@@ -61,6 +61,9 @@ enum
   HDR_REPLYTO,
   HDR_FCC,
 
+#ifdef MIXMASTER  
+  HDR_MIX,
+#endif
 
   HDR_CRYPT,
   HDR_CRYPTINFO,
@@ -71,7 +74,11 @@ enum
   HDR_XCOMMENTTO,
 #endif
 
+#ifndef USE_NNTP
   HDR_ATTACH  = (HDR_FCC + 5) /* where to start printing the attachments */
+#else
+  HDR_ATTACH  = (HDR_FCC + 7) 
+#endif
 };
 
 #define HDR_XOFFSET 14
@@ -205,7 +212,7 @@ static void redraw_mix_line (LIST *chain)
   int c;
   char *t;
 
-  mvaddstr (HDR_MIX, SidebarWidth,     "     Mix: ");
+  mvaddstr (HDR_MIX, SidebarWidth,     "         Mix: ");
 
   if (!chain)
   {

@@ -503,15 +503,6 @@
 /* Sleepycat DB4 Support */
 #undef HAVE_DB4
 
-/* Enable header caching */
-#undef USE_HCACHE
-
-/* GDBM Support */
-#undef HAVE_GDBM
-
-/* Sleepycat DB4 Support */
-#undef HAVE_DB4
-
 /* Define if you have the iconv() function. */
 #undef HAVE_ICONV
 
