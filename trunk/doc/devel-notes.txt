@@ -56,10 +56,10 @@ Getting started from SVN
 ------------------------
 
 Once you've checked out a copy of the source from SVN from
-svn.berlios.de/svnroot/repos/mutt-ng , you'll need to
-run the script called 'prepare' that is in the root directory.  The
-script does all the automake/autoconf magic that needs to be done with
-a fresh checkout.
+svn.berlios.de/svnroot/repos/mutt-ng , you'll need to run the script
+called 'prepare' that is in the root directory.  The script does all the
+automake/autoconf magic that needs to be done with a fresh checkout. If
+all steps succeed, you'll have a configure script to start off with.
 
 
 A word about warnings
@@ -115,8 +115,9 @@ Configuration _variables_ are documented directly in init.h.   Note
 that this includes documentation for possibly added format flags!
 
 When adding variables which depend on system-functionality and/or
-./configure switches, you have to add additional availability
-information to avoid confusion in the manual.
+./configure switches, you have to add additional "availability"
+information to init.h to avoid confusion in the manual. Please see
+init.h for examples.
 
 The parts of The Manual and the muttngrc manual page dealing with
 these variables, and the global Muttrc, are generated automatically
