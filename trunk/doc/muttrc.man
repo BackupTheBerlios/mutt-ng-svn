@@ -1999,7 +1999,7 @@ Example: set inews=\(rq/usr/local/bin/inews -hS\(rq
 .B ispell
 .nf
 Type: path
-Default: \(lq/sw/bin/ispell\(rq
+Default: \(lq/usr/bin/ispell\(rq
 .fi
 .IP
 How to invoke ispell (GNU's spell-checking software).
@@ -4249,7 +4249,7 @@ iso-8859-2, koi8-r or iso-2022-jp) either instead of or after
 .B sendmail
 .nf
 Type: path
-Default: \(lq/sw/sbin/sendmail -oem -oi\(rq
+Default: \(lq/usr/sbin/sendmail -oem -oi\(rq
 .fi
 .IP
 Specifies the program and arguments used to deliver mail sent by Mutt.

@@ -4338,7 +4338,7 @@ Example: set inews=&dquot;/usr/local/bin/inews -hS&dquot;
 <sect2>ispell<label id="ispell">
 <p>
 Type: path<newline>
-Default: &dquot;/sw/bin/ispell&dquot;
+Default: &dquot;/usr/bin/ispell&dquot;
 
 <p>
 How to invoke ispell (GNU's spell-checking software).
@@ -6354,7 +6354,7 @@ iso-8859-2, koi8-r or iso-2022-jp) either instead of or after
 <sect2>sendmail<label id="sendmail">
 <p>
 Type: path<newline>
-Default: &dquot;/sw/sbin/sendmail -oem -oi&dquot;
+Default: &dquot;/usr/sbin/sendmail -oem -oi&dquot;
 
 <p>
 Specifies the program and arguments used to deliver mail sent by Mutt.

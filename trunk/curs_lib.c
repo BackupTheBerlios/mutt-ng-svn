@@ -170,7 +170,7 @@ int mutt_yesorno (const char *msg, int def)
   answer[1] = 0;
   
   reyes_ok = (expr = nl_langinfo (YESEXPR)) && expr[0] == '^' &&
-	     !regcomp (&reyes, expr, REG_NOSUB|REG_EXTENDED);
+             !regcomp (&reyes, expr, REG_NOSUB|REG_EXTENDED);
   reno_ok = (expr = nl_langinfo (NOEXPR)) && expr[0] == '^' &&
             !regcomp (&reno, expr, REG_NOSUB|REG_EXTENDED);
 #endif
@@ -204,21 +204,21 @@ int mutt_yesorno (const char *msg, int def)
 #ifdef HAVE_LANGINFO_YESEXPR
     answer[0] = ch.ch;
     if (reyes_ok ? 
-	(regexec (& reyes, answer, 0, 0, 0) == 0) :
+        (regexec (& reyes, answer, 0, 0, 0) == 0) :
 #else
     if (
 #endif
-	(tolower (ch.ch) == 'y'))
+        (tolower (ch.ch) == 'y'))
     {
       def = M_YES;
       break;
     }
     else if (
 #ifdef HAVE_LANGINFO_YESEXPR
-	     reno_ok ?
-	     (regexec (& reno, answer, 0, 0, 0) == 0) :
+             reno_ok ?
+             (regexec (& reno, answer, 0, 0, 0) == 0) :
 #endif
-	     (tolower (ch.ch) == 'n'))
+             (tolower (ch.ch) == 'n'))
     {
       def = M_NO;
       break;
@@ -271,7 +271,7 @@ void mutt_curses_error (const char *fmt, ...)
   
   dprint (1, (debugfile, "%s\n", Errorbuf));
   mutt_format_string (Errorbuf, sizeof (Errorbuf),
-		      0, COLS-2, 0, 0, Errorbuf, sizeof (Errorbuf), 0);
+                      0, COLS-2, 0, 0, Errorbuf, sizeof (Errorbuf), 0);
 
   if (!option (OPTKEEPQUIET))
   {
@@ -295,7 +295,7 @@ void mutt_curses_message (const char *fmt, ...)
   va_end (ap);
 
   mutt_format_string (Errorbuf, sizeof (Errorbuf),
-		      0, COLS-2, 0, 0, Errorbuf, sizeof (Errorbuf), 0);
+                      0, COLS-2, 0, 0, Errorbuf, sizeof (Errorbuf), 0);
 
   if (!option (OPTKEEPQUIET))
   {
@@ -376,9 +376,9 @@ int mutt_any_key_to_continue (const char *s)
 }
 
 int mutt_do_pager (const char *banner,
-		   const char *tempfile,
-		   int do_color,
-		   pager_t *info)
+                   const char *tempfile,
+                   int do_color,
+                   pager_t *info)
 {
   int rc;
   
@@ -425,17 +425,17 @@ int _mutt_enter_fname (const char *prompt, char *buf, size_t blen, int *redraw, 
     mutt_refresh ();
     buf[0] = 0;
     _mutt_select_file (buf, blen, M_SEL_FOLDER | (multiple ? M_SEL_MULTI : 0), 
-		       files, numfiles);
+                       files, numfiles);
     *redraw = REDRAW_FULL;
   }
   else
   {
     char *pc = safe_malloc (mutt_strlen (prompt) + 3);
 
-    sprintf (pc, "%s: ", prompt);	/* __SPRINTF_CHECKED__ */
+    sprintf (pc, "%s: ", prompt);        /* __SPRINTF_CHECKED__ */
     mutt_ungetch (ch.op ? 0 : ch.ch, ch.op ? ch.op : 0);
     if (_mutt_get_field (pc, buf, blen, (buffy ? M_EFILE : M_FILE) | M_CLEAR, multiple, files, numfiles)
-	!= 0)
+        != 0)
       buf[0] = 0;
     MAYBE_REDRAW (*redraw);
     FREE (&pc);
@@ -479,8 +479,8 @@ void mutt_curs_set (int cursor)
     SavedCursor = cursor;
   
   if (curs_set (cursor) == ERR) {
-    if (cursor == 1)	/* cnorm */
-      curs_set (2);	/* cvvis */
+    if (cursor == 1)        /* cnorm */
+      curs_set (2);        /* cvvis */
   }
 }
 #endif
@@ -507,14 +507,14 @@ int mutt_multi_choice (char *prompt, char *letters)
       p = strchr (letters, ch.ch);
       if (p)
       {
-	choice = p - letters + 1;
-	break;
+        choice = p - letters + 1;
+        break;
       }
       else if (ch.ch <= '9' && ch.ch > '0')
       {
-	choice = ch.ch - '0';
-	if (choice <= mutt_strlen (letters))
-	  break;
+        choice = ch.ch - '0';
+        if (choice <= mutt_strlen (letters))
+          break;
       }
     }
     BEEP ();
@@ -551,10 +551,10 @@ int mutt_addwch (wchar_t wc)
  */
 
 void mutt_format_string (char *dest, size_t destlen,
-			 int min_width, int max_width,
-			 int right_justify, char m_pad_char,
-			 const char *s, size_t n,
-			 int arboreal)
+                         int min_width, int max_width,
+                         int right_justify, char m_pad_char,
+                         const char *s, size_t n,
+                         int arboreal)
 {
   char *p;
   int w;
@@ -603,10 +603,10 @@ void mutt_format_string (char *dest, size_t destlen,
  */
 
 static void mutt_format_s_x (char *dest,
-			     size_t destlen,
-			     const char *prefix,
-			     const char *s,
-			     int arboreal)
+                             size_t destlen,
+                             const char *prefix,
+                             const char *s,
+                             int arboreal)
 {
   int right_justify = 1;
   char *p;
@@ -625,21 +625,21 @@ static void mutt_format_s_x (char *dest,
   }
 
   mutt_format_string (dest, destlen, min_width, max_width,
-		      right_justify, ' ', s, mutt_strlen (s), arboreal);
+                      right_justify, ' ', s, mutt_strlen (s), arboreal);
 }
 
 void mutt_format_s (char *dest,
-		    size_t destlen,
-		    const char *prefix,
-		    const char *s)
+                    size_t destlen,
+                    const char *prefix,
+                    const char *s)
 {
   mutt_format_s_x (dest, destlen, prefix, s, 0);
 }
 
 void mutt_format_s_tree (char *dest,
-			 size_t destlen,
-			 const char *prefix,
-			 const char *s)
+                         size_t destlen,
+                         const char *prefix,
+                         const char *s)
 {
   mutt_format_s_x (dest, destlen, prefix, s, 1);
 }
@@ -651,30 +651,14 @@ void mutt_format_s_tree (char *dest,
 
 void mutt_paddstr (int n, const char *s)
 {
-  wchar_t wc;
-  int w;
-  size_t k;
   size_t len = mutt_strlen (s);
-  mbstate_t mbstate;
 
-  memset (&mbstate, 0, sizeof (mbstate));
-  for (; len && (k = mbrtowc (&wc, s, len, &mbstate)); s += k, len -= k)
+  for (; len && *s; s += 1, len -= 1)
   {
-    if (k == (size_t)(-1) || k == (size_t)(-2))
-    {
-      k = (k == (size_t)(-1)) ? 1 : len;
-      wc = replacement_char ();
-    }
-    if (!IsWPrint (wc))
-      wc = '?';
-    w = wcwidth (wc);
-    if (w >= 0)
-    {
-      if (w > n)
-	break;
-      addnstr ((char *)s, k);
-      n -= w;
-    }
+    if (1 > n)
+      break;
+    addnstr ((char *)s, 1);
+    n -= 1;
   }
   while (n-- > 0)
     addch (' ');
@@ -683,30 +667,10 @@ void mutt_paddstr (int n, const char *s)
 /*
  * mutt_strwidth is like mutt_strlen except that it returns the width
  * refering to the number of characters cells.
+ * AK: since we remove all that multibyte-character-stuff, it is equal to mutt_strlen
  */
 
 int mutt_strwidth (const char *s)
 {
-  wchar_t wc;
-  int w;
-  size_t k, n;
-  mbstate_t mbstate;
-
-  if (!s) return 0;
-
-  n = mutt_strlen (s);
-
-  memset (&mbstate, 0, sizeof (mbstate));
-  for (w=0; n && (k = mbrtowc (&wc, s, n, &mbstate)); s += k, n -= k)
-  {
-    if (k == (size_t)(-1) || k == (size_t)(-2))
-    {
-      k = (k == (size_t)(-1)) ? 1 : n;
-      wc = replacement_char ();
-    }
-    if (!IsWPrint (wc))
-      wc = '?';
-    w += wcwidth (wc);
-  }
-  return w;
+  return mutt_strlen(s);
 }

@@ -33,7 +33,7 @@ DEBIAN_SUBMIT="submit@bugs.debian.org"
 prefix=/usr/local
 
 DEBUGGER=/usr/bin/gdb
-SENDMAIL=/sw/sbin/sendmail
+SENDMAIL=/usr/sbin/sendmail
 sysconfdir=${prefix}/etc
 pkgdatadir=@pkgdatadir@
 

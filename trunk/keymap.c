@@ -266,12 +266,9 @@ static char *get_func (struct binding_t *bindings, int op)
 {
   int i;
 
-  fprintf(stderr,"get_func: op = %d\n",op);
-
   for (i = 0; bindings[i].name; i++)
   {
     if (bindings[i].op == op) {
-      fprintf(stderr,"get_func: name = %s\n",bindings[i].name);
       return bindings[i].name;
     }
   }
@@ -390,8 +387,6 @@ int km_dokey (int menu)
     LastKey = tmp.ch;
     if (LastKey == -1)
       return -1;
-
-    fprintf(stderr,"km_dokey got %d (%c) tmp.op = %d\n",LastKey,LastKey,tmp.op);
 
     /* do we have an op already? */
     if (tmp.op)

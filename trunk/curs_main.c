@@ -711,8 +711,7 @@ int mutt_index_menu (void)
 #ifdef USE_NNTP
     unset_option (OPTNEWS);        /* for any case */
 #endif
-    fprintf(stderr,"%d %d\n",op,OP_SIDEBAR_OPEN);
-    fflush(stderr);
+
     switch (op)
     {
 
