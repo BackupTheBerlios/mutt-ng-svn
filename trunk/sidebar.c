@@ -27,6 +27,7 @@
 #include <libgen.h>
 #include "keymap.h"
 #include <stdbool.h>
+#include <ctype.h>
 
 /*BUFFY *CurBuffy = 0;*/
 static BUFFY *TopBuffy = 0;
@@ -45,6 +46,23 @@ static int quick_log10(int n)
   return (++len);
 }
 
+static int cur_is_hidden (int maxline)
+{
+  int l = 0, seen = 0;
+  BUFFY* tmp = TopBuffy;
+  if (!CurBuffy)
+    return (0);
+  while (tmp && l < maxline && !seen)
+  {
+    if (strcmp (tmp->path, CurBuffy->path) == 0)
+      seen = 1;
+    else
+      tmp = tmp->next;
+    l++;
+  }
+  return (seen == 0 || l == maxline);
+}
+
 void calc_boundaries (int menu)
 {
   BUFFY *tmp = Incoming;
@@ -59,7 +77,7 @@ void calc_boundaries (int menu)
   if ( TopBuffy == 0 && BottomBuffy == 0 )
     TopBuffy = Incoming;
   if ( BottomBuffy == 0 ) {
-    int count = LINES - 2 - (menu != MENU_PAGER);
+    int count = LINES - 2 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
     BottomBuffy = TopBuffy;
     while ( --count && BottomBuffy->next )
       BottomBuffy = BottomBuffy->next;
@@ -87,8 +105,11 @@ static char * shortened_hierarchy(char * box) {
   char * last_dot;
   int i,j;
   char * new_box;
-  for (i=0;i<strlen(box);++i)
+  for (i=0;i<strlen(box);++i) {
     if (box[i] == '.') ++dots;
+    else if (isupper (box[i])) 
+      return (safe_strdup (box));
+  }
   last_dot = strrchr(box,'.');
   if (last_dot) {
     ++last_dot;
@@ -165,14 +186,25 @@ void set_curbuffy(char buf[LONG_STRING])
   }
 }
 
+void set_buffystats (CONTEXT* Context)
+{
+  BUFFY* tmp = Incoming;
+  while (tmp)
+  {
+    if (strcmp (tmp->path, Context->path) == 0)
+    {
+      tmp->msg_unread = Context->unread;
+      tmp->msgcount = Context->msgcount;
+      break;
+    }
+    tmp = tmp->next;
+  }
+}
+
 int draw_sidebar(int menu) {
 
   int lines = option(OPTHELP) ? 1 : 0;
   BUFFY *tmp;
-#ifndef USE_SLANG_CURSES
-  attr_t attrs;
-#endif
-  short color_pair;
   short delim_len = mutt_strlen (SidebarDelim);
 
   /* initialize first time */
@@ -194,29 +226,22 @@ int draw_sidebar(int menu) {
     prev_show_value = option(OPTMBOXPANE);
   }
 
-
   if ( SidebarWidth == 0 ) return 0;
 
-  /* get attributes for divider */
-  SETCOLOR(MT_COLOR_STATUS);
-#ifndef USE_SLANG_CURSES
-  attr_get(&attrs, &color_pair, 0);
-#else
-  color_pair = attr_get();
-#endif
-  SETCOLOR(MT_COLOR_NORMAL);
-
   /* draw the divider */
-
-  for ( ; lines < LINES-1-(menu != MENU_PAGER); lines++ ) {
+  SETCOLOR(MT_COLOR_STATUS);
+  for (lines = option (OPTSTATUSONTOP) ? 0 : 1; 
+       lines < LINES-1-(menu != MENU_PAGER || option (OPTSTATUSONTOP)); lines++ ) {
     move(lines, SidebarWidth - delim_len);
     addstr (NONULL (SidebarDelim));
- #ifndef USE_SLANG_CURSES
-    mvchgat(lines, SidebarWidth - delim_len, delim_len, 0, color_pair, NULL);
- #endif
   }
+  SETCOLOR(MT_COLOR_NORMAL);
+
   if ( Incoming == 0 ) return 0;
   lines = option(OPTHELP) ? 1 : 0; /* go back to the top */
+
+  if (cur_is_hidden (LINES-1-(menu != MENU_PAGER)))
+    CurBuffy = TopBuffy;
 
   if ( known_lines != LINES || TopBuffy == 0 || BottomBuffy == 0 ) 
     calc_boundaries(menu);
@@ -224,9 +249,7 @@ int draw_sidebar(int menu) {
 
   tmp = TopBuffy;
 
-  SETCOLOR(MT_COLOR_NORMAL);
-
-  for ( ; tmp && lines < LINES-1 - (menu != MENU_PAGER); tmp = tmp->next ) {
+  for ( ; tmp && lines < LINES-1 - (menu != MENU_PAGER || option (OPTSTATUSONTOP)); tmp = tmp->next ) {
     if ( tmp == CurBuffy )
       SETCOLOR(MT_COLOR_INDICATOR);
     else if ( tmp->msg_unread > 0 )
@@ -249,7 +272,7 @@ int draw_sidebar(int menu) {
     lines++;
   }
   SETCOLOR(MT_COLOR_NORMAL);
-  for ( ; lines < LINES - 1 - (menu != MENU_PAGER); lines++ ) {
+  for ( ; lines < LINES - 1 - (menu != MENU_PAGER || option (OPTSTATUSONTOP)); lines++ ) {
     int i = 0;
     move( lines, 0 );
     for ( ; i < SidebarWidth - delim_len; i++ )

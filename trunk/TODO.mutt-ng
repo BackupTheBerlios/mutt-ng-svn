@@ -1,10 +1,10 @@
-Here's a list of all mutt-ng specific TODOs:
+Here's a list of all mutt-ng specific TODOs (not in priority order):
 
-rename smime_keys, pgpewrap and pgpring
 muttngbug must call fleang, not flea
 
-We need to modify the build scripts and paths in the source so that mutt-ng doesn't conflict in any
-way with mutt.
+Really make sure that there're no more files installed with conflicting
+paths between mutt <-> mutt-ng. Update documentation to state that
+there're new version of all helper programs.
 
 We need to do a security audit. At least remove all the unsafe function calls, even when they're
 marked with "secure" or "checked", and replace it with secure alternatives instead.

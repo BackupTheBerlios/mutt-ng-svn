@@ -2,7 +2,7 @@
 ## Use aclocal -I m4; automake --foreign
 
 AUTOMAKE_OPTIONS = foreign
-EXTRA_PROGRAMS = muttng_dotlock pgpring makedoc
+EXTRA_PROGRAMS = muttng_dotlock pgpringng pgpewrapng makedoc
 
 if BUILD_IMAP
 IMAP_SUBDIR = imap
@@ -86,9 +86,13 @@ muttng_dotlock_SOURCES = mutt_dotlock.c
 muttng_dotlock_LDADD = @LIBOBJS@
 muttng_dotlock_DEPENDENCIES = @LIBOBJS@
 
-pgpring_SOURCES = pgppubring.c pgplib.c lib.c extlib.c sha1.c md5c.c pgppacket.c ascii.c
-pgpring_LDADD = @LIBOBJS@ $(INTLLIBS) 
-pgpring_DEPENDENCIES = @LIBOBJS@ $(INTLDEPS)
+pgpringng_SOURCES = pgppubring.c pgplib.c lib.c extlib.c sha1.c md5c.c pgppacket.c ascii.c
+pgpringng_LDADD = @LIBOBJS@ $(INTLLIBS) 
+pgpringng_DEPENDENCIES = @LIBOBJS@ $(INTLDEPS)
+
+pgpewrapng_SOURCES = pgpewrap.c
+pgpewrapng_LDADD = 
+pgpewrapng_DEPENDENCIES = 
 
 mutt_dotlock.c: dotlock.c
 	cp $(srcdir)/dotlock.c mutt_dotlock.c
@@ -106,9 +110,9 @@ fleang:	muttbug.sh
 	cp muttbug.sh fleang
 	chmod +x fleang
 
-smime_keys: $(srcdir)/smime_keys.pl
-	cp $(srcdir)/smime_keys.pl smime_keys
-	chmod +x smime_keys
+smime_keysng: $(srcdir)/smime_keys.pl
+	cp $(srcdir)/smime_keys.pl smime_keysng
+	chmod +x smime_keysng
 
 Makefile: $(BUILT_SOURCES)
 
@@ -147,7 +151,7 @@ install-data-local: Muttngrc
 		$(INSTALL) -m 644 $(srcdir)/Muttngrc $(DESTDIR)$(sysconfdir) ; \
 	fi
 	-if [ ! -f $(DESTDIR)$(sysconfdir)/mime.types ]; then \
-		$(INSTALL) -m 644 $(srcdir)/mime.types $(DESTDIR)$(sysconfdir); \
+		$(INSTALL) -m 644 $(srcdir)/mime.types $(DESTDIR)$(sysconfdir)/muttng-mime.types; \
 	fi
 
 

@@ -609,6 +609,7 @@ int mutt_index_menu (void)
         SETCOLOR (MT_COLOR_STATUS);
         mutt_paddstr (COLS, buf);
         SETCOLOR (MT_COLOR_NORMAL);
+        set_buffystats (Context);
         menu->redraw &= ~REDRAW_STATUS;
         if (option(OPTXTERMSETTITLES))
         {

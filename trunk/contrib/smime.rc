@@ -51,8 +51,8 @@ set smime_get_signer_cert_command="openssl smime -verify -in %f -noverify -signe
 # This is used to get the email address the certificate was issued to.
 set smime_get_cert_email_command="openssl x509 -in  %f -noout -email"
 
-# Add a certificate to the database using smime_keys.
-set smime_import_cert_command="smime_keys add_cert %f"
+# Add a certificate to the database using smime_keysng.
+set smime_import_cert_command="smime_keysng add_cert %f"
 
 
 
