@@ -1677,13 +1677,15 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
       j = -1;
       while (display_line (fp, &last_pos, &lineInfo, ++i, &lastLine, &maxLine,
 	     has_types | SearchFlag, &QuoteList, &q_level, &force_redraw,
-	     &SearchRE) == 0)
-	if (!lineInfo[i].continuation && ++j == lines)
-	{
-	  topline = i;
-	  if (!SearchFlag)
-	    break;
-	}
+	     &SearchRE) == 0) {
+        if (!lineInfo[i].continuation && ++j == lines)
+        {
+          topline = i;
+          if (!SearchFlag)
+            break;
+        }
+        redraw |= REDRAW_SIDEBAR;
+      } /* while */
     }
 
     if ((redraw & REDRAW_BODY) || topline != oldtopline)
@@ -1703,6 +1705,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
 	    lines++;
 	  curline++;
 		move(lines + bodyoffset, SidebarWidth);
+          redraw |= REDRAW_SIDEBAR;
 	}
 	last_offset = lineInfo[curline].offset;
       } while (force_redraw);
@@ -1754,6 +1757,9 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
       BKGDSET (MT_COLOR_NORMAL);
       SETCOLOR (MT_COLOR_NORMAL);
     }
+
+    if (redraw & REDRAW_SIDEBAR)
+      draw_sidebar(MENU_PAGER);
 
     if ((redraw & REDRAW_INDEX) && index)
     {
@@ -2046,8 +2052,10 @@ search_next:
 	  while (display_line (fp, &last_pos, &lineInfo, i, &lastLine, 
 				&maxLine, M_SEARCH | (flags & M_PAGER_NSKIP),
 				&QuoteList, &q_level,
-				&force_redraw, &SearchRE) == 0)
+				&force_redraw, &SearchRE) == 0) {
 	    i++;
+            redraw |= REDRAW_SIDEBAR;
+          }
 
 	  if (!SearchBack)
 	  {
@@ -2127,8 +2135,10 @@ search_next:
 		  (0 == (dretval = display_line (fp, &last_pos, &lineInfo,
 			 new_topline, &lastLine, &maxLine, M_TYPES,
 			 &QuoteList, &q_level, &force_redraw, &SearchRE))))
-		 && lineInfo[new_topline].type != MT_COLOR_QUOTED)
+		 && lineInfo[new_topline].type != MT_COLOR_QUOTED) {
+            redraw |= REDRAW_SIDEBAR;
 	    new_topline++;
+          }
 
 	  if (dretval < 0)
 	  {
@@ -2140,8 +2150,10 @@ search_next:
 		  (0 == (dretval = display_line (fp, &last_pos, &lineInfo,
 			 new_topline, &lastLine, &maxLine, M_TYPES,
 			 &QuoteList, &q_level, &force_redraw, &SearchRE))))
-		 && lineInfo[new_topline].type == MT_COLOR_QUOTED)
+		 && lineInfo[new_topline].type == MT_COLOR_QUOTED) {
 	    new_topline++;
+            redraw |= REDRAW_SIDEBAR;
+          }
 
 	  if (dretval < 0)
 	  {
@@ -2160,8 +2172,10 @@ search_next:
 	  while (display_line (fp, &last_pos, &lineInfo, i, &lastLine, 
 				&maxLine, has_types, 
 				&QuoteList, &q_level, &force_redraw,
-				&SearchRE) == 0)
+				&SearchRE) == 0) {
 	    i++;
+            redraw |= REDRAW_SIDEBAR;
+          }
 	  topline = upNLines (bodylen, lineInfo, lastLine, hideQuoted);
 	}
 	else
@@ -2345,6 +2359,7 @@ CHECK_IMAP_ACL(IMAP_ACL_DELETE);
 					&QuoteList, &q_level, &force_redraw,
 					&SearchRE) == 0)
 	  {
+            redraw |= REDRAW_SIDEBAR;
 	    if (! lineInfo[topline].continuation)
 	      j--;
 	    if (j > 0)
