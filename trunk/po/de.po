@@ -154,14 +154,10 @@ msgstr "Es gibt keinen passenden Mailcap-Eintrag. Anzeige als Text."
 msgid "MIME type not defined.  Cannot view attachment."
 msgstr "Undefinierter MIME-Typ. Kann Anhang nicht anzeigen."
 
-#: attach.c:541
+#: attach.c:541 attach.c:671 attach.c:703 attach.c:996 attach.c:1054
+#: handler.c:1563 pgpkey.c:570 pgpkey.c:759
 msgid "Can't create filter"
 msgstr "Kann Filter nicht erzeugen."
-
-#: attach.c:671 attach.c:703 attach.c:996 attach.c:1054 handler.c:1563
-#: pgpkey.c:570 pgpkey.c:759
-msgid "Can't create filter"
-msgstr "Kann Filter nicht erzeugen"
 
 #: attach.c:835
 msgid "Write fault!"
