@@ -439,8 +439,8 @@ int mutt_buffy_check (int force)
 	      (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')))
 	  {
 	    /* one new and undeleted message is enough */
-	    BuffyCount++;
 #if 0
+	    BuffyCount++;
             /* we're checking for read and not new mail; 
              * seems like copy'n'paste error
              */
