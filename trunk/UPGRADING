@@ -111,6 +111,9 @@ this still likely is incomplete. Please report missing items to
     ~/.muttngrc, instead of /etc/Muttrc it's now /etc/Muttngrc and
     so on.
 
+    The config directories were renamed too. If you used .mutt/ for
+    config file you have to use .muttng/ now.
+
     The following tools were removed:
     bin/flea, bin/muttbug, bin/mutt_dotlock, bin/pgpewrap, bin/pgpring,
     bin/smime_keys and etc/mime.types.
