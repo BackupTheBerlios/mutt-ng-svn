@@ -39,9 +39,12 @@ extern size_t UngetCount;
 
 static void print_enriched_string (int attr, unsigned char *s, int do_color)
 {
+  wchar_t wc;
   size_t k;
   size_t n = mutt_strlen ((char *)s);
+  mbstate_t mbstate;
 
+  memset (&mbstate, 0, sizeof (mbstate));
   while (*s)
   {
     if (*s < M_TREE_MAX)
@@ -131,10 +134,10 @@ static void print_enriched_string (int attr, unsigned char *s, int do_color)
       }
       if (do_color) attrset(attr);
     }
-    else if (*s > 0)
+    else if ((k = mbrtowc (&wc, (char *)s, n, &mbstate)) > 0)
     {
-      addnstr ((char *)s, 1);
-      s += 1, n-= 1;
+      addnstr ((char *)s, k);
+      s += k, n-= k;
     }
     else
       break;

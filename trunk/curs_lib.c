@@ -688,14 +688,30 @@ void mutt_format_s_tree (char *dest,
 
 void mutt_paddstr (int n, const char *s)
 {
+  wchar_t wc;
+  int w;
+  size_t k;
   size_t len = mutt_strlen (s);
+  mbstate_t mbstate;
 
-  for (; len && *s; s += 1, len -= 1)
+  memset (&mbstate, 0, sizeof (mbstate));
+  for (; len && (k = mbrtowc (&wc, s, len, &mbstate)); s += k, len -= k)
   {
-    if (1 > n)
-      break;
-    addnstr ((char *)s, 1);
-    n -= 1;
+    if (k == (size_t)(-1) || k == (size_t)(-2))
+    {
+      k = (k == (size_t)(-1)) ? 1 : len;
+      wc = replacement_char ();
+    }
+    if (!IsWPrint (wc))
+      wc = '?';
+    w = wcwidth (wc);
+    if (w >= 0)
+    {
+      if (w > n)
+        break;
+      addnstr ((char *)s, 1);
+      n -= w;
+    }
   }
   while (n-- > 0)
     addch (' ');
@@ -704,10 +720,30 @@ void mutt_paddstr (int n, const char *s)
 /*
  * mutt_strwidth is like mutt_strlen except that it returns the width
  * refering to the number of characters cells.
- * AK: since we remove all that multibyte-character-stuff, it is equal to mutt_strlen
  */
 
 int mutt_strwidth (const char *s)
 {
-  return mutt_strlen(s);
+  wchar_t wc;
+  int w;
+  size_t k, n;
+  mbstate_t mbstate;
+
+  if (!s) return 0;
+
+  n = mutt_strlen (s);
+
+  memset (&mbstate, 0, sizeof (mbstate));
+  for (w=0; n && (k = mbrtowc (&wc, s, n, &mbstate)); s += k, n -= k)
+  {
+    if (k == (size_t)(-1) || k == (size_t)(-2))
+    {
+      k = (k == (size_t)(-1)) ? 1 : n;
+      wc = replacement_char ();
+    }
+    if (!IsWPrint (wc))
+      wc = '?';
+    w += wcwidth (wc);
+  }
+  return w;
 }
