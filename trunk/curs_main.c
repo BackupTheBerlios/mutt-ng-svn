@@ -1310,6 +1310,7 @@ CHECK_IMAP_ACL(IMAP_ACL_DELETE);
           mutt_error (_("%s is not a mailbox."), buf);
           break;
         }
+        mutt_str_replace (&CurrentFolder, buf);
 
         if (Context)
         {

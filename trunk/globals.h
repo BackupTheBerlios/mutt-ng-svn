@@ -156,6 +156,7 @@ WHERE char *Visual;
 WHERE char *XtermTitle;
 WHERE char *XtermIcon;
 
+WHERE char *CurrentFolder;
 WHERE char *LastFolder;
 
 WHERE LIST *AutoViewList INITVAL(0);

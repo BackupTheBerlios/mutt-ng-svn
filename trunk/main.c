@@ -54,6 +54,7 @@
 
 static const char *ReachingUs = N_("\
 To contact the developers, please mail to <mutt-ng-devel@lists.berlios.de>.\n\
+To visit the Mutt-ng homepage go to http://www.muttng.org.\n\
 To report a bug, please use the fleang(1) utility.\n");
 
 static const char *Notice = N_("\
@@ -994,7 +995,8 @@ int main (int argc, char **argv)
     else
 #endif
     mutt_expand_path (folder, sizeof (folder));
-
+    
+    mutt_str_replace (&CurrentFolder, folder);
     mutt_str_replace (&LastFolder, folder);
 
     if (flags & M_IGNORE)

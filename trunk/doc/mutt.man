@@ -195,7 +195,7 @@ GNU General Public License for more details.
 .BR sendmail (1),
 .BR smail (1)
 .PP
-Mutt-ng Home Page: http://mutt-ng.berlios.de
+Mutt-ng Home Page: http://www.muttng.org
 .PP
 The Mutt-ng manual
 .PP
