@@ -592,7 +592,6 @@ int mutt_index_menu (void)
         if (menu->redraw & REDRAW_INDEX)
         {
           menu_redraw_index (menu);
-          draw_slidebar(menu);
           menu->redraw |= REDRAW_STATUS;
         }
         else if (menu->redraw & (REDRAW_MOTION_RESYNCH | REDRAW_MOTION))
