@@ -1,0 +1,14 @@
+Here's a list of all mutt-ng specific TODOs:
+
+We need to modify the build scripts and paths in the source so that mutt-ng doesn't conflict in any
+way with mutt.
+
+We need to do a security audit. At least remove all the unsafe function calls, even when they're
+marked with "secure" or "checked", and replace it with secure alternatives instead.
+
+Remove all the multibyte-character handling stuff. It only makes the source code complicated, and
+doesn't add any special functionality - no, in one case, it already caused lots of problems.
+
+Update the ChangeLog file or create a new ChangeLog.mutt-ng file.
+
+Incorporate a lot more patches that are floating around in the web.
