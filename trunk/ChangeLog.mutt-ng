@@ -1,9 +1,9 @@
 Changes specific to mutt-ng:
 
-2004-01-23:
+2005-01-23:
   * Implemented umask option after Wolfgang Karall's idea
 
-2004-01-22:
+2005-01-22:
   * Reverted the xface patch as it broke a lot of things
   * Removed a few pscan(1) warnings
   * Integrated the following patches:
@@ -15,13 +15,13 @@ Changes specific to mutt-ng:
     * Thomas Glanzmann's hcache patch
   * Corrected email addresses et al.
 
-2004-01-14:
+2005-01-14:
   * Integrated the following patches:
     * rr.compressed for compressed folders
   * Changed User-Agent string
   * Added operating_system to set fake operating system for User-Agent string
 
-2004-01-09:
+2005-01-09:
   * first version of mutt-ng
   * integrated the following patches:
     * sidebar patch
