@@ -588,7 +588,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 #endif
   menu->help = mutt_compile_help (helpstr, sizeof (helpstr), MENU_COMPOSE, ComposeHelp);
   
-  mutt_buffy_check(1);
+  if (option (OPTSTATUSONTOP))
+    mutt_buffy_check(1);
   while (loop)
   {
 #ifdef USE_NNTP

@@ -58,7 +58,7 @@ To report a bug, please use the fleang(1) utility.\n");
 
 static const char *Notice = N_("\
 Copyright (C) 1996-2002 Michael R. Elkins and others.\n\
-Mutt comes with ABSOLUTELY NO WARRANTY; for details type `muttng -vv'.\n\
+Mutt-ng comes with ABSOLUTELY NO WARRANTY; for details type `muttng -vv'.\n\
 Mutt is free software, and you are welcome to redistribute it\n\
 under certain conditions; type `muttng -vv' for details.\n");
 
@@ -121,7 +121,7 @@ options:\n\
   -H <file>\tspecify a draft file to read header and body from\n\
   -i <file>\tspecify a file which Mutt should include in the body\n\
   -m <type>\tspecify a default mailbox type\n\
-  -n\t\tcauses Mutt not to read the system Muttrc\n\
+  -n\t\tcauses Mutt-ng not to read the system Muttngrc\n\
   -p\t\trecall a postponed message\n\
   -Q <variable>\tquery a configuration variable\n\
   -R\t\topen mailbox in read-only mode\n\

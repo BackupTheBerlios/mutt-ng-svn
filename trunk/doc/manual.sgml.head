@@ -13,7 +13,7 @@
 
 <sect>Introduction
 <p>
-<bf/Mutt/ is a small but very powerful text-based MIME mail client.  Mutt is
+<bf/Mutt-ng/ is a small but very powerful text-based MIME mail client.  Mutt-ng is
 highly configurable, and is well suited to the mail power user with advanced
 features like key bindings, keyboard macros, mail threading, regular
 expression searches and a powerful pattern matching language for selecting
@@ -26,15 +26,11 @@ add other new features. Features specific to Mutt-ng will be discussed in
 an extra section. Don't be confused when most of the documentation talk about
 Mutt and not Mutt-ng, Mutt-ng contains all Mutt-ng features, plus many more.
 
-<sect1>Mutt Home Page
-<p>
-<htmlurl url="http://www.mutt.org/"
-name="http://www.mutt.org/">
 
 <sect1>Mutt-ng Home Page
 <p>
-<htmlurl url="http://mutt-ng.berlios.de/"
-name="http://mutt-ng.berlios.de/">
+<htmlurl url="http://www.muttng.org/"
+name="http://www.muttng.org">
 
 <sect1>Mailing Lists
 <p>

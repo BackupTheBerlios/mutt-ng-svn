@@ -1066,7 +1066,7 @@ CHECK_IMAP_ACL(IMAP_ACL_DELETE);
          break;
         }
 
-        if (query_quadoption (OPT_QUIT, _("Quit Mutt?")) == M_YES)
+        if (query_quadoption (OPT_QUIT, _("Quit Mutt-ng?")) == M_YES)
         {
           int check;
           

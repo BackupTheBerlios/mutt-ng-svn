@@ -14,10 +14,10 @@ Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildPrereq: /usr/sbin/sendmail slang-devel /usr/bin/automake-1.4
 
 %description
-Mutt-ng is a text-mode mail user agent. Mutt supports color, threading,
+Mutt-ng is a text-mode mail user agent. Mutt-ng supports color, threading,
 arbitrary key remapping, and a lot of customization.
 
-You should install mutt if you have used it in the past and you prefer
+You should install Mutt-ng if you have used it in the past and you prefer
 it, or if you are new to mail programs and have not decided which one
 you are going to use.
 

@@ -813,8 +813,8 @@ msgstr "nein"
 
 #. restore blocking operation
 #: curs_lib.c:287
-msgid "Exit Mutt?"
-msgstr "Mutt verlassen?"
+msgid "Exit Mutt-ng?"
+msgstr "Mutt-ng verlassen?"
 
 #: curs_lib.c:380 mutt_socket.c:530 mutt_ssl.c:328
 msgid "unknown error"
@@ -935,8 +935,8 @@ msgid "Limit to messages matching: "
 msgstr "Begrenze auf Nachrichten nach Muster: "
 
 #: curs_main.c:873
-msgid "Quit Mutt?"
-msgstr "Mutt beenden?"
+msgid "Quit Mutt-ng?"
+msgstr "Mutt-ng beenden?"
 
 #: curs_main.c:952
 msgid "Tag messages matching: "
@@ -964,8 +964,8 @@ msgid "%s is not a mailbox."
 msgstr "%s ist keine Mailbox."
 
 #: curs_main.c:1165
-msgid "Exit Mutt without saving?"
-msgstr "Mutt verlassen, ohne Änderungen zu speichern?"
+msgid "Exit Mutt-ng without saving?"
+msgstr "Mutt-ng verlassen, ohne Änderungen zu speichern?"
 
 #: curs_main.c:1199 curs_main.c:1224
 msgid "You are on the last message."
