@@ -2948,12 +2948,6 @@ struct option_t MuttVars[] = {
   ** xterm_set_titles has been set. This string is identical in formatting
   ** to the one used by ``$$status_format''.
   */
-  { "xface",		DT_BOOL, R_NONE, OPTXFACE, 0 },
-  /*
-  ** .pp
-  ** Controls whether mutt uses slrnface to display X-Faces when run
-  ** in an X11 terminal emulator.
-  */
 #ifdef USE_NNTP
   { "x_comment_to",   DT_BOOL, R_NONE, OPTXCOMMENTTO, 0 },
   /*

@@ -658,7 +658,6 @@ void mutt_free_envelope (ENVELOPE **p)
 #endif
   mutt_free_list (&(*p)->references);
   mutt_free_list (&(*p)->in_reply_to);
-  mutt_free_list (&(*p)->x_face);
   mutt_free_list (&(*p)->userhdrs);
   FREE (p);
 }

@@ -1737,15 +1737,6 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
     }
   }
 
-  /* Add X-Face headers */
-  if (env->x_face)
-  {
-    LIST *face;
-
-    for (face = env->x_face; face; face = face->next)
-      fprintf (fp, "X-Face: %s\n", face->data);
-  }
-
   if (mode == 0 && !privacy && option (OPTXMAILER) && !has_agent)
   {
     struct utsname un;
