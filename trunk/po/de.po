@@ -13,7 +13,7 @@ msgstr ""
 #: account.c:148
 #, c-format
 msgid "Username at %s: "
-msgstr "Username bei %s: "
+msgstr "Benutzername bei %s: "
 
 #: account.c:176
 #, c-format
@@ -64,7 +64,7 @@ msgstr ""
 
 #: alias.c:258
 msgid "Warning: This alias name may not work.  Fix it?"
-msgstr "Warnung: Dieser Alias-Name könnte Probleme bereiten. Korrigieren?"
+msgstr "Warnung: Dieser Adressbucheintrag könnte Probleme bereiten. Korrigieren?"
 
 #: alias.c:283
 msgid "Address: "
@@ -147,7 +147,7 @@ msgid "MIME type not defined.  Cannot view attachment."
 msgstr "Undefinierter MIME-Typ. Kann Anhang nicht anzeigen."
 
 #: attach.c:541
-msgid "Cannot create filter"
+msgid "Can't create filter"
 msgstr "Kann Filter nicht erzeugen."
 
 #: attach.c:671 attach.c:703 attach.c:996 attach.c:1054 handler.c:1563
