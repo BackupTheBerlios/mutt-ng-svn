@@ -121,6 +121,7 @@ WHERE char *Realname;
 WHERE char *SendCharset;
 WHERE char *Sendmail;
 WHERE char *Shell;
+WHERE char *SidebarDelim;
 WHERE char *Signature;
 WHERE char *SignOffString;
 WHERE char *SimpleSearch;

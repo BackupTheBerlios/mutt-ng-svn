@@ -421,7 +421,7 @@ int mutt_buffy_check (int force)
 	  }
 	}
 	closedir (dirp);
-#if 0
+#if 1
   /* I commented this out because it led to an infite "New mail in ..." loop,
    * and when looking at the code, the check seems to be overly eager.
    *   -- ak
@@ -440,8 +440,13 @@ int mutt_buffy_check (int force)
 	  {
 	    /* one new and undeleted message is enough */
 	    BuffyCount++;
+#if 0
+            /* we're checking for read and not new mail; 
+             * seems like copy'n'paste error
+             */
 	    tmp->has_new = tmp->new = 1;
-        tmp->msgcount++;
+#endif
+            tmp->msgcount++;
 	  }
 	}
 	closedir (dirp);

@@ -1773,11 +1773,10 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
       /* redraw the pager_index indicator, because the
        * flags for this message might have changed. */
       menu_redraw_current (index);
-	  draw_sidebar(MENU_PAGER);
+      draw_sidebar(MENU_PAGER);
       /* print out the index status bar */
       menu_status_line (buffer, sizeof (buffer), index, NONULL(Status));
-      move (indexoffset + (option (OPTSTATUSONTOP) ? 0 : (indexlen - 1)),
-		  SidebarWidth);
+      move (indexoffset + (option (OPTSTATUSONTOP) ? 0 : (indexlen - 1)),SidebarWidth);
       SETCOLOR (MT_COLOR_STATUS);
       mutt_paddstr (COLS-SidebarWidth, buffer);
       SETCOLOR (MT_COLOR_NORMAL);

@@ -1211,6 +1211,12 @@ struct option_t MuttVars[] = {
   ** this is unset, it will be set to the operating system name that uname(2)
   ** returns. If uname(2) fails, "UNIX" will be used.
   */
+  { "sidebar_delim", DT_STR, R_BOTH, UL &SidebarDelim, UL "|" },
+  /*
+  ** .pp
+  ** This specifies the delimiter between the sidebar (if visible) and 
+  ** other screens.
+  */
   { "sidebar_visible", DT_BOOL, R_BOTH, OPTMBOXPANE, 0 },
   /*
   ** .pp
