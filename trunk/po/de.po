@@ -18,7 +18,7 @@ msgstr "Username bei %s: "
 #: account.c:176
 #, c-format
 msgid "Password for %s@%s: "
-msgstr "Paßwort für %s@%s: "
+msgstr "Passwort für %s@%s: "
 
 #: addrbook.c:37 browser.c:44 pager.c:1449 postpone.c:43 query.c:48
 #: recvattach.c:54
@@ -410,7 +410,7 @@ msgstr "Nachrichten weitergeleitet."
 
 #: commands.c:385 commands.c:419 commands.c:436
 msgid "Can't create filter process"
-msgstr "Kann Filterprozeß nicht erzeugen"
+msgstr "Kann Filterprozess nicht erzeugen"
 
 #: commands.c:465
 msgid "Pipe to command: "
@@ -911,7 +911,7 @@ msgstr "Springe zu Nachricht: "
 
 #: curs_main.c:749
 msgid "Argument must be a message number."
-msgstr "Argument muß eine Nachrichtennummer sein."
+msgstr "Argument muss eine Nachrichtennummer sein."
 
 #: curs_main.c:782
 msgid "That message is not visible."
@@ -1393,7 +1393,7 @@ msgstr "Erzeuge Mailbox: "
 
 #: imap/browse.c:286 imap/browse.c:332
 msgid "Mailbox must have a name."
-msgstr "Mailbox muß einen Namen haben."
+msgstr "Mailbox muss einen Namen haben."
 
 #: imap/browse.c:294
 msgid "Mailbox created."
@@ -2595,7 +2595,7 @@ msgstr ""
 "    entweder unter Version 2 dieser Lizenz oder, wenn Sie es wünschen,\n"
 "    jeder späteren Version.\n"
 "\n"
-"    Die Veröffentlichung dieses Programms erfolgt in der Hoffnung, daß\n"
+"    Die Veröffentlichung dieses Programms erfolgt in der Hoffnung, dass\n"
 "    es Ihnen von Nutzen sein wird, aber OHNE JEGLICHE GEWÄHRLEISTUNG,\n"
 "    sogar ohne die Garantie der MARKTREIFE oder EIGNUNG FÜR EINEN\n"
 "    BESTIMMTEN ZWECK. Lesen Sie die GNU General Public License, um\n"
@@ -3317,7 +3317,7 @@ msgstr "PGP-Mantra vergessen."
 
 #: pgp.c:344
 msgid "[-- Error: unable to create PGP subprocess! --]\n"
-msgstr "[-- Fehler: Kann keinen PGP-Prozeß erzeugen! --]\n"
+msgstr "[-- Fehler: Kann keinen PGP-Prozess erzeugen! --]\n"
 
 #: pgp.c:379 pgp.c:596 pgp.c:797
 msgid ""
@@ -3376,7 +3376,7 @@ msgid ""
 "[-- Error: could not create a PGP subprocess! --]\n"
 "\n"
 msgstr ""
-"[-- Fehler: Konnte PGP-Subprozeß nicht erzeugen! --]\n"
+"[-- Fehler: Konnte PGP-Subprozess nicht erzeugen! --]\n"
 "\n"
 
 #: pgp.c:873
@@ -3405,7 +3405,7 @@ msgstr "[-- Ende der PGP/MIME-verschlüsselten Daten --]\n"
 
 #: pgp.c:965
 msgid "Can't open PGP subprocess!"
-msgstr "Kann PGP-Subprozeß nicht erzeugen!"
+msgstr "Kann PGP-Subprozess nicht erzeugen!"
 
 #: pgp.c:1109
 #, c-format
@@ -4114,7 +4114,7 @@ msgstr "Kein (gültiges) Zertifikat für %s gefunden."
 
 #: smime.c:851 smime.c:879 smime.c:944 smime.c:988 smime.c:1053 smime.c:1128
 msgid "Error: unable to create OpenSSL subprocess!"
-msgstr "Fehler: Kann keinen OpenSSL Prozeß erzeugen!"
+msgstr "Fehler: Kann keinen OpenSSL Prozess erzeugen!"
 
 #: smime.c:1206
 msgid "no certfile"
@@ -4135,7 +4135,7 @@ msgstr "Warnung: Zwischenzertifikat nicht gefunden."
 
 #: smime.c:1433
 msgid "Can't open OpenSSL subprocess!"
-msgstr "Kann OpenSSL-Unterprozeß nicht erzeugen!"
+msgstr "Kann OpenSSL-Unterprozess nicht erzeugen!"
 
 #: smime.c:1471
 msgid "No output from OpenSSL..."
@@ -4151,7 +4151,7 @@ msgstr ""
 
 #: smime.c:1719 smime.c:1729
 msgid "[-- Error: unable to create OpenSSL subprocess! --]\n"
-msgstr "[-- Fehler: Kann keinen OpenSSL-Unterprozeß erzeugen! --]\n"
+msgstr "[-- Fehler: Kann keinen OpenSSL-Unterprozess erzeugen! --]\n"
 
 #: smime.c:1762
 msgid "[-- The following data is S/MIME encrypted --]\n"
