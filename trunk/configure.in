@@ -1114,7 +1114,7 @@ fi
 dnl -- end libesmtp --
 
 AC_OUTPUT(Makefile intl/Makefile m4/Makefile
-        po/Makefile.in doc/Makefile contrib/Makefile
+        po/Makefile.in doc/Makefile contrib/Makefile test/Makefile
         muttbug.sh
         imap/Makefile
         Muttngrc.head
