@@ -1146,6 +1146,12 @@ case "`uname -s`" in
     SGML2HTML_CMD="sgmlfmt -f html manual.sgml || true"
     AC_MSG_RESULT(FreeBSD)
     ;;
+  SunOS)
+    SGML2TXT_CMD="sgml2txt manual || true"
+    SGML2PS_CMD="sgml2latex -p manual || true"
+    SGML2HTML_CMD="sgml2html manual || true"
+    AC_MSG_RESULT(Solaris)
+    ;;
   *)
     SGML2TXT_CMD="if linuxdoc -B txt --pass='-P -c' manual ; then uniq < manual.txt | expand > _manual.txt ; rm manual.txt ; col -b < _manual.txt > manual.txt ; rm -rf _manual.txt ; fi || true"
     SGML2PS_CMD="sgml2latex --output=ps manual || true"
