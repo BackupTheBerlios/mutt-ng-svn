@@ -614,9 +614,10 @@ self_insert:
       /* use the raw keypress */
       ch = LastKey;
 
-      if ((ch == '.') && (flags & (M_FILE | M_EFILE)))
+      if ((ch == '#') && (flags & M_LASTFOLDER))
       {
         rv = 2;
+        my_wcstombs (buf, buflen, state->wbuf, state->lastchar);
         goto bye;
       }
       

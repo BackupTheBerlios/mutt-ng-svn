@@ -413,21 +413,22 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
   else
     buf[0] = 0;
 
-  prompt = _("Save to file ('.' for last used folder): ");
+  prompt = _("Save to file ('#' for last used folder): ");
   while (prompt)
   {
-    ret = mutt_get_field (prompt, buf, sizeof (buf), M_FILE | M_CLEAR);
-    if (((ret != 0) && (ret != 2)) || (!buf[0]))
+    ret = mutt_get_field (prompt, buf, sizeof (buf), M_FILE | M_CLEAR | M_LASTFOLDER);
+    if (((ret != 0) && (ret != 2)) || (!buf[0] && ret != 2))
       return -1;
 
     if (ret == 2)
     {
-      strfcpy (buf, LastSaveFolder, sizeof (buf));
-      strcat(buf,body->filename);
+      char tmpbuf[_POSIX_PATH_MAX];
+      snprintf(tmpbuf,sizeof(tmpbuf),"%s%s",LastSaveFolder,buf);
+      strfcpy (buf, tmpbuf, sizeof (buf));
       ret = mutt_get_field (_("Save to file: ")
-                , buf, sizeof (buf), M_FILE | M_CLEAR);
+                , buf, sizeof (buf), M_FILE);
       if ((ret != 0) || (!buf[0]))
-      return -1;
+        return -1;
     }  
     else
     {
