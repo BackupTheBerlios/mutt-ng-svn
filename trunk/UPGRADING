@@ -16,6 +16,10 @@ this still likely is incomplete.
 Note for developers: if you encounter anything missing before SVN
 rev123, please put it "into" init and removes this comment when done!
 
+2005-03-05
+
+  New Color: 'sidebar [fg] [bg]'
+
 2005-03-01 (init)
 
   New Variables:
