@@ -1124,6 +1124,26 @@ if test x$use_libesmtp = xyes; then
 fi
 dnl -- end libesmtp --
 
+dnl -- sgml tools --
+AC_MSG_CHECKING([for SGML Tools style])
+case "`uname -s`" in
+  FreeBSD)
+    SGML2TXT_CMD="sgmlfmt -f ascii manual.sgml && uniq < manual.ascii | expand > manual.txt && rm -rf manual.ascii || true"
+    SGML2PS_CMD="sgmlfmt -f ps manual.sgml || true"
+    SGML2HTML_CMD="sgmlfmt -f html manual.sgml || true"
+    AC_MSG_RESULT(FreeBSD)
+    ;;
+  default)
+    SGML2TXT_CMD="if linuxdoc -B txt --pass='-P -c' manual ; then uniq < manual.txt | expand > _manual.txt ; rm manual.txt ; col -b < _manual.txt > manual.txt ; rm -rf _manual.txt ; fi || true"
+    SGML2PS_CMD="sgml2latex --output=ps manual || true"
+    SGML2HTML_CMD="sgml2html manual || true"
+    AC_MSG_RESULT(Linux (default))
+    ;;
+esac
+AC_SUBST(SGML2TXT_CMD)
+AC_SUBST(SGML2PS_CMD)
+AC_SUBST(SGML2HTML_CMD)
+
 AC_OUTPUT(Makefile intl/Makefile m4/Makefile
         po/Makefile.in doc/Makefile contrib/Makefile
         muttbug.sh
