@@ -17,6 +17,8 @@
 #include "imap_private.h"
 #include "auth.h"
 
+#include "lib/intl.h"
+
 #include <netinet/in.h>
 
 #ifdef HAVE_HEIMDAL
