@@ -46,21 +46,21 @@ msgstr "Hilfe"
 
 #: addrbook.c:145
 msgid "You have no aliases!"
-msgstr "Keine Einträge im Adreßbuch!"
+msgstr "Keine Einträge im Adressbuch!"
 
 #: addrbook.c:156
 msgid "Aliases"
-msgstr "Adreßbuch"
+msgstr "Adressbuch"
 
 #. add a new alias
 #: alias.c:246
 msgid "Alias as: "
-msgstr "Kurzname für Adreßbuch: "
+msgstr "Kurzname für Adressbuch: "
 
 #: alias.c:252
 msgid "You already have an alias defined with that name!"
 msgstr ""
-"Sie haben bereits einen Adreßbucheintrag mit diesem Kurznamen definiert."
+"Sie haben bereits einen Adressbucheintrag mit diesem Kurznamen definiert."
 
 #: alias.c:258
 msgid "Warning: This alias name may not work.  Fix it?"
@@ -1922,7 +1922,7 @@ msgstr "Kopiere Nachricht in Datei/Mailbox"
 
 #: keymap_alldefs.h:50
 msgid "create an alias from a message sender"
-msgstr "Erzeuge Adreßbucheintrag für Absender"
+msgstr "Erzeuge Adressbucheintrag für Absender"
 
 #: keymap_alldefs.h:51
 msgid "move entry to bottom of screen"
