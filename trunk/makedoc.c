@@ -805,6 +805,7 @@ static void print_confline (const char *varname, int type, const char *val)
  **
  ** - \fI switches to italics
  ** - \fB switches to boldface
+ ** - \fT switches to typewriter for SGML
  ** - \fP switches to normal display
  ** - .dl on a line starts a definition list (name taken taken from HTML).
  ** - .dt starts a term in a definition list.
@@ -964,26 +965,27 @@ static int print_it (int special, char *str, int docstat)
       case SP_END_FT:
         {
           add_s ("\\fP");
-          docstat &= ~(D_EM | D_BF);
+          docstat &= ~(D_EM | D_BF | D_TT);
           break;
         }
       case SP_START_BF:
         {
           add_s ("\\fB");
           docstat |= D_BF;
-          docstat &= ~D_EM;
+          docstat &= ~(D_EM | D_TT);
           break;
         }
       case SP_START_EM:
         {
           add_s ("\\fI");
           docstat |= D_EM;
-          docstat &= ~D_BF;
+          docstat &= ~(D_BF | D_TT);
           break;
         }
       case SP_START_TT:
         {
           docstat |= D_TT;
+          docstat &= ~(D_BF | D_EM);
           break;
         }
       case SP_NEWLINE:
