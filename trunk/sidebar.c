@@ -212,6 +212,7 @@ void set_buffystats (CONTEXT* Context)
   {
     if (strcmp (tmp->path, Context->path) == 0)
     {
+      tmp->new = Context->new;
       tmp->msg_unread = Context->unread;
       tmp->msgcount = Context->msgcount;
       tmp->msg_flagged = Context->flagged;
@@ -264,7 +265,9 @@ int draw_sidebar(int menu) {
   lines = option(OPTHELP) ? 1 : 0; /* go back to the top */
 
   if ( CurBuffy == 0 ) CurBuffy = Incoming;
+#if 0
   if ( known_lines != LINES || TopBuffy == 0 || BottomBuffy == 0 ) 
+#endif
     calc_boundaries(menu);
 
   tmp = TopBuffy;

@@ -274,9 +274,10 @@ int mutt_buffy_check (int force)
   DIR *dirp;
   char path[_POSIX_PATH_MAX];
   struct stat contex_sb;
-  time_t now, last1, last2;
+  time_t now, last1;
   CONTEXT *ctx;
 #ifdef USE_IMAP
+  time_t last2;
   /* update postponed count as well, on force */
   if (force != 0)
     mutt_update_num_postponed ();
@@ -533,7 +534,7 @@ int mutt_buffy_check (int force)
       tmp->size = (long) sb.st_size;	/* update the size */
 #endif
 
-    if (!tmp->new)
+    if (tmp->new <= 0)
       tmp->notified = 0;
     else if (!tmp->notified)
       BuffyNotify++;
@@ -563,7 +564,7 @@ int mutt_buffy_list (void)
   for (tmp = Incoming; tmp; tmp = tmp->next)
   {
     /* Is there new mail in this mailbox? */
-    if (!tmp->new || (have_unnotified && tmp->notified))
+    if (tmp->new <= 0 || (have_unnotified && tmp->notified))
       continue;
 
     strfcpy (path, tmp->path, sizeof (path));
@@ -633,7 +634,7 @@ void mutt_buffy (char *s, size_t slen)
 
   case 1:
 
-    while (tmp && !tmp->new)
+    while (tmp && tmp->new <= 0)
       tmp = tmp->next;
     if (!tmp)
     {
@@ -652,7 +653,7 @@ void mutt_buffy (char *s, size_t slen)
     {
       if (mutt_strcmp (s, tmp->path) == 0)
 	count++;
-      else if (count && tmp->new)
+      else if (count && tmp->new > 0)
 	break;
       tmp = tmp->next;
       if (!tmp)

@@ -198,7 +198,7 @@ status_format_str (char *buf, size_t buflen, char op, const char *src,
 	snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
 	snprintf (buf, buflen, fmt, Context ? Context->new : 0);
       }
-      else if (!Context || !Context->new)
+      else if (!Context || Context->new <= 0)
 	optional = 0;
       break;
 

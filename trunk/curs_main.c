@@ -479,8 +479,12 @@ int mutt_index_menu (void)
 #endif
         IndexHelp);
   
-  if (!attach_msg) 
+  if (!attach_msg) {
     mutt_buffy_check(1); /* force the buffy check after we enter the folder */
+    /* record folder we open to place sidebar indicator properly */
+    if (Context && Context->path)
+      set_curbuffy(Context->path);
+  }
 
   FOREVER
   {
