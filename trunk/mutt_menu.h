@@ -33,7 +33,7 @@
 #define REDRAW_SIGWINCH		(1<<7)
 #define REDRAW_SIDEBAR		(1<<8)
 
-#define M_MODEFMT "-- Mutt: %s"
+#define M_MODEFMT "-- Mutt-ng: %s"
 
 typedef struct menu_t
 {

@@ -331,7 +331,7 @@ struct option_t MuttVars[] = {
   ** When \fIset\fP, Mutt will jump to the next unread message, if any,
   ** when the current thread is \fIun\fPcollapsed.
   */
-  { "compose_format",	DT_STR,	 R_BOTH, UL &ComposeFormat, UL "-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-" },
+  { "compose_format",	DT_STR,	 R_BOTH, UL &ComposeFormat, UL "-- Mutt-ng: Compose  [Approx. msg size: %l   Atts: %a]%>-" },
   /*
   ** .pp
   ** Controls the format of the status line displayed in the \fICompose\fP
