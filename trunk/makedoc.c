@@ -719,11 +719,12 @@ static void print_confline (const char *varname, int type, const char *val)
     /* manual page */
     case F_MAN:
     {
-      add ("\n.TP\n.B %s\n");
+      add (".TP\n.B ");
       add (varname);
-      add (".nf\n");
-      add ("Type: %s\n");
+      add ("\n.nf\n");
+      add ("Type: ");
       add (type2human (type));
+      add_c ('\n');
       if (type == DT_STR || type == DT_RX || type == DT_ADDR || type == DT_PATH)
       {
         add ("Default: \\(lq");
@@ -735,7 +736,6 @@ static void print_confline (const char *varname, int type, const char *val)
         add (val);
         add_c ('\n');
       }
-
       add (".fi");
 
       break;
