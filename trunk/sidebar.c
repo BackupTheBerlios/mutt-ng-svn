@@ -46,58 +46,39 @@ static int quick_log10(int n)
   return (++len);
 }
 
-static int cur_is_hidden (int maxline)
-{
-  int l = 0, seen = 0;
-  BUFFY* tmp = TopBuffy;
-  if (!CurBuffy)
-    return (0);
-  while (tmp && l < maxline && !seen)
-  {
-    if (strcmp (tmp->path, CurBuffy->path) == 0)
-      seen = 1;
-    else
-      tmp = tmp->next;
-    l++;
-  }
-  return (seen == 0 || l == maxline);
-}
-
+// CurBuffy should contain a valid buffy mailbox before calling this function!!!
 void calc_boundaries (int menu)
 {
   BUFFY *tmp = Incoming;
+  int position;
+  int i,count, mailbox_position;
 
+  // correct known_lines if it has changed because of a window resize
   if ( known_lines != LINES ) {
-    TopBuffy = BottomBuffy = 0;
     known_lines = LINES;
   }
+  // fix all the prev links on all the mailboxes
   for ( ; tmp->next != 0; tmp = tmp->next )
     tmp->next->prev = tmp;
 
-  if ( TopBuffy == 0 && BottomBuffy == 0 )
-    TopBuffy = Incoming;
-  if ( BottomBuffy == 0 ) {
-    int count = LINES - 2 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
-    BottomBuffy = TopBuffy;
-    while ( --count && BottomBuffy->next )
-      BottomBuffy = BottomBuffy->next;
+  // calculate the position of the current mailbox
+  position = 1;
+  tmp = Incoming;
+  while (tmp != CurBuffy)
+  {
+	  position++;
+	  tmp = tmp->next;
   }
-  else if ( TopBuffy == CurBuffy->next ) {
-    int count = LINES - 2 - (menu != MENU_PAGER);
-    BottomBuffy = CurBuffy;
-    tmp = BottomBuffy;
-    while ( --count && tmp->prev)
-      tmp = tmp->prev;
-    TopBuffy = tmp;
-  }
-  else if ( BottomBuffy == CurBuffy->prev ) {
-    int count = LINES - 2 - (menu != MENU_PAGER);
-    TopBuffy = CurBuffy;
-    tmp = TopBuffy;
-    while ( --count && tmp->next )
-      tmp = tmp->next;
-    BottomBuffy = tmp;
-  }
+  // calculate the size of the screen we can use
+  count = LINES - 2 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
+  // calculate the position of the current mailbox on the screen
+  mailbox_position = position%count;
+  // determine topbuffy
+  TopBuffy = CurBuffy;
+  for(i = mailbox_position; i >1; i--) TopBuffy = TopBuffy->prev;
+  // determine bottombuffy
+  BottomBuffy = CurBuffy;
+  for(i = mailbox_position; i <= count && BottomBuffy->next; i++) BottomBuffy = BottomBuffy->next;
 }
 
 static char * shortened_hierarchy(char * box) {
@@ -263,12 +244,9 @@ int draw_sidebar(int menu) {
   if ( Incoming == 0 ) return 0;
   lines = option(OPTHELP) ? 1 : 0; /* go back to the top */
 
-  if (cur_is_hidden (LINES-1-(menu != MENU_PAGER)))
-    CurBuffy = TopBuffy;
-
+  if ( CurBuffy == 0 ) CurBuffy = Incoming;
   if ( known_lines != LINES || TopBuffy == 0 || BottomBuffy == 0 ) 
     calc_boundaries(menu);
-  if ( CurBuffy == 0 ) CurBuffy = Incoming;
 
   tmp = TopBuffy;
 
