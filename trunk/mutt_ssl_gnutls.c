@@ -268,7 +268,7 @@ static int tls_socket_close (CONNECTION * conn)
 
     gnutls_certificate_free_credentials (data->xcred);
     gnutls_deinit (data->state);
-    safe_free ((void **) &conn->sockdata);
+    FREE(&conn->sockdata);
   }
 
   return raw_socket_close (conn);
@@ -414,7 +414,7 @@ static int tls_check_stored_hostname (const gnutls_datum * cert,
           if (strcmp (linestr + pmatch[1].rm_so, hostname) == 0 &&
               strcmp (linestr + pmatch[2].rm_so, buf) == 0) {
             regfree (&preg);
-            safe_free ((void **) &linestr);
+            FREE(&linestr);
             fclose (fp);
             return 1;
           }
