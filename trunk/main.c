@@ -48,14 +48,14 @@
 #endif
 
 static const char *ReachingUs = N_("\
-To contact the developers, please mail to <mutt-dev@mutt.org>.\n\
+To contact the developers, please mail to <mutt-ng-devel@lists.berlios.de>.\n\
 To report a bug, please use the flea(1) utility.\n");
 
 static const char *Notice = N_("\
 Copyright (C) 1996-2002 Michael R. Elkins and others.\n\
-Mutt comes with ABSOLUTELY NO WARRANTY; for details type `mutt -vv'.\n\
+Mutt comes with ABSOLUTELY NO WARRANTY; for details type `muttng -vv'.\n\
 Mutt is free software, and you are welcome to redistribute it\n\
-under certain conditions; type `mutt -vv' for details.\n");
+under certain conditions; type `muttng -vv' for details.\n");
 
 static const char *Copyright = N_("\
 Copyright (C) 1996-2002 Michael R. Elkins <me@mutt.org>\n\
@@ -65,6 +65,7 @@ Copyright (C) 1998-2002 Werner Koch <wk@isil.d.shuttle.de>\n\
 Copyright (C) 1999-2002 Brendan Cully <brendan@kublai.com>\n\
 Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n\
 Copyright (C) 2000-2002 Edmund Grimley Evans <edmundo@rano.org>\n\
+Copyright (C) 2004-2005 Andreas Krennmair <ak@synflood.at>\n\
 \n\
 Lots of others not mentioned here contributed lots of code,\n\
 fixes, and suggestions.\n\
@@ -95,12 +96,12 @@ static void mutt_usage (void)
   puts (mutt_make_version ());
 
   puts _(
-"usage: mutt [ -nRyzZ ] [ -e <cmd> ] [ -F <file> ] [ -m <type> ] [ -f <file> ]\n\
-       mutt [ -nR ] [ -e <cmd> ] [ -F <file> ] -Q <query> [ -Q <query> ] [...]\n\
-       mutt [ -nR ] [ -e <cmd> ] [ -F <file> ] -A <alias> [ -A <alias> ] [...]\n\
-       mutt [ -nx ] [ -e <cmd> ] [ -a <file> ] [ -F <file> ] [ -H <file> ] [ -i <file> ] [ -s <subj> ] [ -b <addr> ] [ -c <addr> ] <addr> [ ... ]\n\
-       mutt [ -n ] [ -e <cmd> ] [ -F <file> ] -p\n\
-       mutt -v[v]\n\
+"usage: muttng [ -nRyzZ ] [ -e <cmd> ] [ -F <file> ] [ -m <type> ] [ -f <file> ]\n\
+       muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -Q <query> [ -Q <query> ] [...]\n\
+       muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -A <alias> [ -A <alias> ] [...]\n\
+       muttng [ -nx ] [ -e <cmd> ] [ -a <file> ] [ -F <file> ] [ -H <file> ] [ -i <file> ] [ -s <subj> ] [ -b <addr> ] [ -c <addr> ] <addr> [ ... ]\n\
+       muttng [ -n ] [ -e <cmd> ] [ -F <file> ] -p\n\
+       muttng -v[v]\n\
 \n\
 options:\n\
   -A <alias>\texpand the given alias\n\
