@@ -614,6 +614,12 @@ self_insert:
       /* use the raw keypress */
       ch = LastKey;
 
+      if (ch == '.')
+      {
+        rv = 2;
+        goto bye;
+      }
+      
 #ifdef KEY_ENTER
       /* treat ENTER the same as RETURN */
       if (ch == KEY_ENTER)
