@@ -71,9 +71,9 @@ Specify which mailbox to load.
 .IP "-F \fImuttngrc\fP"
 Specify an initialization file to read instead of ~/.muttngrc
 .IP "-g \fIserver\fP"
-Start Mutt with a listing of subscribed newsgroups at specified newsserver.
+Start Mutt-ng with a listing of subscribed newsgroups at specified newsserver.
 .IP "-G"
-Start Mutt with a listing of subscribed newsgroups.
+Start Mutt-ng with a listing of subscribed newsgroups.
 .IP "-h"
 Display help.
 .IP "-H \fIdraft\fP"
@@ -84,7 +84,7 @@ Specify a file to include into the body of a message.
 .IP "-m \fItype\fP       "
 specify a default mailbox type
 .IP "-n"
-Causes Mutt to bypass the system configuration file.
+Causes Mutt-ng to bypass the system configuration file.
 .IP "-p"
 Resume a postponed message.
 .IP "-Q \fIquery\fP"
@@ -96,17 +96,17 @@ Open a mailbox in \fIread-only\fP mode.
 .IP "-s \fIsubject\fP"
 Specify the subject of the message.
 .IP "-v"
-Display the Mutt version number and compile-time definitions.
+Display the Mutt-ng version number and compile-time definitions.
 .IP "-x"
 Emulate the mailx compose mode.
 .IP "-y"
-Start Mutt with a listing of all mailboxes specified by the \fImailboxes\fP
+Start Mutt-ng with a listing of all mailboxes specified by the \fImailboxes\fP
 command.
 .IP "-z"
-When used with -f, causes Mutt not to start if there are no messages in the
+When used with -f, causes Mutt-ng not to start if there are no messages in the
 mailbox.
 .IP "-Z"
-Causes Mutt to open the first mailbox specified by the \fImailboxes\fP
+Causes Mutt-ng to open the first mailbox specified by the \fImailboxes\fP
 command which contains new mail.
 .SH ENVIRONMENT
 .PP
@@ -142,7 +142,7 @@ User configuration file.
 .IP "/etc/Muttngrc"
 System-wide configuration file.
 .IP "/tmp/muttXXXXXX"
-Temporary files created by Mutt.
+Temporary files created by Mutt-ng.
 .IP "~/.mailcap"
 User definition for handling non-text MIME types.
 .IP "/etc/mailcap"
@@ -154,7 +154,7 @@ System mapping between MIME types and file extensions.
 .IP "/usr/local/bin/muttng_dotlock"
 The privileged dotlocking program.
 .IP "/usr/local/doc/muttng/manual.txt"
-The Mutt manual.
+The Mutt-ng manual.
 .SH BUGS
 .PP
 None.  Mutts have fleas, not bugs.
@@ -164,13 +164,13 @@ Suspend/resume while editing a file with an external editor does not work
 under SunOS 4.x if you use the curses lib in /usr/5lib.  It \fIdoes\fP work
 with the S-Lang library, however.
 .PP
-Resizing the screen while using an external pager causes Mutt to go haywire
+Resizing the screen while using an external pager causes Mutt-ng to go haywire
 on some systems.
 .PP
 suspend/resume does not work under Ultrix.
 .PP
 The help line for the index menu is not updated if you change the bindings
-for one of the functions listed while Mutt is running.
+for one of the functions listed while Mutt-ng is running.
 .PP
 For a more up-to-date list of bugs, errm, fleas, please visit the
 mutt-ng project's bug tracking system under http://developer.berlios.de/projects/mutt-ng/.  To
