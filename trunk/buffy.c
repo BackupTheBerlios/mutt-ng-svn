@@ -414,6 +414,11 @@ int mutt_buffy_check (int force)
 	  }
 	}
 	closedir (dirp);
+#if 0
+  /* I commented this out because it led to an infite "New mail in ..." loop,
+   * and when looking at the code, the check seems to be overly eager.
+   *   -- ak
+   */
 	snprintf (path, sizeof (path), "%s/cur", tmp->path);
 	if ((dirp = opendir (path)) == NULL)
 	{
@@ -433,6 +438,7 @@ int mutt_buffy_check (int force)
 	  }
 	}
 	closedir (dirp);
+#endif
 	break;
 
       case M_MH:
