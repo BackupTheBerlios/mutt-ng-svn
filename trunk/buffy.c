@@ -404,6 +404,7 @@ int mutt_buffy_check (int force)
 	}
 	tmp->msgcount = 0;
 	tmp->msg_unread = 0;
+	tmp->msg_tagged = 0;
 	while ((de = readdir (dirp)) != NULL)
 	{
 	  char *p;
