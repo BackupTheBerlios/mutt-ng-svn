@@ -30,7 +30,7 @@
 typedef struct rx_t {
   char *pattern;                /* printable version */
   regex_t *rx;                  /* compiled expression */
-  int not : 1;                  /* do not match */
+  int not;                      /* do not match */
 } rx_t;
 
 void rx_free (rx_t**);
