@@ -150,7 +150,7 @@ install-data-local: Muttngrc
 	elif [ ! -f $(DESTDIR)$(sysconfdir)/Muttngrc ] ; then \
 		$(INSTALL) -m 644 $(srcdir)/Muttngrc $(DESTDIR)$(sysconfdir) ; \
 	fi
-	-if [ ! -f $(DESTDIR)$(sysconfdir)/mime.types ]; then \
+	-if [ ! -f $(DESTDIR)$(sysconfdir)/muttng-mime.types ]; then \
 		$(INSTALL) -m 644 $(srcdir)/mime.types $(DESTDIR)$(sysconfdir)/muttng-mime.types; \
 	fi
 

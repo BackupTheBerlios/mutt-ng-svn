@@ -226,18 +226,7 @@ static void makedoc (FILE *in, FILE *out)
   flush_doc (docstat, out);
   fputs ("\n", out);
   if (sort_error == 1)
-  {
-    fputs ("\n"
-           "***************************************************************************\n"
-           "*** There have been sorting errors for the manual's variable reference. ***\n"
-           "*** If you're not a developer playing with the code, please report this ***\n"
-           "*** error to <mutt-ng-devel@lists.berlios.de>                           ***\n"
-           "***                                                                     ***\n"
-           "*** I'm waiting 5 seconds for you to take notice.                       ***\n"
-           "***************************************************************************\n\n",
-           stderr);
-    sleep (5);
-  }
+    fputs ("makedoc: warning: there're sorting errors in vars\n", stderr);
 }
 
 /* skip whitespace */
@@ -427,11 +416,7 @@ static void handle_confline (char *s, FILE *out)
   else
   {
     if (lastvar[0] && strncmp (lastvar, varname, strlen (lastvar)) > 0)
-    {
-      fprintf (stderr, "*** MAKEDOC WARNING: $%s must come before $%s ***\n",
-               varname, lastvar);
       sort_error = 1;
-    }
     remember (varname);
   }
   

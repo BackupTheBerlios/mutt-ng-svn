@@ -301,9 +301,9 @@ static void draw_envelope (HEADER *msg, char *fcc)
   }
   else
   {
-    mvprintw (HDR_TO, 0, TITLE_FMT , Prompts[HDR_NEWSGROUPS - 1]);
+    mvprintw (HDR_TO, SidebarWidth, TITLE_FMT , Prompts[HDR_NEWSGROUPS - 1]);
     mutt_paddstr (W, NONULL (msg->env->newsgroups));
-    mvprintw (HDR_CC, 0, TITLE_FMT , Prompts[HDR_FOLLOWUPTO - 1]);
+    mvprintw (HDR_CC, SidebarWidth, TITLE_FMT , Prompts[HDR_FOLLOWUPTO - 1]);
     mutt_paddstr (W, NONULL (msg->env->followup_to));
     if (option (OPTXCOMMENTTO))
     {
