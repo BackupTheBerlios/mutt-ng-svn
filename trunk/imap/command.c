@@ -21,6 +21,9 @@
 #include "message.h"
 #include "mx.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+
 #include <ctype.h>
 #include <stdlib.h>
 

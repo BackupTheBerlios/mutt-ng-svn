@@ -13,6 +13,8 @@
 # include "config.h"
 #endif
 
+#include "lib/intl.h"
+
 #include "mutt.h"
 #include "imap_private.h"
 #include "auth.h"

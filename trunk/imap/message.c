@@ -27,6 +27,10 @@
 #include "pgp.h"
 #endif
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #if HAVE_STDINT_H
 #include <stdint.h>
 #elif HAVE_INTTYPES_H

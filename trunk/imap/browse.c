@@ -17,6 +17,10 @@
 #include <stdlib.h>
 #include <ctype.h>
 
+#include "lib/mem.h"
+#include "lib/str.h"
+#include "lib/intl.h"
+
 #include "mutt.h"
 #include "imap_private.h"
 

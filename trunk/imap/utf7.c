@@ -15,6 +15,8 @@
 #include "charset.h"
 #include "imap_private.h"
 
+#include "lib/mem.h"
+
 static int Index_64[128] = {
   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,
   -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1, -1,

@@ -7,6 +7,8 @@
 #ifndef _LIB_MEM_H
 #define _LIB_MEM_H
 
+#include <sys/types.h>
+
 void* _safe_malloc (size_t, int, const char*);
 void* _safe_calloc (size_t, size_t, int, const char*);
 void _safe_realloc (void*, size_t, int, const char*);

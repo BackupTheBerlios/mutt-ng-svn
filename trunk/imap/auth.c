@@ -15,6 +15,9 @@
 # include "config.h"
 #endif
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+
 #include "mutt.h"
 #include "imap_private.h"
 #include "auth.h"

@@ -17,6 +17,8 @@
 #include "imap_private.h"
 #include "auth.h"
 
+#include "lib/intl.h"
+
 /* this is basically a stripped-down version of the cram-md5 method. */
 imap_auth_res_t imap_auth_anon (IMAP_DATA * idata, const char *method)
 {

@@ -19,6 +19,9 @@
 #include "imap_private.h"
 #include "mutt_ssl.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+
 #include <stdlib.h>
 #include <ctype.h>
 

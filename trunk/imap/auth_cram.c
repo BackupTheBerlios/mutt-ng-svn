@@ -16,10 +16,12 @@
 #include "mutt.h"
 #include "imap_private.h"
 #include "auth.h"
-#include "md5.h"
 
+#include "md5.h"
 #define MD5_BLOCK_LEN 64
 #define MD5_DIGEST_LEN 16
+
+#include "lib/intl.h"
 
 /* forward declarations */
 static void hmac_md5 (const char *password, char *challenge,
