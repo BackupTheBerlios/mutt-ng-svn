@@ -14,6 +14,12 @@ Note: as development goes fast and as documentation is way behind it,
 this still likely is incomplete. Please report missing items to
 <mutt-ng-devel@lists.berlios.de>
 
+2005-03-14
+
+  New Configuration Variables:
+    - $strip_was
+    - $strip_was_regex
+
 2005-03-10
 
   New Configuration Command (based on CD's ifdef Patch):

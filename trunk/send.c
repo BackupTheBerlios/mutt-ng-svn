@@ -227,6 +227,7 @@ static int edit_envelope (ENVELOPE *en, int flags)
 {
   char buf[HUGE_STRING];
   LIST *uh = UserHeader;
+  regmatch_t pat_match[1];
 
 #ifdef USE_NNTP
   if (option (OPTNEWSSEND))
@@ -291,7 +292,19 @@ static int edit_envelope (ENVELOPE *en, int flags)
       }
     }
   }
-  
+
+  if ((flags & (SENDREPLY)) && option (OPTSTRIPWAS) && StripWasRegexp.rx &&
+      regexec (StripWasRegexp.rx, buf, 1, pat_match, 0) == 0) {
+    unsigned int pos = pat_match->rm_so;
+    if (ascii_strncasecmp (buf, "re: ", pos) != 0) {
+      buf[pos] = '\0';                  /* kill match */
+      while (pos-- && buf[pos] == ' ')
+        buf[pos] = '\0';                /* remove trailing spaces */
+    } else {
+      mutt_error (_("Ignoring $strip_was: Subject would be empty."));
+      sleep (2);
+    }
+  }
   if (mutt_get_field ("Subject: ", buf, sizeof (buf), 0) != 0 ||
       (!buf[0] && query_quadoption (OPT_SUBJECT, _("No subject, abort?")) != M_NO))
   {

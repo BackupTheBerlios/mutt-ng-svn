@@ -3224,6 +3224,19 @@ struct option_t MuttVars[] = {
   ** personal mailbox where you might have several unrelated messages with
   ** the subject ``hi'' which will get grouped together.
   */
+  { "strip_was",	DT_BOOL, R_NONE, OPTSTRIPWAS,   0 },
+  /**
+  ** .pp
+  ** When \fIset\fP, mutt-ng will remove the trailing part of the ``Subject''
+  ** line which matches $$strip_was_regex when replying.
+  **/
+  { "strip_was_regex",	DT_RX,   R_NONE, UL &StripWasRegexp, UL "\\([Ww][Aa][RrSs]: .*\\)[ ]*$" },
+  /**
+  ** .pp
+  ** When non-empty and $$strip_was is \fIset\fP, mutt-ng will remove this
+  ** trailing part of the ``Subject'' line when replying if it won't be empty
+  ** afterwards.
+  **/
   { "stuff_quoted",	DT_BOOL, R_BOTH, OPTSTUFFQUOTED, 0 },
   /*
   ** .pp
