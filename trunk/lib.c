@@ -363,7 +363,8 @@ int safe_open (const char *path, int flags)
   struct stat osb, nsb;
   int fd;
 
-  if ((fd = open (path, flags, 0600)) < 0)
+  umask(Umask);
+  if ((fd = open (path, flags, 0666)) < 0)
     return fd;
 
   /* make sure the file is not symlink */

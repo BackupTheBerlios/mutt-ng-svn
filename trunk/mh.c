@@ -192,7 +192,8 @@ static int mh_mkstemp (CONTEXT * dest, FILE ** fp, char **tgt)
   {
     snprintf (path, _POSIX_PATH_MAX, "%s/.mutt-%s-%d-%d",
 	      dest->path, NONULL (Hostname), (int) getpid (), Counter++);
-    if ((fd = open (path, O_WRONLY | O_EXCL | O_CREAT, 0600)) == -1)
+    umask(Umask);
+    if ((fd = open (path, O_WRONLY | O_EXCL | O_CREAT, 0666)) == -1)
     {
       if (errno != EEXIST)
       {
@@ -1080,7 +1081,8 @@ int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
     dprint (2, (debugfile, "maildir_open_new_message (): Trying %s.\n",
 		path));
 
-    if ((fd = open (path, O_WRONLY | O_EXCL | O_CREAT, 0600)) == -1)
+    umask(Umask);
+    if ((fd = open (path, O_WRONLY | O_EXCL | O_CREAT, 0666)) == -1)
     {
       if (errno != EEXIST)
       {
