@@ -34,6 +34,7 @@
 #ifdef USE_NNTP
 #include "nntp.h"
 #endif
+#include "sidebar.h"
 
 #include <stdlib.h>
 #include <dirent.h>

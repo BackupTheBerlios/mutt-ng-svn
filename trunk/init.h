@@ -974,6 +974,18 @@ struct option_t MuttVars[] = {
   ** only subscribed folders or all folders.  This can be toggled in the
   ** IMAP browser with the \fItoggle-subscribed\fP function.
   */
+  { "imap_mail_check",	DT_NUM,  R_NONE, UL &ImapBuffyTimeout, 5 },
+  /*
+  ** .pp
+  ** This variable configures how often (in seconds) mutt-ng should look for
+  ** new mail in IMAP folders. This is split from the ``$mail_check'' variable
+  ** to generate less traffic and get more accurate information for local folders.
+  **
+  ** .pp
+  ** To not brake current setups, this defaults to the value of ``$mail_check''.
+  ** Depending on your connection and speed of your IMAP server, you may want to
+  ** increase it.
+  */
   { "imap_pass", 	DT_STR,  R_NONE, UL &ImapPass, UL 0 },
   /*
   ** .pp

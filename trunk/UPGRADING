@@ -11,14 +11,16 @@ the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
 Note: as development goes fast and as documentation is way behind it,
-this still likely is incomplete.
+this still likely is incomplete. Please report missing items to
+<mutt-ng-devel@lists.berlios.de>
 
-Note for developers: if you encounter anything missing before SVN
-rev123, please put it "into" init and removes this comment when done!
+2005-03-07
+
+  New Variable: $imap_mail_check is split from $mail_check
 
 2005-03-05
 
-  New Color: 'sidebar [fg] [bg]'
+  New Color: 'sidebar [fg] [bg]' for the delimiter
 
 2005-03-01 (init)
 
