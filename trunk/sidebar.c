@@ -344,10 +344,7 @@ void scroll_sidebar(int op, int menu)
       break;
     case OP_SIDEBAR_NEXT_NEW:
       if ( (tmp = exist_next_new()) == NULL)
-      {
-	      if (CurBuffy->next == NULL) return;
-	      CurBuffy = CurBuffy->next;
-      }
+          return;
       else CurBuffy = tmp;
       break;
     case OP_SIDEBAR_PREV:
@@ -356,10 +353,7 @@ void scroll_sidebar(int op, int menu)
      break;
     case OP_SIDEBAR_PREV_NEW:
       if ( (tmp = exist_prev_new()) == NULL)
-      {
-	      if(CurBuffy->prev == NULL) return;
-	      CurBuffy = CurBuffy->prev;
-      }
+          return;
       else CurBuffy = tmp;
       break;
      
