@@ -3,6 +3,9 @@
  * Copyright (C) 1996-2002 Michael R. Elkins <me@mutt.org>
  * Copyright (C) 2004 g10 Code GmbH
  *
+ * Parts were writte/modified by:
+ * Nico Golde <nico@ngolde.de>
+ *
  * This file is part of mutt-ng, see http://www.muttng.org/.
  * It's licensed under the GNU General Public License,
  * please see the file GPL in the top level source directory.
