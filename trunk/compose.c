@@ -27,6 +27,7 @@
 #include "sort.h"
 #include "charset.h"
 #include "mx.h"
+#include "compose.h"
 
 #ifdef MIXMASTER
 #include "remailer.h"
@@ -434,10 +435,6 @@ static unsigned long cum_attachs_size (MUTTMENU * menu)
 
   return s;
 }
-
-/* prototype for use below */
-static void compose_status_line (char *buf, size_t buflen, MUTTMENU * menu,
-                                 const char *p);
 
 /*
  * compose_format_str()
@@ -1404,7 +1401,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
       compose_status_line (buf, sizeof (buf), menu, NONULL (ComposeFormat));
       CLEARLINE (option (OPTSTATUSONTOP) ? 0 : LINES - 2);
       SETCOLOR (MT_COLOR_STATUS);
-      printw ("%-*.*s", COLS, COLS, buf);
+      printw ("nnn%-*.*s", COLS, COLS, buf);
       SETCOLOR (MT_COLOR_NORMAL);
       menu->redraw &= ~REDRAW_STATUS;
     }

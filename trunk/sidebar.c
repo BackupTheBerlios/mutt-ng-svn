@@ -60,9 +60,6 @@ void calc_boundaries (int menu)
     TopBuffy = 0;
 }
 
-/* compresses hierarchy in folder names;
- * FIXME move out to library?
- */
 static char *shortened_hierarchy (char *box)
 {
   int dots = 0;
