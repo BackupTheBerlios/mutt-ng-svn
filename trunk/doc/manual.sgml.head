@@ -2176,7 +2176,7 @@ pattern is translated at the time the hook is declared, so the value of
 <ref id="default_hook" name="&dollar;default&lowbar;hook"> that is in effect
 at that time will be used.
 
-<sect1>Usingg the sidebar<label id="sidebar">
+<sect1>Using the sidebar<label id="sidebar">
 <p>
 The sidebar, a feature specific to Mutt-ng, allows you to use a mailbox listing 
 which looks very similar to the ones you probably know from GUI mail clients.
