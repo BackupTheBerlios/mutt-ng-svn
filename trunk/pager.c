@@ -1630,9 +1630,12 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
         _mutt_make_string (buffer, l1 < l2 ? l1 : l2, NONULL (PagerFmt),
                            Context, extra->bdy->hdr, M_FORMAT_MAKEPRINT);
       }
-      move (indexoffset + (option (OPTSTATUSONTOP) ? 0 : (indexlen - 1)),
-            option (OPTSTATUSONTOP) ? 0 : SidebarWidth);
-      mutt_paddstr (COLS - 10, IsHeader (extra)
+      if (option(OPTSTATUSONTOP)) {
+        move(0,0);
+      }
+      /*move (indexoffset + (option (OPTSTATUSONTOP) ? 0 : (InHelp?(LINES-2):(indexlen - 1))),
+            option (OPTSTATUSONTOP) ? 0 : SidebarWidth);*/
+      mutt_paddstr (COLS - 10 - (option(OPTSTATUSONTOP)?0:SidebarWidth), IsHeader (extra)
                     || IsMsgAttach (extra) ? buffer : banner);
 
       addstr (" -- (");
