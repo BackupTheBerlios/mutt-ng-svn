@@ -545,7 +545,7 @@ msgstr "Absenden"
 msgid "Abort"
 msgstr "Verwerfen"
 
-#: compose.c:94 compose.c:668
+#: compose.c:112 compose.c:124 compose.c:781
 msgid "Attach file"
 msgstr "Datei anhängen"
 
