@@ -2,6 +2,7 @@ Changes specific to mutt-ng:
 
 2005-02-05:
   * Made message ID format configurable
+  * Implemented $signoff_string (fixes feature request #552)
 
 2005-02-04:
   * Fixed another bug in ajg.last-folder patch

@@ -120,6 +120,7 @@ WHERE char *SendCharset;
 WHERE char *Sendmail;
 WHERE char *Shell;
 WHERE char *Signature;
+WHERE char *SignOffString;
 WHERE char *SimpleSearch;
 #if defined(USE_LIBESMTP)
 WHERE char *SmtpAuthUser;

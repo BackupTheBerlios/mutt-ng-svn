@@ -54,15 +54,25 @@ static void append_signature (FILE *f)
   FILE *tmpfp;
   pid_t thepid;
 
+  if (SignOffString) {
+    fprintf(f,"\n%s",SignOffString);
+  }
+
   if (Signature && (tmpfp = mutt_open_read (Signature, &thepid)))
   {
     if (option (OPTSIGDASHES))
       fputs ("\n-- \n", f);
+    else if (SignOffString)
+      fputs("\n",f);
     mutt_copy_stream (tmpfp, f);
     fclose (tmpfp);
     if (thepid != -1)
       mutt_wait_filter (thepid);
   }
+}
+
+static void append_signoff_string(FILE *f)
+{
 }
 
 /* compare two e-mail addresses and return 1 if they are equivalent */
