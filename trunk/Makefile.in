@@ -194,7 +194,7 @@ EXTRA_PROGRAMS = muttng_dotlock pgpringng pgpewrapng makedoc
 @BUILD_IMAP_TRUE@IMAP_SUBDIR = imap
 @BUILD_IMAP_TRUE@IMAP_INCLUDES = -I$(top_srcdir)/imap
 
-SUBDIRS = m4 po intl doc contrib test $(IMAP_SUBDIR)
+SUBDIRS = m4 po intl doc contrib $(IMAP_SUBDIR)
 
 bin_SCRIPTS = muttngbug fleang
 
@@ -351,7 +351,7 @@ DIST_COMMON = README ABOUT-NLS ChangeLog INSTALL Makefile.am \
 	config.guess config.h.in config.sub configure configure.in \
 	depcomp install-sh missing mkinstalldirs muttbug.sh.in regex.c \
 	snprintf.c strcasecmp.c strdup.c
-DIST_SUBDIRS = m4 po intl doc contrib test imap
+DIST_SUBDIRS = m4 po intl doc contrib imap
 SOURCES = $(makedoc_SOURCES) $(muttng_SOURCES) $(EXTRA_muttng_SOURCES) $(muttng_dotlock_SOURCES) $(pgpewrapng_SOURCES) $(pgpringng_SOURCES)
 
 all: $(BUILT_SOURCES) config.h

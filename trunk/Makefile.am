@@ -9,7 +9,7 @@ IMAP_SUBDIR = imap
 IMAP_INCLUDES = -I$(top_srcdir)/imap
 endif
 
-SUBDIRS = m4 po intl doc contrib test $(IMAP_SUBDIR)
+SUBDIRS = m4 po intl doc contrib $(IMAP_SUBDIR)
 
 bin_SCRIPTS = muttngbug fleang
 
