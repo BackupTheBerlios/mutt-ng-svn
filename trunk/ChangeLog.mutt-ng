@@ -2,6 +2,7 @@ Changes specific to mutt-ng:
 
 2005-03-01:
   * somewhat bigger documentation update; introduce UPGRADING document
+  * fixed escape sequence problem in manual.txt
 
 2005-02-27:
   * integrated patch to highlight the next mailbox which includes new mail in sidebar
