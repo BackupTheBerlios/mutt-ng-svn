@@ -12,7 +12,8 @@
  */
 
 #include "keymap.h"
-#include "mutt_regex.h"
+
+#include "lib/rx.h"
 
 #define REDRAW_INDEX		(1)
 #define REDRAW_MOTION		(1<<1)

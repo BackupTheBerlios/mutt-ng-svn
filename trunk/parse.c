@@ -12,7 +12,6 @@
 #endif
 
 #include "mutt.h"
-#include "mutt_regex.h"
 #include "mailbox.h"
 #include "mime.h"
 #include "rfc2047.h"
@@ -23,6 +22,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/rx.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -1351,7 +1351,7 @@ ENVELOPE *mutt_read_rfc822_header (FILE * f, HEADER * hdr, short user_hdrs,
     *buf = '\0';
 
     if (mutt_match_spam_list (line, SpamList, buf, sizeof (buf))) {
-      if (!mutt_match_rx_list (line, NoSpamList)) {
+      if (!rx_list_match (NoSpamList, line)) {
 
         /* if spam tag already exists, figure out how to amend it */
         if (e->spam && *buf) {

@@ -14,7 +14,6 @@
 #include "mutt.h"
 #include "mapping.h"
 #include "mutt_curses.h"
-#include "mutt_regex.h"
 #include "history.h"
 #include "keymap.h"
 #include "mbyte.h"
@@ -33,6 +32,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/rx.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -301,44 +301,25 @@ static void add_to_list (LIST ** list, const char *str)
   }
 }
 
-static int add_to_rx_list (RX_LIST ** list, const char *s, int flags,
+static int add_to_rx_list (rx_t ** list, const char *s, int flags,
                            BUFFER * err)
 {
-  RX_LIST *t, *last = NULL;
-  REGEXP *rx;
+  rx_t* rx;
+  int i = 0;
 
   if (!s || !*s)
     return 0;
 
-  if (!(rx = mutt_compile_regexp (s, flags))) {
+  if (!(rx = rx_compile (s, flags))) {
     snprintf (err->data, err->dsize, "Bad regexp: %s\n", s);
     return -1;
   }
 
-  /* check to make sure the item is not already on this list */
-  for (last = *list; last; last = last->next) {
-    if (ascii_strcasecmp (rx->pattern, last->rx->pattern) == 0) {
-      /* already on the list, so just ignore it */
-      last = NULL;
-      break;
-    }
-    if (!last->next)
-      break;
-  }
-
-  if (!*list || last) {
-    t = mutt_new_rx_list ();
-    t->rx = rx;
-    if (last) {
-      last->next = t;
-      last = last->next;
-    }
-    else
-      *list = last = t;
-  }
-  else                          /* duplicate */
-    mutt_free_regexp (&rx);
-
+  i = rx_lookup ((*list), rx->pattern);
+  if (i >= 0)
+    rx_free (&rx);
+  else
+    list_push_back (list, rx);
   return 0;
 }
 
@@ -346,14 +327,14 @@ static int add_to_spam_list (SPAM_LIST ** list, const char *pat,
                              const char *templ, BUFFER * err)
 {
   SPAM_LIST *t = NULL, *last = NULL;
-  REGEXP *rx;
+  rx_t* rx;
   int n;
   const char *p;
 
   if (!pat || !*pat || !templ)
     return 0;
 
-  if (!(rx = mutt_compile_regexp (pat, REG_ICASE))) {
+  if (!(rx = rx_compile (pat, REG_ICASE))) {
     snprintf (err->data, err->dsize, _("Bad regexp: %s"), pat);
     return -1;
   }
@@ -417,7 +398,7 @@ static int remove_from_spam_list (SPAM_LIST ** list, const char *pat)
   spam = *list;
   if (spam->rx && !mutt_strcmp (spam->rx->pattern, pat)) {
     *list = spam->next;
-    mutt_free_regexp (&spam->rx);
+    rx_free (&spam->rx);
     FREE(&spam->template);
     FREE(&spam);
     return 1;
@@ -427,7 +408,7 @@ static int remove_from_spam_list (SPAM_LIST ** list, const char *pat)
   for (spam = prev->next; spam;) {
     if (!mutt_strcmp (spam->rx->pattern, pat)) {
       prev->next = spam->next;
-      mutt_free_regexp (&spam->rx);
+      rx_free (&spam->rx);
       FREE(spam->template);
       FREE(spam);
       spam = prev->next;
@@ -467,35 +448,23 @@ static void remove_from_list (LIST ** l, const char *str)
   }
 }
 
-static int remove_from_rx_list (RX_LIST ** l, const char *str)
+static int remove_from_rx_list (list2_t** l, const char *str)
 {
-  RX_LIST *p, *last = NULL;
-  int rv = -1;
+  int i = 0;
 
   if (mutt_strcmp ("*", str) == 0) {
-    mutt_free_rx_list (l);      /* ``unCMD *'' means delete all current entries */
-    rv = 0;
+    list_del (l, rx_free);
+    return (0);
   }
   else {
-    p = *l;
-    last = NULL;
-    while (p) {
-      if (ascii_strcasecmp (str, p->rx->pattern) == 0) {
-        mutt_free_regexp (&p->rx);
-        if (last)
-          last->next = p->next;
-        else
-          (*l) = p->next;
-        FREE (&p);
-        rv = 0;
-      }
-      else {
-        last = p;
-        p = p->next;
-      }
+    i = rx_lookup ((*l), str);
+    if (i >= 0) {
+      rx_t* r = list_pop_idx ((*l), i);
+      rx_free (&r);
+      return (0);
     }
   }
-  return (rv);
+  return (-1);
 }
 
 static int parse_ifdef (BUFFER * tmp, BUFFER * s, unsigned long data,
@@ -605,44 +574,6 @@ static int parse_list (BUFFER * buf, BUFFER * s, unsigned long data,
   return 0;
 }
 
-#if 0
-static int _parse_rx_list (BUFFER * buf, BUFFER * s, unsigned long data,
-                           BUFFER * err, int flags)
-{
-  do {
-    mutt_extract_token (buf, s, 0);
-    if (add_to_rx_list ((RX_LIST **) data, buf->data, flags, err) != 0)
-      return -1;
-
-  }
-  while (MoreArgs (s));
-
-  return 0;
-}
-
-static int parse_rx_list (BUFFER * buf, BUFFER * s, unsigned long data,
-                          BUFFER * err)
-{
-  return _parse_rx_list (buf, s, data, err, REG_ICASE);
-}
-
-static int parse_rx_unlist (BUFFER * buf, BUFFER * s, unsigned long data,
-                            BUFFER * err)
-{
-  do {
-    mutt_extract_token (buf, s, 0);
-    if (mutt_strcmp (buf->data, "*") == 0) {
-      mutt_free_rx_list ((RX_LIST **) data);
-      break;
-    }
-    remove_from_rx_list ((RX_LIST **) data, buf->data);
-  }
-  while (MoreArgs (s));
-
-  return 0;
-}
-#endif
-
 static void _alternates_clean (void)
 {
   int i;
@@ -735,7 +666,7 @@ static int parse_spam_list (BUFFER * buf, BUFFER * s, unsigned long data,
     /* "*" is a special case. */
     if (!mutt_strcmp (buf->data, "*")) {
       mutt_free_spam_list (&SpamList);
-      mutt_free_rx_list (&NoSpamList);
+      list_del (&NoSpamList, rx_free);
       return 0;
     }
 
@@ -1083,7 +1014,7 @@ static void mutt_set_default (struct option_t *p)
     break;
   case DT_RX:
     {
-      REGEXP *pp = (REGEXP *) p->data;
+      rx_t* pp = (rx_t*) p->data;
 
       if (!p->init && pp->pattern)
         p->init = (unsigned long) safe_strdup (pp->pattern);
@@ -1130,7 +1061,7 @@ static void mutt_restore_default (struct option_t *p)
     break;
   case DT_RX:
     {
-      REGEXP *pp = (REGEXP *) p->data;
+      rx_t *pp = (rx_t *) p->data;
       int flags = 0;
 
       FREE (&pp->pattern);
@@ -1323,7 +1254,7 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
       }
     }
     else if (DTYPE (MuttVars[idx].type) == DT_RX) {
-      REGEXP *ptr = (REGEXP *) MuttVars[idx].data;
+      rx_t *ptr = (rx_t *) MuttVars[idx].data;
       regex_t *rx;
       int e, flags = 0;
 

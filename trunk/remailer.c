@@ -18,7 +18,6 @@
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "mutt_menu.h"
-#include "mutt_regex.h"
 #include "mapping.h"
 
 #include "remailer.h"
@@ -26,6 +25,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/rx.h"
 
 #include <stdio.h>
 #include <string.h>

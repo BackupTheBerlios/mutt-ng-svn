@@ -22,6 +22,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/rx.h"
 
 #include <limits.h>
 #include <string.h>
@@ -31,7 +32,7 @@
 
 typedef struct hook {
   int type;                     /* hook type */
-  REGEXP rx;                    /* regular expression */
+  rx_t rx;                      /* regular expression */
   char *command;                /* filename, command or pattern to execute */
   pattern_t *pattern;           /* used for fcc,save,send-hook */
   struct hook *next;

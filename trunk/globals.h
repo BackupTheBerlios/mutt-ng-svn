@@ -10,6 +10,8 @@
 #define _GLOBALS_H
 
 #include "lib/str.h"
+#include "lib/list.h"
+#include "lib/rx.h"
 
 WHERE void (*mutt_error) (const char *, ...);
 WHERE void (*mutt_message) (const char *, ...);
@@ -75,6 +77,13 @@ WHERE char *MhReplied;
 WHERE char *MhUnseen;
 WHERE char *MsgFmt;
 WHERE char *MsgIdFormat;
+
+WHERE rx_t Mask;
+WHERE rx_t QuoteRegexp;
+WHERE rx_t ReplyRegexp;
+WHERE rx_t Smileys;
+WHERE rx_t GecosMask;
+WHERE rx_t StripWasRegexp;
 
 #ifdef USE_SOCKET
 WHERE char *Preconnect INITVAL (NULL);
@@ -167,14 +176,14 @@ WHERE LIST *Ignore INITVAL (0);
 WHERE LIST *MimeLookupList INITVAL (0);
 WHERE LIST *UnIgnore INITVAL (0);
 
-WHERE RX_LIST *Alternates INITVAL (0);
-WHERE RX_LIST *UnAlternates INITVAL (0);
-WHERE RX_LIST *MailLists INITVAL (0);
-WHERE RX_LIST *UnMailLists INITVAL (0);
-WHERE RX_LIST *SubscribedLists INITVAL (0);
-WHERE RX_LIST *UnSubscribedLists INITVAL (0);
+WHERE list2_t *Alternates INITVAL (0);
+WHERE list2_t *UnAlternates INITVAL (0);
+WHERE list2_t *MailLists INITVAL (0);
+WHERE list2_t *UnMailLists INITVAL (0);
+WHERE list2_t *SubscribedLists INITVAL (0);
+WHERE list2_t *UnSubscribedLists INITVAL (0);
 WHERE SPAM_LIST *SpamList INITVAL (0);
-WHERE RX_LIST *NoSpamList INITVAL (0);
+WHERE list2_t *NoSpamList INITVAL (0);
 
 /* bit vector for boolean variables */
 #ifdef MAIN_C
@@ -234,7 +243,7 @@ WHERE ALIAS *Aliases INITVAL (0);
 WHERE LIST *UserHeader INITVAL (0);
 
 /*-- formerly in pgp.h --*/
-WHERE REGEXP PgpGoodSign;
+WHERE rx_t PgpGoodSign;
 WHERE char *PgpSignAs;
 WHERE short PgpTimeout;
 WHERE char *PgpEntryFormat;
@@ -297,9 +306,10 @@ extern const char *Months[];
 #endif
 
 #ifdef MAIN_C
-/* so that global vars get included */
+/* so that global vars get included
+ * FIXME WTF IS THIS?!?!???!?!??!?!??
+ */
 #include "mx.h"
-#include "mutt_regex.h"
 #include "buffy.h"
 #include "sort.h"
 #include "mutt_crypt.h"

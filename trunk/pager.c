@@ -17,7 +17,6 @@
 
 #include "mutt.h"
 #include "mutt_curses.h"
-#include "mutt_regex.h"
 #include "keymap.h"
 #include "mutt_menu.h"
 #include "mapping.h"
@@ -38,6 +37,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/rx.h"
 
 #include <sys/stat.h>
 #include <ctype.h>
@@ -672,7 +672,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       lineInfo[n].type = MT_COLOR_HDEFAULT;
       color_line = ColorHdrList;
       while (color_line) {
-        if (REGEXEC (color_line->rx, buf) == 0) {
+        if (REGEXEC (&color_line->rx, buf) == 0) {
           lineInfo[n].type = MT_COLOR_HEADER;
           lineInfo[n].syntax[0].color = color_line->pair;
           break;

@@ -8,8 +8,8 @@
  * please see the file GPL in the top level source directory.
  */
 
-#ifndef MUTT_H
-#define MUTT_H
+#ifndef _MUTT_H
+#define _MUTT_H
 
 #include "config.h"
 
@@ -44,6 +44,7 @@
 #include "rfc822.h"
 #include "hash.h"
 #include "charset.h"
+#include "lib/rx.h"
 
 #ifndef HAVE_WC_FUNCS
 # ifdef MB_LEN_MAX
@@ -66,8 +67,6 @@
 #define WHERE extern
 #define INITVAL(x)
 #endif
-
-#include "mutt_regex.h"
 
 /* flags for mutt_copy_header() */
 #define CH_UPDATE	1       /* update the status and x-status fields? */
@@ -571,13 +570,8 @@ typedef struct list_t {
   struct list_t *next;
 } LIST;
 
-typedef struct rx_list_t {
-  REGEXP *rx;
-  struct rx_list_t *next;
-} RX_LIST;
-
 typedef struct spam_list_t {
-  REGEXP *rx;
+  rx_t *rx;
   int nmatch;
   char *template;
   struct spam_list_t *next;
@@ -586,9 +580,7 @@ typedef struct spam_list_t {
 
 #define mutt_new_list() safe_calloc (1, sizeof (LIST))
 #define mutt_new_spam_list() safe_calloc (1, sizeof (SPAM_LIST))
-#define mutt_new_rx_list() safe_calloc (1, sizeof (RX_LIST))
 void mutt_free_list (LIST **);
-void mutt_free_rx_list (RX_LIST **);
 void mutt_free_spam_list (SPAM_LIST **);
 LIST *mutt_copy_list (LIST *);
 int mutt_matches_ignore (const char *, LIST *);
@@ -946,4 +938,4 @@ int state_printf (STATE *, const char *, ...);
 #include "lib.h"
 #include "globals.h"
 
-#endif /*MUTT_H */
+#endif /* !_MUTT_H */

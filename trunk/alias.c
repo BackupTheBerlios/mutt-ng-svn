@@ -12,13 +12,13 @@
 #endif
 
 #include "mutt.h"
-#include "mutt_regex.h"
 #include "mutt_curses.h"
 #include "mutt_idna.h"
 
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/rx.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -527,11 +527,11 @@ int mutt_addr_is_user (ADDRESS * addr)
     return 1;
   }
 
-  if (mutt_match_rx_list (addr->mailbox, Alternates)) {
+  if (rx_list_match (Alternates, addr->mailbox)) {
     dprint (5,
             (debugfile, "mail_addr_is_user: yes, %s matched by alternates.\n",
              addr->mailbox));
-    if (mutt_match_rx_list (addr->mailbox, UnAlternates))
+    if (rx_list_match (UnAlternates, addr->mailbox))
       dprint (5,
               (debugfile,
                "mail_addr_is_user: but, %s matched by unalternates.\n",

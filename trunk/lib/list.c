@@ -100,7 +100,7 @@ list2_t* list_dup (list2_t* l, void* (*dup) (void*)) {
   return (ret);
 }
 
-int _list_lookup (list2_t* l, int (*cmp) (const void*, const void*), const void* p) {
+int list_lookup (list2_t* l, int (*cmp) (const void*, const void*), const void* p) {
   int i = 0;
   if (list_empty(l) || !*cmp)
     return (-1);

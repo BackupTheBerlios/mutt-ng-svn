@@ -23,11 +23,11 @@
 #include "mutt_curses.h"
 #include "mutt_menu.h"
 #include "mutt_ssl.h"
-#include "mutt_regex.h"
 
 #include "lib/mem.h"
 #include "lib/str.h"
 #include "lib/intl.h"
+#include "lib/rx.h"
 
 typedef struct _tlssockdata {
   gnutls_session state;

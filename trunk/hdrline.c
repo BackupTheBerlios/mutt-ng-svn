@@ -19,6 +19,7 @@
 #include "mutt_idna.h"
 
 #include "lib/str.h"
+#include "lib/rx.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -27,16 +28,16 @@
 
 int mutt_is_mail_list (ADDRESS * addr)
 {
-  if (!mutt_match_rx_list (addr->mailbox, UnMailLists))
-    return mutt_match_rx_list (addr->mailbox, MailLists);
+  if (!rx_list_match (UnMailLists, addr->mailbox))
+    return rx_list_match (MailLists, addr->mailbox);
   return 0;
 }
 
 int mutt_is_subscribed_list (ADDRESS * addr)
 {
-  if (!mutt_match_rx_list (addr->mailbox, UnMailLists)
-      && !mutt_match_rx_list (addr->mailbox, UnSubscribedLists))
-    return mutt_match_rx_list (addr->mailbox, SubscribedLists);
+  if (!rx_list_match (UnMailLists, addr->mailbox)
+      && !rx_list_match (UnSubscribedLists, addr->mailbox))
+    return rx_list_match (SubscribedLists, addr->mailbox);
   return 0;
 }
 
