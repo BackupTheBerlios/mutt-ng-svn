@@ -592,6 +592,7 @@ int mutt_index_menu (void)
         if (menu->redraw & REDRAW_INDEX)
         {
           menu_redraw_index (menu);
+          draw_slidebar(menu);
           menu->redraw |= REDRAW_STATUS;
         }
         else if (menu->redraw & (REDRAW_MOTION_RESYNCH | REDRAW_MOTION))
@@ -1400,7 +1401,7 @@ CHECK_IMAP_ACL(IMAP_ACL_DELETE);
 
         if ((menu->menu == MENU_MAIN)
             && (query_quadoption (OPT_QUIT, 
-                                  _("Exit Mutt without saving?")) == M_YES))
+                                  _("Exit Mutt-ng without saving?")) == M_YES))
         {
           if (Context)
           {

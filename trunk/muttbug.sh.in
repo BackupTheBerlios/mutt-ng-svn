@@ -27,7 +27,7 @@
 #     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
 #
 
-SUBMIT="submit@bugs.guug.de"
+SUBMIT="mutt-ng-devel@lists.berlios.de"
 DEBIAN_SUBMIT="submit@bugs.debian.org"
 
 prefix=@prefix@
@@ -149,7 +149,7 @@ esac
 
 if test -x $DEBUGGER ; then
 	test -f core && CORE=core
-	echo "If mutt has crashed, it may have saved some program state in"
+	echo "If Mutt-ng has crashed, it may have saved some program state in"
 	echo "a file named core.  We can include this information with the bug"
 	echo "report if you wish so."
 	echo "Do you want to include information gathered from a core file?"
@@ -159,14 +159,14 @@ if test -x $DEBUGGER ; then
 	test "$_CORE" && CORE="$_CORE"
 fi
 
-echo $n "Do you want to include your personal mutt configuration files? [Y|n] $c"
+echo $n "Do you want to include your personal Mutt-ng configuration files? [Y|n] $c"
 read personal
 case "$personal" in
 [nN]*)  personal=no  ;;
     *)  personal=yes ;;
 esac
 
-echo $n "Do you want to include your system's global mutt configuration file? [Y|n] $c"
+echo $n "Do you want to include your system's global Mutt-ng configuration file? [Y|n] $c"
 read global
 case "$global" in
 [nN]*)  global=no  ;;
@@ -175,8 +175,8 @@ esac
 
 if test -f /etc/debian_version ; then
 	DEBIAN=yes
-	echo $n "Checking whether mutt has been installed as a package... $c"
-	DEBIANVERSION="`dpkg -l mutt | grep '^[ih]' | awk '{print $3}'`" 2> /dev/null
+	echo $n "Checking whether mutt-ng has been installed as a package... $c"
+	DEBIANVERSION="`dpkg -l muttng | grep '^[ih]' | awk '{print $3}'`" 2> /dev/null
 	if test "$DEBIANVERSION" ; then
 		DPKG=yes
 	else
@@ -198,10 +198,10 @@ fi
 if rpm -q mutt > /dev/null 2> /dev/null ; then
 	echo "Mutt seems to come from an RPM package."
 	RPMVERSION="`rpm -q mutt`"
-	RPMPACKAGER="`rpm -q -i mutt | sed -n -e 's/^Packager *: *//p'`"
+	RPMPACKAGER="`rpm -q -i muttng | sed -n -e 's/^Packager *: *//p'`"
 fi
 
-MUTTVERSION="`mutt -v | awk '{print $2; exit; }'`"
+MUTTVERSION="`muttng -v | awk '{print $2 $3; exit; }'`"
 test "$DPKG" = "yes" && SUBMIT="$SUBMIT, $DEBIAN_SUBMIT"
 
 exec > ${TEMPLATE}
@@ -210,11 +210,11 @@ test "$EMAIL"        && echo "From: $EMAIL"
 test "$REPLYTO"      && echo "Reply-To: $REPLYTO"
 test "$ORGANIZATION" && echo "Organization: $ORGANIZATION"
 
-echo "Subject: mutt-$MUTTVERSION: $SUBJECT"
+echo "Subject: Mutt-ng-$MUTTVERSION: $SUBJECT"
 echo "To: $SUBMIT"
 test "$EMAIL" 	     && echo "Bcc: ${EMAIL}"
 echo
-echo "Package: mutt"
+echo "Package: muttng"
 echo "Version: ${DEBIANVERSION-${RPMVERSION-$MUTTVERSION}}"
 echo "Severity: $severity"
 echo 
@@ -225,7 +225,7 @@ echo
 
 if test "$DEBIAN" = "yes" ; then
 	echo "Obtaining Debian-specific information..." > /dev/tty
-	bug -p -s dummy mutt < /dev/null 2> /dev/null |        \
+	bug -p -s dummy muttng < /dev/null 2> /dev/null |        \
 		sed -n -e "/^-- System Information/,/^---/p" | \
 		grep -v '^---'
 else
@@ -253,9 +253,9 @@ echo @CFLAGS@
 
 
 echo
-echo "-- Mutt Version Information"
+echo "-- Mutt-ng Version Information"
 echo
-mutt -v
+muttng -v
 
 if test "$CORE" && test -f "$CORE" ; then
 	echo 

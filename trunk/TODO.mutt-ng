@@ -1,6 +1,7 @@
 Here's a list of all mutt-ng specific TODOs (not in priority order):
 
-muttngbug must call fleang, not flea
+Check why sidebar-next-new doesn't switch to mailboxes if they don't fit in the
+sidebar and you have to scroll down.
 
 Really make sure that there're no more files installed with conflicting
 paths between mutt <-> mutt-ng. Update documentation to state that
