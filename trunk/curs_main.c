@@ -1277,7 +1277,11 @@ CHECK_IMAP_ACL(IMAP_ACL_DELETE);
         }
         else
 #endif
-        mutt_buffy (buf, sizeof (buf));
+        {
+          if (Context && Context->path)
+            strncpy (buf, Context->path, sizeof (buf));
+          mutt_buffy (buf, sizeof (buf));
+        }
 
         if ( op == OP_SIDEBAR_OPEN ) {
           if(!CurBuffy)
