@@ -19,6 +19,9 @@
  *     Boston, MA  02111, USA.
  */
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include <string.h>
 #include <stdio.h>
@@ -196,6 +199,7 @@ PreferredMIMENames[] =
   /* seems to be common on some systems */
 
   { "sjis",		"Shift_JIS"	},
+  { "euc-jp-ms",	"eucJP-ms"	},
 
 
   /*

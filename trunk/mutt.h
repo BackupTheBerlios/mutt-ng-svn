@@ -21,8 +21,6 @@
 #ifndef MUTT_H
 #define MUTT_H 
 
-#include "config.h"
-
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
@@ -469,6 +467,9 @@ enum
   OPTUSEDOMAIN,
   OPTUSEFROM,
   OPTUSEGPGAGENT,
+#ifdef HAVE_LIBIDN
+  OPTUSEIDN,
+#endif
 #ifdef HAVE_GETADDRINFO
   OPTUSEIPV6,
 #endif
@@ -498,6 +499,7 @@ enum
   OPTPGPIGNORESUB,
   OPTPGPCHECKEXIT,
   OPTPGPLONGIDS,
+  OPTPGPAUTODEC,
 #if 0
   OPTPGPENCRYPTSELF,
 #endif

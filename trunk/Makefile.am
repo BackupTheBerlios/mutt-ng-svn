@@ -53,7 +53,7 @@ DEFS=-DPKGDATADIR=\"$(pkgdatadir)\" -DSYSCONFDIR=\"$(sysconfdir)\" \
 	-DBINDIR=\"$(bindir)\" -DMUTTLOCALEDIR=\"$(datadir)/locale\" \
 	-DHAVE_CONFIG_H=1
 
-INCLUDES=-I. -I$(top_srcdir) $(IMAP_INCLUDES) -Iintl
+INCLUDES=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(LIBGPGME_CFLAGS) -Iintl
 
 CPPFLAGS=@CPPFLAGS@ -I$(includedir)
 

@@ -11,7 +11,9 @@ gssapi.m4 \
 iconv.m4 \
 lcmessage.m4 \
 libesmtp.m4 \
-progtest.m4
+libgnutls.m4 \
+progtest.m4 \
+types.m4
 ##m4-files-end
 
 Makefile.am: Makefile.am.in

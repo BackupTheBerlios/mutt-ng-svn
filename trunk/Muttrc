@@ -1598,6 +1598,17 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # command) from the list of recipients when replying to a message.
 # 
 # 
+# set menu_context=0
+#
+# Name: menu_context
+# Type: number
+# Default: 0
+# 
+# 
+# This variable controls the number of lines of context that are given
+# when scrolling through menus. (Similar to ``$pager_context''.)
+# 
+# 
 # set menu_scroll=no
 #
 # Name: menu_scroll
@@ -1760,7 +1771,7 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # Default: ask-no
 # 
 # 
-# Controls whether you will be asked to confirm moving read messages
+# Controls whether or not Mutt will move read messages
 # from your spool mailbox to your ``$mbox'' mailbox, or as a result of
 # a ``mbox-hook'' command.
 # 
@@ -2361,6 +2372,21 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # (PGP only)
 # 
 # 
+# set pgp_auto_decode=no
+#
+# Name: pgp_auto_decode
+# Type: boolean
+# Default: no
+# 
+# 
+# If set, mutt will automatically attempt to decrypt traditional PGP
+# messages whenever the user performs an operation which ordinarily would
+# result in the contents of the message being operated on.  For example,
+# if the user displays a pgp-traditional message which has not been manually
+# checked with the check-traditional-pgp function, mutt will automatically
+# check the message for traditional pgp.
+# 
+# 
 # set pgp_decode_command=""
 #
 # Name: pgp_decode_command
@@ -2783,6 +2809,17 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # (S/MIME only)
 # 
 # 
+# set ssl_client_cert=""
+#
+# Name: ssl_client_cert
+# Type: path
+# Default: ""
+# 
+# 
+# The file containing a client certificate and its associated private
+# key.
+# 
+# 
 # set ssl_starttls=yes
 #
 # Name: ssl_starttls
@@ -2869,17 +2906,6 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # 
 # This variables specifies whether to attempt to use TLSv1 in the
 # SSL authentication process.
-# 
-# 
-# set ssl_client_cert=""
-#
-# Name: ssl_client_cert
-# Type: path
-# Default: ""
-# 
-# 
-# The file containing a client certificate and its associated private
-# key.
 # 
 # 
 # set pipe_split=no
@@ -3114,8 +3140,9 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # Default: ask-no
 # 
 # 
-# Controls whether or not Mutt asks for confirmation before printing.
-# This is useful for people (like me) who accidentally hit ``p'' often.
+# Controls whether or not Mutt really prints messages.
+# This is set to ask-no by default, because some people
+# accidentally hit ``p'' often (like me).
 # 
 # 
 # set print_command="lpr"
@@ -3268,7 +3295,7 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # Default: ask-yes
 # 
 # 
-# Controls whether or not you are prompted to recall postponed messages
+# Controls whether or not Mutt recalls postponed messages
 # when composing a new message.  Also see ``$postponed''.
 # 
 # Setting this variable to ``yes'' is not generally useful, and thus not
@@ -3322,8 +3349,8 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # Default: ask-yes
 # 
 # 
-# If set, Mutt will ask you if you want to use the address listed in the
-# Reply-To: header field when replying to a message.  If you answer no,
+# If set, when replying to a message, Mutt will use the address listed
+# in the Reply-to: header as the recipient of the reply.  If unset,
 # it will use the address in the From: header field instead.  This
 # option is useful for reading a mailing list that sets the Reply-To:
 # header field to the list address and you want to send a private
@@ -3870,7 +3897,7 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # %m      the number of messages in the mailbox *
 # %M      the number of messages shown (i.e., which match the current limit) *
 # %n      number of new messages in the mailbox *
-# %o      number of old unread messages
+# %o      number of old unread messages *
 # %p      number of postponed messages *
 # %P      percentage of the way through the index
 # %r      modified/read-only/won't-write/attach-message indicator,
@@ -3897,8 +3924,8 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # 
 # where sequence_char is a character from the table above, and
 # optional_string is the string you would like printed if
-# status_char is nonzero.  optional_string may contain
-# other sequence as well as normal text, but you may not nest
+# sequence_char is nonzero.  optional_string may contain
+# other sequences as well as normal text, but you may not nest
 # optional strings.
 # 
 # Here is an example illustrating how to optionally print the number of
@@ -4123,6 +4150,30 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # Normally, the default should work.
 # 
 # 
+# set use_idn=yes
+#
+# Name: use_idn
+# Type: boolean
+# Default: yes
+# 
+# 
+# When set, Mutt will show you international domain names decoded.
+# Note: You can use IDNs for addresses even if this is unset.
+# This variable only affects decoding.
+# 
+# 
+# set use_ipv6=yes
+#
+# Name: use_ipv6
+# Type: boolean
+# Default: yes
+# 
+# 
+# When set, Mutt will look for IPv6 addresses of hosts it tries to
+# contact.  If this option is unset, Mutt will restrict itself to IPv4 addresses.
+# Normally, the default should work.
+# 
+# 
 # set user_agent=yes
 #
 # Name: user_agent
@@ -4172,7 +4223,7 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # Default: yes
 # 
 # 
-# When set, mutt will weed headers when when displaying, forwarding,
+# When set, mutt will weed headers when displaying, forwarding,
 # printing, or replying to messages.
 # 
 # 
@@ -4222,7 +4273,7 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # 
 # 
 # Controls whether mutt writes out the Bcc header when preparing
-# messages to be sent.  Exim users may wish to use this.
+# messages to be sent.  Exim users may wish to unset this.
 # 
 # 
 # set x_comment_to=no

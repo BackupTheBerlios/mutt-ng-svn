@@ -1202,6 +1202,12 @@ struct option_t MuttVars[] = {
   ** If unset, Mutt will remove your address (see the ``alternates''
   ** command) from the list of recipients when replying to a message.
   */
+  { "menu_context",	DT_NUM,  R_NONE, UL &MenuContext, 0 },
+  /*
+  ** .pp
+  ** This variable controls the number of lines of context that are given
+  ** when scrolling through menus. (Similar to ``$$pager_context''.)
+  */
   { "menu_scroll",	DT_BOOL, R_NONE, OPTMENUSCROLL, 0 },
   /*
   ** .pp
@@ -1314,7 +1320,7 @@ struct option_t MuttVars[] = {
   { "move",		DT_QUAD, R_NONE, OPT_MOVE, M_ASKNO },
   /*
   ** .pp
-  ** Controls whether you will be asked to confirm moving read messages
+  ** Controls whether or not Mutt will move read messages
   ** from your spool mailbox to your ``$$mbox'' mailbox, or as a result of
   ** a ``$mbox-hook'' command.
   */
@@ -1753,6 +1759,17 @@ struct option_t MuttVars[] = {
   ** \fBdeprecated\fP.
   ** (PGP only)
   */
+  { "pgp_auto_decode", DT_BOOL, R_NONE, OPTPGPAUTODEC, 0 },
+  /*
+  ** .pp
+  ** If set, mutt will automatically attempt to decrypt traditional PGP
+  ** messages whenever the user performs an operation which ordinarily would
+  ** result in the contents of the message being operated on.  For example,
+  ** if the user displays a pgp-traditional message which has not been manually
+  ** checked with the check-traditional-pgp function, mutt will automatically
+  ** check the message for traditional pgp.
+  */
+
 
   /* XXX Default values! */
   
@@ -2063,6 +2080,14 @@ struct option_t MuttVars[] = {
 #endif
  
 #if defined(USE_SSL)||defined(USE_NSS)||defined(USE_GNUTLS)
+#ifdef USE_SSL
+  { "ssl_client_cert", DT_PATH, R_NONE, UL &SslClientCert, 0 },
+  /*
+  ** .pp
+  ** The file containing a client certificate and its associated private
+  ** key.
+  */
+#endif
 # if defined(USE_SSL)||defined(USE_GNUTLS)
   { "ssl_starttls", DT_QUAD, R_NONE, OPT_SSLSTARTTLS, M_YES },
   /*
@@ -2136,12 +2161,6 @@ struct option_t MuttVars[] = {
   ** certificates are also automatically accepted.
   ** .pp
   ** Example: set ssl_ca_certificates_file=/etc/ssl/certs/ca-certificates.crt
-  */
-  { "ssl_client_cert", DT_PATH, R_NONE, UL &SslClientCert, 0 },
-  /*
-  ** .pp
-  ** The file containing a client certificate and its associated private
-  ** key.
   */
 #ifdef USE_GNUTLS
   { "ssl_min_dh_prime_bits", DT_NUM, R_NONE, UL &SslDHPrimeBits, 0 },
@@ -2316,8 +2335,9 @@ struct option_t MuttVars[] = {
   { "print",		DT_QUAD, R_NONE, OPT_PRINT, M_ASKNO },
   /*
   ** .pp
-  ** Controls whether or not Mutt asks for confirmation before printing.
-  ** This is useful for people (like me) who accidentally hit ``p'' often.
+  ** Controls whether or not Mutt really prints messages.
+  ** This is set to \fIask-no\fP by default, because some people
+  ** accidentally hit ``p'' often (like me).
   */
   { "print_command",	DT_PATH, R_NONE, UL &PrintCmd, UL "lpr" },
   /*
@@ -2431,7 +2451,7 @@ struct option_t MuttVars[] = {
   { "recall",		DT_QUAD, R_NONE, OPT_RECALL, M_ASKYES },
   /*
   ** .pp
-  ** Controls whether or not you are prompted to recall postponed messages
+  ** Controls whether or not Mutt recalls postponed messages
   ** when composing a new message.  Also see ``$$postponed''.
   ** .pp
   ** Setting this variable to ``yes'' is not generally useful, and thus not
@@ -2465,8 +2485,8 @@ struct option_t MuttVars[] = {
   { "reply_to",		DT_QUAD, R_NONE, OPT_REPLYTO, M_ASKYES },
   /*
   ** .pp
-  ** If set, Mutt will ask you if you want to use the address listed in the
-  ** Reply-To: header field when replying to a message.  If you answer no,
+  ** If set, when replying to a message, Mutt will use the address listed
+  ** in the Reply-to: header as the recipient of the reply.  If unset,
   ** it will use the address in the From: header field instead.  This
   ** option is useful for reading a mailing list that sets the Reply-To:
   ** header field to the list address and you want to send a private
@@ -2863,7 +2883,7 @@ struct option_t MuttVars[] = {
   ** .dt %m  .dd the number of messages in the mailbox *
   ** .dt %M  .dd the number of messages shown (i.e., which match the current limit) *
   ** .dt %n  .dd number of new messages in the mailbox *
-  ** .dt %o  .dd number of old unread messages
+  ** .dt %o  .dd number of old unread messages *
   ** .dt %p  .dd number of postponed messages *
   ** .dt %P  .dd percentage of the way through the index
   ** .dt %r  .dd modified/read-only/won't-write/attach-message indicator,
@@ -2890,8 +2910,8 @@ struct option_t MuttVars[] = {
   ** .pp
   ** where \fIsequence_char\fP is a character from the table above, and
   ** \fIoptional_string\fP is the string you would like printed if
-  ** \fIstatus_char\fP is nonzero.  \fIoptional_string\fP \fBmay\fP contain
-  ** other sequence as well as normal text, but you may \fBnot\fP nest
+  ** \fIsequence_char\fP is nonzero.  \fIoptional_string\fP \fBmay\fP contain
+  ** other sequences as well as normal text, but you may \fBnot\fP nest
   ** optional strings.
   ** .pp
   ** Here is an example illustrating how to optionally print the number of
@@ -3058,6 +3078,15 @@ struct option_t MuttVars[] = {
   ** generated unless the user explicitly sets one using the ``$my_hdr''
   ** command.
   */
+#ifdef HAVE_LIBIDN
+  { "use_idn",		DT_BOOL, R_BOTH, OPTUSEIDN, 1},
+  /*
+  ** .pp
+  ** When \fIset\fP, Mutt will show you international domain names decoded.
+  ** Note: You can use IDNs for addresses even if this is \fIunset\fP.
+  ** This variable only affects decoding.
+  */
+#endif /* HAVE_LIBIDN */
 #ifdef HAVE_GETADDRINFO
   { "use_ipv6",		DT_BOOL, R_NONE, OPTUSEIPV6, 1},
   /*
@@ -3097,7 +3126,7 @@ struct option_t MuttVars[] = {
   { "weed",		DT_BOOL, R_NONE, OPTWEED, 1 },
   /*
   ** .pp
-  ** When set, mutt will weed headers when when displaying, forwarding,
+  ** When set, mutt will weed headers when displaying, forwarding,
   ** printing, or replying to messages.
   */
   { "wrap_search",	DT_BOOL, R_NONE, OPTWRAPSEARCH, 1 },
@@ -3127,7 +3156,7 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** Controls whether mutt writes out the Bcc header when preparing
-  ** messages to be sent.  Exim users may wish to use this.
+  ** messages to be sent.  Exim users may wish to unset this.
   */
   {"xterm_icon",       DT_STR,   R_BOTH, UL &XtermIcon,  UL "M%?n?AIL&ail?"},
   /*
@@ -3229,6 +3258,7 @@ static int parse_spam_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unlist (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_rx_unlist (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 
+static int parse_lists (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unlists (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_alias (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unalias (BUFFER *, BUFFER *, unsigned long, BUFFER *);
@@ -3239,6 +3269,7 @@ static int parse_set (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_my_hdr (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unmy_hdr (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_subscribe (BUFFER *, BUFFER *, unsigned long, BUFFER *);
+static int parse_unsubscribe (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 
 static int parse_alternates (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unalternates (BUFFER *, BUFFER *, unsigned long, BUFFER *);
@@ -3248,11 +3279,12 @@ struct command_t
   char *name;
   int (*func) (BUFFER *, BUFFER *, unsigned long, BUFFER *);
   unsigned long data;
+  unsigned long data1;
 };
 
 struct command_t Commands[] = {
-  { "alternates",	parse_alternates,	UL &Alternates },
-  { "unalternates",	parse_unalternates,	UL &Alternates },
+  { "alternates",	parse_alternates,	0 },
+  { "unalternates",	parse_unalternates,	0 },
 #ifdef USE_SOCKET
   { "account-hook",     mutt_parse_hook,        M_ACCOUNTHOOK },
 #endif
@@ -3279,7 +3311,7 @@ struct command_t Commands[] = {
   { "iconv-hook",	mutt_parse_hook,	M_ICONVHOOK }, 
 #endif
   { "ignore",		parse_ignore,		0 },
-  { "lists",		parse_rx_list,		UL &MailLists },
+  { "lists",		parse_lists,		0 },
   { "macro",		mutt_parse_macro,	0 },
   { "mailboxes",	mutt_parse_mailboxes,	M_MAILBOXES },
   { "unmailboxes",	mutt_parse_mailboxes,	M_UNMAILBOXES },
@@ -3315,6 +3347,6 @@ struct command_t Commands[] = {
   { "unmy_hdr",		parse_unmy_hdr,		0 },
   { "unscore",		mutt_parse_unscore,	0 },
   { "unset",		parse_set,		M_SET_UNSET },
-  { "unsubscribe",	parse_rx_unlist,	UL &SubscribedLists },
+  { "unsubscribe",	parse_unsubscribe,	0 },
   { NULL }
 };

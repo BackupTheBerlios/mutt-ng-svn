@@ -44,8 +44,6 @@ Problems are listed in approximate order of priority.
   STATE struct so that all of the MIME handlers can look
   up the corresponding HEADERs if need be?
 
-- option to not include attachments in replies
-
 - handle message/external-body in some fashion
 
 - handle message/partial reconstruction
@@ -65,4 +63,4 @@ Problems are listed in approximate order of priority.
   array.  How do we handle "in-the-middle additions" properly?  Do
   they happen at all?
 
-$Id: TODO,v 3.0 2002/01/24 12:10:47 roessler Exp $
+$Id: TODO,v 3.1 2005/02/12 19:29:52 roessler Exp $

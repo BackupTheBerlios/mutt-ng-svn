@@ -2,12 +2,8 @@
 
 /* Compiling with newsreading support with NNTP */
 #undef USE_NNTP
-
-/* program to use for shell commands */
-#define EXECSHELL "/bin/sh"
-
-/* Define to `int' if <signal.h> doesn't define.  */
-#undef sig_atomic_t
+/* The compressed mailboxes support */
+#undef USE_COMPRESSED
 
 
 /* Define to enable the "buffy_size" feature. */
@@ -23,6 +19,9 @@
 
 /* Define if you want clasic S/MIME support. */
 #undef CRYPT_BACKEND_CLASSIC_SMIME
+
+/* Defined, if GPGME support is enabled */
+#undef CRYPT_BACKEND_GPGME
 
 /* Define to 1 if using `alloca.c'. */
 #undef C_ALLOCA
@@ -60,18 +59,23 @@
 /* Define to 1 if you have the `bind_textdomain_codeset' function. */
 #undef HAVE_BIND_TEXTDOMAIN_CODESET
 
+/* Define if you have bkgdset, as a function or macro. */
+#undef HAVE_BKGDSET
+
+/* Define if you have the C99 integer types */
+#undef HAVE_C99_INTTYPES
+
 /* Define if your curses library supports color. */
 #undef HAVE_COLOR
+
+/* Define if you have curs_set, as a function or macro. */
+#undef HAVE_CURS_SET
 
 /* Sleepycat DB4 Support */
 #undef HAVE_DB4
 
 /* Define to 1 if you have the `dcgettext' function. */
 #undef HAVE_DCGETTEXT
-
-/* Define to 1 if you have the declaration of `sys_siglist', and to 0 if you
-   don't. */
-#undef HAVE_DECL_SYS_SIGLIST
 
 /* Define to 1 if you have the `fchdir' function. */
 #undef HAVE_FCHDIR
@@ -120,6 +124,9 @@
 
 /* Define to 1 if you have the `getuid' function. */
 #undef HAVE_GETUID
+
+/* Define to 1 if you have the <gnutls/openssl.h> header file. */
+#undef HAVE_GNUTLS_OPENSSL_H
 
 /* Define if your GSSAPI implementation is Heimdal */
 #undef HAVE_HEIMDAL
@@ -256,6 +263,9 @@
 /* Define to 1 if you have the `mempcpy' function. */
 #undef HAVE_MEMPCPY
 
+/* Define if you have meta, as a function or macro. */
+#undef HAVE_META
+
 /* Define to 1 if you have a working `mmap' system call. */
 #undef HAVE_MMAP
 
@@ -283,6 +293,9 @@
 /* Define to 1 if you have the `regcomp' function. */
 #undef HAVE_REGCOMP
 
+/* Define if you have resizeterm, as a function or macro. */
+#undef HAVE_RESIZETERM
+
 /* Define to 1 if you have the `setegid' function. */
 #undef HAVE_SETEGID
 
@@ -300,6 +313,9 @@
 
 /* Define to 1 if you have the `srand48' function. */
 #undef HAVE_SRAND48
+
+/* Define if you have start_color, as a function or macro. */
+#undef HAVE_START_COLOR
 
 /* Define to 1 if you have the <stdarg.h> header file. */
 #undef HAVE_STDARG_H
@@ -370,14 +386,17 @@
 /* Define to 1 if you have the `tsearch' function. */
 #undef HAVE_TSEARCH
 
-/* Define if you have the uint32_t type. */
-#undef HAVE_UINT32_T
+/* Define if you have typeahead, as a function or macro. */
+#undef HAVE_TYPEAHEAD
 
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
 /* Define to 1 if you have the <unix.h> header file. */
 #undef HAVE_UNIX_H
+
+/* Define if you have use_default_colors, as a function or macro. */
+#undef HAVE_USE_DEFAULT_COLORS
 
 /* Define to 1 if you have the `vsnprintf' function. */
 #undef HAVE_VSNPRINTF
@@ -407,6 +426,10 @@
 
 /* Define as const if the declaration of iconv() needs const. */
 #undef ICONV_CONST
+
+/* Define as 1 if iconv() only converts exactly and we should treat all return
+   values other than (size_t)(-1) as equivalent. */
+#undef ICONV_NONTRANS
 
 /* Where to find ispell on your system. */
 #undef ISPELL
@@ -452,18 +475,29 @@
 /* Where to find sendmail on your system. */
 #undef SENDMAIL
 
+/* Some systems declare sig_atomic_t as volatile, some others -- no. This
+   define will have value `sig_atomic_t' or `volatile sig_atomic_t'
+   accordingly. */
+#undef SIG_ATOMIC_VOLATILE_T
+
 /* The size of a `int', as computed by sizeof. */
 #undef SIZEOF_INT
 
 /* The size of a `long', as computed by sizeof. */
 #undef SIZEOF_LONG
 
+/* The size of a `long long', as computed by sizeof. */
+#undef SIZEOF_LONG_LONG
+
+/* The size of a `short', as computed by sizeof. */
+#undef SIZEOF_SHORT
+
 /* If using the C implementation of alloca, define if you know the
    direction of stack growth for your system; otherwise it will be
    automatically deduced at run-time.
-	STACK_DIRECTION > 0 => grows toward higher addresses
-	STACK_DIRECTION < 0 => grows toward lower addresses
-	STACK_DIRECTION = 0 => direction of growth unknown */
+        STACK_DIRECTION > 0 => grows toward higher addresses
+        STACK_DIRECTION < 0 => grows toward lower addresses
+        STACK_DIRECTION = 0 => direction of growth unknown */
 #undef STACK_DIRECTION
 
 /* Define to 1 if you have the ANSI C header files. */
@@ -475,6 +509,9 @@
 /* Define to enable Sun mailtool attachments support. */
 #undef SUN_ATTACHMENT
 
+/* Define to 1 if `sys_siglist' is declared by <signal.h> or <unistd.h>. */
+#undef SYS_SIGLIST_DECLARED
+
 /* Define to use dotlocking for mailboxes. */
 #undef USE_DOTLOCK
 
@@ -484,7 +521,7 @@
 /* Define to use flock() to lock mailboxes. */
 #undef USE_FLOCK
 
-/* Define if you want support for GNU TLS. */
+/* Define if you want support for SSL via the gnutls library. */
 #undef USE_GNUTLS
 
 /* Define if you want to use the included regex.c. */
@@ -534,18 +571,36 @@
 /* Version number of package */
 #undef VERSION
 
-/* Define to 1 if your processor stores words with the most significant byte
-   first (like Motorola and SPARC, unlike Intel and VAX). */
-#undef WORDS_BIGENDIAN
+#ifndef HAVE_C99_INTTYPES
+#  if SIZEOF_SHORT == 4
+typedef unsigned short uint32_t;
+#  elif SIZEOF_INT == 4
+typedef unsigned int uint32_t;
+#  elif SIZEOF_LONG == 4
+typedef unsigned long uint32_t;
+#  endif
+#  if SIZEOF_INT == 8
+typedef unsigned int uint64_t;
+#  elif SIZEOF_LONG == 8
+typedef unsigned long uint64_t;
+#  elif SIZEOF_LONG_LONG == 8
+typedef unsigned long long uint64_t;
+#  endif
+#endif
+  
+
+/* Number of bits in a file offset, on hosts where this is settable. */
+#undef _FILE_OFFSET_BITS
+
+/* Define for large files, on AIX-style hosts. */
+#undef _LARGE_FILES
 
 /* Define to empty if `const' does not conform to ANSI C. */
 #undef const
 
-/* Define to `__inline__' or `__inline' if that's what the C compiler
-   calls it, or to nothing if 'inline' is not supported under any name.  */
-#ifndef __cplusplus
+/* Define as `__inline' if that's what the C compiler calls it, or to nothing
+   if it is not supported. */
 #undef inline
-#endif
 
 /* Define to 'int' if system headers don't define. */
 #undef mbstate_t
@@ -570,36 +625,3 @@
 
 /* Define to 'int' if system headers don't define. */
 #undef wint_t
-/* Define if you have start_color, as a function or macro.  */
-#undef HAVE_START_COLOR
-
-/* Define if you have typeahead, as a function or macro.  */
-#undef HAVE_TYPEAHEAD
-
-/* Define if you have bkgdset, as a function or macro.  */
-#undef HAVE_BKGDSET
-
-/* Define if you have curs_set, as a function or macro.  */
-#undef HAVE_CURS_SET
-
-/* Define if you have meta, as a function or macro.  */
-#undef HAVE_META
-
-/* Define if you have use_default_colors, as a function or macro.  */
-#undef HAVE_USE_DEFAULT_COLORS
-
-/* Define if you have resizeterm, as a function or macro.  */
-#undef HAVE_RESIZETERM
-
-/* Some systems declare sig_atomic_t as volatile, some others -- no.
- * This define will have value `sig_atomic_t' or `volatile sig_atomic_t'
- * accordingly. */
-#undef SIG_ATOMIC_VOLATILE_T
-
-/* Define as 1 if iconv() only converts exactly and we should treat
- * all return values other than (size_t)(-1) as equivalent. */
-#undef ICONV_NONTRANS
-
-/* The compressed mailboxes support */
-#undef USE_COMPRESSED
-

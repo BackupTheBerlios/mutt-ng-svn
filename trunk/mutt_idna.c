@@ -16,7 +16,10 @@
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
  */ 
 
-#include "config.h"
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "mutt.h"
 #include "charset.h"
 #include "mutt_idna.h"
@@ -43,6 +46,9 @@ int mutt_idna_to_local (const char *in, char **out, int flags)
 {
   *out = NULL;
 
+  if (!option (OPTUSEIDN))
+    goto notrans;
+
   if (!in)
     goto notrans;
   
@@ -54,7 +60,8 @@ int mutt_idna_to_local (const char *in, char **out, int flags)
 
   /* 
    * make sure that we can convert back and come out with the same
-   * domain name. */
+   * domain name. 
+   */
   
   if ((flags & MI_MAY_BE_IRREVERSIBLE) == 0)
   {

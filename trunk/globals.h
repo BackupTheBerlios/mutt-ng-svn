@@ -136,7 +136,9 @@ WHERE char *SslCertFile INITVAL (NULL);
 #if defined(USE_SSL) || defined(USE_NSS)
 WHERE char *SslEntropyFile INITVAL (NULL);
 #endif
+#ifdef USE_SSL
 WHERE char *SslClientCert INITVAL (NULL);
+#endif
 #ifdef USE_GNUTLS
 WHERE short SslDHPrimeBits;
 WHERE char *SslCACertFile INITVAL (NULL);
@@ -161,8 +163,11 @@ WHERE LIST *MimeLookupList INITVAL(0);
 WHERE LIST *UnIgnore INITVAL(0);
 
 WHERE RX_LIST *Alternates INITVAL(0);
+WHERE RX_LIST *UnAlternates INITVAL(0);
 WHERE RX_LIST *MailLists INITVAL(0);
+WHERE RX_LIST *UnMailLists INITVAL(0);
 WHERE RX_LIST *SubscribedLists INITVAL(0);
+WHERE RX_LIST *UnSubscribedLists INITVAL(0);
 WHERE SPAM_LIST *SpamList INITVAL(0);
 WHERE RX_LIST *NoSpamList INITVAL(0);
 
@@ -189,6 +194,7 @@ WHERE short NntpContext;
 
 WHERE short ConnectTimeout;
 WHERE short HistSize;
+WHERE short MenuContext;
 WHERE short PagerContext;
 WHERE short PagerIndexLines;
 WHERE short ReadInc;

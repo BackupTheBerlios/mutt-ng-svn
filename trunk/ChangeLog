@@ -1,3 +1,255 @@
+2005-02-12 20:46:48  Vincent Lefevre  <vincent@vinc17.org>  (roessler)
+
+	* po/fr.po: update
+
+2005-02-12 20:45:36  Vsevolod Volkov  <vvv@mutt.org.ua>  (roessler)
+
+	* po/ru.po: update
+
+2005-02-12 20:20:42  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* configure.in: Give people more time to profile the inode
+	sorting code; disabled by default for now.
+
+	* globals.h, init.h, menu.c: Christoph Berg's menu_context,
+	and a version of menu_move_off where that's not optional,
+	but where mutt will just try to avoid moving off the bottom.
+	Complain to mutt-dev if you want this to be optional.
+
+2005-02-12 19:54:51  TAKAHASHI Tamotsu	<ttakah@lapis.plala.or.jp>  (brendan)
+
+	* imap/message.c, imap/util.c: Fix debian bug #275060 (editing
+	on an imap server loses its flags).  Remove trailing delimiter
+	from IMAP folder names.
+
+2005-02-12 19:52:28  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+                                 
+	* charset.c, mbyte.c: Recognize euc-jp-ms.  MORIYAMA Masayuki by
+	way of TAKAHASHI Tamotsu.
+                                 
+2005-02-12 19:38:14  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+                                 
+	* init.h, main.c: Trivial documentation fixes (TAKAHASHI Tamotsu,
+	Brendan Cully, Paul Walker, Derek Martin).
+                                 
+	* editmsg.c: Partially fix debian bug #275060 (editing a message
+	in a mbox loses its flags).
+                                 
+        * TODO: We have $include_onlyfirst.
+                                 
+2005-02-12 19:28:26  TAKIZAWA Takashi  <taki@luna.email.ne.jp>  (roessler)
+                                 
+	* muttlib.c, pager.c: column-length and byte-length are different
+                                 
+2005-02-12 19:19:25  Derek Martin  <invalid@pizzashack.org>  (roessler)
+                                 
+	* mutt.h, commands.c, curs_main.c, init.h: pgp-auto-decode: When
+	$pgp_auto_decode is set, then mutt will check for traditional pgp
+	on certain operations.  This is similar (but NOT identical) to the
+	behavior known from PGP/MIME messages.
+                                 
+2005-02-12 19:12:40  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+                                 
+	* alias.c, globals.h, hdrline.c, init.c, init.h: unalternates now
+	also adds to a list of exceptions; same behavior for unlists, and
+	unsubscribe.  With some changes from tlr.
+                                 
+2005-02-12 19:52:28  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+                                 
+	* charset.c, mbyte.c: Recognize euc-jp-ms.  MORIYAMA Masayuki by
+	way of TAKAHASHI Tamotsu.
+                                 
+2005-02-12 19:38:14  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+                                 
+	* init.h, main.c: Trivial documentation fixes (TAKAHASHI Tamotsu, Brendan Cully, Paul
+        Walker, Derek Martin).
+                                 
+	* editmsg.c: Partially fix debian bug #275060 (editing a message
+	in a mbox loses its flags).
+                                 
+        * TODO: We have $include_onlyfirst.
+                                 
+2005-02-12 19:28:26  TAKIZAWA Takashi  <taki@luna.email.ne.jp>  (roessler)
+                                 
+	* muttlib.c, pager.c: column-length and byte-length are different
+                                 
+2005-02-12 19:19:25  Derek Martin  <invalid@pizzashack.org>  (roessler)
+                                 
+	* mutt.h, commands.c, curs_main.c, init.h: pgp-auto-decode: When
+	$pgp_auto_decode is set, then mutt will check for traditional pgp
+	on certain operations.  This is similar (but NOT identical) to the
+	behavior known from PGP/MIME messages.
+                                 
+2005-02-12 19:12:40  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+                                 
+	* alias.c, globals.h, hdrline.c, init.c, init.h: unalternates now
+	also adds to a list of exceptions; same behavior 
+	for unlists, and unsubscribe.  With some changes from tlr.
+                                 
+2005-02-12 19:52:28  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* charset.c, mbyte.c: Recognize euc-jp-ms.  MORIYAMA Masayuki
+	by way of TAKAHASHI Tamotsu.
+
+2005-02-12 19:38:14  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* doc/manual.sgml.head, doc/manual.sgml.tail, init.h, main.c:
+	Trivial documentation fixes (TAKAHASHI Tamotsu, Brendan Cully,
+	Paul Walker, Derek Martin).
+
+	* editmsg.c: Partially fix debian bug #275060 (editing a message
+	in a mbox loses its flags).
+
+	* TODO: We have $include_onlyfirst.
+
+2005-02-12 19:28:26  TAKIZAWA Takashi  <taki@luna.email.ne.jp>  (roessler)
+
+	* muttlib.c, pager.c: column-length and byte-length are different
+
+2005-02-12 19:19:25  Derek Martin  <invalid@pizzashack.org>  (roessler)
+
+	* mutt.h, commands.c, curs_main.c, init.h: pgp-auto-decode: When
+	$pgp_auto_decode is set, then mutt will check for traditional
+	pgp on certain operations.  This is similar (but NOT identical)
+	to the behavior known from PGP/MIME messages.
+
+2005-02-12 19:12:40  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* alias.c, doc/manual.sgml.head, globals.h, hdrline.c, init.c,
+	init.h: unalternates now also adds to a list of exceptions;
+	same behavior for unlists, and unsubscribe.  With some changes
+	from tlr.
+
+2005-02-11 04:12:03  Brendan Cully  <brendan@kublai.com>  (brendan)
+                                 
+	* configure.in, mutt_ssl_gnutls.c: autoconf support for gnutls
+	using a slightly modified version of gnutls' own libgnutls.m4 
+                                 
+2005-02-11 01:19:15  Brendan Cully  <brendan@kublai.com>  (brendan)
+                                 
+	* globals.h, init.h: Only enable ssl_client_cert for openssl
+	(spotted by Adeodato).
+                                 
+2005-02-09 09:05:38  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* pattern.c: Don't crash in mutt_pattern_exec when h->env is NULL.
+
+2005-02-08 17:23:50  TAKAHASHI Tamotsu  <tamo@momonga-linux.org>  (roessler)
+
+	* init.h, mutt.h, mutt_idna.c: Make IDN decoding optional.
+
+2005-02-05 14:11:36  Thomas Roessler   <roessler@does-not-exist.org>  (roessler)
+
+	* crypthash.h, imap/util.c, lib.h, mbyte.h, mutt_idna.h,
+	patchlist.sh, remailer.h, rfc822.h: Remove a number of unnecessary
+	config.h includes, and add some missing ones.  May fix some bugs.
+
+2005-02-04 16:54:13  Brendan Cully  <brendan@kublai.com>  (brendan)
+                                 
+	* Makefile.am: Add smime_keys to EXTRA_SCRIPTS (for make dist).
+                                 
+2005-02-04 12:56:28  Tamotsu Takahashi  <ttakah@lapis.plala.or.jp>  (roessler)
+                                 
+        * Makefile.am: http://bugs.guug.de/db/17/1769.html
+                  This is necessary for FreeBSD.
+                                 
+2005-02-04 12:56:28  Tamotsu Takahashi  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* Makefile.am: http://bugs.guug.de/db/17/1769.html This is
+	necessary for FreeBSD.
+
+2005-02-03 19:46:53  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
+
+	* hcache.c: this is a fix for hcache.c infrastructure which is
+	about wrongly calculate unique id
+
+2005-02-03 18:44:27  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* pgp.c: Fix PGP clear signature handling.
+
+2005-02-03 17:01:44  Brendan Cully  <brendan@kublai.com>  (brendan)
+                                 
+	* pgpkey.c, pgplib.c, pgpmicalg.c, pgppacket.c, pgppubring.c,
+	pop.c, pop_auth.c, pop_lib.c, postpone.c, query.c, recvattach.c,
+	recvcmd.c, regex.c, remailer.c, resize.c, rfc1524.c, rfc2047.c,
+	rfc2231.c, rfc822.c, score.c, send.c, sendlib.c, sha1.c, signal.c,
+	smime.c, snprintf.c, sort.c, status.c, system.c, thread.c, url.c,
+	utf8.c, wcwidth.c, crypt-mod-pgp-classic.c, crypt-mod-pgp-gpgme.c,
+	crypt-mod-smime-classic.c, crypt-mod-smime-gpgme.c, crypt-mod.c,
+	crypt.c, cryptglue.c, curs_lib.c, curs_main.c, date.c, dotlock.c,
+	edit.c, editmsg.c, enter.c, extlib.c, filter.c, flags.c, from.c,
+	getdomain.c, gnupgparse.c, handler.c, hash.c, hdrline.c,
+	headers.c, help.c, history.c, hook.c, init.c, keymap.c, lib.c,
+	main.c, makedoc.c, mbox.c, mbyte.c, md5c.c, menu.c, mh.c, mutt.h,
+	mutt_idna.c, mutt_sasl.c, mutt_socket.c, mutt_ssl.c,
+	mutt_ssl_gnutls.c, mutt_ssl_nss.c, mutt_tunnel.c, muttlib.c, mx.c,
+	pager.c, parse.c, pattern.c, pgp.c, pgpinvoke.c, account.c,
+	addrbook.c, alias.c, ascii.c, attach.c, base64.c, browser.c,
+	buffy.c, charset.c, color.c, commands.c, complete.c, compose.c,
+	copy.c, crypt-gpgme.c: Add config.h to the top of every C file
+	that could possibly want it.  Remove it from mutt.h
+                                 
+2005-02-01 03:36:39  Brendan Cully  <brendan@kublai.com>  (brendan)
+                                 
+	* protos.h: Pull config.h out of protos.h, add to top of every
+	IMAP C file. This should probably be done to every C file, but the
+	results need testing in case  some files depend on the current
+	(broken) includes. This should at least fix the off_t 4/8 bytes
+	bug I introduced yesterday.
+                                 
+2005-01-31 02:40:14  Brendan Cully  <brendan@kublai.com>  (brendan)
+                                 
+	* acconfig.h, configure.in, hcache.c, protos.h: Begin removing
+	deprecated autoconf 2.13 backward compatibility code. Add
+	AC_CHECK_TYPES macros for uin32/64 types, use uint64_t instead of
+	long long in hcache code.
+                                 
+2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
+                                 
+     * hcache.c: - make hcache.c conform to mutt codingstyle
+     - use $Id: ChangeLog,v 3.384 2005/02/12 20:47:13 roessler Exp $ CVS keyword instead of %K% BitKeeper keyword
+                                 
+2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
+
+	* hcache.c: - make hcache.c conform to mutt codingstyle - use
+	Id CVS keyword instead of %K% BitKeeper keyword
+
+2005-01-28 16:40:33  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* pgp.c: Adeodato points out on IRC that feof() only works
+	after a read. So, we now check for an unsuccessful fgetc().
+
+2005-01-28 14:50:31  Paul Walker  <paul@black-sun.demon.co.uk>  (roessler)
+
+	* signal.c: Trigger window resizing code when waking up from
+	suspension.
+
+2005-01-28 14:09:08  René Clerc  <rene@clerc.nl>  (roessler)
+
+	* po/nl.po: update
+
+2005-01-28 13:17:22  Werner Koch  <wk@gnupg.org>  (roessler)
+
+	* Makefile.am, configure.in, crypt-gpgme.c, crypt-gpgme.h,
+	crypt-mod-pgp-gpgme.c, crypt-mod-smime-gpgme.c, cryptglue.c,
+	functions.h: gpgme integration.  See documentation for
+	$crypt_use_gpgme, and http://www.gnupg.org/aegypten2/.
+
+2005-01-28 13:00:36  Adeodato Simó  <asp16@alu.ua.es>  (roessler)
+
+	* mutt_ssl_gnutls.c: The attached mini-patch from David Mosberger
+	<davidm@napali.hpl.hp.com> seems to fix a segfault in the ia64
+	architecture. Via Debian Bug#285001.
+
+2005-01-28 10:01:30  roessler  (roessler)
+
+	* po/tr.po, po/uk.po, po/zh_CN.po, po/zh_TW.po, po/lt.po,
+	po/nl.po, po/pl.po, po/pt_BR.po, po/ru.po, po/sk.po, po/sv.po,
+	po/el.po, po/eo.po, po/es.po, po/et.po, po/fr.po, po/gl.po,
+	po/hu.po, po/id.po, po/it.po, po/ja.po, po/ko.po, VERSION,
+	po/bg.po, po/ca.po, po/cs.po, po/da.po, po/de.po, reldate.h:
+	automatic post-release commit for mutt-1.5.7
+
 2005-01-27 20:52:13  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
 
 	* main.c: Add USE_INODESORT to main.c's option dump.

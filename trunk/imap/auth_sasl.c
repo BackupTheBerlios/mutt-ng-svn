@@ -18,6 +18,10 @@
 
 /* SASL login/authentication code */
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "mutt.h"
 #include "mutt_sasl.h"
 #include "imap_private.h"

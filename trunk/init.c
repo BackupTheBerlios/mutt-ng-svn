@@ -16,6 +16,10 @@
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
  */ 
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "mutt.h"
 #include "mapping.h"
 #include "mutt_curses.h"
@@ -502,12 +506,16 @@ static void remove_from_list (LIST **l, const char *str)
   }
 }
 
-static void remove_from_rx_list (RX_LIST **l, const char *str)
+static int remove_from_rx_list (RX_LIST **l, const char *str)
 {
   RX_LIST *p, *last = NULL;
+  int rv = -1;
 
   if (mutt_strcmp ("*", str) == 0)
+  {
     mutt_free_rx_list (l);    /* ``unCMD *'' means delete all current entries */
+    rv = 0;
+  }
   else
   {
     p = *l;
@@ -522,6 +530,7 @@ static void remove_from_rx_list (RX_LIST **l, const char *str)
 	else
 	  (*l) = p->next;
 	FREE (&p);
+	rv = 0;
       }
       else
       {
@@ -530,6 +539,7 @@ static void remove_from_rx_list (RX_LIST **l, const char *str)
       }
     }
   }
+  return (rv);
 }
 
 static int parse_unignore (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
@@ -623,13 +633,35 @@ static void _alternates_clean (void)
 static int parse_alternates (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 {
   _alternates_clean();
-  return parse_rx_list (buf, s, data, err);
+  do
+  {
+    mutt_extract_token (buf, s, 0);
+    remove_from_rx_list (&UnAlternates, buf->data);
+
+    if (add_to_rx_list (&Alternates, buf->data, REG_ICASE, err) != 0)
+      return -1;
+  }
+  while (MoreArgs (s));
+
+  return 0;
 }
 
 static int parse_unalternates (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 {
   _alternates_clean();
-  return parse_rx_unlist (buf, s, data, err);
+  do
+  {
+    mutt_extract_token (buf, s, 0);
+    remove_from_rx_list (&Alternates, buf->data);
+
+    if (mutt_strcmp (buf->data, "*") &&
+	add_to_rx_list (&UnAlternates, buf->data, REG_ICASE, err) != 0)
+      return -1;
+
+  }
+  while (MoreArgs (s));
+
+  return 0;
 }
 
 static int parse_spam_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
@@ -725,14 +757,32 @@ static int parse_unlist (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err
   return 0;
 }
 
+static int parse_lists (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+{
+  do
+  {
+    mutt_extract_token (buf, s, 0);
+    remove_from_rx_list (&UnMailLists, buf->data);
+    
+    if (add_to_rx_list (&MailLists, buf->data, REG_ICASE, err) != 0)
+      return -1;
+  }
+  while (MoreArgs (s));
+
+  return 0;
+}
 
 static int parse_unlists (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 {
   do
   {
     mutt_extract_token (buf, s, 0);
-    remove_from_rx_list (&MailLists, buf->data);
     remove_from_rx_list (&SubscribedLists, buf->data);
+    remove_from_rx_list (&MailLists, buf->data);
+    
+    if (mutt_strcmp (buf->data, "*") && 
+	add_to_rx_list (&UnMailLists, buf->data, REG_ICASE, err) != 0)
+      return -1;
   }
   while (MoreArgs (s));
 
@@ -744,9 +794,28 @@ static int parse_subscribe (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *
   do
   {
     mutt_extract_token (buf, s, 0);
+    remove_from_rx_list (&UnMailLists, buf->data);
+    remove_from_rx_list (&UnSubscribedLists, buf->data);
+
     if (add_to_rx_list (&MailLists, buf->data, REG_ICASE, err) != 0)
       return -1;
     if (add_to_rx_list (&SubscribedLists, buf->data, REG_ICASE, err) != 0)
+      return -1;
+  }
+  while (MoreArgs (s));
+
+  return 0;
+}
+
+static int parse_unsubscribe (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+{
+  do
+  {
+    mutt_extract_token (buf, s, 0);
+    remove_from_rx_list (&SubscribedLists, buf->data);
+    
+    if (mutt_strcmp (buf->data, "*") &&
+	add_to_rx_list (&UnSubscribedLists, buf->data, REG_ICASE, err) != 0)
       return -1;
   }
   while (MoreArgs (s));

@@ -17,80 +17,78 @@
  */
 
 /* 
-    This is a crytpo module wrapping the classic smime code.
+    This is a crytpo module wrapping the gpgme based smime code.
  */
 
 #if HAVE_CONFIG_H
 # include "config.h"
 #endif
 
+#ifdef CRYPT_BACKEND_GPGME
+
 #include "crypt-mod.h"
-#include "smime.h"
+#include "crypt-gpgme.h"
+
+static void crypt_mod_smime_init (void)
+{
+  smime_gpgme_init ();
+}
 
 static void crypt_mod_smime_void_passphrase (void)
 {
-  smime_void_passphrase ();
+  /* Handled by gpg-agent.  */
 }
 
 static int crypt_mod_smime_valid_passphrase (void)
 {
-  return smime_valid_passphrase ();
+  /* Handled by gpg-agent.  */
+  return 1;
 }
 
 static int crypt_mod_smime_decrypt_mime (FILE *a, FILE **b, BODY *c, BODY **d)
 {
-  return smime_decrypt_mime (a, b, c, d);
+  return smime_gpgme_decrypt_mime (a, b, c, d);
 }
+
 static void crypt_mod_smime_application_handler (BODY *m, STATE *s)
 {
-  smime_application_smime_handler (m, s);
+  smime_gpgme_application_handler (m, s);
 }
 
 static char *crypt_mod_smime_findkeys (ADDRESS *to, ADDRESS *cc, ADDRESS *bcc)
 {
-  return smime_findKeys (to, cc, bcc);
+  return smime_gpgme_findkeys (to, cc, bcc);
 }
 
 static BODY *crypt_mod_smime_sign_message (BODY *a)
 {
-  return smime_sign_message (a);
+  return smime_gpgme_sign_message (a);
 }
 
 static int crypt_mod_smime_verify_one (BODY *sigbdy, STATE *s, const char *tempf)
 {
-  return smime_verify_one (sigbdy, s, tempf);
+  return smime_gpgme_verify_one (sigbdy, s, tempf);
 }
 
 static int crypt_mod_smime_send_menu (HEADER *msg, int *redraw)
 {
-  return smime_send_menu (msg, redraw);
-}
-
-static void crypt_mod_smime_getkeys (ENVELOPE *env)
-{
-  smime_getkeys (env);
-}
-
-static int crypt_mod_smime_verify_sender (HEADER *h)
-{
-  return smime_verify_sender (h);
+  return smime_gpgme_send_menu (msg, redraw);
 }
 
 static BODY *crypt_mod_smime_build_smime_entity (BODY *a, char *certlist)
 {
-  return smime_build_smime_entity (a, certlist);
+  return smime_gpgme_build_smime_entity (a, certlist);
 }
 
-static void crypt_mod_smime_invoke_import (char *infile, char *mailbox)
+static int crypt_mod_smime_verify_sender (HEADER *h)
 {
-  smime_invoke_import (infile, mailbox);
+  return smime_gpgme_verify_sender (h);
 }
 
-
-struct crypt_module_specs crypt_mod_smime_classic =
+struct crypt_module_specs crypt_mod_smime_gpgme =
   { APPLICATION_SMIME,
     {
-      NULL,			/* init */
+      crypt_mod_smime_init,
       crypt_mod_smime_void_passphrase,
       crypt_mod_smime_valid_passphrase,
       crypt_mod_smime_decrypt_mime,
@@ -109,9 +107,11 @@ struct crypt_module_specs crypt_mod_smime_classic =
       NULL,			/* pgp_invoke_import */
       NULL,			/* pgp_extract_keys_from_attachment_list */
       
-      crypt_mod_smime_getkeys,
+      NULL,			/* smime_getkeys */
       crypt_mod_smime_verify_sender,
       crypt_mod_smime_build_smime_entity,
-      crypt_mod_smime_invoke_import,
+      NULL, 			/* smime_invoke_import */
     }
   };
+
+#endif

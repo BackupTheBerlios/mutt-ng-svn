@@ -16,6 +16,10 @@
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
  */ 
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "rfc2047.h"
@@ -69,10 +73,6 @@ static void append_signature (FILE *f)
     if (thepid != -1)
       mutt_wait_filter (thepid);
   }
-}
-
-static void append_signoff_string(FILE *f)
-{
 }
 
 /* compare two e-mail addresses and return 1 if they are equivalent */

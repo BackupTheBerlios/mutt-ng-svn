@@ -16,6 +16,10 @@
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
  */ 
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "sort.h"
@@ -30,12 +34,17 @@
 
 int mutt_is_mail_list (ADDRESS *addr)
 {
-  return mutt_match_rx_list (addr->mailbox, MailLists);
+  if (!mutt_match_rx_list (addr->mailbox, UnMailLists))
+    return mutt_match_rx_list (addr->mailbox, MailLists);
+  return 0;
 }
 
 int mutt_is_subscribed_list (ADDRESS *addr)
 {
-  return mutt_match_rx_list (addr->mailbox, SubscribedLists);
+  if (!mutt_match_rx_list (addr->mailbox, UnMailLists)
+      && !mutt_match_rx_list (addr->mailbox, UnSubscribedLists))
+    return mutt_match_rx_list (addr->mailbox, SubscribedLists);
+  return 0;
 }
 
 /* Search for a mailing list in the list of addresses pointed to by adr.

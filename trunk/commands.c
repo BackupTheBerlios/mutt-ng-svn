@@ -17,6 +17,10 @@
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
  */ 
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "mutt_menu.h"
@@ -1092,6 +1096,7 @@ static int _mutt_check_traditional_pgp (HEADER *h, int *redraw)
     rv = 1;
   }
   
+  h->security |= PGP_TRADITIONAL_CHECKED;
   mx_close_message (&msg);
   return rv;
 }

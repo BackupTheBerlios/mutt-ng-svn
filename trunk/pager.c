@@ -16,6 +16,10 @@
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
  */ 
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "mutt_regex.h"
@@ -1735,17 +1739,17 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
       CLEARLINE_WIN(statusoffset);
       if (IsHeader (extra))
       {
-	_mutt_make_string (buffer,
-			   COLS-9-SidebarWidth < sizeof (buffer) ?
-			   COLS-9-SidebarWidth : sizeof (buffer),
-			   NONULL (PagerFmt), Context, extra->hdr, M_FORMAT_MAKEPRINT);
+ 	size_t l1 = (COLS - 9) * MB_LEN_MAX;
+ 	size_t l2 = sizeof (buffer);
+ 	_mutt_make_string (buffer, l1 < l2 ? l1 : l2, NONULL (PagerFmt),
+ 			   Context, extra->hdr, M_FORMAT_MAKEPRINT);
       }
       else if (IsMsgAttach (extra))
       {
-	_mutt_make_string (buffer,
-			   COLS - 9 - SidebarWidth < sizeof (buffer) ?
-			   COLS - 9 - SidebarWidth : sizeof (buffer),
-			   NONULL (PagerFmt), Context, extra->bdy->hdr, M_FORMAT_MAKEPRINT);
+ 	size_t l1 = (COLS - 9) * MB_LEN_MAX;
+ 	size_t l2 = sizeof (buffer);
+ 	_mutt_make_string (buffer, l1 < l2 ? l1 : l2, NONULL (PagerFmt),
+ 			   Context, extra->bdy->hdr, M_FORMAT_MAKEPRINT);
       }
       mutt_paddstr (COLS-10-SidebarWidth, IsHeader (extra) || IsMsgAttach (extra) ?
 		    buffer : banner);

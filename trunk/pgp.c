@@ -1,6 +1,6 @@
 /*
  * Copyright (C) 1996,1997 Michael R. Elkins <me@mutt.org>
- * Copyright (c) 1998,1999 Thomas Roessler <roessler@does-not-exist.org>
+ * Copyright (C) 1998,1999 Thomas Roessler <roessler@does-not-exist.org>
  * Copyright (C) 2004 g10 Code GmbH
  *
  *     This program is free software; you can redistribute it and/or modify
@@ -25,6 +25,10 @@
  * cache the user's passphrase for repeat use when decrypting or signing
  * a message.
  */
+
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include "mutt.h"
 #include "mutt_curses.h"
@@ -209,7 +213,7 @@ static void pgp_copy_clearsigned (FILE *fpin, STATE *s, char *charset)
     if (armor_header)
     {
       char *p = mutt_skip_whitespace (buf);
-      if (*p == '\n') 
+      if (*p == '\0') 
 	armor_header = 0;
       continue;
     }
@@ -797,8 +801,10 @@ BODY *pgp_decrypt_part (BODY *a, STATE *s, FILE *fpout, BODY *p)
   fflush (fpout);
   rewind (fpout);
   
-  if (feof (fpout))
+  if (fgetc (fpout) == EOF)
     return NULL;
+
+  rewind (fpout);
   
   if ((tattach = mutt_read_mime_header (fpout, 0)) != NULL)
   {

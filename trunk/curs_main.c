@@ -16,6 +16,10 @@
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
  */ 
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "mx.h"
@@ -2083,6 +2087,8 @@ CHECK_IMAP_ACL(IMAP_ACL_INSERT);
         }
 #endif
 
+	if (option (OPTPGPAUTODEC) && (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED))) 
+	  mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
         mutt_edit_message (Context, tag ? NULL : CURHDR);
         menu->redraw = REDRAW_FULL;
 

@@ -19,6 +19,10 @@
 
 /* message parsing/updating functions */
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -554,7 +558,10 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
   rewind (fp);
   
   imap_munge_mbox_name (mbox, sizeof (mbox), mailbox);
-  snprintf (buf, sizeof (buf), "APPEND %s (\\Seen) {%lu}", mbox, len);
+  snprintf (buf, sizeof (buf), "APPEND %s (\\Seen%s%s) {%lu}", mbox,
+	    msg->flags.replied ? " \\Answered" : "",
+	    msg->flags.flagged ? " \\Flagged" : "",
+	    (unsigned long) len);
 
   imap_cmd_start (idata, buf);
 

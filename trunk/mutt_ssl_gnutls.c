@@ -16,8 +16,15 @@
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
  */
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include <gnutls/gnutls.h>
 #include <gnutls/x509.h>
+#ifdef HAVE_GNUTLS_OPENSSL_H
+#include <gnutls/openssl.h>
+#endif
 
 #include "mutt.h"
 #include "mutt_socket.h"

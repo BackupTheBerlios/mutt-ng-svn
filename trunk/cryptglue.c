@@ -28,6 +28,10 @@
    contained in this file and the functions implemented by the crypto
    modules.  */
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "mutt.h"
 #include "mutt_crypt.h"
 
@@ -84,6 +88,8 @@ void crypt_init (void)
 #else
       mutt_message (_("\"crypt_use_gpgme\" set"
                       " but not build with GPGME support."));
+      if (mutt_any_key_to_continue (NULL) == -1)
+	mutt_exit(1);
 #endif
     }
 

@@ -20,6 +20,10 @@
 
 #define MAIN_C 1
 
+#if HAVE_CONFIG_H
+# include "config.h"
+#endif
+
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "keymap.h"
@@ -114,8 +118,8 @@ options:\n\
   -F <file>\tspecify an alternate muttrc file\n\
   -g <server>\tspecify a newsserver (if compiled with NNTP)\n\
   -G\t\tselect a newsgroup (if compiled with NNTP)\n\
-  -H <file>\tspecify a draft file to read header from\n\
-  -i <file>\tspecify a file which Mutt should include in the reply\n\
+  -H <file>\tspecify a draft file to read header and body from\n\
+  -i <file>\tspecify a file which Mutt should include in the body\n\
   -m <type>\tspecify a default mailbox type\n\
   -n\t\tcauses Mutt not to read the system Muttrc\n\
   -p\t\trecall a postponed message\n\

@@ -1,6 +1,6 @@
   The Mutt E-Mail Client
   by Michael Elkins <me@cs.hmc.edu>
-  version 1.5.7
+  version 1.5.8
 
   ``All mail clients suck.  This one just sucks less.'' -me, circa 1995
   ______________________________________________________________________
@@ -453,7 +453,7 @@
 
   [1m1.4.  IRC[0m
 
-  Visit channel [4m#mutt[24m on OpenProjects.Net (www.openprojects.net) to chat
+  Visit channel [4m#mutt[24m on irc.freenode.net (www.freenode.net) to chat
   with other people interested in Mutt.
 
   [1m1.5.  USENET[0m
@@ -790,11 +790,12 @@
   [1mlist-reply [22m(default: L)
 
   Reply to the current or tagged message(s) by extracting any addresses
-  which match the addresses given by the ``lists or subscribe''
-  commands, but also honor any Mail-Followup-To header(s) if the
-  ``$honor_followup_to'' configuration variable is set.  Using this when
-  replying to messages posted to mailing lists helps avoid duplicate
-  copies being sent to the author of the message you are replying to.
+  which match the regular expressions given by the ``lists or
+  subscribe'' commands, but also honor any Mail-Followup-To header(s) if
+  the ``$honor_followup_to'' configuration variable is set.  Using this
+  when replying to messages posted to mailing lists helps avoid
+  duplicate copies being sent to the author of the message you are
+  replying to.
 
   [1mpipe-message [22m(default: |)
 
@@ -1555,8 +1556,16 @@
   the alternates command: It takes a list of regular expressions, each
   of which can identify an address under which you receive e-mail.
 
-  To remove a regular expression from this list, use the unalternates
-  command.
+  The unalternates command can be used to write exceptions to alternates
+  patterns. If an address matches something in an alternates command,
+  but you nonetheless do not think it is from you, you can list a more
+  precise pattern under an unalternates command.
+
+  To remove a regular expression from the alternates list, use the
+  unalternates command with exactly the same [4mregexp[24m.  Likewise, if the
+  [4mregexp[24m for a alternates command matches an entry on the unalternates
+  list, that unalternates entry will be removed. If the [4mregexp[24m for
+  unalternates is ``*'', [4mall[24m [4mentries[24m on alternates will be removed.
 
   [1m3.10.  Mailing lists[0m
 
@@ -1594,14 +1603,13 @@
   initialization file.  To tell mutt that you are subscribed to it, add
   ``subscribe mutt-users'' to your initialization file instead.  If you
   also happen to get mail from someone whose address is [4mmutt-[0m
-  [4musers@example.com[24m, you could use ``lists mutt-users@mutt.org'' or
-  ``subscribe mutt-users@mutt.org'' to match only mail from the actual
+  [4musers@example.com[24m, you could use ``lists mutt-users@mutt\\.org'' or
+  ``subscribe mutt-users@mutt\\.org'' to match only mail from the actual
   list.
 
   The ``unlists'' command is used to remove a token from the list of
   known and subscribed mailing-lists. Use ``unlists *'' to remove all
   tokens.
-
   To remove a mailing list from the list of subscribed mailing lists,
   but keep it on the list of known mailing lists, use ``unsubscribe''.
 
@@ -1728,7 +1736,7 @@
   See ``Message Matching in Hooks'' for information on the exact format
   of [4mpattern[24m.
 
-  Example: fcc-hook aol.com$ +spammers
+  Example: fcc-hook [@.]aol\\.com$ +spammers
 
   The above will save a copy of all messages going to the aol.com domain
   to the `+spammers' mailbox by default.  Also see the ``fcc-save-hook''
@@ -1836,6 +1844,7 @@
   This command can be used to execute any function. Functions are listed
   in the ``function reference''.  ``exec function'' is equivalent to
   ``push <function>''.
+
   [1m3.23.  Message Scoring[0m
 
   Usage: score [4mpattern[24m [4mvalue[0m
@@ -1891,10 +1900,10 @@
   For example, suppose I use DCC, SpamAssassin, and PureMessage. I might
   define these spam settings:
 
-       spam "X-DCC-.*-Metrics:.*(....)=many"         "90+/DCC-%1"
-       spam "X-Spam-Status: Yes"                     "90+/SA"
-       spam "X-PerlMX-Spam: .*Probability=([0-9]+)%" "%1/PM"
-       set spam_separator=", "
+  spam "X-DCC-.*-Metrics:.*(....)=many"         "90+/DCC-%1"
+  spam "X-Spam-Status: Yes"                     "90+/SA"
+  spam "X-PerlMX-Spam: .*Probability=([0-9]+)%" "%1/PM"
+  set spam_separator=", "
 
   If I then received a message that DCC registered with ``many'' hits
   under the ``Fuz2'' checksum, and that PureMessage registered with a
@@ -2144,6 +2153,7 @@
         and ``=]''.  For example, the name ``e'' might be used to
         represent all of ``è'' ``é'' and ``e''.  In this case, [1m[[=e=]][0m
         is a regexp that matches any of ``è'', ``é'' and ``e''.
+
   A regular expression matching a single character may be followed by
   one of several repetition operators:
 
@@ -2352,7 +2362,7 @@
   Example: To select any messages two weeks around January 15, 2001,
   you'd use the following pattern:
 
-       Limit to messages matching: ~d 15/1/2001*2w
+  Limit to messages matching: ~d 15/1/2001*2w
 
   [1mRelative[22m.  This type of date is relative to the current date, and may
   be specified as:
@@ -2404,7 +2414,6 @@
   rest of the macro to abort it's execution.  Mutt will stop "eating"
   the macro when it encounters the ``end-cond'' operator;  after this
   operator the rest of the macro will be executed as normal.
-
   [1m4.4.  Using Hooks[0m
 
   A [4mhook[24m is a concept borrowed from the EMACS editor which allows you to
@@ -2437,7 +2446,7 @@
   send-hook and the my_hdr directive:
 
        send-hook . 'unmy_hdr From:'
-       send-hook ~Cb@b.b my_hdr from: c@c.c
+       send-hook ~C'^b@b\.b$' my_hdr from: c@c.c
 
   [1m4.4.1.  Message Matching in Hooks[0m
 
@@ -2461,7 +2470,6 @@
 
   which would execute the given command when sending mail to
   [4mme@cs.hmc.edu[24m.
-
   However, it is not required that you write the pattern to match using
   the full searching language.  You can still specify a simple [4mregular[0m
   [4mexpression[24m like the other hooks, in which case Mutt will translate
@@ -2623,10 +2631,11 @@
   trying to reply directly to the author in private, since most mail
   clients will automatically reply to the address given in the ``Reply-
   To'' field.  Mutt uses the ``$reply_to'' variable to help decide which
-  address to use.  If set, you will be prompted as to whether or not you
-  would like to use the address given in the ``Reply-To'' field, or
-  reply directly to the address given in the ``From'' field.  When
-  unset, the ``Reply-To'' field will be used when present.
+  address to use.  If set to [4mask-yes[24m or [4mask-no[24m, you will be prompted as
+  to whether or not you would like to use the address given in the
+  ``Reply-To'' field, or reply directly to the address given in the
+  ``From'' field.  When set to [4myes[24m, the ``Reply-To'' field will be used
+  when present.
 
   The ``X-Label:'' header field can be used to further identify mailing
   lists or list subject matter (or just to annotate messages
@@ -2815,9 +2824,9 @@
 
   Some examples:
 
-       account-hook . 'unset imap_user; unset imap_pass; unset tunnel'
-       account-hook imap://host1/ 'set imap_user=me1 imap_pass=foo'
-       account-hook imap://host2/ 'set tunnel="ssh host2 /usr/libexec/imapd"'
+  account-hook . 'unset imap_user; unset imap_pass; unset tunnel'
+  account-hook imap://host1/ 'set imap_user=me1 imap_pass=foo'
+  account-hook imap://host2/ 'set tunnel="ssh host2 /usr/libexec/imapd"'
 
   [1m4.13.  Start a WWW Browser on URLs (EXTERNAL)[0m
 
@@ -2866,7 +2875,6 @@
   Where the Description is the description or filename given for the
   attachment, and the Encoding is one of 7bit/8bit/quoted-print-
   able/base64/binary.
-
   If Mutt cannot deal with a MIME type, it will display a message like:
 
        [-- image/gif is unsupported (use 'v' to view this part) --]
@@ -2980,7 +2988,6 @@
 
   A comment line consists of a # character followed by anything you
   want.
-
   A blank line is blank.
 
   A definition line consists of a content type, a view command, and any
@@ -3037,6 +3044,7 @@
        text/*; more
 
   This is the simplest form of a mailcap file.
+
   [1m5.3.2.  Secure use of mailcap[0m
 
   The interpretion of shell meta-characters embedded in MIME parameters
@@ -3205,6 +3213,7 @@
         Mutt will expand this to the value of the specified parameter
         from the Content-Type: line of the mail message.  For instance,
         if Your mail message contains:
+
           Content-Type: text/plain; charset=iso-8859-1
 
      then Mutt will expand %{charset} to iso-8859-1.  The default meta-
@@ -6201,7 +6210,6 @@
   Specifies the number of seconds to wait for the ````$sendmail''''
   process to finish before giving up and putting delivery in the
   background.
-
   Mutt interprets the value of this variable as follows:
 
      >>00 number of seconds to wait for sendmail to finish before
@@ -6503,9 +6511,9 @@
   %?<sequence_char>?<optional_string>?
 
   where [4msequence_char[24m is a character from the table above, and
-  [4moptional_string[24m is the string you would like printed if [4mstatus_char[24m is
-  nonzero.  [4moptional_string[24m [1mmay [22mcontain other sequence as well as normal
-  text, but you may [1mnot [22mnest optional strings.
+  [4moptional_string[24m is the string you would like printed if [4msequence_char[0m
+  is nonzero.  [4moptional_string[24m [1mmay [22mcontain other sequences as well as
+  normal text, but you may [1mnot [22mnest optional strings.
 
   Here is an example illustrating how to optionally print the number of
   new messages in a mailbox: %?n?%n new messages.?
@@ -6806,6 +6814,7 @@
   tag-prefix                 ;   apply next command to tagged entries
   tag-prefix-cond    not bound   apply next function ONLY to tagged messages
   top-page                   H   move to the top of the page
+  what-key           not bound   display the keycode for a key press
 
   [1m6.4.2.  index[0m
 
