@@ -37,7 +37,7 @@ rev123, please put it "into" init and removes this comment when done!
     assumed_charset, strict_mime, file_charset 
 
     Header Caching:
-    maildir_header_cache_verify, maildir_cache 
+    maildir_header_cache_verify, header_cache 
 
     Sidebar:
     sidebar_delim, sidebar_visible, sidebar_width, shorten_hierarchy

@@ -50,6 +50,7 @@ typedef struct
   unsigned int hasXPAT : 1;
   unsigned int hasXGTITLE : 1;
   unsigned int hasXOVER : 1;
+  unsigned int hasLISTGROUP : 1;
   unsigned int status : 3;
   char *newsrc;
   char *cache;

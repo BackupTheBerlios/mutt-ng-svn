@@ -1,5 +1,8 @@
 Changes specific to mutt-ng:
 
+2005-03-02:
+  * support for news servers without LISTGROUP (fixes bug #3483)
+
 2005-03-01:
   * made internal buffy list sorted (-> sorted in sidebar, too)
   * somewhat bigger documentation update; introduce UPGRADING document

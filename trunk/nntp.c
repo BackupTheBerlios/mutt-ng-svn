@@ -180,6 +180,12 @@ static int nntp_attempt_features (NNTP_SERVER *serv)
   char buf[LONG_STRING];
   CONNECTION *conn = serv->conn;
 
+  mutt_socket_write (conn, "LISTGROUP\r\n");
+  if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
+    return (nntp_connect_error (serv));
+  if (mutt_strncmp ("500", buf, 3))
+    serv->hasLISTGROUP = 1;
+
   mutt_socket_write (conn, "XOVER\r\n");
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
     return nntp_connect_error (serv);
@@ -621,17 +627,17 @@ typedef struct
 } FETCH_CONTEXT;
 
 #define fc ((FETCH_CONTEXT *) c)
-static int nntp_fetch_numbers (char *line, void *c)
-{
-  unsigned int num;
-
-  if (!line)
-    return 0;
-  num = atoi (line);
+static int _nntp_fetch_numbers (unsigned int num ,void* c) {
   if (num < fc->base || num > fc->last)
     return 0;
   fc->messages[num - fc->base] = 1;
   return 0;
+}
+static int nntp_fetch_numbers (char *line, void *c)
+{
+  if (!line)
+    return 0;
+  return (_nntp_fetch_numbers ((unsigned int) atoi (line), c));
 }
 
 static int add_xover_line (char *line, void *c)
@@ -691,15 +697,31 @@ static int nntp_fetch_headers (CONTEXT *ctx, unsigned int first,
   fc.base = first;
   fc.last = last;
   fc.messages = safe_calloc (last - first + 1, sizeof (unsigned short));
-  snprintf (buf, sizeof (buf), "LISTGROUP %s\r\n", nntp_data->group);
-  if (mutt_nntp_fetch (nntp_data, buf, NULL, nntp_fetch_numbers, &fc, 0) != 0)
-  {
-    mutt_error (_("LISTGROUP command failed: %s"), buf);
+  if (nntp_data->nserv->hasLISTGROUP) {
+    snprintf (buf, sizeof (buf), "LISTGROUP %s\r\n", nntp_data->group);
+    if (mutt_nntp_fetch (nntp_data, buf, NULL, nntp_fetch_numbers, &fc, 0) != 0)
+    {
+      mutt_error (_("LISTGROUP command failed: %s"), buf);
+      sleep (2);
 #ifdef DEBUG
-    nntp_error ("nntp_fetch_headers()", buf);
+      nntp_error ("nntp_fetch_headers()", buf);
 #endif
-    FREE (&fc.messages);
-    return -1;
+      FREE (&fc.messages);
+      return -1;
+    }
+  } else {
+    /* mutt_nntp_query() issues a 'GROUP nntp_data->group' 
+     * command on its own if !*buf */
+    buf[0] = '\0';
+    mutt_nntp_query (nntp_data, buf, sizeof (buf));
+    if (sscanf (buf + 4, "%d %d %d %s", &num, &fc.first, &fc.last, buf) != 4) {
+      mutt_error (_("GROUP command failed: %s"), buf);
+      FREE (&fc.messages);
+      return (-1);
+    } else {
+      for (num = fc.first; num < fc.last; num++)
+        _nntp_fetch_numbers (num, &fc);
+    }
   }
 
   /* CACHE: must be loaded xover cache here */
