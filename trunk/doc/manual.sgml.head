@@ -2161,6 +2161,41 @@ pattern is translated at the time the hook is declared, so the value of
 <ref id="default_hook" name="&dollar;default&lowbar;hook"> that is in effect
 at that time will be used.
 
+<sect1>Usind the sidebar<label id="sidebar">
+<p>
+The sidebar allows you to use a mailbox listing which looks very
+similiar to the ones you can the in GUI mail clients.
+The sidebar lists all specified mailboxes, shows the number in each
+and highlights the ones with new email
+Use the following commands:
+<tscreen><verb>
+set sidebar_visible="yes"
+set sidebar_width=25
+</tscreen></verb>
+
+If you want to specify the mailboxes you can do so with:
+<tscreen><verb>
+set mbox='=INBOX'
+mailboxes INBOX \
+          MBOX1 \
+          MBOX2 \
+          ...
+</tscreen></verb>
+
+You can also specify the colors for mailboxes with new mails by using:
+<tscreen><verb>
+color sidebar_new red black
+</tscreen></verb>
+
+The available functions are:
+<tscreen><verb>
+sidebar-scroll-up      Scrolls the mailbox list up 1 page
+sidebar-scroll-down    Scrolls the mailbox list down 1 page
+sidebar-next           Hilights the next mailbox
+sidebar-previous       Hilights the previous mailbox
+sidebar-open           Opens the currently hilighted mailbox
+</tscreen></verb>
+
 <sect1>External Address Queries<label id="query">
 <p>
 Mutt supports connecting to external directory databases such as LDAP,
