@@ -6,13 +6,13 @@ Date: Tue,  9 May 2000 19:48:08 +0200
 Required tools
 --------------
 
-If you are planning to hack on mutt, please subscribe to the
-mutt-dev mailinglist (mutt-dev@mutt.org, contact
-majordomo@mutt.org).  Announcements about recent development
+If you are planning to hack on mutt-ng, please subscribe to the
+mutt-dev mailinglist (mutt-ng-deve-@lists.berlios.de).
+Announcements about recent development
 versions go to that mailing list, as go technical discussions and
 patches.
 
-You'll need several GNU development utilities for working on mutt:
+You'll need several GNU development utilities for working on mutt-ng:
 
 - automake
 
@@ -75,7 +75,7 @@ something which should be eliminated.
 
 Nevertheless, the code in intl/ is said to generate some warnings with
 the compiler settings we usually rely upon.  This code is not
-maintained by the mutt developpers, so please redirect any comments to
+maintained by the mutt-ng developpers, so please redirect any comments to
 the GNU gettext library's developpers.
 
 
@@ -99,7 +99,7 @@ Style Guide
 - when adding new options, make the old behaviour the
   default.
 
-- try to keep mutt as portable as possible.
+- try to keep mutt-ng as portable as possible.
 
 
 Documentation
@@ -110,14 +110,14 @@ where you may have to add documentation:
 
 - doc/manual.sgml.{head,tail} contain The Manual.
 
-- doc/muttrc.man.{head,tail} contain an abriged version of The
+- doc/muttngrc.man.{head,tail} contain an abriged version of The
   Manual in nroff format (see man(7)), which deals with
   configuration file commands.
 
 Configuration _variables_ are documented directly in init.h.   Note
 that this includes documentation for possibly added format flags!
 
-The parts of The Manual and the muttrc manual page dealing with
+The parts of The Manual and the muttngrc manual page dealing with
 these variables, and the global Muttrc, are generated automatically
 from that documentation.  To start this process, type "make
 update-doc" in the top-level source directory.
@@ -160,7 +160,7 @@ similar to [ntg]roff:
  - .ts on a line starts a "verbose tscreen" environment (name taken from
    SGML).  Please try to keep lines inside such an environment
    short; a length of abut 40 characters should be ok.  This is
-   necessary to avoid a really bad-looking muttrc (5) manual page.
+   necessary to avoid a really bad-looking muttngrc (5) manual page.
 
  - .te on a line finishes this environment.
 
