@@ -1,3 +1,36 @@
+2005-03-31 04:55:09  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (brendan)
+
+	* mh.c: Another hcache cygwin portability fix.
+
+2005-03-23 10:51:11  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
+
+	* init.h, mh.c, mutt.h: Maildir header cache.
+
+2005-03-22 19:58:15  Horst Schirmeier  <horst@schirmeier.com>  (roessler)
+
+	* Makefile.am: Use install-exec-hook install of
+	install-exec-local.
+
+2005-03-22 19:53:49  Ronny Haryanto  <ronnylist@haryan.to>  (roessler)
+
+	* po/id.po: update
+
+2005-03-22 19:49:31  René Clerc  <rene@clerc.nl>  (roessler)
+
+	* po/nl.po: update
+
+2005-03-22 19:48:35  Roland Rosenfeld  <roland@spinnaker.de>  (roessler)
+
+	* po/de.po: update
+
+2005-03-22 19:46:59  Paul Walker  <paul@black-sun.demon.co.uk>  (roessler)
+
+	* init.c, init.h: remove some unused functions.
+
+2005-03-22 19:43:13  Vsevolod Volkov  <vvv@mutt.org.ua>  (roessler)
+
+	* po/ru.po: update
+
 2005-03-22 03:40:54  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (brendan)
 
 	* hcache.c, imap/imap.c, imap/imap_private.h, imap/message.c,
@@ -367,7 +400,7 @@
 2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
                                  
      * hcache.c: - make hcache.c conform to mutt codingstyle
-     - use $Id: ChangeLog,v 3.411 2005/03/22 03:42:22 brendan Exp $ CVS keyword instead of %K% BitKeeper keyword
+     - use $Id: ChangeLog,v 3.419 2005/03/31 04:56:39 brendan Exp $ CVS keyword instead of %K% BitKeeper keyword
                                  
 2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
 
