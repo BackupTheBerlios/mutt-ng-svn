@@ -1,5 +1,9 @@
 Changes specific to mutt-ng:
 
+2004-02-21:
+  * Merged past mutt changes
+  * Fixed a bug in mutt_FormatString regarding aligning the rest of a string to the right (%>)
+
 2004-02-16:
   * fixed segfault in curs_lib.c
   * fixed names

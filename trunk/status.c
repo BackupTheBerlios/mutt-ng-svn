@@ -41,6 +41,7 @@ static char *get_sort_str (char *buf, size_t buflen, int method)
 }
 
 /* %b = number of incoming folders with unread messages [option]
+ * %B = short mailbox path
  * %d = number of deleted messages [option]
  * %f = full mailbox path
  * %F = number of flagged messages [option]
@@ -63,7 +64,7 @@ status_format_str (char *buf, size_t buflen, char op, const char *src,
 		   const char *elsestring,
 		   unsigned long data, format_flag flags)
 {
-  char fmt[SHORT_STRING], tmp[SHORT_STRING], *cp;
+  char fmt[SHORT_STRING], tmp[SHORT_STRING], *cp, *p;
   int count, optional = (flags & M_FORMAT_OPTIONAL);
   MUTTMENU *menu = (MUTTMENU *) data;
 
@@ -78,6 +79,30 @@ status_format_str (char *buf, size_t buflen, char op, const char *src,
       }
       else if (!mutt_buffy_check (0))
 	optional = 0;
+      break;
+
+    case 'B':
+      snprintf (fmt, sizeof (fmt), "%%%ss", prefix);
+#ifdef USE_COMPRESSED
+      if (Context && Context->compressinfo && Context->realpath)
+      {
+	if ((p = strrchr (Context->realpath, '/')))
+	  strfcpy (tmp, p + 1, sizeof (tmp));
+	else
+	  strfcpy (tmp, Context->realpath, sizeof (tmp));
+      } 
+      else
+#endif
+      if (Context && Context->path)
+      {
+	if ((p = strrchr (Context->path, '/')))
+	  strfcpy (tmp, p + 1, sizeof (tmp));
+	else
+	  strfcpy (tmp, Context->path, sizeof (tmp));
+      }
+      else
+	  strfcpy (tmp, _("no mailbox"), sizeof (tmp));
+      snprintf (buf, buflen, fmt, tmp);
       break;
 
     case 'd':

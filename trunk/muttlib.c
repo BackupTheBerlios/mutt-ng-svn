@@ -1029,7 +1029,7 @@ void mutt_FormatString (char *dest,		/* output buffer */
 	if ( DrawFullLine )
 	  count = (COLS < destlen ? COLS : destlen);
 	else
-	  count = ((COLS-SidebarWidth) < destlen ? COLS - SidebarWidth : destlen);
+	  count = ((COLS-SidebarWidth) < destlen ? (COLS - SidebarWidth) : destlen);
 	if (count > col)
 	{
 	  count -= col; /* how many columns left on this line */
@@ -1042,8 +1042,10 @@ void mutt_FormatString (char *dest,		/* output buffer */
 	    wptr += count;
 	    col += count;
 	  }
-	  if (len + wlen > destlen)
+	  if (wid + wlen > destlen)
 	    len = destlen - wlen;
+    else
+      len = wid;
 	  memcpy (wptr, buf, len);
 	  wptr += len;
 	  wlen += len;

@@ -2873,6 +2873,7 @@ struct option_t MuttVars[] = {
   ** .pp
   ** .dl
   ** .dt %b  .dd number of mailboxes with new mail *
+  ** .dt %B  .dd the short pathname of the current mailbox
   ** .dt %d  .dd number of deleted messages *
   ** .dt %f  .dd the full pathname of the current mailbox
   ** .dt %F  .dd number of flagged messages *

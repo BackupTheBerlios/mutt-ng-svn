@@ -20,7 +20,7 @@
 #ifndef _IMAP_PRIVATE_H
 #define _IMAP_PRIVATE_H 1
 
-#include <stdint.h>
+#include <inttypes.h>
 
 #include "imap.h"
 #include "mutt_socket.h"
@@ -196,6 +196,7 @@ typedef struct
 /* -- private IMAP functions -- */
 /* imap.c */
 int imap_create_mailbox (IMAP_DATA* idata, char* mailbox);
+int imap_rename_mailbox (IMAP_DATA* idata, IMAP_MBOX* mx, const char* newname);
 int imap_make_msg_set (IMAP_DATA* idata, BUFFER* buf, int flag, int changed);
 int imap_open_connection (IMAP_DATA* idata);
 IMAP_DATA* imap_conn_find (const ACCOUNT* account, int flags);

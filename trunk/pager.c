@@ -1042,8 +1042,11 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
   wchar_t wc;
   mbstate_t mbstate;
 
-  int wrap_cols = COLS - WrapMargin - SidebarWidth;
-  
+  int wrap_cols = COLS;
+  if (!(flags & (M_SHOWFLAT)))
+    wrap_cols -= WrapMargin;
+  wrap_cols -= SidebarWidth;
+
   if (wrap_cols <= 0)
     wrap_cols = COLS;
   

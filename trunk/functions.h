@@ -413,6 +413,7 @@ struct binding_t OpBrowser[] = {
 #ifdef USE_IMAP
   { "create-mailbox",   OP_CREATE_MAILBOX,      "C" },
   { "delete-mailbox",   OP_DELETE_MAILBOX,      "d" },
+  { "rename-mailbox",   OP_RENAME_MAILBOX,      "r" },
 #endif
 #if defined USE_IMAP || defined USE_NNTP
   { "subscribe",	OP_BROWSER_SUBSCRIBE,	"s" },

@@ -1,3 +1,17 @@
+2005-02-19 16:00:24  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* sendlib.c: Fix Debian 295528.
+
+2005-02-17 03:33:00  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* OPS, browser.c, doc/manual.sgml.head, functions.h,
+	imap/browse.c, imap/imap.c, imap/imap.h, imap/imap_private.h: New
+	function: rename-mailbox (bound to 'r' by default).
+
+	The lack of a rename-mailbox command for IMAP finally got too annoying.
+	It's a bit of a cut-and-paste job, but I've put my dreams of cleaning
+	up the IMAP codebase on hold. Gotta grow up some time.
+
 2005-02-13 17:37:31  Roland Rosenfeld  <roland@spinnaker.de>  (roessler)
 
 	* po/de.po: update
