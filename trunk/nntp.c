@@ -714,7 +714,7 @@ static int nntp_fetch_headers (CONTEXT *ctx, unsigned int first,
      * command on its own if !*buf */
     buf[0] = '\0';
     mutt_nntp_query (nntp_data, buf, sizeof (buf));
-    if (sscanf (buf + 4, "%d %d %d %s", &num, &fc.first, &fc.last, buf) != 4) {
+    if (sscanf (buf + 4, "%d %u %u %s", &num, &fc.first, &fc.last, buf) != 4) {
       mutt_error (_("GROUP command failed: %s"), buf);
       FREE (&fc.messages);
       return (-1);

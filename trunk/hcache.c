@@ -136,6 +136,7 @@ dump_char(char *c, unsigned char *d, int *off)
 	return d;
 }
 
+#if 0
 static unsigned char *
 dump_char_size(char *c, unsigned char *d, int *off, ssize_t size)
 {
@@ -152,6 +153,7 @@ dump_char_size(char *c, unsigned char *d, int *off, ssize_t size)
 
 	return d;
 }
+#endif
 
 static void
 restore_char(char **c, const unsigned char *d, int *off)
@@ -251,6 +253,7 @@ restore_list(LIST **l, const unsigned char *d, int *off)
 	*l = NULL;
 }
 
+#if 0
 static unsigned char *
 dump_buffer(BUFFER *b, unsigned char *d, int *off)
 {
@@ -287,6 +290,7 @@ restore_buffer(BUFFER **b, const unsigned char *d, int *off)
 	restore_int(& (*b)->dsize, d, off);
 	restore_int((unsigned int *) & (*b)->destroy, d, off);
 }
+#endif
 
 static unsigned char *
 dump_parameter(PARAMETER *p, unsigned char *d, int *off)

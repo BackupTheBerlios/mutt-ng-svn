@@ -204,6 +204,7 @@ int imap_parse_list_response(IMAP_DATA* idata, char** name, int* noselect,
   int* noinferiors, char* delim);
 int imap_read_literal (FILE* fp, IMAP_DATA* idata, long bytes);
 void imap_expunge_mailbox (IMAP_DATA* idata);
+int imap_reconnect (CONTEXT* ctx);
 void imap_logout (IMAP_DATA* idata);
 
 /* auth.c */

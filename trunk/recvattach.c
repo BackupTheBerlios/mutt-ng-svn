@@ -78,8 +78,7 @@ int mutt_extract_path(char *filename, char *path)
     }
     *help_ptr++=*filename++;
   }
-  safe_free((void **) &tmp);
-    
+  FREE(&tmp);
   return 0;
 }
 

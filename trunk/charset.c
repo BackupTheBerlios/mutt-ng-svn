@@ -633,7 +633,7 @@ static size_t convert_string (ICONV_CONST char *f, size_t flen,
 
   *tlen = ob - buf;
 
-  safe_realloc ((void **) &buf, ob - buf + 1);
+  safe_realloc (&buf, ob - buf + 1);
   *t = buf;
   iconv_close (cd);
 

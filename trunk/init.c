@@ -652,6 +652,7 @@ static int parse_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
   return 0;
 }
 
+#if 0
 static int _parse_rx_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err, int flags)
 {
   do 
@@ -687,6 +688,7 @@ static int parse_rx_unlist (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *
   
   return 0;
 }
+#endif
 
 static void _alternates_clean (void)
 {

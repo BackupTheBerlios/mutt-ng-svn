@@ -897,7 +897,6 @@ void maildir_delayed_parsing (CONTEXT * ctx, struct maildir *md)
 #if USE_HCACHE
   void *hc = NULL;
   void *data;
-  unsigned int size;
   struct timeval *when = NULL;
   struct stat lastchanged;
   int ret;
@@ -1081,7 +1080,7 @@ int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
   FOREVER
   {
     snprintf (path, _POSIX_PATH_MAX, "%s/tmp/%s.%ld.%u_%d.%s%s",
-	      dest->path, subdir, time (NULL), (unsigned int)getpid (),
+	      dest->path, subdir, (long) time (NULL), (unsigned int)getpid (),
   	      Counter++, NONULL (Hostname), suffix);
 
     dprint (2, (debugfile, "maildir_open_new_message (): Trying %s.\n",
@@ -1163,7 +1162,7 @@ int maildir_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr)
   FOREVER
   {
     snprintf (path, _POSIX_PATH_MAX, "%s/%ld.%u_%d.%s%s", subdir,
-	      time (NULL), (unsigned int)getpid (), Counter++, 
+	      (long) time (NULL), (unsigned int)getpid (), Counter++, 
  	      NONULL (Hostname), suffix);
     snprintf (full, _POSIX_PATH_MAX, "%s/%s", ctx->path, path);
 

@@ -903,6 +903,12 @@ void text_enriched_handler (BODY *a, STATE *s)
 
 #define FLOWED_MAX 77
 
+#if 0
+static int flowed_maybe_quoted (char *cont)
+{
+  return regexec ((regex_t *) QuoteRegexp.rx, cont, 0, NULL, 0) == 0;
+}
+
 static void flowed_quote (STATE *s, int level)
 {
   int i;
@@ -917,11 +923,6 @@ static void flowed_quote (STATE *s, int level)
   
   for (i = 0; i < level; i++)
     state_putc ('>', s);
-}
-
-static int flowed_maybe_quoted (char *cont)
-{
-  return regexec ((regex_t *) QuoteRegexp.rx, cont, 0, NULL, 0) == 0;
 }
 
 static void flowed_stuff (STATE *s, char *cont, int level)
@@ -966,7 +967,6 @@ static int flowed_visual_strlen (char *l, int i)
   return j;
 }
 
-#if 0
 static void text_plain_flowed_handler (BODY *a, STATE *s)
 {
   char line[LONG_STRING];
@@ -1208,7 +1208,6 @@ static int get_quote_level(char * line) {
 static void print_flowed_line(char * line, STATE *s,int ql) {
   int width;
   char * pos, * oldpos;
-  char * t;
   int len = strlen(line);
   int i;
 

@@ -931,7 +931,6 @@ static size_t imap_hcache_keylen (const char *fn)
 static int msg_fetch_header_fetch (CONTEXT* ctx, IMAP_HEADER* h, char* buf, FILE* fp)
 {
   IMAP_DATA* idata;
-  long bytes;
   int rc = -1; /* default now is that string isn't FETCH response*/
 
   idata = (IMAP_DATA*) ctx->data;
