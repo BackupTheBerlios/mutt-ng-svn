@@ -403,7 +403,7 @@ static void x509_fingerprint (char *s, int l, X509 * cert)
 
   if (!X509_digest (cert, EVP_md5 (), md, &n))
   {
-    snprintf (s, l, _("[unable to calculate]"));
+    snprintf (s, l, "%s", _("[unable to calculate]"));
   }
   else
   {
@@ -598,7 +598,7 @@ static int ssl_check_certificate (sslsockdata * data)
   }
 
   row++;
-  snprintf (menu->dialog[row++], SHORT_STRING, _("This certificate is valid"));
+  snprintf (menu->dialog[row++], SHORT_STRING, "%s", _("This certificate is valid"));
   snprintf (menu->dialog[row++], SHORT_STRING, _("   from %s"), 
       asn1time_to_string (X509_get_notBefore (data->cert)));
   snprintf (menu->dialog[row++], SHORT_STRING, _("     to %s"), 
