@@ -1776,9 +1776,9 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
       draw_sidebar(MENU_PAGER);
       /* print out the index status bar */
       menu_status_line (buffer, sizeof (buffer), index, NONULL(Status));
-      move (indexoffset + (option (OPTSTATUSONTOP) ? 0 : (indexlen - 1)),SidebarWidth);
+      move (indexoffset + (option (OPTSTATUSONTOP) ? 0 : (indexlen - 1)),0);
       SETCOLOR (MT_COLOR_STATUS);
-      mutt_paddstr (COLS-SidebarWidth, buffer);
+      mutt_paddstr (COLS, buffer);
       SETCOLOR (MT_COLOR_NORMAL);
     }
 	/* if we're not using the index, update every time */

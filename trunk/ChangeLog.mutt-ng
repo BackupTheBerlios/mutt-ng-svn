@@ -1,6 +1,9 @@
 Changes specific to mutt-ng:
 
 2005-02-27
+  * makes sidebar fit into screen in the pager
+
+2005-02-27
   * integrated patch to highlight the next mailbox which includes new mail in
   sidebar
 
