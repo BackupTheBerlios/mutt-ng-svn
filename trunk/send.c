@@ -16,7 +16,6 @@
 #include "rfc2047.h"
 #include "keymap.h"
 #include "mime.h"
-#include "mailbox.h"
 #include "copy.h"
 #include "mx.h"
 #include "mutt_crypt.h"

@@ -15,7 +15,6 @@
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "mime.h"
-#include "mailbox.h"
 #include "mx.h"
 #include "url.h"
 

@@ -20,7 +20,6 @@
 #include "mime.h"
 #include "rfc1524.h"
 #include "rfc2047.h"
-#include "mailbox.h"
 #include "nntp.h"
 
 #ifdef HAVE_PGP

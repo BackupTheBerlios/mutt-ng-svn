@@ -12,9 +12,9 @@
 #endif
 
 #include "mutt.h"
+#include "mx.h"
 #include "mapping.h"
 #include "keymap.h"
-#include "mailbox.h"
 #include "copy.h"
 
 #include "lib/mem.h"

@@ -18,7 +18,6 @@
 #include "sort.h"
 #include "mx.h"
 #include "mime.h"
-#include "mailbox.h"
 #include "nntp.h"
 #include "rfc822.h"
 #include "rfc1524.h"

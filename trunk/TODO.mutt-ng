@@ -13,7 +13,12 @@ Here's a list of all mutt-ng specific TODOs (not in priority order):
 
 - Stop making up names of global functions with mutt_*; give meaningful
   names and declare them in the right headers to eventually obsolote
-  protos.h
+  protos.h. This counts for data typedef's, too! Write one header and
+  one source file per datatype, do proper information hiding and thus
+  provide sane internal abstraction to get "future ready." For example,
+  for all the mailbox handling, the mbox_*/mmdf_* and mh_*/maildir_*
+  functions should only be called directly in the right abstraction
+  layer's implementation. And so forth.
 
 - Convert all the names in manual.sgml.head/tail
 

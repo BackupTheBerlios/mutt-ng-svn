@@ -19,7 +19,6 @@
 #include "rfc1524.h"
 #include "mime.h"
 #include "pager.h"
-#include "mailbox.h"
 #include "copy.h"
 #include "mx.h"
 #include "mutt_crypt.h"

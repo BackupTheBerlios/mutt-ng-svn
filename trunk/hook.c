@@ -12,7 +12,7 @@
 #endif
 
 #include "mutt.h"
-#include "mailbox.h"
+#include "mx.h"
 #include "mutt_crypt.h"
 
 #ifdef USE_COMPRESSED

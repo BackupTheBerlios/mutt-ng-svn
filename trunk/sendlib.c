@@ -19,7 +19,6 @@
 #include "rfc2231.h"
 #include "mx.h"
 #include "mime.h"
-#include "mailbox.h"
 #include "copy.h"
 #include "pager.h"
 #include "charset.h"

@@ -18,8 +18,9 @@
 #endif
 
 #include "mutt.h"
-#include "mailbox.h"
 #include "mx.h"
+#include "mh.h"
+#include "mbox.h"
 #include "copy.h"
 #include "buffy.h"
 #include "sort.h"

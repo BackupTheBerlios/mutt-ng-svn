@@ -15,7 +15,6 @@
 
 #include "mutt.h"
 #include "copy.h"
-#include "mailbox.h"
 #include "mx.h"
 
 #include "lib/intl.h"

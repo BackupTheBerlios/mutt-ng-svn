@@ -12,7 +12,6 @@
 #ifdef USE_COMPRESSED
 
 #include "mx.h"
-#include "mailbox.h"
 #include "mutt_curses.h"
 
 #include "lib/mem.h"

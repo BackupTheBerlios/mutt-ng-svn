@@ -16,8 +16,8 @@
 
 #include "mutt.h"
 #include "buffy.h"
-#include "mailbox.h"
 #include "mx.h"
+#include "mh.h"
 #include "sidebar.h"
 
 #include "mutt_curses.h"

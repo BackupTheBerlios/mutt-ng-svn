@@ -13,7 +13,7 @@
 #define _NNTP_H_ 1
 
 #include "mutt_socket.h"
-#include "mailbox.h"
+#include "mx.h"
 
 #include <time.h>
 

@@ -12,7 +12,7 @@
 #endif
 
 #include "mutt.h"
-#include "mailbox.h"
+#include "mx.h"
 #include "mime.h"
 #include "rfc2047.h"
 #include "rfc2231.h"

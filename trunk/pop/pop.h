@@ -10,7 +10,7 @@
 #ifndef _POP_H
 #define _POP_H 1
 
-#include "mailbox.h"
+#include "mx.h"
 #include "mutt_socket.h"
 
 #define POP_PORT 110

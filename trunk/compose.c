@@ -23,7 +23,6 @@
 #include "mime.h"
 #include "attach.h"
 #include "mapping.h"
-#include "mailbox.h"
 #include "sort.h"
 #include "charset.h"
 #include "mx.h"

@@ -13,7 +13,7 @@
 
 #include "mutt.h"
 #ifdef USE_IMAP
-#include "mailbox.h"
+#include "mx.h"
 #include "imap.h"
 #endif
 #ifdef USE_NNTP

@@ -12,7 +12,6 @@
 #endif
 
 #include "mutt.h"
-#include "mailbox.h"
 #include "mx.h"
 #include "copy.h"
 #include "rfc2047.h"

@@ -18,7 +18,6 @@
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "mx.h"
-#include "mailbox.h"
 #include "globals.h"
 #include "sort.h"
 #include "browser.h"

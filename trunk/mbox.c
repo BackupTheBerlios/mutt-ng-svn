@@ -14,8 +14,8 @@
 #endif
 
 #include "mutt.h"
-#include "mailbox.h"
 #include "mx.h"
+#include "mbox.h"
 #include "sort.h"
 #include "copy.h"
 
@@ -44,6 +44,13 @@ struct m_update_t {
   long lines;
   long length;
 };
+
+
+int mbox_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
+{
+  msg->fp = dest->fp;
+  return 0;
+}
 
 /* parameters:
  * ctx - context to lock
@@ -601,7 +608,7 @@ int mbox_check_mailbox (CONTEXT * ctx, int *index_hint)
   }
 
   if (modified) {
-    if (mutt_reopen_mailbox (ctx, index_hint) != -1) {
+    if (mbox_reopen_mailbox (ctx, index_hint) != -1) {
       if (unlock) {
         mbox_unlock_mailbox (ctx);
         mutt_unblock_signals ();
@@ -972,7 +979,7 @@ int mbox_close_mailbox (CONTEXT * ctx)
   return 0;
 }
 
-int mutt_reopen_mailbox (CONTEXT * ctx, int *index_hint)
+int mbox_reopen_mailbox (CONTEXT * ctx, int *index_hint)
 {
   int (*cmp_headers) (const HEADER *, const HEADER *) = NULL;
   HEADER **old_hdrs;
@@ -1035,7 +1042,7 @@ int mutt_reopen_mailbox (CONTEXT * ctx, int *index_hint)
   case M_MBOX:
   case M_MMDF:
     if (fseek (ctx->fp, 0, SEEK_SET) != 0) {
-      dprint (1, (debugfile, "mutt_reopen_mailbox: fseek() failed\n"));
+      dprint (1, (debugfile, "mbox_reopen_mailbox: fseek() failed\n"));
       rc = -1;
     }
     else {

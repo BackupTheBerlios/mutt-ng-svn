@@ -27,7 +27,6 @@
 
 #include "mx.h"
 #include "init.h"
-#include "mailbox.h"
 
 #include "lib/mem.h"
 #include "lib/intl.h"

@@ -17,7 +17,6 @@
 #include "mutt_menu.h"
 #include "mime.h"
 #include "sort.h"
-#include "mailbox.h"
 #include "copy.h"
 #include "mx.h"
 #include "pager.h"

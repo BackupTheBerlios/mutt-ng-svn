@@ -17,7 +17,6 @@
 #include "buffy.h"
 #include "mapping.h"
 #include "sort.h"
-#include "mailbox.h"
 #include "browser.h"
 #ifdef USE_IMAP
 #include "imap.h"

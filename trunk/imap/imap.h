@@ -13,7 +13,7 @@
 
 #include "account.h"
 #include "browser.h"
-#include "mailbox.h"
+#include "mx.h"
 
 /* -- data structures -- */
 typedef struct {

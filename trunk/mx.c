@@ -14,9 +14,10 @@
 
 #include "mutt.h"
 #include "mx.h"
+#include "mbox.h"
+#include "mh.h"
 #include "rfc2047.h"
 #include "sort.h"
-#include "mailbox.h"
 #include "copy.h"
 #include "keymap.h"
 #include "url.h"
@@ -314,7 +315,6 @@ void mx_unlink_empty (const char *path)
  */
 
 #ifdef USE_IMAP
-
 int mx_is_imap (const char *p)
 {
   url_scheme_t scheme;
@@ -331,7 +331,6 @@ int mx_is_imap (const char *p)
 
   return 0;
 }
-
 #endif
 
 #ifdef USE_POP
@@ -1303,15 +1302,6 @@ int mx_sync_mailbox (CONTEXT * ctx, int *index_hint)
   }
 
   return (rc);
-}
-
-
-/* {maildir,mh}_open_new_message are in mh.c. */
-
-int mbox_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
-{
-  msg->fp = dest->fp;
-  return 0;
 }
 
 #ifdef USE_IMAP

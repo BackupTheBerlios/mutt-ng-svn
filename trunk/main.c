@@ -22,7 +22,6 @@
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "keymap.h"
-#include "mailbox.h"
 #include "url.h"
 #include "mutt_crypt.h"
 #include "mutt_idna.h"

@@ -9,14 +9,13 @@
  */
 
 /*
- * This header file contains prototypes for internal functions used by the
- * generic mailbox api.  None of these functions should be called directly.
+ * mailbox abstraction
+ * when adding code dealing with folders or whatever,
+ * please use these only
  */
 
 #ifndef _MX_H
 #define _MX_H
-
-#include "mailbox.h"
 
 /* supported mailbox formats */
 enum {
@@ -38,49 +37,76 @@ enum {
 #endif
 };
 
-WHERE short DefaultMagic INITVAL (M_MBOX);
+/* flags for mx_open_mailbox() */
+#define M_NOSORT	(1<<0)  /* do not sort the mailbox after opening it */
+#define M_APPEND	(1<<1)  /* open mailbox for appending messages */
+#define M_READONLY	(1<<2)  /* open in read-only mode */
+#define M_QUIET		(1<<3)  /* do not print any messages */
+#define M_NEWFOLDER	(1<<4)  /* create a new folder - same as M_APPEND, but uses
+                                 * safe_fopen() for mbox-style folders.
+                                 */
 
-#define MMDF_SEP "\001\001\001\001\n"
+/* mx_open_new_message() */
+#define M_ADD_FROM	1       /* add a From_ line */
+
 #define MAXLOCKATTEMPT 5
 
-int mbox_sync_mailbox (CONTEXT *, int *);
-int mbox_open_mailbox (CONTEXT *);
-int mbox_check_mailbox (CONTEXT *, int *);
-int mbox_close_mailbox (CONTEXT *);
-int mbox_lock_mailbox (CONTEXT *, int, int);
-int mbox_parse_mailbox (CONTEXT *);
-int mmdf_parse_mailbox (CONTEXT *);
-void mbox_unlock_mailbox (CONTEXT *);
-int mbox_check_empty (const char *);
+/* return values from mx_check_mailbox() */
+enum {
+  M_NEW_MAIL = 1,               /* new mail received in mailbox */
+  M_LOCKED,                     /* couldn't lock the mailbox */
+  M_REOPENED,                   /* mailbox was reopened */
+  M_FLAGS                       /* nondestructive flags change (IMAP) */
+};
 
-int mh_read_dir (CONTEXT *, const char *);
-int mh_sync_mailbox (CONTEXT *, int *);
-int mh_check_mailbox (CONTEXT *, int *);
-int mh_buffy (const char *);
-int mh_check_empty (const char *);
+typedef struct {
+  FILE *fp;                     /* pointer to the message data */
+  char *path;                   /* path to temp file */
+  short magic;                  /* type of mailbox this message belongs to */
+  short write;                  /* nonzero if message is open for writing */
+  struct {
+    unsigned read:1;
+    unsigned flagged:1;
+    unsigned replied:1;
+  } flags;
+  time_t received;              /* the time at which this message was received */
+} MESSAGE;
 
-int maildir_read_dir (CONTEXT *);
-int maildir_check_mailbox (CONTEXT *, int *);
-int maildir_check_empty (const char *);
+WHERE short DefaultMagic INITVAL (M_MBOX);
 
-int maildir_commit_message (CONTEXT *, MESSAGE *, HEADER *);
-int mh_commit_message (CONTEXT *, MESSAGE *, HEADER *);
+CONTEXT *mx_open_mailbox (const char *, int, CONTEXT *);
 
-int maildir_open_new_message (MESSAGE *, CONTEXT *, HEADER *);
-int mh_open_new_message (MESSAGE *, CONTEXT *, HEADER *);
+MESSAGE *mx_open_message (CONTEXT *, int);
+MESSAGE *mx_open_new_message (CONTEXT *, HEADER *, int);
 
-FILE *maildir_open_find_message (const char *, const char *);
+void mx_fastclose_mailbox (CONTEXT *);
 
-int mbox_strict_cmp_headers (const HEADER *, const HEADER *);
-int mutt_reopen_mailbox (CONTEXT *, int *);
+int mx_close_mailbox (CONTEXT *, int *);
+int mx_sync_mailbox (CONTEXT *, int *);
+int mx_commit_message (MESSAGE *, CONTEXT *);
+int mx_close_message (MESSAGE **);
+int mx_get_magic (const char *);
+int mx_set_magic (const char *);
+int mx_check_mailbox (CONTEXT *, int *, int);
+
+#ifdef USE_IMAP
+int mx_is_imap (const char *);
+#endif
+#ifdef USE_POP
+int mx_is_pop (const char *);
+#endif
+#ifdef USE_NNTP
+int mx_is_nntp (const char *);
+#endif
+
+int mx_access (const char *, int);
+int mx_check_empty (const char *);
 
 void mx_alloc_memory (CONTEXT *);
 void mx_update_context (CONTEXT *, int);
 void mx_update_tables (CONTEXT *, int);
 
-
 int mx_lock_file (const char *, int, int, int, int);
 int mx_unlock_file (const char *path, int fd, int dot);
 
-
-#endif
+#endif /* !_MX_H */
