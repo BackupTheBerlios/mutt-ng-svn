@@ -73,13 +73,13 @@ try-txt: ../makedoc
 install: all instdoc
 	$(top_srcdir)/mkinstalldirs $(DESTDIR)$(mandir)/man1
 	$(top_srcdir)/mkinstalldirs $(DESTDIR)$(mandir)/man5
-	./instdoc $(srcdir)/mutt.man $(DESTDIR)$(mandir)/man1/mutt.1
-	./instdoc $(srcdir)/muttbug.man $(DESTDIR)$(mandir)/man1/flea.1
-	echo ".so $(mandir)/man1/flea.1" > $(DESTDIR)$(mandir)/man1/muttbug.1
+	./instdoc $(srcdir)/mutt.man $(DESTDIR)$(mandir)/man1/muttng.1
+	./instdoc $(srcdir)/muttbug.man $(DESTDIR)$(mandir)/man1/muttng-flea.1
+	echo ".so $(mandir)/man1/flea.1" > $(DESTDIR)$(mandir)/man1/muttngbug.1
 	./instdoc $(srcdir)/dotlock.man \
-		$(DESTDIR)$(mandir)/man1/mutt_dotlock.1
-	./instdoc muttrc.man $(DESTDIR)$(mandir)/man5/muttrc.5
-	./instdoc $(srcdir)/mbox.man $(DESTDIR)$(mandir)/man5/mbox.5
+		$(DESTDIR)$(mandir)/man1/muttng_dotlock.1
+	./instdoc muttrc.man $(DESTDIR)$(mandir)/man5/muttngrc.5
+	./instdoc $(srcdir)/mbox.man $(DESTDIR)$(mandir)/man5/muttng-mbox.5
 	$(top_srcdir)/mkinstalldirs $(DESTDIR)$(docdir)
 	for f in $(srcdir_DOCFILES) ; do \
 		$(INSTALL) -m 644 $(srcdir)/$$f $(DESTDIR)$(docdir) ; \
@@ -94,9 +94,9 @@ install: all instdoc
 	done
 
 uninstall:
-	-rm -f $(DESTDIR)$(mandir)/man1/mutt.1
-	-rm -f $(DESTDIR)$(mandir)/man1/mutt_dotlock.1
-	-rm -f $(DESTDIR)$(mandir)/man5/muttrc.5
+	-rm -f $(DESTDIR)$(mandir)/man1/muttng.1
+	-rm -f $(DESTDIR)$(mandir)/man1/muttng_dotlock.1
+	-rm -f $(DESTDIR)$(mandir)/man5/muttngrc.5
 	-rm -rf $(DESTDIR)$(docdir)
 
 check:

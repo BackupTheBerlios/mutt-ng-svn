@@ -9559,7 +9559,7 @@ if test "${with_docdir+set}" = set; then
   withval="$with_docdir"
   mutt_cv_docdir=$withval
 else
-  mutt_cv_docdir="$mutt_cv_prefix/doc/mutt"
+  mutt_cv_docdir="$mutt_cv_prefix/doc/muttng"
 fi;
 echo "$as_me:$LINENO: result: $mutt_cv_docdir" >&5
 echo "${ECHO_T}$mutt_cv_docdir" >&6
