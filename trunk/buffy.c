@@ -599,9 +599,11 @@ int mutt_buffy_list (void)
   char buffylist[160];
   int pos;
   int first;
-
   int have_unnotified = BuffyNotify;
-  
+
+  if (option (OPTFORCEBUFFYCHECK))
+    mutt_buffy_check (1);
+
   pos = 0;
   first = 1;
   buffylist[0] = 0;

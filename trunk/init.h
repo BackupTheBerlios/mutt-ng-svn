@@ -697,6 +697,16 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Also see the ``$$record'' variable.
   */
+  { "force_buffy_check", DT_BOOL, R_NONE, OPTFORCEBUFFYCHECK, 0 },
+  /*
+  ** .pp
+  ** When \fIset\fP, it causes mutt-ng to check for new mail when the
+  ** \fIbuffy-list\fP command is invoked. When \fIunset\fP, \fIbuffy_list\fP
+  ** will just list all mailboxes which are already known to have new mail.
+  ** .pp
+  ** Also see the following variables: ``$$timeout'', ``$$mail_check'' and
+  ** ``$$imap_mail_check''.
+  */
   { "forward_decode",	DT_BOOL, R_NONE, OPTFORWDECODE, 1 },
   /*
   ** .pp
@@ -980,7 +990,6 @@ struct option_t MuttVars[] = {
   ** This variable configures how often (in seconds) mutt-ng should look for
   ** new mail in IMAP folders. This is split from the ``$mail_check'' variable
   ** to generate less traffic and get more accurate information for local folders.
-  **
   ** .pp
   ** To not brake current setups, this defaults to the value of ``$mail_check''.
   ** Depending on your connection and speed of your IMAP server, you may want to

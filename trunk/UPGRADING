@@ -16,11 +16,14 @@ this still likely is incomplete. Please report missing items to
 
 2005-03-07
 
-  New Variable: $imap_mail_check is split from $mail_check
+  New Variables: 
+    - $imap_mail_check is split from $mail_check
+    - $force_buffy_check forces check on <buffy-list>
 
 2005-03-05
 
-  New Color: 'sidebar [fg] [bg]' for the delimiter
+  New Color:
+    - 'sidebar [fg] [bg]' for the delimiter
 
 2005-03-01 (init)
 
