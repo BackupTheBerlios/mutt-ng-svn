@@ -4,6 +4,10 @@
  * Copyright (C) 1999-2002 Thomas Roessler <roessler@does-not-exist.org>
  * Copyright (C) 2004 g10 Code GmbH
  *
+ * Parts written/modified by:
+ * Nico Golde <nion@muttng.org>
+ * Andreas Krennmair <ak@synflood.at>
+ *
  * This file is part of mutt-ng, see http://www.muttng.org/.
  * It's licensed under the GNU General Public License,
  * please see the file GPL in the top level source directory.
@@ -61,8 +65,10 @@ Copyright (C) 1997-2002 Thomas Roessler <roessler@does-not-exist.org>\n\
 Copyright (C) 1998-2002 Werner Koch <wk@isil.d.shuttle.de>\n\
 Copyright (C) 1999-2002 Brendan Cully <brendan@kublai.com>\n\
 Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n\
-Copyright (C) 2000-2002 Edmund Grimley Evans <edmundo@rano.org>\n\
-Copyright (C) 2004-2005 Andreas Krennmair <ak@synflood.at>\n\
+Copyright (C) 2000-2002 Edmund Grimley Evans <edmundo@rano.org>\n\n\
+Parts were written/modified by:\n\
+Andreas Krennmair <ak@synflood.at>\n\
+Nico Golde <nico@ngolde.de>\n\
 \n\
 Lots of others not mentioned here contributed lots of code,\n\
 fixes, and suggestions.\n\
@@ -548,7 +554,12 @@ int main (int argc, char **argv)
       alias_queries = mutt_add_list (alias_queries, optarg);
       break;
     case 'a':
-      attach = mutt_add_list (attach, optarg);
+      if (strlen(optarg)<=512)
+        attach = mutt_add_list (attach, optarg);
+      else{
+        printf("too long arguments. exiting ...\n");
+        exit(1);
+      }
       break;
 
     case 'F':
