@@ -77,6 +77,7 @@ install: all instdoc
 	./instdoc $(srcdir)/mutt.man $(DESTDIR)$(mandir)/man1/muttng.1
 	./instdoc $(srcdir)/muttbug.man $(DESTDIR)$(mandir)/man1/muttng-flea.1
 	echo ".so $(mandir)/man1/muttng-flea.1" > $(DESTDIR)$(mandir)/man1/muttngbug.1
+	echo ".so $(mandir)/man1/muttng-flea.1" > $(DESTDIR)$(mandir)/man1/fleang.1
 	./instdoc $(srcdir)/dotlock.man \
 		$(DESTDIR)$(mandir)/man1/muttng_dotlock.1
 	./instdoc muttrc.man $(DESTDIR)$(mandir)/man5/muttngrc.5
