@@ -1160,6 +1160,7 @@ AC_SUBST(SGML2HTML_CMD)
 AC_OUTPUT(Makefile intl/Makefile m4/Makefile
         po/Makefile.in doc/Makefile contrib/Makefile
         muttbug.sh
+        lib/Makefile
         imap/Makefile
         pop/Makefile
         nntp/Makefile

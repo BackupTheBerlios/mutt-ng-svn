@@ -19,6 +19,9 @@
 # include "mutt_ssl.h"
 #endif
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+
 #include <string.h>
 #include <unistd.h>
 #include <ctype.h>

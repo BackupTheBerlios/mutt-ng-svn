@@ -29,19 +29,6 @@
 #  include <posix1_lim.h>
 # endif
 
-# ifdef ENABLE_NLS
-#  include <libintl.h>
-# define _(a) (gettext (a))
-#  ifdef gettext_noop
-#   define N_(a) gettext_noop (a)
-#  else
-#   define N_(a) (a)
-#  endif
-# else
-#  define _(a) (a)
-#  define N_(a) a
-# endif
-
 # define TRUE 1
 # define FALSE 0
 
@@ -61,9 +48,6 @@
 # define MUTT_FORMAT(a)		_MUTT_FORMAT_1(a, "s")
 # define MUTT_FORMAT2(a,b)	_MUTT_FORMAT_1(a, b)
 
-
-# define FREE(x) safe_free(x)
-# define NONULL(x) x?x:""
 # define ISSPACE(c) isspace((unsigned char)c)
 # define strfcpy(A,B,C) strncpy(A,B,C), *(A+(C)-1)=0
 
@@ -71,7 +55,6 @@
 # undef MIN
 # define MAX(a,b) ((a) < (b) ? (b) : (a))
 # define MIN(a,b) ((a) < (b) ? (a) : (b))
-
 
 #define FOREVER while (1)
 
@@ -125,15 +108,11 @@ int safe_fclose (FILE **);
 size_t mutt_quote_filename (char *, size_t, const char *);
 size_t mutt_strlen (const char *);
 
-void *safe_calloc (size_t, size_t);
-void *safe_malloc (size_t);
 void mutt_nocurses_error (const char *, ...);
 void mutt_remove_trailing_ws (char *);
 void mutt_sanitize_filename (char *, short);
 void mutt_str_replace (char **p, const char *s);
 void mutt_str_adjust (char **p);
 void mutt_unlink (const char *);
-void safe_free (void *);
-void safe_realloc (void *, size_t);
 
 #endif

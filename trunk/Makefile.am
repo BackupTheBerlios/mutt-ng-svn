@@ -19,7 +19,7 @@ NNTP_SUBDIR = nntp
 NNTP_INCLUDES = -I$(top_srcdir)/nntp
 endif
 
-SUBDIRS = m4 po intl doc contrib $(IMAP_SUBDIR) $(POP_SUBDIR) $(NNTP_SUBDIR)
+SUBDIRS = m4 po intl doc contrib lib $(IMAP_SUBDIR) $(POP_SUBDIR) $(NNTP_SUBDIR)
 
 bin_SCRIPTS = muttngbug fleang
 
@@ -41,7 +41,7 @@ muttng_SOURCES = $(BUILT_SOURCES) \
 	url.c ascii.c mutt_idna.c sidebar.c hcache.c crypt-mod.c crypt-mod.h
 
 muttng_LDADD = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(LIBPOP) $(LIBNNTP) \
-	$(MUTTLIBS) $(INTLLIBS) $(LIBICONV)
+	-Llib -lsane $(MUTTLIBS) $(INTLLIBS) $(LIBICONV)
 
 muttng_DEPENDENCIES = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAPDEPS) $(LIBPOPDEPS) $(LIBNNTPDEPS) \
 	$(INTLDEPS)

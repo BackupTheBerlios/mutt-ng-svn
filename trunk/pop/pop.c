@@ -16,6 +16,10 @@
 #include "pop.h"
 #include "mutt_crypt.h"
 
+#include "lib/mem.h"
+#include "lib/str.h"
+#include "lib/intl.h"
+
 #include <string.h>
 #include <unistd.h>
 

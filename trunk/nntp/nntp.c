@@ -31,6 +31,10 @@
 #include "smime.h"
 #endif
 
+#include "lib/mem.h"
+#include "lib/str.h"
+#include "lib/intl.h"
+
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
