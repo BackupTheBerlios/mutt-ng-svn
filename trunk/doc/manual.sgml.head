@@ -2200,6 +2200,7 @@ mailboxes INBOX \
 You can also specify the colors for mailboxes with new mails by using:
 <tscreen><verb>
 color sidebar_new red black
+color sidebar white black
 </verb></tscreen>
 
 The available functions are:

@@ -94,6 +94,7 @@ static struct mapping_t Fields[] =
   { "underline",	MT_COLOR_UNDERLINE },
   { "index",		MT_COLOR_INDEX },
   { "sidebar_new",	MT_COLOR_NEW },
+  { "sidebar",      MT_COLOR_SIDEBAR },
   { "sidebar_flagged",	MT_COLOR_FLAGGED },
   { NULL,		0 }
 };
