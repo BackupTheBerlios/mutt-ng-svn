@@ -1109,8 +1109,10 @@ int mutt_reopen_mailbox (CONTEXT *ctx, int *index_hint)
       else 
       {
         cmp_headers = mbox_strict_cmp_headers;
-        rc = ((ctx->magic == M_MBOX) ? mbox_parse_mailbox
-				     : mmdf_parse_mailbox) (ctx);
+        if (ctx->magic == M_MBOX)
+          rc = mbox_parse_mailbox(ctx);
+        else
+          rc = mmdf_parse_mailbox(ctx);
       }
       break;
 

@@ -561,7 +561,7 @@ void mutt_clear_threads (CONTEXT *ctx)
   ctx->tree = NULL;
 
   if (ctx->thread_hash)
-    hash_destroy (&ctx->thread_hash, *free);
+    hash_destroy (&ctx->thread_hash, free);
 }
 
 int compare_threads (const void *a, const void *b)
@@ -643,7 +643,7 @@ THREAD *mutt_sort_subthreads (THREAD *thread, int init)
 	  array[i] = thread;
 	}
 
-	qsort ((void *) array, i, sizeof (THREAD *), *compare_threads);
+	qsort ((void *) array, i, sizeof (THREAD *), compare_threads);
 
 	/* attach them back together.  make thread the last sibling. */
 	thread = array[0];
