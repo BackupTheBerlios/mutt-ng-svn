@@ -503,7 +503,7 @@ my_hdr X-GnuPG-KeyID: 8BCAC169
 my_hdr X-GnuPG-Fingerprint: 95F3 5951 6091 8F46 82B9  EE2E 9686 20D3 8BCA C169
 
 # My X-Editor-header. Look strange. ;)
-my_hdr X-Editor: `vim --version | grep IMp | awk -F"(" '{ print $1 }'|sed 's/[ ]$//g'`.`vim --version | rev |grep cnI | awk '{ print $1}' | rev | awk -F "1-" '{ print $2 }'`
+#my_hdr X-Editor: `vim --version | grep IMp | awk -F"(" '{ print $1 }'|sed 's/[ ]$//g'`.`vim --version | rev |grep cnI | awk '{ print $1}' | rev | awk -F "1-" '{ print $2 }'`
 
 # My From-header.
 my_hdr From: akneib@foobar.tld
