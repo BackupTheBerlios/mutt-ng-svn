@@ -139,7 +139,7 @@ Specifies the editor to use when composing messages.
 .PP
 .IP "~/.muttngrc or ~/.muttng/muttngrc"
 User configuration file.
-.IP "/etc/Muttrc"
+.IP "/etc/Muttngrc"
 System-wide configuration file.
 .IP "/tmp/muttXXXXXX"
 Temporary files created by Mutt.
