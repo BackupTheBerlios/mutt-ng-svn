@@ -15,11 +15,11 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #ifdef USE_SLANG_CURSES
 
-#ifndef unix /* this symbol is not defined by the hp-ux compiler (sigh) */
+#ifndef unix                    /* this symbol is not defined by the hp-ux compiler (sigh) */
 #define unix
 #endif /* unix */
 
@@ -102,8 +102,7 @@ void mutt_need_hard_redraw (void);
  * Support for color
  */
 
-enum
-{
+enum {
   MT_COLOR_HDEFAULT = 0,
   MT_COLOR_QUOTED,
   MT_COLOR_SIGNATURE,
@@ -128,12 +127,11 @@ enum
   MT_COLOR_MAX
 };
 
-typedef struct color_line
-{
+typedef struct color_line {
   regex_t rx;
   char *pattern;
-  pattern_t *color_pattern; /* compiled pattern to speed up index color
-                               calculation */
+  pattern_t *color_pattern;     /* compiled pattern to speed up index color
+                                   calculation */
   short fg;
   short bg;
   int pair;
@@ -160,21 +158,21 @@ void ci_start_color (void);
  */
 
 #if !defined(STDC_HEADERS) && !defined(NCURSES_VERSION) && !defined(USE_SLANG_CURSES)
-extern int endwin();
-extern int printw();
-extern int beep();
-extern int isendwin();
-extern int w32addch();
-extern int keypad();
-extern int wclrtobot();
-extern int mvprintw();
-extern int getcurx();
-extern int getcury();
-extern int noecho();
-extern int wdelch();
-extern int wrefresh();
-extern int wmove();
-extern int wclear();
-extern int waddstr();
-extern int wclrtoeol();
+extern int endwin ();
+extern int printw ();
+extern int beep ();
+extern int isendwin ();
+extern int w32addch ();
+extern int keypad ();
+extern int wclrtobot ();
+extern int mvprintw ();
+extern int getcurx ();
+extern int getcury ();
+extern int noecho ();
+extern int wdelch ();
+extern int wrefresh ();
+extern int wmove ();
+extern int wclear ();
+extern int waddstr ();
+extern int wclrtoeol ();
 #endif

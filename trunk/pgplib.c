@@ -37,8 +37,7 @@
 
 const char *pgp_pkalgbytype (unsigned char type)
 {
-  switch (type)
-  {
+  switch (type) {
   case 1:
     return "RSA";
   case 2:
@@ -64,8 +63,7 @@ const char *pgp_pkalgbytype (unsigned char type)
 
 static const char *hashalgbytype (unsigned char type)
 {
-  switch (type)
-  {
+  switch (type) {
   case 1:
     return "MD5";
   case 2:
@@ -83,8 +81,7 @@ static const char *hashalgbytype (unsigned char type)
 
 short pgp_canencrypt (unsigned char type)
 {
-  switch (type)
-  {
+  switch (type) {
   case 1:
   case 2:
   case 16:
@@ -97,8 +94,7 @@ short pgp_canencrypt (unsigned char type)
 
 short pgp_cansign (unsigned char type)
 {
-  switch (type)
-  {
+  switch (type) {
   case 1:
   case 3:
   case 17:
@@ -121,19 +117,18 @@ short pgp_get_abilities (unsigned char type)
   return (pgp_canencrypt (type) << 1) | pgp_cansign (type);
 }
 
-void pgp_free_sig (pgp_sig_t **sigp)
+void pgp_free_sig (pgp_sig_t ** sigp)
 {
   pgp_sig_t *sp, *q;
-  
+
   if (!sigp || !*sigp)
     return;
-  
-  for (sp = *sigp; sp; sp = q)
-  {
+
+  for (sp = *sigp; sp; sp = q) {
     q = sp->next;
     FREE (&sp);
   }
-  
+
   *sigp = NULL;
 }
 
@@ -143,8 +138,7 @@ void pgp_free_uid (pgp_uid_t ** upp)
 
   if (!upp || !*upp)
     return;
-  for (up = *upp; up; up = q)
-  {
+  for (up = *upp; up; up = q) {
     q = up->next;
     pgp_free_sig (&up->sigs);
     FREE (&up->addr);
@@ -154,17 +148,16 @@ void pgp_free_uid (pgp_uid_t ** upp)
   *upp = NULL;
 }
 
-pgp_uid_t *pgp_copy_uids (pgp_uid_t *up, pgp_key_t parent)
+pgp_uid_t *pgp_copy_uids (pgp_uid_t * up, pgp_key_t parent)
 {
   pgp_uid_t *l = NULL;
   pgp_uid_t **lp = &l;
 
-  for (; up; up = up->next)
-  {
+  for (; up; up = up->next) {
     *lp = safe_calloc (1, sizeof (pgp_uid_t));
-    (*lp)->trust  = up->trust;
-    (*lp)->flags  = up->flags;
-    (*lp)->addr   = safe_strdup (up->addr);
+    (*lp)->trust = up->trust;
+    (*lp)->flags = up->flags;
+    (*lp)->addr = safe_strdup (up->addr);
     (*lp)->parent = parent;
     lp = &(*lp)->next;
   }
@@ -172,7 +165,7 @@ pgp_uid_t *pgp_copy_uids (pgp_uid_t *up, pgp_key_t parent)
   return l;
 }
 
-static void _pgp_free_key (pgp_key_t *kpp)
+static void _pgp_free_key (pgp_key_t * kpp)
 {
   pgp_key_t kp;
 
@@ -186,7 +179,7 @@ static void _pgp_free_key (pgp_key_t *kpp)
   FREE (kpp);
 }
 
-pgp_key_t pgp_remove_key (pgp_key_t *klist, pgp_key_t key)
+pgp_key_t pgp_remove_key (pgp_key_t * klist, pgp_key_t key)
 {
   pgp_key_t *last;
   pgp_key_t p, q, r;
@@ -214,7 +207,7 @@ pgp_key_t pgp_remove_key (pgp_key_t *klist, pgp_key_t key)
   return q;
 }
 
-void pgp_free_key (pgp_key_t *kpp)
+void pgp_free_key (pgp_key_t * kpp)
 {
   pgp_key_t p, q, r;
 
@@ -223,7 +216,7 @@ void pgp_free_key (pgp_key_t *kpp)
 
   if ((*kpp)->parent && (*kpp)->parent != *kpp)
     *kpp = (*kpp)->parent;
-  
+
   /* Order is important here:
    *
    * - First free all children.
@@ -232,10 +225,8 @@ void pgp_free_key (pgp_key_t *kpp)
    * - free ourselves.
    */
 
-  for (p = *kpp; p; p = q)
-  {
-    for (q = p->next; q && q->parent == p; q = r)
-    {
+  for (p = *kpp; p; p = q) {
+    for (q = p->next; q && q->parent == p; q = r) {
       r = q->next;
       _pgp_free_key (&q);
     }
@@ -247,4 +238,3 @@ void pgp_free_key (pgp_key_t *kpp)
 
   *kpp = NULL;
 }
-

@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 /*
  * A simple URL parser.
@@ -32,18 +32,17 @@
 
 #include <ctype.h>
 
-static struct mapping_t UrlMap[] =
-{
-  { "file", 	U_FILE },
-  { "imap", 	U_IMAP },
-  { "imaps", 	U_IMAPS },
-  { "pop",  	U_POP  },
-  { "pops", 	U_POPS  },
-  { "nntp",	U_NNTP },
-  { "nntps",	U_NNTPS },
-  { "snews",	U_NNTPS },
-  { "mailto",	U_MAILTO },
-  { NULL,	U_UNKNOWN}
+static struct mapping_t UrlMap[] = {
+  {"file", U_FILE},
+  {"imap", U_IMAP},
+  {"imaps", U_IMAPS},
+  {"pop", U_POP},
+  {"pops", U_POPS},
+  {"nntp", U_NNTP},
+  {"nntps", U_NNTPS},
+  {"snews", U_NNTPS},
+  {"mailto", U_MAILTO},
+  {NULL, U_UNKNOWN}
 };
 
 
@@ -53,21 +52,19 @@ static void url_pct_decode (char *s)
 
   if (!s)
     return;
-  
-  for (d = s; *s; s++)
-  {
+
+  for (d = s; *s; s++) {
     if (*s == '%' && s[1] && s[2] &&
-	isxdigit ((unsigned char) s[1]) &&
+        isxdigit ((unsigned char) s[1]) &&
         isxdigit ((unsigned char) s[2]) &&
-	hexval (s[1]) >= 0 && hexval (s[2]) >= 0)
-    {
+        hexval (s[1]) >= 0 && hexval (s[2]) >= 0) {
       *d++ = (hexval (s[1]) << 4) | (hexval (s[2]));
       s += 2;
     }
     else
       *d++ = *s;
   }
-  *d ='\0';
+  *d = '\0';
 }
 
 url_scheme_t url_check_scheme (const char *s)
@@ -75,12 +72,12 @@ url_scheme_t url_check_scheme (const char *s)
   char sbuf[STRING];
   char *t;
   int i;
-  
+
   if (!s || !(t = strchr (s, ':')))
     return U_UNKNOWN;
   if ((t - s) + 1 >= sizeof (sbuf))
     return U_UNKNOWN;
-  
+
   strfcpy (sbuf, s, t - s + 1);
   for (t = sbuf; *t; t++)
     *t = ascii_tolower (*t);
@@ -95,11 +92,11 @@ int url_parse_file (char *d, const char *src, size_t dl)
 {
   if (ascii_strncasecmp (src, "file:", 5))
     return -1;
-  else if (!ascii_strncasecmp (src, "file://", 7))	/* we don't support remote files */
+  else if (!ascii_strncasecmp (src, "file://", 7))      /* we don't support remote files */
     return -1;
   else
     strfcpy (d, src + 5, dl);
-  
+
   url_pct_decode (d);
   return 0;
 }
@@ -107,7 +104,7 @@ int url_parse_file (char *d, const char *src, size_t dl)
 /* ciss_parse_userhost: fill in components of ciss with info from src. Note
  *   these are pointers into src, which is altered with '\0's. Port of 0
  *   means no port given. */
-static char *ciss_parse_userhost (ciss_url_t *ciss, char *src)
+static char *ciss_parse_userhost (ciss_url_t * ciss, char *src)
 {
   char *t;
   char *p;
@@ -120,17 +117,15 @@ static char *ciss_parse_userhost (ciss_url_t *ciss, char *src)
 
   if (strncmp (src, "//", 2))
     return src;
-  
+
   src += 2;
 
   if ((path = strchr (src, '/')))
     *path++ = '\0';
-  
-  if ((t = strrchr (src, '@')))
-  {
+
+  if ((t = strrchr (src, '@'))) {
     *t = '\0';
-    if ((p = strchr (src, ':')))
-    {
+    if ((p = strchr (src, ':'))) {
       *p = '\0';
       ciss->pass = p + 1;
       url_pct_decode (ciss->pass);
@@ -141,15 +136,14 @@ static char *ciss_parse_userhost (ciss_url_t *ciss, char *src)
   }
   else
     t = src;
-  
-  if ((p = strchr (t, ':')))
-  {
+
+  if ((p = strchr (t, ':'))) {
     *p++ = '\0';
     ciss->port = atoi (p);
   }
   else
     ciss->port = 0;
-  
+
   ciss->host = t;
   url_pct_decode (ciss->host);
   return path;
@@ -157,7 +151,7 @@ static char *ciss_parse_userhost (ciss_url_t *ciss, char *src)
 
 /* url_parse_ciss: Fill in ciss_url_t. char* elements are pointers into src,
  *   which is modified by this call (duplicate it first if you need to). */
-int url_parse_ciss (ciss_url_t *ciss, char *src)
+int url_parse_ciss (ciss_url_t * ciss, char *src)
 {
   char *tmp;
 
@@ -168,13 +162,13 @@ int url_parse_ciss (ciss_url_t *ciss, char *src)
 
   ciss->path = ciss_parse_userhost (ciss, tmp);
   url_pct_decode (ciss->path);
-  
+
   return 0;
 }
 
 /* url_ciss_tostring: output the URL string for a given CISS object. */
 
-int url_ciss_tostring (ciss_url_t* ciss, char* dest, size_t len, int flags)
+int url_ciss_tostring (ciss_url_t * ciss, char *dest, size_t len, int flags)
 {
   long l;
 
@@ -183,18 +177,19 @@ int url_ciss_tostring (ciss_url_t* ciss, char* dest, size_t len, int flags)
 
   snprintf (dest, len, "%s:", mutt_getnamebyvalue (ciss->scheme, UrlMap));
 
-  if (ciss->host)
-  {
+  if (ciss->host) {
     safe_strcat (dest, len, "//");
-    len -= (l = strlen (dest)); dest += l;
-    
+    len -= (l = strlen (dest));
+    dest += l;
+
     if (ciss->user) {
       if (flags & U_DECODE_PASSWD && ciss->pass)
-	snprintf (dest, len, "%s:%s@", ciss->user, ciss->pass);
+        snprintf (dest, len, "%s:%s@", ciss->user, ciss->pass);
       else
-	snprintf (dest, len, "%s@", ciss->user);
+        snprintf (dest, len, "%s@", ciss->user);
 
-      len -= (l = strlen (dest)); dest += l;
+      len -= (l = strlen (dest));
+      dest += l;
     }
 
     if (ciss->port)
@@ -209,7 +204,7 @@ int url_ciss_tostring (ciss_url_t* ciss, char* dest, size_t len, int flags)
   return 0;
 }
 
-int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
+int url_parse_mailto (ENVELOPE * e, char **body, const char *src)
 {
   char *t;
   char *tmp;
@@ -220,10 +215,10 @@ int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
   int taglen;
 
   LIST *last = NULL;
-  
+
   if (!(t = strchr (src, ':')))
     return -1;
-  
+
   if ((tmp = safe_strdup (t + 1)) == NULL)
     return -1;
 
@@ -234,9 +229,8 @@ int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
   e->to = rfc822_parse_adrlist (e->to, tmp);
 
   tag = headers ? strtok (headers, "&") : NULL;
-  
-  for (; tag; tag = strtok (NULL, "&"))
-  {
+
+  for (; tag; tag = strtok (NULL, "&")) {
     if ((value = strchr (tag, '=')))
       *value++ = '\0';
     if (!value || !*value)
@@ -245,24 +239,21 @@ int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
     url_pct_decode (tag);
     url_pct_decode (value);
 
-    if (!ascii_strcasecmp (tag, "body"))
-    {
+    if (!ascii_strcasecmp (tag, "body")) {
       if (body)
-	mutt_str_replace (body, value);
+        mutt_str_replace (body, value);
     }
-    else 
-    {
+    else {
       taglen = strlen (tag);
       /* mutt_parse_rfc822_line makes some assumptions */
       snprintf (scratch, sizeof (scratch), "%s: %s", tag, value);
       scratch[taglen] = '\0';
-      value = &scratch[taglen+1];
+      value = &scratch[taglen + 1];
       SKIPWS (value);
       mutt_parse_rfc822_line (e, NULL, scratch, value, 1, 0, 0, &last);
     }
   }
-  
+
   FREE (&tmp);
   return 0;
 }
-

@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #if HAVE_CONFIG_H
 # include "config.h"
@@ -25,12 +25,11 @@
 
 /* global vars used for the string-history routines */
 
-struct history
-{
+struct history {
   char **hist;
   short cur;
   short last;
-}; 
+};
 
 static struct history History[HC_LAST];
 static int OldSize = 0;
@@ -39,65 +38,62 @@ static void init_history (struct history *h)
 {
   int i;
 
-  if(OldSize)
-  {
-    if (h->hist)
-    {
-      for (i = 0 ; i < OldSize ; i ++)
-	FREE (&h->hist[i]);
+  if (OldSize) {
+    if (h->hist) {
+      for (i = 0; i < OldSize; i++)
+        FREE (&h->hist[i]);
       FREE (&h->hist);
     }
   }
-  
+
   if (HistSize)
     h->hist = safe_calloc (HistSize, sizeof (char *));
-  
+
   h->cur = 0;
   h->last = 0;
 }
 
-void mutt_init_history(void)
+void mutt_init_history (void)
 {
   history_class_t hclass;
-  
+
   if (HistSize == OldSize)
     return;
-  
-  for(hclass = HC_FIRST; hclass < HC_LAST; hclass++)
-    init_history(&History[hclass]);
+
+  for (hclass = HC_FIRST; hclass < HC_LAST; hclass++)
+    init_history (&History[hclass]);
 
   OldSize = HistSize;
 }
-  
+
 void mutt_history_add (history_class_t hclass, const char *s)
 {
   int prev;
   struct history *h = &History[hclass];
-  
-  if (!HistSize)
-    return; /* disabled */
 
-  if (*s)
-  {
+  if (!HistSize)
+    return;                     /* disabled */
+
+  if (*s) {
     prev = h->last - 1;
-    if (prev < 0) prev = HistSize - 1;
-    if (!h->hist[prev] || mutt_strcmp (h->hist[prev], s) != 0)
-    {
+    if (prev < 0)
+      prev = HistSize - 1;
+    if (!h->hist[prev] || mutt_strcmp (h->hist[prev], s) != 0) {
       mutt_str_replace (&h->hist[h->last++], s);
       if (h->last > HistSize - 1)
-	h->last = 0;
+        h->last = 0;
     }
   }
-  h->cur = h->last; /* reset to the last entry */
+  h->cur = h->last;             /* reset to the last entry */
 }
 
 char *mutt_history_next (history_class_t hclass)
 {
   int next;
   struct history *h = &History[hclass];
-  
+
   if (!HistSize)
-    return (""); /* disabled */
+    return ("");                /* disabled */
 
   next = h->cur + 1;
   if (next > HistSize - 1)
@@ -112,11 +108,10 @@ char *mutt_history_prev (history_class_t hclass)
   struct history *h = &History[hclass];
 
   if (!HistSize)
-    return (""); /* disabled */
+    return ("");                /* disabled */
 
   prev = h->cur - 1;
-  if (prev < 0)
-  {
+  if (prev < 0) {
     prev = HistSize - 1;
     while (prev > 0 && h->hist[prev] == NULL)
       prev--;

@@ -35,17 +35,16 @@
 
 #define M_MODEFMT "-- Mutt-ng: %s"
 
-typedef struct menu_t
-{
-  char *title;   /* the title of this menu */
-  char *help;    /* quickref for the current menu */
-  void *data;    /* extra data for the current menu */
-  int current;   /* current entry */
-  int max;       /* the number of entries in the menu */
-  int redraw;	/* when to redraw the screen */
-  int menu;	/* menu definition for keymap entries. */
-  int offset;	/* which screen row to start the index */
-  int pagelen;	/* number of entries per screen */
+typedef struct menu_t {
+  char *title;                  /* the title of this menu */
+  char *help;                   /* quickref for the current menu */
+  void *data;                   /* extra data for the current menu */
+  int current;                  /* current entry */
+  int max;                      /* the number of entries in the menu */
+  int redraw;                   /* when to redraw the screen */
+  int menu;                     /* menu definition for keymap entries. */
+  int offset;                   /* which screen row to start the index */
+  int pagelen;                  /* number of entries per screen */
   int tagprefix;
 
   /* Setting dialog != NULL overrides normal menu behaviour. 
@@ -53,15 +52,15 @@ typedef struct menu_t
    * normal menu movement keys. This can cause problems with scrolling, if 
    * prompt keys override movement keys.
    */
-  char **dialog;	/* dialog lines themselves */
-  char *prompt;		/* prompt for user, similar to mutt_multi_choice */
-  char *keys;		/* keys used in the prompt */
-  
+  char **dialog;                /* dialog lines themselves */
+  char *prompt;                 /* prompt for user, similar to mutt_multi_choice */
+  char *keys;                   /* keys used in the prompt */
+
   /* callback to generate an index line for the requested element */
   void (*make_entry) (char *, size_t, struct menu_t *, int);
-  
+
   /* how to search the menu */
-  int (*search) (struct menu_t *, regex_t *re, int n);
+  int (*search) (struct menu_t *, regex_t * re, int n);
 
   int (*tag) (struct menu_t *, int i, int m);
 
@@ -69,13 +68,13 @@ typedef struct menu_t
    * (default function returns ColorDefs[MT_COLOR_NORMAL])
    */
   int (*color) (int i);
-   
+
   /* the following are used only by mutt_menuLoop() */
-  int top;		/* entry that is the top of the current page */
-  int oldcurrent;	/* for driver use only. */
-  char *searchBuf;	/* last search pattern */
-  int searchDir;	/* direction of search */
-  int tagged;		/* number of tagged entries */
+  int top;                      /* entry that is the top of the current page */
+  int oldcurrent;               /* for driver use only. */
+  char *searchBuf;              /* last search pattern */
+  int searchDir;                /* direction of search */
+  int tagged;                   /* number of tagged entries */
 } MUTTMENU;
 
 void menu_jump (MUTTMENU *);
@@ -84,7 +83,7 @@ void menu_redraw_index (MUTTMENU *);
 void menu_redraw_status (MUTTMENU *);
 void menu_redraw_motion (MUTTMENU *);
 void menu_redraw_current (MUTTMENU *);
-int  menu_redraw (MUTTMENU *);
+int menu_redraw (MUTTMENU *);
 void menu_first_entry (MUTTMENU *);
 void menu_last_entry (MUTTMENU *);
 void menu_top_page (MUTTMENU *);

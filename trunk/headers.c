@@ -29,12 +29,10 @@
 #include <ctype.h>
 
 void mutt_edit_headers (const char *editor,
-			const char *body,
-			HEADER *msg,
-			char *fcc,
-			size_t fcclen)
+                        const char *body,
+                        HEADER * msg, char *fcc, size_t fcclen)
 {
-  char path[_POSIX_PATH_MAX];	/* tempfile used to edit headers + body */
+  char path[_POSIX_PATH_MAX];   /* tempfile used to edit headers + body */
   char buffer[LONG_STRING];
   char *p;
   FILE *ifp, *ofp;
@@ -45,19 +43,17 @@ void mutt_edit_headers (const char *editor,
   LIST *cur, **last = NULL, *tmp;
 
   mutt_mktemp (path);
-  if ((ofp = safe_fopen (path, "w")) == NULL)
-  {
+  if ((ofp = safe_fopen (path, "w")) == NULL) {
     mutt_perror (path);
     return;
   }
-  
+
   mutt_env_to_local (msg->env);
   mutt_write_rfc822_header (ofp, msg->env, NULL, 1, 0);
-  fputc ('\n', ofp);	/* tie off the header. */
+  fputc ('\n', ofp);            /* tie off the header. */
 
   /* now copy the body of the message. */
-  if ((ifp = fopen (body, "r")) == NULL)
-  {
+  if ((ifp = fopen (body, "r")) == NULL) {
     mutt_perror (body);
     return;
   }
@@ -67,8 +63,7 @@ void mutt_edit_headers (const char *editor,
   fclose (ifp);
   fclose (ofp);
 
-  if (stat (path, &st) == -1)
-  {
+  if (stat (path, &st) == -1) {
     mutt_perror (path);
     return;
   }
@@ -77,9 +72,9 @@ void mutt_edit_headers (const char *editor,
 
   mutt_edit_file (editor, path);
   stat (path, &st);
-  if (mtime == st.st_mtime)
-  {
-    dprint (1, (debugfile, "ci_edit_headers(): temp file was not modified.\n"));
+  if (mtime == st.st_mtime) {
+    dprint (1,
+            (debugfile, "ci_edit_headers(): temp file was not modified.\n"));
     /* the file has not changed! */
     mutt_unlink (path);
     return;
@@ -89,20 +84,18 @@ void mutt_edit_headers (const char *editor,
   mutt_free_list (&msg->env->userhdrs);
 
   /* Read the temp file back in */
-  if ((ifp = fopen (path, "r")) == NULL)
-  {
+  if ((ifp = fopen (path, "r")) == NULL) {
     mutt_perror (path);
     return;
   }
-  
-  if ((ofp = safe_fopen (body, "w")) == NULL)
-  {
+
+  if ((ofp = safe_fopen (body, "w")) == NULL) {
     /* intentionally leak a possible temporary file here */
     fclose (ifp);
     mutt_perror (body);
     return;
   }
-  
+
   n = mutt_read_rfc822_header (ifp, NULL, 1, 0);
   while ((i = fread (buffer, 1, sizeof (buffer), ifp)) > 0)
     fwrite (buffer, 1, i, ofp);
@@ -115,13 +108,14 @@ void mutt_edit_headers (const char *editor,
   msg->env->references = NULL;
 
   mutt_free_envelope (&msg->env);
-  msg->env = n; n = NULL;
+  msg->env = n;
+  n = NULL;
 
   if (!msg->env->in_reply_to)
 #ifdef USE_NNTP
-  if (!option (OPTNEWSSEND))
+    if (!option (OPTNEWSSEND))
 #endif
-    mutt_free_list (&msg->env->references);
+      mutt_free_list (&msg->env->references);
 
   mutt_expand_aliases_env (msg->env);
 
@@ -131,78 +125,67 @@ void mutt_edit_headers (const char *editor,
 
   cur = msg->env->userhdrs;
   last = &msg->env->userhdrs;
-  while (cur)
-  {
+  while (cur) {
     keep = 1;
 
     /* keep track of whether or not we see the in-reply-to field.  if we did
      * not, remove the references: field later so that we can generate a new
      * message based upon this one.
      */
-    if (fcc && ascii_strncasecmp ("fcc:", cur->data, 4) == 0)
-    {
+    if (fcc && ascii_strncasecmp ("fcc:", cur->data, 4) == 0) {
       p = cur->data + 4;
       SKIPWS (p);
-      if (*p)
-      {
-	strfcpy (fcc, p, fcclen);
-	mutt_pretty_mailbox (fcc);
+      if (*p) {
+        strfcpy (fcc, p, fcclen);
+        mutt_pretty_mailbox (fcc);
       }
       keep = 0;
     }
-    else if (ascii_strncasecmp ("attach:", cur->data, 7) == 0)
-    {
+    else if (ascii_strncasecmp ("attach:", cur->data, 7) == 0) {
       BODY *body;
       BODY *parts;
       char *q;
 
       p = cur->data + 7;
       SKIPWS (p);
-      if (*p)
-      {
-	if ((q = strpbrk (p, " \t")))
-	{
-	  mutt_substrcpy (path, p, q, sizeof (path));
-	  SKIPWS (q);
-	}
-	else
-	  strfcpy (path, p, sizeof (path));
-	mutt_expand_path (path, sizeof (path));
-	if ((body = mutt_make_file_attach (path)))
-	{
-	  body->description = safe_strdup (q);
-	  for (parts = msg->content; parts->next; parts = parts->next) ;
-	  parts->next = body;
-	}
-	else
-	{
-	  mutt_pretty_mailbox (path);
-	  mutt_error (_("%s: unable to attach file"), path);
-	}
+      if (*p) {
+        if ((q = strpbrk (p, " \t"))) {
+          mutt_substrcpy (path, p, q, sizeof (path));
+          SKIPWS (q);
+        }
+        else
+          strfcpy (path, p, sizeof (path));
+        mutt_expand_path (path, sizeof (path));
+        if ((body = mutt_make_file_attach (path))) {
+          body->description = safe_strdup (q);
+          for (parts = msg->content; parts->next; parts = parts->next);
+          parts->next = body;
+        }
+        else {
+          mutt_pretty_mailbox (path);
+          mutt_error (_("%s: unable to attach file"), path);
+        }
       }
       keep = 0;
     }
 
 
     else if ((WithCrypto & APPLICATION_PGP)
-             &&ascii_strncasecmp ("pgp:", cur->data, 4) == 0)
-    {
+             && ascii_strncasecmp ("pgp:", cur->data, 4) == 0) {
       msg->security = mutt_parse_crypt_hdr (cur->data + 4, 0);
       if (msg->security)
-	msg->security |= APPLICATION_PGP;
+        msg->security |= APPLICATION_PGP;
       keep = 0;
     }
 
-    if (keep)
-    {
+    if (keep) {
       last = &cur->next;
-      cur  = cur->next;
+      cur = cur->next;
     }
-    else
-    {
-      tmp       = cur;
-      *last     = cur->next;
-      cur       = cur->next;
+    else {
+      tmp = cur;
+      *last = cur->next;
+      cur = cur->next;
       tmp->next = NULL;
       mutt_free_list (&tmp);
     }

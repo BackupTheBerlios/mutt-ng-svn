@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #if HAVE_CONFIG_H
 # include "config.h"
@@ -46,6 +46,7 @@
 
 
 const char RFC822Specials[] = "@.,:;<>[]\\\"()";
+
 #define is_special(x) strchr(RFC822Specials,x)
 
 int RFC822Error = 0;
@@ -64,30 +65,26 @@ void rfc822_dequote_comment (char *s)
 {
   char *w = s;
 
-  for (; *s; s++)
-  {
-    if (*s == '\\')
-    {
+  for (; *s; s++) {
+    if (*s == '\\') {
       if (!*++s)
-	break; /* error? */
+        break;                  /* error? */
       *w++ = *s;
     }
-    else if (*s != '\"')
-    {
+    else if (*s != '\"') {
       if (w != s)
-	*w = *s;
+        *w = *s;
       w++;
     }
   }
   *w = 0;
 }
 
-void rfc822_free_address (ADDRESS **p)
+void rfc822_free_address (ADDRESS ** p)
 {
   ADDRESS *t;
 
-  while (*p)
-  {
+  while (*p) {
     t = *p;
     *p = (*p)->next;
 #ifdef EXACT_ADDRESS
@@ -99,62 +96,54 @@ void rfc822_free_address (ADDRESS **p)
   }
 }
 
-static const char *
-parse_comment (const char *s,
-	       char *comment, size_t *commentlen, size_t commentmax)
+static const char *parse_comment (const char *s,
+                                  char *comment, size_t * commentlen,
+                                  size_t commentmax)
 {
   int level = 1;
-  
-  while (*s && level)
-  {
+
+  while (*s && level) {
     if (*s == '(')
       level++;
-    else if (*s == ')')
-    {
-      if (--level == 0)
-      {
-	s++;
-	break;
+    else if (*s == ')') {
+      if (--level == 0) {
+        s++;
+        break;
       }
     }
-    else if (*s == '\\')
-    {
+    else if (*s == '\\') {
       if (!*++s)
-	break;
+        break;
     }
     if (*commentlen < commentmax)
       comment[(*commentlen)++] = *s;
     s++;
   }
-  if (level)
-  {
+  if (level) {
     RFC822Error = ERR_MISMATCH_PAREN;
     return NULL;
   }
   return s;
 }
 
-static const char *
-parse_quote (const char *s, char *token, size_t *tokenlen, size_t tokenmax)
+static const char *parse_quote (const char *s, char *token, size_t * tokenlen,
+                                size_t tokenmax)
 {
   if (*tokenlen < tokenmax)
     token[(*tokenlen)++] = '"';
-  while (*s)
-  {
+  while (*s) {
     if (*tokenlen < tokenmax)
       token[*tokenlen] = *s;
-    if (*s == '"')
-    {
+    if (*s == '"') {
       (*tokenlen)++;
       return (s + 1);
     }
-    if (*s == '\\')
-    {
+    if (*s == '\\') {
       if (!*++s)
-	break;
+        break;
 
       if (*tokenlen < tokenmax)
-	token[*tokenlen] = *s;
+        token[*tokenlen] = *s;
     }
     (*tokenlen)++;
     s++;
@@ -163,21 +152,19 @@ parse_quote (const char *s, char *token, size_t *tokenlen, size_t tokenmax)
   return NULL;
 }
 
-static const char *
-next_token (const char *s, char *token, size_t *tokenlen, size_t tokenmax)
+static const char *next_token (const char *s, char *token, size_t * tokenlen,
+                               size_t tokenmax)
 {
   if (*s == '(')
     return (parse_comment (s + 1, token, tokenlen, tokenmax));
   if (*s == '"')
     return (parse_quote (s + 1, token, tokenlen, tokenmax));
-  if (is_special (*s))
-  {
+  if (is_special (*s)) {
     if (*tokenlen < tokenmax)
       token[(*tokenlen)++] = *s;
     return (s + 1);
   }
-  while (*s)
-  {
+  while (*s) {
     if (ISSPACE ((unsigned char) *s) || is_special (*s))
       break;
     if (*tokenlen < tokenmax)
@@ -187,23 +174,22 @@ next_token (const char *s, char *token, size_t *tokenlen, size_t tokenmax)
   return s;
 }
 
-static const char *
-parse_mailboxdomain (const char *s, const char *nonspecial,
-		     char *mailbox, size_t *mailboxlen, size_t mailboxmax,
-		     char *comment, size_t *commentlen, size_t commentmax)
+static const char *parse_mailboxdomain (const char *s, const char *nonspecial,
+                                        char *mailbox, size_t * mailboxlen,
+                                        size_t mailboxmax, char *comment,
+                                        size_t * commentlen,
+                                        size_t commentmax)
 {
   const char *ps;
 
-  while (*s)
-  {
+  while (*s) {
     SKIPWS (s);
     if (strchr (nonspecial, *s) == NULL && is_special (*s))
       return s;
 
-    if (*s == '(')
-    {
+    if (*s == '(') {
       if (*commentlen && *commentlen < commentmax)
-	comment[(*commentlen)++] = ' ';
+        comment[(*commentlen)++] = ' ';
       ps = next_token (s, comment, commentlen, commentmax);
     }
     else
@@ -216,25 +202,24 @@ parse_mailboxdomain (const char *s, const char *nonspecial,
   return s;
 }
 
-static const char *
-parse_address (const char *s,
-               char *token, size_t *tokenlen, size_t tokenmax,
-	       char *comment, size_t *commentlen, size_t commentmax,
-	       ADDRESS *addr)
+static const char *parse_address (const char *s,
+                                  char *token, size_t * tokenlen,
+                                  size_t tokenmax, char *comment,
+                                  size_t * commentlen, size_t commentmax,
+                                  ADDRESS * addr)
 {
   s = parse_mailboxdomain (s, ".\"(\\",
-			   token, tokenlen, tokenmax,
-			   comment, commentlen, commentmax);
+                           token, tokenlen, tokenmax,
+                           comment, commentlen, commentmax);
   if (!s)
     return NULL;
 
-  if (*s == '@')
-  {
+  if (*s == '@') {
     if (*tokenlen < tokenmax)
       token[(*tokenlen)++] = '@';
     s = parse_mailboxdomain (s + 1, ".([]\\",
-			     token, tokenlen, tokenmax,
-			     comment, commentlen, commentmax);
+                             token, tokenlen, tokenmax,
+                             comment, commentlen, commentmax);
     if (!s)
       return NULL;
   }
@@ -242,8 +227,7 @@ parse_address (const char *s,
   terminate_string (token, *tokenlen, tokenmax);
   addr->mailbox = safe_strdup (token);
 
-  if (*commentlen && !addr->personal)
-  {
+  if (*commentlen && !addr->personal) {
     terminate_string (comment, *commentlen, commentmax);
     addr->personal = safe_strdup (comment);
   }
@@ -251,10 +235,9 @@ parse_address (const char *s,
   return s;
 }
 
-static const char *
-parse_route_addr (const char *s,
-		  char *comment, size_t *commentlen, size_t commentmax,
-		  ADDRESS *addr)
+static const char *parse_route_addr (const char *s,
+                                     char *comment, size_t * commentlen,
+                                     size_t commentmax, ADDRESS * addr)
 {
   char token[STRING];
   size_t tokenlen = 0;
@@ -262,20 +245,17 @@ parse_route_addr (const char *s,
   SKIPWS (s);
 
   /* find the end of the route */
-  if (*s == '@')
-  {
-    while (s && *s == '@')
-    {
+  if (*s == '@') {
+    while (s && *s == '@') {
       if (tokenlen < sizeof (token) - 1)
-	token[tokenlen++] = '@';
+        token[tokenlen++] = '@';
       s = parse_mailboxdomain (s + 1, ",.\\[](", token,
-			       &tokenlen, sizeof (token) - 1,
-			       comment, commentlen, commentmax);
+                               &tokenlen, sizeof (token) - 1,
+                               comment, commentlen, commentmax);
     }
-    if (!s || *s != ':')
-    {
+    if (!s || *s != ':') {
       RFC822Error = ERR_BAD_ROUTE;
-      return NULL; /* invalid route */
+      return NULL;              /* invalid route */
     }
 
     if (tokenlen < sizeof (token) - 1)
@@ -283,11 +263,12 @@ parse_route_addr (const char *s,
     s++;
   }
 
-  if ((s = parse_address (s, token, &tokenlen, sizeof (token) - 1, comment, commentlen, commentmax, addr)) == NULL)
+  if ((s =
+       parse_address (s, token, &tokenlen, sizeof (token) - 1, comment,
+                      commentlen, commentmax, addr)) == NULL)
     return NULL;
 
-  if (*s != '>')
-  {
+  if (*s != '>') {
     RFC822Error = ERR_BAD_ROUTE_ADDR;
     return NULL;
   }
@@ -299,17 +280,17 @@ parse_route_addr (const char *s,
   return s;
 }
 
-static const char *
-parse_addr_spec (const char *s,
-		 char *comment, size_t *commentlen, size_t commentmax,
-		 ADDRESS *addr)
+static const char *parse_addr_spec (const char *s,
+                                    char *comment, size_t * commentlen,
+                                    size_t commentmax, ADDRESS * addr)
 {
   char token[STRING];
   size_t tokenlen = 0;
 
-  s = parse_address (s, token, &tokenlen, sizeof (token) - 1, comment, commentlen, commentmax, addr);
-  if (s && *s && *s != ',' && *s != ';')
-  {
+  s =
+    parse_address (s, token, &tokenlen, sizeof (token) - 1, comment,
+                   commentlen, commentmax, addr);
+  if (s && *s && *s != ',' && *s != ';') {
     RFC822Error = ERR_BAD_ADDR_SPEC;
     return NULL;
   }
@@ -317,13 +298,12 @@ parse_addr_spec (const char *s,
 }
 
 static void
-add_addrspec (ADDRESS **top, ADDRESS **last, const char *phrase,
-	      char *comment, size_t *commentlen, size_t commentmax)
+add_addrspec (ADDRESS ** top, ADDRESS ** last, const char *phrase,
+              char *comment, size_t * commentlen, size_t commentmax)
 {
   ADDRESS *cur = rfc822_new_address ();
-  
-  if (parse_addr_spec (phrase, comment, commentlen, commentmax, cur) == NULL)
-  {
+
+  if (parse_addr_spec (phrase, comment, commentlen, commentmax, cur) == NULL) {
     rfc822_free_address (&cur);
     return;
   }
@@ -335,14 +315,14 @@ add_addrspec (ADDRESS **top, ADDRESS **last, const char *phrase,
   *last = cur;
 }
 
-ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
+ADDRESS *rfc822_parse_adrlist (ADDRESS * top, const char *s)
 {
   int ws_pending;
   const char *begin, *ps;
   char comment[STRING], phrase[STRING];
   size_t phraselen = 0, commentlen = 0;
   ADDRESS *cur, *last = NULL;
-  
+
   RFC822Error = 0;
 
   last = top;
@@ -350,27 +330,24 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
     last = last->next;
 
   ws_pending = isspace ((unsigned char) *s);
-  
+
   SKIPWS (s);
   begin = s;
-  while (*s)
-  {
-    if (*s == ',')
-    {
-      if (phraselen)
-      {
-	terminate_buffer (phrase, phraselen);
-	add_addrspec (&top, &last, phrase, comment, &commentlen, sizeof (comment) - 1);
+  while (*s) {
+    if (*s == ',') {
+      if (phraselen) {
+        terminate_buffer (phrase, phraselen);
+        add_addrspec (&top, &last, phrase, comment, &commentlen,
+                      sizeof (comment) - 1);
       }
-      else if (commentlen && last && !last->personal)
-      {
-	terminate_buffer (comment, commentlen);
-	last->personal = safe_strdup (comment);
+      else if (commentlen && last && !last->personal) {
+        terminate_buffer (comment, commentlen);
+        last->personal = safe_strdup (comment);
       }
 
 #ifdef EXACT_ADDRESS
       if (last && !last->val)
-	last->val = mutt_substrdup (begin, s);
+        last->val = mutt_substrdup (begin, s);
 #endif
       commentlen = 0;
       phraselen = 0;
@@ -378,28 +355,27 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
       begin = s;
       SKIPWS (begin);
     }
-    else if (*s == '(')
-    {
+    else if (*s == '(') {
       if (commentlen && commentlen < sizeof (comment) - 1)
-	comment[commentlen++] = ' ';
-      if ((ps = next_token (s, comment, &commentlen, sizeof (comment) - 1)) == NULL)
-      {
-	rfc822_free_address (&top);
-	return NULL;
+        comment[commentlen++] = ' ';
+      if ((ps =
+           next_token (s, comment, &commentlen,
+                       sizeof (comment) - 1)) == NULL) {
+        rfc822_free_address (&top);
+        return NULL;
       }
       s = ps;
     }
-    else if (*s == ':')
-    {
+    else if (*s == ':') {
       cur = rfc822_new_address ();
       terminate_buffer (phrase, phraselen);
       cur->mailbox = safe_strdup (phrase);
       cur->group = 1;
 
       if (last)
-	last->next = cur;
+        last->next = cur;
       else
-	top = cur;
+        top = cur;
       last = cur;
 
 #ifdef EXACT_ADDRESS
@@ -412,29 +388,26 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
       begin = s;
       SKIPWS (begin);
     }
-    else if (*s == ';')
-    {
-      if (phraselen)
-      {
-	terminate_buffer (phrase, phraselen);
-	add_addrspec (&top, &last, phrase, comment, &commentlen, sizeof (comment) - 1);
+    else if (*s == ';') {
+      if (phraselen) {
+        terminate_buffer (phrase, phraselen);
+        add_addrspec (&top, &last, phrase, comment, &commentlen,
+                      sizeof (comment) - 1);
       }
-      else if (commentlen && last && !last->personal)
-      {
-	terminate_buffer (comment, commentlen);
-	last->personal = safe_strdup (comment);
+      else if (commentlen && last && !last->personal) {
+        terminate_buffer (comment, commentlen);
+        last->personal = safe_strdup (comment);
       }
 #ifdef EXACT_ADDRESS
       if (last && !last->val)
-	last->val = mutt_substrdup (begin, s);
+        last->val = mutt_substrdup (begin, s);
 #endif
 
       /* add group terminator */
       cur = rfc822_new_address ();
-      if (last)
-      {
-	last->next = cur;
-	last = cur;
+      if (last) {
+        last->next = cur;
+        last = cur;
       }
 
       phraselen = 0;
@@ -443,58 +416,55 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
       begin = s;
       SKIPWS (begin);
     }
-    else if (*s == '<')
-    {
+    else if (*s == '<') {
       terminate_buffer (phrase, phraselen);
       cur = rfc822_new_address ();
-      if (phraselen)
-      {
-	if (cur->personal)
-	  FREE (&cur->personal);
-	/* if we get something like "Michael R. Elkins" remove the quotes */
-	rfc822_dequote_comment (phrase);
-	cur->personal = safe_strdup (phrase);
+      if (phraselen) {
+        if (cur->personal)
+          FREE (&cur->personal);
+        /* if we get something like "Michael R. Elkins" remove the quotes */
+        rfc822_dequote_comment (phrase);
+        cur->personal = safe_strdup (phrase);
       }
-      if ((ps = parse_route_addr (s + 1, comment, &commentlen, sizeof (comment) - 1, cur)) == NULL)
-      {
-	rfc822_free_address (&top);
-	rfc822_free_address (&cur);
-	return NULL;
+      if ((ps =
+           parse_route_addr (s + 1, comment, &commentlen,
+                             sizeof (comment) - 1, cur)) == NULL) {
+        rfc822_free_address (&top);
+        rfc822_free_address (&cur);
+        return NULL;
       }
 
       if (last)
-	last->next = cur;
+        last->next = cur;
       else
-	top = cur;
+        top = cur;
       last = cur;
 
       phraselen = 0;
       commentlen = 0;
       s = ps;
     }
-    else
-    {
+    else {
       if (phraselen && phraselen < sizeof (phrase) - 1 && ws_pending)
-	phrase[phraselen++] = ' ';
-      if ((ps = next_token (s, phrase, &phraselen, sizeof (phrase) - 1)) == NULL)
-      {
-	rfc822_free_address (&top);
-	return NULL;
+        phrase[phraselen++] = ' ';
+      if ((ps =
+           next_token (s, phrase, &phraselen, sizeof (phrase) - 1)) == NULL) {
+        rfc822_free_address (&top);
+        return NULL;
       }
       s = ps;
     }
     ws_pending = isspace ((unsigned char) *s);
     SKIPWS (s);
   }
-  
-  if (phraselen)
-  {
+
+  if (phraselen) {
     terminate_buffer (phrase, phraselen);
     terminate_buffer (comment, commentlen);
-    add_addrspec (&top, &last, phrase, comment, &commentlen, sizeof (comment) - 1);
+    add_addrspec (&top, &last, phrase, comment, &commentlen,
+                  sizeof (comment) - 1);
   }
-  else if (commentlen && last && !last->personal)
-  {
+  else if (commentlen && last && !last->personal) {
     terminate_buffer (comment, commentlen);
     last->personal = safe_strdup (comment);
   }
@@ -506,15 +476,14 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS *top, const char *s)
   return top;
 }
 
-void rfc822_qualify (ADDRESS *addr, const char *host)
+void rfc822_qualify (ADDRESS * addr, const char *host)
 {
   char *p;
 
   for (; addr; addr = addr->next)
-    if (!addr->group && addr->mailbox && strchr (addr->mailbox, '@') == NULL)
-    {
+    if (!addr->group && addr->mailbox && strchr (addr->mailbox, '@') == NULL) {
       p = safe_malloc (mutt_strlen (addr->mailbox) + mutt_strlen (host) + 2);
-      sprintf (p, "%s@%s", addr->mailbox, host);	/* __SPRINTF_CHECKED__ */
+      sprintf (p, "%s@%s", addr->mailbox, host);        /* __SPRINTF_CHECKED__ */
       FREE (&addr->mailbox);
       addr->mailbox = p;
     }
@@ -523,18 +492,15 @@ void rfc822_qualify (ADDRESS *addr, const char *host)
 void
 rfc822_cat (char *buf, size_t buflen, const char *value, const char *specials)
 {
-  if (strpbrk (value, specials))
-  {
+  if (strpbrk (value, specials)) {
     char tmp[256], *pc = tmp;
     size_t tmplen = sizeof (tmp) - 3;
 
     *pc++ = '"';
-    for (; *value && tmplen > 1; value++)
-    {
-      if (*value == '\\' || *value == '"')
-      {
-	*pc++ = '\\';
-	tmplen--;
+    for (; *value && tmplen > 1; value++) {
+      if (*value == '\\' || *value == '"') {
+        *pc++ = '\\';
+        tmplen--;
       }
       *pc++ = *value;
       tmplen--;
@@ -547,31 +513,29 @@ rfc822_cat (char *buf, size_t buflen, const char *value, const char *specials)
     strfcpy (buf, value, buflen);
 }
 
-void rfc822_write_address_single (char *buf, size_t buflen, ADDRESS *addr,
-				  int display)
+void rfc822_write_address_single (char *buf, size_t buflen, ADDRESS * addr,
+                                  int display)
 {
   size_t len;
   char *pbuf = buf;
   char *pc;
-  
+
   if (!addr)
     return;
 
-  buflen--; /* save room for the terminal nul */
+  buflen--;                     /* save room for the terminal nul */
 
 #ifdef EXACT_ADDRESS
-  if (addr->val)
-  {
+  if (addr->val) {
     if (!buflen)
       goto done;
     strfcpy (pbuf, addr->val, buflen);
     len = mutt_strlen (pbuf);
     pbuf += len;
     buflen -= len;
-    if (addr->group)
-    {
+    if (addr->group) {
       if (!buflen)
-	goto done;
+        goto done;
       *pbuf++ = ':';
       buflen--;
       *pbuf = 0;
@@ -580,37 +544,32 @@ void rfc822_write_address_single (char *buf, size_t buflen, ADDRESS *addr,
   }
 #endif
 
-  if (addr->personal)
-  {
-    if (strpbrk (addr->personal, RFC822Specials))
-    {
+  if (addr->personal) {
+    if (strpbrk (addr->personal, RFC822Specials)) {
       if (!buflen)
-	goto done;
+        goto done;
       *pbuf++ = '"';
       buflen--;
-      for (pc = addr->personal; *pc && buflen > 0; pc++)
-      {
-	if (*pc == '"' || *pc == '\\')
-	{
-	  if (!buflen)
-	    goto done;
-	  *pbuf++ = '\\';
-	  buflen--;
-	}
-	if (!buflen)
-	  goto done;
-	*pbuf++ = *pc;
-	buflen--;
+      for (pc = addr->personal; *pc && buflen > 0; pc++) {
+        if (*pc == '"' || *pc == '\\') {
+          if (!buflen)
+            goto done;
+          *pbuf++ = '\\';
+          buflen--;
+        }
+        if (!buflen)
+          goto done;
+        *pbuf++ = *pc;
+        buflen--;
       }
       if (!buflen)
-	goto done;
+        goto done;
       *pbuf++ = '"';
       buflen--;
     }
-    else
-    {
+    else {
       if (!buflen)
-	goto done;
+        goto done;
       strfcpy (pbuf, addr->personal, buflen);
       len = mutt_strlen (pbuf);
       pbuf += len;
@@ -623,58 +582,50 @@ void rfc822_write_address_single (char *buf, size_t buflen, ADDRESS *addr,
     buflen--;
   }
 
-  if (addr->personal || (addr->mailbox && *addr->mailbox == '@'))
-  {
+  if (addr->personal || (addr->mailbox && *addr->mailbox == '@')) {
     if (!buflen)
       goto done;
     *pbuf++ = '<';
     buflen--;
   }
 
-  if (addr->mailbox)
-  {
+  if (addr->mailbox) {
     if (!buflen)
       goto done;
-    if (ascii_strcmp (addr->mailbox, "@") && !display)
-    {
+    if (ascii_strcmp (addr->mailbox, "@") && !display) {
       strfcpy (pbuf, addr->mailbox, buflen);
       len = mutt_strlen (pbuf);
     }
-    else if (ascii_strcmp (addr->mailbox, "@") && display)
-    {
+    else if (ascii_strcmp (addr->mailbox, "@") && display) {
       strfcpy (pbuf, mutt_addr_for_display (addr), buflen);
       len = mutt_strlen (pbuf);
     }
-    else
-    {
+    else {
       *pbuf = '\0';
       len = 0;
     }
     pbuf += len;
     buflen -= len;
 
-    if (addr->personal || (addr->mailbox && *addr->mailbox == '@'))
-    {
+    if (addr->personal || (addr->mailbox && *addr->mailbox == '@')) {
       if (!buflen)
-	goto done;
+        goto done;
       *pbuf++ = '>';
       buflen--;
     }
 
-    if (addr->group)
-    {
+    if (addr->group) {
       if (!buflen)
-	goto done;
+        goto done;
       *pbuf++ = ':';
       buflen--;
       if (!buflen)
-	goto done;
+        goto done;
       *pbuf++ = ' ';
       buflen--;
     }
   }
-  else
-  {
+  else {
     if (!buflen)
       goto done;
     *pbuf++ = ';';
@@ -687,17 +638,17 @@ done:
 }
 
 /* note: it is assumed that `buf' is nul terminated! */
-void rfc822_write_address (char *buf, size_t buflen, ADDRESS *addr, int display)
+void rfc822_write_address (char *buf, size_t buflen, ADDRESS * addr,
+                           int display)
 {
   char *pbuf = buf;
   size_t len = mutt_strlen (buf);
-  
-  buflen--; /* save room for the terminal nul */
 
-  if (len > 0)
-  {
+  buflen--;                     /* save room for the terminal nul */
+
+  if (len > 0) {
     if (len > buflen)
-      return; /* safety check for bogus arguments */
+      return;                   /* safety check for bogus arguments */
 
     pbuf += len;
     buflen -= len;
@@ -711,8 +662,7 @@ void rfc822_write_address (char *buf, size_t buflen, ADDRESS *addr, int display)
     buflen--;
   }
 
-  for (; addr && buflen > 0; addr = addr->next)
-  {
+  for (; addr && buflen > 0; addr = addr->next) {
     /* use buflen+1 here because we already saved space for the trailing
        nul char, and the subroutine can make use of it */
     rfc822_write_address_single (pbuf, buflen + 1, addr, display);
@@ -725,14 +675,13 @@ void rfc822_write_address (char *buf, size_t buflen, ADDRESS *addr, int display)
 
     /* if there is another address, and its not a group mailbox name or
        group terminator, add a comma to separate the addresses */
-    if (addr->next && addr->next->mailbox && !addr->group)
-    {
+    if (addr->next && addr->next->mailbox && !addr->group) {
       if (!buflen)
-	goto done;
+        goto done;
       *pbuf++ = ',';
       buflen--;
       if (!buflen)
-	goto done;
+        goto done;
       *pbuf++ = ' ';
       buflen--;
     }
@@ -742,7 +691,7 @@ done:
 }
 
 /* this should be rfc822_cpy_adr */
-ADDRESS *rfc822_cpy_adr_real (ADDRESS *addr)
+ADDRESS *rfc822_cpy_adr_real (ADDRESS * addr)
 {
   ADDRESS *p = rfc822_new_address ();
 
@@ -756,14 +705,12 @@ ADDRESS *rfc822_cpy_adr_real (ADDRESS *addr)
 }
 
 /* this should be rfc822_cpy_adrlist */
-ADDRESS *rfc822_cpy_adr (ADDRESS *addr)
+ADDRESS *rfc822_cpy_adr (ADDRESS * addr)
 {
   ADDRESS *top = NULL, *last = NULL;
-  
-  for (; addr; addr = addr->next)
-  {
-    if (last)
-    {
+
+  for (; addr; addr = addr->next) {
+    if (last) {
       last->next = rfc822_cpy_adr_real (addr);
       last = last->next;
     }
@@ -774,7 +721,7 @@ ADDRESS *rfc822_cpy_adr (ADDRESS *addr)
 }
 
 /* append list 'b' to list 'a' and return the last element in the new list */
-ADDRESS *rfc822_append (ADDRESS **a, ADDRESS *b)
+ADDRESS *rfc822_append (ADDRESS ** a, ADDRESS * b)
 {
   ADDRESS *tmp = *a;
 
@@ -794,7 +741,7 @@ ADDRESS *rfc822_append (ADDRESS **a, ADDRESS *b)
 #ifdef TESTING
 int safe_free (void **p)
 {
-  free(*p);		/* __MEM_CHECKED__ */
+  free (*p);                    /* __MEM_CHECKED__ */
   *p = 0;
 }
 
@@ -802,12 +749,14 @@ int main (int argc, char **argv)
 {
   ADDRESS *list;
   char buf[256];
+
 # if 0
-  char *str = "michael, Michael Elkins <me@mutt.org>, testing a really complex address: this example <@contains.a.source.route,@with.multiple.hosts:address@example.com>;, lothar@of.the.hillpeople (lothar)";
+  char *str =
+    "michael, Michael Elkins <me@mutt.org>, testing a really complex address: this example <@contains.a.source.route,@with.multiple.hosts:address@example.com>;, lothar@of.the.hillpeople (lothar)";
 # else
   char *str = "a b c ";
 # endif
-  
+
   list = rfc822_parse_adrlist (NULL, str);
   buf[0] = 0;
   rfc822_write_address (buf, sizeof (buf), list);

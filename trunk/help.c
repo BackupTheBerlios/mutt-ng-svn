@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #define HELP_C
 
@@ -36,21 +36,19 @@ static struct binding_t *help_lookupFunction (int op, int menu)
   int i;
   struct binding_t *map;
 
-  if (menu != MENU_PAGER)
-  {
+  if (menu != MENU_PAGER) {
     /* first look in the generic map for the function */
     for (i = 0; OpGeneric[i].name; i++)
       if (OpGeneric[i].op == op)
-	return (&OpGeneric[i]);    
+        return (&OpGeneric[i]);
   }
 
-  if ((map = km_get_table(menu)))
-  {
+  if ((map = km_get_table (menu))) {
     for (i = 0; map[i].name; i++)
       if (map[i].op == op)
-	return (&map[i]);
+        return (&map[i]);
   }
-  
+
   return (NULL);
 }
 
@@ -65,17 +63,15 @@ void mutt_make_help (char *d, size_t dlen, char *txt, int menu, int op)
     d[0] = 0;
 }
 
-char *
-mutt_compile_help (char *buf, size_t buflen, int menu, struct mapping_t *items)
+char *mutt_compile_help (char *buf, size_t buflen, int menu,
+                         struct mapping_t *items)
 {
   int i;
   size_t len;
   char *pbuf = buf;
-  
-  for (i = 0; items[i].name && buflen > 2; i++)
-  {
-    if (i)
-    {
+
+  for (i = 0; items[i].name && buflen > 2; i++) {
+    if (i) {
       *pbuf++ = ' ';
       *pbuf++ = ' ';
       buflen -= 2;
@@ -88,7 +84,7 @@ mutt_compile_help (char *buf, size_t buflen, int menu, struct mapping_t *items)
   return buf;
 }
 
-static int print_macro (FILE *f, int maxwidth, const char **macro)
+static int print_macro (FILE * f, int maxwidth, const char **macro)
 {
   int n = maxwidth;
   wchar_t wc;
@@ -99,47 +95,44 @@ static int print_macro (FILE *f, int maxwidth, const char **macro)
 
   memset (&mbstate1, 0, sizeof (mbstate1));
   memset (&mbstate2, 0, sizeof (mbstate2));
-  for (; len && (k = mbrtowc (&wc, *macro, len, &mbstate1)); *macro += k, len -= k)
-  {
-    if (k == (size_t)(-1) || k == (size_t)(-2))
-    {
-      k = (k == (size_t)(-1)) ? 1 : len;
+  for (; len && (k = mbrtowc (&wc, *macro, len, &mbstate1));
+       *macro += k, len -= k) {
+    if (k == (size_t) (-1) || k == (size_t) (-2)) {
+      k = (k == (size_t) (-1)) ? 1 : len;
       wc = replacement_char ();
     }
     /* glibc-2.1.3's wcwidth() returns 1 for unprintable chars! */
-    if (IsWPrint (wc) && (w = wcwidth (wc)) >= 0)
-    {
+    if (IsWPrint (wc) && (w = wcwidth (wc)) >= 0) {
       if (w > n)
-	break;
+        break;
       n -= w;
       {
-	char buf[MB_LEN_MAX*2];
-	size_t n1, n2;
-	if ((n1 = wcrtomb (buf, wc, &mbstate2)) != (size_t)(-1) &&
-	    (n2 = wcrtomb (buf + n1, 0, &mbstate2)) != (size_t)(-1))
-	  fputs (buf, f);
+        char buf[MB_LEN_MAX * 2];
+        size_t n1, n2;
+
+        if ((n1 = wcrtomb (buf, wc, &mbstate2)) != (size_t) (-1) &&
+            (n2 = wcrtomb (buf + n1, 0, &mbstate2)) != (size_t) (-1))
+          fputs (buf, f);
       }
     }
-    else if (wc < 0x20 || wc == 0x7f)
-    {
+    else if (wc < 0x20 || wc == 0x7f) {
       if (2 > n)
-	break;
+        break;
       n -= 2;
       if (wc == '\033')
-	fprintf (f, "\\e");
+        fprintf (f, "\\e");
       else if (wc == '\n')
-	fprintf (f, "\\n");
+        fprintf (f, "\\n");
       else if (wc == '\r')
-	fprintf (f, "\\r");
+        fprintf (f, "\\r");
       else if (wc == '\t')
-	fprintf (f, "\\t");
+        fprintf (f, "\\t");
       else
-	fprintf (f, "^%c", (char)((wc + '@') & 0x7f));
+        fprintf (f, "^%c", (char) ((wc + '@') & 0x7f));
     }
-    else
-    {
+    else {
       if (1 > n)
-	break;
+        break;
       n -= 1;
       fprintf (f, "?");
     }
@@ -147,13 +140,12 @@ static int print_macro (FILE *f, int maxwidth, const char **macro)
   return (maxwidth - n);
 }
 
-static int pad (FILE *f, int col, int i)
+static int pad (FILE * f, int col, int i)
 {
   char fmt[8];
 
-  if (col < i)
-  {
-    snprintf (fmt, sizeof(fmt), "%%-%ds", i - col);
+  if (col < i) {
+    snprintf (fmt, sizeof (fmt), "%%-%ds", i - col);
     fprintf (f, fmt, "");
     return (i);
   }
@@ -161,8 +153,8 @@ static int pad (FILE *f, int col, int i)
   return (col + 1);
 }
 
-static void format_line (FILE *f, int ismacro,
-			 const char *t1, const char *t2, const char *t3)
+static void format_line (FILE * f, int ismacro,
+                         const char *t1, const char *t2, const char *t3)
 {
   int col;
   int col_a, col_b;
@@ -173,31 +165,27 @@ static void format_line (FILE *f, int ismacro,
 
   /* don't try to press string into one line with less than 40 characters.
      The double paranthesis avoid a gcc warning, sigh ... */
-  if ((split = COLS < 40))
-  {
+  if ((split = COLS < 40)) {
     col_a = col = 0;
     col_b = LONG_STRING;
     fputc ('\n', f);
   }
-  else
-  {
+  else {
     col_a = COLS > 83 ? (COLS - 32) >> 2 : 12;
     col_b = COLS > 49 ? (COLS - 10) >> 1 : 19;
-    col = pad (f, mutt_strlen(t1), col_a);
+    col = pad (f, mutt_strlen (t1), col_a);
   }
 
-  if (ismacro > 0)
-  {
+  if (ismacro > 0) {
     if (!mutt_strcmp (Pager, "builtin"))
       fputs ("_\010", f);
     fputs ("M ", f);
     col += 2;
 
-    if (!split)
-    {
+    if (!split) {
       col += print_macro (f, col_b - col - 4, &t2);
       if (mutt_strlen (t2) > col_b - col)
-	t2 = "...";
+        t2 = "...";
     }
   }
 
@@ -207,47 +195,39 @@ static void format_line (FILE *f, int ismacro,
   else
     col = pad (f, col, col_b);
 
-  if (split)
-  {
+  if (split) {
     print_macro (f, LONG_STRING, &t3);
     fputc ('\n', f);
   }
-  else
-  {
-    while (*t3)
-    {
+  else {
+    while (*t3) {
       n = COLS - col;
 
-      if (ismacro >= 0)
-      {
-	SKIPWS(t3);
+      if (ismacro >= 0) {
+        SKIPWS (t3);
 
-	/* FIXME: this is completely wrong */
-	if ((n = mutt_strlen (t3)) > COLS - col)
-	{
-	  n = COLS - col;
-	  for (col_a = n; col_a > 0 && t3[col_a] != ' '; col_a--) ;
-	  if (col_a)
-	    n = col_a;
-	}
+        /* FIXME: this is completely wrong */
+        if ((n = mutt_strlen (t3)) > COLS - col) {
+          n = COLS - col;
+          for (col_a = n; col_a > 0 && t3[col_a] != ' '; col_a--);
+          if (col_a)
+            n = col_a;
+        }
       }
 
       print_macro (f, n, &t3);
 
-      if (*t3)
-      {
-        if (mutt_strcmp (Pager, "builtin"))
-	{
-	  fputc ('\n', f);
-	  n = 0;
-	}
-	else
-	{
-	  n += col - COLS;
-	  if (option (OPTMARKERS))
-	    ++n;
-	}
-	col = pad (f, n, col_b);
+      if (*t3) {
+        if (mutt_strcmp (Pager, "builtin")) {
+          fputc ('\n', f);
+          n = 0;
+        }
+        else {
+          n += col - COLS;
+          if (option (OPTMARKERS))
+            ++n;
+        }
+        col = pad (f, n, col_b);
       }
     }
   }
@@ -255,31 +235,28 @@ static void format_line (FILE *f, int ismacro,
   fputc ('\n', f);
 }
 
-static void dump_menu (FILE *f, int menu)
+static void dump_menu (FILE * f, int menu)
 {
   struct keymap_t *map;
   struct binding_t *b;
   char buf[SHORT_STRING];
 
   /* browse through the keymap table */
-  for (map = Keymaps[menu]; map; map = map->next)
-  {
-    if (map->op != OP_NULL)
-    {
+  for (map = Keymaps[menu]; map; map = map->next) {
+    if (map->op != OP_NULL) {
       km_expand_key (buf, sizeof (buf), map);
 
-      if (map->op == OP_MACRO)
-      {
-	if (map->descr == NULL)
-	  format_line (f, -1, buf, "macro", map->macro);
+      if (map->op == OP_MACRO) {
+        if (map->descr == NULL)
+          format_line (f, -1, buf, "macro", map->macro);
         else
-	  format_line (f, 1, buf, map->macro, map->descr);
+          format_line (f, 1, buf, map->macro, map->descr);
       }
-      else
-      {
-	b = help_lookupFunction (map->op, menu);
-	format_line (f, 0, buf, b ? b->name : "UNKNOWN",
-	      b ? _(HelpStrings[b->op]) : _("ERROR: please report this bug"));
+      else {
+        b = help_lookupFunction (map->op, menu);
+        format_line (f, 0, buf, b ? b->name : "UNKNOWN",
+                     b ? _(HelpStrings[b->op]) :
+                     _("ERROR: please report this bug"));
       }
     }
   }
@@ -293,17 +270,15 @@ static int is_bound (struct keymap_t *map, int op)
   return 0;
 }
 
-static void dump_unbound (FILE *f,
-			  struct binding_t *funcs,
-			  struct keymap_t *map,
-			  struct keymap_t *aux)
+static void dump_unbound (FILE * f,
+                          struct binding_t *funcs,
+                          struct keymap_t *map, struct keymap_t *aux)
 {
   int i;
 
-  for (i = 0; funcs[i].name; i++)
-  {
-    if (! is_bound (map, funcs[i].op) &&
-	(!aux || ! is_bound (aux, funcs[i].op)))
+  for (i = 0; funcs[i].name; i++) {
+    if (!is_bound (map, funcs[i].op) &&
+        (!aux || !is_bound (aux, funcs[i].op)))
       format_line (f, 0, funcs[i].name, "", _(HelpStrings[funcs[i].op]));
   }
 }
@@ -322,34 +297,31 @@ void mutt_help (int menu)
   desc = mutt_getnamebyvalue (menu, Menus);
   if (!desc)
     desc = _("<UNKNOWN>");
-  
+
   do {
-    if ((f = safe_fopen (t, "w")) == NULL)
-    {
+    if ((f = safe_fopen (t, "w")) == NULL) {
       mutt_perror (t);
       return;
     }
-  
+
     dump_menu (f, menu);
-    if (menu != MENU_EDITOR && menu != MENU_PAGER)
-    {
+    if (menu != MENU_EDITOR && menu != MENU_PAGER) {
       fputs (_("\nGeneric bindings:\n\n"), f);
       dump_menu (f, MENU_GENERIC);
     }
-  
+
     fputs (_("\nUnbound functions:\n\n"), f);
     if (funcs)
       dump_unbound (f, funcs, Keymaps[menu], NULL);
     if (menu != MENU_PAGER)
       dump_unbound (f, OpGeneric, Keymaps[MENU_GENERIC], Keymaps[menu]);
-  
+
     fclose (f);
-  
+
     snprintf (buf, sizeof (buf), _("Help for %s"), desc);
   }
   while
     (mutt_do_pager (buf, t,
-		    M_PAGER_RETWINCH | M_PAGER_MARKER | M_PAGER_NSKIP,
-		    NULL)
+                    M_PAGER_RETWINCH | M_PAGER_MARKER | M_PAGER_NSKIP, NULL)
      == OP_REFORMAT_WINCH);
 }

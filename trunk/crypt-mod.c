@@ -25,8 +25,7 @@
 /* A type an a variable to keep track of registered crypto modules. */
 typedef struct crypt_module *crypt_module_t;
 
-struct crypt_module
-{
+struct crypt_module {
   crypt_module_specs_t specs;
   crypt_module_t next, *prevp;
 };

@@ -17,7 +17,7 @@
  *     License along with this program; if not, write to the Free
  *     Software Foundation, Inc., 59 Temple Place - Suite 330,
  *     Boston, MA  02111, USA.
- */ 
+ */
 
 /* 
  * Some simple dummies, so we can reuse the routines from
@@ -40,4 +40,3 @@ void mutt_exit (int code)
 {
   exit (code);
 }
-

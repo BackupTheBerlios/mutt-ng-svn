@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #ifndef _MUTT_IDNA_H
 # define _MUTT_IDNA_H
@@ -37,7 +37,7 @@ int mutt_addrlist_to_local (ADDRESS *);
 void mutt_env_to_local (ENVELOPE *);
 int mutt_env_to_idna (ENVELOPE *, char **, char **);
 
-const char *mutt_addr_for_display (ADDRESS *a);
+const char *mutt_addr_for_display (ADDRESS * a);
 
 /* Work around incompatibilities in the libidn API */
 

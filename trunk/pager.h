@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 /* dynamic internal flags */
 #define M_SHOWFLAT	(1<<0)
@@ -25,21 +25,20 @@
 #define M_SHOW		(M_SHOWCOLOR | M_SHOWFLAT)
 
 /* exported flags for mutt_(do_)?pager */
-#define M_PAGER_NSKIP		(1<<5)	/* preserve whitespace with smartwrap */
-#define M_PAGER_MARKER		(1<<6)	/* use markers if option is set */
-#define M_PAGER_RETWINCH	(1<<7)	/* need reformatting on SIGWINCH */
+#define M_PAGER_NSKIP		(1<<5)  /* preserve whitespace with smartwrap */
+#define M_PAGER_MARKER		(1<<6)  /* use markers if option is set */
+#define M_PAGER_RETWINCH	(1<<7)  /* need reformatting on SIGWINCH */
 #define M_PAGER_MESSAGE		(M_SHOWCOLOR | M_PAGER_MARKER)
 #define M_PAGER_ATTACHMENT	(1<<8)
 
 #define M_DISPLAYFLAGS	(M_SHOW | M_PAGER_NSKIP | M_PAGER_MARKER)
 
-typedef struct
-{
-  CONTEXT *ctx;	/* current mailbox */
-  HEADER *hdr;	/* current message */
-  BODY *bdy;	/* current attachment */
-  FILE *fp;	/* source stream */
-  ATTACHPTR **idx;	/* attachment information */
+typedef struct {
+  CONTEXT *ctx;                 /* current mailbox */
+  HEADER *hdr;                  /* current message */
+  BODY *bdy;                    /* current attachment */
+  FILE *fp;                     /* source stream */
+  ATTACHPTR **idx;              /* attachment information */
   short idxlen;
 } pager_t;
 

@@ -14,16 +14,16 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
-#define SORT_DATE	1   /* the date the mail was sent. */
+#define SORT_DATE	1       /* the date the mail was sent. */
 #define SORT_SIZE	2
 #define SORT_SUBJECT	3
-#define SORT_ALPHA	3   /* makedoc.c requires this */
+#define SORT_ALPHA	3       /* makedoc.c requires this */
 #define SORT_FROM	4
-#define SORT_ORDER	5   /* the order the messages appear in the mailbox. */
+#define SORT_ORDER	5       /* the order the messages appear in the mailbox. */
 #define SORT_THREADS	6
-#define SORT_RECEIVED	7   /* when the message were delivered locally */
+#define SORT_RECEIVED	7       /* when the message were delivered locally */
 #define SORT_TO		8
 #define SORT_SCORE	9
 #define SORT_ALIAS	10
@@ -48,7 +48,7 @@ THREAD *mutt_sort_subthreads (THREAD *, int);
 
 WHERE short BrowserSort INITVAL (SORT_SUBJECT);
 WHERE short Sort INITVAL (SORT_DATE);
-WHERE short SortAux INITVAL (SORT_DATE); /* auxiallary sorting method */
+WHERE short SortAux INITVAL (SORT_DATE);        /* auxiallary sorting method */
 WHERE short SortAlias INITVAL (SORT_ALIAS);
 
 /* FIXME: This one does not belong to here */

@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #if HAVE_CONFIG_H
 # include "config.h"
@@ -25,37 +25,33 @@
 #include <string.h>
 #include <stdlib.h>
 
-typedef struct score_t
-{
+typedef struct score_t {
   char *str;
   pattern_t *pat;
   int val;
-  int exact;		/* if this rule matches, don't evaluate any more */
+  int exact;                    /* if this rule matches, don't evaluate any more */
   struct score_t *next;
 } SCORE;
 
 SCORE *Score = NULL;
 
-void mutt_check_rescore (CONTEXT *ctx)
+void mutt_check_rescore (CONTEXT * ctx)
 {
   int i;
 
-  if (option (OPTNEEDRESCORE) && option (OPTSCORE))
-  {
+  if (option (OPTNEEDRESCORE) && option (OPTSCORE)) {
     if ((Sort & SORT_MASK) == SORT_SCORE ||
-	(SortAux & SORT_MASK) == SORT_SCORE)
-    {
+        (SortAux & SORT_MASK) == SORT_SCORE) {
       set_option (OPTNEEDRESORT);
       if ((Sort & SORT_MASK) == SORT_THREADS)
-	set_option (OPTSORTSUBTHREADS);
+        set_option (OPTSORTSUBTHREADS);
     }
 
     /* must redraw the index since the user might have %N in it */
     set_option (OPTFORCEREDRAWINDEX);
     set_option (OPTFORCEREDRAWPAGER);
 
-    for (i = 0; ctx && i < ctx->msgcount; i++)
-    {
+    for (i = 0; ctx && i < ctx->msgcount; i++) {
       mutt_score_message (ctx, ctx->hdrs[i], 1);
       ctx->hdrs[i]->pair = 0;
     }
@@ -63,23 +59,22 @@ void mutt_check_rescore (CONTEXT *ctx)
   unset_option (OPTNEEDRESCORE);
 }
 
-int mutt_parse_score (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+int mutt_parse_score (BUFFER * buf, BUFFER * s, unsigned long data,
+                      BUFFER * err)
 {
   SCORE *ptr, *last;
   char *pattern, *pc;
   struct pattern_t *pat;
 
   mutt_extract_token (buf, s, 0);
-  if (!MoreArgs (s))
-  {
+  if (!MoreArgs (s)) {
     strfcpy (err->data, _("score: too few arguments"), err->dsize);
     return (-1);
   }
   pattern = buf->data;
   memset (buf, 0, sizeof (BUFFER));
   mutt_extract_token (buf, s, 0);
-  if (MoreArgs (s))
-  {
+  if (MoreArgs (s)) {
     FREE (&pattern);
     strfcpy (err->data, _("score: too many arguments"), err->dsize);
     return (-1);
@@ -90,10 +85,8 @@ int mutt_parse_score (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
   for (ptr = Score, last = NULL; ptr; last = ptr, ptr = ptr->next)
     if (mutt_strcmp (pattern, ptr->str) == 0)
       break;
-  if (!ptr)
-  {
-    if ((pat = mutt_pattern_comp (pattern, 0, err)) == NULL)
-    {
+  if (!ptr) {
+    if ((pat = mutt_pattern_comp (pattern, 0, err)) == NULL) {
       FREE (&pattern);
       return (-1);
     }
@@ -106,8 +99,7 @@ int mutt_parse_score (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
     ptr->str = pattern;
   }
   pc = buf->data;
-  if (*pc == '=')
-  {
+  if (*pc == '=') {
     ptr->exact = 1;
     pc++;
   }
@@ -116,26 +108,23 @@ int mutt_parse_score (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
   return 0;
 }
 
-void mutt_score_message (CONTEXT *ctx, HEADER *hdr, int upd_ctx)
+void mutt_score_message (CONTEXT * ctx, HEADER * hdr, int upd_ctx)
 {
   SCORE *tmp;
 
-  hdr->score = 0; /* in case of re-scoring */
-  for (tmp = Score; tmp; tmp = tmp->next)
-  {
-    if (mutt_pattern_exec (tmp->pat, 0, NULL, hdr) > 0)
-    {
-      if (tmp->exact || tmp->val == 9999 || tmp->val == -9999)
-      {
-	hdr->score = tmp->val;
-	break;
+  hdr->score = 0;               /* in case of re-scoring */
+  for (tmp = Score; tmp; tmp = tmp->next) {
+    if (mutt_pattern_exec (tmp->pat, 0, NULL, hdr) > 0) {
+      if (tmp->exact || tmp->val == 9999 || tmp->val == -9999) {
+        hdr->score = tmp->val;
+        break;
       }
       hdr->score += tmp->val;
     }
   }
   if (hdr->score < 0)
     hdr->score = 0;
-  
+
   if (hdr->score <= ScoreThresholdDelete)
     _mutt_set_flag (ctx, hdr, M_DELETE, 1, upd_ctx);
   if (hdr->score <= ScoreThresholdRead)
@@ -144,39 +133,34 @@ void mutt_score_message (CONTEXT *ctx, HEADER *hdr, int upd_ctx)
     _mutt_set_flag (ctx, hdr, M_FLAG, 1, upd_ctx);
 }
 
-int mutt_parse_unscore (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+int mutt_parse_unscore (BUFFER * buf, BUFFER * s, unsigned long data,
+                        BUFFER * err)
 {
   SCORE *tmp, *last = NULL;
 
-  while (MoreArgs (s))
-  {
+  while (MoreArgs (s)) {
     mutt_extract_token (buf, s, 0);
-    if (!mutt_strcmp ("*", buf->data))
-    {
-      for (tmp = Score; tmp; )
-      {
-	last = tmp;
-	tmp = tmp->next;
-	mutt_pattern_free (&last->pat);
-	FREE (&last);
+    if (!mutt_strcmp ("*", buf->data)) {
+      for (tmp = Score; tmp;) {
+        last = tmp;
+        tmp = tmp->next;
+        mutt_pattern_free (&last->pat);
+        FREE (&last);
       }
       Score = NULL;
     }
-    else
-    {
-      for (tmp = Score; tmp; last = tmp, tmp = tmp->next)
-      {
-	if (!mutt_strcmp (buf->data, tmp->str))
-	{
-	  if (last)
-	    last->next = tmp->next;
-	  else
-	    Score = tmp->next;
-	  mutt_pattern_free (&tmp->pat);
-	  FREE (&tmp);
-	  /* there should only be one score per pattern, so we can stop here */
-	  break;
-	}
+    else {
+      for (tmp = Score; tmp; last = tmp, tmp = tmp->next) {
+        if (!mutt_strcmp (buf->data, tmp->str)) {
+          if (last)
+            last->next = tmp->next;
+          else
+            Score = tmp->next;
+          mutt_pattern_free (&tmp->pat);
+          FREE (&tmp);
+          /* there should only be one score per pattern, so we can stop here */
+          break;
+        }
       }
     }
   }

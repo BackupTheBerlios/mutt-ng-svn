@@ -48,7 +48,7 @@ int ascii_toupper (int c)
 {
   if (ascii_islower (c))
     return c & ~32;
-  
+
   return c;
 }
 
@@ -56,46 +56,44 @@ int ascii_tolower (int c)
 {
   if (ascii_isupper (c))
     return c | 32;
-  
+
   return c;
 }
 
 int ascii_strcasecmp (const char *a, const char *b)
 {
   int i;
-  
+
   if (a == b)
     return 0;
   if (a == NULL && b)
     return -1;
   if (b == NULL && a)
     return 1;
-  
-  for (; *a || *b; a++, b++)
-  {
+
+  for (; *a || *b; a++, b++) {
     if ((i = ascii_tolower (*a) - ascii_tolower (*b)))
       return i;
   }
-  
+
   return 0;
 }
 
 int ascii_strncasecmp (const char *a, const char *b, int n)
 {
   int i, j;
-  
+
   if (a == b)
     return 0;
   if (a == NULL && b)
     return -1;
   if (b == NULL && a)
     return 1;
-  
-  for (j = 0; (*a || *b) && j < n; a++, b++, j++)
-  {
+
+  for (j = 0; (*a || *b) && j < n; a++, b++, j++) {
     if ((i = ascii_tolower (*a) - ascii_tolower (*b)))
       return i;
   }
-  
+
   return 0;
 }

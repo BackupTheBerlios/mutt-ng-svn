@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #if HAVE_CONFIG_H
 # include "config.h"
@@ -42,32 +42,28 @@ void mutt_resize_screen (void)
   char *cp;
   int fd;
   struct winsize w;
+
 #ifdef HAVE_RESIZETERM
   int SLtt_Screen_Rows, SLtt_Screen_Cols;
 #endif
 
   SLtt_Screen_Rows = -1;
   SLtt_Screen_Cols = -1;
-  if ((fd = open ("/dev/tty", O_RDONLY)) != -1)
-  {
-    if (ioctl (fd, TIOCGWINSZ, &w) != -1)
-    {
+  if ((fd = open ("/dev/tty", O_RDONLY)) != -1) {
+    if (ioctl (fd, TIOCGWINSZ, &w) != -1) {
       SLtt_Screen_Rows = w.ws_row;
       SLtt_Screen_Cols = w.ws_col;
     }
     close (fd);
   }
-  if (SLtt_Screen_Rows <= 0)
-  {
-    if ((cp = getenv ("LINES")) != NULL)
-    {
+  if (SLtt_Screen_Rows <= 0) {
+    if ((cp = getenv ("LINES")) != NULL) {
       SLtt_Screen_Rows = atoi (cp);
     }
     else
       SLtt_Screen_Rows = 24;
   }
-  if (SLtt_Screen_Cols <= 0)
-  {
+  if (SLtt_Screen_Cols <= 0) {
     if ((cp = getenv ("COLUMNS")) != NULL)
       SLtt_Screen_Cols = atoi (cp);
     else

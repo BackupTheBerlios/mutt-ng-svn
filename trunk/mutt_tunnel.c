@@ -33,21 +33,21 @@
 #include <errno.h>
 
 /* -- data types -- */
-typedef struct
-{
+typedef struct {
   pid_t pid;
   int readfd;
   int writefd;
 } TUNNEL_DATA;
 
 /* forward declarations */
-static int tunnel_socket_open (CONNECTION*);
-static int tunnel_socket_close (CONNECTION*);
-static int tunnel_socket_read (CONNECTION* conn, char* buf, size_t len);
-static int tunnel_socket_write (CONNECTION* conn, const char* buf, size_t len);
+static int tunnel_socket_open (CONNECTION *);
+static int tunnel_socket_close (CONNECTION *);
+static int tunnel_socket_read (CONNECTION * conn, char *buf, size_t len);
+static int tunnel_socket_write (CONNECTION * conn, const char *buf,
+                                size_t len);
 
 /* -- public functions -- */
-int mutt_tunnel_socket_setup (CONNECTION *conn)
+int mutt_tunnel_socket_setup (CONNECTION * conn)
 {
   conn->conn_open = tunnel_socket_open;
   conn->conn_close = tunnel_socket_close;
@@ -57,32 +57,29 @@ int mutt_tunnel_socket_setup (CONNECTION *conn)
   return 0;
 }
 
-static int tunnel_socket_open (CONNECTION *conn)
+static int tunnel_socket_open (CONNECTION * conn)
 {
-  TUNNEL_DATA* tunnel;
+  TUNNEL_DATA *tunnel;
   int pid;
   int rc;
   int pin[2], pout[2];
 
-  tunnel = (TUNNEL_DATA*) safe_malloc (sizeof (TUNNEL_DATA));
+  tunnel = (TUNNEL_DATA *) safe_malloc (sizeof (TUNNEL_DATA));
   conn->sockdata = tunnel;
 
   mutt_message (_("Connecting with \"%s\"..."), Tunnel);
 
-  if ((rc = pipe (pin)) == -1)
-  {
+  if ((rc = pipe (pin)) == -1) {
     mutt_perror ("pipe");
     return -1;
   }
-  if ((rc = pipe (pout)) == -1)
-  {
+  if ((rc = pipe (pout)) == -1) {
     mutt_perror ("pipe");
     return -1;
   }
 
   mutt_block_signals_system ();
-  if ((pid = fork ()) == 0)
-  {
+  if ((pid = fork ()) == 0) {
     mutt_unblock_signals_system (0);
     if (dup2 (pout[0], STDIN_FILENO) < 0 || dup2 (pin[1], STDOUT_FILENO) < 0)
       _exit (127);
@@ -100,8 +97,7 @@ static int tunnel_socket_open (CONNECTION *conn)
   }
   mutt_unblock_signals_system (1);
 
-  if (pid == -1)
-  {
+  if (pid == -1) {
     close (pin[0]);
     close (pin[1]);
     close (pout[0]);
@@ -119,14 +115,14 @@ static int tunnel_socket_open (CONNECTION *conn)
   tunnel->writefd = pout[1];
   tunnel->pid = pid;
 
-  conn->fd = 42; /* stupid hack */
+  conn->fd = 42;                /* stupid hack */
 
   return 0;
 }
 
-static int tunnel_socket_close (CONNECTION* conn)
+static int tunnel_socket_close (CONNECTION * conn)
 {
-  TUNNEL_DATA* tunnel = (TUNNEL_DATA*) conn->sockdata;
+  TUNNEL_DATA *tunnel = (TUNNEL_DATA *) conn->sockdata;
 
   close (tunnel->readfd);
   close (tunnel->writefd);
@@ -136,32 +132,31 @@ static int tunnel_socket_close (CONNECTION* conn)
   return 0;
 }
 
-static int tunnel_socket_read (CONNECTION* conn, char* buf, size_t len)
+static int tunnel_socket_read (CONNECTION * conn, char *buf, size_t len)
 {
-  TUNNEL_DATA* tunnel = (TUNNEL_DATA*) conn->sockdata;
+  TUNNEL_DATA *tunnel = (TUNNEL_DATA *) conn->sockdata;
   int rc;
 
   rc = read (tunnel->readfd, buf, len);
-  if (rc == -1)
-  {
+  if (rc == -1) {
     mutt_error (_("Tunnel error talking to %s: %s"), conn->account.host,
-		strerror (errno));
+                strerror (errno));
     mutt_sleep (1);
   }
 
   return rc;
 }
 
-static int tunnel_socket_write (CONNECTION* conn, const char* buf, size_t len)
+static int tunnel_socket_write (CONNECTION * conn, const char *buf,
+                                size_t len)
 {
-  TUNNEL_DATA* tunnel = (TUNNEL_DATA*) conn->sockdata;
+  TUNNEL_DATA *tunnel = (TUNNEL_DATA *) conn->sockdata;
   int rc;
 
   rc = write (tunnel->writefd, buf, len);
-  if (rc == -1)
-  {
+  if (rc == -1) {
     mutt_error (_("Tunnel error talking to %s: %s"), conn->account.host,
-		strerror (errno));
+                strerror (errno));
     mutt_sleep (1);
   }
 

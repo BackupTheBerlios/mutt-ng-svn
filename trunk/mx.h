@@ -15,7 +15,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 /*
  * This header file contains prototypes for internal functions used by the
@@ -28,23 +28,22 @@
 #include "mailbox.h"
 
 /* supported mailbox formats */
-enum
-{
+enum {
   M_MBOX = 1,
   M_MMDF,
   M_MH,
   M_MAILDIR
 #ifdef USE_IMAP
-  , M_IMAP
+    , M_IMAP
 #endif
 #ifdef USE_POP
-  , M_POP
+    , M_POP
 #endif
 #ifdef USE_NNTP
-  , M_NNTP
+    , M_NNTP
 #endif
 #ifdef USE_COMPRESSED
-  , M_COMPRESSED
+    , M_COMPRESSED
 #endif
 };
 

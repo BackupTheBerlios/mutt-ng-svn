@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 /*
  * A (more) generic interface to regular expression matching
@@ -39,11 +39,10 @@
 #define REGCOMP(X,Y,Z) regcomp(X, Y, REG_WORDS|REG_EXTENDED|(Z))
 #define REGEXEC(X,Y) regexec(&X, Y, (size_t)0, (regmatch_t *)0, (int)0)
 
-typedef struct
-{
-  char *pattern;	/* printable version */
-  regex_t *rx; 		/* compiled expression */
-  int not;		/* do not match */
+typedef struct {
+  char *pattern;                /* printable version */
+  regex_t *rx;                  /* compiled expression */
+  int not;                      /* do not match */
 } REGEXP;
 
 WHERE REGEXP Mask;

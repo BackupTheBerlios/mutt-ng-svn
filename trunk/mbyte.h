@@ -13,8 +13,8 @@
 # endif
 
 #ifndef HAVE_WC_FUNCS
-size_t wcrtomb (char *s, wchar_t wc, mbstate_t *ps);
-size_t mbrtowc (wchar_t *pwc, const char *s, size_t n, mbstate_t *ps);
+size_t wcrtomb (char *s, wchar_t wc, mbstate_t * ps);
+size_t mbrtowc (wchar_t * pwc, const char *s, size_t n, mbstate_t * ps);
 int iswprint (wint_t wc);
 int iswspace (wint_t wc);
 int iswalnum (wint_t wc);
@@ -26,7 +26,7 @@ int wcwidth (wchar_t wc);
 
 void mutt_set_charset (char *charset);
 extern int Charset_is_utf8;
-size_t utf8rtowc (wchar_t *pwc, const char *s, size_t n, mbstate_t *_ps);
+size_t utf8rtowc (wchar_t * pwc, const char *s, size_t n, mbstate_t * _ps);
 wchar_t replacement_char (void);
 
 #endif /* _MBYTE_H */

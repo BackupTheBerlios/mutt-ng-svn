@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 /* remote host account manipulation (POP/IMAP) */
 
@@ -27,9 +27,9 @@
 #include "url.h"
 
 /* mutt_account_match: compare account info (host/port/user) */
-int mutt_account_match (const ACCOUNT* a1, const ACCOUNT* a2)
+int mutt_account_match (const ACCOUNT * a1, const ACCOUNT * a2)
 {
-  const char* user = NONULL (Username);
+  const char *user = NONULL (Username);
 
   if (a1->type != a2->type)
     return 0;
@@ -47,7 +47,7 @@ int mutt_account_match (const ACCOUNT* a1, const ACCOUNT* a2)
   if (a1->type == M_ACCT_TYPE_POP && PopUser)
     user = PopUser;
 #endif
-  
+
 #ifdef USE_NNTP
   if (a1->type == M_ACCT_TYPE_NNTP && NntpUser)
     user = NntpUser;
@@ -64,7 +64,7 @@ int mutt_account_match (const ACCOUNT* a1, const ACCOUNT* a2)
 }
 
 /* mutt_account_fromurl: fill account with information from url. */
-int mutt_account_fromurl (ACCOUNT* account, ciss_url_t* url)
+int mutt_account_fromurl (ACCOUNT * account, ciss_url_t * url)
 {
   /* must be present */
   if (url->host)
@@ -72,18 +72,15 @@ int mutt_account_fromurl (ACCOUNT* account, ciss_url_t* url)
   else
     return -1;
 
-  if (url->user)
-  {
+  if (url->user) {
     strfcpy (account->user, url->user, sizeof (account->user));
     account->flags |= M_ACCT_USER;
   }
-  if (url->pass)
-  {
+  if (url->pass) {
     strfcpy (account->pass, url->pass, sizeof (account->pass));
     account->flags |= M_ACCT_PASS;
   }
-  if (url->port)
-  {
+  if (url->port) {
     account->port = url->port;
     account->flags |= M_ACCT_PORT;
   }
@@ -95,7 +92,7 @@ int mutt_account_fromurl (ACCOUNT* account, ciss_url_t* url)
  *   is a set of pointers into account - don't free or edit account until
  *   you've finished with url (make a copy of account if you need it for
  *   a while). */
-void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url)
+void mutt_account_tourl (ACCOUNT * account, ciss_url_t * url)
 {
   url->scheme = U_UNKNOWN;
   url->user = NULL;
@@ -103,8 +100,7 @@ void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url)
   url->port = 0;
 
 #ifdef USE_IMAP
-  if (account->type == M_ACCT_TYPE_IMAP)
-  {
+  if (account->type == M_ACCT_TYPE_IMAP) {
     if (account->flags & M_ACCT_SSL)
       url->scheme = U_IMAPS;
     else
@@ -113,8 +109,7 @@ void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url)
 #endif
 
 #ifdef USE_POP
-  if (account->type == M_ACCT_TYPE_POP)
-  {
+  if (account->type == M_ACCT_TYPE_POP) {
     if (account->flags & M_ACCT_SSL)
       url->scheme = U_POPS;
     else
@@ -123,8 +118,7 @@ void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url)
 #endif
 
 #ifdef USE_NNTP
-  if (account->type == M_ACCT_TYPE_NNTP)
-  {
+  if (account->type == M_ACCT_TYPE_NNTP) {
     if (account->flags & M_ACCT_SSL)
       url->scheme = U_NNTPS;
     else
@@ -142,7 +136,7 @@ void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url)
 }
 
 /* mutt_account_getuser: retrieve username into ACCOUNT, if neccessary */
-int mutt_account_getuser (ACCOUNT* account)
+int mutt_account_getuser (ACCOUNT * account)
 {
   char prompt[SHORT_STRING];
 
@@ -162,8 +156,7 @@ int mutt_account_getuser (ACCOUNT* account)
     strfcpy (account->user, NntpUser, sizeof (account->user));
 #endif
   /* prompt (defaults to unix username), copy into account->user */
-  else
-  {
+  else {
     snprintf (prompt, sizeof (prompt), _("Username at %s: "), account->host);
     strfcpy (account->user, NONULL (Username), sizeof (account->user));
     if (mutt_get_field (prompt, account->user, sizeof (account->user), 0))
@@ -176,7 +169,7 @@ int mutt_account_getuser (ACCOUNT* account)
 }
 
 /* mutt_account_getpass: fetch password into ACCOUNT, if neccessary */
-int mutt_account_getpass (ACCOUNT* account)
+int mutt_account_getpass (ACCOUNT * account)
 {
   char prompt[SHORT_STRING];
 
@@ -194,10 +187,9 @@ int mutt_account_getpass (ACCOUNT* account)
   else if ((account->type == M_ACCT_TYPE_NNTP) && NntpPass)
     strfcpy (account->pass, NntpPass, sizeof (account->pass));
 #endif
-  else
-  {
+  else {
     snprintf (prompt, sizeof (prompt), _("Password for %s@%s: "),
-      account->user, account->host);
+              account->user, account->host);
     account->pass[0] = '\0';
     if (mutt_get_password (prompt, account->pass, sizeof (account->pass)))
       return -1;
@@ -208,7 +200,7 @@ int mutt_account_getpass (ACCOUNT* account)
   return 0;
 }
 
-void mutt_account_unsetpass (ACCOUNT* account)
+void mutt_account_unsetpass (ACCOUNT * account)
 {
   account->flags &= !M_ACCT_PASS;
 }

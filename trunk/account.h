@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 /* remote host account manipulation (POP/IMAP) */
 
@@ -24,8 +24,7 @@
 #include "url.h"
 
 /* account types */
-enum
-{
+enum {
   M_ACCT_TYPE_NONE = 0,
   M_ACCT_TYPE_IMAP,
   M_ACCT_TYPE_NNTP,
@@ -38,8 +37,7 @@ enum
 #define M_ACCT_PASS (1<<2)
 #define M_ACCT_SSL  (1<<3)
 
-typedef struct
-{
+typedef struct {
   char user[64];
   char pass[64];
   char host[128];
@@ -48,11 +46,11 @@ typedef struct
   unsigned char flags;
 } ACCOUNT;
 
-int mutt_account_match (const ACCOUNT* a1, const ACCOUNT* m2);
-int mutt_account_fromurl (ACCOUNT* account, ciss_url_t* url);
-void mutt_account_tourl (ACCOUNT* account, ciss_url_t* url);
-int mutt_account_getuser (ACCOUNT* account);
-int mutt_account_getpass (ACCOUNT* account);
-void mutt_account_unsetpass (ACCOUNT* account);
+int mutt_account_match (const ACCOUNT * a1, const ACCOUNT * m2);
+int mutt_account_fromurl (ACCOUNT * account, ciss_url_t * url);
+void mutt_account_tourl (ACCOUNT * account, ciss_url_t * url);
+int mutt_account_getuser (ACCOUNT * account);
+int mutt_account_getpass (ACCOUNT * account);
+void mutt_account_unsetpass (ACCOUNT * account);
 
 #endif /* _MUTT_ACCOUNT_H_ */

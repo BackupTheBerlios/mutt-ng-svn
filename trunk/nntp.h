@@ -16,7 +16,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */ 
+ */
 
 #ifndef _NNTP_H_
 #define _NNTP_H_ 1
@@ -32,26 +32,23 @@
 /* number of entries in the hash table */
 #define NNTP_CACHE_LEN 10
 
-enum
-{
+enum {
   NNTP_NONE = 0,
   NNTP_OK,
   NNTP_BYE
 };
 
-typedef struct
-{
+typedef struct {
   int first;
   int last;
 } NEWSRC_ENTRY;
 
-typedef struct
-{
-  unsigned int hasXPAT : 1;
-  unsigned int hasXGTITLE : 1;
-  unsigned int hasXOVER : 1;
-  unsigned int hasLISTGROUP : 1;
-  unsigned int status : 3;
+typedef struct {
+  unsigned int hasXPAT:1;
+  unsigned int hasXGTITLE:1;
+  unsigned int hasXOVER:1;
+  unsigned int hasLISTGROUP:1;
+  unsigned int status:3;
   char *newsrc;
   char *cache;
   int stat;
@@ -60,32 +57,30 @@ typedef struct
   time_t newgroups_time;
   time_t check_time;
   HASH *newsgroups;
-  LIST *list;	/* list of newsgroups */
-  LIST *tail;	/* last entry of list */
+  LIST *list;                   /* list of newsgroups */
+  LIST *tail;                   /* last entry of list */
   CONNECTION *conn;
 } NNTP_SERVER;
 
-typedef struct
-{
+typedef struct {
   unsigned int index;
   char *path;
 } NNTP_CACHE;
 
-typedef struct
-{
+typedef struct {
   NEWSRC_ENTRY *entries;
-  unsigned int num;	/* number of used entries */
-  unsigned int max;	/* number of allocated entries */
+  unsigned int num;             /* number of used entries */
+  unsigned int max;             /* number of allocated entries */
   unsigned int unread;
   unsigned int firstMessage;
   unsigned int lastMessage;
   unsigned int lastLoaded;
   unsigned int lastCached;
-  unsigned int subscribed : 1;
-  unsigned int rc : 1;
-  unsigned int new : 1;
-  unsigned int allowed : 1;
-  unsigned int deleted : 1;
+  unsigned int subscribed:1;
+  unsigned int rc:1;
+  unsigned int new:1;
+  unsigned int allowed:1;
+  unsigned int deleted:1;
   char *group;
   char *desc;
   char *cache;
@@ -129,7 +124,8 @@ void nntp_buffy (char *);
 void nntp_expand_path (char *, size_t, ACCOUNT *);
 void nntp_logout_all ();
 const char *nntp_format_str (char *, size_t, char, const char *, const char *,
-		const char *, const char *, unsigned long, format_flag);
+                             const char *, const char *, unsigned long,
+                             format_flag);
 
 NNTP_SERVER *CurrentNewsSrv INITVAL (NULL);
 

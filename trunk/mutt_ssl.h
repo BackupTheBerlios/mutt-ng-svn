@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #ifndef _MUTT_SSL_H_
 #define _MUTT_SSL_H_ 1
@@ -22,16 +22,16 @@
 #include "mutt_socket.h"
 
 #ifdef USE_SSL
-int mutt_ssl_starttls (CONNECTION* conn);
+int mutt_ssl_starttls (CONNECTION * conn);
 
-extern int ssl_socket_setup (CONNECTION *conn);
+extern int ssl_socket_setup (CONNECTION * conn);
 #endif
 #ifdef USE_GNUTLS
-int mutt_gnutls_starttls (CONNECTION* conn);
+int mutt_gnutls_starttls (CONNECTION * conn);
 
-extern int mutt_gnutls_socket_setup (CONNECTION *conn);
+extern int mutt_gnutls_socket_setup (CONNECTION * conn);
 #endif
 #ifdef USE_NSS
-int mutt_nss_socket_setup (CONNECTION* conn);
+int mutt_nss_socket_setup (CONNECTION * conn);
 #endif
 #endif /* _MUTT_SSL_H_ */

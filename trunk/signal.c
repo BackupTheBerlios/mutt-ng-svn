@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #if HAVE_CONFIG_H
 # include "config.h"
@@ -38,17 +38,17 @@ static int IsEndwin = 0;
 RETSIGTYPE exit_handler (int sig)
 {
   curs_set (1);
-  endwin (); /* just to be safe */
+  endwin ();                    /* just to be safe */
 #if SYS_SIGLIST_DECLARED
-  printf(_("%s...  Exiting.\n"), sys_siglist[sig]);
+  printf (_("%s...  Exiting.\n"), sys_siglist[sig]);
 #else
 #if (__sun__ && __svr4__)
-  printf(_("Caught %s...  Exiting.\n"), _sys_siglist[sig]);
+  printf (_("Caught %s...  Exiting.\n"), _sys_siglist[sig]);
 #else
 #if (__alpha && __osf__)
-  printf(_("Caught %s...  Exiting.\n"), __sys_siglist[sig]);
+  printf (_("Caught %s...  Exiting.\n"), __sys_siglist[sig]);
 #else
-  printf(_("Caught signal %d...  Exiting.\n"), sig);
+  printf (_("Caught signal %d...  Exiting.\n"), sig);
 #endif
 #endif
 #endif
@@ -64,37 +64,36 @@ RETSIGTYPE sighandler (int sig)
 {
   int save_errno = errno;
 
-  switch (sig)
-  {
-    case SIGTSTP: /* user requested a suspend */
-      if (!option (OPTSUSPEND))
-        break;
-      IsEndwin = isendwin ();
-      curs_set (1);
-      if (!IsEndwin)
-	endwin ();
-      kill (0, SIGSTOP);
+  switch (sig) {
+  case SIGTSTP:                /* user requested a suspend */
+    if (!option (OPTSUSPEND))
+      break;
+    IsEndwin = isendwin ();
+    curs_set (1);
+    if (!IsEndwin)
+      endwin ();
+    kill (0, SIGSTOP);
 
-    case SIGCONT:
-      if (!IsEndwin)
-	refresh ();
-      mutt_curs_set (-1);
+  case SIGCONT:
+    if (!IsEndwin)
+      refresh ();
+    mutt_curs_set (-1);
 #if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
-      /* We don't receive SIGWINCH when suspended; however, no harm is done by
-       * just assuming we received one, and triggering the 'resize' anyway. */
-      SigWinch = 1;
+    /* We don't receive SIGWINCH when suspended; however, no harm is done by
+     * just assuming we received one, and triggering the 'resize' anyway. */
+    SigWinch = 1;
 #endif
-      break;
+    break;
 
 #if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
-    case SIGWINCH:
-      SigWinch = 1;
-      break;
+  case SIGWINCH:
+    SigWinch = 1;
+    break;
 #endif
 
-    case SIGINT:
-      SigInt = 1;
-      break;
+  case SIGINT:
+    SigInt = 1;
+    break;
 
   }
   errno = save_errno;
@@ -169,8 +168,7 @@ void mutt_signal_init (void)
 /* signals which are important to block while doing critical ops */
 void mutt_block_signals (void)
 {
-  if (!option (OPTSIGNALSBLOCKED))
-  {
+  if (!option (OPTSIGNALSBLOCKED)) {
     sigemptyset (&Sigset);
     sigaddset (&Sigset, SIGTERM);
     sigaddset (&Sigset, SIGHUP);
@@ -187,8 +185,7 @@ void mutt_block_signals (void)
 /* restore the previous signal mask */
 void mutt_unblock_signals (void)
 {
-  if (option (OPTSIGNALSBLOCKED))
-  {
+  if (option (OPTSIGNALSBLOCKED)) {
     sigprocmask (SIG_UNBLOCK, &Sigset, 0);
     unset_option (OPTSIGNALSBLOCKED);
   }
@@ -198,8 +195,7 @@ void mutt_block_signals_system (void)
 {
   struct sigaction sa;
 
-  if (! option (OPTSYSSIGNALSBLOCKED))
-  {
+  if (!option (OPTSYSSIGNALSBLOCKED)) {
     /* POSIX: ignore SIGINT and SIGQUIT & block SIGCHLD  before exec */
     sa.sa_handler = SIG_IGN;
     sa.sa_flags = 0;
@@ -216,16 +212,13 @@ void mutt_block_signals_system (void)
 
 void mutt_unblock_signals_system (int catch)
 {
-  if (option (OPTSYSSIGNALSBLOCKED))
-  {
+  if (option (OPTSYSSIGNALSBLOCKED)) {
     sigprocmask (SIG_UNBLOCK, &SigsetSys, NULL);
-    if (catch)
-    {
+    if (catch) {
       sigaction (SIGQUIT, &SysOldQuit, NULL);
       sigaction (SIGINT, &SysOldInt, NULL);
     }
-    else
-    {
+    else {
       struct sigaction sa;
 
       sa.sa_handler = SIG_DFL;
@@ -242,7 +235,7 @@ void mutt_unblock_signals_system (int catch)
 void mutt_allow_interrupt (int disposition)
 {
   struct sigaction sa;
-  
+
   memset (&sa, 0, sizeof sa);
   sa.sa_handler = sighandler;
 #ifdef SA_RESTART

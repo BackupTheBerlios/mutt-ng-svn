@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #if HAVE_CONFIG_H
 # include "config.h"
@@ -49,14 +49,12 @@ int _mutt_system (const char *cmd, int flags)
   mutt_block_signals_system ();
 
   /* also don't want to be stopped right now */
-  if (flags & M_DETACH_PROCESS)
-  {
+  if (flags & M_DETACH_PROCESS) {
     sigemptyset (&set);
     sigaddset (&set, SIGTSTP);
     sigprocmask (SIG_BLOCK, &set, NULL);
   }
-  else
-  {
+  else {
     act.sa_handler = SIG_DFL;
     /* we want to restart the waitpid() below */
 #ifdef SA_RESTART
@@ -67,41 +65,38 @@ int _mutt_system (const char *cmd, int flags)
     sigaction (SIGCONT, &act, &oldcont);
   }
 
-  if ((thepid = fork ()) == 0)
-  {
+  if ((thepid = fork ()) == 0) {
     act.sa_flags = 0;
 
-    if (flags & M_DETACH_PROCESS)
-    {
+    if (flags & M_DETACH_PROCESS) {
       int fd;
 
       /* give up controlling terminal */
       setsid ();
 
-      switch (fork ())
-      {
-	case 0:
+      switch (fork ()) {
+      case 0:
 #if defined(OPEN_MAX)
-	  for (fd = 0; fd < OPEN_MAX; fd++)
-	    close (fd);
+        for (fd = 0; fd < OPEN_MAX; fd++)
+          close (fd);
 #elif defined(_POSIX_OPEN_MAX)
-	  for (fd = 0; fd < _POSIX_OPEN_MAX; fd++)
-	    close (fd);
+        for (fd = 0; fd < _POSIX_OPEN_MAX; fd++)
+          close (fd);
 #else
-	  close (0);
-	  close (1);
-	  close (2);
+        close (0);
+        close (1);
+        close (2);
 #endif
-	  chdir ("/");
-	  act.sa_handler = SIG_DFL;
-	  sigaction (SIGCHLD, &act, NULL);
-	  break;
+        chdir ("/");
+        act.sa_handler = SIG_DFL;
+        sigaction (SIGCHLD, &act, NULL);
+        break;
 
-	case -1:
-	  _exit (127);
+      case -1:
+        _exit (127);
 
-	default:
-	  _exit (0);
+      default:
+        _exit (0);
       }
     }
 
@@ -115,10 +110,9 @@ int _mutt_system (const char *cmd, int flags)
     sigaction (SIGCONT, &act, NULL);
 
     execl (EXECSHELL, "sh", "-c", cmd, NULL);
-    _exit (127); /* execl error */
+    _exit (127);                /* execl error */
   }
-  else if (thepid != -1)
-  {
+  else if (thepid != -1) {
 #ifndef USE_IMAP
     /* wait for the (first) child process to finish */
     waitpid (thepid, &rc, 0);

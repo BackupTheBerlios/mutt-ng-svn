@@ -29,7 +29,7 @@ typedef void *iconv_t;
 
 #ifndef HAVE_ICONV
 #define ICONV_CONST /**/
-iconv_t iconv_open (const char *, const char *);
+  iconv_t iconv_open (const char *, const char *);
 size_t iconv (iconv_t, ICONV_CONST char **, size_t *, char **, size_t *);
 int iconv_close (iconv_t);
 #endif
@@ -39,13 +39,14 @@ char *mutt_get_first_charset (const char *);
 int mutt_convert_nonmime_string (char **);
 
 iconv_t mutt_iconv_open (const char *, const char *, int);
-size_t mutt_iconv (iconv_t, ICONV_CONST char **, size_t *, char **, size_t *, ICONV_CONST char **, const char *);
+size_t mutt_iconv (iconv_t, ICONV_CONST char **, size_t *, char **, size_t *,
+                   ICONV_CONST char **, const char *);
 
-typedef void * FGETCONV;
+typedef void *FGETCONV;
 
 FGETCONV *fgetconv_open (FILE *, const char *, const char *, int);
 int fgetconv (FGETCONV *);
-char * fgetconvs (char *, size_t, FGETCONV *);
+char *fgetconvs (char *, size_t, FGETCONV *);
 void fgetconv_close (FGETCONV **);
 
 void mutt_set_langinfo_charset (void);

@@ -18,31 +18,29 @@
 
 /*parameter to mutt_parse_mailboxes*/
 #define M_MAILBOXES   1
-#define M_UNMAILBOXES 2 
+#define M_UNMAILBOXES 2
 
-typedef struct buffy_t
-{
+typedef struct buffy_t {
   char *path;
 #ifdef BUFFY_SIZE
   long size;
-#endif				/* BUFFY_SIZE */
+#endif                          /* BUFFY_SIZE */
   struct buffy_t *next;
   struct buffy_t *prev;
-  short new;			/* mailbox has new mail */
-  short has_new;		/* set it new if new and not read */
-  int msgcount;			/* total number of messages */
-  int msg_unread;		/* number of unread messages */
-  int msg_flagged;		/* number of flagged messages */
-  short notified;		/* user has been notified */
-  short magic;			/* mailbox type */
-  short newly_created;		/* mbox or mmdf just popped into existence */
-}
-BUFFY;
+  short new;                    /* mailbox has new mail */
+  short has_new;                /* set it new if new and not read */
+  int msgcount;                 /* total number of messages */
+  int msg_unread;               /* number of unread messages */
+  int msg_flagged;              /* number of flagged messages */
+  short notified;               /* user has been notified */
+  short magic;                  /* mailbox type */
+  short newly_created;          /* mbox or mmdf just popped into existence */
+} BUFFY;
 
 WHERE BUFFY *Incoming INITVAL (0);
 WHERE short BuffyTimeout INITVAL (3);
 
-extern time_t BuffyDoneTime;	/* last time we knew for sure how much mail there was */
+extern time_t BuffyDoneTime;    /* last time we knew for sure how much mail there was */
 
 #ifdef BUFFY_SIZE
 BUFFY *mutt_find_mailbox (const char *path);

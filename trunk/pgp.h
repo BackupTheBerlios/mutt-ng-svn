@@ -26,7 +26,7 @@
 
 /* prototypes */
 
-int pgp_use_gpg_agent(void);
+int pgp_use_gpg_agent (void);
 
 int pgp_check_traditional (FILE *, BODY *, int);
 BODY *pgp_decrypt_part (BODY *, STATE *, FILE *, BODY *);
@@ -49,7 +49,7 @@ pgp_key_t pgp_get_candidates (pgp_ring_t, LIST *);
 pgp_key_t pgp_getkeybyaddr (ADDRESS *, short, pgp_ring_t);
 pgp_key_t pgp_getkeybystr (char *, short, pgp_ring_t);
 
-char *pgp_findKeys (ADDRESS *to, ADDRESS *cc, ADDRESS *bcc);
+char *pgp_findKeys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc);
 
 void pgp_forget_passphrase (void);
 void pgp_application_pgp_handler (BODY *, STATE *);
@@ -61,33 +61,33 @@ int pgp_valid_passphrase (void);
 
 /* The PGP invocation interface - not really beautiful. */
 
-pid_t pgp_invoke_decode (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			 int pgpinfd, int pgpoutfd, int pgperrfd, 
-			 const char *fname, short need_passphrase);
-pid_t pgp_invoke_verify (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			 int pgpinfd, int pgpoutfd, int pgperrfd, 
-			 const char *fname, const char *sig_fname);
-pid_t pgp_invoke_decrypt (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			  int pgpinfd, int pgpoutfd, int pgperrfd, 
-			  const char *fname);
-pid_t pgp_invoke_sign (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-		       int pgpinfd, int pgpoutfd, int pgperrfd, 
-		       const char *fname);
-pid_t pgp_invoke_encrypt (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			  int pgpinfd, int pgpoutfd, int pgperrfd,
-			  const char *fname, const char *uids, int sign);
-pid_t pgp_invoke_export (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			 int pgpinfd, int pgpoutfd, int pgperrfd, 
-			 const char *uids);
-pid_t pgp_invoke_verify_key (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			     int pgpinfd, int pgpoutfd, int pgperrfd, 
-			     const char *uids);
-pid_t pgp_invoke_list_keys (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			    int pgpinfd, int pgpoutfd, int pgperrfd, 
-			    pgp_ring_t keyring, LIST *hints);
-pid_t pgp_invoke_traditional (FILE **pgpin, FILE **pgpout, FILE **pgperr,
-			  int pgpinfd, int pgpoutfd, int pgperrfd,
-			  const char *fname, const char *uids, int flags);
+pid_t pgp_invoke_decode (FILE ** pgpin, FILE ** pgpout, FILE ** pgperr,
+                         int pgpinfd, int pgpoutfd, int pgperrfd,
+                         const char *fname, short need_passphrase);
+pid_t pgp_invoke_verify (FILE ** pgpin, FILE ** pgpout, FILE ** pgperr,
+                         int pgpinfd, int pgpoutfd, int pgperrfd,
+                         const char *fname, const char *sig_fname);
+pid_t pgp_invoke_decrypt (FILE ** pgpin, FILE ** pgpout, FILE ** pgperr,
+                          int pgpinfd, int pgpoutfd, int pgperrfd,
+                          const char *fname);
+pid_t pgp_invoke_sign (FILE ** pgpin, FILE ** pgpout, FILE ** pgperr,
+                       int pgpinfd, int pgpoutfd, int pgperrfd,
+                       const char *fname);
+pid_t pgp_invoke_encrypt (FILE ** pgpin, FILE ** pgpout, FILE ** pgperr,
+                          int pgpinfd, int pgpoutfd, int pgperrfd,
+                          const char *fname, const char *uids, int sign);
+pid_t pgp_invoke_export (FILE ** pgpin, FILE ** pgpout, FILE ** pgperr,
+                         int pgpinfd, int pgpoutfd, int pgperrfd,
+                         const char *uids);
+pid_t pgp_invoke_verify_key (FILE ** pgpin, FILE ** pgpout, FILE ** pgperr,
+                             int pgpinfd, int pgpoutfd, int pgperrfd,
+                             const char *uids);
+pid_t pgp_invoke_list_keys (FILE ** pgpin, FILE ** pgpout, FILE ** pgperr,
+                            int pgpinfd, int pgpoutfd, int pgperrfd,
+                            pgp_ring_t keyring, LIST * hints);
+pid_t pgp_invoke_traditional (FILE ** pgpin, FILE ** pgpout, FILE ** pgperr,
+                              int pgpinfd, int pgpoutfd, int pgperrfd,
+                              const char *fname, const char *uids, int flags);
 
 
 void pgp_invoke_import (const char *fname);
@@ -100,6 +100,6 @@ BODY *pgp_traditional_encryptsign (BODY *, int, char *);
 BODY *pgp_encrypt_message (BODY *, char *, int);
 BODY *pgp_sign_message (BODY *);
 
-int pgp_send_menu (HEADER *msg, int *redraw);
+int pgp_send_menu (HEADER * msg, int *redraw);
 
 #endif /* CRYPT_BACKEND_CLASSIC_PGP */

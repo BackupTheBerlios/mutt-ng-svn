@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #if HAVE_CONFIG_H
 # include "config.h"
@@ -33,11 +33,10 @@ static time_t compute_tz (time_t g, struct tm *utc)
 
   t = (((lt->tm_hour - utc->tm_hour) * 60) + (lt->tm_min - utc->tm_min)) * 60;
 
-  if ((yday = (lt->tm_yday - utc->tm_yday)))
-  {
+  if ((yday = (lt->tm_yday - utc->tm_yday))) {
     /* This code is optimized to negative timezones (West of Greenwich) */
-    if (yday == -1 ||	/* UTC passed midnight before localtime */
-	yday > 1)	/* UTC passed new year before localtime */
+    if (yday == -1 ||           /* UTC passed midnight before localtime */
+        yday > 1)               /* UTC passed new year before localtime */
       t -= 24 * 60 * 60;
     else
       t += 24 * 60 * 60;
@@ -65,7 +64,7 @@ time_t mutt_local_tz (time_t t)
 
 /* converts struct tm to time_t, but does not take the local timezone into
    account unless ``local'' is nonzero */
-time_t mutt_mktime (struct tm *t, int local)
+time_t mutt_mktime (struct tm * t, int local)
 {
   time_t g;
 
@@ -74,7 +73,7 @@ time_t mutt_mktime (struct tm *t, int local)
   };
 
   /* Compute the number of days since January 1 in the same year */
-  g = AccumDaysPerMonth [t->tm_mon % 12];
+  g = AccumDaysPerMonth[t->tm_mon % 12];
 
   /* The leap years are 1972 and every 4. year until 2096,
    * but this algoritm will fail after year 2099 */
@@ -108,9 +107,9 @@ time_t mutt_mktime (struct tm *t, int local)
 /* Return 1 if month is February of leap year, else 0 */
 static int isLeapYearFeb (struct tm *tm)
 {
-  if (tm->tm_mon == 1)
-  {
+  if (tm->tm_mon == 1) {
     int y = tm->tm_year + 1900;
+
     return (((y & 3) == 0) && (((y % 100) != 0) || ((y % 400) == 0)));
   }
   return (0);
@@ -123,66 +122,54 @@ void mutt_normalize_time (struct tm *tm)
   };
   int nLeap;
 
-  while (tm->tm_sec < 0)
-  {
+  while (tm->tm_sec < 0) {
     tm->tm_sec += 60;
     tm->tm_min--;
   }
-  while (tm->tm_sec >= 60)
-  {
+  while (tm->tm_sec >= 60) {
     tm->tm_sec -= 60;
     tm->tm_min++;
   }
-  while (tm->tm_min < 0)
-  {
+  while (tm->tm_min < 0) {
     tm->tm_min += 60;
     tm->tm_hour--;
   }
-  while (tm->tm_min >= 60)
-  {
+  while (tm->tm_min >= 60) {
     tm->tm_min -= 60;
     tm->tm_hour++;
   }
-  while (tm->tm_hour < 0)
-  {
+  while (tm->tm_hour < 0) {
     tm->tm_hour += 24;
     tm->tm_mday--;
   }
-  while (tm->tm_hour >= 24)
-  {
+  while (tm->tm_hour >= 24) {
     tm->tm_hour -= 24;
     tm->tm_mday++;
   }
   /* use loops on NNNdwmy user input values? */
-  while (tm->tm_mon < 0)
-  {
+  while (tm->tm_mon < 0) {
     tm->tm_mon += 12;
     tm->tm_year--;
   }
-  while (tm->tm_mon >= 12)
-  {
+  while (tm->tm_mon >= 12) {
     tm->tm_mon -= 12;
     tm->tm_year++;
   }
-  while (tm->tm_mday <= 0)
-  {
+  while (tm->tm_mday <= 0) {
     if (tm->tm_mon)
       tm->tm_mon--;
-    else
-    {
+    else {
       tm->tm_mon = 11;
       tm->tm_year--;
     }
     tm->tm_mday += DaysPerMonth[tm->tm_mon] + isLeapYearFeb (tm);
   }
-  while (tm->tm_mday > (DaysPerMonth[tm->tm_mon] + 
-	(nLeap = isLeapYearFeb (tm))))
-  {
+  while (tm->tm_mday > (DaysPerMonth[tm->tm_mon] +
+                        (nLeap = isLeapYearFeb (tm)))) {
     tm->tm_mday -= DaysPerMonth[tm->tm_mon] + nLeap;
     if (tm->tm_mon < 11)
       tm->tm_mon++;
-    else
-    {
+    else {
       tm->tm_mon = 0;
       tm->tm_year++;
     }

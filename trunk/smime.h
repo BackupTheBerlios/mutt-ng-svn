@@ -29,33 +29,31 @@
 void smime_void_passphrase (void);
 int smime_valid_passphrase (void);
 
-int   smime_decrypt_mime (FILE *, FILE **, BODY *, BODY **);
+int smime_decrypt_mime (FILE *, FILE **, BODY *, BODY **);
 
-void  smime_application_smime_handler (BODY *, STATE *);
-
-
-BODY* smime_sign_message (BODY *);
-
-BODY* smime_build_smime_entity (BODY *, char *);
-
-int   smime_verify_one(BODY *, STATE *, const char *);
+void smime_application_smime_handler (BODY *, STATE *);
 
 
-int   smime_verify_sender(HEADER *);
+BODY *smime_sign_message (BODY *);
+
+BODY *smime_build_smime_entity (BODY *, char *);
+
+int smime_verify_one (BODY *, STATE *, const char *);
 
 
-char* smime_get_field_from_db (char *, char *, short, short);
+int smime_verify_sender (HEADER *);
 
-void  smime_getkeys (ENVELOPE *);
 
-char* smime_ask_for_key (char *, char *, short);
+char *smime_get_field_from_db (char *, char *, short, short);
 
-char *smime_findKeys (ADDRESS *to, ADDRESS *cc, ADDRESS *bcc);
+void smime_getkeys (ENVELOPE *);
 
-void  smime_invoke_import (char *, char *);
+char *smime_ask_for_key (char *, char *, short);
 
-int smime_send_menu (HEADER *msg, int *redraw);
+char *smime_findKeys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc);
+
+void smime_invoke_import (char *, char *);
+
+int smime_send_menu (HEADER * msg, int *redraw);
 
 #endif
-
-

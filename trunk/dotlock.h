@@ -15,16 +15,16 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #ifndef _DOTLOCK_H
 #define _DOTLOCK_H
 
 /* exit values */
 
-#define DL_EX_OK	0	
-#define DL_EX_ERROR	1	
-#define DL_EX_EXIST	3	
+#define DL_EX_OK	0
+#define DL_EX_ERROR	1
+#define DL_EX_EXIST	3
 #define DL_EX_NEED_PRIVS 4
 #define DL_EX_IMPOSSIBLE 5
 

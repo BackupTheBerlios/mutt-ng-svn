@@ -15,16 +15,16 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #ifndef SIDEBAR_H
 #define SIDEBAR_H
 
 /* parameter is whether or not to go to the status line */
 /* used for omitting the last | that covers up the status bar in the index */
-int draw_sidebar(int);
-void scroll_sidebar(int, int);
-void set_curbuffy(char*);
-void set_buffystats (CONTEXT*);
+int draw_sidebar (int);
+void scroll_sidebar (int, int);
+void set_curbuffy (char *);
+void set_buffystats (CONTEXT *);
 
 #endif /* SIDEBAR_H */

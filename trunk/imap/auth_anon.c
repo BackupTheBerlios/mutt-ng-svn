@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 /* IMAP login/authentication code */
 
@@ -27,7 +27,7 @@
 #include "auth.h"
 
 /* this is basically a stripped-down version of the cram-md5 method. */
-imap_auth_res_t imap_auth_anon (IMAP_DATA* idata, const char* method)
+imap_auth_res_t imap_auth_anon (IMAP_DATA * idata, const char *method)
 {
   int rc;
 
@@ -48,20 +48,18 @@ imap_auth_res_t imap_auth_anon (IMAP_DATA* idata, const char* method)
     rc = imap_cmd_step (idata);
   while (rc == IMAP_CMD_CONTINUE);
 
-  if (rc != IMAP_CMD_RESPOND)
-  {
+  if (rc != IMAP_CMD_RESPOND) {
     dprint (1, (debugfile, "Invalid response from server.\n"));
     goto bail;
   }
 
-  mutt_socket_write (idata->conn, "ZHVtbXkK\r\n"); /* base64 ("dummy") */
+  mutt_socket_write (idata->conn, "ZHVtbXkK\r\n");      /* base64 ("dummy") */
 
   do
     rc = imap_cmd_step (idata);
   while (rc == IMAP_CMD_CONTINUE);
-  
-  if (rc != IMAP_CMD_OK)
-  {
+
+  if (rc != IMAP_CMD_OK) {
     dprint (1, (debugfile, "Error receiving server response.\n"));
     goto bail;
   }
@@ -69,7 +67,7 @@ imap_auth_res_t imap_auth_anon (IMAP_DATA* idata, const char* method)
   if (imap_code (idata->cmd.buf))
     return IMAP_AUTH_SUCCESS;
 
- bail:
+bail:
   mutt_error _("Anonymous authentication failed.");
   mutt_sleep (2);
   return IMAP_AUTH_FAILURE;

@@ -50,22 +50,20 @@
 
 /* raw bytes to null-terminated base 64 string */
 void mutt_to_base64 (unsigned char *out, const unsigned char *in, size_t len,
-		     size_t olen)
+                     size_t olen)
 {
-  while (len >= 3 && olen > 10)
-  {
+  while (len >= 3 && olen > 10) {
     *out++ = B64Chars[in[0] >> 2];
     *out++ = B64Chars[((in[0] << 4) & 0x30) | (in[1] >> 4)];
     *out++ = B64Chars[((in[1] << 2) & 0x3c) | (in[2] >> 6)];
     *out++ = B64Chars[in[2] & 0x3f];
-    olen  -= 4;
-    len   -= 3;
-    in    += 3;
+    olen -= 4;
+    len -= 3;
+    in += 3;
   }
 
   /* clean up remainder */
-  if (len > 0 && olen > 4)
-  {
+  if (len > 0 && olen > 4) {
     unsigned char fragment;
 
     *out++ = B64Chars[in[0] >> 2];
@@ -86,8 +84,7 @@ int mutt_from_base64 (char *out, const char *in)
   int len = 0;
   register unsigned char digit1, digit2, digit3, digit4;
 
-  do
-  {
+  do {
     digit1 = in[0];
     if (digit1 > 127 || base64val (digit1) == BAD)
       return -1;
@@ -103,16 +100,14 @@ int mutt_from_base64 (char *out, const char *in)
     in += 4;
 
     /* digits are already sanity-checked */
-    *out++ = (base64val(digit1) << 2) | (base64val(digit2) >> 4);
+    *out++ = (base64val (digit1) << 2) | (base64val (digit2) >> 4);
     len++;
-    if (digit3 != '=')
-    {
-      *out++ = ((base64val(digit2) << 4) & 0xf0) | (base64val(digit3) >> 2);
+    if (digit3 != '=') {
+      *out++ = ((base64val (digit2) << 4) & 0xf0) | (base64val (digit3) >> 2);
       len++;
-      if (digit4 != '=')
-      {
-	*out++ = ((base64val(digit3) << 6) & 0xc0) | base64val(digit4);
-	len++;
+      if (digit4 != '=') {
+        *out++ = ((base64val (digit3) << 6) & 0xc0) | base64val (digit4);
+        len++;
       }
     }
   }

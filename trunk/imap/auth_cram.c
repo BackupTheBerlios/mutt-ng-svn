@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 /* IMAP login/authentication code */
 
@@ -31,13 +31,13 @@
 #define MD5_DIGEST_LEN 16
 
 /* forward declarations */
-static void hmac_md5 (const char* password, char* challenge,
-  unsigned char* response);
+static void hmac_md5 (const char *password, char *challenge,
+                      unsigned char *response);
 
 /* imap_auth_cram_md5: AUTH=CRAM-MD5 support. */
-imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA* idata, const char* method)
+imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA * idata, const char *method)
 {
-  char ibuf[LONG_STRING*2], obuf[LONG_STRING];
+  char ibuf[LONG_STRING * 2], obuf[LONG_STRING];
   unsigned char hmac_response[MD5_DIGEST_LEN];
   int len;
   int rc;
@@ -64,15 +64,13 @@ imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA* idata, const char* method)
   do
     rc = imap_cmd_step (idata);
   while (rc == IMAP_CMD_CONTINUE);
-  
-  if (rc != IMAP_CMD_RESPOND)
-  {
+
+  if (rc != IMAP_CMD_RESPOND) {
     dprint (1, (debugfile, "Invalid response from server: %s\n", ibuf));
     goto bail;
   }
 
-  if ((len = mutt_from_base64 (obuf, idata->cmd.buf + 2)) == -1)
-  {
+  if ((len = mutt_from_base64 (obuf, idata->cmd.buf + 2)) == -1) {
     dprint (1, (debugfile, "Error decoding base64 response.\n"));
     goto bail;
   }
@@ -94,20 +92,22 @@ imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA* idata, const char* method)
   hmac_md5 (idata->conn->account.pass, obuf, hmac_response);
   /* dubious optimisation I saw elsewhere: make the whole string in one call */
   snprintf (obuf, sizeof (obuf),
-    "%s %02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
-    idata->conn->account.user,
-    hmac_response[0], hmac_response[1], hmac_response[2], hmac_response[3],
-    hmac_response[4], hmac_response[5], hmac_response[6], hmac_response[7],
-    hmac_response[8], hmac_response[9], hmac_response[10], hmac_response[11],
-    hmac_response[12], hmac_response[13], hmac_response[14], hmac_response[15]);
-  dprint(2, (debugfile, "CRAM response: %s\n", obuf));
+            "%s %02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x%02x",
+            idata->conn->account.user,
+            hmac_response[0], hmac_response[1], hmac_response[2],
+            hmac_response[3], hmac_response[4], hmac_response[5],
+            hmac_response[6], hmac_response[7], hmac_response[8],
+            hmac_response[9], hmac_response[10], hmac_response[11],
+            hmac_response[12], hmac_response[13], hmac_response[14],
+            hmac_response[15]);
+  dprint (2, (debugfile, "CRAM response: %s\n", obuf));
 
   /* XXX - ibuf must be long enough to store the base64 encoding of obuf, 
    * plus the additional debris
    */
-  
-  mutt_to_base64 ((unsigned char*) ibuf, (unsigned char*) obuf, strlen (obuf),
-		  sizeof (ibuf) - 2);
+
+  mutt_to_base64 ((unsigned char *) ibuf, (unsigned char *) obuf,
+                  strlen (obuf), sizeof (ibuf) - 2);
   safe_strcat (ibuf, sizeof (ibuf), "\r\n");
   mutt_socket_write (idata->conn, ibuf);
 
@@ -115,8 +115,7 @@ imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA* idata, const char* method)
     rc = imap_cmd_step (idata);
   while (rc == IMAP_CMD_CONTINUE);
 
-  if (rc != IMAP_CMD_OK)
-  {
+  if (rc != IMAP_CMD_OK) {
     dprint (1, (debugfile, "Error receiving server response.\n"));
     goto bail;
   }
@@ -124,19 +123,19 @@ imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA* idata, const char* method)
   if (imap_code (idata->cmd.buf))
     return IMAP_AUTH_SUCCESS;
 
- bail:
+bail:
   mutt_error _("CRAM-MD5 authentication failed.");
   mutt_sleep (2);
   return IMAP_AUTH_FAILURE;
 }
 
 /* hmac_md5: produce CRAM-MD5 challenge response. */
-static void hmac_md5 (const char* password, char* challenge,
-  unsigned char* response)
+static void hmac_md5 (const char *password, char *challenge,
+                      unsigned char *response)
 {
   MD5_CTX ctx;
   unsigned char ipad[MD5_BLOCK_LEN], opad[MD5_BLOCK_LEN];
-  unsigned char secret[MD5_BLOCK_LEN+1];
+  unsigned char secret[MD5_BLOCK_LEN + 1];
   unsigned char hash_passwd[MD5_DIGEST_LEN];
   unsigned int secret_len, chal_len;
   int i;
@@ -146,12 +145,11 @@ static void hmac_md5 (const char* password, char* challenge,
 
   /* passwords longer than MD5_BLOCK_LEN bytes are substituted with their MD5
    * digests */
-  if (secret_len > MD5_BLOCK_LEN)
-  {
+  if (secret_len > MD5_BLOCK_LEN) {
     MD5Init (&ctx);
-    MD5Update (&ctx, (unsigned char*) password, secret_len);
+    MD5Update (&ctx, (unsigned char *) password, secret_len);
     MD5Final (hash_passwd, &ctx);
-    strfcpy ((char*) secret, (char*) hash_passwd, MD5_DIGEST_LEN);
+    strfcpy ((char *) secret, (char *) hash_passwd, MD5_DIGEST_LEN);
     secret_len = MD5_DIGEST_LEN;
   }
   else
@@ -162,8 +160,7 @@ static void hmac_md5 (const char* password, char* challenge,
   memcpy (ipad, secret, secret_len);
   memcpy (opad, secret, secret_len);
 
-  for (i = 0; i < MD5_BLOCK_LEN; i++)
-  {
+  for (i = 0; i < MD5_BLOCK_LEN; i++) {
     ipad[i] ^= 0x36;
     opad[i] ^= 0x5c;
   }
@@ -171,7 +168,7 @@ static void hmac_md5 (const char* password, char* challenge,
   /* inner hash: challenge and ipadded secret */
   MD5Init (&ctx);
   MD5Update (&ctx, ipad, MD5_BLOCK_LEN);
-  MD5Update (&ctx, (unsigned char*) challenge, chal_len);
+  MD5Update (&ctx, (unsigned char *) challenge, chal_len);
   MD5Final (response, &ctx);
 
   /* outer hash: inner hash and opadded secret */

@@ -17,7 +17,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 /*
  * Mixmaster support for Mutt
@@ -34,8 +34,7 @@
 
 #define MAXMIXES 19
 
-struct type2
-{
+struct type2 {
   int num;
   char *shortname;
   char *addr;
@@ -46,8 +45,7 @@ struct type2
 typedef struct type2 REMAILER;
 
 
-struct mixchain
-{
+struct mixchain {
   size_t cl;
   int ch[MAXMIXES];
 };
@@ -55,7 +53,7 @@ struct mixchain
 typedef struct mixchain MIXCHAIN;
 
 int mix_send_message (LIST *, const char *);
-int mix_check_message (HEADER *msg);
+int mix_check_message (HEADER * msg);
 void mix_make_chain (LIST **, int *);
 
 #endif /* MIXMASTER */

@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 WHERE void (*mutt_error) (const char *, ...);
 WHERE void (*mutt_message) (const char *, ...);
@@ -56,6 +56,7 @@ WHERE char *Fqdn;
 WHERE char *HdrFmt;
 WHERE char *Homedir;
 WHERE char *Hostname;
+
 #ifdef USE_IMAP
 WHERE char *ImapAuthenticators INITVAL (NULL);
 WHERE char *ImapDelimChars INITVAL (NULL);
@@ -69,6 +70,7 @@ WHERE char *Ispell;
 WHERE char *Locale;
 WHERE char *MailcapPath;
 WHERE char *Maildir;
+
 #if USE_HCACHE
 WHERE char *HeaderCache;
 WHERE char *HeaderCachePageSize;
@@ -92,6 +94,7 @@ WHERE char *MixEntryFormat;
 WHERE char *OperatingSystem INITVAL (NULL);
 
 WHERE char *Muttrc INITVAL (NULL);
+
 #ifdef USE_NNTP
 WHERE char *NewsCacheDir;
 WHERE char *GroupFormat;
@@ -105,6 +108,7 @@ WHERE char *Outbox;
 WHERE char *Pager;
 WHERE char *PagerFmt;
 WHERE char *PipeSep;
+
 #ifdef USE_POP
 WHERE char *PopAuthenticators INITVAL (NULL);
 WHERE short PopCheckTimeout;
@@ -125,6 +129,7 @@ WHERE char *SidebarDelim;
 WHERE char *Signature;
 WHERE char *SignOffString;
 WHERE char *SimpleSearch;
+
 #if defined(USE_LIBESMTP)
 WHERE char *SmtpAuthUser;
 WHERE char *SmtpAuthPass;
@@ -133,6 +138,7 @@ WHERE unsigned short SmtpPort;
 #endif
 WHERE char *Spoolfile;
 WHERE char *SpamSep;
+
 #if defined(USE_SSL) || defined(USE_NSS) || defined(USE_GNUTLS)
 WHERE char *SslCertFile INITVAL (NULL);
 #endif
@@ -159,32 +165,32 @@ WHERE char *XtermIcon;
 WHERE char *CurrentFolder;
 WHERE char *LastFolder;
 
-WHERE LIST *AutoViewList INITVAL(0);
-WHERE LIST *AlternativeOrderList INITVAL(0);
-WHERE LIST *HeaderOrderList INITVAL(0);
-WHERE LIST *Ignore INITVAL(0);
-WHERE LIST *MimeLookupList INITVAL(0);
-WHERE LIST *UnIgnore INITVAL(0);
+WHERE LIST *AutoViewList INITVAL (0);
+WHERE LIST *AlternativeOrderList INITVAL (0);
+WHERE LIST *HeaderOrderList INITVAL (0);
+WHERE LIST *Ignore INITVAL (0);
+WHERE LIST *MimeLookupList INITVAL (0);
+WHERE LIST *UnIgnore INITVAL (0);
 
-WHERE RX_LIST *Alternates INITVAL(0);
-WHERE RX_LIST *UnAlternates INITVAL(0);
-WHERE RX_LIST *MailLists INITVAL(0);
-WHERE RX_LIST *UnMailLists INITVAL(0);
-WHERE RX_LIST *SubscribedLists INITVAL(0);
-WHERE RX_LIST *UnSubscribedLists INITVAL(0);
-WHERE SPAM_LIST *SpamList INITVAL(0);
-WHERE RX_LIST *NoSpamList INITVAL(0);
+WHERE RX_LIST *Alternates INITVAL (0);
+WHERE RX_LIST *UnAlternates INITVAL (0);
+WHERE RX_LIST *MailLists INITVAL (0);
+WHERE RX_LIST *UnMailLists INITVAL (0);
+WHERE RX_LIST *SubscribedLists INITVAL (0);
+WHERE RX_LIST *UnSubscribedLists INITVAL (0);
+WHERE SPAM_LIST *SpamList INITVAL (0);
+WHERE RX_LIST *NoSpamList INITVAL (0);
 
 /* bit vector for boolean variables */
 #ifdef MAIN_C
-unsigned char Options[(OPTMAX + 7)/8];
+unsigned char Options[(OPTMAX + 7) / 8];
 #else
 extern unsigned char Options[];
 #endif
 
 /* bit vector for the yes/no/ask variable type */
 #ifdef MAIN_C
-unsigned char QuadOptions[(OPT_MAX*2 + 7) / 8];
+unsigned char QuadOptions[(OPT_MAX * 2 + 7) / 8];
 #else
 extern unsigned char QuadOptions[];
 #endif
@@ -205,7 +211,7 @@ WHERE short ReadInc;
 WHERE short SendmailWait;
 WHERE short SleepTime INITVAL (1);
 WHERE short Timeout;
-WHERE short Umask INITVAL(0077);
+WHERE short Umask INITVAL (0077);
 WHERE short WrapMargin;
 WHERE short WriteInc;
 WHERE short MaxLineLength;
@@ -214,9 +220,10 @@ WHERE short ScoreThresholdDelete;
 WHERE short ScoreThresholdRead;
 WHERE short ScoreThresholdFlag;
 
-WHERE struct buffy_t *CurBuffy INITVAL(0);
-WHERE short DrawFullLine INITVAL(0);
+WHERE struct buffy_t *CurBuffy INITVAL (0);
+WHERE short DrawFullLine INITVAL (0);
 WHERE short SidebarWidth;
+
 #ifdef USE_IMAP
 WHERE short ImapKeepalive;
 WHERE short ImapBuffyTimeout;
@@ -280,17 +287,23 @@ WHERE int debuglevel INITVAL (0);
 
 #ifdef MAIN_C
 const char *Weekdays[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
-const char *Months[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "ERR" };
+const char *Months[] =
+  { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct",
+"Nov", "Dec", "ERR" };
 
-const char *BodyTypes[] = { "x-unknown", "audio", "application", "image", "message", "model", "multipart", "text", "video" };
-const char *BodyEncodings[] = { "x-unknown", "7bit", "8bit", "quoted-printable", "base64", "binary", "x-uuencoded" };
+const char *BodyTypes[] =
+  { "x-unknown", "audio", "application", "image", "message", "model",
+"multipart", "text", "video" };
+const char *BodyEncodings[] =
+  { "x-unknown", "7bit", "8bit", "quoted-printable", "base64", "binary",
+"x-uuencoded" };
 #else
 extern const char *Weekdays[];
 extern const char *Months[];
 #endif
 
 #ifdef MAIN_C
-/* so that global vars get included */ 
+/* so that global vars get included */
 #include "mx.h"
 #include "mutt_regex.h"
 #include "buffy.h"

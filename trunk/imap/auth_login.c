@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 /* plain LOGIN support */
 
@@ -27,15 +27,15 @@
 #include "auth.h"
 
 /* imap_auth_login: Plain LOGIN support */
-imap_auth_res_t imap_auth_login (IMAP_DATA* idata, const char* method)
+imap_auth_res_t imap_auth_login (IMAP_DATA * idata, const char *method)
 {
   char q_user[SHORT_STRING], q_pass[SHORT_STRING];
   char buf[STRING];
   int rc;
 
-  if (mutt_bit_isset (idata->capabilities, LOGINDISABLED))
-  {
+  if (mutt_bit_isset (idata->capabilities, LOGINDISABLED)) {
     mutt_message _("LOGIN disabled on this server.");
+
     return IMAP_AUTH_UNAVAIL;
   }
 
@@ -55,16 +55,17 @@ imap_auth_res_t imap_auth_login (IMAP_DATA* idata, const char* method)
 
   if (debuglevel < IMAP_LOG_PASS)
     dprint (2, (debugfile, "Sending LOGIN command for %s...\n",
-      idata->conn->account.user));
+                idata->conn->account.user));
 #endif
 
   snprintf (buf, sizeof (buf), "LOGIN %s %s", q_user, q_pass);
   rc = imap_exec (idata, buf, IMAP_CMD_FAIL_OK | IMAP_CMD_PASS);
-  
+
   if (!rc)
     return IMAP_AUTH_SUCCESS;
 
   mutt_error _("Login failed.");
+
   mutt_sleep (2);
   return IMAP_AUTH_FAILURE;
 }

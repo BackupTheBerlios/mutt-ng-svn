@@ -16,7 +16,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
- */ 
+ */
 
 #ifdef HAVE_CONFIG_H
 #include <config.h>
@@ -50,19 +50,20 @@ static unsigned int _checked = 0;
 #ifdef DEBUG
 static void nntp_error (const char *where, const char *msg)
 {
-  dprint (1, (debugfile, "nntp_error(): unexpected response in %s: %s\n", where, msg));
+  dprint (1,
+          (debugfile, "nntp_error(): unexpected response in %s: %s\n", where,
+           msg));
 }
 #endif /* DEBUG */
 
-static int nntp_auth (NNTP_SERVER *serv)
+static int nntp_auth (NNTP_SERVER * serv)
 {
   CONNECTION *conn = serv->conn;
   char buf[STRING];
   unsigned char flags = conn->account.flags;
 
   if (mutt_account_getuser (&conn->account) || !conn->account.user[0] ||
-      mutt_account_getpass (&conn->account) || !conn->account.pass[0])
-  {
+      mutt_account_getpass (&conn->account) || !conn->account.pass[0]) {
     conn->account.flags = flags;
     return -2;
   }
@@ -71,8 +72,7 @@ static int nntp_auth (NNTP_SERVER *serv)
 
   snprintf (buf, sizeof (buf), "AUTHINFO USER %s\r\n", conn->account.user);
   mutt_socket_write (conn, buf);
-  if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
-  {
+  if (mutt_socket_readln (buf, sizeof (buf), conn) < 0) {
     conn->account.flags = flags;
     return -1;
   }
@@ -84,16 +84,15 @@ static int nntp_auth (NNTP_SERVER *serv)
 #endif
   snprintf (buf, sizeof (buf), "AUTHINFO PASS %s\r\n", conn->account.pass);
   mutt_socket_write_d (conn, buf, M_SOCK_LOG_FULL);
-  if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
-  {
+  if (mutt_socket_readln (buf, sizeof (buf), conn) < 0) {
     conn->account.flags = flags;
     return -1;
   }
 
-  if (mutt_strncmp ("281", buf, 3))
-  {
+  if (mutt_strncmp ("281", buf, 3)) {
     conn->account.flags = flags;
     mutt_error _("Login failed.");
+
     sleep (2);
     return -3;
   }
@@ -101,16 +100,17 @@ static int nntp_auth (NNTP_SERVER *serv)
   return 0;
 }
 
-static int nntp_connect_error (NNTP_SERVER *serv)
+static int nntp_connect_error (NNTP_SERVER * serv)
 {
   serv->status = NNTP_NONE;
   mutt_socket_close (serv->conn);
   mutt_error _("Server closed connection!");
+
   sleep (2);
   return -1;
 }
 
-static int nntp_connect_and_auth (NNTP_SERVER *serv)
+static int nntp_connect_and_auth (NNTP_SERVER * serv)
 {
   CONNECTION *conn = serv->conn;
   char buf[STRING];
@@ -128,8 +128,7 @@ static int nntp_connect_and_auth (NNTP_SERVER *serv)
     mutt_message (_("Connected to %s. Posting ok."), conn->account.host);
   else if (!mutt_strncmp ("201", buf, 3))
     mutt_message (_("Connected to %s. Posting NOT ok."), conn->account.host);
-  else
-  {
+  else {
     mutt_socket_close (conn);
     mutt_remove_trailing_ws (buf);
     mutt_error ("%s", buf);
@@ -140,7 +139,7 @@ static int nntp_connect_and_auth (NNTP_SERVER *serv)
   sleep (1);
 
   /* Tell INN to switch to mode reader if it isn't so. Ignore all
-   returned codes and messages. */
+     returned codes and messages. */
   mutt_socket_write (conn, "MODE READER\r\n");
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
     return nntp_connect_error (serv);
@@ -149,8 +148,7 @@ static int nntp_connect_and_auth (NNTP_SERVER *serv)
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
     return nntp_connect_error (serv);
 
-  if (!(conn->account.flags & M_ACCT_USER) && mutt_strncmp ("480", buf, 3))
-  {
+  if (!(conn->account.flags & M_ACCT_USER) && mutt_strncmp ("480", buf, 3)) {
     serv->status = NNTP_OK;
     return 0;
   }
@@ -158,16 +156,15 @@ static int nntp_connect_and_auth (NNTP_SERVER *serv)
   rc = nntp_auth (serv);
   if (rc == -1)
     return nntp_connect_error (serv);
-  if (rc == -2)
-  {
+  if (rc == -2) {
     mutt_socket_close (conn);
     serv->status = NNTP_BYE;
     return -1;
   }
-  if (rc < 0)
-  {
+  if (rc < 0) {
     mutt_socket_close (conn);
     mutt_error _("Login failed.");
+
     sleep (2);
     return -1;
   }
@@ -175,7 +172,7 @@ static int nntp_connect_and_auth (NNTP_SERVER *serv)
   return 0;
 }
 
-static int nntp_attempt_features (NNTP_SERVER *serv)
+static int nntp_attempt_features (NNTP_SERVER * serv)
 {
   char buf[LONG_STRING];
   CONNECTION *conn = serv->conn;
@@ -204,19 +201,17 @@ static int nntp_attempt_features (NNTP_SERVER *serv)
   if (mutt_strncmp ("500", buf, 3))
     serv->hasXGTITLE = 1;
 
-  if (!mutt_strncmp ("282", buf, 3))
-  {
-    do
-    {
+  if (!mutt_strncmp ("282", buf, 3)) {
+    do {
       if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
-	return nntp_connect_error (serv);
+        return nntp_connect_error (serv);
     } while (!(buf[0] == '.' && buf[1] == '\0'));
   }
 
   return 0;
 }
 
-static int nntp_open_connection (NNTP_SERVER *serv)
+static int nntp_open_connection (NNTP_SERVER * serv)
 {
   if (serv->status == NNTP_OK)
     return 0;
@@ -229,21 +224,19 @@ static int nntp_open_connection (NNTP_SERVER *serv)
   return 0;
 }
 
-static int nntp_reconnect (NNTP_SERVER *serv)
+static int nntp_reconnect (NNTP_SERVER * serv)
 {
   char buf[SHORT_STRING];
 
   mutt_socket_close (serv->conn);
 
-  FOREVER
-  {
+  FOREVER {
     if (nntp_connect_and_auth (serv) == 0)
       return 0;
 
     snprintf (buf, sizeof (buf), _("Connection to %s lost. Reconnect?"),
-				serv->conn->account.host);
-    if (query_quadoption (OPT_NNTPRECONNECT, buf) != M_YES)
-    {
+              serv->conn->account.host);
+    if (query_quadoption (OPT_NNTPRECONNECT, buf) != M_YES) {
       serv->status = NNTP_BYE;
       return -1;
     }
@@ -251,7 +244,7 @@ static int nntp_reconnect (NNTP_SERVER *serv)
 }
 
 /* Send data from line[LONG_STRING] and receive answer to same line */
-static int mutt_nntp_query (NNTP_DATA *data, char *line, size_t linelen)
+static int mutt_nntp_query (NNTP_DATA * data, char *line, size_t linelen)
 {
   char buf[LONG_STRING];
   int done = TRUE;
@@ -259,33 +252,28 @@ static int mutt_nntp_query (NNTP_DATA *data, char *line, size_t linelen)
   if (data->nserv->status == NNTP_BYE)
     return -1;
 
-  do
-  {
-    if (*line)
-    {
+  do {
+    if (*line) {
       mutt_socket_write (data->nserv->conn, line);
     }
-    else if (data->group)
-    {
+    else if (data->group) {
       snprintf (buf, sizeof (buf), "GROUP %s\r\n", data->group);
       mutt_socket_write (data->nserv->conn, buf);
     }
 
     done = TRUE;
-    if (mutt_socket_readln (buf, sizeof (buf), data->nserv->conn) < 0)
-    {
+    if (mutt_socket_readln (buf, sizeof (buf), data->nserv->conn) < 0) {
       if (nntp_reconnect (data->nserv) < 0)
- 	return -1;
+        return -1;
 
-      if (data->group)
-      {
-	snprintf (buf, sizeof (buf), "GROUP %s\r\n", data->group);
-	mutt_socket_write (data->nserv->conn, buf);
-	if (mutt_socket_readln (buf, sizeof (buf), data->nserv->conn) < 0)
-	  return -1;
+      if (data->group) {
+        snprintf (buf, sizeof (buf), "GROUP %s\r\n", data->group);
+        mutt_socket_write (data->nserv->conn, buf);
+        if (mutt_socket_readln (buf, sizeof (buf), data->nserv->conn) < 0)
+          return -1;
       }
       if (*line)
-	done = FALSE;
+        done = FALSE;
     }
     else if ((!mutt_strncmp ("480", buf, 3)) && nntp_auth (data->nserv) < 0)
       return -1;
@@ -305,8 +293,9 @@ static int mutt_nntp_query (NNTP_DATA *data, char *line, size_t linelen)
  * -2 - invalid command or execution error,
  * -3 - error in funct(*line, *data).
  */
-static int mutt_nntp_fetch (NNTP_DATA *nntp_data, char *query, char *msg,
-		int (*funct) (char *, void *), void *data, int tagged)
+static int mutt_nntp_fetch (NNTP_DATA * nntp_data, char *query, char *msg,
+                            int (*funct) (char *, void *), void *data,
+                            int tagged)
 {
   char buf[LONG_STRING];
   char *inbuf, *p;
@@ -315,8 +304,7 @@ static int mutt_nntp_fetch (NNTP_DATA *nntp_data, char *query, char *msg,
   size_t lenbuf = 0;
   int ret;
 
-  do
-  {
+  do {
     strfcpy (buf, query, sizeof (buf));
     if (mutt_nntp_query (nntp_data, buf, sizeof (buf)) < 0)
       return -1;
@@ -329,44 +317,39 @@ static int mutt_nntp_fetch (NNTP_DATA *nntp_data, char *query, char *msg,
     line = 0;
     inbuf = safe_malloc (sizeof (buf));
 
-    FOREVER
-    {
+    FOREVER {
       chunk = mutt_socket_readln_d (buf, sizeof (buf), nntp_data->nserv->conn,
-				    M_SOCK_LOG_HDR);
+                                    M_SOCK_LOG_HDR);
       if (chunk < 0)
-	break;
+        break;
 
       p = buf;
-      if (!lenbuf && buf[0] == '.')
-      {
-	if (buf[1] == '\0')
-	{
-	  done = TRUE;
-	  break;
-	}
-	if (buf[1] == '.')
-	  p++;
+      if (!lenbuf && buf[0] == '.') {
+        if (buf[1] == '\0') {
+          done = TRUE;
+          break;
+        }
+        if (buf[1] == '.')
+          p++;
       }
 
       strfcpy (inbuf + lenbuf, p, sizeof (buf));
 
-      if (chunk >= sizeof (buf))
-      {
-	lenbuf += strlen (p);
+      if (chunk >= sizeof (buf)) {
+        lenbuf += strlen (p);
       }
-      else
-      {
-	line++;
-	if (msg && ReadInc && (line % ReadInc == 0)) {
-	  if (tagged)
-	    mutt_message (_("%s (tagged: %d) %d"), msg, tagged, line);
-	  else
-	    mutt_message ("%s %d", msg, line);
-	}
+      else {
+        line++;
+        if (msg && ReadInc && (line % ReadInc == 0)) {
+          if (tagged)
+            mutt_message (_("%s (tagged: %d) %d"), msg, tagged, line);
+          else
+            mutt_message ("%s %d", msg, line);
+        }
 
-	if (ret == 0 && funct (inbuf, data) < 0)
-	  ret = -3;
-	lenbuf = 0;
+        if (ret == 0 && funct (inbuf, data) < 0)
+          ret = -3;
+        lenbuf = 0;
       }
 
       safe_realloc (&inbuf, lenbuf + sizeof (buf));
@@ -380,12 +363,11 @@ static int mutt_nntp_fetch (NNTP_DATA *nntp_data, char *query, char *msg,
 
 static int nntp_read_tempfile (char *line, void *file)
 {
-  FILE *f = (FILE *)file;
+  FILE *f = (FILE *) file;
 
   if (!line)
     rewind (f);
-  else
-  {
+  else {
     fputs (line, f);
     if (fputc ('\n', f) == EOF)
       return -1;
@@ -393,38 +375,36 @@ static int nntp_read_tempfile (char *line, void *file)
   return 0;
 }
 
-static void nntp_parse_xref (CONTEXT *ctx, char *group, char *xref, HEADER *h)
+static void nntp_parse_xref (CONTEXT * ctx, char *group, char *xref,
+                             HEADER * h)
 {
   register char *p, *b;
   register char *colon = NULL;
 
   b = p = xref;
-  while (*p)
-  {
+  while (*p) {
     /* skip to next word */
     b = p;
-    while (*b && ((*b == ' ') || (*b == '\t'))) b++;
+    while (*b && ((*b == ' ') || (*b == '\t')))
+      b++;
     p = b;
     colon = NULL;
     /* skip to end of word */
-    while (*p && (*p != ' ') && (*p != '\t')) 
-    {
+    while (*p && (*p != ' ') && (*p != '\t')) {
       if (*p == ':')
-	colon = p;
+        colon = p;
       p++;
     }
-    if (*p)
-    {
+    if (*p) {
       *p = '\0';
       p++;
     }
-    if (colon)
-    {
+    if (colon) {
       *colon = '\0';
       colon++;
-      nntp_get_status (ctx, h, p, atoi(colon));
+      nntp_get_status (ctx, h, p, atoi (colon));
       if (h && h->article_num == 0 && mutt_strcmp (group, b) == 0)
-	h->article_num = atoi(colon);
+        h->article_num = atoi (colon);
     }
   }
 }
@@ -435,9 +415,10 @@ static void nntp_parse_xref (CONTEXT *ctx, char *group, char *xref, HEADER *h)
  *  1 if article not found
  * -1 if read or write error on tempfile or socket
  */
-static int nntp_read_header (CONTEXT *ctx, const char *msgid, int article_num)
+static int nntp_read_header (CONTEXT * ctx, const char *msgid,
+                             int article_num)
 {
-  NNTP_DATA *nntp_data = ((NNTP_DATA *)ctx->data);
+  NNTP_DATA *nntp_data = ((NNTP_DATA *) ctx->data);
   FILE *f;
   char buf[LONG_STRING];
   char tempfile[_POSIX_PATH_MAX];
@@ -454,11 +435,10 @@ static int nntp_read_header (CONTEXT *ctx, const char *msgid, int article_num)
     snprintf (buf, sizeof (buf), "HEAD %s\r\n", msgid);
 
   ret = mutt_nntp_fetch (nntp_data, buf, NULL, nntp_read_tempfile, f, 0);
-  if (ret)
-  {
+  if (ret) {
 #ifdef DEBUG
     if (ret != -1)
-      dprint(1, (debugfile, "nntp_read_header: %s\n", buf));
+      dprint (1, (debugfile, "nntp_read_header: %s\n", buf));
 #endif
     fclose (f);
     unlink (tempfile);
@@ -472,8 +452,7 @@ static int nntp_read_header (CONTEXT *ctx, const char *msgid, int article_num)
 
   if (h->env->xref != NULL)
     nntp_parse_xref (ctx, nntp_data->group, h->env->xref, h);
-  else if (h->article_num == 0 && msgid)
-  {
+  else if (h->article_num == 0 && msgid) {
     snprintf (buf, sizeof (buf), "STAT %s\r\n", msgid);
     if (mutt_nntp_query (nntp_data, buf, sizeof (buf)) == 0)
       h->article_num = atoi (buf + 4);
@@ -490,14 +469,15 @@ static int parse_description (char *line, void *n)
 
   if (!line)
     return 0;
-  while (*d && *d != '\t' && *d != ' ') d++;
-    *d = 0;
+  while (*d && *d != '\t' && *d != ' ')
+    d++;
+  *d = 0;
   d++;
-  while (*d && (*d == '\t' || *d == ' ')) d++;
+  while (*d && (*d == '\t' || *d == ' '))
+    d++;
   dprint (2, (debugfile, "group: %s, desc: %s\n", line, d));
   if ((data = (NNTP_DATA *) hash_find (news->newsgroups, line)) != NULL &&
-	mutt_strcmp (d, data->desc))
-  {
+      mutt_strcmp (d, data->desc)) {
     FREE (&data->desc);
     data->desc = safe_strdup (d);
   }
@@ -505,7 +485,7 @@ static int parse_description (char *line, void *n)
 #undef news
 }
 
-static void nntp_get_desc (NNTP_DATA *data, char *mask, char *msg)
+static void nntp_get_desc (NNTP_DATA * data, char *mask, char *msg)
 {
   char buf[STRING];
 
@@ -517,8 +497,8 @@ static void nntp_get_desc (NNTP_DATA *data, char *mask, char *msg)
     snprintf (buf, sizeof (buf), "XGTITLE %s\r\n", mask);
   else
     snprintf (buf, sizeof (buf), "LIST NEWSGROUPS %s\r\n", mask);
-  if (mutt_nntp_fetch (data, buf, msg, parse_description, data->nserv, 0) != 0)
-  {
+  if (mutt_nntp_fetch (data, buf, msg, parse_description, data->nserv, 0) !=
+      0) {
 #ifdef DEBUG
     nntp_error ("nntp_get_desc()", buf);
 #endif
@@ -533,15 +513,15 @@ static void nntp_get_desc (NNTP_DATA *data, char *mask, char *msg)
  * mutt_read_rfc822_header(), since it replaces the call to that (albeit with
  * a limited number of headers which are "parsed" by placement in the list)
  */
-static int nntp_parse_xover (CONTEXT *ctx, char *buf, HEADER *hdr)
+static int nntp_parse_xover (CONTEXT * ctx, char *buf, HEADER * hdr)
 {
   NNTP_DATA *nntp_data = (NNTP_DATA *) ctx->data;
   char *p, *b;
   int x, done = 0;
 
-  hdr->env = mutt_new_envelope();
+  hdr->env = mutt_new_envelope ();
   hdr->env->newsgroups = safe_strdup (nntp_data->group);
-  hdr->content = mutt_new_body();
+  hdr->content = mutt_new_body ();
   hdr->content->type = TYPETEXT;
   hdr->content->subtype = safe_strdup ("plain");
   hdr->content->encoding = ENC7BIT;
@@ -549,65 +529,64 @@ static int nntp_parse_xover (CONTEXT *ctx, char *buf, HEADER *hdr)
   hdr->content->length = -1;
   b = p = buf;
 
-  for (x = 0; !done && x < 9; x++)
-  {
+  for (x = 0; !done && x < 9; x++) {
     /* if from file, need to skip newline character */
-    while (*p && *p != '\n' && *p != '\t') p++;
-    if (!*p) done++;
+    while (*p && *p != '\n' && *p != '\t')
+      p++;
+    if (!*p)
+      done++;
     *p = '\0';
     p++;
-    switch (x)
-    {
-      case 0:
+    switch (x) {
+    case 0:
 
-	hdr->article_num = atoi (b);
-	nntp_get_status (ctx, hdr, NULL, hdr->article_num);
-	break;
-      case 1:
-	hdr->env->subject = safe_strdup (b);
-	/* Now we need to do the things which would normally be done in 
-	 * mutt_read_rfc822_header() */
-	if (hdr->env->subject)
-	{
-	  regmatch_t pmatch[1];
+      hdr->article_num = atoi (b);
+      nntp_get_status (ctx, hdr, NULL, hdr->article_num);
+      break;
+    case 1:
+      hdr->env->subject = safe_strdup (b);
+      /* Now we need to do the things which would normally be done in 
+       * mutt_read_rfc822_header() */
+      if (hdr->env->subject) {
+        regmatch_t pmatch[1];
 
-	  rfc2047_decode (&hdr->env->subject);
+        rfc2047_decode (&hdr->env->subject);
 
-	  if (regexec (ReplyRegexp.rx, hdr->env->subject, 1, pmatch, 0) == 0)
-	    hdr->env->real_subj = hdr->env->subject + pmatch[0].rm_eo;
-	  else
-	    hdr->env->real_subj = hdr->env->subject;
-	}
-	break;
-      case 2:
-	rfc822_free_address (&hdr->env->from);
-	hdr->env->from = rfc822_parse_adrlist (hdr->env->from, b);
-	rfc2047_decode_adrlist (hdr->env->from);
-	break;
-      case 3:
-	hdr->date_sent = mutt_parse_date (b, hdr);
-	hdr->received = hdr->date_sent;
-	break;
-      case 4:
-	FREE (&hdr->env->message_id);
-	hdr->env->message_id = safe_strdup (b);
-	break;
-      case 5:
-	mutt_free_list (&hdr->env->references);
-	hdr->env->references = mutt_parse_references (b, 0);
-	break;
-      case 6:
-	hdr->content->length = atoi (b);
-	break;
-      case 7:
-	hdr->lines = atoi (b);
-	break;
-      case 8:
-	if (!hdr->read)
-	  FREE (&hdr->env->xref);
-	  b = b + 6;	/* skips the "Xref: " */
-	  hdr->env->xref = safe_strdup (b);
-	  nntp_parse_xref (ctx, nntp_data->group, b, hdr);
+        if (regexec (ReplyRegexp.rx, hdr->env->subject, 1, pmatch, 0) == 0)
+          hdr->env->real_subj = hdr->env->subject + pmatch[0].rm_eo;
+        else
+          hdr->env->real_subj = hdr->env->subject;
+      }
+      break;
+    case 2:
+      rfc822_free_address (&hdr->env->from);
+      hdr->env->from = rfc822_parse_adrlist (hdr->env->from, b);
+      rfc2047_decode_adrlist (hdr->env->from);
+      break;
+    case 3:
+      hdr->date_sent = mutt_parse_date (b, hdr);
+      hdr->received = hdr->date_sent;
+      break;
+    case 4:
+      FREE (&hdr->env->message_id);
+      hdr->env->message_id = safe_strdup (b);
+      break;
+    case 5:
+      mutt_free_list (&hdr->env->references);
+      hdr->env->references = mutt_parse_references (b, 0);
+      break;
+    case 6:
+      hdr->content->length = atoi (b);
+      break;
+    case 7:
+      hdr->lines = atoi (b);
+      break;
+    case 8:
+      if (!hdr->read)
+        FREE (&hdr->env->xref);
+      b = b + 6;                /* skips the "Xref: " */
+      hdr->env->xref = safe_strdup (b);
+      nntp_parse_xref (ctx, nntp_data->group, b, hdr);
     }
     if (!*p)
       return -1;
@@ -616,18 +595,18 @@ static int nntp_parse_xover (CONTEXT *ctx, char *buf, HEADER *hdr)
   return 0;
 }
 
-typedef struct
-{
+typedef struct {
   CONTEXT *ctx;
   unsigned int base;
   unsigned int first;
   unsigned int last;
   unsigned short *messages;
-  char* msg;
+  char *msg;
 } FETCH_CONTEXT;
 
 #define fc ((FETCH_CONTEXT *) c)
-static int _nntp_fetch_numbers (unsigned int num ,void* c) {
+static int _nntp_fetch_numbers (unsigned int num, void *c)
+{
   if (num < fc->base || num > fc->last)
     return 0;
   fc->messages[num - fc->base] = 1;
@@ -644,7 +623,7 @@ static int add_xover_line (char *line, void *c)
 {
   unsigned int num, total;
   CONTEXT *ctx = fc->ctx;
-  NNTP_DATA *data = (NNTP_DATA *)ctx->data;
+  NNTP_DATA *data = (NNTP_DATA *) ctx->data;
 
   if (!line)
     return 0;
@@ -657,8 +636,7 @@ static int add_xover_line (char *line, void *c)
   nntp_parse_xover (ctx, line, ctx->hdrs[ctx->msgcount]);
   num = ctx->hdrs[ctx->msgcount]->article_num;
 
-  if (num >= fc->first && num <= fc->last && fc->messages[num - fc->base])
-  {
+  if (num >= fc->first && num <= fc->last && fc->messages[num - fc->base]) {
     ctx->msgcount++;
     if (num > data->lastLoaded)
       data->lastLoaded = num;
@@ -668,18 +646,19 @@ static int add_xover_line (char *line, void *c)
       mutt_message ("%s %d/%d", fc->msg, num, total);
   }
   else
-    mutt_free_header (&ctx->hdrs[ctx->msgcount]); /* skip it */
+    mutt_free_header (&ctx->hdrs[ctx->msgcount]);       /* skip it */
 
   return 0;
 }
+
 #undef fc
 
-static int nntp_fetch_headers (CONTEXT *ctx, unsigned int first,
-	unsigned int last)
+static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
+                               unsigned int last)
 {
   char buf[HUGE_STRING];
   char *msg = _("Fetching message headers...");
-  NNTP_DATA *nntp_data = ((NNTP_DATA *)ctx->data);
+  NNTP_DATA *nntp_data = ((NNTP_DATA *) ctx->data);
   int ret;
   int num;
   int oldmsgcount;
@@ -693,14 +672,15 @@ static int nntp_fetch_headers (CONTEXT *ctx, unsigned int first,
 
   /* fetch list of articles */
   mutt_message _("Fetching list of articles...");
+
   fc.ctx = ctx;
   fc.base = first;
   fc.last = last;
   fc.messages = safe_calloc (last - first + 1, sizeof (unsigned short));
   if (nntp_data->nserv->hasLISTGROUP) {
     snprintf (buf, sizeof (buf), "LISTGROUP %s\r\n", nntp_data->group);
-    if (mutt_nntp_fetch (nntp_data, buf, NULL, nntp_fetch_numbers, &fc, 0) != 0)
-    {
+    if (mutt_nntp_fetch (nntp_data, buf, NULL, nntp_fetch_numbers, &fc, 0) !=
+        0) {
       mutt_error (_("LISTGROUP command failed: %s"), buf);
       sleep (2);
 #ifdef DEBUG
@@ -709,7 +689,8 @@ static int nntp_fetch_headers (CONTEXT *ctx, unsigned int first,
       FREE (&fc.messages);
       return -1;
     }
-  } else {
+  }
+  else {
     /* mutt_nntp_query() issues a 'GROUP nntp_data->group' 
      * command on its own if !*buf */
     buf[0] = '\0';
@@ -718,7 +699,8 @@ static int nntp_fetch_headers (CONTEXT *ctx, unsigned int first,
       mutt_error (_("GROUP command failed: %s"), buf);
       FREE (&fc.messages);
       return (-1);
-    } else {
+    }
+    else {
       for (num = fc.first; num < fc.last; num++)
         _nntp_fetch_numbers (num, &fc);
     }
@@ -726,38 +708,36 @@ static int nntp_fetch_headers (CONTEXT *ctx, unsigned int first,
 
   /* CACHE: must be loaded xover cache here */
   num = nntp_data->lastCached - first + 1;
-  if (option (OPTNEWSCACHE) && nntp_data->cache && num > 0)
-  {
+  if (option (OPTNEWSCACHE) && nntp_data->cache && num > 0) {
     nntp_cache_expand (buf, nntp_data->cache);
     mutt_message _("Fetching headers from cache...");
-    if ((f = safe_fopen (buf, "r")))
-    {
+
+    if ((f = safe_fopen (buf, "r"))) {
       int r = 0;
 
       /* counting number of lines */
       while (fgets (buf, sizeof (buf), f) != NULL)
-	r++;
+        r++;
       rewind (f);
       while (r > num && fgets (buf, sizeof (buf), f) != NULL)
-	r--;
+        r--;
       oldmsgcount = ctx->msgcount;
       fc.first = first;
       fc.last = first + num - 1;
       fc.msg = NULL;
       while (fgets (buf, sizeof (buf), f) != NULL)
-	add_xover_line (buf, &fc);
+        add_xover_line (buf, &fc);
       fclose (f);
       nntp_data->lastLoaded = fc.last;
       first = fc.last + 1;
       if (ctx->msgcount > oldmsgcount)
-	mx_update_context (ctx, ctx->msgcount - oldmsgcount);
+        mx_update_context (ctx, ctx->msgcount - oldmsgcount);
     }
     else
       nntp_delete_cache (nntp_data);
   }
   num = last - first + 1;
-  if (num <= 0)
-  {
+  if (num <= 0) {
     FREE (&fc.messages);
     return 0;
   }
@@ -767,8 +747,7 @@ static int nntp_fetch_headers (CONTEXT *ctx, unsigned int first,
    * it.  With XOVER, we ask for all of them
    */
   mutt_message (msg);
-  if (nntp_data->nserv->hasXOVER)
-  {
+  if (nntp_data->nserv->hasXOVER) {
     oldmsgcount = ctx->msgcount;
     fc.first = first;
     fc.last = last;
@@ -777,8 +756,7 @@ static int nntp_fetch_headers (CONTEXT *ctx, unsigned int first,
     ret = mutt_nntp_fetch (nntp_data, buf, NULL, add_xover_line, &fc, 0);
     if (ctx->msgcount > oldmsgcount)
       mx_update_context (ctx, ctx->msgcount - oldmsgcount);
-    if (ret != 0)
-    {
+    if (ret != 0) {
       mutt_error (_("XOVER command failed: %s"), buf);
 #ifdef DEBUG
       nntp_error ("nntp_fetch_headers()", buf);
@@ -789,39 +767,36 @@ static int nntp_fetch_headers (CONTEXT *ctx, unsigned int first,
     /* fetched OK */
   }
   else
-  for (current = first; current <= last; current++)
-  {
-    HEADER *h;
+    for (current = first; current <= last; current++) {
+      HEADER *h;
 
-    ret = current - first + 1;
-    mutt_message ("%s %d/%d", msg, ret, num);
+      ret = current - first + 1;
+      mutt_message ("%s %d/%d", msg, ret, num);
 
-    if (!fc.messages[current - fc.base])
-      continue;
+      if (!fc.messages[current - fc.base])
+        continue;
 
-    if (ctx->msgcount >= ctx->hdrmax)
-      mx_alloc_memory (ctx);
-    h = ctx->hdrs[ctx->msgcount] = mutt_new_header ();
-    h->index = ctx->msgcount;
+      if (ctx->msgcount >= ctx->hdrmax)
+        mx_alloc_memory (ctx);
+      h = ctx->hdrs[ctx->msgcount] = mutt_new_header ();
+      h->index = ctx->msgcount;
 
-    ret = nntp_read_header (ctx, NULL, current);
-    if (ret == 0) /* Got article. Fetch next header */
-    {
-      nntp_get_status (ctx, h, NULL, h->article_num);
-      ctx->msgcount++;
-      mx_update_context (ctx, 1);
+      ret = nntp_read_header (ctx, NULL, current);
+      if (ret == 0) {           /* Got article. Fetch next header */
+        nntp_get_status (ctx, h, NULL, h->article_num);
+        ctx->msgcount++;
+        mx_update_context (ctx, 1);
+      }
+      else
+        mutt_free_header (&h);  /* skip it */
+      if (ret == -1) {
+        FREE (&fc.messages);
+        return -1;
+      }
+
+      if (current > nntp_data->lastLoaded)
+        nntp_data->lastLoaded = current;
     }
-    else
-      mutt_free_header (&h); /* skip it */
-    if (ret == -1)
-    {
-      FREE (&fc.messages);
-      return -1;
-    }
-
-    if (current > nntp_data->lastLoaded)
-      nntp_data->lastLoaded = current;
-  }
   FREE (&fc.messages);
   nntp_data->lastLoaded = last;
   mutt_clear_error ();
@@ -831,7 +806,7 @@ static int nntp_fetch_headers (CONTEXT *ctx, unsigned int first,
 /* 
  * currently, nntp "mailbox" is "newsgroup"
  */
-int nntp_open_mailbox (CONTEXT *ctx)
+int nntp_open_mailbox (CONTEXT * ctx)
 {
   NNTP_DATA *nntp_data;
   NNTP_SERVER *serv;
@@ -841,8 +816,7 @@ int nntp_open_mailbox (CONTEXT *ctx)
   unsigned int first;
   ACCOUNT acct;
 
-  if (nntp_parse_url (ctx->path, &acct, buf, sizeof (buf)) < 0 || !*buf)
-  {
+  if (nntp_parse_url (ctx->path, &acct, buf, sizeof (buf)) < 0 || !*buf) {
     mutt_error (_("%s is an invalid newsgroup specification!"), ctx->path);
     mutt_sleep (2);
     return -1;
@@ -856,8 +830,7 @@ int nntp_open_mailbox (CONTEXT *ctx)
   CurrentNewsSrv = serv;
 
   /* create NNTP-specific state struct if nof found in list */
-  if ((nntp_data = (NNTP_DATA *) hash_find (serv->newsgroups, buf)) == NULL)
-  {
+  if ((nntp_data = (NNTP_DATA *) hash_find (serv->newsgroups, buf)) == NULL) {
     nntp_data = safe_calloc (1, sizeof (NNTP_DATA) + strlen (buf) + 1);
     nntp_data->group = (char *) nntp_data + sizeof (NNTP_DATA);
     strcpy (nntp_data->group, buf);
@@ -869,38 +842,36 @@ int nntp_open_mailbox (CONTEXT *ctx)
 
   mutt_message (_("Selecting %s..."), nntp_data->group);
 
-  if (!nntp_data->desc)
-  {
+  if (!nntp_data->desc) {
     nntp_get_desc (nntp_data, nntp_data->group, NULL);
     if (nntp_data->desc)
       nntp_save_cache_index (serv);
   }
 
   buf[0] = 0;
-  if (mutt_nntp_query (nntp_data, buf, sizeof(buf)) < 0)
-  {
+  if (mutt_nntp_query (nntp_data, buf, sizeof (buf)) < 0) {
 #ifdef DEBUG
     nntp_error ("nntp_open_mailbox()", buf);
 #endif
     return -1;
   }
 
-  if (mutt_strncmp ("211", buf, 3))
-  {
+  if (mutt_strncmp ("211", buf, 3)) {
     LIST *l = serv->list;
 
     /* GROUP command failed */
-    if (!mutt_strncmp ("411", buf, 3))
-    {
+    if (!mutt_strncmp ("411", buf, 3)) {
       mutt_error (_("Newsgroup %s not found on server %s"),
-		    nntp_data->group, serv->conn->account.host);
+                  nntp_data->group, serv->conn->account.host);
 
       /* CACHE: delete cache and line from .index */
       nntp_delete_cache (nntp_data);
-      hash_delete (serv->newsgroups, nntp_data->group, NULL, nntp_delete_data);
-      while (l && l->data != (void *) nntp_data) l = l->next;
+      hash_delete (serv->newsgroups, nntp_data->group, NULL,
+                   nntp_delete_data);
+      while (l && l->data != (void *) nntp_data)
+        l = l->next;
       if (l)
-	l->data = NULL;
+        l->data = NULL;
 
       sleep (2);
     }
@@ -908,8 +879,8 @@ int nntp_open_mailbox (CONTEXT *ctx)
     return -1;
   }
 
-  sscanf (buf + 4, "%d %u %u %s", &count, &nntp_data->firstMessage, 
-	  &nntp_data->lastMessage, buf);
+  sscanf (buf + 4, "%d %u %u %s", &count, &nntp_data->firstMessage,
+          &nntp_data->lastMessage, buf);
 
   nntp_data->deleted = 0;
 
@@ -927,7 +898,7 @@ int nntp_open_mailbox (CONTEXT *ctx)
   return nntp_fetch_headers (ctx, first, nntp_data->lastMessage);
 }
 
-int nntp_fetch_message (MESSAGE *msg, CONTEXT *ctx, int msgno)
+int nntp_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
 {
   char buf[LONG_STRING];
   char path[_POSIX_PATH_MAX];
@@ -936,7 +907,9 @@ int nntp_fetch_message (MESSAGE *msg, CONTEXT *ctx, int msgno)
   int ret;
 
   /* see if we already have the message in our cache */
-  cache = &((NNTP_DATA *) ctx->data)->acache[ctx->hdrs[msgno]->index % NNTP_CACHE_LEN];
+  cache =
+    &((NNTP_DATA *) ctx->data)->acache[ctx->hdrs[msgno]->index %
+                                       NNTP_CACHE_LEN];
 
   /* if everything is fine, assign msg->fp and return */
   if (cache->path && cache->index == ctx->hdrs[msgno]->index &&
@@ -952,30 +925,27 @@ int nntp_fetch_message (MESSAGE *msg, CONTEXT *ctx, int msgno)
   cache->index = ctx->hdrs[msgno]->index;
   mutt_mktemp (path);
   cache->path = safe_strdup (path);
-  if (!(msg->fp = safe_fopen (path, "w+")))
-  {
+  if (!(msg->fp = safe_fopen (path, "w+"))) {
     FREE (&cache->path);
     return -1;
   }
 
   if (ctx->hdrs[msgno]->article_num == 0)
     snprintf (buf, sizeof (buf), "ARTICLE %s\r\n",
-	  ctx->hdrs[msgno]->env->message_id);
+              ctx->hdrs[msgno]->env->message_id);
   else
     snprintf (buf, sizeof (buf), "ARTICLE %d\r\n",
-	  ctx->hdrs[msgno]->article_num);
+              ctx->hdrs[msgno]->article_num);
 
-  ret = mutt_nntp_fetch ((NNTP_DATA *)ctx->data, buf, m, nntp_read_tempfile,
-	msg->fp, ctx->tagged);
-  if (ret == 1)
-  {
-    mutt_error (_("Article %d not found on server"), 
-	  ctx->hdrs[msgno]->article_num);
+  ret = mutt_nntp_fetch ((NNTP_DATA *) ctx->data, buf, m, nntp_read_tempfile,
+                         msg->fp, ctx->tagged);
+  if (ret == 1) {
+    mutt_error (_("Article %d not found on server"),
+                ctx->hdrs[msgno]->article_num);
     dprint (1, (debugfile, "nntp_fetch_message: %s\n", buf));
   }
 
-  if (ret)
-  {
+  if (ret) {
     fclose (msg->fp);
     unlink (path);
     FREE (&cache->path);
@@ -983,11 +953,12 @@ int nntp_fetch_message (MESSAGE *msg, CONTEXT *ctx, int msgno)
   }
 
   mutt_free_envelope (&ctx->hdrs[msgno]->env);
-  ctx->hdrs[msgno]->env = mutt_read_rfc822_header (msg->fp, ctx->hdrs[msgno], 0, 0);
+  ctx->hdrs[msgno]->env =
+    mutt_read_rfc822_header (msg->fp, ctx->hdrs[msgno], 0, 0);
   /* fix content length */
-  fseek(msg->fp, 0, SEEK_END);
-  ctx->hdrs[msgno]->content->length = ftell (msg->fp) - 
-                                        ctx->hdrs[msgno]->content->offset;
+  fseek (msg->fp, 0, SEEK_END);
+  ctx->hdrs[msgno]->content->length = ftell (msg->fp) -
+    ctx->hdrs[msgno]->content->offset;
 
   /* this is called in mutt before the open which fetches the message, 
    * which is probably wrong, but we just call it again here to handle
@@ -1003,58 +974,52 @@ int nntp_fetch_message (MESSAGE *msg, CONTEXT *ctx, int msgno)
   ctx->hdrs[msgno]->security = crypt_query (ctx->hdrs[msgno]->content);
 #endif /* HAVE_PGP || HAVE_SMIME */
 
-  mutt_clear_error();
+  mutt_clear_error ();
   rewind (msg->fp);
 
   return 0;
 }
 
 /* Post article */
-int nntp_post (const char *msg) {
+int nntp_post (const char *msg)
+{
   char buf[LONG_STRING];
   size_t len;
   FILE *f;
   NNTP_DATA *nntp_data;
 
   if (Context && Context->magic == M_NNTP)
-    nntp_data = (NNTP_DATA *)Context->data;
-  else
-  {
+    nntp_data = (NNTP_DATA *) Context->data;
+  else {
     if (!(CurrentNewsSrv = mutt_select_newsserver (NewsServer)) ||
-	!CurrentNewsSrv->list || !CurrentNewsSrv->list->data)
-    {
+        !CurrentNewsSrv->list || !CurrentNewsSrv->list->data) {
       mutt_error (_("Can't post article. No connection to news server."));
       return -1;
     }
-    nntp_data = (NNTP_DATA *)CurrentNewsSrv->list->data;
+    nntp_data = (NNTP_DATA *) CurrentNewsSrv->list->data;
   }
 
-  if (!(f = safe_fopen (msg, "r")))
-  {
+  if (!(f = safe_fopen (msg, "r"))) {
     mutt_error (_("Can't post article. Unable to open %s"), msg);
     return -1;
   }
 
   strfcpy (buf, "POST\r\n", sizeof (buf));
-  if (mutt_nntp_query (nntp_data, buf, sizeof (buf)) < 0)
-  {
+  if (mutt_nntp_query (nntp_data, buf, sizeof (buf)) < 0) {
     mutt_error (_("Can't post article. Connection to %s lost."),
-		nntp_data->nserv->conn->account.host);
+                nntp_data->nserv->conn->account.host);
     return -1;
   }
-  if (buf[0] != '3')
-  {
+  if (buf[0] != '3') {
     mutt_error (_("Can't post article: %s"), buf);
     return -1;
   }
 
   buf[0] = '.';
   buf[1] = '\0';
-  while (fgets (buf + 1, sizeof (buf) - 2, f) != NULL)
-  {
+  while (fgets (buf + 1, sizeof (buf) - 2, f) != NULL) {
     len = strlen (buf);
-    if (buf[len - 1] == '\n')
-    {
+    if (buf[len - 1] == '\n') {
       buf[len - 1] = '\r';
       buf[len] = '\n';
       len++;
@@ -1070,14 +1035,12 @@ int nntp_post (const char *msg) {
   if (buf[strlen (buf) - 1] != '\n')
     mutt_socket_write_d (nntp_data->nserv->conn, "\r\n", M_SOCK_LOG_HDR);
   mutt_socket_write_d (nntp_data->nserv->conn, ".\r\n", M_SOCK_LOG_HDR);
-  if (mutt_socket_readln (buf, sizeof (buf), nntp_data->nserv->conn) < 0)
-  {
+  if (mutt_socket_readln (buf, sizeof (buf), nntp_data->nserv->conn) < 0) {
     mutt_error (_("Can't post article. Connection to %s lost."),
-		nntp_data->nserv->conn->account.host);
+                nntp_data->nserv->conn->account.host);
     return -1;
   }
-  if (buf[0] != '2')
-  {
+  if (buf[0] != '2') {
     mutt_error (_("Can't post article: %s"), buf);
     return -1;
   }
@@ -1089,17 +1052,15 @@ int nntp_post (const char *msg) {
 void nntp_logout_all (void)
 {
   char buf[LONG_STRING];
-  CONNECTION* conn;
-  CONNECTION* tmp;
+  CONNECTION *conn;
+  CONNECTION *tmp;
 
   conn = mutt_socket_head ();
 
-  while (conn)
-  {
+  while (conn) {
     tmp = conn;
 
-    if (conn->account.type == M_ACCT_TYPE_NNTP)
-    {
+    if (conn->account.type == M_ACCT_TYPE_NNTP) {
       mutt_message (_("Closing connection to %s..."), conn->account.host);
       mutt_socket_write (conn, "QUIT\r\n");
       mutt_socket_readln (buf, sizeof (buf), conn);
@@ -1113,14 +1074,12 @@ void nntp_logout_all (void)
   }
 }
 
-static void nntp_free_acache (NNTP_DATA *data)
+static void nntp_free_acache (NNTP_DATA * data)
 {
   int i;
 
-  for (i = 0; i < NNTP_CACHE_LEN; i++)
-  {
-    if (data->acache[i].path)
-    {
+  for (i = 0; i < NNTP_CACHE_LEN; i++) {
+    if (data->acache[i].path) {
       unlink (data->acache[i].path);
       FREE (&data->acache[i].path);
     }
@@ -1129,7 +1088,7 @@ static void nntp_free_acache (NNTP_DATA *data)
 
 void nntp_delete_data (void *p)
 {
-  NNTP_DATA *data = (NNTP_DATA *)p;
+  NNTP_DATA *data = (NNTP_DATA *) p;
 
   if (!p)
     return;
@@ -1140,7 +1099,7 @@ void nntp_delete_data (void *p)
   FREE (p);
 }
 
-int nntp_sync_mailbox (CONTEXT *ctx)
+int nntp_sync_mailbox (CONTEXT * ctx)
 {
   NNTP_DATA *data = ctx->data;
 
@@ -1149,11 +1108,11 @@ int nntp_sync_mailbox (CONTEXT *ctx)
     nntp_save_cache_group (ctx);
   nntp_free_acache (data);
 
-  data->nserv->check_time = 0; /* next nntp_check_mailbox() will really check */
+  data->nserv->check_time = 0;  /* next nntp_check_mailbox() will really check */
   return 0;
 }
 
-void nntp_fastclose_mailbox (CONTEXT *ctx)
+void nntp_fastclose_mailbox (CONTEXT * ctx)
 {
   NNTP_DATA *data = (NNTP_DATA *) ctx->data, *tmp;
 
@@ -1164,46 +1123,44 @@ void nntp_fastclose_mailbox (CONTEXT *ctx)
     return;
   nntp_save_cache_index (data->nserv);
   if ((tmp = hash_find (data->nserv->newsgroups, data->group)) == NULL
-	|| tmp != data)
+      || tmp != data)
     nntp_delete_data (data);
 }
 
 /* commit changes and terminate connection */
-int nntp_close_mailbox (CONTEXT *ctx)
+int nntp_close_mailbox (CONTEXT * ctx)
 {
   if (!ctx)
     return -1;
   mutt_message _("Quitting newsgroup...");
-  if (ctx->data)
-  {
+
+  if (ctx->data) {
     NNTP_DATA *data = (NNTP_DATA *) ctx->data;
     int ret;
 
-    if (data->nserv && data->nserv->conn && ctx->unread)
-    {
+    if (data->nserv && data->nserv->conn && ctx->unread) {
       ret = query_quadoption (OPT_CATCHUP, _("Mark all articles read?"));
       if (ret == M_YES)
-	mutt_newsgroup_catchup (data->nserv, data->group);
+        mutt_newsgroup_catchup (data->nserv, data->group);
       else if (ret < 0)
-	return -1;
+        return -1;
     }
   }
   nntp_sync_mailbox (ctx);
-  if (ctx->data && ((NNTP_DATA *)ctx->data)->nserv)
-  {
+  if (ctx->data && ((NNTP_DATA *) ctx->data)->nserv) {
     NNTP_SERVER *news;
 
-    news = ((NNTP_DATA *)ctx->data)->nserv;
+    news = ((NNTP_DATA *) ctx->data)->nserv;
     newsrc_gen_entries (ctx);
-    ((NNTP_DATA *)ctx->data)->unread = ctx->unread;
+    ((NNTP_DATA *) ctx->data)->unread = ctx->unread;
     mutt_newsrc_update (news);
   }
-  mutt_clear_error();
+  mutt_clear_error ();
   return 0;
 }
 
 /* use the GROUP command to poll for new mail */
-static int _nntp_check_mailbox (CONTEXT *ctx, NNTP_DATA *nntp_data)
+static int _nntp_check_mailbox (CONTEXT * ctx, NNTP_DATA * nntp_data)
 {
   char buf[LONG_STRING];
   int count = 0;
@@ -1212,34 +1169,29 @@ static int _nntp_check_mailbox (CONTEXT *ctx, NNTP_DATA *nntp_data)
     return 0;
 
   buf[0] = 0;
-  if (mutt_nntp_query (nntp_data, buf, sizeof (buf)) < 0)
-  {
+  if (mutt_nntp_query (nntp_data, buf, sizeof (buf)) < 0) {
 #ifdef DEBUG
     nntp_error ("nntp_check_mailbox()", buf);
 #endif
     return -1;
   }
-  if (mutt_strncmp ("211", buf, 3))
-  {
+  if (mutt_strncmp ("211", buf, 3)) {
     buf[0] = 0;
-    if (mutt_nntp_query (nntp_data, buf, sizeof (buf)) < 0)
-    {
+    if (mutt_nntp_query (nntp_data, buf, sizeof (buf)) < 0) {
 #ifdef DEBUG
       nntp_error ("nntp_check_mailbox()", buf);
 #endif
       return -1;
     }
   }
-  if (!mutt_strncmp ("211", buf, 3))
-  {
+  if (!mutt_strncmp ("211", buf, 3)) {
     int first;
     int last;
 
     sscanf (buf + 4, "%d %d %d", &count, &first, &last);
     nntp_data->firstMessage = first;
     nntp_data->lastMessage = last;
-    if (ctx && last > nntp_data->lastLoaded)
-    {
+    if (ctx && last > nntp_data->lastLoaded) {
       nntp_fetch_headers (ctx, nntp_data->lastLoaded + 1, last);
       time (&nntp_data->nserv->check_time);
       return 1;
@@ -1249,12 +1201,10 @@ static int _nntp_check_mailbox (CONTEXT *ctx, NNTP_DATA *nntp_data)
     else
       mutt_newsgroup_stat (nntp_data);
     /* active was renumbered? */
-    if (last < nntp_data->lastLoaded)
-    {
-      if (!nntp_data->max)
-      {
-	nntp_data->entries = safe_calloc (5, sizeof (NEWSRC_ENTRY));
-	nntp_data->max = 5;
+    if (last < nntp_data->lastLoaded) {
+      if (!nntp_data->max) {
+        nntp_data->entries = safe_calloc (5, sizeof (NEWSRC_ENTRY));
+        nntp_data->max = 5;
       }
       nntp_data->lastCached = 0;
       nntp_data->num = 1;
@@ -1267,9 +1217,9 @@ static int _nntp_check_mailbox (CONTEXT *ctx, NNTP_DATA *nntp_data)
   return 0;
 }
 
-int nntp_check_mailbox (CONTEXT *ctx)
+int nntp_check_mailbox (CONTEXT * ctx)
 {
-  return _nntp_check_mailbox (ctx, (NNTP_DATA *)ctx->data);
+  return _nntp_check_mailbox (ctx, (NNTP_DATA *) ctx->data);
 }
 
 static int add_group (char *buf, void *serv)
@@ -1280,8 +1230,8 @@ static int add_group (char *buf, void *serv)
   NNTP_DATA *nntp_data;
   static int n = 0;
 
-  _checked = n;	/* _checked have N, where N = number of groups */
-  if (!buf)	/* at EOF must be zerouth */
+  _checked = n;                 /* _checked have N, where N = number of groups */
+  if (!buf)                     /* at EOF must be zerouth */
     n = 0;
 
   if (!s || !buf)
@@ -1291,8 +1241,7 @@ static int add_group (char *buf, void *serv)
   sscanf (buf, "%s %d %d %c %[^\n]", group, &last, &first, &mod, desc);
   if (!group)
     return 0;
-  if ((nntp_data = (NNTP_DATA *) hash_find (s->newsgroups, group)) == NULL)
-  {
+  if ((nntp_data = (NNTP_DATA *) hash_find (s->newsgroups, group)) == NULL) {
     n++;
     nntp_data = safe_calloc (1, sizeof (NNTP_DATA) + strlen (group) + 1);
     nntp_data->group = (char *) nntp_data + sizeof (NNTP_DATA);
@@ -1317,7 +1266,7 @@ static int add_group (char *buf, void *serv)
   if (nntp_data->rc || nntp_data->lastCached)
     mutt_newsgroup_stat (nntp_data);
   else if (nntp_data->lastMessage &&
-	nntp_data->firstMessage <= nntp_data->lastMessage)
+           nntp_data->firstMessage <= nntp_data->lastMessage)
     nntp_data->unread = nntp_data->lastMessage - nntp_data->firstMessage + 1;
   else
     nntp_data->unread = 0;
@@ -1326,7 +1275,7 @@ static int add_group (char *buf, void *serv)
 #undef s
 }
 
-int nntp_check_newgroups (NNTP_SERVER *serv, int force)
+int nntp_check_newgroups (NNTP_SERVER * serv, int force)
 {
   char buf[LONG_STRING];
   NNTP_DATA nntp_data;
@@ -1342,35 +1291,34 @@ int nntp_check_newgroups (NNTP_SERVER *serv, int force)
     return -1;
 
   /* check subscribed groups for new news */
-  if (option (OPTSHOWNEWNEWS))
-  {
+  if (option (OPTSHOWNEWNEWS)) {
     mutt_message _("Checking for new messages...");
-    for (l = serv->list; l; l = l->next)
-    {
-      serv->check_time = 0;	/* really check! */
+
+    for (l = serv->list; l; l = l->next) {
+      serv->check_time = 0;     /* really check! */
       if (l->data && ((NNTP_DATA *) l->data)->subscribed)
-	_nntp_check_mailbox (NULL, (NNTP_DATA *) l->data);
+        _nntp_check_mailbox (NULL, (NNTP_DATA *) l->data);
     }
   }
   else if (!force)
     return 0;
 
   mutt_message _("Checking for new newsgroups...");
+
   now = serv->newgroups_time;
   time (&serv->newgroups_time);
   t = gmtime (&now);
   snprintf (buf, sizeof (buf), "NEWGROUPS %02d%02d%02d %02d%02d%02d GMT\r\n",
-	(t->tm_year % 100), t->tm_mon + 1, t->tm_mday, t->tm_hour, t->tm_min,
-	t->tm_sec);
+            (t->tm_year % 100), t->tm_mon + 1, t->tm_mday, t->tm_hour,
+            t->tm_min, t->tm_sec);
   nntp_data.nserv = serv;
   if (Context && Context->magic == M_NNTP)
-    nntp_data.group = ((NNTP_DATA *)Context->data)->group;
+    nntp_data.group = ((NNTP_DATA *) Context->data)->group;
   else
     nntp_data.group = NULL;
   l = serv->tail;
   if (mutt_nntp_fetch (&nntp_data, buf, _("Adding new newsgroups..."),
-	add_group, serv, 0) != 0)
-  {
+                       add_group, serv, 0) != 0) {
 #ifdef DEBUG
     nntp_error ("nntp_check_newgroups()", buf);
 #endif
@@ -1378,16 +1326,17 @@ int nntp_check_newgroups (NNTP_SERVER *serv, int force)
   }
 
   mutt_message _("Loading descriptions...");
+
   if (l)
     emp.next = l->next;
   else
     emp.next = serv->list;
   l = &emp;
-  while (l->next)
-  {
+  while (l->next) {
     l = l->next;
     ((NNTP_DATA *) l->data)->new = 1;
-    nntp_get_desc ((NNTP_DATA *) l->data, ((NNTP_DATA *) l->data)->group, NULL);
+    nntp_get_desc ((NNTP_DATA *) l->data, ((NNTP_DATA *) l->data)->group,
+                   NULL);
   }
   if (emp.next)
     nntp_save_cache_index (serv);
@@ -1396,20 +1345,18 @@ int nntp_check_newgroups (NNTP_SERVER *serv, int force)
 }
 
 /* Load list of all newsgroups from cache ALL */
-int nntp_get_cache_all (NNTP_SERVER *serv)
+int nntp_get_cache_all (NNTP_SERVER * serv)
 {
   char buf[HUGE_STRING];
   FILE *f;
 
   nntp_cache_expand (buf, serv->cache);
-  if ((f = safe_fopen (buf, "r")))
-  {
+  if ((f = safe_fopen (buf, "r"))) {
     int i = 0;
 
-    while (fgets (buf, sizeof(buf), f) != NULL)
-    {
+    while (fgets (buf, sizeof (buf), f) != NULL) {
       if (ReadInc && (i % ReadInc == 0))
-	mutt_message (_("Loading list from cache... %d"), i);
+        mutt_message (_("Loading list from cache... %d"), i);
       add_group (buf, serv);
       i++;
     }
@@ -1418,15 +1365,14 @@ int nntp_get_cache_all (NNTP_SERVER *serv)
     mutt_clear_error ();
     return 0;
   }
-  else
-  {
+  else {
     FREE (&serv->cache);
     return -1;
   }
 }
 
 /* Load list of all newsgroups from active */
-int nntp_get_active (NNTP_SERVER *serv)
+int nntp_get_active (NNTP_SERVER * serv)
 {
   char msg[SHORT_STRING];
   NNTP_DATA nntp_data;
@@ -1435,15 +1381,15 @@ int nntp_get_active (NNTP_SERVER *serv)
   if (nntp_open_connection (serv) < 0)
     return -1;
 
-  snprintf (msg, sizeof(msg), _("Loading list of all newsgroups on server %s..."),
-		serv->conn->account.host);
+  snprintf (msg, sizeof (msg),
+            _("Loading list of all newsgroups on server %s..."),
+            serv->conn->account.host);
   mutt_message (msg);
   time (&serv->newgroups_time);
   nntp_data.nserv = serv;
   nntp_data.group = NULL;
 
-  if (mutt_nntp_fetch (&nntp_data, "LIST\r\n", msg, add_group, serv, 0) < 0)
-  {
+  if (mutt_nntp_fetch (&nntp_data, "LIST\r\n", msg, add_group, serv, 0) < 0) {
 #ifdef DEBUG
     nntp_error ("nntp_get_active()", "LIST\r\n");
 #endif
@@ -1454,12 +1400,10 @@ int nntp_get_active (NNTP_SERVER *serv)
   mutt_message (msg);
   nntp_get_desc (&nntp_data, "*", msg);
 
-  for (tmp = serv->list; tmp; tmp = tmp->next)
-  {
-    NNTP_DATA *data = (NNTP_DATA *)tmp->data;
+  for (tmp = serv->list; tmp; tmp = tmp->next) {
+    NNTP_DATA *data = (NNTP_DATA *) tmp->data;
 
-    if (data && data->deleted && !data->rc)
-    {
+    if (data && data->deleted && !data->rc) {
       nntp_delete_cache (data);
       hash_delete (serv->newsgroups, data->group, NULL, nntp_delete_data);
       tmp->data = NULL;
@@ -1475,7 +1419,7 @@ int nntp_get_active (NNTP_SERVER *serv)
  * returns -1 if error ocurred while retrieving header,
  * number of articles which ones exist in context on success.
  */
-int nntp_check_msgid (CONTEXT *ctx, const char *msgid)
+int nntp_check_msgid (CONTEXT * ctx, const char *msgid)
 {
   int ret;
 
@@ -1486,15 +1430,14 @@ int nntp_check_msgid (CONTEXT *ctx, const char *msgid)
     mx_alloc_memory (ctx);
   ctx->hdrs[ctx->msgcount] = mutt_new_header ();
   ctx->hdrs[ctx->msgcount]->index = ctx->msgcount;
-  
+
   mutt_message (_("Fetching %s from server..."), msgid);
   ret = nntp_read_header (ctx, msgid, 0);
   /* since nntp_read_header() may set read flag, we must reset it */
   ctx->hdrs[ctx->msgcount]->read = 0;
   if (ret != 0)
     mutt_free_header (&ctx->hdrs[ctx->msgcount]);
-  else
-  {
+  else {
     ctx->msgcount++;
     mx_update_context (ctx, 1);
     ctx->changed = 1;
@@ -1502,8 +1445,7 @@ int nntp_check_msgid (CONTEXT *ctx, const char *msgid)
   return ret;
 }
 
-typedef struct
-{
+typedef struct {
   CONTEXT *ctx;
   unsigned int num;
   unsigned int max;
@@ -1528,34 +1470,32 @@ static int check_children (char *s, void *c)
 #undef cc
 }
 
-int nntp_check_children (CONTEXT *ctx, const char *msgid)
+int nntp_check_children (CONTEXT * ctx, const char *msgid)
 {
-  NNTP_DATA *nntp_data = (NNTP_DATA *)ctx->data;
+  NNTP_DATA *nntp_data = (NNTP_DATA *) ctx->data;
   char buf[STRING];
   int i, ret = 0, tmp = 0;
   CHILD_CONTEXT cc;
 
   if (!nntp_data || !nntp_data->nserv || !nntp_data->nserv->conn ||
-	!nntp_data->nserv->conn->account.host)
+      !nntp_data->nserv->conn->account.host)
     return -1;
   if (nntp_data->firstMessage > nntp_data->lastLoaded)
     return 0;
-  if (!nntp_data->nserv->hasXPAT)
-  {
+  if (!nntp_data->nserv->hasXPAT) {
     mutt_error (_("Server %s does not support this operation!"),
-	  nntp_data->nserv->conn->account.host);
+                nntp_data->nserv->conn->account.host);
     return -1;
   }
 
-  snprintf (buf, sizeof (buf), "XPAT References %d-%d *%s*\r\n", 
-	nntp_data->firstMessage, nntp_data->lastLoaded, msgid);
+  snprintf (buf, sizeof (buf), "XPAT References %d-%d *%s*\r\n",
+            nntp_data->firstMessage, nntp_data->lastLoaded, msgid);
 
   cc.ctx = ctx;
   cc.num = 0;
   cc.max = 25;
   cc.child = safe_malloc (sizeof (unsigned int) * 25);
-  if (mutt_nntp_fetch (nntp_data, buf, NULL, check_children, &cc, 0))
-  {
+  if (mutt_nntp_fetch (nntp_data, buf, NULL, check_children, &cc, 0)) {
     FREE (&cc.child);
     return -1;
   }
@@ -1563,17 +1503,15 @@ int nntp_check_children (CONTEXT *ctx, const char *msgid)
    * made sure that we dont have the article, so we need to visit
    * the server. Reading the cache at this point is also bad
    * because it would duplicate messages */
-  if (option (OPTNEWSCACHE))
-  {
+  if (option (OPTNEWSCACHE)) {
     tmp++;
     unset_option (OPTNEWSCACHE);
   }
-  for (i = 0; i < cc.num; i++)
-  {
+  for (i = 0; i < cc.num; i++) {
     if ((ret = nntp_fetch_headers (ctx, cc.child[i], cc.child[i])))
       break;
     if (ctx->msgcount &&
-	  ctx->hdrs[ctx->msgcount - 1]->article_num == cc.child[i])
+        ctx->hdrs[ctx->msgcount - 1]->article_num == cc.child[i])
       ctx->hdrs[ctx->msgcount - 1]->read = 0;
   }
   if (tmp)

@@ -14,7 +14,7 @@
  *     You should have received a copy of the GNU General Public License
  *     along with this program; if not, write to the Free Software
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
- */ 
+ */
 
 #ifndef KEYMAP_H
 #define KEYMAP_H
@@ -32,15 +32,14 @@ void km_bindkey (char *, int, int);
 int km_dokey (int);
 
 /* entry in the keymap tree */
-struct keymap_t
-{
-  char *macro;           /* macro expansion (op == OP_MACRO) */
-  char *descr;           /* description of a macro for the help menu */
-  struct keymap_t *next; /* next key in map */
-  short op;              /* operation to perform */
-  short eq;              /* number of leading keys equal to next entry */
-  short len;             /* length of key sequence (unit: sizeof (keycode_t)) */
-  keycode_t *keys;       /* key sequence */
+struct keymap_t {
+  char *macro;                  /* macro expansion (op == OP_MACRO) */
+  char *descr;                  /* description of a macro for the help menu */
+  struct keymap_t *next;        /* next key in map */
+  short op;                     /* operation to perform */
+  short eq;                     /* number of leading keys equal to next entry */
+  short len;                    /* length of key sequence (unit: sizeof (keycode_t)) */
+  keycode_t *keys;              /* key sequence */
 };
 
 char *km_keyname (int);
@@ -50,8 +49,7 @@ void km_init (void);
 void km_error_key (int);
 void mutt_what_key (void);
 
-enum
-{
+enum {
   MENU_ALIAS,
   MENU_ATTACH,
   MENU_COMPOSE,
@@ -63,7 +61,7 @@ enum
   MENU_POST,
   MENU_QUERY,
 
-  
+
   MENU_PGP,
   MENU_SMIME,
 
@@ -71,7 +69,7 @@ enum
   MENU_KEY_SELECT_PGP,
   MENU_KEY_SELECT_SMIME,
 #endif
-  
+
 #ifdef MIXMASTER
   MENU_MIX,
 #endif
@@ -89,11 +87,10 @@ extern int LastKey;
 
 extern struct mapping_t Menus[];
 
-struct binding_t
-{
-  char *name;	/* name of the function */
-  int op;	/* function id number */
-  char *seq;	/* default key binding */
+struct binding_t {
+  char *name;                   /* name of the function */
+  int op;                       /* function id number */
+  char *seq;                    /* default key binding */
 };
 
 struct binding_t *km_get_table (int menu);
