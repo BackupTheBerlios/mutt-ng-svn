@@ -15,8 +15,8 @@ bin_SCRIPTS = muttbug flea
 
 BUILT_SOURCES = keymap_defs.h patchlist.c
 
-bin_PROGRAMS = mutt @DOTLOCK_TARGET@ @PGPAUX_TARGET@ @SMIMEAUX_TARGET@
-mutt_SOURCES = $(BUILT_SOURCES) \
+bin_PROGRAMS = muttng @DOTLOCK_TARGET@ @PGPAUX_TARGET@ @SMIMEAUX_TARGET@
+muttng_SOURCES = $(BUILT_SOURCES) \
 	addrbook.c alias.c attach.c base64.c browser.c buffy.c color.c \
         crypt.c cryptglue.c \
 	commands.c complete.c compose.c copy.c curs_lib.c curs_main.c date.c \
@@ -30,10 +30,10 @@ mutt_SOURCES = $(BUILT_SOURCES) \
 	muttlib.c editmsg.c utf8.c mbyte.c wcwidth.c \
 	url.c ascii.c mutt_idna.c sidebar.c
 
-mutt_LDADD = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(MUTTLIBS) \
+muttng_LDADD = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(MUTTLIBS) \
 	$(INTLLIBS) $(LIBICONV)
 
-mutt_DEPENDENCIES = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAPDEPS) \
+muttng_DEPENDENCIES = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAPDEPS) \
 	$(INTLDEPS)
 
 makedoc_SOURCES = makedoc.c
@@ -58,7 +58,7 @@ INCLUDES=-I. -I$(top_srcdir) $(IMAP_INCLUDES) -Iintl
 CPPFLAGS=@CPPFLAGS@ -I$(includedir)
 
 
-EXTRA_mutt_SOURCES = account.c md5c.c mutt_sasl.c mutt_socket.c mutt_ssl.c \
+EXTRA_muttng_SOURCES = account.c md5c.c mutt_sasl.c mutt_socket.c mutt_ssl.c \
 	mutt_tunnel.c pop.c pop_auth.c pop_lib.c smime.c pgp.c pgpinvoke.c pgpkey.c \
 	pgplib.c sha1.c pgpmicalg.c gnupgparse.c resize.c dotlock.c remailer.c \
 	browser.h mbyte.h remailer.h url.h mutt_ssl_nss.c \

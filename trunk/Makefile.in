@@ -194,8 +194,8 @@ bin_SCRIPTS = muttbug flea
 
 BUILT_SOURCES = keymap_defs.h patchlist.c
 
-bin_PROGRAMS = mutt @DOTLOCK_TARGET@ @PGPAUX_TARGET@ @SMIMEAUX_TARGET@
-mutt_SOURCES = $(BUILT_SOURCES) \
+bin_PROGRAMS = muttng @DOTLOCK_TARGET@ @PGPAUX_TARGET@ @SMIMEAUX_TARGET@
+muttng_SOURCES = $(BUILT_SOURCES) \
 	addrbook.c alias.c attach.c base64.c browser.c buffy.c color.c \
         crypt.c cryptglue.c \
 	commands.c complete.c compose.c copy.c curs_lib.c curs_main.c date.c \
@@ -210,11 +210,11 @@ mutt_SOURCES = $(BUILT_SOURCES) \
 	url.c ascii.c mutt_idna.c sidebar.c
 
 
-mutt_LDADD = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(MUTTLIBS) \
+muttng_LDADD = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(MUTTLIBS) \
 	$(INTLLIBS) $(LIBICONV)
 
 
-mutt_DEPENDENCIES = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAPDEPS) \
+muttng_DEPENDENCIES = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAPDEPS) \
 	$(INTLDEPS)
 
 
@@ -224,7 +224,7 @@ makedoc_DEPENDENCIES =
 
 INCLUDES = -I. -I$(top_srcdir) $(IMAP_INCLUDES) -Iintl
 
-EXTRA_mutt_SOURCES = account.c md5c.c mutt_sasl.c mutt_socket.c mutt_ssl.c \
+EXTRA_muttng_SOURCES = account.c md5c.c mutt_sasl.c mutt_socket.c mutt_ssl.c \
 	mutt_tunnel.c pop.c pop_auth.c pop_lib.c smime.c pgp.c pgpinvoke.c pgpkey.c \
 	pgplib.c sha1.c pgpmicalg.c gnupgparse.c resize.c dotlock.c remailer.c \
 	browser.h mbyte.h remailer.h url.h mutt_ssl_nss.c \
@@ -271,15 +271,18 @@ CONFIG_HEADER = config.h
 CONFIG_CLEAN_FILES = intl/Makefile doc/Makefile contrib/Makefile \
 	muttbug.sh Muttrc.head doc/instdoc.sh
 EXTRA_PROGRAMS = mutt_dotlock$(EXEEXT) pgpring$(EXEEXT) makedoc$(EXEEXT)
-bin_PROGRAMS = mutt$(EXEEXT) @DOTLOCK_TARGET@ @PGPAUX_TARGET@ \
+bin_PROGRAMS = muttng$(EXEEXT) @DOTLOCK_TARGET@ @PGPAUX_TARGET@ \
 	@SMIMEAUX_TARGET@
 PROGRAMS = $(bin_PROGRAMS)
 
 am_makedoc_OBJECTS = makedoc.$(OBJEXT)
 makedoc_OBJECTS = $(am_makedoc_OBJECTS)
 makedoc_LDFLAGS =
+am_mutt_dotlock_OBJECTS = mutt_dotlock.$(OBJEXT)
+mutt_dotlock_OBJECTS = $(am_mutt_dotlock_OBJECTS)
+mutt_dotlock_LDFLAGS =
 am__objects_1 = patchlist.$(OBJEXT)
-am_mutt_OBJECTS = $(am__objects_1) addrbook.$(OBJEXT) alias.$(OBJEXT) \
+am_muttng_OBJECTS = $(am__objects_1) addrbook.$(OBJEXT) alias.$(OBJEXT) \
 	attach.$(OBJEXT) base64.$(OBJEXT) browser.$(OBJEXT) \
 	buffy.$(OBJEXT) color.$(OBJEXT) crypt.$(OBJEXT) \
 	cryptglue.$(OBJEXT) commands.$(OBJEXT) complete.$(OBJEXT) \
@@ -300,11 +303,8 @@ am_mutt_OBJECTS = $(am__objects_1) addrbook.$(OBJEXT) alias.$(OBJEXT) \
 	lib.$(OBJEXT) muttlib.$(OBJEXT) editmsg.$(OBJEXT) \
 	utf8.$(OBJEXT) mbyte.$(OBJEXT) wcwidth.$(OBJEXT) url.$(OBJEXT) \
 	ascii.$(OBJEXT) mutt_idna.$(OBJEXT) sidebar.$(OBJEXT)
-mutt_OBJECTS = $(am_mutt_OBJECTS)
-mutt_LDFLAGS =
-am_mutt_dotlock_OBJECTS = mutt_dotlock.$(OBJEXT)
-mutt_dotlock_OBJECTS = $(am_mutt_dotlock_OBJECTS)
-mutt_dotlock_LDFLAGS =
+muttng_OBJECTS = $(am_muttng_OBJECTS)
+muttng_LDFLAGS =
 am_pgpring_OBJECTS = pgppubring.$(OBJEXT) pgplib.$(OBJEXT) lib.$(OBJEXT) \
 	extlib.$(OBJEXT) sha1.$(OBJEXT) md5c.$(OBJEXT) \
 	pgppacket.$(OBJEXT) ascii.$(OBJEXT)
@@ -320,8 +320,8 @@ COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 CCLD = $(CC)
 LINK = $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
-DIST_SOURCES = $(makedoc_SOURCES) $(mutt_SOURCES) $(EXTRA_mutt_SOURCES) \
-	$(mutt_dotlock_SOURCES) $(pgpring_SOURCES)
+DIST_SOURCES = $(makedoc_SOURCES) $(mutt_dotlock_SOURCES) \
+	$(muttng_SOURCES) $(EXTRA_muttng_SOURCES) $(pgpring_SOURCES)
 
 RECURSIVE_TARGETS = info-recursive dvi-recursive pdf-recursive \
 	ps-recursive install-info-recursive uninstall-info-recursive \
@@ -334,7 +334,7 @@ DIST_COMMON = README ABOUT-NLS ChangeLog INSTALL Makefile.am \
 	depcomp install-sh missing mkinstalldirs muttbug.sh.in regex.c \
 	snprintf.c strcasecmp.c strdup.c
 DIST_SUBDIRS = m4 po intl doc contrib imap
-SOURCES = $(makedoc_SOURCES) $(mutt_SOURCES) $(EXTRA_mutt_SOURCES) $(mutt_dotlock_SOURCES) $(pgpring_SOURCES)
+SOURCES = $(makedoc_SOURCES) $(mutt_dotlock_SOURCES) $(muttng_SOURCES) $(EXTRA_muttng_SOURCES) $(pgpring_SOURCES)
 
 all: $(BUILT_SOURCES) config.h
 	$(MAKE) $(AM_MAKEFLAGS) all-recursive
@@ -411,12 +411,12 @@ clean-binPROGRAMS:
 makedoc$(EXEEXT): $(makedoc_OBJECTS) $(makedoc_DEPENDENCIES) 
 	@rm -f makedoc$(EXEEXT)
 	$(LINK) $(makedoc_LDFLAGS) $(makedoc_OBJECTS) $(makedoc_LDADD) $(LIBS)
-mutt$(EXEEXT): $(mutt_OBJECTS) $(mutt_DEPENDENCIES) 
-	@rm -f mutt$(EXEEXT)
-	$(LINK) $(mutt_LDFLAGS) $(mutt_OBJECTS) $(mutt_LDADD) $(LIBS)
 mutt_dotlock$(EXEEXT): $(mutt_dotlock_OBJECTS) $(mutt_dotlock_DEPENDENCIES) 
 	@rm -f mutt_dotlock$(EXEEXT)
 	$(LINK) $(mutt_dotlock_LDFLAGS) $(mutt_dotlock_OBJECTS) $(mutt_dotlock_LDADD) $(LIBS)
+muttng$(EXEEXT): $(muttng_OBJECTS) $(muttng_DEPENDENCIES) 
+	@rm -f muttng$(EXEEXT)
+	$(LINK) $(muttng_LDFLAGS) $(muttng_OBJECTS) $(muttng_LDADD) $(LIBS)
 pgpring$(EXEEXT): $(pgpring_OBJECTS) $(pgpring_DEPENDENCIES) 
 	@rm -f pgpring$(EXEEXT)
 	$(LINK) $(pgpring_LDFLAGS) $(pgpring_OBJECTS) $(pgpring_LDADD) $(LIBS)

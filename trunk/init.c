@@ -2089,13 +2089,13 @@ void mutt_init (int skip_sys_rc, LIST *commands)
   
   if (!Muttrc)
   {
-    snprintf (buffer, sizeof(buffer), "%s/.muttrc-%s", NONULL(Homedir), MUTT_VERSION);
+    snprintf (buffer, sizeof(buffer), "%s/.muttngrc-%s", NONULL(Homedir), MUTT_VERSION);
     if (access(buffer, F_OK) == -1)
-      snprintf (buffer, sizeof(buffer), "%s/.muttrc", NONULL(Homedir));
+      snprintf (buffer, sizeof(buffer), "%s/.muttngrc", NONULL(Homedir));
     if (access(buffer, F_OK) == -1)
-      snprintf (buffer, sizeof (buffer), "%s/.mutt/muttrc-%s", NONULL(Homedir), MUTT_VERSION);
+      snprintf (buffer, sizeof (buffer), "%s/.muttng/muttngrc-%s", NONULL(Homedir), MUTT_VERSION);
     if (access(buffer, F_OK) == -1)
-      snprintf (buffer, sizeof (buffer), "%s/.mutt/muttrc", NONULL(Homedir));
+      snprintf (buffer, sizeof (buffer), "%s/.muttng/muttngrc", NONULL(Homedir));
     
     default_rc = 1;
     Muttrc = safe_strdup (buffer);
@@ -2114,13 +2114,13 @@ void mutt_init (int skip_sys_rc, LIST *commands)
      requested not to via "-n".  */
   if (!skip_sys_rc)
   {
-    snprintf (buffer, sizeof(buffer), "%s/Muttrc-%s", SYSCONFDIR, MUTT_VERSION);
+    snprintf (buffer, sizeof(buffer), "%s/Muttngrc-%s", SYSCONFDIR, MUTT_VERSION);
     if (access (buffer, F_OK) == -1)
-      snprintf (buffer, sizeof(buffer), "%s/Muttrc", SYSCONFDIR);
+      snprintf (buffer, sizeof(buffer), "%s/Muttngrc", SYSCONFDIR);
     if (access (buffer, F_OK) == -1)
-      snprintf (buffer, sizeof (buffer), "%s/Muttrc-%s", PKGDATADIR, MUTT_VERSION);
+      snprintf (buffer, sizeof (buffer), "%s/Muttngrc-%s", PKGDATADIR, MUTT_VERSION);
     if (access (buffer, F_OK) == -1)
-      snprintf (buffer, sizeof (buffer), "%s/Muttrc", PKGDATADIR);
+      snprintf (buffer, sizeof (buffer), "%s/Muttngrc", PKGDATADIR);
     if (access (buffer, F_OK) != -1)
     {
       if (source_rc (buffer, &err) != 0)
