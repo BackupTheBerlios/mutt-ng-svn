@@ -1754,8 +1754,10 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
  	_mutt_make_string (buffer, l1 < l2 ? l1 : l2, NONULL (PagerFmt),
  			   Context, extra->bdy->hdr, M_FORMAT_MAKEPRINT);
       }
-      mutt_paddstr (COLS-10-SidebarWidth, IsHeader (extra) || IsMsgAttach (extra) ?
-		    buffer : banner);
+      move (indexoffset + (option (OPTSTATUSONTOP) ? 0 : (indexlen - 1)),option(OPTSTATUSONTOP)?0:SidebarWidth);
+      mutt_paddstr (COLS-10, IsHeader (extra) || IsMsgAttach (extra) ?
+                    buffer : banner);
+
       addstr (" -- (");
       if (last_pos < sb.st_size - 1)
 	printw ("%d%%)", (int) (100 * last_offset / sb.st_size));
