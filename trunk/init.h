@@ -305,12 +305,12 @@ struct option_t MuttVars[] = {
   { "beep",		DT_BOOL, R_NONE, OPTBEEP, 1 },
   /*
   ** .pp
-  ** When this variable is set, mutt-ng will beep when an error occurs.
+  ** When this variable is set, Mutt-ng will beep when an error occurs.
   */
   { "beep_new",		DT_BOOL, R_NONE, OPTBEEPNEW, 0 },
   /*
   ** .pp
-  ** When this variable is set, mutt-ng will beep whenever it prints a message
+  ** When this variable is set, Mutt-ng will beep whenever it prints a message
   ** notifying you of new mail.  This is independent of the setting of the
   ** ``$$beep'' variable.
   */
@@ -325,7 +325,7 @@ struct option_t MuttVars[] = {
   { "bounce_delivered", DT_BOOL, R_NONE, OPTBOUNCEDELIVERED, 1 },
   /*
   ** .pp
-  ** When this variable is set, mutt-ng will include Delivered-To headers when
+  ** When this variable is set, Mutt-ng will include Delivered-To headers when
   ** bouncing messages.  Postfix users may wish to unset this variable.
   */
 #ifdef USE_NNTP
@@ -437,7 +437,7 @@ struct option_t MuttVars[] = {
   { "crypt_autopgp",	DT_BOOL, R_NONE, OPTCRYPTAUTOPGP, 1 },
   /*
   ** .pp
-  ** This variable controls whether or not mutt-ng may automatically enable
+  ** This variable controls whether or not Mutt-ng may automatically enable
   ** PGP encryption/signing for messages.  See also ``$$crypt_autoencrypt'',
   ** ``$$crypt_replyencrypt'',
   ** ``$$crypt_autosign'', ``$$crypt_replysign'' and ``$$smime_is_default''.
@@ -445,7 +445,7 @@ struct option_t MuttVars[] = {
   { "crypt_autosmime",	DT_BOOL, R_NONE, OPTCRYPTAUTOSMIME, 1 },
   /*
   ** .pp
-  ** This variable controls whether or not mutt-ng may automatically enable
+  ** This variable controls whether or not Mutt-ng may automatically enable
   ** S/MIME encryption/signing for messages. See also ``$$crypt_autoencrypt'',
   ** ``$$crypt_replyencrypt'',
   ** ``$$crypt_autosign'', ``$$crypt_replysign'' and ``$$smime_is_default''.
@@ -490,14 +490,14 @@ struct option_t MuttVars[] = {
   { "delete_untag",	DT_BOOL, R_NONE, OPTDELETEUNTAG, 1 },
   /*
   ** .pp
-  ** If this option is \fIset\fP, mutt-ng will untag messages when marking them
+  ** If this option is \fIset\fP, Mutt-ng will untag messages when marking them
   ** for deletion.  This applies when you either explicitly delete a message,
   ** or when you save it to another folder.
   */
   { "digest_collapse",	DT_BOOL, R_NONE, OPTDIGESTCOLLAPSE, 1},
   /*
   ** .pp
-  ** If this option is \fIset\fP, mutt-ng's received-attachments menu will not show the subparts of
+  ** If this option is \fIset\fP, Mutt-ng's received-attachments menu will not show the subparts of
   ** individual messages in a multipart/digest.  To see these subparts, press 'v' on that menu.
   */
   { "display_filter",	DT_PATH, R_PAGER, UL &DisplayFilter, UL "" },
@@ -515,7 +515,7 @@ struct option_t MuttVars[] = {
   **
   ** .pp
   ** Contains the path of the muttng_dotlock (1) binary to be used by
-  ** mutt-ng.
+  ** Mutt-ng.
   */
 #endif
   { "dsn_notify",	DT_STR,	 R_NONE, UL &DsnNotify, UL "" },
@@ -548,7 +548,7 @@ struct option_t MuttVars[] = {
   { "duplicate_threads",	DT_BOOL, R_RESORT|R_RESORT_INIT|R_INDEX, OPTDUPTHREADS, 1 },
   /*
   ** .pp
-  ** This variable controls whether mutt-ng, when sorting by threads, threads
+  ** This variable controls whether Mutt-ng, when sorting by threads, threads
   ** messages with the same message-id together.  If it is set, it will indicate
   ** that it thinks they are duplicates of each other with an equals sign
   ** in the thread diagram.
@@ -565,14 +565,14 @@ struct option_t MuttVars[] = {
   { "editor",		DT_PATH, R_NONE, UL &Editor, 0 },
   /*
   ** .pp
-  ** This variable specifies which editor is used by mutt-ng.
+  ** This variable specifies which editor is used by Mutt-ng.
   ** It defaults to the value of the VISUAL, or EDITOR, environment
   ** variable, or to the string "vi" if neither of those are set.
   */
   { "encode_from",	DT_BOOL, R_NONE, OPTENCODEFROM, 0 },
   /*
   ** .pp
-  ** When \fIset\fP, mutt-ng will quoted-printable encode messages when
+  ** When \fIset\fP, Mutt-ng will quoted-printable encode messages when
   ** they contain the string "From " in the beginning of a line.
   ** Useful to avoid the tampering certain mail delivery and transport
   ** agents tend to do with messages.
@@ -580,7 +580,7 @@ struct option_t MuttVars[] = {
   { "envelope_from", 	DT_BOOL, R_NONE, OPTENVFROM, 0 },
   /*
   ** .pp
-  ** When \fIset\fP, mutt-ng will try to derive the message's \fIenvelope\fP
+  ** When \fIset\fP, Mutt-ng will try to derive the message's \fIenvelope\fP
   ** sender from the "From:" header.  Note that this information is passed 
   ** to sendmail command using the "-f" command line switch, so don't set this
   ** option if you are using that switch in $$sendmail yourself,
@@ -706,7 +706,7 @@ struct option_t MuttVars[] = {
   { "force_buffy_check", DT_BOOL, R_NONE, OPTFORCEBUFFYCHECK, 0 },
   /*
   ** .pp
-  ** When \fIset\fP, it causes mutt-ng to check for new mail when the
+  ** When \fIset\fP, it causes Mutt-ng to check for new mail when the
   ** \fIbuffy-list\fP command is invoked. When \fIunset\fP, \fIbuffy_list\fP
   ** will just list all mailboxes which are already known to have new mail.
   ** .pp
@@ -753,26 +753,29 @@ struct option_t MuttVars[] = {
   { "from",		DT_ADDR, R_NONE, UL &From, UL 0 },
   /*
   ** .pp
-  ** When set, this variable contains a default from address.  It
+  ** This variable contains a default from address.  It
   ** can be overridden using my_hdr (including from send-hooks) and
   ** ``$$reverse_name''.  This variable is ignored if ``$$use_from''
   ** is unset.
+  ** E.g. you can use 
+  ** send-hook Mutt-ng-devel@lists.berlios.de 'my_hdr From: Foo Bar <foo@bar.fb>'
+  ** when replying to Mutt-ng-devel and Mutt-ng takes this email address.
   ** .pp
   ** Defaults to the contents of the environment variable EMAIL.
   */
   { "gecos_mask",	DT_RX,	 R_NONE, UL &GecosMask, UL "^[^,]*" },
   /*
   ** .pp
-  ** A regular expression used by mutt-ng to parse the GECOS field of a password
+  ** A regular expression used by Mutt-ng to parse the GECOS field of a password
   ** entry when expanding the alias.  By default the regular expression is set
   ** to "^[^,]*" which will return the string up to the first "," encountered.
   ** If the GECOS field contains a string like "lastname, firstname" then you
   ** should set the gecos_mask=".*".
   ** .pp
   ** This can be useful if you see the following behavior: you address a e-mail
-  ** to user ID stevef whose full name is Steve Franklin.  If mutt-ng expands 
+  ** to user ID stevef whose full name is Steve Franklin.  If Mutt-ng expands 
   ** stevef to "Franklin" stevef@foo.bar then you should set the gecos_mask to
-  ** a regular expression that will match the whole name so mutt-ng will expand
+  ** a regular expression that will match the whole name so Mutt-ng will expand
   ** "Franklin" to "Franklin, Steve".
   */
 #ifdef USE_NNTP
@@ -832,7 +835,7 @@ struct option_t MuttVars[] = {
   { "hidden_host",	DT_BOOL, R_NONE, OPTHIDDENHOST, 0 },
   /*
   ** .pp
-  ** When set, mutt-ng will skip the host name part of ``$$hostname'' variable
+  ** When set, Mutt-ng will skip the host name part of ``$$hostname'' variable
   ** when adding the domain part to addresses.  This variable does not
   ** affect the generation of Message-IDs, and it will not lead to the 
   ** cut-off of first-level domains.
@@ -840,33 +843,33 @@ struct option_t MuttVars[] = {
   { "hide_limited",	DT_BOOL, R_TREE|R_INDEX, OPTHIDELIMITED, 0 },
   /*
   ** .pp
-  ** When set, mutt-ng will not show the presence of messages that are hidden
+  ** When set, Mutt-ng will not show the presence of messages that are hidden
   ** by limiting, in the thread tree.
   */
   { "hide_missing",	DT_BOOL, R_TREE|R_INDEX, OPTHIDEMISSING, 1 },
   /*
   ** .pp
-  ** When set, mutt-ng will not show the presence of missing messages in the
+  ** When set, Mutt-ng will not show the presence of missing messages in the
   ** thread tree.
   */
   { "hide_thread_subject", DT_BOOL, R_TREE|R_INDEX, OPTHIDETHREADSUBJECT, 1 },
   /*
   ** .pp
-  ** When set, mutt-ng will not show the subject of messages in the thread
+  ** When set, Mutt-ng will not show the subject of messages in the thread
   ** tree that have the same subject as their parent or closest previously
   ** displayed sibling.
   */
   { "hide_top_limited",	DT_BOOL, R_TREE|R_INDEX, OPTHIDETOPLIMITED, 0 },
   /*
   ** .pp
-  ** When set, mutt-ng will not show the presence of messages that are hidden
+  ** When set, Mutt-ng will not show the presence of messages that are hidden
   ** by limiting, at the top of threads in the thread tree.  Note that when
   ** $$hide_missing is set, this option will have no effect.
   */
   { "hide_top_missing",	DT_BOOL, R_TREE|R_INDEX, OPTHIDETOPMISSING, 1 },
   /*
   ** .pp
-  ** When set, mutt-ng will not show the presence of missing messages at the
+  ** When set, Mutt-ng will not show the presence of missing messages at the
   ** top of threads in the thread tree.  Note that when $$hide_limited is
   ** set, this option will have no effect.
   */
@@ -909,19 +912,19 @@ struct option_t MuttVars[] = {
   ** Availability: IMAP
   **
   ** .pp
-  ** This is a colon-delimited list of authentication methods mutt-ng may
-  ** attempt to use to log in to an IMAP server, in the order mutt-ng should
+  ** This is a colon-delimited list of authentication methods Mutt-ng may
+  ** attempt to use to log in to an IMAP server, in the order Mutt-ng should
   ** try them.  Authentication methods are either 'login' or the right
   ** side of an IMAP 'AUTH=xxx' capability string, eg 'digest-md5', 'gssapi'
   ** or 'cram-md5'. This parameter is case-insensitive. If this
-  ** parameter is unset (the default) mutt-ng will try all available methods,
+  ** parameter is unset (the default) Mutt-ng will try all available methods,
   ** in order from most-secure to least-secure.
   ** .pp
   ** Example: set imap_authenticators="gssapi:cram-md5:login"
   ** .pp
   ** \fBNote:\fP Mutt-ng will only fall back to other authentication methods if
   ** the previous methods are unavailable. If a method is available but
-  ** authentication fails, mutt-ng will not connect to the IMAP server.
+  ** authentication fails, Mutt-ng will not connect to the IMAP server.
   */
   { "imap_delim_chars",		DT_STR, R_NONE, UL &ImapDelimChars, UL "/." },
   /*
@@ -972,9 +975,9 @@ struct option_t MuttVars[] = {
   ** Availability: IMAP
   **
   ** .pp
-  ** This variable specifies the maximum amount of time in seconds that mutt-ng
+  ** This variable specifies the maximum amount of time in seconds that Mutt-ng
   ** will wait before polling open IMAP connections, to prevent the server
-  ** from closing them before mutt-ng has finished with them. The default is
+  ** from closing them before Mutt-ng has finished with them. The default is
   ** well within the RFC-specified minimum amount of time (30 minutes) before
   ** a server is allowed to do this, but in practice the RFC does get
   ** violated every now and then. Reduce this number if you find yourself
@@ -993,7 +996,7 @@ struct option_t MuttVars[] = {
   { "imap_mail_check",	DT_NUM,  R_NONE, UL &ImapBuffyTimeout, 5 },
   /*
   ** .pp
-  ** This variable configures how often (in seconds) mutt-ng should look for
+  ** This variable configures how often (in seconds) Mutt-ng should look for
   ** new mail in IMAP folders. This is split from the ``$mail_check'' variable
   ** to generate less traffic and get more accurate information for local folders.
   ** .pp
@@ -1018,10 +1021,10 @@ struct option_t MuttVars[] = {
   ** Availability: IMAP
   **
   ** .pp
-  ** When set, mutt-ng will not open new IMAP connections to check for new
+  ** When set, Mutt-ng will not open new IMAP connections to check for new
   ** mail.  Mutt-ng will only check for new mail over existing IMAP
   ** connections.  This is useful if you don't want to be prompted to
-  ** user/password pairs on mutt-ng invocation, or if opening the connection
+  ** user/password pairs on Mutt-ng invocation, or if opening the connection
   ** is slow.
   */
   { "imap_peek", DT_BOOL, R_NONE, OPTIMAPPEEK, 1 },
@@ -1030,7 +1033,7 @@ struct option_t MuttVars[] = {
   ** Availability: IMAP
   **
   ** .pp
-  ** If set, mutt-ng will avoid implicitly marking your mail as read whenever
+  ** If set, Mutt-ng will avoid implicitly marking your mail as read whenever
   ** you fetch a message from the server. This is generally a good thing,
   ** but can make closing an IMAP folder somewhat slower. This option
   ** exists to appease speed freaks.
@@ -1050,7 +1053,7 @@ struct option_t MuttVars[] = {
   ** Availability: IMAP
   **
   ** .pp
-  ** When set, mutt-ng will display warning messages from the IMAP
+  ** When set, Mutt-ng will display warning messages from the IMAP
   ** server as error messages. Since these messages are often
   ** harmless, or generated due to configuration problems on the
   ** server which are out of the users' hands, you may wish to suppress
@@ -1070,9 +1073,9 @@ struct option_t MuttVars[] = {
   { "implicit_autoview", DT_BOOL,R_NONE, OPTIMPLICITAUTOVIEW, 0},
   /*
   ** .pp
-  ** If set to ``yes'', mutt-ng will look for a mailcap entry with the
+  ** If set to ``yes'', Mutt-ng will look for a mailcap entry with the
   ** copiousoutput flag set for \fIevery\fP MIME attachment it doesn't have
-  ** an internal viewer defined for.  If such an entry is found, mutt-ng will
+  ** an internal viewer defined for.  If such an entry is found, Mutt-ng will
   ** use the viewer defined in that entry to convert the body part to text
   ** form.
   */
@@ -1135,7 +1138,7 @@ struct option_t MuttVars[] = {
   ** .dt %M .dd number of hidden messages if the thread is collapsed.
   ** .dt %N .dd message score
   ** .dt %n .dd author's real name (or address if missing)
-  ** .dt %O .dd (_O_riginal save folder)  Where mutt-ng would formerly have
+  ** .dt %O .dd (_O_riginal save folder)  Where Mutt-ng would formerly have
   **            stashed the message: list name or recipient name if no list
   ** .dt %s .dd subject of the message
   ** .dt %S .dd status of the message (N/D/d/!/r/\(as)
@@ -1174,7 +1177,7 @@ struct option_t MuttVars[] = {
   **
   ** .pp
   ** If set, specifies the program and arguments used to deliver news posted
-  ** by Mutt-ng.  Otherwise, mutt-ng posts article using current connection to
+  ** by Mutt-ng.  Otherwise, Mutt-ng posts article using current connection to
   ** news server.  The following printf-style sequence is understood:
   ** .pp
   ** .ts
@@ -1219,7 +1222,7 @@ struct option_t MuttVars[] = {
   { "mail_check",	DT_NUM,  R_NONE, UL &BuffyTimeout, 5 },
   /*
   ** .pp
-  ** This variable configures how often (in seconds) mutt-ng should look for
+  ** This variable configures how often (in seconds) Mutt-ng should look for
   ** new mail.
   */
   { "mailcap_path",	DT_STR,	 R_NONE, UL &MailcapPath, 0 },
@@ -1231,7 +1234,7 @@ struct option_t MuttVars[] = {
   { "mailcap_sanitize",	DT_BOOL, R_NONE, OPTMAILCAPSANITIZE, 1 },
   /*
   ** .pp
-  ** If set, mutt-ng will restrict possible characters in mailcap % expandos
+  ** If set, Mutt-ng will restrict possible characters in mailcap % expandos
   ** to a well-defined set of safe characters.  This is the safe setting,
   ** but we are not sure it doesn't break some more advanced MIME stuff.
   ** .pp
@@ -1258,7 +1261,7 @@ struct option_t MuttVars[] = {
   ** Availability: Header Cache
   **
   ** .pp
-  ** Check for Maildir unaware programs other than mutt-ng having modified maildir
+  ** Check for Maildir unaware programs other than Mutt-ng having modified maildir
   ** files when the header cache is in use.  This incurs one stat(2) per
   ** message every time the folder is opened.
   */
@@ -1271,7 +1274,7 @@ struct option_t MuttVars[] = {
   ** Change the maildir header cache database page size.  Too large
   ** or too small of a page size for the common header can waste
   ** space, memory effectiveness, or CPU time. The default should be more or
-  ** less the best you can get. For details google after mutt-ng maildir header
+  ** less the best you can get. For details google after Mutt-ng maildir header
   ** cache (first hit).
   */
 #endif /* USE_HCACHE */
@@ -1282,13 +1285,14 @@ struct option_t MuttVars[] = {
   ** (T)rashed flag instead of unlinked.  \fBNOTE:\fP this only applies
   ** to maildir-style mailboxes.  Setting it will have no effect on other
   ** mailbox types.
+  ** It is similiar to the trash option.
   */
   { "mark_old",		DT_BOOL, R_BOTH, OPTMARKOLD, 1 },
   /*
   ** .pp
-  ** Controls whether or not mutt-ng marks \fInew\fP \fBunread\fP
+  ** Controls whether or not Mutt-ng marks \fInew\fP \fBunread\fP
   ** messages as \fIold\fP if you exit a mailbox without reading them.
-  ** With this option set, the next time you start mutt-ng, the messages
+  ** With this option set, the next time you start Mutt-ng, the messages
   ** will show up with an "O" next to them in the index menu,
   ** indicating that they are old.
   */
@@ -1318,6 +1322,7 @@ struct option_t MuttVars[] = {
   ** This specifies the operating system name for the User-Agent header. If
   ** this is unset, it will be set to the operating system name that uname(2)
   ** returns. If uname(2) fails, "UNIX" will be used.
+  ** It looks like this Mutt-ng version (specified string)
   */
   { "sidebar_delim", DT_STR, R_BOTH, UL &SidebarDelim, UL "|" },
   /*
@@ -1328,7 +1333,7 @@ struct option_t MuttVars[] = {
   { "sidebar_visible", DT_BOOL, R_BOTH, OPTMBOXPANE, 0 },
   /*
   ** .pp
-  ** This specifies whether or not to show the mailbox list pane.
+  ** This specifies whether or not to show the mailbox list pane (left sidebar).
   */
   { "sidebar_width", DT_NUM, R_BOTH, UL &SidebarWidth, 0 },
   /*
@@ -1375,7 +1380,7 @@ struct option_t MuttVars[] = {
   { "mh_purge",		DT_BOOL, R_NONE, OPTMHPURGE, 0 },
   /*
   ** .pp
-  ** When unset, mutt-ng will mimic mh's behaviour and rename deleted messages
+  ** When unset, Mutt-ng will mimic mh's behaviour and rename deleted messages
   ** to \fI,<old file name>\fP in mh folders instead of really deleting
   ** them.  If the variable is set, the message files will simply be
   ** deleted.
@@ -1625,7 +1630,7 @@ struct option_t MuttVars[] = {
   ** like to use.
   ** .pp
   ** Using an external pager may have some disadvantages: Additional
-  ** keystrokes are necessary because you can't call mutt-ng functions
+  ** keystrokes are necessary because you can't call Mutt-ng functions
   ** directly from the pager, and screen resizes cause lines longer than
   ** the screen width to be badly formatted in the help menu.
   */
@@ -1727,14 +1732,14 @@ struct option_t MuttVars[] = {
   ** which are encrypted. This makes sense in combination with
   ** ``$$crypt_replyencrypt'', because it allows you to sign all
   ** messages which are automatically encrypted.  This works around
-  ** the problem noted in ``$$crypt_replysign'', that mutt-ng is not able
+  ** the problem noted in ``$$crypt_replysign'', that Mutt-ng is not able
   ** to find out whether an encrypted message is also signed.
   ** (Crypto only)
   */
   { "crypt_timestamp", DT_BOOL, R_NONE, OPTCRYPTTIMESTAMP, 1 },
   /*
   ** .pp
-  ** If set, mutt-ng will include a time stamp in the lines surrounding
+  ** If set, Mutt-ng will include a time stamp in the lines surrounding
   ** PGP or S/MIME output, so spoofing such lines is more difficult.
   ** If you are using colors to mark these lines, and rely on these,
   ** you may unset this setting.
@@ -1743,7 +1748,7 @@ struct option_t MuttVars[] = {
   { "pgp_use_gpg_agent", DT_BOOL, R_NONE, OPTUSEGPGAGENT, 0},
   /*
   ** .pp
-  ** If set, mutt-ng will use a possibly-running gpg-agent process.
+  ** If set, Mutt-ng will use a possibly-running gpg-agent process.
   ** (PGP only)
   */
   { "pgp_verify_sig",   DT_SYN,  R_NONE, UL "crypt_verify_sig", 0},
@@ -1758,9 +1763,9 @@ struct option_t MuttVars[] = {
   { "smime_is_default", DT_BOOL,  R_NONE, OPTSMIMEISDEFAULT, 0},
   /*
   ** .pp
-  ** The default behaviour of mutt-ng is to use PGP on all auto-sign/encryption
+  ** The default behaviour of Mutt-ng is to use PGP on all auto-sign/encryption
   ** operations. To override and to use OpenSSL instead this must be set.
-  ** However, this has no effect while replying, since mutt-ng will automatically 
+  ** However, this has no effect while replying, since Mutt-ng will automatically 
   ** select the same application that was used to sign/encrypt the original
   ** message.  (Note that this variable can be overridden by unsetting $$crypt_autosmime.)
   ** (S/MIME only)
@@ -1776,8 +1781,8 @@ struct option_t MuttVars[] = {
   { "smime_decrypt_use_default_key",	DT_BOOL, R_NONE, OPTSDEFAULTDECRYPTKEY, 1 },
   /*
   ** .pp
-  ** If set (default) this tells mutt-ng to use the default key for decryption. Otherwise,
-  ** if manage multiple certificate-key-pairs, mutt-ng will try to use the mailbox-address
+  ** If set (default) this tells Mutt-ng to use the default key for decryption. Otherwise,
+  ** if manage multiple certificate-key-pairs, Mutt-ng will try to use the mailbox-address
   ** to determine the key to use. It will ask you to supply a key, if it can't find one.
   ** (S/MIME only)
   */
@@ -1814,7 +1819,7 @@ struct option_t MuttVars[] = {
   { "pgp_check_exit",	DT_BOOL, R_NONE, OPTPGPCHECKEXIT, 1 },
   /*
   ** .pp
-  ** If set, mutt-ng will check the exit code of the PGP subprocess when
+  ** If set, Mutt-ng will check the exit code of the PGP subprocess when
   ** signing or encrypting.  A non-zero exit code means that the
   ** subprocess failed.
   ** (PGP only)
@@ -1881,7 +1886,7 @@ struct option_t MuttVars[] = {
   { "pgp_show_unusable", DT_BOOL, R_NONE, OPTPGPSHOWUNUSABLE, 1 },
   /*
   ** .pp
-  ** If set, mutt-ng will display non-usable keys on the PGP key selection
+  ** If set, Mutt-ng will display non-usable keys on the PGP key selection
   ** menu.  This includes keys which have been revoked, have expired, or
   ** have been marked as ``disabled'' by the user.
   ** (PGP only)
@@ -1907,7 +1912,7 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** The number of seconds after which a cached passphrase will expire if
-  ** not used.
+  ** not used. Default: 300.
   ** (PGP only)
   */
   { "pgp_sort_keys",	DT_SORT|DT_SORT_KEYS, R_NONE, UL &PgpSortKeys, SORT_ADDRESS },
@@ -1941,11 +1946,11 @@ struct option_t MuttVars[] = {
   { "pgp_auto_decode", DT_BOOL, R_NONE, OPTPGPAUTODEC, 0 },
   /*
   ** .pp
-  ** If set, mutt-ng will automatically attempt to decrypt traditional PGP
+  ** If set, Mutt-ng will automatically attempt to decrypt traditional PGP
   ** messages whenever the user performs an operation which ordinarily would
   ** result in the contents of the message being operated on.  For example,
   ** if the user displays a pgp-traditional message which has not been manually
-  ** checked with the check-traditional-pgp function, mutt-ng will automatically
+  ** checked with the check-traditional-pgp function, Mutt-ng will automatically
   ** check the message for traditional pgp.
   */
 
@@ -1979,7 +1984,7 @@ struct option_t MuttVars[] = {
   { "pgp_getkeys_command",	DT_STR, R_NONE, UL &PgpGetkeysCommand, 0},
   /*
   ** .pp
-  ** This command is invoked whenever mutt-ng will need public key information.
+  ** This command is invoked whenever Mutt-ng will need public key information.
   ** %r is the only printf-like sequence used with this format.
   ** (PGP only)
   */
@@ -2051,7 +2056,7 @@ struct option_t MuttVars[] = {
   ** gpg --list-keys --with-colons.
   ** .pp
   ** This format is also generated by the pgpring utility which comes 
-  ** with mutt-ng.
+  ** with Mutt-ng.
   ** (PGP only)
   */  
   { "pgp_list_pubring_command", DT_STR, R_NONE, UL &PgpListPubringCommand, 0},
@@ -2062,7 +2067,7 @@ struct option_t MuttVars[] = {
   ** gpg --list-keys --with-colons.
   ** .pp
   ** This format is also generated by the pgpring utility which comes 
-  ** with mutt-ng.
+  ** with Mutt-ng.
   ** (PGP only)
   */  
   { "forward_decrypt",	DT_BOOL, R_NONE, OPTFORWDECRYPT, 1 },
@@ -2096,7 +2101,7 @@ struct option_t MuttVars[] = {
   { "smime_keys",		DT_PATH, R_NONE, UL &SmimeKeys, 0 },
   /*
   ** .pp
-  ** Since there is no pubring/secring as with PGP, mutt-ng has to handle
+  ** Since there is no pubring/secring as with PGP, Mutt-ng has to handle
   ** storage ad retrieval of keys/certs by itself. This is very basic right now,
   ** and stores keys and certificates in two different directories, both
   ** named as the hash-value retrieved from OpenSSL. There is an index file
@@ -2114,7 +2119,7 @@ struct option_t MuttVars[] = {
   { "smime_certificates",	DT_PATH, R_NONE, UL &SmimeCertificates, 0 },
   /*
   ** .pp
-  ** Since there is no pubring/secring as with PGP, mutt-ng has to handle
+  ** Since there is no pubring/secring as with PGP, Mutt-ng has to handle
   ** storage and retrieval of keys by itself. This is very basic right
   ** now, and keys and certificates are stored in two different
   ** directories, both named as the hash-value retrieved from
@@ -2234,7 +2239,7 @@ struct option_t MuttVars[] = {
   **
   ** .pp
   ** Defines the username to use with SMTP AUTH.  Setting this variable will
-  ** cause mutt-ng to attempt to use SMTP AUTH when sending.
+  ** cause Mutt-ng to attempt to use SMTP AUTH when sending.
   */
   { "smtp_auth_password", DT_STR, R_NONE, UL &SmtpAuthPass, 0 },
   /*
@@ -2288,8 +2293,8 @@ struct option_t MuttVars[] = {
   ** Availability: SSL or GNUTLS
   **
   ** .pp
-  ** If set (the default), mutt-ng will attempt to use STARTTLS on servers
-  ** advertising the capability. When unset, mutt-ng will not attempt to
+  ** If set (the default), Mutt-ng will attempt to use STARTTLS on servers
+  ** advertising the capability. When unset, Mutt-ng will not attempt to
   ** use STARTTLS regardless of the server's capabilities.
   */
 # endif  
@@ -2318,7 +2323,7 @@ struct option_t MuttVars[] = {
   ** Availability: SSL or NSS
   **
   ** .pp
-  ** If set to \fIyes\fP, mutt-ng will use CA certificates in the
+  ** If set to \fIyes\fP, Mutt-ng will use CA certificates in the
   ** system-wide certificate store when checking if server certificate 
   ** is signed by a trusted CA.
   */
@@ -2412,12 +2417,12 @@ struct option_t MuttVars[] = {
   ** Availability: POP
   **
   ** .pp
-  ** This is a colon-delimited list of authentication methods mutt-ng may
-  ** attempt to use to log in to an POP server, in the order mutt-ng should
+  ** This is a colon-delimited list of authentication methods Mutt-ng may
+  ** attempt to use to log in to an POP server, in the order Mutt-ng should
   ** try them.  Authentication methods are either 'user', 'apop' or any
   ** SASL mechanism, eg 'digest-md5', 'gssapi' or 'cram-md5'.
   ** This parameter is case-insensitive. If this parameter is unset
-  ** (the default) mutt-ng will try all available methods, in order from
+  ** (the default) Mutt-ng will try all available methods, in order from
   ** most-secure to least-secure.
   ** .pp
   ** Example: set pop_authenticators="digest-md5:apop:user"
@@ -2469,7 +2474,7 @@ struct option_t MuttVars[] = {
   ** Availability: POP
   **
   ** .pp
-  ** If this variable is set, mutt-ng will try to use the "LAST" POP command
+  ** If this variable is set, Mutt-ng will try to use the "LAST" POP command
   ** for retrieving only unread messages from the POP server when using
   ** the fetch-mail function.
   */
@@ -2545,10 +2550,10 @@ struct option_t MuttVars[] = {
   { "preconnect",	DT_STR, R_NONE, UL &Preconnect, UL 0},
   /*
   ** .pp
-  ** If set, a shell command to be executed if mutt-ng fails to establish
+  ** If set, a shell command to be executed if Mutt-ng fails to establish
   ** a connection to the server. This is useful for setting up secure
   ** connections, e.g. with ssh(1). If the command returns a  nonzero
-  ** status, mutt-ng gives up opening the server. Example:
+  ** status, Mutt-ng gives up opening the server. Example:
   ** .pp
   ** preconnect="ssh -f -q -L 1234:mailhost.net:143 mailhost.net
   **                   sleep 20 < /dev/null > /dev/null"
@@ -2610,7 +2615,7 @@ struct option_t MuttVars[] = {
   { "query_command",	DT_PATH, R_NONE, UL &QueryCmd, UL "" },
   /*
   ** .pp
-  ** This specifies the command that mutt-ng will use to make external address
+  ** This specifies the command that Mutt-ng will use to make external address
   ** queries.  The string should contain a %s, which will be substituted
   ** with the query string the user types.  See ``$query'' for more
   ** information.
@@ -2619,7 +2624,7 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** This variable controls whether ``quit'' and ``exit'' actually quit
-  ** from mutt-ng.  If it set to yes, they do quit, if it is set to no, they
+  ** from Mutt-ng.  If it set to yes, they do quit, if it is set to no, they
   ** have no effect, and if it is set to ask-yes or ask-no, you are
   ** prompted for confirmation when you try to quit.
   */
@@ -2765,15 +2770,15 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** This variable fine-tunes the behaviour of the $reverse_name feature.
-  ** When it is set, mutt-ng will use the address from incoming messages as-is,
-  ** possibly including eventual real names.  When it is unset, mutt-ng will
+  ** When it is set, Mutt-ng will use the address from incoming messages as-is,
+  ** possibly including eventual real names.  When it is unset, Mutt-ng will
   ** override any such real names with the setting of the $realname variable.
   */
   { "rfc2047_parameters", DT_BOOL, R_NONE, OPTRFC2047PARAMS, 0 },
   /*
   ** .pp
   ** When this variable is set, Mutt-ng will decode RFC-2047-encoded MIME 
-  ** parameters. You want to set this variable when mutt-ng suggests you
+  ** parameters. You want to set this variable when Mutt-ng suggests you
   ** to save attachments to files named like this: 
   ** =?iso-8859-1?Q?file=5F=E4=5F991116=2Ezip?=
   ** .pp
@@ -2784,13 +2789,13 @@ struct option_t MuttVars[] = {
   ** prohibited by the standard, but nevertheless encountered in the
   ** wild.
   ** Also note that setting this parameter will \fInot\fP have the effect 
-  ** that mutt-ng \fIgenerates\fP this kind of encoding.  Instead, mutt-ng will
+  ** that Mutt-ng \fIgenerates\fP this kind of encoding.  Instead, Mutt-ng will
   ** unconditionally use the encoding specified in RFC 2231.
   */
   { "save_address",	DT_BOOL, R_NONE, OPTSAVEADDRESS, 0 },
   /*
   ** .pp
-  ** If set, mutt-ng will take the sender's full address when choosing a
+  ** If set, Mutt-ng will take the sender's full address when choosing a
   ** default folder for saving a mail. If ``$$save_name'' or ``$$force_name''
   ** is set too, the selection of the fcc folder will be changed as well.
   */
@@ -2829,8 +2834,8 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** Messages which have been assigned a score equal to or lower than the value
-  ** of this variable are automatically marked for deletion by mutt-ng.  Since
-  ** mutt-ng scores are always greater than or equal to zero, the default setting
+  ** of this variable are automatically marked for deletion by Mutt-ng.  Since
+  ** Mutt-ng scores are always greater than or equal to zero, the default setting
   ** of this variable will never mark a message for deletion.
   */
   { "score_threshold_flag", DT_NUM, R_NONE, UL &ScoreThresholdFlag, 9999 },
@@ -2843,8 +2848,8 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** Messages which have been assigned a score equal to or lower than the value
-  ** of this variable are automatically marked as read by mutt-ng.  Since
-  ** mutt-ng scores are always greater than or equal to zero, the default setting
+  ** of this variable are automatically marked as read by Mutt-ng.  Since
+  ** Mutt-ng scores are always greater than or equal to zero, the default setting
   ** of this variable will never mark a message read.
   */
   { "send_charset",	DT_STR,  R_NONE, UL &SendCharset, UL "us-ascii:iso-8859-1:utf-8" },
@@ -3043,7 +3048,7 @@ struct option_t MuttVars[] = {
   ** When sorting by threads, this variable controls how threads are sorted
   ** in relation to other threads, and how the branches of the thread trees
   ** are sorted.  This can be set to any value that ``$$sort'' can, except
-  ** threads (in that case, mutt-ng will just use date-sent).  You can also
+  ** threads (in that case, Mutt-ng will just use date-sent).  You can also
   ** specify the last- prefix in addition to the reverse- prefix, but last-
   ** must come after reverse-.  The last- prefix causes messages to be
   ** sorted against its siblings by which has the last descendant, using
@@ -3075,10 +3080,10 @@ struct option_t MuttVars[] = {
   ** .pp
   ** This variable is only useful when sorting by threads with
   ** ``$$strict_threads'' unset.  In that case, it changes the heuristic
-  ** mutt-ng uses to thread messages by subject.  With sort_re set, mutt-ng will
+  ** Mutt-ng uses to thread messages by subject.  With sort_re set, Mutt-ng will
   ** only attach a message as the child of another message by subject if
   ** the subject of the child message starts with a substring matching the
-  ** setting of ``$$reply_regexp''.  With sort_re unset, mutt-ng will attach
+  ** setting of ``$$reply_regexp''.  With sort_re unset, Mutt-ng will attach
   ** the message whether or not this is the case, as long as the
   ** non-``$$reply_regexp'' parts of both messages are identical.
   */
@@ -3179,7 +3184,7 @@ struct option_t MuttVars[] = {
   ** lowercase, you would use:
   ** %_h
   ** .pp
-  ** If you prefix the sequence character with a colon (:) character, mutt-ng
+  ** If you prefix the sequence character with a colon (:) character, Mutt-ng
   ** will replace any dots in the expansion by underscores. This might be helpful 
   ** with IMAP folders that don't like dots in folder names.
   */
@@ -3222,14 +3227,14 @@ struct option_t MuttVars[] = {
   { "suspend",		DT_BOOL, R_NONE, OPTSUSPEND, 1 },
   /*
   ** .pp
-  ** When \fIunset\fP, mutt-ng won't stop when the user presses the terminal's
-  ** \fIsusp\fP key, usually ``control-Z''. This is useful if you run mutt-ng
-  ** inside an xterm using a command like xterm -e mutt-ng.
+  ** When \fIunset\fP, Mutt-ng won't stop when the user presses the terminal's
+  ** \fIsusp\fP key, usually ``control-Z''. This is useful if you run Mutt-ng
+  ** inside an xterm using a command like xterm -e Mutt-ng.
   */
   { "text_flowed", 	DT_BOOL, R_NONE, OPTTEXTFLOWED,  0 },
   /*
   ** .pp
-  ** When set, mutt-ng will generate text/plain; format=flowed attachments.
+  ** When set, Mutt-ng will generate text/plain; format=flowed attachments.
   ** This format is easier to handle for some mailing software, and generally
   ** just looks like ordinary text.  To actually make use of this format's 
   ** features, you'll need support in your editor.
@@ -3239,7 +3244,7 @@ struct option_t MuttVars[] = {
   { "thread_received",	DT_BOOL, R_RESORT|R_RESORT_INIT|R_INDEX, OPTTHREADRECEIVED, 0 },
   /*
   ** .pp
-  ** When set, mutt-ng uses the date received rather than the date sent
+  ** When set, Mutt-ng uses the date received rather than the date sent
   ** to thread messages by subject.
   */
   { "thorough_search",	DT_BOOL, R_NONE, OPTTHOROUGHSRC, 0 },
@@ -3294,13 +3299,13 @@ struct option_t MuttVars[] = {
   ** purged.
   ** .pp
   ** NOTE: When you delete a message in the trash folder, it is really
-  ** deleted, so that you have a way to clean the trash.
+  ** deleted, so that there is no way to recover mail.
   */
 #ifdef USE_SOCKET
   { "tunnel",            DT_STR, R_NONE, UL &Tunnel, UL 0 },
   /*
   ** .pp
-  ** Setting this variable will cause mutt-ng to open a pipe to a command
+  ** Setting this variable will cause Mutt-ng to open a pipe to a command
   ** instead of a raw socket. You may be able to use this to set up
   ** preauthenticated connections to your IMAP/POP3 server. Example:
   ** .pp
@@ -3313,7 +3318,7 @@ struct option_t MuttVars[] = {
   { "umask",	DT_NUM, R_NONE, UL &Umask, 0077 },
   /*
   ** .pp
-  ** This sets the umask that will be used by mutt-ng when creating all
+  ** This sets the umask that will be used by Mutt-ng when creating all
   ** kinds of files. If unset, the default value is 077.
   */
   { "use_8bitmime",	DT_BOOL, R_NONE, OPTUSE8BITMIME, 0 },
@@ -3365,8 +3370,8 @@ struct option_t MuttVars[] = {
   { "user_agent",	DT_BOOL, R_NONE, OPTXMAILER, 1},
   /*
   ** .pp
-  ** When \fIset\fP, mutt-ng will add a "User-Agent" header to outgoing
-  ** messages, indicating which version of mutt-ng was used for composing
+  ** When \fIset\fP, Mutt-ng will add a "User-Agent" header to outgoing
+  ** messages, indicating which version of Mutt-ng was used for composing
   ** them.
   */
   { "visual",		DT_PATH, R_NONE, UL &Visual, 0 },
@@ -3392,7 +3397,7 @@ struct option_t MuttVars[] = {
   { "weed",		DT_BOOL, R_NONE, OPTWEED, 1 },
   /*
   ** .pp
-  ** When set, mutt-ng will weed headers when displaying, forwarding,
+  ** When set, Mutt-ng will weed headers when displaying, forwarding,
   ** printing, or replying to messages.
   */
   { "wrap_search",	DT_BOOL, R_NONE, OPTWRAPSEARCH, 1 },
@@ -3407,7 +3412,7 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** Controls the size of the margin remaining at the right side of
-  ** the terminal when mutt-ng's pager does smart wrapping.
+  ** the terminal when Mutt-ng's pager does smart wrapping.
   */
   { "write_inc",	DT_NUM,	 R_NONE, UL &WriteInc, 10 },
   /*
@@ -3421,7 +3426,7 @@ struct option_t MuttVars[] = {
   { "write_bcc",	DT_BOOL, R_NONE, OPTWRITEBCC, 1},
   /*
   ** .pp
-  ** Controls whether mutt-ng writes out the Bcc header when preparing
+  ** Controls whether Mutt-ng writes out the Bcc header when preparing
   ** messages to be sent.  Exim users may wish to unset this.
   */
   {"xterm_icon",       DT_STR,   R_BOTH, UL &XtermIcon,  UL "M%?n?AIL&ail?"},
@@ -3434,7 +3439,7 @@ struct option_t MuttVars[] = {
   {"xterm_set_titles", DT_BOOL,  R_BOTH, OPTXTERMSETTITLES, 0},
   /*
   ** .pp
-  ** Controls whether mutt-ng sets the xterm title bar and icon name
+  ** Controls whether Mutt-ng sets the xterm title bar and icon name
   ** (as long as you're in an appropriate terminal). The default must
   ** be off to force in the validity checking.
   */
