@@ -30,6 +30,7 @@
 #include "sort.h"
 
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <dirent.h>
 #include <limits.h>
 #include <unistd.h>
@@ -47,6 +48,7 @@ struct maildir
   HEADER *h;
   char *canon_fname;
   unsigned header_parsed:1;
+  ino_t inode;
   struct maildir *next;
 };
 
@@ -626,7 +628,7 @@ static HEADER *maildir_parse_message (int magic, const char *fname,
 
 static int maildir_parse_entry (CONTEXT * ctx, struct maildir ***last,
 				const char *subdir, const char *fname,
-				int *count, int is_old)
+				int *count, int is_old, ino_t inode)
 {
   struct maildir *entry;
   HEADER *h = NULL;
@@ -666,6 +668,7 @@ static int maildir_parse_entry (CONTEXT * ctx, struct maildir ***last,
     entry = safe_calloc (sizeof (struct maildir), 1);
     entry->h = h;
     entry->header_parsed = (ctx->magic == M_MH);
+    entry->inode = inode;
     **last = entry;
     *last = &entry->next;
 
@@ -723,7 +726,8 @@ static int maildir_parse_dir (CONTEXT * ctx, struct maildir ***last,
     dprint (2,
 	    (debugfile, "%s:%d: parsing %s\n", __FILE__, __LINE__,
 	     de->d_name));
-    maildir_parse_entry (ctx, last, subdir, de->d_name, count, is_old);
+    maildir_parse_entry (ctx, last, subdir, de->d_name, count, is_old, 
+			 de->d_ino);
   }
 
   closedir (dirp);
@@ -777,6 +781,94 @@ static int maildir_move_to_context (CONTEXT * ctx, struct maildir **md)
   r = maildir_add_to_context (ctx, *md);
   maildir_free_maildir (md);
   return r;
+}
+
+/*
+ * Merge two maildir lists according to the inode numbers.
+ */
+static struct maildir*  maildir_merge_inode (struct maildir *left,
+					     struct maildir *right)
+{
+  struct maildir* head;
+  struct maildir* tail;
+
+  if (left && right) 
+  {
+    if (left->inode < right->inode)
+    {
+      head = left;
+      left = left->next;
+    }
+    else 
+    {
+      head = right;
+      right = right->next;
+    }
+  } 
+  else 
+  {
+    if (left) 
+      return left;
+    else 
+      return right;
+  }
+    
+  tail = head;
+
+  while (left && right) 
+  {
+    if (left->inode < right->inode) 
+    {
+      tail->next = left;
+      left = left->next;
+    } 
+    else 
+    {
+      tail->next = right;
+      right = right->next;
+    }
+    tail = tail->next;
+  }
+
+  if (left) 
+  {
+    tail->next = left;
+  }
+  else
+  {
+    tail->next = right;
+  }
+
+  return head;
+}
+
+/*
+ * Sort maildir list according to inode.
+ */
+static struct maildir* maildir_sort_inode(struct maildir* list)
+{
+  struct maildir* left = list;
+  struct maildir* right = list;
+
+  if (!list || !list->next) 
+  {
+    return list;
+  }
+
+  list = list->next;
+  while (list && list->next) 
+  {
+    right = right->next;
+    list = list->next->next;
+  }
+
+  list = right;
+  right = right->next;
+  list->next = 0;
+
+  left = maildir_sort_inode(left);
+  right = maildir_sort_inode(right);
+  return maildir_merge_inode(left, right);
 }
 
 
@@ -834,6 +926,8 @@ int mh_read_dir (CONTEXT * ctx, const char *subdir)
     mh_update_maildir (md, &mhs);
     mhs_free_sequences (&mhs);
   }
+
+  md = maildir_sort_inode(md);
 
   if (ctx->magic == M_MAILDIR)
     maildir_delayed_parsing (ctx, md);

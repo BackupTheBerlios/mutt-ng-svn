@@ -6,6 +6,8 @@ Changes specific to mutt-ng:
     * edit-threads patch
     * gnutls patch including integration into configure script, i.e. the user
       can select between OpenSSL and GNU TLS.
+    * Florian Weimer's sort maildir entries by inode number patch
+    * little pgpewrap fix
   * Corrected email addresses et al.
 
 2004-01-14:
