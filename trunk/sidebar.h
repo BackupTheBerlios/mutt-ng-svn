@@ -8,14 +8,13 @@
  * please see the file GPL in the top level source directory.
  */
 
-#ifndef SIDEBAR_H
-#define SIDEBAR_H
+#ifndef _SIDEBAR_H
+#define _SIDEBAR_H
 
-/* parameter is whether or not to go to the status line */
-/* used for omitting the last | that covers up the status bar in the index */
-int draw_sidebar (int);
-void scroll_sidebar (int, int);
-void set_curbuffy (char *);
-void set_buffystats (CONTEXT *);
+int sidebar_draw (int);
+void sidebar_scroll (int, int);
+void sidebar_set_buffystats (CONTEXT *);
+const char* sidebar_get_current (void);
+void sidebar_set_current (const char*);
 
-#endif /* SIDEBAR_H */
+#endif /* _SIDEBAR_H */
