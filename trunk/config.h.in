@@ -77,6 +77,10 @@
 /* Define to 1 if you have the `dcgettext' function. */
 #undef HAVE_DCGETTEXT
 
+/* Define to 1 if you have the declaration of `sys_siglist', and to 0 if you
+   don't. */
+#undef HAVE_DECL_SYS_SIGLIST
+
 /* Define to 1 if you have the `fchdir' function. */
 #undef HAVE_FCHDIR
 
@@ -508,9 +512,6 @@
 
 /* Define to enable Sun mailtool attachments support. */
 #undef SUN_ATTACHMENT
-
-/* Define to 1 if `sys_siglist' is declared by <signal.h> or <unistd.h>. */
-#undef SYS_SIGLIST_DECLARED
 
 /* Define to use dotlocking for mailboxes. */
 #undef USE_DOTLOCK

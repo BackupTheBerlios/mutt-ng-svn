@@ -21,6 +21,8 @@
 #ifndef MUTT_H
 #define MUTT_H 
 
+#include "config.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef HAVE_UNISTD_H
