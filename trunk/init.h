@@ -1123,6 +1123,13 @@ struct option_t MuttVars[] = {
   ** from (instead to the author only). Setting this option to ``ask-yes'' or
   ** ``ask-no'' will ask if you really intended to reply to the author only.
   */
+  { "max_line_length",	DT_NUM, R_NONE, UL &MaxLineLength, 0 },
+  /*
+  ** .pp
+  ** When set, the maximum line length for displaying f=f messages is limited
+  ** to this length. A value of 0 (which is also the default) means that the
+  ** maximum line length is determined by the terminal width and $$wrapmargin.
+  */
   { "mail_check",	DT_NUM,  R_NONE, UL &BuffyTimeout, 5 },
   /*
   ** .pp

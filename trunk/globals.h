@@ -207,6 +207,7 @@ WHERE short Timeout;
 WHERE short Umask INITVAL(0077);
 WHERE short WrapMargin;
 WHERE short WriteInc;
+WHERE short MaxLineLength;
 
 WHERE short ScoreThresholdDelete;
 WHERE short ScoreThresholdRead;

@@ -1212,11 +1212,19 @@ static void print_flowed_line(char * line, STATE *s,int ql) {
   int len = strlen(line);
   int i;
 
-  width = COLS - WrapMargin - ql - 1;
-  if (option(OPTSTUFFQUOTED))
-    --width;
-  if (width < 0)
-    width = COLS;
+  if (MaxLineLength > 0) {
+    width = MaxLineLength - WrapMargin - ql - 1;
+    if (option(OPTSTUFFQUOTED))
+      --width;
+    if (width < 0)
+      width = MaxLineLength;
+  } else {
+    width = COLS - WrapMargin - ql - 1;
+    if (option(OPTSTUFFQUOTED))
+      --width;
+    if (width < 0)
+      width = COLS;
+  }
 
   /* fprintf(stderr,"print_flowed_line will print `%s' with ql = %d\n",line,ql); */
 
