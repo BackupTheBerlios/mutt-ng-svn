@@ -1539,7 +1539,7 @@ struct option_t MuttVars[] = {
    ** deeper threads to fit on the screen.
    */
 #ifdef USE_NNTP
-  {"news_cache_dir", DT_PATH, R_NONE, UL & NewsCacheDir, UL "~/.mutt"},
+  {"news_cache_dir", DT_PATH, R_NONE, UL & NewsCacheDir, UL "~/.muttng"},
   /*
    ** .pp
    ** Availability: NNTP
