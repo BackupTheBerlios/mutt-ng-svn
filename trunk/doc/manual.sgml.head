@@ -2210,7 +2210,7 @@ sidebar-next           Hilights the next mailbox
 sidebar-next-new       Hilights the next mailbox with new mail
 sidebar-previous       Hilights the previous mailbox
 sidebar-open           Opens the currently hilighted mailbox
-</tscreen></verb>
+</verb></tscreen>
 
 Reasonable key bindings look e.g. like this:
 <tscreen><verb>

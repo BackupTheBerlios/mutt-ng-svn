@@ -2699,6 +2699,7 @@ CHECK_IMAP_ACL(IMAP_ACL_DELETE);
 
       case OP_BUFFY_LIST:
 	mutt_buffy_list ();
+    redraw |= REDRAW_SIDEBAR;
 	break;
 
       case OP_VIEW_ATTACHMENTS:

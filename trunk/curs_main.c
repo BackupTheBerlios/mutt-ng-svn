@@ -564,8 +564,10 @@ int mutt_index_menu (void)
     {
      /* check for new mail in the incoming folders */
      oldcount = newcount;
-     if ((newcount = mutt_buffy_check (0)) != oldcount)
+     if ((newcount = mutt_buffy_check (0)) != oldcount){
        menu->redraw |= REDRAW_STATUS;
+       menu->redraw |= REDRAW_SIDEBAR;
+     } 
      if (do_buffy_notify)
      {
        if (mutt_buffy_notify () && option (OPTBEEPNEW))
@@ -577,7 +579,7 @@ int mutt_index_menu (void)
 
     if (op != -1)
       mutt_curs_set (0);
-
+    if (menu->redraw & REDRAW_SIDEBAR) draw_sidebar(menu->menu);
     if (menu->redraw & REDRAW_FULL)
     {
       menu_redraw_full (menu);
@@ -2374,6 +2376,7 @@ CHECK_IMAP_ACL(IMAP_ACL_DELETE);
 
       case OP_BUFFY_LIST:
         mutt_buffy_list ();
+        menu->redraw = REDRAW_FULL;
         break;
 
       case OP_VIEW_ATTACHMENTS:
