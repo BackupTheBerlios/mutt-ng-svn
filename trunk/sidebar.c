@@ -330,9 +330,10 @@ BUFFY * exist_prev_new()
 
 void scroll_sidebar(int op, int menu)
 {
-        if(!SidebarWidth) return;
-        if(!CurBuffy) return;
-	BUFFY *tmp;
+  BUFFY *tmp;
+
+  if(!SidebarWidth) return;
+  if(!CurBuffy) return;
 
   switch (op) {
     case OP_SIDEBAR_NEXT:
