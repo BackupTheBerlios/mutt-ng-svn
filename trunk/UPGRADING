@@ -43,14 +43,14 @@ rev123, please put it "into" init and removes this comment when done!
     sidebar_delim, sidebar_visible, sidebar_width, shorten_hierarchy
 
     Format Flowed Improvements:
-    max_line_length, quote_empty, quote_quoted
+    max_line_length, quote_empty, quote_quoted, stuff_quoted
 
     XTerm-Titles Patch:
     xterm_icon, xterm_set_titles, xterm_title
 
     Misc.
     imap_reconnect, msgid_format, operating_system, shorten_hierarchy,
-    signoff_string, stuff_quoted, umask
+    signoff_string, umask
     
     Trash-Folder Patch:
     trash

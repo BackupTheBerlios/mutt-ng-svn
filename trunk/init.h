@@ -1220,11 +1220,11 @@ struct option_t MuttVars[] = {
   ** Availability: Header Cache
   **
   ** .pp
-  ** The header_cache variable points to the header cache database. If
-  ** header_cache points to a directory there will be created one header cache
-  ** database per folder within this directory. If it doesn't point to a directory a
-  ** global header cache for all folders is used. Per default it is unset and so
-  ** no header caching will be used.
+  ** The header_cache variable points to the header cache database.
+  ** If header_cache points to a directory it will contain a header cache
+  ** database  per folder. If header_cache points to a file that file will
+  ** be a single global header cache. By default it is unset and so no
+  ** header caching will be used.
   */
   { "maildir_header_cache_verify", DT_BOOL, R_NONE, OPTHCACHEVERIFY, 1 },
   /*
