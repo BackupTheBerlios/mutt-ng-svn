@@ -2326,7 +2326,11 @@ CHECK_IMAP_ACL(IMAP_ACL_SEEN);
       case OP_FORWARD_TO_GROUP:
 
         CHECK_ATTACH;
-        if (op != OP_FOLLOWUP || !CURHDR->env->followup_to ||
+        if ((op == OP_FOLLOWUP || op == OP_FORWARD_TO_GROUP) &&
+            Context && Context->msgcount == 0) {
+          mutt_error (_("There are no messages."));
+          sleep (2);
+        } else if (op != OP_FOLLOWUP || !CURHDR->env->followup_to ||
             mutt_strcasecmp (CURHDR->env->followup_to, "poster") ||
             query_quadoption (OPT_FOLLOWUPTOPOSTER,_("Reply by mail as poster prefers?")) != M_YES)
         {
