@@ -59,6 +59,9 @@ extern int optind;
 
 #define BUFFSIZE 2048
 
+static char lastvar[BUFFSIZE];
+static int sort_error = 0;
+
 enum output_formats_t
 {
   F_CONF, F_MAN, F_SGML, F_NONE
@@ -150,7 +153,9 @@ int main (int argc, char *argv[])
   {
     case F_CONF: 
     case F_MAN:  
-    case F_SGML: makedoc (f, stdout); break;
+    case F_SGML:
+      lastvar[0] = '\0';
+      makedoc (f, stdout); break;
     default:
     {
       fprintf (stderr, "%s: No output format specified.\n",
@@ -165,6 +170,13 @@ int main (int argc, char *argv[])
   exit (1);
 }
 
+static void remember (const char* s)
+{
+  int l = strlen (s);
+  lastvar[0] = '\0';
+  strncpy (lastvar, s, strlen (s));
+  lastvar[l] = '\0';
+}
 
 static void makedoc (FILE *in, FILE *out)
 {
@@ -213,6 +225,19 @@ static void makedoc (FILE *in, FILE *out)
   }
   flush_doc (docstat, out);
   fputs ("\n", out);
+  if (sort_error == 1)
+  {
+    fputs ("\n"
+           "***************************************************************************\n"
+           "*** There have been sorting errors for the manual's variable reference. ***\n"
+           "*** If you're not a developer playing with the code, please report this ***\n"
+           "*** error to <mutt-ng-devel@lists.berlios.de>                           ***\n"
+           "***                                                                     ***\n"
+           "*** I'm waiting 5 seconds for you to take notice.                       ***\n"
+           "***************************************************************************\n\n",
+           stderr);
+    sleep (5);
+  }
 }
 
 /* skip whitespace */
@@ -397,7 +422,18 @@ static void handle_confline (char *s, FILE *out)
   /* xxx - put this into an actual state machine? */
 
   /* variable name */
-  if (!(s = get_token (varname, sizeof (varname), s))) return;
+  if (!(s = get_token (varname, sizeof (varname), s)))
+    return;
+  else
+  {
+    if (lastvar[0] && strncmp (lastvar, varname, strlen (lastvar)) > 0)
+    {
+      fprintf (stderr, "*** MAKEDOC WARNING: $%s must come before $%s ***\n",
+               varname, lastvar);
+      sort_error = 1;
+    }
+    remember (varname);
+  }
   
   /* comma */
   if (!(s = get_token (buff, sizeof (buff), s))) return;
