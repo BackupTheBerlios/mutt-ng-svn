@@ -1,0 +1,6 @@
+# $Id: sample.mailcap,v 3.0 2002/01/24 12:11:17 roessler Exp $
+
+text/html; netscape -remote openURL\(%s\)
+image/gif; xv %s
+image/jpg; xv %s
+application/pgp-keys; pgp -f < %s ; copiousoutput
