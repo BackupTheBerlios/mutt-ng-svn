@@ -207,6 +207,8 @@ void set_curbuffy(char buf[LONG_STRING])
 void set_buffystats (CONTEXT* Context)
 {
   BUFFY* tmp = Incoming;
+  if (!Context)
+    return;
   while (tmp)
   {
     if (strcmp (tmp->path, Context->path) == 0)
