@@ -588,7 +588,7 @@ int mutt_buffy_list (void)
       first = 0;
     }
   }
-  if (!first && tmp) {
+  if (!first && i < Incoming->length) {
     strncat (buffylist + pos, ", ...", sizeof (buffylist) - 1 - pos);   /* __STRNCAT_CHECKED__ */
   }
   if (!first) {
