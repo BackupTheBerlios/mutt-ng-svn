@@ -808,7 +808,6 @@ dnl -- start cache --
 AC_ARG_ENABLE(hcache, [  --enable-hcache            Enable header caching],
 [if test x$enableval = xyes; then
     AC_DEFINE(USE_HCACHE, 1, [Enable header caching])
-    MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS hcache.o"
 
     OLDCPPFLAGS="$CPPFLAGS"
     OLDLIBS="$LIBS"
