@@ -108,7 +108,7 @@ struct feature_t {
 #endif
 
 struct option_t MuttVars[] = {
-  /*++ */
+  /*++*/
   {"abort_nosubject", DT_QUAD, R_NONE, OPT_SUBJECT, M_ASKYES},
   /*
    ** .pp
