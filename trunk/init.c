@@ -301,7 +301,7 @@ static void add_to_list (LIST ** list, const char *str)
   }
 }
 
-static int add_to_rx_list (rx_t ** list, const char *s, int flags,
+static int add_to_rx_list (list2_t** list, const char *s, int flags,
                            BUFFER * err)
 {
   rx_t* rx;
