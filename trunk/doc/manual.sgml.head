@@ -24,7 +24,7 @@ fork from Mutt with the goal to fix all the little annoyances of Mutt, to
 integrate all the Mutt patches that are floating around in the web, and to
 add other new features. Features specific to Mutt-ng will be discussed in
 an extra section. Don't be confused when most of the documentation talk about
-Mutt and not Mutt-ng, Mutt-ng contains all Mutt-ng features, plus many more.
+Mutt and not Mutt-ng, Mutt-ng contains all Mutt features, plus many more.
 
 
 <sect1>Mutt-ng Home Page
