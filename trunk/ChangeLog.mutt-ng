@@ -1,5 +1,8 @@
 Changes specific to mutt-ng:
 
+2005-01-30:
+  * (Partially?) implemented IMAP reconnecting, needs more testing
+
 2005-01-29:
   * Fixed bugs #3149 and #3161: declarations within functions don't work with gcc 2.95
   * Rename helper programs new names and install documentation into 

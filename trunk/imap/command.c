@@ -115,7 +115,7 @@ int imap_cmd_step (IMAP_DATA* idata)
     if (c <= 0)
     {
       dprint (1, (debugfile, "imap_cmd_step: Error reading server response.\n"));
-      cmd_handle_fatal (idata);
+      /* cmd_handle_fatal (idata); */
       return IMAP_CMD_BAD;
     }
 
@@ -206,6 +206,13 @@ int imap_exec (IMAP_DATA* idata, const char* cmd, int flags)
     rc = imap_cmd_step (idata);
   while (rc == IMAP_CMD_CONTINUE);
 
+  if (rc == IMAP_CMD_BAD) {
+    if (imap_reconnect(idata->ctx)!=0) {
+      return -1;
+    }
+    return 0;
+  }
+
   if (rc == IMAP_CMD_NO && (flags & IMAP_CMD_FAIL_OK))
     return -2;
 
@@ -286,12 +293,12 @@ static void cmd_handle_fatal (IMAP_DATA* idata)
       (idata->reopen & IMAP_REOPEN_ALLOW) &&
       !idata->ctx->closing)
   {
-    mx_fastclose_mailbox (idata->ctx);
-    /*mutt_error (_("Mailbox closed"));
+    /*mx_fastclose_mailbox (idata->ctx);*/
+    mutt_error (_("Mailbox closed"));
     mutt_sleep (1);
-    */
     idata->state = IMAP_DISCONNECTED;
-    imap_reconnect(idata->ctx);
+    if (imap_reconnect(idata->ctx)!=0)
+      mx_fastclose_mailbox(idata->ctx);
   }
 
   if (idata->state != IMAP_SELECTED)
@@ -375,12 +382,16 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
     SKIPWS (s);
     mutt_error ("%s", s);
     idata->status = IMAP_BYE;
-    if (idata->state == IMAP_SELECTED)
-      mx_fastclose_mailbox (idata->ctx);
-    mutt_socket_close (idata->conn);
-    idata->state = IMAP_DISCONNECTED;
 
-    return -1;
+    /*if (imap_reconnect(idata->ctx)!=0) {
+        if (idata->state == IMAP_SELECTED)
+        mx_fastclose_mailbox (idata->ctx); */ /* XXX memleak? */
+      mutt_socket_close (idata->conn);
+      idata->state = IMAP_DISCONNECTED;
+      return -1;
+    /*} else {
+        return 0;
+      } */
   }
   else if (option (OPTIMAPSERVERNOISE) && (ascii_strncasecmp ("NO", s, 2) == 0))
   {

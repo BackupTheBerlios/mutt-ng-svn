@@ -1485,20 +1485,19 @@ int imap_complete(char* dest, size_t dlen, char* path) {
   return -1;
 }
 
-/* reconnect and verify indexes if connection was lost */
+/* reconnect if connection was lost */
 int imap_reconnect(CONTEXT* ctx) {
   IMAP_DATA* imap_data = (IMAP_DATA *)ctx->data;
 
-  if (imap_data->status == IMAP_CONNECTED)
-    return -1;
-  if (imap_data->status == IMAP_BYE)
-    return 0;
-
-  mutt_socket_close(imap_data->conn);
+  if (imap_data) {
+    if (imap_data->status == IMAP_CONNECTED)
+      return -1;
+  }
 
   if (query_quadoption(OPT_IMAPRECONNECT,_("Connection lost. Reconnect to IMAP server?")) != M_YES)
     return -1;
 
-  return imap_open_mailbox(ctx);
+  mx_open_mailbox(ctx->path,0,ctx);
+  return 0;
 }
 
