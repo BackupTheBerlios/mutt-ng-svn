@@ -1922,6 +1922,9 @@ messages:
 ~z [MIN]-[MAX]  messages with a size in the range MIN to MAX *)
 ~=		duplicated messages (see $duplicate_threads)
 ~$		unreferenced messages (requires threaded view)
+~*		``From'' contains realname and (syntactically) valid
+		address (excluded are addresses matching against
+		alternates or any alias)
 </verb></tscreen>
 
 Where EXPR, USER, ID, and SUBJECT are 

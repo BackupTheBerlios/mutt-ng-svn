@@ -91,6 +91,7 @@ Flags[] =
   { 'z', M_SIZE,		0,		eat_range },
   { '=', M_DUPLICATED,		0,		NULL },
   { '$', M_UNREFERENCED,	0,		NULL },
+  { '*', M_REALNAME,		0,		NULL },
   { 0 }
 };
 
@@ -952,6 +953,25 @@ static int match_user (int alladdr, ADDRESS *a1, ADDRESS *a2)
   return alladdr;
 }
 
+/* test if name is considered a real name, i.e. consists of at least 2
+ * space-separated words of which none may end in a dot
+ */
+static int valid_realname (const char* name)
+{
+  const char* p = name;
+  int ret = 0;
+  while (*p)
+  {
+    if (isspace (*p))
+      ret++;
+    else if (*p == '.')
+      /* skip abbr. parts of names (e.g. 'J. User') */
+      ret--;
+    p++;
+  }
+  return (ret >= 1);
+}
+
 /* flags
    	M_MATCH_FULL_ADDRESS	match both personal and machine address */
 int
@@ -1060,6 +1080,18 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags, CONTEXT *ctx,
       return (pat->not ^ (h->thread && h->thread->duplicate_thread));
     case M_UNREFERENCED:
       return (pat->not ^ (h->thread && !h->thread->child));
+    case M_REALNAME:
+      /* realname filter:
+       * we have a match if
+       * - From: matches $alternates
+       * - or we have an alias for current address
+       * - or From: contains valid email address _and_ name has >= 2 fields
+       */
+      return (pat->not ^ (h->env && h->env->from && (
+                            mutt_addr_is_user (h->env->from) ||
+                            (alias_reverse_lookup (h->env->from) != NULL) ||
+                            (h->env->from->personal && valid_realname (h->env->from->personal) && h->env->from->mailbox)
+                            )));
 #ifdef USE_NNTP
     case M_NEWSGROUPS:
       return (pat->not ^ (h->env->newsgroups && regexec (pat->rx, h->env->newsgroups, 0, NULL, 0) == 0));

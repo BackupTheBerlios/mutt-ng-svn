@@ -1,4 +1,3 @@
-
 /*
  * Copyright (C) 1996-2002 Michael R. Elkins <me@mutt.org>
  * Copyright (C) 2004 g10 Code GmbH
@@ -219,6 +218,7 @@ enum
   M_LIMIT,
   M_EXPIRED,
   M_SUPERSEDED,
+  M_REALNAME,
 
   /* actions for mutt_pattern_comp/mutt_pattern_exec */
   M_AND,
