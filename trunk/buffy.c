@@ -135,19 +135,21 @@ int test_new_folder (const char *path)
 
 BUFFY *mutt_find_mailbox (const char *path)
 {
-  BUFFY *tmp = NULL;
   struct stat sb;
   struct stat tmp_sb;
+  int i = 0;
 
   if (stat (path, &sb) != 0)
     return NULL;
 
-  for (tmp = Incoming; tmp; tmp = tmp->next) {
-    if (stat (tmp->path, &tmp_sb) == 0 &&
-        sb.st_dev == tmp_sb.st_dev && sb.st_ino == tmp_sb.st_ino)
-      break;
+  if (!list_empty(Incoming)) {
+    for (i = 0; i < Incoming->length; i++) {
+      if (stat (Incoming->data[i], &tmp_sb) == 0 &&
+          sb.st_dev == tmp_sb.st_dev && sb.st_ino == tmp_sb.st_ino)
+        return ((BUFFY*) Incoming->data[i]);
+    }
   }
-  return tmp;
+  return (NULL);
 }
 
 void mutt_update_mailbox (BUFFY * b)
