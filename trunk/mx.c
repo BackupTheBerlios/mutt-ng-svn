@@ -155,7 +155,6 @@ static int mx_get_idx (const char* path) {
 
   for (i = 0; i < MailboxFormats->length; i++) {
     t = MX_COMMAND(i,mx_is_magic)(path);
-    fprintf (stderr, "          test %s for %i == %i\n", NONULL(path), i, t);
     if (t >= 1)
       return (t-1);     /* use type as index for array */
   }
@@ -331,10 +330,8 @@ int mx_get_magic (const char *path) {
 
   if (safe_strlen (path) == 0)
     return (-1);
-  if ((i = mx_get_idx (path)) >= 0) {
-    fprintf (stderr, "%s is %i\n", NONULL(path), i);
+  if ((i = mx_get_idx (path)) >= 0)
     return (MX_COMMAND(i,type));
-  }
   return (-1);
 }
 
