@@ -16,3 +16,5 @@ Here's a list of all mutt-ng specific TODOs (not in priority order):
   protos.h
 
 - Convert all the names in manual.sgml.head/tail
+
+- Check line numbers in translation files

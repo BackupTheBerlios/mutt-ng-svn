@@ -19,7 +19,7 @@ bottom-page                L   move to the bottom of the page
 current-bottom     not bound   move current entry to bottom of page
 current-middle     not bound   move current entry to middle of page
 current-top        not bound   move current entry to top of page
-enter-command              :   enter a muttrc command
+enter-command              :   enter a muttngrc command
 exit                       q   exit this menu
 first-entry                =   move to the first entry
 half-down                  ]   scroll down 1/2 page
@@ -102,7 +102,7 @@ reply                      r   reply to a message
 resend-message         ESC e   resend message and preserve MIME structure
 save-message               s   save message/attachment to a file
 set-flag                   w   set a status flag on a message
-show-version               V   show the Mutt version number and date
+show-version               V   show the Mutt-ng version number and date
 show-limit             ESC l   show currently active limit pattern, if any
 sort-mailbox               o   sort messages
 sort-reverse               O   sort messages in reverse order
@@ -137,7 +137,7 @@ display-address            @   display full address of sender
 display-toggle-weed        h   display message and toggle header weeding
 edit                       e   edit the current message
 edit-type                 ^E   edit the current message's Content-Type
-enter-command              :   enter a muttrc command
+enter-command              :   enter a muttngrc command
 exit                       i   return to the main-menu
 extract-keys              ^K   extract PGP public keys
 flag-message               F   toggle a message's 'important' flag
@@ -183,7 +183,7 @@ search-opposite    not bound   search for next match in opposite direction
 search-reverse         ESC /   search backwards for a regular expression
 search-toggle              \   toggle search pattern coloring
 shell-escape               !   invoke a command in a subshell
-show-version               V   show the Mutt version number and date
+show-version               V   show the Mutt-ng version number and date
 skip-quoted                S   skip beyond quoted text
 sync-mailbox               $   save changes to mailbox
 tag-message                t   tag a message
@@ -338,7 +338,7 @@ Kari Hurtta
 <htmlurl url="mailto:kari.hurtta@fmi.fi" name="&lt;kari.hurtta@fmi.fi&gt;">
 co-developed the original MIME parsing code back in the ELM-ME days.
 
-The following people have been very helpful to the development of Mutt:
+The following people have been very helpful to the development of Mutt-ng:
 
 Vikas Agnihotri <htmlurl url="mailto:vikasa@writeme.com" name="&lt;vikasa@writeme.com&gt;">,<newline>
 Francois Berjon <htmlurl url="mailto:Francois.Berjon@aar.alcatel-alsthom.fr" name="&lt;Francois.Berjon@aar.alcatel-alsthom.fr&gt;">,<newline>
@@ -381,6 +381,11 @@ Allain Thivillon <htmlurl url="mailto:Allain.Thivillon@alma.fr" name="&lt;Allain
 Gero Treuner <htmlurl url="mailto:gero@faveve.uni-stuttgart.de" name="&lt;gero@faveve.uni-stuttgart.de&gt;">,<newline>
 Vsevolod Volkov <htmlurl url="mailto:vvv@lucky.net" name="&lt;vvv@lucky.net&gt;">,<newline>
 Ken Weinert <htmlurl url="mailto:kenw@ihs.com" name="&lt;kenw@ihs.com&gt;">
+Andreas Krennmair <htmlurl url="mailto:ak@synflood.at" name="&lt;ak@synflood.at&gt;">
+Nico Golde <htmlurl url="mailto:nico@ngolde.de" name="&lt;nico@ngolde.de&gt;">
+Rocco Rutte <htmlurl url="mailto:pdmef@cs.tu-berlin.de" name="&lt;pdmef@cs.tu-berlin.de&gt;">
+
+
 
 <sect1>About this document
 <p>

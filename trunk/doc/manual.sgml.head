@@ -2,8 +2,8 @@
 
 <article>
 
-<title>The Mutt E-Mail Client
-<author>by Michael Elkins <htmlurl url="mailto:me@cs.hmc.edu" name="&lt;me@cs.hmc.edu&gt;">
+<title>The Mutt-ng E-Mail Client
+<author>by Michael Elkins <htmlurl url="mailto:me@cs.hmc.edu" name="&lt;me@cs.hmc.edu&gt;"> and others.
 <date>version @VERSION@
 <abstract>
 ``All mail clients suck.  This one just sucks less.'' -me, circa 1995
@@ -310,7 +310,7 @@ Colors are
 7    white
 </verb></tscreen>
 
-Mutt uses these attributes for handling text/enriched messages, and they
+Mutt-ng uses these attributes for handling text/enriched messages, and they
 can also be used by an external <ref id="auto_view" name="autoview">
 script for highlighting purposes.  <bf/Note:/ If you change the colors for your
 display, for example by changing the color associated with color2 for
@@ -453,7 +453,7 @@ as a message/rfc822 body part.
 
 Asks for an external Unix command and executes it.  The <ref
 id="wait_key" name="&dollar;wait&lowbar;key"> can be used to control
-whether Mutt will wait for a key to be pressed when the command returns
+whether Mutt-ng will wait for a key to be pressed when the command returns
 (presumably to let the user read the output of the command), based on
 the return status of the named command.
 
@@ -493,7 +493,7 @@ modify the message you are forwarding.  These items are discussed
 in greater detail in the next chapter <ref id="forwarding_mail"
 name="``Forwarding and Bouncing Mail''">.
 
-Mutt will then enter the <em/compose/ menu and prompt you for the
+Mutt-ng will then enter the <em/compose/ menu and prompt you for the
 recipients to place on the ``To:'' header field.  Next, it will ask
 you for the ``Subject:'' field for the message, providing a default if
 you are replying to or forwarding a message.  See also <ref id="askcc"
