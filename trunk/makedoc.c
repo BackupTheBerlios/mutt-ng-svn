@@ -749,21 +749,21 @@ static void print_confline (const char *varname, int type, const char *val)
       add ("<label id=\"");
       add (varname);
       add ("\">");
-      add ("\n<p>\nType: ");
+      add ("\n<p>\nType: <tt>");
       add (type2human (type));
-      add ("<newline>");
-      
+      add ("</tt>\n\n");
+
       if (type == DT_STR || type == DT_RX || type == DT_ADDR || type == DT_PATH)
       {
-        add ("\nDefault: &dquot;");
+        add ("<p>\nDefault: <tt>&dquot;");
         sgml_print_strval (val);
-        add ("&dquot;\n");
+        add ("&dquot;</tt>");
       }
       else
       {
-        add ("\nDefault: ");
+        add ("<p>\nDefault: <tt>");
         add (val);
-        add ("\n");
+        add ("</tt>");
       }
       break;
     }
@@ -1097,7 +1097,7 @@ static int print_it (int special, char *str, int docstat)
 
           if (!(onl & D_NL))
             add ("\n");
-          add ("<p>\n");
+          add ("\n<p>\n");
 
           docstat |= D_NP;
           break;

@@ -101,6 +101,7 @@ Style Guide
 
 - try to keep mutt-ng as portable as possible.
 
+- do not use C++-style comments (i.e. "// Comment")
 
 Documentation
 -------------
@@ -116,6 +117,10 @@ where you may have to add documentation:
 
 Configuration _variables_ are documented directly in init.h.   Note
 that this includes documentation for possibly added format flags!
+
+When adding variables which depend on system-functionality and/or
+./configure switches, you have to add additional availability
+information to avoid confusion in the manual.
 
 The parts of The Manual and the muttngrc manual page dealing with
 these variables, and the global Muttrc, are generated automatically

@@ -1,0 +1,99 @@
+This documents describes changes
+
+  - made to configuration variables, functions and the like which are
+    not backwards-compatible and/or which do not exist in mutt
+
+  - other changes which might break existing user configuration and thus
+    have to be documented
+
+This document is not the place for verbose documentation; it only offers
+the necessary keywords to look them up in the manual, ChangeLog or other
+sources of information.
+
+Note: as development goes fast and as documentation is way behind it,
+this still likely is incomplete.
+
+Note for developers: if you encounter anything missing before SVN
+rev123, please put it "into" init and removes this comment when done!
+
+2005-03-01 (init)
+
+  New Variables:
+
+    NNTP-Support:
+    ask_follow_up, ask_x_comment_to, followup_to_poster,
+    group_index_format, catchup_newsgroup, inews, news_cache_dir,
+    newsrc,news_server, nntp_context, nntp_load_description, nntp_pass,
+    nntp_poll, nntp_reconnect, nntp_user, post_moderated,
+    save_unsubscribed, show_new_news, show_only_unread, x_comment_to
+
+    Quoting-Initials-Support
+    indent_string
+
+    libESMTP-Support:
+    smtp_auth_password, smtp_auth_username, smtp_host, smtp_port
+
+    Assumed Character Set Patch:
+    assumed_charset, strict_mime, file_charset 
+
+    Header Caching:
+    maildir_header_cache_verify, maildir_cache 
+
+    Sidebar:
+    sidebar_delim, sidebar_visible, sidebar_width, shorten_hierarchy
+
+    Format Flowed Improvements:
+    max_line_length, quote_empty, quote_quoted
+
+    XTerm-Titles Patch:
+    xterm_icon, xterm_set_titles, xterm_title
+
+    Misc.
+    imap_reconnect, msgid_format, operating_system, shorten_hierarchy,
+    signoff_string, stuff_quoted, umask
+    
+    Trash-Folder Patch:
+    trash
+
+  New Functions:
+
+    NNTP-Support:
+    change-newsgroup, change-newsgroup-readonly, forward-to-group,
+    followup-message, get-children, get-message, get-parent,
+    reconstruct-thread, post-message, catchup, edit-newsgroups,
+    edit-followup-to, edit-x-comment-to, reload-active,
+    subscribe-pattern, unsubscribe-pattern, catchup, uncatchup,
+
+    Purge-Message Patch:
+    purge-message
+
+    List-Reply Patch
+    list_reply 
+
+    Patch edit_threads:
+    break-thread, link-threads
+
+    Sidebar:
+    sidebar-open, sidebar-next, sidebar-prev, sidebar-next-new,
+    sidebar-prev-new, sidebar-scroll-up, sidebar-scroll-down
+
+  New Hooks:
+
+    Compressed-Folder Support:
+    close-hook, open-hook, append-hook
+
+  New Misc.:
+
+    Sidebar Colors:
+    sidebar_new, sidebar_flagged
+
+    Scoring Patterns:
+    ~*
+
+  Other Changes:
+
+    The following tools were removed: bin/pgpewrap, bin/pgpring,
+    bin/smime_keys and etc/mime.types.
+    They were replaced by: bin/pgpewrapng, bin/pgpringng,
+    bin/smime_keysng and etc/muttng-mime.types.
+    Please check and update your configuration.

@@ -215,11 +215,17 @@ struct option_t MuttVars[] = {
   { "ask_follow_up",	DT_BOOL, R_NONE, OPTASKFOLLOWUP, 0 },
   /*
   ** .pp
+  ** Availability: NNTP
+  **
+  ** .pp
   ** If set, Mutt-ng will prompt you for follow-up groups before editing
   ** the body of an outgoing message.
   */  
   { "ask_x_comment_to",	DT_BOOL, R_NONE, OPTASKXCOMMENTTO, 0 },
   /*
+  ** .pp
+  ** Availability: NNTP
+  **
   ** .pp
   ** If set, Mutt-ng will prompt you for x-comment-to field before editing
   ** the body of an outgoing message.
@@ -319,6 +325,9 @@ struct option_t MuttVars[] = {
 #ifdef USE_NNTP
   { "catchup_newsgroup", DT_QUAD, R_NONE, OPT_CATCHUP, M_ASKYES },
   /*
+  ** .pp
+  ** Availability: NNTP
+  **
   ** .pp
   ** If this variable is \fIset\fP, Mutt-ng will mark all articles in newsgroup
   ** as read when you quit the newsgroup (catchup newsgroup).
@@ -496,6 +505,9 @@ struct option_t MuttVars[] = {
   { "dotlock_program",  DT_PATH, R_NONE, UL &MuttDotlock, UL BINDIR "/muttng_dotlock" },
   /*
   ** .pp
+  ** Availability: Standalone and Dotlock
+  **
+  ** .pp
   ** Contains the path of the muttng_dotlock (1) binary to be used by
   ** mutt-ng.
   */
@@ -667,6 +679,9 @@ struct option_t MuttVars[] = {
   { "followup_to_poster", DT_QUAD, R_NONE, OPT_FOLLOWUPTOPOSTER, M_ASKYES },
   /*
   ** .pp
+  ** Availability: NNTP
+  **
+  ** .pp
   ** If this variable is \fIset\fP and the keyword "poster" is present in
   ** \fIFollowup-To\fP header, follow-up to newsgroup function is not
   ** permitted.  The message will be mailed to the submitter of the
@@ -747,6 +762,9 @@ struct option_t MuttVars[] = {
 #ifdef USE_NNTP
   { "group_index_format", DT_STR, R_BOTH, UL &GroupFormat, UL "%4C %M%N %5s  %-45.45f %d" },
   /*
+  ** .pp
+  ** Availability: NNTP
+  **
   ** .pp
   ** This variable allows you to customize the newsgroup browser display to
   ** your personal taste.  This string is similar to ``$index_format'', but
@@ -872,6 +890,9 @@ struct option_t MuttVars[] = {
   { "imap_authenticators", DT_STR, R_NONE, UL &ImapAuthenticators, UL 0 },
   /*
   ** .pp
+  ** Availability: IMAP
+  **
+  ** .pp
   ** This is a colon-delimited list of authentication methods mutt-ng may
   ** attempt to use to log in to an IMAP server, in the order mutt-ng should
   ** try them.  Authentication methods are either 'login' or the right
@@ -889,6 +910,9 @@ struct option_t MuttVars[] = {
   { "imap_delim_chars",		DT_STR, R_NONE, UL &ImapDelimChars, UL "/." },
   /*
   ** .pp
+  ** Availability: IMAP
+  **
+  ** .pp
   ** This contains the list of characters which you would like to treat
   ** as folder separators for displaying IMAP paths. In particular it
   ** helps in using the '=' shortcut for your \fIfolder\fP variable.
@@ -897,12 +921,18 @@ struct option_t MuttVars[] = {
   { "imap_force_ssl",		DT_BOOL, R_NONE, OPTIMAPFORCESSL, 0 },
   /*
   ** .pp
+  ** Availability: IMAP and SSL or IMAP and GNUTLS
+  **
+  ** .pp
   ** If this variable is set, Mutt-ng will always use SSL when
   ** connecting to IMAP servers.
   */
 # endif
   { "imap_headers",	DT_STR, R_INDEX, UL &ImapHeaders, UL 0},
   /*
+  ** .pp
+  ** Availability: IMAP
+  **
   ** .pp
   ** Mutt-ng requests these header fields in addition to the default headers
   ** ("DATE FROM SUBJECT TO CC MESSAGE-ID REFERENCES CONTENT-TYPE
@@ -913,12 +943,18 @@ struct option_t MuttVars[] = {
   { "imap_home_namespace",	DT_STR, R_NONE, UL &ImapHomeNamespace, UL 0},
   /*
   ** .pp
+  ** Availability: IMAP
+  **
+  ** .pp
   ** You normally want to see your personal folders alongside
   ** your INBOX in the IMAP browser. If you see something else, you may set
   ** this variable to the IMAP path to your folders.
   */
   { "imap_keepalive",           DT_NUM,  R_NONE, UL &ImapKeepalive, 900 },
   /*
+  ** .pp
+  ** Availability: IMAP
+  **
   ** .pp
   ** This variable specifies the maximum amount of time in seconds that mutt-ng
   ** will wait before polling open IMAP connections, to prevent the server
@@ -931,12 +967,18 @@ struct option_t MuttVars[] = {
   { "imap_list_subscribed",	DT_BOOL, R_NONE, OPTIMAPLSUB, 0 },
   /*
   ** .pp
+  ** Availability: IMAP
+  **
+  ** .pp
   ** This variable configures whether IMAP folder browsing will look for
   ** only subscribed folders or all folders.  This can be toggled in the
   ** IMAP browser with the \fItoggle-subscribed\fP function.
   */
   { "imap_pass", 	DT_STR,  R_NONE, UL &ImapPass, UL 0 },
   /*
+  ** .pp
+  ** Availability: IMAP
+  **
   ** .pp
   ** Specifies the password for your IMAP account.  If unset, Mutt-ng will
   ** prompt you for your password when you invoke the fetch-mail function.
@@ -947,6 +989,9 @@ struct option_t MuttVars[] = {
   { "imap_passive",		DT_BOOL, R_NONE, OPTIMAPPASSIVE, 1 },
   /*
   ** .pp
+  ** Availability: IMAP
+  **
+  ** .pp
   ** When set, mutt-ng will not open new IMAP connections to check for new
   ** mail.  Mutt-ng will only check for new mail over existing IMAP
   ** connections.  This is useful if you don't want to be prompted to
@@ -956,6 +1001,9 @@ struct option_t MuttVars[] = {
   { "imap_peek", DT_BOOL, R_NONE, OPTIMAPPEEK, 1 },
   /*
   ** .pp
+  ** Availability: IMAP
+  **
+  ** .pp
   ** If set, mutt-ng will avoid implicitly marking your mail as read whenever
   ** you fetch a message from the server. This is generally a good thing,
   ** but can make closing an IMAP folder somewhat slower. This option
@@ -964,11 +1012,17 @@ struct option_t MuttVars[] = {
   { "imap_reconnect",	DT_QUAD, R_NONE, OPT_IMAPRECONNECT, M_ASKYES },
   /*
   ** .pp
+  ** Availability: IMAP
+  **
+  ** .pp
   ** Controls whether or not Mutt-ng will try to reconnect to IMAP server when
   ** the connection is lost.
   */
   { "imap_servernoise",		DT_BOOL, R_NONE, OPTIMAPSERVERNOISE, 1 },
   /*
+  ** .pp
+  ** Availability: IMAP
+  **
   ** .pp
   ** When set, mutt-ng will display warning messages from the IMAP
   ** server as error messages. Since these messages are often
@@ -978,6 +1032,9 @@ struct option_t MuttVars[] = {
   */
   { "imap_user",	DT_STR,  R_NONE, UL &ImapUser, UL 0 },
   /*
+  ** .pp
+  ** Availability: IMAP
+  **
   ** .pp
   ** Your login name on the IMAP server.
   ** .pp
@@ -1087,6 +1144,9 @@ struct option_t MuttVars[] = {
   { "inews",          DT_PATH, R_NONE, UL &Inews, UL "" },
   /*
   ** .pp
+  ** Availability: NNTP
+  **
+  ** .pp
   ** If set, specifies the program and arguments used to deliver news posted
   ** by Mutt-ng.  Otherwise, mutt-ng posts article using current connection to
   ** news server.  The following printf-style sequence is understood:
@@ -1157,6 +1217,9 @@ struct option_t MuttVars[] = {
   { "header_cache", DT_PATH, R_NONE, UL &HeaderCache, 0 },
   /*
   ** .pp
+  ** Availability: Header Cache
+  **
+  ** .pp
   ** The header_cache variable points to the header cache database. If
   ** header_cache points to a directory there will be created one header cache
   ** database per folder within this directory. If it doesn't point to a directory a
@@ -1166,12 +1229,18 @@ struct option_t MuttVars[] = {
   { "maildir_header_cache_verify", DT_BOOL, R_NONE, OPTHCACHEVERIFY, 1 },
   /*
   ** .pp
+  ** Availability: Header Cache
+  **
+  ** .pp
   ** Check for Maildir unaware programs other than mutt-ng having modified maildir
   ** files when the header cache is in use.  This incurs one stat(2) per
   ** message every time the folder is opened.
   */
   { "header_cache_pagesize", DT_STR, R_NONE, UL &HeaderCachePageSize, UL "16384" },
   /*
+  ** .pp
+  ** Availability: Header Cache
+  **
   ** .pp
   ** Change the maildir header cache database page size.  Too large
   ** or too small of a page size for the common header can waste
@@ -1335,6 +1404,9 @@ struct option_t MuttVars[] = {
   { "mime_subject",   DT_BOOL, R_NONE, OPTMIMESUBJECT, 1 },
   /*
   ** .pp
+  ** Availability: NNTP
+  **
+  ** .pp
   ** If \fIunset\fP, 8-bit ``subject:'' line in article header will not be
   ** encoded according to RFC2047 to base64.  This is useful when message
   ** is Usenet article, because MIME for news is nonstandard feature.
@@ -1344,6 +1416,9 @@ struct option_t MuttVars[] = {
 #ifdef MIXMASTER
   { "mix_entry_format", DT_STR,  R_NONE, UL &MixEntryFormat, UL "%4n %c %-16s %a" },
   /*
+  ** .pp
+  ** Availability: Mixmaster
+  **
   ** .pp
   ** This variable describes the format of a remailer line on the mixmaster
   ** chain selection screen.  The following printf-like sequences are 
@@ -1359,14 +1434,15 @@ struct option_t MuttVars[] = {
   { "mixmaster",	DT_PATH, R_NONE, UL &Mixmaster, UL MIXMASTER },
   /*
   ** .pp
+  ** Availability: Mixmaster
+  **
+  ** .pp
   ** This variable contains the path to the Mixmaster binary on your
   ** system.  It is used with various sets of parameters to gather the
   ** list of known remailers, and to finally send a message through the
   ** mixmaster chain.
   */
 #endif
-
-
   { "move",		DT_QUAD, R_NONE, OPT_MOVE, M_ASKNO },
   /*
   ** .pp
@@ -1420,12 +1496,18 @@ struct option_t MuttVars[] = {
   { "news_cache_dir", DT_PATH, R_NONE, UL &NewsCacheDir, UL "~/.mutt" },
   /*
   ** .pp
+  ** Availability: NNTP
+  **
+  ** .pp
   ** This variable pointing to directory where Mutt-ng will save cached news
   ** articles headers in. If \fIunset\fP, headers will not be saved at all
   ** and will be reloaded each time when you enter to newsgroup.
   */
   { "news_server",    DT_STR,  R_NONE, UL &NewsServer, 0 },
   /*
+  ** .pp
+  ** Availability: NNTP
+  **
   ** .pp
   ** This variable specifies domain name or address of NNTP server. It
   ** defaults to the newsserver specified in the environment variable
@@ -1436,6 +1518,9 @@ struct option_t MuttVars[] = {
   */
   { "newsrc",         DT_PATH, R_NONE, UL &NewsRc, UL "~/.newsrc" },
   /*
+  ** .pp
+  ** Availability: NNTP
+  **
   ** .pp
   ** The file, containing info about subscribed newsgroups - names and
   ** indexes of read articles.  The following printf-style sequence
@@ -1448,6 +1533,9 @@ struct option_t MuttVars[] = {
   { "nntp_context",   DT_NUM,  R_NONE, UL &NntpContext, 1000 },
   /*
   ** .pp
+  ** Availability: NNTP
+  **
+  ** .pp
   ** This variable defines number of articles which will be in index when
   ** newsgroup entered.  If active newsgroup have more articles than this
   ** number, oldest articles will be ignored.  Also controls how many
@@ -1456,12 +1544,18 @@ struct option_t MuttVars[] = {
   { "nntp_load_description", DT_BOOL, R_NONE, OPTLOADDESC, 1 },
   /*
   ** .pp
+  ** Availability: NNTP
+  **
+  ** .pp
   ** This variable controls whether or not descriptions for each newsgroup
   ** must be loaded when newsgroup is added to list (first time list
   ** loading or new newsgroup adding).
   */
   { "nntp_user",      DT_STR,  R_NONE, UL &NntpUser, UL "" },
   /*
+  ** .pp
+  ** Availability: NNTP
+  **
   ** .pp
   ** Your login name on the NNTP server.  If \fIunset\fP and NNTP server requires
   ** authentification, Mutt-ng will prompt you for your account name when you
@@ -1470,10 +1564,16 @@ struct option_t MuttVars[] = {
   { "nntp_pass",      DT_STR,  R_NONE, UL &NntpPass, UL "" },
   /*
   ** .pp
+  ** Availability: NNTP
+  **
+  ** .pp
   ** Your password for NNTP account.
   */
   { "nntp_poll",      DT_NUM,  R_NONE, UL &NewsPollTimeout, 60 },
   /*
+  ** .pp
+  ** Availability: NNTP
+  **
   ** .pp
   ** The time in seconds until any operations on newsgroup except post new
   ** article will cause recheck for new news.  If set to 0, Mutt-ng will
@@ -1482,6 +1582,9 @@ struct option_t MuttVars[] = {
   */
   { "nntp_reconnect", DT_QUAD, R_NONE, OPT_NNTPRECONNECT, M_ASKYES },
   /*
+  ** .pp
+  ** Availability: NNTP
+  **
   ** .pp
   ** Controls whether or not Mutt-ng will try to reconnect to newsserver when
   ** connection lost.
@@ -2101,11 +2204,17 @@ struct option_t MuttVars[] = {
   { "smtp_auth_username", DT_STR, R_NONE, UL &SmtpAuthUser, 0 },
   /*
   ** .pp
+  ** Availability: SMTP
+  **
+  ** .pp
   ** Defines the username to use with SMTP AUTH.  Setting this variable will
   ** cause mutt-ng to attempt to use SMTP AUTH when sending.
   */
   { "smtp_auth_password", DT_STR, R_NONE, UL &SmtpAuthPass, 0 },
   /*
+  ** .pp
+  ** Availability: SMTP
+  **
   ** .pp
   ** Defines the password to use with SMTP AUTH.  If ``$$smtp_auth_username''
   ** is set, but this variable is not, you will be prompted for a password
@@ -2114,12 +2223,18 @@ struct option_t MuttVars[] = {
   { "smtp_host", DT_STR, R_NONE, UL &SmtpHost, 0 },
   /*
   ** .pp
+  ** Availability: SMTP
+  **
+  ** .pp
   ** Defines the SMTP host which will be used to deliver mail, as opposed
   ** to invoking the sendmail binary.  Setting this variable overrides the
   ** value of ``$$sendmail'', and any associated variables.
   */
   { "smtp_port", DT_NUM, R_NONE, UL &SmtpPort, 25 },
   /*
+  ** .pp
+  ** Availability: SMTP
+  **
   ** .pp
   ** Defines the port that the SMTP host is listening on for mail delivery.
   ** Must be specified as a number.
@@ -2128,11 +2243,13 @@ struct option_t MuttVars[] = {
   ** servers will probably desire 587, the mail submission port.
   */
 #endif
- 
 #if defined(USE_SSL)||defined(USE_NSS)||defined(USE_GNUTLS)
 #ifdef USE_SSL
   { "ssl_client_cert", DT_PATH, R_NONE, UL &SslClientCert, 0 },
   /*
+  ** .pp
+  ** Availability: SSL
+  **
   ** .pp
   ** The file containing a client certificate and its associated private
   ** key.
@@ -2142,6 +2259,9 @@ struct option_t MuttVars[] = {
   { "ssl_starttls", DT_QUAD, R_NONE, OPT_SSLSTARTTLS, M_YES },
   /*
   ** .pp
+  ** Availability: SSL or GNUTLS
+  **
+  ** .pp
   ** If set (the default), mutt-ng will attempt to use STARTTLS on servers
   ** advertising the capability. When unset, mutt-ng will not attempt to
   ** use STARTTLS regardless of the server's capabilities.
@@ -2149,6 +2269,9 @@ struct option_t MuttVars[] = {
 # endif  
   { "certificate_file",	DT_PATH, R_NONE, UL &SslCertFile, UL "~/.mutt_certificates" },
   /*
+  ** .pp
+  ** Availability: SSL or NSS or GNUTLS
+  **
   ** .pp
   ** This variable specifies the file where the certificates you trust
   ** are saved. When an unknown certificate is encountered, you are asked
@@ -2166,6 +2289,9 @@ struct option_t MuttVars[] = {
   { "ssl_usesystemcerts", DT_BOOL, R_NONE, OPTSSLSYSTEMCERTS, 1 },
   /*
   ** .pp
+  ** Availability: SSL or NSS
+  **
+  ** .pp
   ** If set to \fIyes\fP, mutt-ng will use CA certificates in the
   ** system-wide certificate store when checking if server certificate 
   ** is signed by a trusted CA.
@@ -2173,11 +2299,17 @@ struct option_t MuttVars[] = {
   { "entropy_file",	DT_PATH, R_NONE, UL &SslEntropyFile, 0 },
   /*
   ** .pp
+  ** Availability: SSL or NSS
+  **
+  ** .pp
   ** The file which includes random data that is used to initialize SSL
   ** library functions.
    */
   { "ssl_use_sslv2", DT_BOOL, R_NONE, OPTSSLV2, 1 },
   /*
+  ** .pp
+  ** Availability: SSL or NSS
+  **
   ** .pp
   ** This variables specifies whether to attempt to use SSLv2 in the
   ** SSL authentication process.
@@ -2186,11 +2318,17 @@ struct option_t MuttVars[] = {
   { "ssl_use_sslv3", DT_BOOL, R_NONE, OPTSSLV3, 1 },
   /*
   ** .pp
+  ** Availability: SSL or NSS or GNUTLS
+  **
+  ** .pp
   ** This variables specifies whether to attempt to use SSLv3 in the
   ** SSL authentication process.
   */
   { "ssl_use_tlsv1", DT_BOOL, R_NONE, OPTTLSV1, 1 },
   /*
+  ** .pp
+  ** Availability: SSL or NSS or GNUTLS
+  **
   ** .pp
   ** This variables specifies whether to attempt to use TLSv1 in the
   ** SSL authentication process.
@@ -2198,6 +2336,9 @@ struct option_t MuttVars[] = {
 #ifdef USE_GNUTLS
   { "ssl_min_dh_prime_bits", DT_NUM, R_NONE, UL &SslDHPrimeBits, 0 },
   /*
+  ** .pp
+  ** Availability: GNUTLS
+  **
   ** .pp
   ** This variable specifies the minimum acceptable prime size (in bits)
   ** for use in any Diffie-Hellman key exchange. A value of 0 will use
@@ -2242,6 +2383,9 @@ struct option_t MuttVars[] = {
   { "pop_authenticators", DT_STR, R_NONE, UL &PopAuthenticators, UL 0 },
   /*
   ** .pp
+  ** Availability: POP
+  **
+  ** .pp
   ** This is a colon-delimited list of authentication methods mutt-ng may
   ** attempt to use to log in to an POP server, in the order mutt-ng should
   ** try them.  Authentication methods are either 'user', 'apop' or any
@@ -2255,6 +2399,9 @@ struct option_t MuttVars[] = {
   { "pop_auth_try_all",	DT_BOOL, R_NONE, OPTPOPAUTHTRYALL, 1 },
   /*
   ** .pp
+  ** Availability: POP
+  **
+  ** .pp
   ** If set, Mutt-ng will try all available methods. When unset, Mutt-ng will
   ** only fall back to other authentication methods if the previous
   ** methods are unavailable. If a method is available but authentication
@@ -2263,11 +2410,17 @@ struct option_t MuttVars[] = {
   { "pop_checkinterval", DT_NUM, R_NONE, UL &PopCheckTimeout, 60 },
   /*
   ** .pp
+  ** Availability: POP
+  **
+  ** .pp
   ** This variable configures how often (in seconds) POP should look for
   ** new mail.
   */
   { "pop_delete",	DT_QUAD, R_NONE, OPT_POPDELETE, M_ASKNO },
   /*
+  ** .pp
+  ** Availability: POP
+  **
   ** .pp
   ** If set, Mutt-ng will delete successfully downloaded messages from the POP
   ** server when using the fetch-mail function.  When unset, Mutt-ng will
@@ -2275,6 +2428,9 @@ struct option_t MuttVars[] = {
   */
   { "pop_host",		DT_STR,	 R_NONE, UL &PopHost, UL "" },
   /*
+  ** .pp
+  ** Availability: POP
+  **
   ** .pp
   ** The name of your POP server for the fetch-mail function.  You
   ** can also specify an alternative port, username and password, ie:
@@ -2284,6 +2440,9 @@ struct option_t MuttVars[] = {
   { "pop_last",		DT_BOOL, R_NONE, OPTPOPLAST, 0 },
   /*
   ** .pp
+  ** Availability: POP
+  **
+  ** .pp
   ** If this variable is set, mutt-ng will try to use the "LAST" POP command
   ** for retrieving only unread messages from the POP server when using
   ** the fetch-mail function.
@@ -2291,11 +2450,17 @@ struct option_t MuttVars[] = {
   { "pop_reconnect",	DT_QUAD, R_NONE, OPT_POPRECONNECT, M_ASKYES },
   /*
   ** .pp
+  ** Availability: POP
+  **
+  ** .pp
   ** Controls whether or not Mutt-ng will try to reconnect to POP server when
   ** connection lost.
   */
   { "pop_user",		DT_STR,	 R_NONE, UL &PopUser, 0 },
   /*
+  ** .pp
+  ** Availability: POP
+  **
   ** .pp
   ** Your login name on the POP server.
   ** .pp
@@ -2303,6 +2468,9 @@ struct option_t MuttVars[] = {
   */
   { "pop_pass",		DT_STR,	 R_NONE, UL &PopPass, UL "" },
   /*
+  ** .pp
+  ** Availability: POP
+  **
   ** .pp
   ** Specifies the password for your POP account.  If unset, Mutt-ng will
   ** prompt you for your password when you open POP mailbox.
@@ -2323,6 +2491,9 @@ struct option_t MuttVars[] = {
 #ifdef USE_NNTP
   { "post_moderated", DT_QUAD, R_NONE, OPT_TOMODERATED, M_ASKYES },
   /*
+  ** .pp
+  ** Availability: NNTP
+  **
   ** .pp
   ** If set to \fIyes\fP, Mutt-ng will post article to newsgroup that have
   ** not permissions to posting (e.g. moderated).  \fBNote:\fP if newsserver
@@ -2695,9 +2866,13 @@ struct option_t MuttVars[] = {
   { "save_unsubscribed",DT_BOOL, R_NONE, OPTSAVEUNSUB, 0 },
   /*
   ** .pp
+  ** Availability: NNTP
+  **
+  ** .pp
   ** When \fIset\fP, info about unsubscribed newsgroups will be saved into
   ** ``newsrc'' file and into cache.
   */
+#endif
   { "shorten_hierarchy", DT_BOOL, R_NONE, OPTSHORTENHIERARCHY, 0 },
   /*
   ** .pp
@@ -2708,8 +2883,12 @@ struct option_t MuttVars[] = {
   ** ``d.a.s.recovery'' while ``de.alt.d0'' still would and thus will not get 
   ** shortened.
   */
+#ifdef USE_NNTP
   { "show_new_news",  DT_BOOL, R_NONE, OPTSHOWNEWNEWS, 1 },
   /*
+  ** .pp
+  ** Availability: NNTP
+  **
   ** .pp
   ** If \fIset\fP, newsserver will be asked for new newsgroups on entering
   ** the browser.  Otherwise, it will be done only once for a newsserver.
@@ -2718,6 +2897,9 @@ struct option_t MuttVars[] = {
   */
   { "show_only_unread",  DT_BOOL, R_NONE, OPTSHOWONLYUNREAD, 0 },
   /*
+  ** .pp
+  ** Availability: NNTP
+  **
   ** .pp
   ** If \fIset\fP, only subscribed newsgroups that contain unread articles
   ** will be displayed in browser.
@@ -3137,6 +3319,9 @@ struct option_t MuttVars[] = {
   { "use_idn",		DT_BOOL, R_BOTH, OPTUSEIDN, 1},
   /*
   ** .pp
+  ** Availability: IDN
+  **
+  ** .pp
   ** When \fIset\fP, Mutt-ng will show you international domain names decoded.
   ** Note: You can use IDNs for addresses even if this is \fIunset\fP.
   ** This variable only affects decoding.
@@ -3237,6 +3422,9 @@ struct option_t MuttVars[] = {
 #ifdef USE_NNTP
   { "x_comment_to",   DT_BOOL, R_NONE, OPTXCOMMENTTO, 0 },
   /*
+  ** .pp
+  ** Availability: NNTP
+  **
   ** .pp
   ** If \fIset\fP, Mutt-ng will add ``X-Comment-To:'' field (that contains full
   ** name of original article author) to article that followuped to newsgroup.
