@@ -821,7 +821,7 @@ split over multiple lines with only one ``&num;''.
 <tscreen><verb>
 # folder-hook . \
   set realname="Michael \"MuttDude\" Elkins"
-</tscreen></verb>
+</verb></tscreen>
 
 When testing your config files, beware the following caveat. The backslash
 at the end of the commented line extends the current line with the next line
@@ -838,7 +838,7 @@ line2a # line2b\
 line3\
 line4
 line5
-</tscreen></verb>
+</verb></tscreen>
 
 line1 ``continues'' until line4. however, the part after the &num; is a
 comment which includes line3 and line4. line5 is a new line of its own and
@@ -1775,14 +1775,14 @@ ifndef feature_nntp 'push q'
 # ifndef newsrc 'push q'
 # or
 # ...
-</verb/</tscreen>
+</verb></tscreen>
 
 To only set the <ref id="imap_mail_check"
 name="&lt;&dollar;imap&lowbar;mail&lowbar;check"> when the system's SVN
 is recent enough to have it:
 <tscreen><verb>
 ifdef imap_mail_check 'set imap_mail_check=300'
-</tscreen></verb>
+</verb></tscreen>
 
 <sect1>Removing hooks<label id="unhook">
 <p>
