@@ -202,26 +202,6 @@ static int ctype(const char *name)
   return MUTT_INVALID;
 }
 
-#ifndef HAVE_ISCTYPE
-static int isctype(char c, int desc)
-{
-  switch (desc) {
-    case MUTT_ALNUM: return isalnum(c);
-    case MUTT_ALPHA: return isalpha(c);
-    case MUTT_BLANK: return isblank(c);
-    case MUTT_CNTRL: return iscntrl(c);
-    case MUTT_DIGIT: return isdigit(c);
-    case MUTT_GRAPH: return isgraph(c);
-    case MUTT_LOWER: return islower(c);
-    case MUTT_PRINT: return isprint(c);
-    case MUTT_PUNCT: return ispunct(c);
-    case MUTT_SPACE: return isspace(c);
-    case MUTT_UPPER: return isupper(c);
-    case MUTT_XDIGIT: return isxdigit(c);
-  }
-  return 0; /* false */
-}
-#endif
 
 static void
 init_syntax_once ()
@@ -1860,6 +1840,27 @@ static boolean group_in_compile_stack _RE_ARGS ((compile_stack_type
 /* Return, freeing storage we allocated.  */
 #define FREE_STACK_RETURN(value)                \
   return (free (compile_stack.stack), value)                /* __MEM_CHECKED__ */
+
+#ifndef HAVE_ISCTYPE
+static int isctype(char c, int desc)
+{
+  switch (desc) {
+    case MUTT_ALNUM: return ISALNUM(c);
+    case MUTT_ALPHA: return ISALPHA(c);
+    case MUTT_BLANK: return ISBLANK(c);
+    case MUTT_CNTRL: return ISCNTRL(c);
+    case MUTT_DIGIT: return ISDIGIT(c);
+    case MUTT_GRAPH: return ISGRAPH(c);
+    case MUTT_LOWER: return ISLOWER(c);
+    case MUTT_PRINT: return ISPRINT(c);
+    case MUTT_PUNCT: return ISPUNCT(c);
+    case MUTT_SPACE: return ISSPACE(c);
+    case MUTT_UPPER: return ISUPPER(c);
+    case MUTT_XDIGIT: return ISXDIGIT(c);
+  }
+  return 0; /* false */
+}
+#endif
 
 static reg_errcode_t
 regex_compile (pattern, size, syntax, bufp)
