@@ -55,7 +55,7 @@ static char *get_sort_str (char *buf, size_t buflen, int method)
  * %s = current sorting method ($sort)
  * %S = current aux sorting method ($sort_aux)
  * %t = # of tagged messages [option]
- * %v = Mutt version 
+ * %v = Mutt-ng version 
  * %V = currently active limit pattern [option] */
 static const char *
 status_format_str (char *buf, size_t buflen, char op, const char *src,
@@ -270,7 +270,7 @@ status_format_str (char *buf, size_t buflen, char op, const char *src,
       break;
 
     case 'v':
-      snprintf (fmt, sizeof (fmt), "Mutt %%s");
+      snprintf (fmt, sizeof (fmt), "Mutt-ng %%s");
       snprintf (buf, buflen, fmt, MUTT_VERSION);
       break;
 
