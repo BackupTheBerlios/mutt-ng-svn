@@ -133,7 +133,7 @@ static char * shortened_hierarchy(char * box) {
   return safe_strdup(box);
 }
 
-char *make_sidebar_entry(char *box, int size, int new, int tagged)
+char *make_sidebar_entry(char *box, int size, int new, int flagged)
 {
   char *c;
   int i = 0, dlen = mutt_strlen (SidebarDelim);
@@ -156,16 +156,16 @@ char *make_sidebar_entry(char *box, int size, int new, int tagged)
   strncpy( entry, box, i < SidebarWidth - dlen ? i :SidebarWidth - dlen);
 
   if ( new ) {
-    if (tagged>0) {
-      sprintf(entry + SidebarWidth - 5 - quick_log10(size) - dlen - quick_log10(new) - quick_log10(tagged),
-              "% d(%d)[%d]", size, new, tagged);
+    if (flagged>0) {
+      sprintf(entry + SidebarWidth - 5 - quick_log10(size) - dlen - quick_log10(new) - quick_log10(flagged),
+              "% d(%d)[%d]", size, new, flagged);
     } else {
       sprintf(entry + SidebarWidth - 3 - quick_log10(size) - dlen - quick_log10(new),
               "% d(%d)", size, new);
     }
   } else {
-    if (tagged>0) {
-      sprintf( entry + SidebarWidth - 3 - quick_log10(size) - dlen - quick_log10(tagged), "% d[%d]", size,tagged);
+    if (flagged>0) {
+      sprintf( entry + SidebarWidth - 3 - quick_log10(size) - dlen - quick_log10(flagged), "% d[%d]", size,flagged);
     } else {
       sprintf( entry + SidebarWidth - 1 - quick_log10(size) - dlen, "% d", size);
     }
@@ -206,7 +206,7 @@ void set_buffystats (CONTEXT* Context)
     {
       tmp->msg_unread = Context->unread;
       tmp->msgcount = Context->msgcount;
-      tmp->msg_tagged = Context->flagged;
+      tmp->msg_flagged = Context->flagged;
       break;
     }
     tmp = tmp->next;
@@ -273,15 +273,15 @@ int draw_sidebar(int menu) {
     if ( Context && !strcmp( tmp->path, Context->path ) ) {
       printw( "%.*s", SidebarWidth - delim_len,
               make_sidebar_entry(basename(tmp->path),
-                                 Context->msgcount, Context->unread, Context->tagged));
+                                 Context->msgcount, Context->unread, Context->flagged));
       tmp->msg_unread = Context->unread;
       tmp->msgcount = Context->msgcount;
-      tmp->msg_tagged = Context->tagged;
+      tmp->msg_flagged = Context->flagged;
     }
     else
       printw( "%.*s", SidebarWidth - delim_len,
               make_sidebar_entry(basename(tmp->path),
-                                 tmp->msgcount,tmp->msg_unread, tmp->msg_tagged));
+                                 tmp->msgcount,tmp->msg_unread, tmp->msg_flagged));
     lines++;
   }
   SETCOLOR(MT_COLOR_NORMAL);

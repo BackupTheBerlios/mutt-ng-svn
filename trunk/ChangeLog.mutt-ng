@@ -2,7 +2,7 @@ Changes specific to mutt-ng:
 
 2005-02-24:
   * Integrated another sidebar fix and a build fix from Rocco Rutte.
-  * Implemented feature request that the number of tagged messages is shown in the sidebar
+  * Implemented feature request that the number of flagged messages is shown in the sidebar
 
 2005-02-23:
   * Integrated assume_charset patch from http://www.emaillab.org/mutt/download15.html.en
