@@ -727,7 +727,7 @@ void mutt_paddstr (int n, const char *s)
     {
       if (w > n)
         break;
-      addnstr ((char *)s, 1);
+      addnstr ((char *)s, k);
       n -= w;
     }
   }

@@ -929,6 +929,23 @@ void mutt_safe_path (char *s, size_t l, ADDRESS *a)
       *p = '_';
 }
 
+/* counts how many characters in s can be skipped while none of the
+ * characters of c appears */
+int mutt_skipchars (const char* s, const char* c) {
+  int ret = 0;
+  const char* p = s;
+  while (s && *s) {
+    register const char* t = c;
+    while (t && *t) {
+      if (*t == *s)
+        return (ret);
+      t++;
+    }
+    ret++;
+    s++;
+  }
+  return (mutt_strlen (p));
+}
 
 void mutt_FormatString (char *dest,		/* output buffer */
 			size_t destlen,		/* output buffer len */
@@ -1136,9 +1153,15 @@ void mutt_FormatString (char *dest,		/* output buffer */
     }
     else
     {
-      *wptr++ = *src++;
-      wlen++;
-      col++;
+      unsigned int bar = mutt_skipchars (src, "%\\");
+      char* bar2 = safe_malloc (bar+1);
+      strfcpy (bar2, src, bar+1);
+      while (bar--) {
+        *wptr++ = *src++;
+        wlen++;
+      }
+      col += mutt_strwidth (bar2);
+      FREE(&bar2);
     }
   }
   *wptr = 0;
