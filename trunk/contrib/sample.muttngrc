@@ -1,0 +1,825 @@
+#######################################################################
+# $HOME/.muttng/muttngrc
+# Purpose:        Setup file for the mailer muttng 
+#                 <http://mutt-ng.berlios.de/>
+# Author:         Andreas Kneib <akneib@gmx.net>     
+# Latest change:  Wed, 23 Feb 2005 12:16:05 +0100
+
+
+
+## KEYBINDINGS ########################################################
+#
+# Use ß to show the parent message
+bind index ß parent-message 
+bind pager ß parent-message
+
+# Esc-f: muttng forget the GnuPG-passphrase
+bind index \ef forget-passphrase
+bind pager \ef forget-passphrase
+
+# Esc-p: delete a message. Forever! (see "set trash")
+bind index \ep purge-message
+bind pager \ep purge-message
+
+# Control-p/n: navigate in the sidebar
+# Control-o: open a mailfolder in the sidebar (see
+# variables "set sidebar_width=" and "set sidebar_visible")
+bind index \CP sidebar-prev
+bind index \CN sidebar-next
+bind index \CO sidebar-open
+bind pager \CP sidebar-prev
+bind pager \CN sidebar-next
+bind pager \CO sidebar-open
+
+
+# MACROS ##############################################################
+#
+# Switch the sidebar on an off
+macro index b ':toggle sidebar_visible^M'
+macro pager b ':toggle sidebar_visible^M'
+
+# Pipe the massage through a shellscript
+macro pager <F5> "|bin/fetchnewsgroupheader.sh \nF" 'Copy for VIM'
+
+# Switch the Content-Transfer-Encoding between 8bit and quoted-printable
+macro pager B ':toggle allow_8bit ; set ?allow_8bit'\n
+
+# Show the Manual
+macro pager <F1> '!less ~/.own/muttng/doc/muttng/manual.txt' 'Call Manual'
+macro index <F1> '!less ~/.own/muttng/doc/muttng/manual.txt' 'Call Manual'
+
+# Start a script to fetch mails and usenet-article
+macro pager G '!lfetch &> /dev/null &' 'Fetch mails and postings'
+macro index G '!lfetch &> /dev/null &' 'Fetch mails and postings'
+
+# Answers of messages from me are highlightet (F2) or not (F3)
+macro index <F2> ':color index brightyellow default "!~f akneib@gmx.net ~b kneib"'^M 'Highlight ON for answers to me'
+macro pager <F2> ':color index brightyellow default "!~f akneib@gmx.net ~b kneib"'^M 'Highlight ON for answers to me'
+macro index <F3> ':uncolor index brightyellow default "!~f akneib@gmx.net ~b kneib"'^M 'Highlight OFF for answers to me'
+macro pager <F3> ':uncolor index brightyellow default "!~f akneib@gmx.net ~b kneib"'^M 'Highlight OFF for answers to me'
+
+# Change into the mailfolder "zu_beantworten". 
+# Messages I want to reply are in this folder
+macro pager ö "<change-folder>=zu_beantworten<enter>y" "Change to folder =zu_beantworten"
+macro index ö "<change-folder>=zu_beantworten<enter>y" "Change to folder =zu_beantworten"
+
+# Move messages into the trashcan "papierkorb"
+macro pager ä "<save-message>=papierkorb<enter>y"     "Move messages into the trashcan"
+macro index ä "<save-message>=papierkorb<enter>y"     "Move messages into the trashcan"
+
+# Move (and decrypt) messages into the mailfolder "zu_beantworten"
+macro pager ü "<decrypt-copy>=zu_beantworten<enter>y" "Copy Message in folder =zu_beantworten"
+macro index ü "<decrypt-copy>=zu_beantworten<enter>y" "Copy Message in folder =zu_beantworten"
+
+# Esc-a show ALL messages in the folder/newsgroup
+macro index \ea "l~A\n" 'Show ALL messages'
+
+# Esc-a show only NEW messages in the folder/newsgroup
+macro index \en "l~N\n" 'Show NEW messages'
+
+# Esc-i show only messages from ME in the folder/newsgroup
+macro index \ei "l~P\n" 'Show messages FROM ME'
+
+# Esc-o show only ANSWERS to ME in the folder/newsgroup
+macro index \eo "l!~f akneib@gmx.net ~b kneib ~N\n" 'Show ANSWERS to ME  '
+
+# Esc-d show only messages from TODAY in the folder/newsgroup
+macro index \ed "l~d `date +%d`\n" 'Show messages from today'
+
+# Change from the filebrowser to the mailfolder "inbox"
+macro browser ö "c.mutt/Mail\n\t\nc=inbox\n" 'browser to inbox'
+
+# Control-r pipe the body of the message thru sed an vim.
+# It's good for decrypt ROT13 in vim
+macro pager \cr "|sed -e "1,/^$/d" | vim -c 'set syntax=mail' -\n" 'ROT13'
+
+# Control-w pipe the body of the message thru sed and the webbrowser w3m
+macro index \cw "|sed -e "1,/^$/d" | w3m\n" 'Message pipe W3M' 
+macro pager \cw "|sed -e "1,/^$/d" | w3m\n" 'Message pipe W3M' 
+
+# Pipe the message to a script that decrypt the geek-code
+macro pager <F4> "|ungeek -rm > /tmp/ungeek; less /tmp/ungeek" 'Geek-Code decode'
+
+# Pipe the message in spamassassins "sa-learn" for the bayes-filter
+macro index <F9> "|sa-learn --ham --single\n"   'Message as HAM to Spamassassin'
+macro pager <F9> "|sa-learn --ham --single\n"   'Message as HAM to Spamassassin'
+macro index <F10> "|sa-learn --spam --single\n" 'Message as SPAM to Spamassassin'
+macro pager <F10> "|sa-learn --spam --single\n" 'Message as SPAM to Spamassassin'
+
+# Esc-x show X-Face-header
+macro pager \ex "|~/.mutt/view-x-face\n" 'View X-Faces'
+
+
+# Change the windowsize of the index/pager
+macro pager \e1 ":set pager_index_lines=1\n" 'Windowsize 1'
+macro pager \e2 ":set pager_index_lines=2\n" 'Windowsize 2'
+macro pager \e3 ":set pager_index_lines=3\n" 'Windowsize 3'
+macro pager \e4 ":set pager_index_lines=4\n" 'Windowsize 4'
+macro pager \e5 ":set pager_index_lines=5\n" 'Windowsize 5'
+macro pager \e6 ":set pager_index_lines=6\n" 'Windowsize 6'
+macro pager \e7 ":set pager_index_lines=7\n" 'Windowsize 7'
+macro pager \e8 ":set pager_index_lines=8\n" 'Windowsize 8'
+macro pager \e9 ":set pager_index_lines=9\n" 'Windowsize 9'
+macro pager \e0 ":set pager_index_lines=0\n" 'Windowsize 0'
+
+# Esc-, use "utf8tolatin1" as display filter.
+# Sometimes the reader apple-mail srcapping umlauts, if the message is PGP/GPG-encrypted.
+macro pager \e, ":set display_filter='utf8tolatin1'" 'utf8tolatin1 as display_filter for broken utf8/gpg-Mails'
+
+# Source two files: The aliases and the gpg-options.
+source ~/.mutt/aliases ~/.mutt/gpg.rc
+
+
+# VARIABLES ###########################################################
+#
+# Messages with no subject given at the subject 
+# prompt will never be aborted.
+set abort_nosubject=no
+
+# Ask to aborted the unmodified message, if no changes are made into 
+# the file.
+set abort_unmodified=ask-yes
+
+# The file in which to save aliases created by the "create-alias"-function.
+# (see "source ~/.mutt/aliases).
+set alias_file="~/.mutt/aliases"
+
+# The format displayed in the "alias"-menu.
+set alias_format="%3n %t %-12 %r"
+
+# Show an arrow, not a beam to mark a current entry
+set arrow_cursor
+
+# YES for follow-up groups before editing the body of an outgoing 
+# message.
+set ask_follow_up=yes
+
+# If set, Mutt will prompt you for x-comment-to field before editing the
+# body of an outgoing message.
+#set ask_x_comment_to
+
+# This  variable  describes the format of the 'attachment' menu.
+# (see "man muttngrc for details).
+set attach_format="%u%D%t%2n %T%.40d%> [%.7m/%.10M, %.6e, %s] "
+
+# Format of the attribution-line:
+# -------------------------------
+# Hallo $forename,
+#
+# * $name $mailadress:
+#
+# -------------------------------
+set attribution="Hallo %v,\n\n* %n <%a>:\n"
+
+# Do not beep when an error occurs.
+unset beep
+
+# beep by new mail
+set beep_new=yes
+
+# Get asked if you want to bounce a message with default-NO
+set bounce=ask-no
+
+# Get asked if Mutt mark all articles in newsgroup as read when you quit the 
+# newsgroup. Default-NO
+set catchup_newsgroup=ask-no
+
+# Character set your terminal uses
+set charset="iso-8859-15"
+
+# Controls the format of the status line displayed in the "compose"-menu.
+# (see "man muttngrc")
+set compose_format="-- [Geschätzte Nachrichtengröße: %l Nachrichten-Teile: %a]%>-"
+
+# Messages marked for deleting will automatically be purged without 
+# prompting.
+set delete=yes
+
+# Filter messages thru t-prot in the display
+set display_filter="t-prot -cemkst -M=mutt"
+
+# Edit the header of an outgoing message with the body of the message.
+set edit_headers
+
+# The editor vim is used by mutt. 
+set editor="vim '+/^$'"
+
+# Mutt will try to derive the message envelope sender from the 
+# "From:"-header.
+set envelope_from
+
+# The initial prompt for recipients and subject are skipped when replying
+# a message.
+set fast_reply
+
+# No attachments of an outgoing message are saved.
+unset fcc_attach
+
+# FCCs will be stored unencrypted and unsigned.
+set fcc_clear
+
+# Specifies the default location of the mailboxes. A '+' or '=' at the 
+# beginning of a pathname will be expanded to the value of this variable.
+# (See section "HOOKS" and "MAILBOXES" in this file).
+set folder=~/.mutt/Mail
+
+# This  variable  describes the format of the 'file-browser'-menu.
+set folder_format="%2C %N %-40.40f %d"
+
+# Ask me by a follow-up2poster
+set followup_to_poster=ask-yes
+
+# This  variable  describes the format of the subject when forwarding 
+# a message.
+set forward_format="(Weiterleitung) %s [%a]"
+
+# This  variable  describes the display of the newsgroup-browser.
+# (see "man muttngrc" for details).
+set group_index_format="%4C %M%N %5s  %-45.45f %d"
+
+# This  variable controls the size of the history-buffer.
+set history=100
+
+# Specifies  the  hostname  to use after the "@" in local e-mail 
+# addresses.
+set hostname="andreas.kneib.biz"
+
+# Include the mailbody in the message I reply.
+set include=yes
+
+# This  variable  describes the format of the message-index.
+set index_format="%4C %Z [  %-20.20F] (%?M?C%3M&%4l?) %s"
+
+# Ask-YES if you really intended to reply to the author only.
+set list_reply=ask-yes
+
+# Look 2 seconds for new mail.
+set mail_check=2
+
+# Define the mailcap-file (see section AUTOVIEW in this file).
+set mailcap_path="~/.mailcap"
+
+# Do not mark a messages as old.
+set nomark_old
+
+# Show all files in the file browser.
+set mask="."
+
+# Do not move a message into $mbox.
+set nomove
+
+# Define the operation system in the user-agent-header.
+set operating_system="Debian GNU/`uname -s` `cat /etc/debian_version` (`uname -r`)"
+
+# Define the string displayed in the "attachment"-menu.
+set message_format="%-.16n: %s"
+
+# Set the format of the message-id.
+# Message-ID: <2005-02-23T12-55-12.GA16507@$LOCALPART>
+# 
+set msgid_format="%Y-%m-%dT%h-%M-%s.G%P%p"
+
+# In this directory muttng will save cached news articles headers.
+set news_cache_dir="~/.mutt/newsspool"
+
+# In this file muttng write information about subscribed newsgroups.
+set newsrc="~/.mutt/newsrc"
+
+# This variable define the format of the "status"-line in the pager.
+set pager_format="%> [%b]"
+
+# Four lines for the mini-index about the pager.
+set pager_index_lines=4
+
+# The key which muttng use.
+set pgp_sign_as=0x8BCAC169
+
+# After 3600 seconds a cached passphrase will expire if not used.
+set pgp_timeout=3600
+
+# A message to place back will stored in this folder.
+set postponed="~/.mutt/Mail/postponed"
+
+# Use the muttprint to print a message.
+set print_command="muttprint"
+
+# Print without request
+set print="yes"
+
+# To set "yes" is better with muttprint.
+set print_split
+
+# If an external pager is closed, muttng goes right away in the index.
+set noprompt_after
+
+# Use Little Brother DataBase to queries external addresses.
+set query_command="/usr/bin/lbdbq '%s'"
+
+# Prompted with YES when I want to quit muttng.
+set quit=ask-yes
+
+# A regular expression used in the internal-pager to determine quoted 
+# sections of text in the mailbody.
+set quote_regexp="^( {0,4}[>|:%]| {0,4}[a-z0-9]+[>|]+)+"
+
+# Controls whether or not empty lines will be quoted using 
+# "indent_string". Here is "no":
+set quote_empty=no
+
+# Controls  how  quoted lines will be quoted. If set, one quote character 
+# will be added to the end of  existing  prefix.
+# This...
+# --------------------
+# blabla blabla
+# | cite
+# blabla blabla
+# --------------------
+# ...will be quoted to this:
+# --------------------
+# > blabla blabla
+# | | cite
+# > blabla blabla
+# --------------------
+set quote_quoted=yes
+
+
+# My name
+set realname="Andreas Kneib"
+
+# In this file my outgoing messages should be stored.
+# (see "set folder" in this file)
+set record=+sent-mail
+
+# This regex  used to recognize reply messages when threading and replying.
+set reply_regexp="^((re(\\^[0-9])? ?:|a(nt)?w(ort)?:|wg:|\\(fwd\\))[ \t]+)*"
+
+# Always use the To as From in all messages.
+set reverse_name
+
+# Muttng use these character sets for outgoing messages.
+set send_charset="us-ascii:iso-8859-1:iso-8859-15:utf-8"
+
+# The SMTP-server of my provider
+set smtp_host="mail.gmx.de"
+
+# Set the username for authentication on mail.gmx.de
+set smtp_auth_username="......."
+
+# Set the password for authentication on mail.gmx.de
+set smtp_auth_password="......."
+
+
+# NO sendmail. I deliver via "smtp_host"!
+# Reset the sendmail-variable.
+#reset sendmail
+#
+# Use sendmail with these options
+#set sendmail="/usr/lib/sendmail -oi -oem"
+#
+# Sendmail waiting always in the background.
+#set sendmail_wait=-1
+
+# Asked the newsserver for new newsgroups when entering the browser.
+set show_new_news
+
+# Show only unread and subscribed newsgroups
+#set show_only_unread
+
+# 30 chars width for the left sidebar
+set sidebar_width=30
+
+# Do not show the sidebar when stating muttng.
+unset sidebar_visible
+
+# No sign-dashes ("-- ")...
+unset sig_dashes
+
+# ...and no signature.
+unset signature
+
+# Set these string at the bottom of all messages (and about the 
+# signature, if you have one).
+set signoff_string="Regards,\nAndreas"
+
+# First sort messages by threads...
+set sort=threads
+
+# Sort the messaes in the threads by the sent-date.
+set sort_aux=date-sent
+
+# ~/.mutt/Mail/inbox is my spool mailbox instead /var/spool/$USER.
+set spoolfile="/home/andreas/.mutt/Mail/inbox"
+
+# Define the format of the status line displayed in the "index"-menu.
+set status_format="%> Nachrichten [%m insg.%?n? | %n neu?%?t? | %t mark.?%?d? | %d gel.?%?M? | %M angez. mit %V?] ---(%f)---"
+
+# Only use the header-fields "References" and "In-Reply-To" to sort 
+# threads. 
+set strict_threads
+
+# Set the tilde "~" at the bottom of displayed messages in the pager.
+set tilde
+
+# That is the trashfolder. Messages, marked for deletion (with "d"), 
+# stored in this folder. Messages you purge (see "Esc-p" i this file)
+# are not moved into this folder.
+set trash=+papierkorb
+
+# Set the User-Agent-Header.
+set user_agent
+
+# Do not wait for a keypress, if I use a commando like "pipe-message".
+unset wait_key
+
+# Do not write the Bcc-Header. The mailserver exim dont work good 
+# with this.
+unset write_bcc
+
+
+# MAILBOXES ###########################################################
+#
+mailboxes ! +aporia
+mailboxes ! +cron
+mailboxes ! +efriends
+mailboxes ! +gerd
+mailboxes ! +gmx
+mailboxes ! +joerg
+mailboxes ! +linux
+mailboxes ! +linux-user
+mailboxes ! +inbox
+mailboxes ! +michael
+mailboxes ! +netzliteratur
+mailboxes ! +newsletter
+mailboxes ! +orakel
+mailboxes ! +papierkorb
+mailboxes ! +spam
+mailboxes ! +sudelbuch
+mailboxes ! +test
+mailboxes ! +zu_beantworten
+
+# NEWSGROUPS ##########################################################
+#
+mailboxes ! nntp://localhost/comp.mail.mutt
+mailboxes ! nntp://localhost/de.alt.fan.tolkien
+mailboxes ! nntp://localhost/de.alt.netdigest
+mailboxes ! nntp://localhost/de.comm.software.browser.misc
+mailboxes ! nntp://localhost/de.comm.software.mailreader.misc
+mailboxes ! nntp://localhost/de.comm.software.mailserver
+mailboxes ! nntp://localhost/de.comm.software.newsreader
+mailboxes ! nntp://localhost/de.comm.software.newsserver
+mailboxes ! nntp://localhost/de.comp.editoren
+mailboxes ! nntp://localhost/de.comp.lang.perl.misc
+mailboxes ! nntp://localhost/de.comp.os.unix.apps.misc
+mailboxes ! nntp://localhost/de.comp.os.unix.discussion
+mailboxes ! nntp://localhost/de.comp.os.unix.linux.hardware
+mailboxes ! nntp://localhost/de.comp.os.unix.linux.misc
+mailboxes ! nntp://localhost/de.comp.os.unix.shell
+mailboxes ! nntp://localhost/de.comp.os.unix.x11
+mailboxes ! nntp://localhost/de.org.ccc
+mailboxes ! nntp://localhost/de.rec.film.misc
+mailboxes ! nntp://localhost/de.rec.orakel
+mailboxes ! nntp://localhost/gmane.editors.vim 
+mailboxes ! nntp://localhost/gmane.linux.debian.user.german
+mailboxes ! nntp://localhost/gmane.mail.mutt.mutt-ng.devel
+mailboxes ! nntp://localhost/gmane.mail.mutt.user
+mailboxes ! nntp://localhost/gmane.network.leafnode
+mailboxes ! nntp://localhost/gmane.network.slrn.user
+
+
+# ALTERNATIVES ADRESSES ###############################################
+#
+alternates (akneib@foobar\.tld|aporia@foobar\.lö|akneib@gmx\.net)
+
+
+# OWN HEADER ##########################################################
+# 
+# First all header to zero.
+unmy_hdr *
+
+# My GnuPG-key-ident.
+my_hdr X-GnuPG-KeyID: 8BCAC169
+
+# My GnuPG-fingerprint.
+my_hdr X-GnuPG-Fingerprint: 95F3 5951 6091 8F46 82B9  EE2E 9686 20D3 8BCA C169
+
+# My X-Editor-header. Look strange. ;)
+my_hdr X-Editor: `vim --version | grep IMp | awk -F"(" '{ print $1 }'|sed 's/[ ]$//g'`.`vim --version | rev |grep cnI | awk '{ print $1}' | rev | awk -F "1-" '{ print $2 }'`
+
+# My From-header.
+my_hdr From: akneib@foobar.tld
+
+
+# DISPLAYED HEADER ####################################################
+#
+# At first all header to zero.
+unhdr_order *
+
+# Order in which muttng will attempt to present headers in the display.
+hdr_order From: Subject: To: Newsgroups: Cc: Bcc: Reply-To: Followup-To:
+
+# Ignore all header.
+ignore * 
+
+# Unignor following header:
+unignore from: subject: to: newsgroups: Followup-To: X-Spam-Report: X-Soest: cc: Mail-Copies-To:
+
+
+# This MIME types should automatically displayed (see "set mailcap" 
+# in this file).
+auto_view text/richtext
+auto_view text/html
+auto_view text/x-sgml
+auto_view text/x-vcard
+auto_view text/x-sh
+auto_view text/x-csrc
+auto_view text/enriched
+auto_view message/partial
+auto_view text/ms-rtf
+auto_view text/rtff
+auto_view application/x-gzip-dvi
+auto_view application/x-gzip
+auto_view application/x-gunzip
+auto_view application/x-gtar
+auto_view application/x-tar
+auto_view application/x-tar-gz
+auto_view application/x-rar-compressed
+auto_view application/x-zip-compressed
+auto_view application/zip
+auto_view application/x-csh
+auto_view application/x-sh
+auto_view application/x-script
+auto_view application/x-shellscript
+auto_view application/x-latex
+auto_view application/x-shar
+auto_view application/x-troff-man
+auto_view application/x-troff-me
+auto_view application/x-pgp-message
+auto_view application/pgp-encrypted
+auto_view application/pgp-signature
+auto_view application/pgp-keys
+auto_view application/ms-tnef
+auto_view application/pdf
+auto_view application/octet-stream
+auto_view application/x-tcl
+auto_view application/x-perl
+auto_view application/ms-word
+auto_view application/msword
+auto_view application/word
+auto_view application/ms-rtf
+auto_view application/rtf
+auto_view application/x-www-form-urlencoded
+auto_view application/octet-stream
+
+# In this order muttng should display the multipart/alternative-part 
+# in the body of message.
+alternative_order text/html text/enriched text/plain
+
+
+# Subscribed mailinglist:
+subscribe mailingliste@invalid.foo
+
+
+# HOOKS ###############################################################
+#
+# Pgp-hooks. Concatenates an adress with a key.
+pgp-hook gerd.geppert@invalid.bar 429E3FDE
+pgp-hook gerd.geppert@foo.bar B1E7E53D
+
+
+# Save-hooks. Define the folder into incoming messages are saved
+save-hook '~t mailingliste@invalid.foo'               +archiv/netzliteratur-`date +%Y-%m`
+save-hook '~h From:.*RUS-CERT'                        +archiv/newsletter-`date +%Y-%m`
+save-hook '~h Newsgroups:.*'                          +archiv/posted-`date +%Y-%m`
+save-hook '~f wittkewitz@'                            +archiv/joerg-`date +%Y-%m`
+save-hook '~f info@foob.ar   '                        +archiv/joerg-`date +%Y-%m`
+save-hook '~t e-friends-l@invalid.tld.com'            +archiv/e-friends-`date +%Y-%m`
+save-hook '~f @foobar.invalid'                        +archiv/michael-`date +%Y-%m`
+save-hook '~B sudelbuch'                              +archiv/sudelbuch-`date +%Y-%m`
+save-hook '~h Subject:.*SPAM-SCORE'                   +archiv/spam-`date +%Y-%m`
+save-hook '~f root@comtwo.comtwo'                     +archiv/cron-`date +%Y-%m`
+save-hook '~f @tagesschau.tld.invalid'                +archiv/newsletter-`date +%Y-%m`
+save-hook '~f @newsfeed.osdn.dot.foo'                 +archiv/newsletter-`date +%Y-%m`
+save-hook .                                           +archiv/save-`date +%Y-%m`
+
+
+# Send-Hooks. No PGP-autosign for all messages.
+send-hook . "unset pgp_autosign"
+
+# Define an atriibution-line an a from-header which use, 
+# when send a message to this mailinglist.
+send-hook ^mailingliste@.*invalid\\.foo$ \
+      'set attribution="Hallo %v,\n\n* %n <%a>:\n" ; my_hdr From: "Andreas Kneib" <aporia@foo.bar>'
+
+# PGP-autoencrypt and set a new attribution-line for this recipient.
+send-hook ^gerd.geppert@(bar|foobar|invalid)\\.tld \
+      'set pgp_autoencrypt attribution="Hallo %v,\n\n* Du schriebst:\n" ; my_hdr From: "Andreas Kneib" <akneib@inval.id>'
+
+# PGP-autosign and set a new attribution-line for this recipient.
+send-hook ^.*@foobar.invalid \
+      'set pgp_autosign attribution="Hallo %v,\n\n* Du schriebst:\n"'
+
+
+# Send-hook for newsgroups. "!~t." means: Messages with no To:-header.
+send-hook !~t. 'my_hdr From: "Andreas Kneib" <akneib@gmx.net>' 
+send-hook !~t. 'set record=+posted'
+send-hook !~t. "set attribution='* %n <%a>:\n'"
+      
+
+# Folder-hooks for newsgroups. When open a newsgroup only show NEW
+# postings.
+folder-hook nntp 'push l~N\n'
+# Highlight mails they are answers to me (see the macro to F2).
+folder-hook nntp 'push <F2>'
+
+# In the folder "zu_beantworten" only show messages, I not reply.
+folder-hook +zu_beantworten$ 'push l!~Q\n'
+
+# Folder-hooks for all folder.
+folder-hook . 'my_hdr From: "Andreas Kneib" <akneib@inva.lid>'
+folder-hook . "set attribution='Hallo %v, \n\n* %n <%a>:\n'"
+folder-hook . 'set display_filter="t-prot -cemkst -M=mutt"'
+folder-hook . 'set record=+sent-mail'
+# Don't highlight mails they are answers to me (see the macro to F3).
+folder-hook . 'push <F3>'
+# Show ALL mails
+folder-hook . 'push l~A\n'
+
+# In folder "cron" highlight IP-adresses in the logfiles.
+folder-hook +cron$ 'color body red yellow "from [0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,4}"'
+folder-hook +cron$ 'color body white blue "port [0-9]{1,5}"'
+
+# The from in the mailbox "gmx".
+folder-hook +gmx$ 'my_hdr From: "Andreas Kneib" <akneib@gmx.net>'
+
+# The from in the mailbox "aporia".
+folder-hook +aporia$ 'my_hdr From: "Andreas Kneib" <aporia@foobar.tld>'
+
+# Do not use a display-filter for the folder "orakel".
+folder-hook +orakel 'set display_filter=""'
+
+# Time to save (or delete) messages in the folder:
+# mailbox "efriends": One Month.
+folder-hook +efriends$          'push T~r>1m!~F\n\;' 
+# mailbox "newsletter": Three days.
+folder-hook +newsletter$        'push T~r>3d!~F\n\;'
+# mailbox "linux": One week.
+folder-hook +linux$             'push T~r>1w!~F\n\;' 
+
+
+
+# COLOR ###############################################################
+#
+# Syntax: color object foreground background
+#         color index  foreground background
+#         color body   foreground background
+#         color header foreground background
+#
+# Color of normal text
+color normal      default        default
+
+# Color of the folder with new messages in sidebar
+color sidebar_new brightgreen    default
+
+# Color of the indicator (see "set arrow_cursor")
+color indicator   brightdefault  default
+
+# Color of the thread-tree
+color tree        brightmagenta  default
+
+# Color of the status-line
+color status      brightwhite    black 
+
+# Color of error-messages
+color error       red            default 
+
+# Color of muttng-info-messages
+color message     default        default
+
+# Color of the displayed signature
+color signature   red            default
+
+# Color of the attachment-info
+color attachment  brightyellow   default
+
+# Color of the found words
+color search      brightyellow   red 
+
+# Color of the tilde (see "set tilde")
+color tilde       brightblue     default
+
+# Color of the markers by broken lines
+color markers     red            default
+
+# Color of the header
+color hdrdefault  blue           default
+
+# Color of bld an underline
+color bold        brightblack    default      
+color underline   brightwhite    default
+
+# Color of the quoted text
+color quoted      blue           default      
+color quoted1     red            default      
+color quoted2     magenta        default      
+color quoted3     green          default      
+color quoted4     blue           default      
+color quoted5     cyan           default      
+color quoted6     green          default      
+color quoted7     red            default      
+color quoted8     magenta        default      
+color quoted9     blue           default
+
+# Color of tagged messages in the index
+color index       brightyellow   default  ~T
+
+# Color of deleted messages in the index
+color index       red            default  ~D
+
+# Color of new messages in the index
+color index       brightblack    default  ~N
+
+# Color of flagged messages in the index
+color index       brightred      default  ~F
+
+# Color of message is from me in the index (see "alternates")
+color index       brightblue     default  ~P
+
+# Color of the CC-header
+color header      brightwhite    default  "cc:"
+
+# Color of the header from, subject, newsgroups and to
+color header      brightred      default  "^(from|subject|newsgroups|to):"
+
+# Color of the header reply-to and date
+color header      red            default  "^(reply-to|date):"
+
+# Color of the header user-agent, x-mailer and x-newsreader
+color header      brightgreen    default  "^(user-agent|x-mailer|x-newsreader):"
+
+# Color of the header Mail-Copies-To and Followup-To
+color header      brightwhite    default  "^(Mail-Copies-To|Followup-To):"
+
+# Color of the header X-Soest (don't ask me why, but I need this ;))
+color header      brightred      blue     "^X-Soest:"
+
+# Color of the spamassassin-header
+color header      brightyellow   default  "X-Spam-Report:"
+
+# Color of mail-adresses in the body
+color body        brightblue     default  "[-a-z_0-9.+]+@[-a-z_0-9.]+"
+
+# Color of the string <URL:foobar> in the body
+color body        brightblue     default  "<URL:.*>"
+
+# Color of URL in the body
+color body        brightblue     default  "((ftp|http|https)://|(file|mailto|news):|www\\.)[-a-z0-9_.:]*[a-z0-9](/[^][{} \t\n\r\"<>()]*[^][{} \t\n\r\"<>().,:!])?/?"
+
+# Color of smileys in the body
+color body        brightdefault  yellow      "[;:]-*[)oO>(<]"
+
+# Color for the german GnuPG-output in the body
+color body        red            default  "Korrekte Unterschrift"
+color body        brightyellow   black    "(Öffentlicher Schlüssel nicht gefunden|keine vertrauenswürdige Signatur|Dieser Schlüssel ist verfallen)"
+color body        brightred      black    "FALSCHE Unterschrift"
+color body        brightgreen    black    "nicht durch hinreichend vertrauenswürdige Signaturen zertifiziert"
+
+# Color for the t-prot-output in the body
+color body        magenta        default   "^\\[---.*"
+
+# Color for verbatim-marks in the body
+color body        brightgreen    black    "^#v[-+]"
+
+# Color for *fat* text in the body
+color body        brightblack    default  "\\*+[^\\*]+\\*+"
+
+# Color for _underline_ text in the body
+color body        brightwhite    default  "_+[^_]+_+"
+
+# Color for /italic/ text in the body
+color body        red            default  "[^/a-z]/[a-z]+/[^/a-z]" 
+
+# Colors to test the colors color0-7 in the body
+color body        color0         default  "color0"
+color body        color1         default  "color1"
+color body        color2         default  "color2"
+color body        color3         default  "color3"
+color body        color4         default  "color4"
+color body        color5         default  "color5"
+color body        color6         default  "color6"
+color body        color7         default  "color7"
+
+# Color the attribution-line in order of the quoted lines.
+color body       brightblue     default "^[^>].*(wrote|writes|said|says|schrieb|schreibt|schrub|\
+schreibselte|tippte|meinte|teilte folgendes mit|\
+escreveu|escribió|scripsit|[0-9]+\\]|\\.[a-z]{2,4}>).*:"
+
+color body       brightred       default "^>[^>].*(wrote|writes|said|says|schrieb|schreibt|schrub|\
+schreibselte|tippte|meinte|teilte folgendes mit|\
+escreveu|escribió|scripsit|[0-9]+\\]|\\.[a-z]{2,4}>).*:"
+
+color body       brightmagenta   default "^>[ ]?>[^>].*(wrote|writes|said|says|schrieb|schreibt|schrub|\
+schreibselte|tippte|meinte|teilte folgendes mit|\
+escreveu|escribió|scripsit|[0-9]+\\]|\\.[a-z]{2,4}>).*:"
+
+# vim: ft=muttrc
+# EOF
