@@ -816,9 +816,7 @@ typedef struct header
   char *tree;           	/* character string to print thread tree */
   struct thread *thread;
 
-#ifdef IMAP_EDIT_THREADS
   ENVELOPE *new_env;	/* envelope information for rethreading */
-#endif
 
 #ifdef MIXMASTER
   LIST *chain;

@@ -1439,11 +1439,6 @@ CHECK_IMAP_ACL(IMAP_ACL_DELETE);
 
         if ((Sort & SORT_MASK) != SORT_THREADS)
           mutt_error _("Threading is not enabled.");
-
-#if defined (USE_IMAP) && ! defined (IMAP_EDIT_THREADS)
-        else if (Context->magic == M_IMAP)
-          mutt_error _("Compile Mutt with --enable-imap-edit-threads for break-thread support");
-#endif
         else
         {
           {
@@ -1475,12 +1470,6 @@ CHECK_IMAP_ACL(IMAP_ACL_DELETE);
 
         if ((Sort & SORT_MASK) != SORT_THREADS)
           mutt_error _("Threading is not enabled.");
-
-#if defined (USE_IMAP) && ! defined (IMAP_EDIT_THREADS)
-        else if (Context->magic == M_IMAP)
-          mutt_error _("Compile Mutt with --enable-imap-edit-threads for link-threads support");
-#endif
-
         else if (!CURHDR->env->message_id)
           mutt_error _("No Message-ID: header available to link thread");
         else if (!tag && (!Context->last_tag || !Context->last_tag->tagged))

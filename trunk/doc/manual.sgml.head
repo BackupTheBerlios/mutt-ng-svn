@@ -2419,9 +2419,6 @@ either by misconfigured software or bad behaviour from some
 correspondents. This allows to clean your mailboxes formats) from these
 annoyances which make it hard to follow a discussion.
 
-If you want to use these functions with IMAP, you need to compile Mutt
-with the <em/--enable-imap-edit-threads/ configure flag.
-
 <sect2>Linking threads
 <p>
 

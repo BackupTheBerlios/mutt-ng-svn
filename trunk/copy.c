@@ -379,15 +379,10 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
   if (flags & CH_UPDATE)
   {
     if ((flags & CH_NOSTATUS) == 0)
-#ifdef IMAP_EDIT_THREADS
-#define NEW_ENV new_env
-#else
-#define NEW_ENV env
-#endif
     {
-      if (h->irt_changed && h->NEW_ENV->in_reply_to)
+      if (h->irt_changed && h->new_env->in_reply_to)
       {
-	LIST *listp = h->NEW_ENV->in_reply_to;
+	LIST *listp = h->new_env->in_reply_to;
 
 	if (fputs ("In-Reply-To: ", out) == EOF)
 	  return (-1);
@@ -400,9 +395,9 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
 	  return (-1);
       }
 
-      if (h->refs_changed && h->NEW_ENV->references)
+      if (h->refs_changed && h->new_env->references)
       {
-	LIST *listp = h->NEW_ENV->references, *refs = NULL, *t;
+	LIST *listp = h->new_env->references, *refs = NULL, *t;
 
 	if (fputs ("References: ", out) == EOF)
 	  return (-1);
@@ -427,7 +422,6 @@ mutt_copy_header (FILE *in, HEADER *h, FILE *out, int flags, const char *prefix)
 	if (fputc ('\n', out) == EOF)
 	  return (-1);
       }
-#undef NEW_ENV
 
       if (h->old || h->read)
       {
