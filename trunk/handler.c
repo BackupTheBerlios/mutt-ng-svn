@@ -241,7 +241,7 @@ void mutt_decode_quoted (STATE * s, long len, int istext, iconv_t cd)
     if (fgets (line, MIN ((ssize_t) sizeof (line), len + 1), s->fpin) == NULL)
       break;
 
-    linelen = mutt_strlen (line);
+    linelen = safe_strlen (line);
     len -= linelen;
 
     /*
@@ -369,15 +369,15 @@ void mutt_decode_uuencoded (STATE * s, long len, int istext, iconv_t cd)
   while (len > 0) {
     if ((fgets (tmps, sizeof (tmps), s->fpin)) == NULL)
       return;
-    len -= mutt_strlen (tmps);
-    if ((!mutt_strncmp (tmps, "begin", 5)) && ISSPACE (tmps[5]))
+    len -= safe_strlen (tmps);
+    if ((!safe_strncmp (tmps, "begin", 5)) && ISSPACE (tmps[5]))
       break;
   }
   while (len > 0) {
     if ((fgets (tmps, sizeof (tmps), s->fpin)) == NULL)
       return;
-    len -= mutt_strlen (tmps);
-    if (!mutt_strncmp (tmps, "end", 3))
+    len -= safe_strlen (tmps);
+    if (!safe_strncmp (tmps, "end", 3))
       break;
     pt = tmps;
     linelen = decode_byte (*pt);
@@ -517,7 +517,7 @@ static void enriched_wrap (struct enriched_state *stte)
   stte->indent_len = 0;
   if (stte->s->prefix) {
     state_puts (stte->s->prefix, stte->s);
-    stte->indent_len += mutt_strlen (stte->s->prefix);
+    stte->indent_len += safe_strlen (stte->s->prefix);
   }
 
   if (stte->tag_level[RICH_EXCERPT]) {
@@ -525,11 +525,11 @@ static void enriched_wrap (struct enriched_state *stte)
     while (x) {
       if (stte->s->prefix) {
         state_puts (stte->s->prefix, stte->s);
-        stte->indent_len += mutt_strlen (stte->s->prefix);
+        stte->indent_len += safe_strlen (stte->s->prefix);
       }
       else {
         state_puts ("> ", stte->s);
-        stte->indent_len += mutt_strlen ("> ");
+        stte->indent_len += safe_strlen ("> ");
       }
       x--;
     }
@@ -631,7 +631,7 @@ static void enriched_puts (char *s, struct enriched_state *stte)
 {
   char *c;
 
-  if (stte->buff_len < stte->buff_used + mutt_strlen (s)) {
+  if (stte->buff_len < stte->buff_used + safe_strlen (s)) {
     stte->buff_len += LONG_STRING;
     safe_realloc (&stte->buffer, stte->buff_len + 1);
   }
@@ -735,7 +735,7 @@ void text_enriched_handler (BODY * a, STATE * s)
 
   if (s->prefix) {
     state_puts (s->prefix, s);
-    stte.indent_len += mutt_strlen (s->prefix);
+    stte.indent_len += safe_strlen (s->prefix);
   }
 
   while (state != DONE) {
@@ -865,13 +865,13 @@ static void flowed_stuff (STATE * s, char *cont, int level)
      * some text on the line which looks like it's quoted, turn off 
      * ANSI colors, so quote coloring doesn't affect this line. 
      */
-    if (*cont && !level && !mutt_strcmp (Pager, "builtin")
+    if (*cont && !level && !safe_strcmp (Pager, "builtin")
         && flowed_maybe_quoted (cont))
       state_puts ("\033[0m", s);
   }
   else if ((!(s->flags & M_PRINTING)) && ((*cont == ' ') || (*cont == '>')
                                           || (!level
-                                              && !mutt_strncmp (cont, "From ",
+                                              && !safe_strncmp (cont, "From ",
                                                                 5))))
     state_putc (' ', s);
 }
@@ -943,7 +943,7 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
   fprintf (stderr, "flowed_max = %d\n", flowed_max);
 
   while (bytes > 0 && fgets (line, sizeof (line), s->fpin)) {
-    bytes -= mutt_strlen (line);
+    bytes -= safe_strlen (line);
     tail = NULL;
 
     last_full = full;
@@ -973,7 +973,7 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
        */
 
       full = 0;
-      l = mutt_strlen (t + 1);
+      l = safe_strlen (t + 1);
       t[0] = ' ';
       t[1] = '\0';
 
@@ -1032,7 +1032,7 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
 
     retry_wrap:
       l = flowed_visual_strlen (cont, quoted + i_add + add + col);
-      rl = mutt_strlen (cont);
+      rl = safe_strlen (cont);
       if (quoted + i_add + add + col + l > flowed_max) {
         actually_wrap = 1;
 
@@ -1126,7 +1126,7 @@ static void print_flowed_line (char *line, STATE * s, int ql)
 {
   int width;
   char *pos, *oldpos;
-  int len = mutt_strlen (line);
+  int len = safe_strlen (line);
   int i;
 
   if (MaxLineLength > 0) {
@@ -1150,7 +1150,7 @@ static void print_flowed_line (char *line, STATE * s, int ql)
 
   /* fprintf(stderr,"print_flowed_line will print `%s' with ql = %d\n",line,ql); */
 
-  if (mutt_strlen (line) == 0) {
+  if (safe_strlen (line) == 0) {
     if (option (OPTQUOTEEMPTY)) {
       if (s->prefix)
         state_puts(s->prefix,s);
@@ -1233,24 +1233,24 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
   while (bytes > 0 && fgets (buf, sizeof (buf), s->fpin)) {
 
     /* fprintf(stderr,"read `%s'",buf); */
-    bytes -= mutt_strlen (buf);
+    bytes -= safe_strlen (buf);
 
     newql = get_quote_level (buf);
 
     if ((t = strrchr (buf, '\n')) || (t = strrchr (buf, '\r'))) {
       *t = '\0';
-      if (mutt_strlen (curline) > 0 && curline[mutt_strlen (curline) - 1] == ' '
+      if (safe_strlen (curline) > 0 && curline[safe_strlen (curline) - 1] == ' '
           && newql == quotelevel
           && strcmp (curline + quotelevel, "-- ") != 0) {
         if (buf[newql] == ' ')
-          curline[mutt_strlen (curline) - 1] = '\0';
+          curline[safe_strlen (curline) - 1] = '\0';
 
-        curline = realloc (curline, curline_len + mutt_strlen (buf));
+        curline = realloc (curline, curline_len + safe_strlen (buf));
         if (curline_len == 1)
           *curline = '\0';
-        curline_len += mutt_strlen (buf);
+        curline_len += safe_strlen (buf);
         safe_strncat (curline, curline_len, buf + newql,
-                      mutt_strlen (buf + newql));
+                      safe_strlen (buf + newql));
       }
       else {
         if (first_line) {
@@ -1261,11 +1261,11 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
         }
         FREE (&curline);
         curline_len = 1;
-        curline = realloc (curline, curline_len + mutt_strlen (buf));
+        curline = realloc (curline, curline_len + safe_strlen (buf));
         if (curline_len == 1)
           *curline = '\0';
-        curline_len += mutt_strlen (buf);
-        safe_strncat (curline, curline_len, buf, mutt_strlen (buf));
+        curline_len += safe_strlen (buf);
+        safe_strncat (curline, curline_len, buf, safe_strlen (buf));
         quotelevel = newql;
       }
     }
@@ -1329,7 +1329,7 @@ static void alternative_handler (BODY * a, STATE * s)
     }
     else {
       wild = 1;
-      btlen = mutt_strlen (t->data);
+      btlen = safe_strlen (t->data);
     }
 
     if (a && a->parts)
@@ -1878,7 +1878,7 @@ void mutt_body_handler (BODY * b, STATE * s)
         handler = mutt_signed_handler;
     }
     else if ((WithCrypto & APPLICATION_PGP)
-             && mutt_strcasecmp ("encrypted", b->subtype) == 0) {
+             && safe_strcasecmp ("encrypted", b->subtype) == 0) {
       p = mutt_get_parameter ("protocol", b->parameter);
 
       if (!p)

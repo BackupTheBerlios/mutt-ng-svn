@@ -63,7 +63,7 @@ static char **be_snarf_data (FILE * f, char **buf, int *bufmax, int *buflen,
   tmp[sizeof (tmp) - 1] = 0;
   if (prefix) {
     strfcpy (tmp, NONULL (Prefix), sizeof (tmp));
-    tmplen = mutt_strlen (tmp);
+    tmplen = safe_strlen (tmp);
     p = tmp + tmplen;
     tmplen = sizeof (tmp) - tmplen;
   }
@@ -72,7 +72,7 @@ static char **be_snarf_data (FILE * f, char **buf, int *bufmax, int *buflen,
   while (bytes > 0) {
     if (fgets (p, tmplen - 1, f) == NULL)
       break;
-    bytes -= mutt_strlen (p);
+    bytes -= safe_strlen (p);
     if (*bufmax == *buflen)
       safe_realloc (&buf, sizeof (char *) * (*bufmax += 25));
     buf[(*buflen)++] = safe_strdup (tmp);
@@ -245,7 +245,7 @@ static void be_edit_header (ENVELOPE * e, int force)
     addstr ("Subject: ");
     strfcpy (tmp, e->subject ? e->subject : "", sizeof (tmp));
     if (mutt_enter_string (tmp, sizeof (tmp), LINES - 1, 9, 0) == 0)
-      mutt_str_replace (&e->subject, tmp);
+      str_replace (&e->subject, tmp);
     addch ('\n');
   }
 
@@ -316,7 +316,7 @@ int mutt_builtin_editor (const char *path, HEADER * msg, HEADER * cur)
 
     if (EscChar && tmp[0] == EscChar[0] && tmp[1] != EscChar[0]) {
       /* remove trailing whitespace from the line */
-      p = tmp + mutt_strlen (tmp) - 1;
+      p = tmp + safe_strlen (tmp) - 1;
       while (p >= tmp && ISSPACE (*p))
         *p-- = 0;
 
@@ -345,9 +345,9 @@ int mutt_builtin_editor (const char *path, HEADER * msg, HEADER * cur)
         if (Context) {
           if (!*p && cur) {
             /* include the current message */
-            p = tmp + mutt_strlen (tmp) + 1;
-            snprintf (tmp + mutt_strlen (tmp),
-                      sizeof (tmp) - mutt_strlen (tmp), " %d",
+            p = tmp + safe_strlen (tmp) + 1;
+            snprintf (tmp + safe_strlen (tmp),
+                      sizeof (tmp) - safe_strlen (tmp), " %d",
                       cur->msgno + 1);
           }
           buf = be_include_messages (p, buf, &bufmax, &buflen,
@@ -379,7 +379,7 @@ int mutt_builtin_editor (const char *path, HEADER * msg, HEADER * cur)
           addstr (_("missing filename.\n"));
         break;
       case 's':
-        mutt_str_replace (&msg->env->subject, p);
+        str_replace (&msg->env->subject, p);
         break;
       case 't':
         msg->env->to = rfc822_parse_adrlist (msg->env->to, p);
@@ -389,7 +389,7 @@ int mutt_builtin_editor (const char *path, HEADER * msg, HEADER * cur)
         if (buflen) {
           buflen--;
           strfcpy (tmp, buf[buflen], sizeof (tmp));
-          tmp[mutt_strlen (tmp) - 1] = 0;
+          tmp[safe_strlen (tmp) - 1] = 0;
           FREE (&buf[buflen]);
           buf[buflen] = NULL;
           continue;
@@ -433,7 +433,7 @@ int mutt_builtin_editor (const char *path, HEADER * msg, HEADER * cur)
         break;
       }
     }
-    else if (mutt_strcmp (".", tmp) == 0)
+    else if (safe_strcmp (".", tmp) == 0)
       done = 1;
     else {
       safe_strcat (tmp, sizeof (tmp), "\n");

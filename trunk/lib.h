@@ -52,7 +52,6 @@ char *mutt_concat_path (char *, const char *, const char *, size_t);
 char *mutt_read_line (char *, size_t *, FILE *, int *);
 char *mutt_skip_whitespace (char *);
 
-const char *mutt_stristr (const char *, const char *);
 const char *mutt_basename (const char *);
 
 int mutt_copy_stream (FILE *, FILE *);
@@ -65,7 +64,6 @@ int safe_rename (const char *, const char *);
 int safe_fclose (FILE **);
 
 size_t mutt_quote_filename (char *, size_t, const char *);
-size_t mutt_strlen (const char *);
 
 void mutt_nocurses_error (const char *, ...);
 void mutt_remove_trailing_ws (char *);

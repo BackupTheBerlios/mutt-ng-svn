@@ -15,7 +15,7 @@
 
 #define NONULL(x) x?x:""
 
-# define HUGE_STRING	5120
+# define HUGE_STRING     5120
 # define LONG_STRING     1024
 # define STRING          256
 # define SHORT_STRING    128
@@ -32,33 +32,34 @@
 # define MUTT_FORMAT2(a,b)	_MUTT_FORMAT_1(a, b)
 
 # define ISSPACE(c) isspace((unsigned char)c)
+# define ISBLANK(c) (c == ' ' || c == '\t')
 # define strfcpy(A,B,C) strncpy(A,B,C), *(A+(C)-1)=0
-
-/* this macro must check for *c == 0 since isspace(0) has unreliable behavior
-   on some systems */
+/* this macro must check for *c == 0 since isspace(0) has
+ * unreliable behavior on some systems */
 # define SKIPWS(c) while (*(c) && isspace ((unsigned char) *(c))) c++;
 
-#define ISBLANK(c) (c == ' ' || c == '\t')
 /*
- * These functions aren't defined in lib.c, but
- * they are used there.
- *
- * A non-mutt "implementation" (ahem) can be found in extlib.c.
+ * safety wrappers/replacements
+ * (mostly only difference: safely handle NULL strings)
  */
+char *safe_strdup (const char*);
+char *safe_strcat (char*, size_t, const char*);
+char *safe_strncat (char*, size_t, const char*, size_t);
+int safe_strcmp (const char*, const char*);
+int safe_strcasecmp (const char*, const char*);
+int safe_strncmp (const char*, const char*, size_t);
+int safe_strncasecmp (const char*, const char*, size_t);
+int safe_strcoll (const char*, const char*);
+size_t safe_strlen (const char*);
 
-char *mutt_strlower (char *);
-char *mutt_substrcpy (char *, const char *, const char *, size_t);
-char *mutt_substrdup (const char *, const char *);
-char *safe_strcat (char *, size_t, const char *);
-char *safe_strncat (char *, size_t, const char *, size_t);
-char *safe_strdup (const char *);
-int mutt_strcasecmp (const char *, const char *);
-int mutt_strcmp (const char *, const char *);
-int mutt_strncasecmp (const char *, const char *, size_t);
-int mutt_strncmp (const char *, const char *, size_t);
-int mutt_strcoll (const char *, const char *);
-void mutt_str_replace (char **p, const char *s);
-void mutt_str_adjust (char **p);
-size_t mutt_strlen (const char *a);
+/*
+ * tools
+ */
+char *str_tolower (char*);
+char *str_substrcpy (char*, const char*, const char*, size_t);
+char *str_substrdup (const char*, const char*);
+void str_replace (char**, const char*);
+void str_adjust (char**);
+const char *str_isstr (const char*, const char*);
 
 #endif /* !_LIB_STR_H */

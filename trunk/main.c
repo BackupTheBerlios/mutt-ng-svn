@@ -568,7 +568,7 @@ int main (int argc, char **argv)
       break;
 
     case 'F':
-      mutt_str_replace (&Muttrc, optarg);
+      str_replace (&Muttrc, optarg);
       break;
 
     case 'f':
@@ -804,7 +804,7 @@ int main (int argc, char **argv)
 
     if (infile || bodytext) {
       if (infile) {
-        if (mutt_strcmp ("-", infile) == 0)
+        if (safe_strcmp ("-", infile) == 0)
           fin = stdin;
         else {
           char path[_POSIX_PATH_MAX];
@@ -928,8 +928,8 @@ int main (int argc, char **argv)
 #endif
       mutt_expand_path (folder, sizeof (folder));
 
-    mutt_str_replace (&CurrentFolder, folder);
-    mutt_str_replace (&LastFolder, folder);
+    str_replace (&CurrentFolder, folder);
+    str_replace (&LastFolder, folder);
 
     if (flags & M_IGNORE) {
       /* check to see if there are any messages in the folder */

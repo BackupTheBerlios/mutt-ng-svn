@@ -143,7 +143,7 @@ void mutt_edit_headers (const char *editor,
       SKIPWS (p);
       if (*p) {
         if ((q = strpbrk (p, " \t"))) {
-          mutt_substrcpy (path, p, q, sizeof (path));
+          str_substrcpy (path, p, q, sizeof (path));
           SKIPWS (q);
         }
         else

@@ -59,7 +59,7 @@ imap_auth_res_t imap_auth_gss (IMAP_DATA * idata, const char *method)
   /* get an IMAP service ticket for the server */
   snprintf (buf1, sizeof (buf1), "imap@%s", idata->conn->account.host);
   request_buf.value = buf1;
-  request_buf.length = mutt_strlen (buf1) + 1;
+  request_buf.length = safe_strlen (buf1) + 1;
   maj_stat = gss_import_name (&min_stat, &request_buf, gss_nt_service_name,
                               &target_name);
   if (maj_stat != GSS_S_COMPLETE) {
@@ -201,7 +201,7 @@ imap_auth_res_t imap_auth_gss (IMAP_DATA * idata, const char *method)
   /* server decides if principal can log in as user */
   strncpy (buf1 + 4, idata->conn->account.user, sizeof (buf1) - 4);
   request_buf.value = buf1;
-  request_buf.length = 4 + mutt_strlen (idata->conn->account.user) + 1;
+  request_buf.length = 4 + safe_strlen (idata->conn->account.user) + 1;
   maj_stat = gss_wrap (&min_stat, context, 0, GSS_C_QOP_DEFAULT, &request_buf,
                        &cflags, &send_token);
   if (maj_stat != GSS_S_COMPLETE) {

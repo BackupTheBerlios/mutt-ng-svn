@@ -221,14 +221,14 @@ static void redraw_mix_line (LIST * chain)
     if (t && t[0] == '0' && t[1] == '\0')
       t = "<random>";
 
-    if (c + mutt_strlen (t) + 2 >= COLS - SidebarWidth)
+    if (c + safe_strlen (t) + 2 >= COLS - SidebarWidth)
       break;
 
     addstr (NONULL (t));
     if (chain->next)
       addstr (", ");
 
-    c += mutt_strlen (t) + 2;
+    c += safe_strlen (t) + 2;
   }
 }
 #endif /* MIXMASTER */
@@ -669,7 +669,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
       else
         buf[0] = 0;
       if (mutt_get_field ("Subject: ", buf, sizeof (buf), 0) == 0) {
-        mutt_str_replace (&msg->env->subject, buf);
+        str_replace (&msg->env->subject, buf);
         move (HDR_SUBJECT, HDR_XOFFSET + SidebarWidth);
         clrtoeol ();
         if (msg->env->subject)
@@ -694,7 +694,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
       mutt_message_hook (NULL, msg, M_SEND2HOOK);
       break;
     case OP_COMPOSE_EDIT_MESSAGE:
-      if (Editor && (mutt_strcmp ("builtin", Editor) != 0)
+      if (Editor && (safe_strcmp ("builtin", Editor) != 0)
           && !option (OPTEDITHDRS)) {
         mutt_edit_file (Editor, msg->content->filename);
         mutt_update_encoding (msg->content);
@@ -704,7 +704,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
       }
       /* fall through */
     case OP_COMPOSE_EDIT_HEADERS:
-      if (mutt_strcmp ("builtin", Editor) != 0 &&
+      if (safe_strcmp ("builtin", Editor) != 0 &&
           (op == OP_COMPOSE_EDIT_HEADERS ||
            (op == OP_COMPOSE_EDIT_MESSAGE && option (OPTEDITHDRS)))) {
         char *tag = NULL, *err = NULL;
@@ -998,7 +998,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
                idx[menu->current]->content->description : "", sizeof (buf));
       /* header names should not be translated */
       if (mutt_get_field ("Description: ", buf, sizeof (buf), 0) == 0) {
-        mutt_str_replace (&idx[menu->current]->content->description, buf);
+        str_replace (&idx[menu->current]->content->description, buf);
         menu->redraw = REDRAW_CURRENT;
       }
       mutt_message_hook (NULL, msg, M_SEND2HOOK);
@@ -1146,7 +1146,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
         if (mutt_rename_file (idx[menu->current]->content->filename, fname))
           break;
 
-        mutt_str_replace (&idx[menu->current]->content->filename, fname);
+        str_replace (&idx[menu->current]->content->filename, fname);
         menu->redraw = REDRAW_CURRENT;
 
         if (idx[menu->current]->content->stamp >= st.st_mtime)
@@ -1208,7 +1208,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
         update_idx (menu, idx, idxlen++);
 
         idx[menu->current]->content->type = itype;
-        mutt_str_replace (&idx[menu->current]->content->subtype, p);
+        str_replace (&idx[menu->current]->content->subtype, p);
         idx[menu->current]->content->unlink = 1;
         menu->redraw |= REDRAW_INDEX | REDRAW_STATUS;
 

@@ -54,8 +54,8 @@ int getdnsdomainname (char *s, size_t l)
     p = tmp;
     while (ISSPACE (*p))
       p++;
-    if (mutt_strncmp ("domain", p, 6) == 0
-        || mutt_strncmp ("search", p, 6) == 0) {
+    if (safe_strncmp ("domain", p, 6) == 0
+        || safe_strncmp ("search", p, 6) == 0) {
       p += 6;
 
       for (q = strtok (p, " \t\n"); q; q = strtok (NULL, " \t\n"))

@@ -67,7 +67,7 @@ static char *shortened_hierarchy (char *box)
   int i, j;
   char *new_box;
 
-  for (i = 0; i < mutt_strlen (box); ++i) {
+  for (i = 0; i < safe_strlen (box); ++i) {
     if (box[i] == '.')
       ++dots;
     else if (isupper (box[i]))
@@ -76,9 +76,9 @@ static char *shortened_hierarchy (char *box)
   last_dot = strrchr (box, '.');
   if (last_dot) {
     ++last_dot;
-    new_box = safe_malloc (mutt_strlen (last_dot) + 2 * dots + 1);
+    new_box = safe_malloc (safe_strlen (last_dot) + 2 * dots + 1);
     new_box[0] = box[0];
-    for (i = 1, j = 1; i < mutt_strlen (box); ++i) {
+    for (i = 1, j = 1; i < safe_strlen (box); ++i) {
       if (box[i] == '.') {
         new_box[j++] = '.';
         new_box[j] = 0;
@@ -108,17 +108,17 @@ char *make_sidebar_entry (char *box, int size, int new, int flagged)
   if (SidebarWidth > COLS)
     SidebarWidth = COLS;
 
-  dlen = mutt_strlen (SidebarDelim);
+  dlen = safe_strlen (SidebarDelim);
   max = SidebarWidth - dlen - 1;
 
   safe_realloc (&entry, SidebarWidth + 1);
   entry[SidebarWidth] = 0;
   for (; i < SidebarWidth; entry[i++] = ' ');
 #if USE_IMAP
-  if (ImapHomeNamespace && mutt_strlen (ImapHomeNamespace) > 0) {
-    if (strncmp (box, ImapHomeNamespace, mutt_strlen (ImapHomeNamespace)) == 0
-        && mutt_strcmp (box, ImapHomeNamespace) != 0) {
-      box += mutt_strlen (ImapHomeNamespace) + 1;
+  if (ImapHomeNamespace && safe_strlen (ImapHomeNamespace) > 0) {
+    if (strncmp (box, ImapHomeNamespace, safe_strlen (ImapHomeNamespace)) == 0
+        && safe_strcmp (box, ImapHomeNamespace) != 0) {
+      box += safe_strlen (ImapHomeNamespace) + 1;
     }
   }
 #endif
@@ -127,11 +127,11 @@ char *make_sidebar_entry (char *box, int size, int new, int flagged)
     max -= quick_log10 (new) + 2;
   if (flagged > 0)
     max -= quick_log10 (flagged) + 2;
-  if (option (OPTSHORTENHIERARCHY) && mutt_strlen (box) > max) {
+  if (option (OPTSHORTENHIERARCHY) && safe_strlen (box) > max) {
     box = shortened_hierarchy (box);
     shortened = 1;
   }
-  i = mutt_strlen (box);
+  i = safe_strlen (box);
   strncpy (entry, box, i < SidebarWidth - dlen ? i : SidebarWidth - dlen);
 
   if (new) {
@@ -218,7 +218,7 @@ int sidebar_draw (int menu)
   int lines = option (OPTHELP) ? 1 : 0;
   BUFFY *tmp;
   int i = 0;
-  short delim_len = mutt_strlen (SidebarDelim);
+  short delim_len = safe_strlen (SidebarDelim);
 
   /* initialize first time */
   if (!initialized) {
@@ -244,7 +244,7 @@ int sidebar_draw (int menu)
   }
 
   if (SidebarWidth > 0 && option (OPTMBOXPANE)
-      && mutt_strlen (SidebarDelim) >= SidebarWidth) {
+      && safe_strlen (SidebarDelim) >= SidebarWidth) {
     mutt_error (_("Value for sidebar_delim is too long. Disabling sidebar."));
     sleep (2);
     unset_option (OPTMBOXPANE);
@@ -262,9 +262,9 @@ int sidebar_draw (int menu)
     move (lines, SidebarWidth - delim_len);
     if (option (OPTASCIICHARS))
       addstr (NONULL (SidebarDelim));
-    else if (!option (OPTASCIICHARS) && !mutt_strcmp (SidebarDelim, "|"))
+    else if (!option (OPTASCIICHARS) && !safe_strcmp (SidebarDelim, "|"))
       addch (ACS_VLINE);
-    else if ((Charset_is_utf8) && !mutt_strcmp (SidebarDelim, "|"))
+    else if ((Charset_is_utf8) && !safe_strcmp (SidebarDelim, "|"))
       addstr ("\342\224\202");
     else
       addstr (NONULL (SidebarDelim));
@@ -293,7 +293,7 @@ int sidebar_draw (int menu)
     move (lines, 0);
     if (option (OPTSIDEBARNEWMAILONLY)) {
       if (tmp->msg_unread > 0) {
-        if (Context && !mutt_strcmp (tmp->path, Context->path)) {
+        if (Context && !safe_strcmp (tmp->path, Context->path)) {
           printw ("%.*s", SidebarWidth - delim_len,
                   make_sidebar_entry (basename (tmp->path),
                                       Context->msgcount, Context->unread,
@@ -311,7 +311,7 @@ int sidebar_draw (int menu)
       }
     }
     else {
-      if (Context && !mutt_strcmp (tmp->path, Context->path)) {
+      if (Context && !safe_strcmp (tmp->path, Context->path)) {
         printw ("%.*s", SidebarWidth - delim_len,
                 make_sidebar_entry (basename (tmp->path),
                                     Context->msgcount, Context->unread,

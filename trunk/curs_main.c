@@ -1246,18 +1246,18 @@ int mutt_index_menu (void)
         mutt_error (_("%s is not a mailbox."), buf);
         break;
       }
-      mutt_str_replace (&CurrentFolder, buf);
+      str_replace (&CurrentFolder, buf);
 
       if (Context) {
         int check;
 
 #ifdef USE_COMPRESSED
         if (Context->compressinfo && Context->realpath)
-          mutt_str_replace (&LastFolder, Context->realpath);
+          str_replace (&LastFolder, Context->realpath);
         else
 #endif
 
-          mutt_str_replace (&LastFolder, Context->path);
+          str_replace (&LastFolder, Context->path);
         oldcount = Context ? Context->msgcount : 0;
 
         if ((check = mx_close_mailbox (Context, &index_hint)) != 0) {
@@ -2225,7 +2225,7 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
         sleep (2);
       }
       else if (op != OP_FOLLOWUP || !CURHDR->env->followup_to ||
-               mutt_strcasecmp (CURHDR->env->followup_to, "poster") ||
+               safe_strcasecmp (CURHDR->env->followup_to, "poster") ||
                query_quadoption (OPT_FOLLOWUPTOPOSTER,
                                  _("Reply by mail as poster prefers?")) !=
                M_YES) {

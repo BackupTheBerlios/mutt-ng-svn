@@ -277,10 +277,10 @@ static int _pgp_compare_address (const void *a, const void *b)
   pgp_uid_t **s = (pgp_uid_t **) a;
   pgp_uid_t **t = (pgp_uid_t **) b;
 
-  if ((r = mutt_strcasecmp ((*s)->addr, (*t)->addr)))
+  if ((r = safe_strcasecmp ((*s)->addr, (*t)->addr)))
     return r > 0;
   else
-    return (mutt_strcasecmp (_pgp_keyid ((*s)->parent),
+    return (safe_strcasecmp (_pgp_keyid ((*s)->parent),
                              _pgp_keyid ((*t)->parent)) > 0);
 }
 
@@ -299,11 +299,11 @@ static int _pgp_compare_keyid (const void *a, const void *b)
   pgp_uid_t **s = (pgp_uid_t **) a;
   pgp_uid_t **t = (pgp_uid_t **) b;
 
-  if ((r = mutt_strcasecmp (_pgp_keyid ((*s)->parent),
+  if ((r = safe_strcasecmp (_pgp_keyid ((*s)->parent),
                             _pgp_keyid ((*t)->parent))))
     return r > 0;
   else
-    return (mutt_strcasecmp ((*s)->addr, (*t)->addr)) > 0;
+    return (safe_strcasecmp ((*s)->addr, (*t)->addr)) > 0;
 }
 
 static int pgp_compare_keyid (const void *a, const void *b)
@@ -320,7 +320,7 @@ static int _pgp_compare_date (const void *a, const void *b)
 
   if ((r = ((*s)->parent->gen_time - (*t)->parent->gen_time)))
     return r > 0;
-  return (mutt_strcasecmp ((*s)->addr, (*t)->addr)) > 0;
+  return (safe_strcasecmp ((*s)->addr, (*t)->addr)) > 0;
 }
 
 static int pgp_compare_date (const void *a, const void *b)
@@ -345,9 +345,9 @@ static int _pgp_compare_trust (const void *a, const void *b)
     return r < 0;
   if ((r = ((*s)->parent->gen_time - (*t)->parent->gen_time)))
     return r < 0;
-  if ((r = mutt_strcasecmp ((*s)->addr, (*t)->addr)))
+  if ((r = safe_strcasecmp ((*s)->addr, (*t)->addr)))
     return r > 0;
-  return (mutt_strcasecmp (_pgp_keyid ((*s)->parent),
+  return (safe_strcasecmp (_pgp_keyid ((*s)->parent),
                            _pgp_keyid ((*t)->parent))) > 0;
 }
 
@@ -406,11 +406,11 @@ static int pgp_id_matches_addr (ADDRESS * addr, ADDRESS * u_addr,
     rv |= PGP_KV_STRONGID;
 
   if (addr->mailbox && u_addr->mailbox
-      && mutt_strcasecmp (addr->mailbox, u_addr->mailbox) == 0)
+      && safe_strcasecmp (addr->mailbox, u_addr->mailbox) == 0)
     rv |= PGP_KV_ADDR;
 
   if (addr->personal && u_addr->personal
-      && mutt_strcasecmp (addr->personal, u_addr->personal) == 0)
+      && safe_strcasecmp (addr->personal, u_addr->personal) == 0)
     rv |= PGP_KV_STRING;
 
   return rv;
@@ -641,7 +641,7 @@ pgp_key_t pgp_ask_for_key (char *tag, char *whatfor,
   if (whatfor) {
 
     for (l = id_defaults; l; l = l->next)
-      if (!mutt_strcasecmp (whatfor, l->what)) {
+      if (!safe_strcasecmp (whatfor, l->what)) {
         strfcpy (resp, NONULL (l->dflt), sizeof (resp));
         break;
       }
@@ -655,7 +655,7 @@ pgp_key_t pgp_ask_for_key (char *tag, char *whatfor,
 
     if (whatfor) {
       if (l)
-        mutt_str_replace (&l->dflt, resp);
+        str_replace (&l->dflt, resp);
       else {
         l = safe_malloc (sizeof (struct pgp_cache));
         l->next = id_defaults;
@@ -762,7 +762,7 @@ static LIST *pgp_add_string_to_hints (LIST * hints, const char *str)
 
   for (t = strtok (scratch, " ,.:\"()<>\n"); t;
        t = strtok (NULL, " ,.:\"()<>\n")) {
-    if (mutt_strlen (t) > 3)
+    if (safe_strlen (t) > 3)
       hints = mutt_add_list (hints, t);
   }
 
@@ -932,12 +932,12 @@ pgp_key_t pgp_getkeybystr (char *p, short abilities, pgp_ring_t keyring)
               (debugfile,
                "pgp_getkeybystr: matching \"%s\" against key %s, \"%s\": ", p,
                pgp_keyid (k), a->addr));
-      if (!*p || mutt_strcasecmp (p, pgp_keyid (k)) == 0
-          || (!mutt_strncasecmp (p, "0x", 2)
-              && !mutt_strcasecmp (p + 2, pgp_keyid (k)))
-          || (option (OPTPGPLONGIDS) && !mutt_strncasecmp (p, "0x", 2)
-              && !mutt_strcasecmp (p + 2, k->keyid + 8))
-          || mutt_stristr (a->addr, p)) {
+      if (!*p || safe_strcasecmp (p, pgp_keyid (k)) == 0
+          || (!safe_strncasecmp (p, "0x", 2)
+              && !safe_strcasecmp (p + 2, pgp_keyid (k)))
+          || (option (OPTPGPLONGIDS) && !safe_strncasecmp (p, "0x", 2)
+              && !safe_strcasecmp (p + 2, k->keyid + 8))
+          || str_isstr (a->addr, p)) {
         dprint (5, (debugfile, "match.\n"));
         match = 1;
         break;

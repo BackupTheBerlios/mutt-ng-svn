@@ -60,7 +60,7 @@ int mutt_get_tmp_attachment (BODY * a)
 
   if ((fpin = fopen (a->filename, "r")) && (fpout = safe_fopen (tempfile, "w"))) {      /* __FOPEN_CHECKED__ */
     mutt_copy_stream (fpin, fpout);
-    mutt_str_replace (&a->filename, tempfile);
+    str_replace (&a->filename, tempfile);
     a->unlink = 1;
 
     if (a->stamp >= st.st_mtime)
@@ -274,7 +274,7 @@ static int is_mmnoask (const char *buf)
   int lng;
 
   if ((p = getenv ("MM_NOASK")) != NULL && *p) {
-    if (mutt_strcmp (p, "1") == 0)
+    if (safe_strcmp (p, "1") == 0)
       return (1);
 
     strfcpy (tmp, p, sizeof (tmp));
@@ -292,8 +292,8 @@ static int is_mmnoask (const char *buf)
         }
       }
       else {
-        lng = mutt_strlen (p);
-        if (buf[lng] == '/' && mutt_strncasecmp (buf, p, lng) == 0)
+        lng = safe_strlen (p);
+        if (buf[lng] == '/' && safe_strncasecmp (buf, p, lng) == 0)
           return (1);
       }
 
@@ -310,7 +310,7 @@ void mutt_check_lookup_list (BODY * b, char *type, int len)
   int i;
 
   for (; t; t = t->next) {
-    i = mutt_strlen (t->data) - 1;
+    i = safe_strlen (t->data) - 1;
     if ((i > 0 && t->data[i - 1] == '/' && t->data[i] == '*' &&
          ascii_strncasecmp (type, t->data, i) == 0) ||
         ascii_strcasecmp (type, t->data) == 0) {
@@ -362,7 +362,7 @@ int mutt_is_autoview (BODY * b, const char *type)
   }
 
   for (; t; t = t->next) {
-    i = mutt_strlen (t->data) - 1;
+    i = safe_strlen (t->data) - 1;
     if ((i > 0 && t->data[i - 1] == '/' && t->data[i] == '*' &&
          ascii_strncasecmp (type, t->data, i) == 0) ||
         ascii_strcasecmp (type, t->data) == 0)
@@ -431,7 +431,7 @@ int mutt_view_attachment (FILE * fp, BODY * a, int flag, HEADER * hdr,
 
     if (rfc1524_expand_filename (entry->nametemplate, fname,
                                  tempfile, sizeof (tempfile))) {
-      if (fp == NULL && mutt_strcmp (tempfile, a->filename)) {
+      if (fp == NULL && safe_strcmp (tempfile, a->filename)) {
         /* send case: the file is already there */
         if (safe_symlink (a->filename, tempfile) == -1) {
           if (mutt_yesorno (_("Can't match nametemplate, continue?"), M_YES)

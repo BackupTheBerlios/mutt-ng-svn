@@ -106,11 +106,11 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
       break;
 
 #ifdef USE_SASL2
-    if (!mutt_strncmp (inbuf, "+ ", 2)
+    if (!safe_strncmp (inbuf, "+ ", 2)
         && sasl_decode64 (inbuf, strlen (inbuf), buf, LONG_STRING - 1,
                           &len) != SASL_OK)
 #else
-    if (!mutt_strncmp (inbuf, "+ ", 2)
+    if (!safe_strncmp (inbuf, "+ ", 2)
         && sasl_decode64 (inbuf, strlen (inbuf), buf, &len) != SASL_OK)
 #endif
     {
@@ -153,7 +153,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
   if (rc != SASL_OK)
     goto bail;
 
-  if (!mutt_strncmp (inbuf, "+OK", 3)) {
+  if (!safe_strncmp (inbuf, "+OK", 3)) {
     mutt_sasl_setup_conn (pop_data->conn, saslconn);
     return POP_A_SUCCESS;
   }
@@ -162,7 +162,7 @@ bail:
   sasl_dispose (&saslconn);
 
   /* terminate SASL sessoin if the last responce is not +OK nor -ERR */
-  if (!mutt_strncmp (inbuf, "+ ", 2)) {
+  if (!safe_strncmp (inbuf, "+ ", 2)) {
     snprintf (buf, sizeof (buf), "*\r\n");
     if (pop_query (pop_data, buf, sizeof (buf)) == PQ_NOT_CONNECTED)
       return POP_A_SOCKET;

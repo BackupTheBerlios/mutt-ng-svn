@@ -197,7 +197,7 @@ static void pgp_copy_clearsigned (FILE * fpin, STATE * s, char *charset)
       continue;
     }
 
-    if (mutt_strcmp (buf, "-----BEGIN PGP SIGNATURE-----\n") == 0)
+    if (safe_strcmp (buf, "-----BEGIN PGP SIGNATURE-----\n") == 0)
       break;
 
     if (armor_header) {
@@ -253,21 +253,21 @@ void pgp_application_pgp_handler (BODY * m, STATE * s)
       break;
 
     offset = ftell (s->fpin);
-    bytes -= (offset - last_pos);       /* don't rely on mutt_strlen(buf) */
+    bytes -= (offset - last_pos);       /* don't rely on safe_strlen(buf) */
     last_pos = offset;
 
-    if (mutt_strncmp ("-----BEGIN PGP ", buf, 15) == 0) {
+    if (safe_strncmp ("-----BEGIN PGP ", buf, 15) == 0) {
       clearsign = 0;
       start_pos = last_pos;
 
-      if (mutt_strcmp ("MESSAGE-----\n", buf + 15) == 0)
+      if (safe_strcmp ("MESSAGE-----\n", buf + 15) == 0)
         needpass = 1;
-      else if (mutt_strcmp ("SIGNED MESSAGE-----\n", buf + 15) == 0) {
+      else if (safe_strcmp ("SIGNED MESSAGE-----\n", buf + 15) == 0) {
         clearsign = 1;
         needpass = 0;
       }
       else if (!option (OPTDONTHANDLEPGPKEYS) &&
-               mutt_strcmp ("PUBLIC KEY BLOCK-----\n", buf + 15) == 0) {
+               safe_strcmp ("PUBLIC KEY BLOCK-----\n", buf + 15) == 0) {
         needpass = 0;
         pgp_keyblock = 1;
       }
@@ -291,16 +291,16 @@ void pgp_application_pgp_handler (BODY * m, STATE * s)
       fputs (buf, tmpfp);
       while (bytes > 0 && fgets (buf, sizeof (buf) - 1, s->fpin) != NULL) {
         offset = ftell (s->fpin);
-        bytes -= (offset - last_pos);   /* don't rely on mutt_strlen(buf) */
+        bytes -= (offset - last_pos);   /* don't rely on safe_strlen(buf) */
         last_pos = offset;
 
         fputs (buf, tmpfp);
 
         if ((needpass
-             && mutt_strcmp ("-----END PGP MESSAGE-----\n", buf) == 0)
+             && safe_strcmp ("-----END PGP MESSAGE-----\n", buf) == 0)
             || (!needpass
-                && (mutt_strcmp ("-----END PGP SIGNATURE-----\n", buf) == 0
-                    || mutt_strcmp ("-----END PGP PUBLIC KEY BLOCK-----\n",
+                && (safe_strcmp ("-----END PGP SIGNATURE-----\n", buf) == 0
+                    || safe_strcmp ("-----END PGP PUBLIC KEY BLOCK-----\n",
                                     buf) == 0)))
           break;
       }
@@ -465,12 +465,12 @@ static int pgp_check_traditional_one_body (FILE * fp, BODY * b,
   }
 
   while (fgets (buf, sizeof (buf), tfp)) {
-    if (mutt_strncmp ("-----BEGIN PGP ", buf, 15) == 0) {
-      if (mutt_strcmp ("MESSAGE-----\n", buf + 15) == 0)
+    if (safe_strncmp ("-----BEGIN PGP ", buf, 15) == 0) {
+      if (safe_strcmp ("MESSAGE-----\n", buf + 15) == 0)
         enc = 1;
-      else if (mutt_strcmp ("SIGNED MESSAGE-----\n", buf + 15) == 0)
+      else if (safe_strcmp ("SIGNED MESSAGE-----\n", buf + 15) == 0)
         sgn = 1;
-      else if (mutt_strcmp ("PUBLIC KEY BLOCK-----\n", buf + 15) == 0)
+      else if (safe_strcmp ("PUBLIC KEY BLOCK-----\n", buf + 15) == 0)
         key = 1;
     }
   }
@@ -741,7 +741,7 @@ BODY *pgp_decrypt_part (BODY * a, STATE * s, FILE * fpout, BODY * p)
    * read_mime_header has a hard time parsing the message.
    */
   while (fgets (buf, sizeof (buf) - 1, pgpout) != NULL) {
-    len = mutt_strlen (buf);
+    len = safe_strlen (buf);
     if (len > 1 && buf[len - 2] == '\r')
       strcpy (buf + len - 2, "\n");     /* __STRCPY_CHECKED__ */
     fputs (buf, fpout);
@@ -939,9 +939,9 @@ BODY *pgp_sign_message (BODY * a)
    * recommended for future releases of PGP.
    */
   while (fgets (buffer, sizeof (buffer) - 1, pgpout) != NULL) {
-    if (mutt_strcmp ("-----BEGIN PGP MESSAGE-----\n", buffer) == 0)
+    if (safe_strcmp ("-----BEGIN PGP MESSAGE-----\n", buffer) == 0)
       fputs ("-----BEGIN PGP SIGNATURE-----\n", fp);
-    else if (mutt_strcmp ("-----END PGP MESSAGE-----\n", buffer) == 0)
+    else if (safe_strcmp ("-----END PGP MESSAGE-----\n", buffer) == 0)
       fputs ("-----END PGP SIGNATURE-----\n", fp);
     else
       fputs (buffer, fp);
@@ -1010,7 +1010,7 @@ static short is_numerical_keyid (const char *s)
   /* or should we require the "0x"? */
   if (strncmp (s, "0x", 2) == 0)
     s += 2;
-  if (mutt_strlen (s) % 8)
+  if (safe_strlen (s) % 8)
     return 0;
   while (*s)
     if (strchr ("0123456789ABCDEFabcdef", *s++) == NULL)
@@ -1118,11 +1118,11 @@ char *pgp_findKeys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc)
     keyID = pgp_keyid (key);
 
   bypass_selection:
-    keylist_size += mutt_strlen (keyID) + 4;
+    keylist_size += safe_strlen (keyID) + 4;
     safe_realloc (&keylist, keylist_size);
     sprintf (keylist + keylist_used, "%s0x%s", keylist_used ? " " : "", /* __SPRINTF_CHECKED__ */
              keyID);
-    keylist_used = mutt_strlen (keylist);
+    keylist_used = safe_strlen (keylist);
 
     pgp_free_key (&key);
     rfc822_free_address (&addr);
@@ -1461,7 +1461,7 @@ int pgp_send_menu (HEADER * msg, int *redraw)
          pgp_ask_for_key (_("Sign as: "), NULL, KEYFLAG_CANSIGN,
                           PGP_PUBRING))) {
       snprintf (input_signas, sizeof (input_signas), "0x%s", pgp_keyid (p));
-      mutt_str_replace (&PgpSignAs, input_signas);
+      str_replace (&PgpSignAs, input_signas);
       pgp_free_key (&p);
 
       msg->security |= SIGN;

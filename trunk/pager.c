@@ -390,7 +390,7 @@ static struct q_class_t *classify_quote (struct q_class_t **QuoteList,
     if (length <= q_list->length) {
       /* case 1: check the top level nodes */
 
-      if (mutt_strncmp (qptr, q_list->prefix, length) == 0) {
+      if (safe_strncmp (qptr, q_list->prefix, length) == 0) {
         if (length == q_list->length)
           return q_list;        /* same prefix: return the current class */
 
@@ -479,7 +479,7 @@ static struct q_class_t *classify_quote (struct q_class_t **QuoteList,
 
       /* tmp != NULL means we already found a shorter prefix at case 1 */
       if (tmp == NULL
-          && mutt_strncmp (qptr, q_list->prefix, q_list->length) == 0) {
+          && safe_strncmp (qptr, q_list->prefix, q_list->length) == 0) {
         /* ok, it's a subclass somewhere on this branch */
 
         ptr = q_list;
@@ -491,7 +491,7 @@ static struct q_class_t *classify_quote (struct q_class_t **QuoteList,
 
         while (q_list) {
           if (length <= q_list->length) {
-            if (mutt_strncmp (tail_qptr, (q_list->prefix) + offset, tail_lng)
+            if (safe_strncmp (tail_qptr, (q_list->prefix) + offset, tail_lng)
                 == 0) {
               /* same prefix: return the current class */
               if (length == q_list->length)
@@ -575,7 +575,7 @@ static struct q_class_t *classify_quote (struct q_class_t **QuoteList,
           else {
             /* longer than the current prefix: try subclassing it */
             if (tmp == NULL
-                && mutt_strncmp (tail_qptr, (q_list->prefix) + offset,
+                && safe_strncmp (tail_qptr, (q_list->prefix) + offset,
                                  q_list->length - offset) == 0) {
               /* still a subclass: go down one level */
               ptr = q_list;
@@ -681,17 +681,17 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       }
     }
   }
-  else if (mutt_strncmp ("\033[0m", raw, 4) == 0)       /* a little hack... */
+  else if (safe_strncmp ("\033[0m", raw, 4) == 0)       /* a little hack... */
     lineInfo[n].type = MT_COLOR_NORMAL;
 #if 0
-  else if (mutt_strncmp ("[-- ", buf, 4) == 0)
+  else if (safe_strncmp ("[-- ", buf, 4) == 0)
     lineInfo[n].type = MT_COLOR_ATTACHMENT;
 #else
   else if (check_attachment_marker ((char *) raw) == 0)
     lineInfo[n].type = MT_COLOR_ATTACHMENT;
 #endif
-  else if (mutt_strcmp ("-- \n", buf) == 0
-           || mutt_strcmp ("-- \r\n", buf) == 0) {
+  else if (safe_strcmp ("-- \n", buf) == 0
+           || safe_strcmp ("-- \r\n", buf) == 0) {
     i = n + 1;
 
     lineInfo[n].type = MT_COLOR_SIGNATURE;
@@ -2332,7 +2332,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       else
         followup_to = extra->hdr->env->followup_to;
 
-      if (!followup_to || mutt_strcasecmp (followup_to, "poster") ||
+      if (!followup_to || safe_strcasecmp (followup_to, "poster") ||
           query_quadoption (OPT_FOLLOWUPTOPOSTER,
                             _("Reply by mail as poster prefers?")) != M_YES) {
         if (extra->ctx && extra->ctx->magic == M_NNTP

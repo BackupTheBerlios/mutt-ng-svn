@@ -131,10 +131,10 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
     if (irc == IMAP_CMD_RESPOND) {
 #ifdef USE_SASL2
       if (sasl_decode64
-          (idata->cmd.buf + 2, mutt_strlen (idata->cmd.buf + 2), buf,
+          (idata->cmd.buf + 2, safe_strlen (idata->cmd.buf + 2), buf,
            LONG_STRING - 1,
 #else
-      if (sasl_decode64 (idata->cmd.buf + 2, mutt_strlen (idata->cmd.buf + 2), buf,
+      if (sasl_decode64 (idata->cmd.buf + 2, safe_strlen (idata->cmd.buf + 2), buf,
 #endif
                          &len) != SASL_OK) {
         dprint (1,

@@ -123,7 +123,7 @@ int mutt_display_message (HEADER * cur)
     }
   }
 
-  if (!Pager || mutt_strcmp (Pager, "builtin") == 0)
+  if (!Pager || safe_strcmp (Pager, "builtin") == 0)
     builtin = 1;
   else {
     mutt_make_string (buf, sizeof (buf), NONULL (PagerFmt), Context, cur);
@@ -724,7 +724,7 @@ int mutt_save_message (HEADER * h, int delete,
   /* This is an undocumented feature of ELM pointed out to me by Felix von
    * Leitner <leitner@prz.fu-berlin.de>
    */
-  if (mutt_strcmp (buf, ".") == 0)
+  if (safe_strcmp (buf, ".") == 0)
     strfcpy (buf, LastSaveFolder, sizeof (buf));
   else
     strfcpy (LastSaveFolder, buf, sizeof (LastSaveFolder));
@@ -849,7 +849,7 @@ int mutt_update_list_file (char *filename, char *section, char *key,
       while (*c && *c != '\n')
         c++;
       c[0] = 0;                 /* strip EOL */
-      if (!strncmp (buf, "#: ", 3) && !mutt_strcasecmp (buf + 3, section))
+      if (!strncmp (buf, "#: ", 3) && !safe_strcasecmp (buf + 3, section))
         done++;
     }
     if (r != EOF && !done) {
@@ -877,8 +877,8 @@ int mutt_update_list_file (char *filename, char *section, char *key,
       done++;
       break;
     }
-    else if (key && !strncmp (buf, key, mutt_strlen (key)) &&
-             (!*key || buf[mutt_strlen (key)] == ' ')) {
+    else if (key && !strncmp (buf, key, safe_strlen (key)) &&
+             (!*key || buf[safe_strlen (key)] == ' ')) {
       c = buf;
       ext = 0;
       while (*c && (*c != '\r') && (*c != '\n'))
@@ -947,7 +947,7 @@ void mutt_edit_content_type (HEADER * h, BODY * b, FILE * fp)
     size_t l;
 
     for (p = b->parameter; p; p = p->next) {
-      l = mutt_strlen (buf);
+      l = safe_strlen (buf);
 
       rfc822_cat (tmp, sizeof (tmp), p->value, MimeSpecials);
       snprintf (buf + l, sizeof (buf) - l, "; %s=%s", p->attribute, tmp);

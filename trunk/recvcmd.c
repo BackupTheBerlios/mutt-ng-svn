@@ -684,7 +684,7 @@ attach_reply_envelope_defaults (ENVELOPE * env, ATTACHPTR ** idx,
   if ((flags & SENDNEWS)) {
     /* in case followup set Newsgroups: with Followup-To: if it present */
     if (!env->newsgroups && curenv &&
-        mutt_strcasecmp (curenv->followup_to, "poster"))
+        safe_strcasecmp (curenv->followup_to, "poster"))
       env->newsgroups = safe_strdup (curenv->followup_to);
   }
   else

@@ -882,7 +882,7 @@ static int msg_fetch_header (CONTEXT * ctx, IMAP_HEADER * h, char *buf,
 #if USE_HCACHE
 static size_t imap_hcache_keylen (const char *fn)
 {
-  return mutt_strlen (fn);
+  return safe_strlen (fn);
 }
 
 /* msg_fetch_header: import IMAP FETCH response into an IMAP_HEADER.
@@ -938,7 +938,7 @@ static int msg_has_flag (LIST * flag_list, const char *flag)
 
   flag_list = flag_list->next;
   while (flag_list) {
-    if (!ascii_strncasecmp (flag_list->data, flag, mutt_strlen (flag_list->data)))
+    if (!ascii_strncasecmp (flag_list->data, flag, safe_strlen (flag_list->data)))
       return 1;
 
     flag_list = flag_list->next;

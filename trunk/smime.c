@@ -403,7 +403,7 @@ char *smime_ask_for_key (char *prompt, char *mailbox, short public)
         continue;
 
       /* Check if query matches this certificate */
-      if (!mutt_stristr (fields[0], qry) && !mutt_stristr (fields[2], qry))
+      if (!str_isstr (fields[0], qry) && !str_isstr (fields[2], qry))
         continue;
 
       Table[cur].hash = hash;
@@ -488,8 +488,8 @@ char *smime_get_field_from_db (char *mailbox, char *query, short public,
   if (!mailbox && !query)
     return (NULL);
 
-  addr_len = mailbox ? mutt_strlen (mailbox) : 0;
-  query_len = query ? mutt_strlen (query) : 0;
+  addr_len = mailbox ? safe_strlen (mailbox) : 0;
+  query_len = query ? safe_strlen (query) : 0;
 
   *key = '\0';
 
@@ -511,7 +511,7 @@ char *smime_get_field_from_db (char *mailbox, char *query, short public,
     }
 
     while (fgets (buf, sizeof (buf) - 1, fp) != NULL)
-      if (mailbox && !(mutt_strncasecmp (mailbox, buf, addr_len))) {
+      if (mailbox && !(safe_strncasecmp (mailbox, buf, addr_len))) {
         numFields = sscanf (buf,
                             MUTT_FORMAT (STRING) " " MUTT_FORMAT (STRING) " "
                             MUTT_FORMAT (STRING) " " MUTT_FORMAT (STRING) " "
@@ -573,13 +573,13 @@ char *smime_get_field_from_db (char *mailbox, char *query, short public,
 
         /* query = label: return certificate. */
         if (numFields >= 3 &&
-            !(mutt_strncasecmp (query, fields[2], query_len))) {
+            !(safe_strncasecmp (query, fields[2], query_len))) {
           ask = 0;
           strfcpy (key, fields[1], sizeof (key));
         }
         /* query = certificate: return intermediate certificate. */
         else if (numFields >= 4 &&
-                 !(mutt_strncasecmp (query, fields[1], query_len))) {
+                 !(safe_strncasecmp (query, fields[1], query_len))) {
           ask = 0;
           strfcpy (key, fields[3], sizeof (key));
         }
@@ -648,7 +648,7 @@ void _smime_getkeys (char *mailbox)
   if (k) {
     /* the key used last time. */
     if (*SmimeKeyToUse &&
-        !mutt_strcasecmp (k, SmimeKeyToUse + mutt_strlen (SmimeKeys) + 1)) {
+        !safe_strcasecmp (k, SmimeKeyToUse + safe_strlen (SmimeKeys) + 1)) {
       FREE (&k);
       return;
     }
@@ -661,7 +661,7 @@ void _smime_getkeys (char *mailbox)
     snprintf (SmimeCertToUse, sizeof (SmimeCertToUse), "%s/%s",
               NONULL (SmimeCertificates), k);
 
-    if (mutt_strcasecmp (k, SmimeDefaultKey))
+    if (safe_strcasecmp (k, SmimeDefaultKey))
       smime_void_passphrase ();
 
     FREE (&k);
@@ -669,8 +669,8 @@ void _smime_getkeys (char *mailbox)
   }
 
   if (*SmimeKeyToUse) {
-    if (!mutt_strcasecmp (SmimeDefaultKey,
-                          SmimeKeyToUse + mutt_strlen (SmimeKeys) + 1))
+    if (!safe_strcasecmp (SmimeDefaultKey,
+                          SmimeKeyToUse + safe_strlen (SmimeKeys) + 1))
       return;
 
     smime_void_passphrase ();
@@ -772,10 +772,10 @@ char *smime_findKeys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc)
       return NULL;
     }
 
-    keylist_size += mutt_strlen (keyID) + 2;
+    keylist_size += safe_strlen (keyID) + 2;
     safe_realloc (&keylist, keylist_size);
     sprintf (keylist + keylist_used, "%s\n", keyID);    /* __SPRINTF_CHECKED__ */
-    keylist_used = mutt_strlen (keylist);
+    keylist_used = safe_strlen (keylist);
 
     rfc822_free_address (&addr);
 
@@ -832,8 +832,8 @@ static int smime_handle_cert_email (char *certificate, char *mailbox,
 
 
   while ((fgets (email, sizeof (email), fpout))) {
-    *(email + mutt_strlen (email) - 1) = '\0';
-    if (mutt_strncasecmp (email, mailbox, mutt_strlen (mailbox)) == 0)
+    *(email + safe_strlen (email) - 1) = '\0';
+    if (safe_strncasecmp (email, mailbox, safe_strlen (mailbox)) == 0)
       ret = 1;
 
     ret = ret < 0 ? 0 : ret;
@@ -859,9 +859,9 @@ static int smime_handle_cert_email (char *certificate, char *mailbox,
 
     rewind (fpout);
     while ((fgets (email, sizeof (email), fpout))) {
-      *(email + mutt_strlen (email) - 1) = '\0';
-      (*buffer)[count] = safe_calloc (1, mutt_strlen (email) + 1);
-      strncpy ((*buffer)[count], email, mutt_strlen (email));
+      *(email + safe_strlen (email) - 1) = '\0';
+      (*buffer)[count] = safe_calloc (1, safe_strlen (email) + 1);
+      strncpy ((*buffer)[count], email, safe_strlen (email));
       count++;
     }
   }
@@ -1241,7 +1241,7 @@ BODY *smime_build_smime_entity (BODY * a, char *certlist)
 
   *certfile = '\0';
   while (1) {
-    int off = mutt_strlen (certfile);
+    int off = safe_strlen (certfile);
 
     while (*++cert_end && *cert_end != '\n');
     if (!*cert_end)
@@ -1564,7 +1564,7 @@ int smime_verify_one (BODY * sigbdy, STATE * s, const char *tempfile)
       rewind (smimeerr);
 
       line = mutt_read_line (line, &linelen, smimeerr, &lineno);
-      if (linelen && !mutt_strcasecmp (line, "verification successful"))
+      if (linelen && !safe_strcasecmp (line, "verification successful"))
         badsig = 0;
 
       FREE (&line);
@@ -1729,7 +1729,7 @@ static BODY *smime_handle_entity (BODY * m, STATE * s, FILE * outFile)
       }
     }
     while (fgets (buf, sizeof (buf) - 1, smimeout) != NULL) {
-      len = mutt_strlen (buf);
+      len = safe_strlen (buf);
       if (len > 1 && buf[len - 2] == '\r') {
         buf[len - 2] = '\n';
         buf[len - 1] = '\0';
@@ -1780,7 +1780,7 @@ static BODY *smime_handle_entity (BODY * m, STATE * s, FILE * outFile)
     rewind (smimeerr);
 
     line = mutt_read_line (line, &linelen, smimeerr, &lineno);
-    if (linelen && !mutt_strcasecmp (line, "verification successful"))
+    if (linelen && !safe_strcasecmp (line, "verification successful"))
       m->goodsig = 1;
     FREE (&line);
   }
@@ -1884,19 +1884,19 @@ int smime_send_menu (HEADER * msg, int *redraw)
                                  " 4: RC2-64, 5: RC2-128, or (f)orget it? "),
                                _("12345f"))) {
     case 1:
-      mutt_str_replace (&SmimeCryptAlg, "des");
+      str_replace (&SmimeCryptAlg, "des");
       break;
     case 2:
-      mutt_str_replace (&SmimeCryptAlg, "des3");
+      str_replace (&SmimeCryptAlg, "des3");
       break;
     case 3:
-      mutt_str_replace (&SmimeCryptAlg, "rc2-40");
+      str_replace (&SmimeCryptAlg, "rc2-40");
       break;
     case 4:
-      mutt_str_replace (&SmimeCryptAlg, "rc2-64");
+      str_replace (&SmimeCryptAlg, "rc2-64");
       break;
     case 5:
-      mutt_str_replace (&SmimeCryptAlg, "rc2-128");
+      str_replace (&SmimeCryptAlg, "rc2-128");
       break;
     case 6:                    /* forget it */
       break;
@@ -1917,8 +1917,8 @@ int smime_send_menu (HEADER * msg, int *redraw)
   case 4:                      /* sign (a)s */
 
     if ((p = smime_ask_for_key (_("Sign as: "), NULL, 0))) {
-      p[mutt_strlen (p) - 1] = '\0';
-      mutt_str_replace (&SmimeDefaultKey, p);
+      p[safe_strlen (p) - 1] = '\0';
+      str_replace (&SmimeDefaultKey, p);
 
       msg->security |= SIGN;
 

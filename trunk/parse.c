@@ -46,7 +46,7 @@ static char *read_rfc822_line (FILE * f, char *line, size_t * linelen)
       return (line);
     }
 
-    buf += mutt_strlen (buf) - 1;
+    buf += safe_strlen (buf) - 1;
     if (*buf == '\n') {
       /* we did get a full line. remove trailing space */
       while (ISSPACE (*buf))
@@ -95,7 +95,7 @@ LIST *mutt_parse_references (char *s, int in_reply_to)
     new = NULL;
 
     if (*s == '<') {
-      n = mutt_strlen (s);
+      n = safe_strlen (s);
       if (s[n - 1] != '>') {
         o = s;
         s = NULL;
@@ -105,7 +105,7 @@ LIST *mutt_parse_references (char *s, int in_reply_to)
       new = safe_strdup (s);
     }
     else if (o) {
-      m = mutt_strlen (s);
+      m = safe_strlen (s);
       if (s[m - 1] == '>') {
         new = safe_malloc (sizeof (char) * (n + m + 1));
         strcpy (new, o);        /* __STRCPY_CHECKED__ */
@@ -397,7 +397,7 @@ static void parse_content_disposition (char *s, BODY * ct)
     if ((s =
          mutt_get_parameter ("filename",
                              (parms = parse_parameters (s)))) != 0)
-      mutt_str_replace (&ct->filename, s);
+      str_replace (&ct->filename, s);
     if ((s = mutt_get_parameter ("name", parms)) != 0)
       ct->form_name = safe_strdup (s);
     mutt_free_parameter (&parms);
@@ -452,7 +452,7 @@ BODY *mutt_read_mime_header (FILE * fp, int digest)
       else if (!ascii_strcasecmp ("disposition", line + 8))
         parse_content_disposition (c, p);
       else if (!ascii_strcasecmp ("description", line + 8)) {
-        mutt_str_replace (&p->description, c);
+        str_replace (&p->description, c);
         rfc2047_decode (&p->description);
       }
     }
@@ -465,7 +465,7 @@ BODY *mutt_read_mime_header (FILE * fp, int digest)
       else if (!ascii_strcasecmp ("content-lines", line + 6))
         mutt_set_parameter ("content-lines", c, &(p->parameter));
       else if (!ascii_strcasecmp ("data-description", line + 6)) {
-        mutt_str_replace (&p->description, c);
+        str_replace (&p->description, c);
         rfc2047_decode (&p->description);
       }
     }
@@ -521,7 +521,7 @@ void mutt_parse_part (FILE * fp, BODY * b)
   /* try to recover from parsing error */
   if (!b->parts) {
     b->type = TYPETEXT;
-    mutt_str_replace (&b->subtype, "plain");
+    str_replace (&b->subtype, "plain");
   }
 }
 
@@ -589,14 +589,14 @@ BODY *mutt_parse_multipart (FILE * fp, const char *boundary, long end_off,
     return (NULL);
   }
 
-  blen = mutt_strlen (boundary);
+  blen = safe_strlen (boundary);
   while (ftell (fp) < end_off && fgets (buffer, LONG_STRING, fp) != NULL) {
-    len = mutt_strlen (buffer);
+    len = safe_strlen (buffer);
 
     crlf = (len > 1 && buffer[len - 2] == '\r') ? 1 : 0;
 
     if (buffer[0] == '-' && buffer[1] == '-' &&
-        mutt_strncmp (buffer + 2, boundary, blen) == 0) {
+        safe_strncmp (buffer + 2, boundary, blen) == 0) {
       if (last) {
         last->length = ftell (fp) - last->offset - len - 1 - crlf;
         if (last->parts && last->parts->length == 0)
@@ -612,7 +612,7 @@ BODY *mutt_parse_multipart (FILE * fp, const char *boundary, long end_off,
         buffer[i] = 0;
 
       /* Check for the end boundary */
-      if (mutt_strcmp (buffer + blen + 2, "--") == 0) {
+      if (safe_strcmp (buffer + blen + 2, "--") == 0) {
         final = 1;
         break;                  /* done parsing */
       }
@@ -1004,7 +1004,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
       }
       else if (ascii_strcasecmp (line + 8, "description") == 0) {
         if (hdr) {
-          mutt_str_replace (&hdr->content->description, p);
+          str_replace (&hdr->content->description, p);
           rfc2047_decode (&hdr->content->description);
         }
         matched = 1;
@@ -1019,7 +1019,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
 
   case 'd':
     if (!ascii_strcasecmp ("ate", line + 1)) {
-      mutt_str_replace (&e->date, p);
+      str_replace (&e->date, p);
       if (hdr)
         hdr->date_sent = mutt_parse_date (p, hdr);
       matched = 1;
@@ -1046,7 +1046,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
       matched = 1;
     }
 #ifdef USE_NNTP
-    else if (!mutt_strcasecmp (line + 1, "ollowup-to")) {
+    else if (!safe_strcasecmp (line + 1, "ollowup-to")) {
       if (!e->followup_to) {
         mutt_remove_trailing_ws (p);
         e->followup_to = safe_strdup (mutt_skip_whitespace (p));
@@ -1092,7 +1092,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
           /* Take the first mailto URL */
           if (url_check_scheme (beg) == U_MAILTO) {
             FREE (&e->list_post);
-            e->list_post = mutt_substrdup (beg, end);
+            e->list_post = str_substrdup (beg, end);
             break;
           }
         }
@@ -1129,7 +1129,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
 
 #ifdef USE_NNTP
   case 'n':
-    if (!mutt_strcasecmp (line + 1, "ewsgroups")) {
+    if (!safe_strcasecmp (line + 1, "ewsgroups")) {
       FREE (&e->newsgroups);
       mutt_remove_trailing_ws (p);
       e->newsgroups = safe_strdup (mutt_skip_whitespace (p));
@@ -1140,8 +1140,8 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
 
   case 'o':
     /* field `Organization:' saves only for pager! */
-    if (!mutt_strcasecmp (line + 1, "rganization")) {
-      if (!e->organization && mutt_strcasecmp (p, "unknown"))
+    if (!safe_strcasecmp (line + 1, "rganization")) {
+      if (!e->organization && safe_strcasecmp (p, "unknown"))
         e->organization = safe_strdup (p);
     }
     break;
@@ -1238,12 +1238,12 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
       matched = 1;
     }
 #ifdef USE_NNTP
-    else if (!mutt_strcasecmp (line + 1, "-comment-to")) {
+    else if (!safe_strcasecmp (line + 1, "-comment-to")) {
       if (!e->x_comment_to)
         e->x_comment_to = safe_strdup (p);
       matched = 1;
     }
-    else if (!mutt_strcasecmp (line + 1, "ref")) {
+    else if (!safe_strcasecmp (line + 1, "ref")) {
       if (!e->xref)
         e->xref = safe_strdup (p);
       matched = 1;
@@ -1257,7 +1257,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
   /* Keep track of the user-defined headers */
   if (!matched && user_hdrs) {
     /* restore the original line */
-    line[mutt_strlen (line)] = ':';
+    line[safe_strlen (line)] = ':';
 
     if (weed && option (OPTWEED) && mutt_matches_ignore (line, Ignore)
         && !mutt_matches_ignore (line, UnIgnore))
@@ -1335,7 +1335,7 @@ ENVELOPE *mutt_read_rfc822_header (FILE * f, HEADER * hdr, short user_hdrs,
       time_t t;
 
       /* some bogus MTAs will quote the original "From " line */
-      if (mutt_strncmp (">From ", line, 6) == 0)
+      if (safe_strncmp (">From ", line, 6) == 0)
         continue;               /* just ignore */
       else if (is_from (line, return_path, sizeof (return_path), &t)) {
         /* MH somtimes has the From_ line in the middle of the header! */

@@ -129,7 +129,7 @@ static void set_path (CONTEXT * ctx)
 
   /* Uncompress to /tmp */
   mutt_mktemp (tmppath);
-  ctx->path = safe_malloc (mutt_strlen (tmppath) + 1);
+  ctx->path = safe_malloc (safe_strlen (tmppath) + 1);
   strcpy (ctx->path, tmppath);
 }
 

@@ -96,8 +96,8 @@ void mutt_update_tree (ATTACHPTR ** idx, short idxlen)
     }
 
     if (idx[x]->tree) {
-      if (mutt_strcmp (idx[x]->tree, buf) != 0)
-        mutt_str_replace (&idx[x]->tree, buf);
+      if (safe_strcmp (idx[x]->tree, buf) != 0)
+        str_replace (&idx[x]->tree, buf);
     }
     else
       idx[x]->tree = safe_strdup (buf);
@@ -1176,7 +1176,7 @@ void mutt_view_attachments (HEADER * hdr)
       CHECK_ATTACH;
 
       if (!idx[menu->current]->content->hdr->env->followup_to ||
-          mutt_strcasecmp (idx[menu->current]->content->hdr->env->followup_to,
+          safe_strcasecmp (idx[menu->current]->content->hdr->env->followup_to,
                            "poster")
           || query_quadoption (OPT_FOLLOWUPTOPOSTER,
                                _("Reply by mail as poster prefers?")) !=

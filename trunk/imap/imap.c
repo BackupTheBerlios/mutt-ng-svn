@@ -1177,9 +1177,9 @@ int imap_mailbox_check (char *path, int new)
    * command on a mailbox that you have selected 
    */
 
-  if (mutt_strcmp (mbox_unquoted, idata->mailbox) == 0
+  if (safe_strcmp (mbox_unquoted, idata->mailbox) == 0
       || (ascii_strcasecmp (mbox_unquoted, "INBOX") == 0
-          && mutt_strcasecmp (mbox_unquoted, idata->mailbox) == 0)) {
+          && safe_strcasecmp (mbox_unquoted, idata->mailbox) == 0)) {
     strfcpy (buf, "NOOP", sizeof (buf));
   }
   else if (mutt_bit_isset (idata->capabilities, IMAP4REV1) ||
@@ -1204,8 +1204,8 @@ int imap_mailbox_check (char *path, int new)
       /* The mailbox name may or may not be quoted here. We could try to 
        * munge the server response and compare with quoted (or vise versa)
        * but it is probably more efficient to just strncmp against both. */
-      if (mutt_strncmp (mbox_unquoted, s, mutt_strlen (mbox_unquoted)) == 0
-          || mutt_strncmp (mbox, s, mutt_strlen (mbox)) == 0) {
+      if (safe_strncmp (mbox_unquoted, s, safe_strlen (mbox_unquoted)) == 0
+          || safe_strncmp (mbox, s, safe_strlen (mbox)) == 0) {
         s = imap_next_word (s);
         s = imap_next_word (s);
         if (isdigit ((unsigned char) *s)) {
@@ -1396,14 +1396,14 @@ int imap_complete (char *dest, size_t dlen, char *path)
       /* if the folder isn't selectable, append delimiter to force browse
        * to enter it on second tab. */
       if (noselect) {
-        clen = mutt_strlen (list_word);
+        clen = safe_strlen (list_word);
         list_word[clen++] = delim;
         list_word[clen] = '\0';
       }
       /* copy in first word */
       if (!completions) {
         strfcpy (completion, list_word, sizeof (completion));
-        matchlen = mutt_strlen (completion);
+        matchlen = safe_strlen (completion);
         completions++;
         continue;
       }

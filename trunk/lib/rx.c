@@ -32,7 +32,7 @@ void rx_free (rx_t** p) {
 }
 
 int rx_compare (const rx_t* r1, const rx_t* r2) {
-  return (mutt_strcmp (r1->pattern, r2->pattern));
+  return (safe_strcmp (r1->pattern, r2->pattern));
 }
 
 int rx_list_match (list2_t* l, const char* pat) {
@@ -50,7 +50,7 @@ int rx_lookup (list2_t* l, const char* pat) {
   if (!pat || !*pat || list_empty(l))
     return (-1);
   for (i = 0; i < l->length; i++)
-    if (mutt_strcmp (((rx_t*) l->data[i])->pattern, pat) == 0)
+    if (safe_strcmp (((rx_t*) l->data[i])->pattern, pat) == 0)
       return (i);
   return (-1);
 }

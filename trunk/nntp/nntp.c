@@ -84,7 +84,7 @@ static int nntp_auth (NNTP_SERVER * serv)
     return -1;
   }
 
-  if (mutt_strncmp ("281", buf, 3)) {
+  if (safe_strncmp ("281", buf, 3)) {
     conn->account.flags = flags;
     mutt_error _("Login failed.");
 
@@ -119,9 +119,9 @@ static int nntp_connect_and_auth (NNTP_SERVER * serv)
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
     return nntp_connect_error (serv);
 
-  if (!mutt_strncmp ("200", buf, 3))
+  if (!safe_strncmp ("200", buf, 3))
     mutt_message (_("Connected to %s. Posting ok."), conn->account.host);
-  else if (!mutt_strncmp ("201", buf, 3))
+  else if (!safe_strncmp ("201", buf, 3))
     mutt_message (_("Connected to %s. Posting NOT ok."), conn->account.host);
   else {
     mutt_socket_close (conn);
@@ -143,7 +143,7 @@ static int nntp_connect_and_auth (NNTP_SERVER * serv)
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
     return nntp_connect_error (serv);
 
-  if (!(conn->account.flags & M_ACCT_USER) && mutt_strncmp ("480", buf, 3)) {
+  if (!(conn->account.flags & M_ACCT_USER) && safe_strncmp ("480", buf, 3)) {
     serv->status = NNTP_OK;
     return 0;
   }
@@ -175,28 +175,28 @@ static int nntp_attempt_features (NNTP_SERVER * serv)
   mutt_socket_write (conn, "LISTGROUP\r\n");
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
     return (nntp_connect_error (serv));
-  if (mutt_strncmp ("500", buf, 3))
+  if (safe_strncmp ("500", buf, 3))
     serv->hasLISTGROUP = 1;
 
   mutt_socket_write (conn, "XOVER\r\n");
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
     return nntp_connect_error (serv);
-  if (mutt_strncmp ("500", buf, 3))
+  if (safe_strncmp ("500", buf, 3))
     serv->hasXOVER = 1;
 
   mutt_socket_write (conn, "XPAT\r\n");
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
     return nntp_connect_error (serv);
-  if (mutt_strncmp ("500", buf, 3))
+  if (safe_strncmp ("500", buf, 3))
     serv->hasXPAT = 1;
 
   mutt_socket_write (conn, "XGTITLE +\r\n");
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
     return nntp_connect_error (serv);
-  if (mutt_strncmp ("500", buf, 3))
+  if (safe_strncmp ("500", buf, 3))
     serv->hasXGTITLE = 1;
 
-  if (!mutt_strncmp ("282", buf, 3)) {
+  if (!safe_strncmp ("282", buf, 3)) {
     do {
       if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
         return nntp_connect_error (serv);
@@ -270,7 +270,7 @@ static int mutt_nntp_query (NNTP_DATA * data, char *line, size_t linelen)
       if (*line)
         done = FALSE;
     }
-    else if ((!mutt_strncmp ("480", buf, 3)) && nntp_auth (data->nserv) < 0)
+    else if ((!safe_strncmp ("480", buf, 3)) && nntp_auth (data->nserv) < 0)
       return -1;
   } while (!done);
 
@@ -331,7 +331,7 @@ static int mutt_nntp_fetch (NNTP_DATA * nntp_data, char *query, char *msg,
       strfcpy (inbuf + lenbuf, p, sizeof (buf));
 
       if (chunk >= sizeof (buf)) {
-        lenbuf += mutt_strlen (p);
+        lenbuf += safe_strlen (p);
       }
       else {
         line++;
@@ -398,7 +398,7 @@ static void nntp_parse_xref (CONTEXT * ctx, char *group, char *xref,
       *colon = '\0';
       colon++;
       nntp_get_status (ctx, h, p, atoi (colon));
-      if (h && h->article_num == 0 && mutt_strcmp (group, b) == 0)
+      if (h && h->article_num == 0 && safe_strcmp (group, b) == 0)
         h->article_num = atoi (colon);
     }
   }
@@ -472,7 +472,7 @@ static int parse_description (char *line, void *n)
     d++;
   dprint (2, (debugfile, "group: %s, desc: %s\n", line, d));
   if ((data = (NNTP_DATA *) hash_find (news->newsgroups, line)) != NULL &&
-      mutt_strcmp (d, data->desc)) {
+      safe_strcmp (d, data->desc)) {
     FREE (&data->desc);
     data->desc = safe_strdup (d);
   }
@@ -826,7 +826,7 @@ int nntp_open_mailbox (CONTEXT * ctx)
 
   /* create NNTP-specific state struct if nof found in list */
   if ((nntp_data = (NNTP_DATA *) hash_find (serv->newsgroups, buf)) == NULL) {
-    nntp_data = safe_calloc (1, sizeof (NNTP_DATA) + mutt_strlen (buf) + 1);
+    nntp_data = safe_calloc (1, sizeof (NNTP_DATA) + safe_strlen (buf) + 1);
     nntp_data->group = (char *) nntp_data + sizeof (NNTP_DATA);
     strcpy (nntp_data->group, buf);
     hash_insert (serv->newsgroups, nntp_data->group, nntp_data, 0);
@@ -851,11 +851,11 @@ int nntp_open_mailbox (CONTEXT * ctx)
     return -1;
   }
 
-  if (mutt_strncmp ("211", buf, 3)) {
+  if (safe_strncmp ("211", buf, 3)) {
     LIST *l = serv->list;
 
     /* GROUP command failed */
-    if (!mutt_strncmp ("411", buf, 3)) {
+    if (!safe_strncmp ("411", buf, 3)) {
       mutt_error (_("Newsgroup %s not found on server %s"),
                   nntp_data->group, serv->conn->account.host);
 
@@ -1013,7 +1013,7 @@ int nntp_post (const char *msg)
   buf[0] = '.';
   buf[1] = '\0';
   while (fgets (buf + 1, sizeof (buf) - 2, f) != NULL) {
-    len = mutt_strlen (buf);
+    len = safe_strlen (buf);
     if (buf[len - 1] == '\n') {
       buf[len - 1] = '\r';
       buf[len] = '\n';
@@ -1027,7 +1027,7 @@ int nntp_post (const char *msg)
   }
   fclose (f);
 
-  if (buf[mutt_strlen (buf) - 1] != '\n')
+  if (buf[safe_strlen (buf) - 1] != '\n')
     mutt_socket_write_d (nntp_data->nserv->conn, "\r\n", M_SOCK_LOG_HDR);
   mutt_socket_write_d (nntp_data->nserv->conn, ".\r\n", M_SOCK_LOG_HDR);
   if (mutt_socket_readln (buf, sizeof (buf), nntp_data->nserv->conn) < 0) {
@@ -1170,7 +1170,7 @@ static int _nntp_check_mailbox (CONTEXT * ctx, NNTP_DATA * nntp_data)
 #endif
     return -1;
   }
-  if (mutt_strncmp ("211", buf, 3)) {
+  if (safe_strncmp ("211", buf, 3)) {
     buf[0] = 0;
     if (mutt_nntp_query (nntp_data, buf, sizeof (buf)) < 0) {
 #ifdef DEBUG
@@ -1179,7 +1179,7 @@ static int _nntp_check_mailbox (CONTEXT * ctx, NNTP_DATA * nntp_data)
       return -1;
     }
   }
-  if (!mutt_strncmp ("211", buf, 3)) {
+  if (!safe_strncmp ("211", buf, 3)) {
     int first;
     int last;
 
@@ -1238,7 +1238,7 @@ static int add_group (char *buf, void *serv)
     return 0;
   if ((nntp_data = (NNTP_DATA *) hash_find (s->newsgroups, group)) == NULL) {
     n++;
-    nntp_data = safe_calloc (1, sizeof (NNTP_DATA) + mutt_strlen (group) + 1);
+    nntp_data = safe_calloc (1, sizeof (NNTP_DATA) + safe_strlen (group) + 1);
     nntp_data->group = (char *) nntp_data + sizeof (NNTP_DATA);
     strcpy (nntp_data->group, group);
     nntp_data->nserv = s;

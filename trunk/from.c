@@ -33,7 +33,7 @@ int mutt_check_month (const char *s)
   int i;
 
   for (i = 0; i < 12; i++)
-    if (mutt_strncasecmp (s, Months[i], 3) == 0)
+    if (safe_strncasecmp (s, Months[i], 3) == 0)
       return (i);
   return (-1);                  /* error */
 }
@@ -42,10 +42,10 @@ static int is_day_name (const char *s)
 {
   int i;
 
-  if ((mutt_strlen (s) < 3) || !*(s + 3) || !ISSPACE (*(s + 3)))
+  if ((safe_strlen (s) < 3) || !*(s + 3) || !ISSPACE (*(s + 3)))
     return 0;
   for (i = 0; i < 7; i++)
-    if (mutt_strncasecmp (s, Weekdays[i], 3) == 0)
+    if (safe_strncasecmp (s, Weekdays[i], 3) == 0)
       return 1;
   return 0;
 }
@@ -64,7 +64,7 @@ int is_from (const char *s, char *path, size_t pathlen, time_t * tp)
   if (path)
     *path = 0;
 
-  if (mutt_strncmp ("From ", s, 5) != 0)
+  if (safe_strncmp ("From ", s, 5) != 0)
     return 0;
 
   s = next_word (s);            /* skip over the From part. */

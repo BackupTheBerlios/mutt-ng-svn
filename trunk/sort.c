@@ -81,7 +81,7 @@ int compare_subject (const void *a, const void *b)
   else if (!(*pb)->env->real_subj)
     rc = 1;
   else
-    rc = mutt_strcasecmp ((*pa)->env->real_subj, (*pb)->env->real_subj);
+    rc = safe_strcasecmp ((*pa)->env->real_subj, (*pb)->env->real_subj);
   AUXSORT (rc, a, b);
   return (SORTCODE (rc));
 }
@@ -122,7 +122,7 @@ int compare_to (const void *a, const void *b)
   strncpy (fb, mutt_get_name ((*ppb)->env->to), sizeof (fb));
   fb[sizeof (fb) - 1] = '\0';
 
-  result = mutt_strcasecmp (fa, fb);
+  result = safe_strcasecmp (fa, fb);
   AUXSORT (result, a, b);
   return (SORTCODE (result));
 }
@@ -145,7 +145,7 @@ int compare_from (const void *a, const void *b)
   strncpy (fb, mutt_get_name ((*ppb)->env->from), sizeof (fb));
   fb[sizeof (fb) - 1] = '\0';
 
-  result = mutt_strcasecmp (fa, fb);
+  result = safe_strcasecmp (fa, fb);
   AUXSORT (result, a, b);
   return (SORTCODE (result));
 }
@@ -213,13 +213,13 @@ int compare_spam (const void *a, const void *b)
   /* If either aptr or bptr is equal to data, there is no numeric    */
   /* value for that spam attribute. In this case, compare lexically. */
   if ((aptr == (*ppa)->env->spam->data) || (bptr == (*ppb)->env->spam->data))
-    return (SORTCODE (mutt_strcmp (aptr, bptr)));
+    return (SORTCODE (safe_strcmp (aptr, bptr)));
 
   /* Otherwise, we have numeric value for both attrs. If these values */
   /* are equal, then we first fall back upon string comparison, then  */
   /* upon auxiliary sort.                                             */
   if (result == 0) {
-    result = mutt_strcmp (aptr, bptr);
+    result = safe_strcmp (aptr, bptr);
     if (result == 0)
       AUXSORT (result, a, b);
   }

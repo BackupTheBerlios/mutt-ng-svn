@@ -172,7 +172,7 @@ int url_ciss_tostring (ciss_url_t * ciss, char *dest, size_t len, int flags)
 
   if (ciss->host) {
     safe_strcat (dest, len, "//");
-    len -= (l = mutt_strlen (dest));
+    len -= (l = safe_strlen (dest));
     dest += l;
 
     if (ciss->user) {
@@ -181,7 +181,7 @@ int url_ciss_tostring (ciss_url_t * ciss, char *dest, size_t len, int flags)
       else
         snprintf (dest, len, "%s@", ciss->user);
 
-      len -= (l = mutt_strlen (dest));
+      len -= (l = safe_strlen (dest));
       dest += l;
     }
 
@@ -234,10 +234,10 @@ int url_parse_mailto (ENVELOPE * e, char **body, const char *src)
 
     if (!ascii_strcasecmp (tag, "body")) {
       if (body)
-        mutt_str_replace (body, value);
+        str_replace (body, value);
     }
     else {
-      taglen = mutt_strlen (tag);
+      taglen = safe_strlen (tag);
       /* mutt_parse_rfc822_line makes some assumptions */
       snprintf (scratch, sizeof (scratch), "%s: %s", tag, value);
       scratch[taglen] = '\0';

@@ -63,7 +63,7 @@ void pop_error (POP_DATA * pop_data, char *msg)
   t = strchr (pop_data->err_msg, '\0');
   c = msg;
 
-  if (!mutt_strncmp (msg, "-ERR ", 5)) {
+  if (!safe_strncmp (msg, "-ERR ", 5)) {
     c2 = msg + 5;
     SKIPWS (c2);
 
@@ -219,7 +219,7 @@ pop_query_status pop_connect (POP_DATA * pop_data)
 
   pop_data->status = POP_CONNECTED;
 
-  if (mutt_strncmp (buf, "+OK", 3)) {
+  if (safe_strncmp (buf, "+OK", 3)) {
     *pop_data->err_msg = '\0';
     pop_error (pop_data, buf);
     mutt_error ("%s", pop_data->err_msg);
@@ -402,7 +402,7 @@ pop_query_status pop_query_d (POP_DATA * pop_data, char *buf, size_t buflen, cha
     pop_data->status = POP_DISCONNECTED;
     return PQ_NOT_CONNECTED;
   }
-  if (!mutt_strncmp (buf, "+OK", 3))
+  if (!safe_strncmp (buf, "+OK", 3))
     return PQ_OK;
 
   pop_error (pop_data, buf);
@@ -482,7 +482,7 @@ static int check_uidl (char *line, void *data)
 
   sscanf (line, "%u %s", &index, line);
   for (i = 0; i < ctx->msgcount; i++) {
-    if (!mutt_strcmp (ctx->hdrs[i]->data, line)) {
+    if (!safe_strcmp (ctx->hdrs[i]->data, line)) {
       ctx->hdrs[i]->refno = index;
       break;
     }

@@ -401,7 +401,7 @@ static void fmtstr (char *buffer, size_t * currlen, size_t maxlen,
     value = "<NULL>";
   }
 
-  for (strln = 0; value[strln]; ++strln);       /* mutt_strlen */
+  for (strln = 0; value[strln]; ++strln);       /* safe_strlen */
   padlen = min - strln;
   if (padlen < 0)
     padlen = 0;
@@ -688,7 +688,7 @@ int vsnprintf (char *str, size_t count, const char *fmt, va_list args)
 {
   str[0] = 0;
   dopr (str, count, fmt, args);
-  return (mutt_strlen (str));
+  return (safe_strlen (str));
 }
 #endif /* !HAVE_VSNPRINTF */
 
@@ -716,7 +716,7 @@ int snprintf (va_alist)
 
   (void) vsnprintf (str, count, fmt, ap);
   VA_END;
-  return (mutt_strlen (str));
+  return (safe_strlen (str));
 }
 
 #ifdef TEST_SNPRINTF
@@ -767,7 +767,7 @@ int main (void)
     for (y = 0; fp_nums[y] != 0; y++) {
       snprintf (buf1, sizeof (buf1), fp_fmt[x], fp_nums[y]);
       sprintf (buf2, fp_fmt[x], fp_nums[y]);
-      if (mutt_strcmp (buf1, buf2)) {
+      if (safe_strcmp (buf1, buf2)) {
         printf ("snprintf doesn't match Format: %s\n\tsnprintf = %s\n\tsprintf  = %s\n",        /* __SPRINTF_CHECKED__ */
                 fp_fmt[x], buf1, buf2);
         fail++;
@@ -779,7 +779,7 @@ int main (void)
     for (y = 0; int_nums[y] != 0; y++) {
       snprintf (buf1, sizeof (buf1), int_fmt[x], int_nums[y]);
       sprintf (buf2, int_fmt[x], int_nums[y]);
-      if (mutt_strcmp (buf1, buf2)) {
+      if (safe_strcmp (buf1, buf2)) {
         printf ("snprintf doesn't match Format: %s\n\tsnprintf = %s\n\tsprintf  = %s\n",        /* __SPRINTF_CHECKED__ */
                 int_fmt[x], buf1, buf2);
         fail++;

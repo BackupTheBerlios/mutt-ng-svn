@@ -291,7 +291,7 @@ static int edit_envelope (ENVELOPE * en, int flags)
 
     return (-1);
   }
-  mutt_str_replace (&en->subject, buf);
+  str_replace (&en->subject, buf);
 
   return 0;
 }
@@ -346,7 +346,7 @@ static void process_user_header (ENVELOPE * env)
       env->reply_to = rfc822_parse_adrlist (env->reply_to, uh->data + 9);
     }
     else if (ascii_strncasecmp ("message-id:", uh->data, 11) == 0)
-      mutt_str_replace (&env->message_id, uh->data + 11);
+      str_replace (&env->message_id, uh->data + 11);
     else if (ascii_strncasecmp ("to:", uh->data, 3) != 0 &&
              ascii_strncasecmp ("cc:", uh->data, 3) != 0 &&
              ascii_strncasecmp ("bcc:", uh->data, 4) != 0 &&
@@ -649,7 +649,7 @@ void mutt_make_forward_subject (ENVELOPE * env, CONTEXT * ctx, HEADER * cur)
 
   /* set the default subject for the message. */
   mutt_make_string (buffer, sizeof (buffer), NONULL (ForwFmt), ctx, cur);
-  mutt_str_replace (&env->subject, buffer);
+  str_replace (&env->subject, buffer);
 }
 
 void mutt_make_misc_reply_headers (ENVELOPE * env, CONTEXT * ctx,
@@ -660,7 +660,7 @@ void mutt_make_misc_reply_headers (ENVELOPE * env, CONTEXT * ctx,
    */
   if (curenv->real_subj) {
     FREE (&env->subject);
-    env->subject = safe_malloc (mutt_strlen (curenv->real_subj) + 5);
+    env->subject = safe_malloc (safe_strlen (curenv->real_subj) + 5);
     sprintf (env->subject, "Re: %s", curenv->real_subj);        /* __SPRINTF_CHECKED__ */
   }
   else if (!env->subject)
@@ -759,7 +759,7 @@ envelope_defaults (ENVELOPE * env, CONTEXT * ctx, HEADER * cur, int flags)
     if ((flags & SENDNEWS)) {
       /* in case followup set Newsgroups: with Followup-To: if it present */
       if (!env->newsgroups && curenv &&
-          mutt_strcasecmp (curenv->followup_to, "poster"))
+          safe_strcasecmp (curenv->followup_to, "poster"))
         env->newsgroups = safe_strdup (curenv->followup_to);
     }
     else
@@ -996,7 +996,7 @@ ADDRESS *mutt_default_from (void)
   else if (option (OPTUSEDOMAIN)) {
     adr = rfc822_new_address ();
     adr->mailbox =
-      safe_malloc (mutt_strlen (Username) + mutt_strlen (fqdn) + 2);
+      safe_malloc (safe_strlen (Username) + safe_strlen (fqdn) + 2);
     sprintf (adr->mailbox, "%s@%s", NONULL (Username), NONULL (fqdn));  /* __SPRINTF_CHECKED__ */
   }
   else {
@@ -1316,7 +1316,7 @@ int ci_send_message (int flags, /* send mode */
 
     if (option (OPTSIGONTOP)
         && (!(flags & (SENDMAILX | SENDKEY)) && Editor
-            && mutt_strcmp (Editor, "builtin") != 0))
+            && safe_strcmp (Editor, "builtin") != 0))
       append_signature (tempfp);
 
     /* include replies/forwarded messages, unless we are given a template */
@@ -1326,7 +1326,7 @@ int ci_send_message (int flags, /* send mode */
 
     if (!option (OPTSIGONTOP)
         && (!(flags & (SENDMAILX | SENDKEY)) && Editor
-            && mutt_strcmp (Editor, "builtin") != 0))
+            && safe_strcmp (Editor, "builtin") != 0))
       append_signature (tempfp);
 
     /* 
@@ -1439,7 +1439,7 @@ int ci_send_message (int flags, /* send mode */
       /* If the this isn't a text message, look for a mailcap edit command */
       if (mutt_needs_mailcap (msg->content))
         mutt_edit_attachment (msg->content);
-      else if (!Editor || mutt_strcmp ("builtin", Editor) == 0)
+      else if (!Editor || safe_strcmp ("builtin", Editor) == 0)
         mutt_builtin_editor (msg->content->filename, msg, cur);
       else if (option (OPTEDITHDRS)) {
         mutt_env_to_local (msg->env);
@@ -1667,7 +1667,7 @@ int ci_send_message (int flags, /* send mode */
     fcc[0] = '\0';
 #endif
 
-  if (*fcc && mutt_strcmp ("/dev/null", fcc) != 0) {
+  if (*fcc && safe_strcmp ("/dev/null", fcc) != 0) {
     BODY *tmpbody = msg->content;
     BODY *save_sig = NULL;
     BODY *save_parts = NULL;
@@ -1678,8 +1678,8 @@ int ci_send_message (int flags, /* send mode */
     /* check to see if the user wants copies of all attachments */
     if (!option (OPTFCCATTACH) && msg->content->type == TYPEMULTIPART) {
       if (WithCrypto
-          && (mutt_strcmp (msg->content->subtype, "encrypted") == 0 ||
-              mutt_strcmp (msg->content->subtype, "signed") == 0)) {
+          && (safe_strcmp (msg->content->subtype, "encrypted") == 0 ||
+              safe_strcmp (msg->content->subtype, "signed") == 0)) {
         if (clear_content->type == TYPEMULTIPART) {
           if (!(msg->security & ENCRYPT) && (msg->security & SIGN)) {
             /* save initial signature and attachments */

@@ -85,7 +85,7 @@ void mutt_adv_mktemp (char *s, size_t l)
     mktemp (s);
     if (period != NULL) {
       *period = '.';
-      sl = mutt_strlen (s);
+      sl = safe_strlen (s);
       strfcpy (s + sl, period, l - sl);
     }
   }
@@ -277,7 +277,7 @@ void mutt_free_header (HEADER ** h)
 int mutt_matches_ignore (const char *s, LIST * t)
 {
   for (; t; t = t->next) {
-    if (!ascii_strncasecmp (s, t->data, mutt_strlen (t->data))
+    if (!ascii_strncasecmp (s, t->data, safe_strlen (t->data))
         || *t->data == '*')
       return 1;
   }
@@ -365,8 +365,8 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 #ifdef USE_IMAP
         /* if folder = {host} or imap[s]://host/: don't append slash */
         if (mx_is_imap (NONULL (Maildir)) &&
-            (Maildir[mutt_strlen (Maildir) - 1] == '}' ||
-             Maildir[mutt_strlen (Maildir) - 1] == '/'))
+            (Maildir[safe_strlen (Maildir) - 1] == '}' ||
+             Maildir[safe_strlen (Maildir) - 1] == '/'))
           strfcpy (p, NONULL (Maildir), sizeof (p));
         else
 #endif
@@ -498,7 +498,7 @@ char *mutt_gecos_name (char *dest, size_t destlen, struct passwd *pw)
   else
     strfcpy (dest, pw->pw_gecos, destlen);
 
-  pwnl = mutt_strlen (pw->pw_name);
+  pwnl = safe_strlen (pw->pw_name);
 
   for (idx = 0; dest[idx]; idx++) {
     if (dest[idx] == '&') {
@@ -534,7 +534,7 @@ void mutt_set_parameter (const char *attribute, const char *value,
 
   for (q = *p; q; q = q->next) {
     if (ascii_strcasecmp (attribute, q->attribute) == 0) {
-      mutt_str_replace (&q->value, value);
+      str_replace (&q->value, value);
       return;
     }
   }
@@ -709,15 +709,15 @@ void mutt_pretty_mailbox (char *s)
   }
   *q = 0;
 
-  if (mutt_strncmp (s, Maildir, (len = mutt_strlen (Maildir))) == 0 &&
+  if (safe_strncmp (s, Maildir, (len = safe_strlen (Maildir))) == 0 &&
       s[len] == '/') {
     *s++ = '=';
-    memmove (s, s + len, mutt_strlen (s + len) + 1);
+    memmove (s, s + len, safe_strlen (s + len) + 1);
   }
-  else if (mutt_strncmp (s, Homedir, (len = mutt_strlen (Homedir))) == 0 &&
+  else if (safe_strncmp (s, Homedir, (len = safe_strlen (Homedir))) == 0 &&
            s[len] == '/') {
     *s++ = '~';
-    memmove (s, s + len - 1, mutt_strlen (s + len - 1) + 1);
+    memmove (s, s + len - 1, safe_strlen (s + len - 1) + 1);
   }
 }
 
@@ -757,7 +757,7 @@ void mutt_expand_fmt (char *dest, size_t destlen, const char *fmt,
   size_t slen;
   int found = 0;
 
-  slen = mutt_strlen (src);
+  slen = safe_strlen (src);
   destlen--;
 
   for (p = fmt, d = dest; destlen && *p; p++) {
@@ -815,7 +815,7 @@ int mutt_check_overwrite (const char *attname, const char *path,
               (_("File is a directory, save under it? [(y)es, (n)o, (a)ll]"),
                _("yna"))) {
       case 3:                  /* all */
-        mutt_str_replace (directory, fname);
+        str_replace (directory, fname);
         break;
       case 1:                  /* yes */
         FREE (directory);
@@ -875,7 +875,7 @@ void mutt_save_path (char *d, size_t dsize, ADDRESS * a)
       if ((p = strpbrk (d, "%@")))
         *p = 0;
     }
-    mutt_strlower (d);
+    str_tolower (d);
   }
   else
     *d = 0;
@@ -909,7 +909,7 @@ int mutt_skipchars (const char *s, const char *c)
     ret++;
     s++;
   }
-  return (mutt_strlen (p));
+  return (safe_strlen (p));
 }
 
 void mutt_FormatString (char *dest,     /* output buffer */
@@ -1009,7 +1009,7 @@ void mutt_FormatString (char *dest,     /* output buffer */
         if (count > col) {
           count -= col;         /* how many columns left on this line */
           mutt_FormatString (buf, sizeof (buf), src, callback, data, flags);
-          wid = mutt_strlen (buf);
+          wid = safe_strlen (buf);
           if (count > wid) {
             count -= wid;       /* how many chars to pad */
             memset (wptr, ch, count);
@@ -1058,7 +1058,7 @@ void mutt_FormatString (char *dest,     /* output buffer */
                     data, flags);
 
         if (tolower)
-          mutt_strlower (buf);
+          str_tolower (buf);
         if (nodots) {
           char *p = buf;
 
@@ -1067,7 +1067,7 @@ void mutt_FormatString (char *dest,     /* output buffer */
               *p = '_';
         }
 
-        if ((len = mutt_strlen (buf)) + wlen > destlen)
+        if ((len = safe_strlen (buf)) + wlen > destlen)
           len = (destlen - wlen > 0) ? (destlen - wlen) : 0;
 
         memcpy (wptr, buf, len);
@@ -1138,7 +1138,7 @@ FILE *mutt_open_read (const char *path, pid_t * thepid)
   FILE *f;
   struct stat s;
 
-  int len = mutt_strlen (path);
+  int len = safe_strlen (path);
 
   if (path[len - 1] == '|') {
     /* read from a pipe */
@@ -1196,7 +1196,7 @@ int mutt_save_confirm (const char *s, struct stat *st)
     }
 
     if (option (OPTCONFIRMAPPEND) &&
-        (!TrashPath || (mutt_strcmp (s, TrashPath) != 0)))
+        (!TrashPath || (safe_strcmp (s, TrashPath) != 0)))
       /* if we're appending to the trash, there's no point in asking */
     {
       snprintf (tmp, sizeof (tmp), _("Append messages to %s?"), s);
@@ -1239,7 +1239,7 @@ void state_prefix_putc (char c, STATE * s)
   if (s->flags & M_PENDINGPREFIX) {
     int i;
 
-    i = mutt_strlen (Quotebuf);
+    i = safe_strlen (Quotebuf);
     Quotebuf[i++] = c;
     Quotebuf[i] = '\0';
     if (i == sizeof (Quotebuf) - 1 || c == '\n') {
@@ -1293,7 +1293,7 @@ int state_printf (STATE * s, const char *fmt, ...)
 
 void state_mark_attach (STATE * s)
 {
-  if ((s->flags & M_DISPLAY) && !mutt_strcmp (Pager, "builtin"))
+  if ((s->flags & M_DISPLAY) && !safe_strcmp (Pager, "builtin"))
     state_puts (AttachmentMarker, s);
 }
 
@@ -1361,14 +1361,14 @@ BUFFER *mutt_buffer_from (BUFFER * b, char *seed)
 
   b = mutt_buffer_init (b);
   b->data = safe_strdup (seed);
-  b->dsize = mutt_strlen (seed);
+  b->dsize = safe_strlen (seed);
   b->dptr = (char *) b->data + b->dsize;
   return b;
 }
 
 void mutt_buffer_addstr (BUFFER * buf, const char *s)
 {
-  mutt_buffer_add (buf, s, mutt_strlen (s));
+  mutt_buffer_add (buf, s, safe_strlen (s));
 }
 
 void mutt_buffer_addch (BUFFER * buf, char c)

@@ -124,7 +124,7 @@ static int fetch_uidl (char *line, void *data)
 
   sscanf (line, "%d %s", &index, line);
   for (i = 0; i < ctx->msgcount; i++)
-    if (!mutt_strcmp (line, ctx->hdrs[i]->data))
+    if (!safe_strcmp (line, ctx->hdrs[i]->data))
       break;
 
   if (i == ctx->msgcount) {

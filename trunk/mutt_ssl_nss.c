@@ -93,7 +93,7 @@ static void mutt_nss_pretty_time (int64 usecs)
   t.tm_yday = ex.tm_yday;
 
   strfcpy (timebuf, asctime (&t), sizeof (timebuf));
-  timebuf[mutt_strlen (timebuf) - 1] = 0;
+  timebuf[safe_strlen (timebuf) - 1] = 0;
 
   addstr (timebuf);
 }

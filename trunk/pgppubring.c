@@ -710,7 +710,7 @@ static int pgpring_string_matches_hint (const char *s, const char *hints[],
     return 1;
 
   for (i = 0; i < nhints; i++) {
-    if (mutt_stristr (s, hints[i]) != NULL)
+    if (str_isstr (s, hints[i]) != NULL)
       return 1;
   }
 
@@ -743,7 +743,7 @@ static void pgpring_find_candidates (char *ringfile, const char *hints[],
     char *error_buf;
     size_t error_buf_len;
 
-    error_buf_len = sizeof ("fopen: ") - 1 + mutt_strlen (ringfile) + 1;
+    error_buf_len = sizeof ("fopen: ") - 1 + safe_strlen (ringfile) + 1;
     error_buf = safe_malloc (error_buf_len);
     snprintf (error_buf, error_buf_len, "fopen: %s", ringfile);
     perror (error_buf);

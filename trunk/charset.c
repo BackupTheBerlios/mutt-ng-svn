@@ -228,7 +228,7 @@ void mutt_canonical_charset (char *dest, size_t dlen, const char *name)
 
   for (i = 0; PreferredMIMENames[i].key; i++)
     if (!ascii_strcasecmp (scratch, PreferredMIMENames[i].key) ||
-        !mutt_strcasecmp (scratch, PreferredMIMENames[i].key)) {
+        !safe_strcasecmp (scratch, PreferredMIMENames[i].key)) {
       strfcpy (dest, PreferredMIMENames[i].pref, dlen);
       return;
     }
@@ -335,7 +335,7 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t * inbytesleft,
 
         for (t = inrepls; *t; t++) {
           ICONV_CONST char *ib1 = *t;
-          size_t ibl1 = mutt_strlen (*t);
+          size_t ibl1 = safe_strlen (*t);
           char *ob1 = ob;
           size_t obl1 = obl;
 
@@ -355,7 +355,7 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t * inbytesleft,
         outrepl = "?";
       iconv (cd, 0, 0, &ob, &obl);
       if (obl) {
-        int n = mutt_strlen (outrepl);
+        int n = safe_strlen (outrepl);
 
         if (n > obl) {
           outrepl = "?";
@@ -406,7 +406,7 @@ int mutt_convert_string (char **ps, const char *from, const char *to,
     else
       outrepl = "?";
 
-    len = mutt_strlen (s);
+    len = safe_strlen (s);
     ib = s, ibl = len + 1;
     obl = MB_LEN_MAX * ibl;
     ob = buf = safe_malloc (obl + 1);
@@ -419,7 +419,7 @@ int mutt_convert_string (char **ps, const char *from, const char *to,
     FREE (ps);
     *ps = buf;
 
-    mutt_str_adjust (ps);
+    str_adjust (ps);
     return 0;
   }
   else
@@ -561,7 +561,7 @@ char *mutt_get_first_charset (const char *charset)
   const char *c, *c1;
 
   c = charset;
-  if (!mutt_strlen (c))
+  if (!safe_strlen (c))
     return "us-ascii";
   if (!(c1 = strchr (c, ':')))
     return charset;
@@ -611,14 +611,14 @@ int mutt_convert_nonmime_string (char **ps)
     char *s;
     char *fromcode;
     size_t m, n;
-    size_t ulen = mutt_strlen (*ps);
+    size_t ulen = safe_strlen (*ps);
     size_t slen;
 
     if (!u || !*u)
       return 0;
 
     c1 = strchr (c, ':');
-    n = c1 ? c1 - c : mutt_strlen (c);
+    n = c1 ? c1 - c : safe_strlen (c);
     if (!n)
       continue;
     fromcode = safe_malloc (n + 1);

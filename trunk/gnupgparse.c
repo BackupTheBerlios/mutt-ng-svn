@@ -95,7 +95,7 @@ static void fix_uid (char *uid)
         memcpy (uid, buf, ob - buf);
         uid[ob - buf] = '\0';
       }
-      else if (ob - buf == n && (buf[n] = 0, mutt_strlen (buf) < n))
+      else if (ob - buf == n && (buf[n] = 0, safe_strlen (buf) < n))
         memcpy (uid, buf, n);
     }
     FREE (&buf);
@@ -129,13 +129,13 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
       {
         dprint (2, (debugfile, "record type: %s\n", p));
 
-        if (!mutt_strcmp (p, "pub"));
-        else if (!mutt_strcmp (p, "sub"))
+        if (!safe_strcmp (p, "pub"));
+        else if (!safe_strcmp (p, "sub"))
           *is_subkey = 1;
-        else if (!mutt_strcmp (p, "sec"));
-        else if (!mutt_strcmp (p, "ssb"))
+        else if (!safe_strcmp (p, "sec"));
+        else if (!safe_strcmp (p, "ssb"))
           *is_subkey = 1;
-        else if (!mutt_strcmp (p, "uid"))
+        else if (!safe_strcmp (p, "uid"))
           is_uid = 1;
         else
           return NULL;
@@ -203,7 +203,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
         dprint (2, (debugfile, "key id: %s\n", p));
 
         if (!(*is_subkey && option (OPTPGPIGNORESUB)))
-          mutt_str_replace (&k->keyid, p);
+          str_replace (&k->keyid, p);
         break;
 
       }
@@ -309,7 +309,7 @@ pgp_key_t pgp_get_candidates (pgp_ring_t keyring, LIST * hints)
   if ((devnull = open ("/dev/null", O_RDWR)) == -1)
     return NULL;
 
-  mutt_str_replace (&_chs, Charset);
+  str_replace (&_chs, Charset);
 
   thepid = pgp_invoke_list_keys (NULL, &fp, NULL, -1, -1, devnull,
                                  keyring, hints);

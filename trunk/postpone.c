@@ -332,10 +332,10 @@ int mutt_get_postponed (CONTEXT * ctx, HEADER * hdr, HEADER ** cur, char *fcc,
       tmp = next;
     }
     else if ((WithCrypto & APPLICATION_PGP)
-             && (mutt_strncmp ("Pgp:", tmp->data, 4) == 0       /* this is generated
+             && (safe_strncmp ("Pgp:", tmp->data, 4) == 0       /* this is generated
                                                                  * by old mutt versions
                                                                  */
-                 || mutt_strncmp ("X-Mutt-PGP:", tmp->data, 11) == 0)) {
+                 || safe_strncmp ("X-Mutt-PGP:", tmp->data, 11) == 0)) {
       hdr->security = mutt_parse_crypt_hdr (strchr (tmp->data, ':') + 1, 1);
       hdr->security |= APPLICATION_PGP;
 
@@ -350,7 +350,7 @@ int mutt_get_postponed (CONTEXT * ctx, HEADER * hdr, HEADER ** cur, char *fcc,
       tmp = next;
     }
     else if ((WithCrypto & APPLICATION_SMIME)
-             && mutt_strncmp ("X-Mutt-SMIME:", tmp->data, 13) == 0) {
+             && safe_strncmp ("X-Mutt-SMIME:", tmp->data, 13) == 0) {
       hdr->security = mutt_parse_crypt_hdr (strchr (tmp->data, ':') + 1, 1);
       hdr->security |= APPLICATION_SMIME;
 
@@ -366,7 +366,7 @@ int mutt_get_postponed (CONTEXT * ctx, HEADER * hdr, HEADER ** cur, char *fcc,
     }
 
 #ifdef MIXMASTER
-    else if (mutt_strncmp ("X-Mutt-Mix:", tmp->data, 11) == 0) {
+    else if (safe_strncmp ("X-Mutt-Mix:", tmp->data, 11) == 0) {
       char *t;
 
       mutt_free_list (&hdr->chain);
@@ -489,10 +489,10 @@ int mutt_parse_crypt_hdr (char *p, int set_signas)
 
   /* the cryptalg field must not be empty */
   if ((WithCrypto & APPLICATION_SMIME) && *smime_cryptalg)
-    mutt_str_replace (&SmimeCryptAlg, smime_cryptalg);
+    str_replace (&SmimeCryptAlg, smime_cryptalg);
 
   if ((WithCrypto & APPLICATION_PGP) && (set_signas || *pgp_sign_as))
-    mutt_str_replace (&PgpSignAs, pgp_sign_as);
+    str_replace (&PgpSignAs, pgp_sign_as);
 
   return pgp;
 }
@@ -646,7 +646,7 @@ int mutt_prepare_template (FILE * fp, CONTEXT * ctx, HEADER * newhdr,
       newhdr->security |= mutt_is_application_pgp (newhdr->content);
 
       b->type = TYPETEXT;
-      mutt_str_replace (&b->subtype, "plain");
+      str_replace (&b->subtype, "plain");
       mutt_delete_parameter ("x-action", &b->parameter);
     }
     else
@@ -655,7 +655,7 @@ int mutt_prepare_template (FILE * fp, CONTEXT * ctx, HEADER * newhdr,
     if (safe_fclose (&s.fpout) != 0)
       goto bail;
 
-    mutt_str_replace (&b->filename, file);
+    str_replace (&b->filename, file);
     b->unlink = 1;
 
     mutt_stamp_attachment (b);

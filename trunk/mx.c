@@ -65,7 +65,7 @@
 #endif
 
 
-#define mutt_is_spool(s)  (mutt_strcmp (Spoolfile, s) == 0)
+#define mutt_is_spool(s)  (safe_strcmp (Spoolfile, s) == 0)
 
 #ifdef USE_DOTLOCK
 /* parameters: 
@@ -447,9 +447,9 @@ int mx_get_magic (const char *path)
 #endif
 
     fgets (tmp, sizeof (tmp), f);
-    if (mutt_strncmp ("From ", tmp, 5) == 0)
+    if (safe_strncmp ("From ", tmp, 5) == 0)
       magic = M_MBOX;
-    else if (mutt_strcmp (MMDF_SEP, tmp) == 0)
+    else if (safe_strcmp (MMDF_SEP, tmp) == 0)
       magic = M_MMDF;
     safe_fclose (&f);
 #ifndef BUFFY_SIZE

@@ -187,7 +187,7 @@ int mutt_invoke_libesmtp (ADDRESS * from,       /* the sender */
 
   /* Create hostname:port string and tell libesmtp */
   /* len = SmtpHost len + colon + max port (65536 => 5 chars) + terminator */
-  hostportlen = mutt_strlen (SmtpHost) + 7;
+  hostportlen = safe_strlen (SmtpHost) + 7;
   hostportstr = safe_malloc (hostportlen);
   snprintf (hostportstr, hostportlen, "%s:%d", SmtpHost, SmtpPort);
   if (!smtp_set_server (session, hostportstr))
