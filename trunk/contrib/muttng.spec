@@ -1,7 +1,7 @@
 Summary: A text mode mail user agent.
 Name: muttng
-Version: 20050306
-Release: 1
+Version: 20050314
+Release: 2
 Serial: 1
 License: GPL
 Group: Applications/Internet
@@ -14,19 +14,19 @@ Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root
 BuildPrereq: /usr/sbin/sendmail slang-devel /usr/bin/automake-1.4
 
 %description
-Mutt-ng is a text-mode mail user agent. Mutt-ng supports color, threading,
+Mutt-ng is a text-mode mail user agent. Mutt supports color, threading,
 arbitrary key remapping, and a lot of customization.
 
-You should install Mutt-ng if you have used it in the past and you prefer
+You should install mutt if you have used it in the past and you prefer
 it, or if you are new to mail programs and have not decided which one
 you are going to use.
 
 %prep
-# %setup -n %{name}-%{version} -q -a 2
 %setup -n %{name}-%{version} -q
 
 %build
-autoconf ./configure.in > ./configure
+rm -rf autom4te.cache
+./prepare
 chmod 700 ./configure
 export -n LINGUAS
 CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%{_prefix} \
@@ -91,5 +91,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man5/muttng-mbox.*
 
 %changelog
+* Mon Mar 14 2005 Iain Lea <iain@bricbrac.de>  1:20050314-2
+- fixed aclocal/automake/autoconf/prepare weirdness (rm -rf autom4te.cache)
 * Sun Mar 06 2005 Iain Lea <iain@bricbrac.de>  1:20050306-1
 - initial muttng.spec file

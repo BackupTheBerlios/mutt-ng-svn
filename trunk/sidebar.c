@@ -282,19 +282,37 @@ int draw_sidebar(int menu) {
       SETCOLOR(MT_COLOR_NORMAL);
 
     move( lines, 0 );
-    if ( Context && !strcmp( tmp->path, Context->path ) ) {
-      printw( "%.*s", SidebarWidth - delim_len,
-              make_sidebar_entry(basename(tmp->path),
-                                 Context->msgcount, Context->unread, Context->flagged));
-      tmp->msg_unread = Context->unread;
-      tmp->msgcount = Context->msgcount;
-      tmp->msg_flagged = Context->flagged;
+    if (option(OPTSIDEBARNEWMAILONLY)) {
+      if (tmp->msg_unread > 0) {
+        if ( Context && !strcmp( tmp->path, Context->path ) ) {
+          printw( "%.*s", SidebarWidth - delim_len,
+                  make_sidebar_entry(basename(tmp->path),
+                                     Context->msgcount, Context->unread, Context->flagged));
+          tmp->msg_unread = Context->unread;
+          tmp->msgcount = Context->msgcount;
+          tmp->msg_flagged = Context->flagged;
+        }
+        else
+          printw( "%.*s", SidebarWidth - delim_len,
+                  make_sidebar_entry(basename(tmp->path),
+                                     tmp->msgcount,tmp->msg_unread, tmp->msg_flagged));
+        lines++;
+      }
+    } else {
+      if ( Context && !strcmp( tmp->path, Context->path ) ) {
+        printw( "%.*s", SidebarWidth - delim_len,
+                make_sidebar_entry(basename(tmp->path),
+                                   Context->msgcount, Context->unread, Context->flagged));
+        tmp->msg_unread = Context->unread;
+        tmp->msgcount = Context->msgcount;
+        tmp->msg_flagged = Context->flagged;
+      }
+      else
+        printw( "%.*s", SidebarWidth - delim_len,
+                make_sidebar_entry(basename(tmp->path),
+                                   tmp->msgcount,tmp->msg_unread, tmp->msg_flagged));
+      lines++;
     }
-    else
-      printw( "%.*s", SidebarWidth - delim_len,
-              make_sidebar_entry(basename(tmp->path),
-                                 tmp->msgcount,tmp->msg_unread, tmp->msg_flagged));
-    lines++;
   }
   SETCOLOR(MT_COLOR_NORMAL);
   for ( ; lines < LINES - 1 - (menu != MENU_PAGER || option (OPTSTATUSONTOP)); lines++ ) {
@@ -340,12 +358,14 @@ void scroll_sidebar(int op, int menu)
 
   switch (op) {
     case OP_SIDEBAR_NEXT:
-      if ( CurBuffy->next == NULL ) {
-        mutt_error (_("You are on the last mailbox."));
-        return;
-      }
-      CurBuffy = CurBuffy->next;
-      break;
+      if (!option(OPTSIDEBARNEWMAILONLY)) {
+        if ( CurBuffy->next == NULL ) {
+          mutt_error (_("You are on the last mailbox."));
+          return;
+        }
+        CurBuffy = CurBuffy->next;
+        break;
+      } /* the fall-through is intentional */
     case OP_SIDEBAR_NEXT_NEW:
       if ( (tmp = exist_next_new()) == NULL) {
         mutt_error (_("No next mailboxes with new mail."));
@@ -354,12 +374,14 @@ void scroll_sidebar(int op, int menu)
       else CurBuffy = tmp;
       break;
     case OP_SIDEBAR_PREV:
-      if ( CurBuffy->prev == NULL ) {
-        mutt_error (_("You are on the first mailbox."));
-        return;
-      }
-      CurBuffy = CurBuffy->prev;
-     break;
+      if (!option(OPTSIDEBARNEWMAILONLY)) {
+        if ( CurBuffy->prev == NULL ) {
+          mutt_error (_("You are on the first mailbox."));
+          return;
+        }
+        CurBuffy = CurBuffy->prev;
+       break;
+     } /* the fall-through is intentional */
     case OP_SIDEBAR_PREV_NEW:
       if ( (tmp = exist_prev_new()) == NULL) {
         mutt_error (_("No previous mailbox with new mail."));

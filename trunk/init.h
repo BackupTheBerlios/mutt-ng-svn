@@ -1340,6 +1340,11 @@ struct option_t MuttVars[] = {
   ** .pp
   ** The width of the mailbox list pane (left sidebar like in GUIs).
   */
+  { "sidebar_newmail_only", DT_BOOL, R_BOTH, OPTSIDEBARNEWMAILONLY, 0 },
+  /*
+  ** .pp
+  ** If set, only folders with new mail will be shown in the sidebar.
+  */
   { "mbox_type",	DT_MAGIC,R_NONE, UL &DefaultMagic, M_MBOX },
   /*
   ** .pp

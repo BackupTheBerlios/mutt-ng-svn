@@ -563,7 +563,7 @@ enum
   OPTNEWSCACHE,		/* (pseudo) used to indicate if news cache exist */
 #endif
   OPTSHORTENHIERARCHY, /* set when to shorten "hierarchies" in the sidebar */
-
+  OPTSIDEBARNEWMAILONLY,
   OPTMAX
 };
 
