@@ -45,11 +45,11 @@ int mutt_account_match (const ACCOUNT * a1, const ACCOUNT * a2)
 #endif
 
   if (a1->flags & a2->flags & M_ACCT_USER)
-    return (!strcmp (a1->user, a2->user));
+    return (!mutt_strcmp (a1->user, a2->user));
   if (a1->flags & M_ACCT_USER)
-    return (!strcmp (a1->user, user));
+    return (!mutt_strcmp (a1->user, user));
   if (a2->flags & M_ACCT_USER)
-    return (!strcmp (a2->user, user));
+    return (!mutt_strcmp (a2->user, user));
 
   return 1;
 }

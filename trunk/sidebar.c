@@ -200,7 +200,7 @@ void set_curbuffy (char buf[LONG_STRING])
     return;
 
   while (1) {
-    if (!strcmp (tmp->path, buf)) {
+    if (!mutt_strcmp (tmp->path, buf)) {
       CurBuffy = tmp;
       break;
     }
@@ -219,7 +219,7 @@ void set_buffystats (CONTEXT * Context)
   if (!Context)
     return;
   while (tmp) {
-    if (strcmp (tmp->path, Context->path) == 0) {
+    if (mutt_strcmp (tmp->path, Context->path) == 0) {
       tmp->new = Context->new;
       tmp->msg_unread = Context->unread;
       tmp->msgcount = Context->msgcount;
@@ -280,9 +280,9 @@ int draw_sidebar (int menu)
     move (lines, SidebarWidth - delim_len);
     if (option (OPTASCIICHARS))
       addstr (NONULL (SidebarDelim));
-    else if (!option (OPTASCIICHARS) && !strcmp (SidebarDelim, "|"))
+    else if (!option (OPTASCIICHARS) && !mutt_strcmp (SidebarDelim, "|"))
       addch (ACS_VLINE);
-    else if ((Charset_is_utf8) && !strcmp (SidebarDelim, "|"))
+    else if ((Charset_is_utf8) && !mutt_strcmp (SidebarDelim, "|"))
       addstr ("\342\224\202");
     else
       addstr (NONULL (SidebarDelim));
@@ -318,7 +318,7 @@ int draw_sidebar (int menu)
     move (lines, 0);
     if (option (OPTSIDEBARNEWMAILONLY)) {
       if (tmp->msg_unread > 0) {
-        if (Context && !strcmp (tmp->path, Context->path)) {
+        if (Context && !mutt_strcmp (tmp->path, Context->path)) {
           printw ("%.*s", SidebarWidth - delim_len,
                   make_sidebar_entry (basename (tmp->path),
                                       Context->msgcount, Context->unread,
