@@ -411,10 +411,13 @@ int mutt_buffy_check (int force)
 	      (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')))
 	  {
 	    /* one new and undeleted message is enough */
-	    BuffyCount++;
-	    tmp->has_new = tmp->new = 1;
-        tmp->msgcount++;
-		tmp->msg_unread++;
+            if (tmp->new != 1)
+	    {
+               BuffyCount++;
+	       tmp->has_new = tmp->new = 1;
+	    }
+	    tmp->msgcount++;
+	    tmp->msg_unread++;
 	  }
 	}
 	closedir (dirp);
