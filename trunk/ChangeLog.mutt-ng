@@ -1,5 +1,9 @@
 Changes specific to mutt-ng:
 
+2005-02-03:
+  * Fixed stupid bug regarding saving attachments
+  * applied ajg.last-folder patch
+
 2005-02-02
   * little change to prevent segfaults on ia64; see #285001 in debian bts for
     more information

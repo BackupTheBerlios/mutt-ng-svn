@@ -38,6 +38,7 @@
 #include <errno.h>
 
 static const char *Mailbox_is_read_only = N_("Mailbox is read-only.");
+static char LastSaveFolder[_POSIX_PATH_MAX] = "";
 
 #define CHECK_READONLY if (Context->readonly) \
 {\
@@ -54,6 +55,29 @@ static struct mapping_t AttachHelp[] = {
   { N_("Help"),  OP_HELP },
   { NULL }
 };
+
+int mutt_extract_path(char *filename, char *path)
+{
+  char *tmp=safe_malloc(sizeof(char) * _POSIX_PATH_MAX);
+  char *help_ptr;
+  
+  help_ptr = tmp;
+
+  while(*filename != '\0')
+  {
+    if (*filename == '/')
+    {
+      *help_ptr++=*filename++;
+      *help_ptr++='\0';
+      strcat(path, tmp);
+      help_ptr = tmp;
+    }
+    *help_ptr++=*filename++;
+  }
+  safe_free((void **) &tmp);
+    
+  return 0;
+}
 
 void mutt_update_tree (ATTACHPTR **idx, short idxlen)
 {
@@ -368,9 +392,11 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
 {
   char *prompt;
   char buf[_POSIX_PATH_MAX], tfile[_POSIX_PATH_MAX];
+  char path[_POSIX_PATH_MAX]="";  
   int is_message;
   int append = 0;
   int rc;
+  int ret = -1;
   
   if (body->filename) 
   {
@@ -387,12 +413,27 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
   else
     buf[0] = 0;
 
-  prompt = _("Save to file: ");
+  prompt = _("Save to file ('.' for last used folder): ");
   while (prompt)
   {
-    if (mutt_get_field (prompt, buf, sizeof (buf), M_FILE | M_CLEAR) != 0
-	|| !buf[0])
+    ret = mutt_get_field (prompt, buf, sizeof (buf), M_FILE | M_CLEAR);
+    if (((ret != 0) && (ret != 2)) || (!buf[0]))
       return -1;
+
+    if (ret == 2)
+    {
+      strfcpy (buf, LastSaveFolder, sizeof (buf));
+      strcat(buf,body->filename);
+      ret = mutt_get_field (_("Save to file: ")
+                , buf, sizeof (buf), M_FILE | M_CLEAR);
+      if ((ret != 0) || (!buf[0]))
+      return -1;
+    }  
+    else
+    {
+      mutt_extract_path(buf,path);
+      strfcpy (LastSaveFolder, path, sizeof (LastSaveFolder));
+    }
     
     prompt = NULL;
     mutt_expand_path (buf, sizeof (buf));

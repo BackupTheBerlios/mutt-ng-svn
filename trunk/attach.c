@@ -729,8 +729,11 @@ mutt_save_attachment_open (char *path, int flags)
 {
   if (flags == M_SAVE_APPEND)
     return fopen (path, "a");
+    /* be sure not to change the following fopen to safe_fopen
+     * as safe_fopen returns w/ an error if path exists
+     */
   if (flags == M_SAVE_OVERWRITE)
-    return safe_fopen (path, "w");		/* __FOPEN_CHECKED__ */
+    return fopen (path, "w");		/* __FOPEN_CHECKED__ */
   
   return safe_fopen (path, "w");
 }
