@@ -17,16 +17,16 @@
 .\"     along with this program; if not, write to the Free Software
 .\"     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
 .\"
-.TH mutt 1 "January 2002" Unix "User Manuals"
+.TH mutt-ng 1 Unix "User Manuals"
 .SH NAME
-mutt \- The Mutt Mail User Agent
+mutt-ng \- The Mutt-ng Mail User Agent
 .SH SYNOPSIS
 .PP
-.B mutt
+.B muttng
 [-GnRyzZ] 
 [-e \fIcmd\fP] [-F \fIfile\fP] [-g \fIserver\fP] [-m \fItype\fP] [-f \fIfile\fP]
 .PP
-.B mutt 
+.B muttng 
 [-nx] 
 [-e \fIcmd\fP] 
 [-a \fIfile\fP]
@@ -37,20 +37,20 @@ mutt \- The Mutt Mail User Agent
 [-b \fIaddr\fP]
 [-c \fIaddr\fP] \fIaddr\fP [...]
 .PP
-.B mutt
+.B muttng
 [-n] [-e \fIcmd\fP] [-F \fIfile\fP] -p
 .PP
-.B mutt
+.B muttng
 [-n] [-e \fIcmd\fP] [-F \fIfile\fP] -Q \fIquery\fP
 .PP
-.B mutt
+.B muttng
 [-n] [-e \fIcmd\fP] [-F \fIfile\fP] -A \fIalias\fP
 .PP
-.B mutt 
+.B muttng
 -v[v]
 .SH DESCRIPTION
 .PP
-Mutt is a small but very powerful text based program for reading electronic
+Mutt-ng is a small but very powerful text based program for reading electronic
 mail under unix operating systems, including support color terminals, MIME,
 and a threaded sorting mode.
 .SH OPTIONS
@@ -68,8 +68,8 @@ Specify a configuration command to be run after processing of initialization
 files.
 .IP "-f \fImailbox\fP"
 Specify which mailbox to load.
-.IP "-F \fImuttrc\fP"
-Specify an initialization file to read instead of ~/.muttrc
+.IP "-F \fImuttngrc\fP"
+Specify an initialization file to read instead of ~/.muttngrc
 .IP "-g \fIserver\fP"
 Start Mutt with a listing of subscribed newsgroups at specified newsserver.
 .IP "-G"
@@ -137,7 +137,7 @@ Default Reply-To address.
 Specifies the editor to use when composing messages.
 .SH FILES
 .PP
-.IP "~/.muttrc or ~/.mutt/muttrc"
+.IP "~/.muttngrc or ~/.muttng/muttngrc"
 User configuration file.
 .IP "/etc/Muttrc"
 System-wide configuration file.
@@ -151,9 +151,9 @@ System definition for handling non-text MIME types.
 User's personal mapping between MIME types and file extensions.
 .IP "/etc/mime.types"
 System mapping between MIME types and file extensions.
-.IP "/usr/local/bin/mutt_dotlock"
+.IP "/usr/local/bin/muttng_dotlock"
 The privileged dotlocking program.
-.IP "/usr/local/doc/mutt/manual.txt"
+.IP "/usr/local/doc/muttng/manual.txt"
 The Mutt manual.
 .SH BUGS
 .PP
@@ -173,7 +173,7 @@ The help line for the index menu is not updated if you change the bindings
 for one of the functions listed while Mutt is running.
 .PP
 For a more up-to-date list of bugs, errm, fleas, please visit the
-mutt project's bug tracking system under http://bugs.guug.de/.  To
+mutt-ng project's bug tracking system under http://developer.berlios.de/projects/mutt-ng/.  To
 report a bug, please use the
 .BR flea (1)
 program.
@@ -189,18 +189,18 @@ GNU General Public License for more details.
 .BR mailcap (5),
 .BR maildir (5),
 .BR mbox (5),
-.BR mutt_dotlock (1),
-.BR muttrc (5),
+.BR muttng_dotlock (1),
+.BR muttngrc (5),
 .BR ncurses (3),
 .BR sendmail (1),
 .BR smail (1)
 .PP
-Mutt Home Page: http://www.mutt.org/
+Mutt-ng Home Page: http://mutt-ng.berlios.de
 .PP
-The Mutt manual
+The Mutt-ng manual
 .PP
 The GNU General Public License.
 .SH AUTHOR
 .PP
-Michael Elkins, and others.  Use <mutt-dev@mutt.org> to contact
+Michael Elkins, and others.  Use <mutt-ng-devel@lists.berlios.de> to contact
 the developers.
