@@ -1810,9 +1810,102 @@ const char *mutt_fqdn(short may_hide_host)
   return p;
 }
 
+static char mutt_normalized_char(char c) {
+  if (isalnum(c))
+    return c;
+  if (strchr(".!#$%&'*+-/=?^_`{|}~",c))
+    return c;
+  return '.'; /* normalized character (we're stricter than RFC2822, 3.6.4) */
+}
+
+static void mutt_gen_localpart(char * buf, unsigned int len, char * fmt) {
+  time_t now;
+  struct tm *tm;
+  char tmp[SHORT_STRING];
+
+  *buf = '\0';
+
+  now = time (NULL);
+  tm = gmtime (&now);
+
+  for (;*fmt;++fmt) {
+    if (*fmt == '%') {
+      switch (fmt[1]) {
+      case 0:
+        return;
+      case 'd':
+        snprintf(tmp,sizeof(tmp),"%02d",tm->tm_mday);
+        safe_strncat(buf,len,tmp,2);
+        break;
+      case 'h':
+        snprintf(tmp,sizeof(tmp),"%02d",tm->tm_hour);
+        safe_strncat(buf,len,tmp,2);
+        break;
+      case 'm':
+        snprintf(tmp,sizeof(tmp),"%02d",tm->tm_mon+1);
+        safe_strncat(buf,len,tmp,2);
+        break;
+      case 'M':
+        snprintf(tmp,sizeof(tmp),"%02d",tm->tm_min);
+        safe_strncat(buf,len,tmp,2);
+        break;
+      case 'O':
+        snprintf(tmp,sizeof(tmp),"%lo",(unsigned long)now);
+        safe_strncat(buf,len,tmp,strlen(tmp));
+        break;
+      case 'p':
+        snprintf(tmp,sizeof(tmp),"%u",(unsigned int)getpid());
+        safe_strncat(buf,len,tmp,strlen(tmp));
+        break;
+      case 'P':
+        snprintf(tmp,sizeof(tmp),"%c",MsgIdPfx);
+        MsgIdPfx = (MsgIdPfx == 'Z') ? 'A' : MsgIdPfx + 1;
+        safe_strncat(buf,len,tmp,1);
+        break;
+      case 'r':
+        snprintf(tmp,sizeof(tmp),"%u",(unsigned int)rand());
+        safe_strncat(buf,len,tmp,strlen(tmp));
+        break;
+      case 'R':
+        snprintf(tmp,sizeof(tmp),"%x",(unsigned int)rand());
+        safe_strncat(buf,len,tmp,strlen(tmp));
+        break;
+      case 's':
+        snprintf(tmp,sizeof(tmp),"%02d",tm->tm_sec);
+        safe_strncat(buf,len,tmp,2);
+        break;
+      case 'T':
+        snprintf(tmp,sizeof(tmp),"%u",(unsigned int)now);
+        safe_strncat(buf,len,tmp,strlen(tmp));
+        break;
+      case 'X':
+        snprintf(tmp,sizeof(tmp),"%x",(unsigned int)now);
+        safe_strncat(buf,len,tmp,strlen(tmp));
+        break;
+      case 'Y':
+        snprintf(tmp,sizeof(tmp),"%04d",tm->tm_year+1900); /* this will break in the year 10000 ;-) */
+        safe_strncat(buf,len,tmp,4);
+        break;
+      case '%':
+        safe_strncat(buf,len,"%",1);
+        break;
+      default:
+        safe_strncat(buf,len,".",1); /* invalid formats are replaced by '.' */
+      } /* switch */
+      ++fmt;
+    } else {
+      char c;
+      c = mutt_normalized_char(*fmt); /* @todo: filter out invalid characters */
+      safe_strncat(buf,len,&c,1);
+    }
+  }
+}
+
 char *mutt_gen_msgid (void)
 {
   char buf[SHORT_STRING];
+  char localpart[SHORT_STRING];
+  unsigned int localpart_length;
   time_t now;
   struct tm *tm;
   const char *fqdn;
@@ -1822,10 +1915,11 @@ char *mutt_gen_msgid (void)
   if(!(fqdn = mutt_fqdn(0)))
     fqdn = NONULL(Hostname);
 
-  snprintf (buf, sizeof (buf), "<%d%02d%02d%02d%02d%02d.G%c%u@%s>",
-	    tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour,
-	    tm->tm_min, tm->tm_sec, MsgIdPfx, (unsigned int)getpid (), fqdn);
-  MsgIdPfx = (MsgIdPfx == 'Z') ? 'A' : MsgIdPfx + 1;
+  localpart_length = sizeof(buf) - strlen(fqdn) - 4; /* the 4 characters are '<', '@', '>' and '\0' */
+
+  mutt_gen_localpart(localpart,localpart_length,MsgIdFormat);
+
+  snprintf(buf,sizeof(buf),"<%s@%s>",localpart,fqdn);
   return (safe_strdup (buf));
 }
 

@@ -75,6 +75,7 @@ WHERE char *MhFlagged;
 WHERE char *MhReplied;
 WHERE char *MhUnseen;
 WHERE char *MsgFmt;
+WHERE char *MsgIdFormat;
 
 #ifdef USE_SOCKET
 WHERE char *Preconnect INITVAL (NULL);

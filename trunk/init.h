@@ -927,8 +927,8 @@ struct option_t MuttVars[] = {
   { "imap_reconnect",	DT_QUAD, R_NONE, OPT_IMAPRECONNECT, M_ASKYES },
   /*
   ** .pp
-  ** Controls whether or not Mutt will try to reconnect to IMAP server when
-  ** connection lost.
+  ** Controls whether or not Mutt-ng will try to reconnect to IMAP server when
+  ** the connection is lost.
   */
   { "imap_servernoise",		DT_BOOL, R_NONE, OPTIMAPSERVERNOISE, 1 },
   /*
@@ -1327,6 +1327,32 @@ struct option_t MuttVars[] = {
   */
   { "msg_format",	DT_SYN,  R_NONE, UL "message_format", 0 },
   /*
+  */
+  { "msgid_format",	DT_STR,	R_NONE, UL &MsgIdFormat, UL "%Y%m%d%h%M%s.G%P%p" },
+  /*
+  ** .pp
+  ** This is the format for the ``local part'' of the message-IDs generated
+  ** by Mutt-ng. The format string contains of one or more characters. The '%'
+  ** character marks that certain data will be added to the string, similar to
+  ** printf(). The following characters are allowed:
+  ** .pp
+  ** .dl
+  ** .dt %d .dd the current day of month
+  ** .dt %h .dd the current hour
+  ** .dt %m .dd the current month
+  ** .dt %M .dd the current minute
+  ** .dt %O .dd the current UNIX timestamp (octal)
+  ** .dt %p .dd the process ID
+  ** .dt %P .dd the current message-ID prefix (a character rotating with 
+  **            every message-ID being generated)
+  ** .dt %r .dd a random integer value (decimal)
+  ** .dt %R .dd a random integer value (hexadecimal)
+  ** .dt %s .dd the current second
+  ** .dt %T .dd the current UNIX timestamp (decimal)
+  ** .dt %X .dd the current UNIX timestamp (hexadecimal)
+  ** .dt %Y .dd the current year (Y2K compliant)
+  ** .dt %% .dd the '%' character
+  ** .de
   */
   { "narrow_tree",	DT_BOOL, R_TREE|R_INDEX, OPTNARROWTREE, 0 },
   /*
