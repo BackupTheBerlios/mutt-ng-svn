@@ -558,6 +558,7 @@ enum
   OPTNEWSSEND,		/* (pseudo) used to change behavior when posting */
   OPTNEWSCACHE,		/* (pseudo) used to indicate if news cache exist */
 #endif
+  OPTSHORTENHIERARCHY, /* set when to shorten "hierarchies" in the sidebar */
 
   OPTMAX
 };

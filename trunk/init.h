@@ -2667,6 +2667,12 @@ struct option_t MuttVars[] = {
   ** When \fIset\fP, info about unsubscribed newsgroups will be saved into
   ** ``newsrc'' file and into cache.
   */
+  { "shorten_hierarchy", DT_BOOL, R_NONE, OPTSHORTENHIERARCHY, 0 },
+  /*
+  ** .pp
+  ** When \fIset\fP, the "hierarchy" of the sidebar entries will be shortened,
+  ** e.g. de.alt.sysadmin.recovery becomes d.a.s.recovery.
+  */
   { "show_new_news",  DT_BOOL, R_NONE, OPTSHOWNEWNEWS, 1 },
   /*
   ** .pp

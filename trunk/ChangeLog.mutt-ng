@@ -3,6 +3,7 @@ Changes specific to mutt-ng:
 2005-02-22:
   * Merged mutt changes
   * Sidebar now honors the imap_home_namespace
+  * Added "shorten hierarchy" option
 
 2005-02-21:
   * Merged past mutt changes

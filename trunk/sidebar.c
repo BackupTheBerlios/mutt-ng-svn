@@ -77,6 +77,36 @@ void calc_boundaries (int menu)
 	}
 }
 
+static char * shortened_hierarchy(char * box) {
+  int dots = 0;
+  char * last_dot;
+  int i,j;
+  char * new_box;
+  for (i=0;i<strlen(box);++i)
+    if (box[i] == '.') ++dots;
+  last_dot = strrchr(box,'.');
+  if (last_dot) {
+    ++last_dot;
+    new_box = safe_malloc(strlen(last_dot)+2*dots+1);
+    new_box[0] = box[0];
+    for (i=1,j=1;i<strlen(box);++i) {
+      if (box[i] == '.') {
+        new_box[j++] = '.';
+        new_box[j] = 0;
+        if (&box[i+1] != last_dot) {
+          new_box[j++] = box[i+1];
+          new_box[j] = 0;
+        } else {
+          strcat(&new_box[j],last_dot);
+          break;
+        }
+      }
+    }
+    return new_box;
+  }
+  return safe_strdup(box);
+}
+
 char *make_sidebar_entry(char *box, int size, int new)
 {
 	static char *entry = 0;
@@ -94,6 +124,9 @@ char *make_sidebar_entry(char *box, int size, int new)
     }
   }
 #endif
+  if (option(OPTSHORTENHIERARCHY)) {
+    box = shortened_hierarchy(box);
+  }
 	i = strlen(box);
 	strncpy( entry, box, i < SidebarWidth ? i :SidebarWidth );
 
@@ -103,6 +136,9 @@ char *make_sidebar_entry(char *box, int size, int new)
 			"% d(%d)", size, new);
 	else
 		sprintf( entry + SidebarWidth - 3 - quick_log10(size), "% d", size);
+  if (option(OPTSHORTENHIERARCHY)) {
+    free(box);
+  }
 	return entry;
 }
 
