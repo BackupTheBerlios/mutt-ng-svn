@@ -10,7 +10,7 @@ AM_CONFIG_HEADER(config.h)
 mutt_cv_version=`cat $srcdir/VERSION`
 
 
-AM_INIT_AUTOMAKE(mutt, $mutt_cv_version)
+AM_INIT_AUTOMAKE(muttng, $mutt_cv_version)
 
 ifdef([AC_LIBOBJ], , [define([AC_LIBOBJ], [LIB[]OBJS="$LIBOBJS $1.o"])])
 

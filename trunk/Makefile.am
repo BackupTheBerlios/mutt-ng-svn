@@ -136,14 +136,14 @@ install-exec-local:
 		{ echo "Can't fix mutt_dotlock's permissions!" >&2 ; exit 1 ; } \
 	fi
 
-install-data-local: Muttrc
+install-data-local: Muttngrc
 	$(srcdir)/mkinstalldirs $(DESTDIR)$(sysconfdir)
-	-if [ -f $(DESTDIR)$(pkgdatadir)/Muttrc ] ; then \
-		mv $(DESTDIR)$(pkgdatadir)/Muttrc* $(DESTDIR)$(sysconfdir) ; \
-	elif [ -f $(DESTDIR)$(pkgdatadir)/../Muttrc ] ; then \
-	 	mv $(DESTDIR)$(pkgdatadir)/../Muttrc* $(DESTDIR)$(sysconfdir) ; \
-	elif [ ! -f $(DESTDIR)$(sysconfdir)/Muttrc ] ; then \
-		$(INSTALL) -m 644 $(srcdir)/Muttrc $(DESTDIR)$(sysconfdir) ; \
+	-if [ -f $(DESTDIR)$(pkgdatadir)/Muttngrc ] ; then \
+		mv $(DESTDIR)$(pkgdatadir)/Muttngrc* $(DESTDIR)$(sysconfdir) ; \
+	elif [ -f $(DESTDIR)$(pkgdatadir)/../Muttngrc ] ; then \
+	 	mv $(DESTDIR)$(pkgdatadir)/../Muttngrc* $(DESTDIR)$(sysconfdir) ; \
+	elif [ ! -f $(DESTDIR)$(sysconfdir)/Muttngrc ] ; then \
+		$(INSTALL) -m 644 $(srcdir)/Muttngrc $(DESTDIR)$(sysconfdir) ; \
 	fi
 	-if [ ! -f $(DESTDIR)$(sysconfdir)/mime.types ]; then \
 		$(INSTALL) -m 644 $(srcdir)/mime.types $(DESTDIR)$(sysconfdir); \

@@ -1584,7 +1584,7 @@ fi
 
 
 # Define the identity of the package.
- PACKAGE=mutt
+ PACKAGE=muttng
  VERSION=$mutt_cv_version
 
 
