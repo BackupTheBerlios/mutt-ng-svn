@@ -18,7 +18,7 @@ BUILT_SOURCES = keymap_defs.h patchlist.c
 bin_PROGRAMS = muttng @DOTLOCK_TARGET@ @PGPAUX_TARGET@ @SMIMEAUX_TARGET@
 muttng_SOURCES = $(BUILT_SOURCES) \
 	addrbook.c alias.c attach.c base64.c browser.c buffy.c color.c \
-        crypt.c cryptglue.c \
+	compress.c crypt.c cryptglue.c \
 	commands.c complete.c compose.c copy.c curs_lib.c curs_main.c date.c \
 	edit.c enter.c flags.c init.c filter.c from.c getdomain.c \
 	handler.c hash.c hdrline.c headers.c help.c hook.c keymap.c \
@@ -67,6 +67,7 @@ EXTRA_muttng_SOURCES = account.c md5c.c mutt_sasl.c mutt_socket.c mutt_ssl.c \
 
 EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	configure acconfig.h account.h \
+	compress.h \
 	attach.h buffy.h charset.h copy.h dotlock.h functions.h gen_defs \
 	globals.h hash.h history.h init.h keymap.h mutt_crypt.h \
 	mailbox.h mapping.h md5.h mime.h mutt.h mutt_curses.h mutt_menu.h \

@@ -1098,6 +1098,13 @@ struct option_t MuttVars[] = {
   ** This specifies the folder into which read mail in your ``$$spoolfile''
   ** folder will be appended.
   */
+  { "operating_system",  DT_STR, R_NONE, UL&OperatingSystem, 0 },
+  /*
+  ** .pp
+  ** This specifies the operating system name for the User-Agent header. If
+  ** this is unset, it will be set to the operating system name that uname(2)
+  ** returns. If uname(2) fails, "UNIX" will be used.
+  */
   { "sidebar_visible", DT_BOOL, R_BOTH, OPTMBOXPANE, 0 },
   /*
   ** .pp
@@ -3054,6 +3061,11 @@ struct command_t Commands[] = {
   { "fcc-hook",		mutt_parse_hook,	M_FCCHOOK },
   { "fcc-save-hook",	mutt_parse_hook,	M_FCCHOOK | M_SAVEHOOK },
   { "folder-hook",	mutt_parse_hook,	M_FOLDERHOOK },
+#ifdef USE_COMPRESSED
+  { "open-hook",	mutt_parse_hook,	M_OPENHOOK },
+  { "close-hook",	mutt_parse_hook,	M_CLOSEHOOK },
+  { "append-hook",	mutt_parse_hook,	M_APPENDHOOK },
+#endif
   { "hdr_order",	parse_list,		UL &HeaderOrderList },
 #ifdef HAVE_ICONV
   { "iconv-hook",	mutt_parse_hook,	M_ICONVHOOK }, 

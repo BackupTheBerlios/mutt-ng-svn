@@ -80,6 +80,8 @@ WHERE char *Mixmaster;
 WHERE char *MixEntryFormat;
 #endif
 
+WHERE char *OperatingSystem INITVAL (NULL);
+
 WHERE char *Muttrc INITVAL (NULL);
 #ifdef USE_NNTP
 WHERE char *NewsCacheDir;

@@ -158,6 +158,11 @@ typedef enum
 #define M_CRYPTHOOK	(1<<8)
 #define M_ACCOUNTHOOK	(1<<9)
 #define M_REPLYHOOK	(1<<10)
+#ifdef USE_COMPRESSED
+#define M_OPENHOOK	(1<<12)
+#define M_APPENDHOOK	(1<<13)
+#define M_CLOSEHOOK	(1<<14)
+#endif
 
 /* tree characters for linearize_tree and print_enriched_string */
 #define M_TREE_LLCORNER		1
@@ -832,6 +837,11 @@ typedef struct
 #endif /* USE_IMAP */
 
   short magic;			/* mailbox type */
+
+#ifdef USE_COMPRESSED
+  void *compressinfo;		/* compressed mbox module private data */
+  char *realpath;		/* path to compressed mailbox */
+#endif /* USE_COMPRESSED */
 
   unsigned int locked : 1;	/* is the mailbox locked? */
   unsigned int changed : 1;	/* mailbox has been modified */

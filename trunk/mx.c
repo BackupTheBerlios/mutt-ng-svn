@@ -26,6 +26,10 @@
 #include "keymap.h"
 #include "url.h"
 
+#ifdef USE_COMPRESSED
+#include "compress.h"
+#endif
+
 #ifdef USE_IMAP
 #include "imap.h"
 #endif
@@ -475,6 +479,11 @@ int mx_get_magic (const char *path)
     return (-1);
   }
 
+#ifdef USE_COMPRESSED
+  if (magic == 0 && mutt_can_read_compressed (path))
+    return M_COMPRESSED;
+#endif
+
   return (magic);
 }
 
@@ -513,6 +522,13 @@ int mx_access (const char* path, int flags)
 static int mx_open_mailbox_append (CONTEXT *ctx, int flags)
 {
   struct stat sb;
+
+#ifdef USE_COMPRESSED
+  /* special case for appending to compressed folders -
+   * even if we can not open them for reading */
+  if (mutt_can_append_compressed (ctx->path))
+    mutt_open_append_compressed (ctx);
+#endif
 
   ctx->append = 1;
 
@@ -675,6 +691,11 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT *pctx)
 
   ctx->magic = mx_get_magic (path);
   
+#ifdef USE_COMPRESSED
+  if (ctx->magic == M_COMPRESSED)
+    mutt_open_read_compressed (ctx);
+#endif
+
   if(ctx->magic == 0)
     mutt_error (_("%s is not a mailbox."), path);
 
@@ -790,6 +811,10 @@ void mx_fastclose_mailbox (CONTEXT *ctx)
     mutt_free_header (&ctx->hdrs[i]);
   FREE (&ctx->hdrs);
   FREE (&ctx->v2r);
+#ifdef USE_COMPRESSED
+  if (ctx->compressinfo)
+    mutt_fast_close_compressed (ctx);
+#endif
   FREE (&ctx->path);
   FREE (&ctx->pattern);
   if (ctx->limit_pattern) 
@@ -853,6 +878,12 @@ static int sync_mailbox (CONTEXT *ctx, int *index_hint)
   if (tmp && tmp->new == 0)
     mutt_update_mailbox (tmp);
 #endif
+
+#ifdef USE_COMPRESSED
+  if (rc == 0 && ctx->compressinfo)
+    return mutt_sync_compressed (ctx);
+#endif
+
   return rc;
 }
 
@@ -1124,6 +1155,11 @@ int mx_close_mailbox (CONTEXT *ctx, int *index_hint)
       (ctx->magic == M_MMDF || ctx->magic == M_MBOX) &&
       !mutt_is_spool(ctx->path) && !option (OPTSAVEEMPTY))
     mx_unlink_empty (ctx->path);
+
+#ifdef USE_COMPRESSED
+  if (ctx->compressinfo && mutt_slow_close_compressed (ctx))
+    return (-1);
+#endif
 
   mx_fastclose_mailbox (ctx);
 
@@ -1434,6 +1470,11 @@ MESSAGE *mx_open_new_message (CONTEXT *dest, HEADER *hdr, int flags)
 int mx_check_mailbox (CONTEXT *ctx, int *index_hint, int lock)
 {
   int rc;
+
+#ifdef USE_COMPRESSED
+  if (ctx->compressinfo)
+    return mutt_check_mailbox_compressed (ctx);
+#endif
 
   if (ctx)
   {

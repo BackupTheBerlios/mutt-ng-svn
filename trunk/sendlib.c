@@ -40,6 +40,7 @@
 #include <signal.h>
 #include <sys/wait.h>
 #include <fcntl.h>
+#include <sys/utsname.h>
 
 #ifdef USE_NNTP
 #include <nntp.h>
@@ -1738,8 +1739,19 @@ int mutt_write_rfc822_header (FILE *fp, ENVELOPE *env, BODY *attach,
 
   if (mode == 0 && !privacy && option (OPTXMAILER) && !has_agent)
   {
+    struct utsname un;
+    char * os;
+    if (OperatingSystem!=NULL) {
+      os = OperatingSystem;
+    } else {
+      if (uname(&un)==-1) {
+        os = "UNIX";
+      } else {
+        os = un.sysname;
+      }
+    }
     /* Add a vanity header */
-    fprintf (fp, "User-Agent: Mutt/%s\n", MUTT_VERSION);
+    fprintf (fp, "User-Agent: mutt-ng %s (%s)\n", MUTT_VERSION,os);
   }
 
   return (ferror (fp) == 0 ? 0 : -1);

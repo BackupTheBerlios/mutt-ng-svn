@@ -43,6 +43,9 @@ enum
 #ifdef USE_NNTP
   , M_NNTP
 #endif
+#ifdef USE_COMPRESSED
+  , M_COMPRESSED
+#endif
 };
 
 WHERE short DefaultMagic INITVAL (M_MBOX);

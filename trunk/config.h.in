@@ -577,3 +577,6 @@
  * all return values other than (size_t)(-1) as equivalent. */
 #undef ICONV_NONTRANS
 
+/* The compressed mailboxes support */
+#undef USE_COMPRESSED
+
