@@ -24,6 +24,7 @@
 #include "buffy.h"
 #include "mailbox.h"
 #include "mx.h"
+#include "sidebar.h"
 
 #include "mutt_curses.h"
 
@@ -171,12 +172,25 @@ void mutt_update_mailbox (BUFFY * b)
 
 int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *err)
 {
-  BUFFY **tmp,*tmp1;
+  BUFFY **tmp,*tmp1,*last;
   char buf[_POSIX_PATH_MAX];
+  int dup = 0;
 #ifdef BUFFY_SIZE
   struct stat sb;
 #endif /* BUFFY_SIZE */
 
+  /*
+   * FIXME
+   * to get rid of correcting the ->prev pointers in sidebar.c,
+   * correct them right here
+   */
+
+  /*
+   * FIXME
+   * if we really want to make the sort order of the sidebar
+   * configurable, this has to go right here
+   */
+  
   while (MoreArgs (s))
   {
     mutt_extract_token (path, s, 0);
@@ -200,11 +214,18 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
     if(!*buf) continue;
 
     /* simple check to avoid duplicates */
-    for (tmp = &Incoming; *tmp; tmp = &((*tmp)->next))
+    dup = 0;
+    for (tmp = &Incoming; *tmp && dup == 0; tmp = &((*tmp)->next))
     {
-      if (mutt_strcmp (buf, (*tmp)->path) == 0)
-	break;
+      if (mutt_strcmp (buf, (*tmp)->path) == 0) {
+        dup = 1;
+        break;
+      }
     }
+
+    if (dup == 1)
+      continue;
+    tmp = &Incoming;
 
     if(data == M_UNMAILBOXES)
     {
@@ -218,16 +239,32 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
       continue;
     }
 
-    if (!*tmp)
-    {
-      *tmp = (BUFFY *) safe_calloc (1, sizeof (BUFFY));
-      (*tmp)->path = safe_strdup (buf);
-      (*tmp)->next = NULL;
-      /* it is tempting to set magic right here */
-      (*tmp)->magic = 0;
-      
+    /* loop over list while it's sorted */
+    tmp1 = NULL;
+    last = NULL;
+    for (tmp = &Incoming; *tmp ; tmp = &((*tmp)->next)) {
+      /*
+       * FIXME
+       * change this to get whatever sorting order
+       */
+      if (mutt_strcmp (buf, (*tmp)->path) < 0) {
+        tmp1 = (*tmp);
+        break;
+      }
+      last = (*tmp);
     }
 
+    /* we want: last -> tmp -> tmp1 */
+    *tmp = (BUFFY *) safe_calloc (1, sizeof (BUFFY));
+    (*tmp)->path = safe_strdup (buf);
+    (*tmp)->magic = 0;
+
+    /* correct pointers */
+    (*tmp)->next = tmp1;
+    if (last)
+      last->next = (*tmp);
+
+    /* left as-is */
     (*tmp)->new = 0;
     (*tmp)->notified = 1;
     (*tmp)->newly_created = 0;
@@ -428,7 +465,6 @@ int mutt_buffy_check (int force)
                if (SidebarWidth == 0)
                {
                  /* if sidebar invisible -> done */
-                 tmp->new = 1;
                  break;
                }
             }
@@ -453,7 +489,6 @@ int mutt_buffy_check (int force)
             if (*de->d_name != '.' && 
                 (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')))
             {
-              BuffyCount++;
               tmp->msgcount++;
             }
           }
@@ -565,6 +600,8 @@ int mutt_buffy_list (void)
   }
   if (!first)
   {
+    /* on new mail: redraw sidebar */
+    draw_sidebar (CurrentMenu);
     mutt_message ("%s", buffylist);
     return (1);
   }

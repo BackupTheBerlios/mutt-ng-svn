@@ -46,22 +46,24 @@ static int quick_log10(int n)
   return (++len);
 }
 
-// CurBuffy should contain a valid buffy mailbox before calling this function!!!
+/* CurBuffy should contain a valid buffy 
+ * mailbox before calling this function!!! */
 void calc_boundaries (int menu)
 {
   BUFFY *tmp = Incoming;
   int position;
   int i,count, mailbox_position;
 
-  // correct known_lines if it has changed because of a window resize
+  /* correct known_lines if it has changed because of a window resize */
   if ( known_lines != LINES ) {
     known_lines = LINES;
   }
-  // fix all the prev links on all the mailboxes
+  /* fix all the prev links on all the mailboxes
+   * FIXME move this over to buffy.c where it belongs */
   for ( ; tmp->next != 0; tmp = tmp->next )
     tmp->next->prev = tmp;
 
-  // calculate the position of the current mailbox
+  /* calculate the position of the current mailbox */
   position = 1;
   tmp = Incoming;
   while (tmp != CurBuffy)
@@ -69,17 +71,18 @@ void calc_boundaries (int menu)
     position++;
     tmp = tmp->next;
   }
-  // calculate the size of the screen we can use
+  /* calculate the size of the screen we can use */
   count = LINES - 2 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
-  // calculate the position of the current mailbox on the screen
+  /* calculate the position of the current mailbox on the screen */
   mailbox_position = position%count;
   if (mailbox_position == 0) mailbox_position=count;
-  // determine topbuffy
+  /* determine topbuffy */
   TopBuffy = CurBuffy;
   for(i = mailbox_position; i >1; i--) TopBuffy = TopBuffy->prev;
-  // determine bottombuffy
+  /* determine bottombuffy */
   BottomBuffy = CurBuffy;
-  for(i = mailbox_position; i < count && BottomBuffy->next; i++) BottomBuffy = BottomBuffy->next;
+  for(i = mailbox_position; i < count && BottomBuffy->next; i++)
+    BottomBuffy = BottomBuffy->next;
 }
 
 static char * shortened_hierarchy(char * box) {
@@ -320,21 +323,31 @@ void scroll_sidebar(int op, int menu)
 
   switch (op) {
     case OP_SIDEBAR_NEXT:
-      if ( CurBuffy->next == NULL ) return;
+      if ( CurBuffy->next == NULL ) {
+        mutt_error (_("You are on the last mailbox."));
+        return;
+      }
       CurBuffy = CurBuffy->next;
       break;
     case OP_SIDEBAR_NEXT_NEW:
-      if ( (tmp = exist_next_new()) == NULL)
-          return;
+      if ( (tmp = exist_next_new()) == NULL) {
+        mutt_error (_("No next mailboxes with new mail."));
+        return;
+      }
       else CurBuffy = tmp;
       break;
     case OP_SIDEBAR_PREV:
-      if ( CurBuffy->prev == NULL ) return;
+      if ( CurBuffy->prev == NULL ) {
+        mutt_error (_("You are on the first mailbox."));
+        return;
+      }
       CurBuffy = CurBuffy->prev;
      break;
     case OP_SIDEBAR_PREV_NEW:
-      if ( (tmp = exist_prev_new()) == NULL)
-          return;
+      if ( (tmp = exist_prev_new()) == NULL) {
+        mutt_error (_("No previous mailbox with new mail."));
+        return;
+      }
       else CurBuffy = tmp;
       break;
      

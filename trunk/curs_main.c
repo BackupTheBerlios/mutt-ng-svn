@@ -537,6 +537,8 @@ int mutt_index_menu (void)
           mutt_error _("Mailbox was externally modified.  Flags may be wrong.");
         else if (check == M_NEW_MAIL)
         {
+          /* on new mail: redraw sidebar */
+          draw_sidebar (CurrentMenu);
           mutt_message _("New mail in this mailbox.");
           if (option (OPTBEEPNEW))
             beep ();
