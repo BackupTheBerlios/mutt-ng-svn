@@ -289,11 +289,8 @@ int mutt_resend_message (FILE *, CONTEXT *, HEADER *);
 int _mutt_enter_fname (const char *, char *, size_t, int *, int, int, char ***, int *);
 int  mutt_enter_string (char *buf, size_t buflen, int y, int x, int flags);
 int _mutt_enter_string (char *, size_t, int, int, int, int, char ***, int *, ENTER_STATE *);
-int _mutt_enter_string_att (char *, size_t, int, int, int, int, char ***, int *, ENTER_STATE *);
 #define mutt_get_field(A,B,C,D) _mutt_get_field(A,B,C,D,0,NULL,NULL)
-#define mutt_get_field_att(A,B,C,D) _mutt_get_field_att(A,B,C,D,0,NULL,NULL)
 int _mutt_get_field (char *, char *, size_t, int, int, char ***, int *);
-int _mutt_get_field_att (char *, char *, size_t, int, int, char ***, int *);
 int mutt_get_hook_type (const char *);
 int mutt_get_password (char *, char *, size_t);
 int mutt_get_postponed (CONTEXT *, HEADER *, HEADER **, char *, size_t);

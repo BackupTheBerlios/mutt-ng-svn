@@ -19,7 +19,6 @@
 
 /* message parsing/updating functions */
 
-#include <stdint.h>
 #include <stdlib.h>
 #include <ctype.h>
 
@@ -32,6 +31,8 @@
 #ifdef HAVE_PGP
 #include "pgp.h"
 #endif
+
+#include <stdint.h>
 
 static void flush_buffer(char* buf, size_t* len, CONNECTION* conn);
 static int msg_fetch_header (CONTEXT* ctx, IMAP_HEADER* h, char* buf,

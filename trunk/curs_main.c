@@ -385,7 +385,7 @@ static void update_index (MUTTMENU *menu, CONTEXT *ctx, int check,
   
   if (menu->current < 0)
     menu->current = ci_first_message ();
-
+  
 }
 
 static void resort_index (MUTTMENU *menu)
