@@ -1211,8 +1211,6 @@ static void print_flowed_line(char * line, STATE *s,int ql) {
   int len = strlen(line);
   int i;
 
-  fprintf(stderr,"prefix = `%s'\n",s->prefix);
-
   width = COLS - WrapMargin - ql - 1;
   if (option(OPTSTUFFQUOTED))
     --width;
