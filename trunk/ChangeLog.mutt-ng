@@ -1,5 +1,8 @@
 Changes specific to mutt-ng:
 
+2005-02-06:
+  * rewrote handler for f=f attachments to produce nicer output
+
 2005-02-05:
   * Made message ID format configurable
   * Implemented $signoff_string (fixes feature request #552)
