@@ -332,7 +332,7 @@ upcase-word            ESC u   uppercase all characters in current word
 <sect>Miscellany
 <p>
 
-<sect1>Acknowledgements
+<sect1>Acknowledgments
 <p>
 Kari Hurtta
 <htmlurl url="mailto:kari.hurtta@fmi.fi" name="&lt;kari.hurtta@fmi.fi&gt;">
@@ -375,8 +375,8 @@ Park Myeong Seok <htmlurl url="mailto:pms@romance.kaist.ac.kr" name="&lt;pms@rom
 Thomas Parmelan <htmlurl url="mailto:tom@ankh.fr.eu.org" name="&lt;tom@ankh.fr.eu.org&gt;">,<newline>
 Ollivier Robert <htmlurl url="mailto:roberto@keltia.freenix.fr" name="&lt;roberto@keltia.freenix.fr&gt;">,<newline>
 Thomas Roessler <htmlurl url="mailto:roessler@does-not-exist.org" name="&lt;roessler@does-not-exist.org&gt;">,<newline>
-Roland Rosenfeld <htmlurl url="roland@spinnaker.de" name="&lt;roland@spinnaker.de&gt;">,<newline>
-TAKIZAWA Takashi <htmlurl url="taki@luna.email.ne.jp" name="&lt;taki@luna.email.ne.jp&gt;">,<newline>
+Roland Rosenfeld <htmlurl url="mailto:roland@spinnaker.de" name="&lt;roland@spinnaker.de&gt;">,<newline>
+TAKIZAWA Takashi <htmlurl url="mailto:taki@luna.email.ne.jp" name="&lt;taki@luna.email.ne.jp&gt;">,<newline>
 Allain Thivillon <htmlurl url="mailto:Allain.Thivillon@alma.fr" name="&lt;Allain.Thivillon@alma.fr&gt;">,<newline>
 Gero Treuner <htmlurl url="mailto:gero@faveve.uni-stuttgart.de" name="&lt;gero@faveve.uni-stuttgart.de&gt;">,<newline>
 Vsevolod Volkov <htmlurl url="mailto:vvv@lucky.net" name="&lt;vvv@lucky.net&gt;">,<newline>

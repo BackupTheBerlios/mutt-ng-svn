@@ -19,7 +19,7 @@ features like key bindings, keyboard macros, mail threading, regular
 expression searches and a powerful pattern matching language for selecting
 groups of messages.
 
-<p>This documentation additionaly contains documentation to <bf/Mutt-NG/, a 
+<p>This documentation additionally contains documentation to <bf/Mutt-NG/, a 
 fork from Mutt with the goal to fix all the little annoyances of Mutt, to
 integrate all the Mutt patches that are floating around in the web, and to
 add other new features. Features specific to Mutt-ng will be discussed in
@@ -99,7 +99,7 @@ is even more information available in the Mutt FAQ and various web
 pages.  See the <htmlurl url="http://www.mutt.org/mutt/"
 name="Mutt Page"> for more details.
 
-The keybindings described in this section are the defaults as distributed.
+The key bindings described in this section are the defaults as distributed.
 Your local system administrator may have altered the defaults for your site.
 You can always type ``?'' in any menu to display the current bindings.
 
@@ -121,7 +121,7 @@ Z or PageUp     page-up         go to the previous page
 = or Home       first-entry     jump to the first entry
 * or End        last-entry      jump to the last entry
 q               quit            exit the current menu
-?               help            list all keybindings for the current menu
+?               help            list all key bindings for the current menu
 </verb></tscreen>
 
 <sect1>Editing Input Fields<label id="editing">
@@ -263,7 +263,7 @@ featureful.
 n               search for next match
 S               skip beyond quoted text
 T               toggle display of quoted text
-?               show keybindings
+?               show key bindings
 /               search for a regular expression (pattern)
 ESC /           search backwards for a regular expression
 \               toggle search pattern coloring
@@ -433,7 +433,7 @@ tagged message(s) to it.  The variables <ref id="pipe_decode"
 name="&dollar;pipe&lowbar;decode">, <ref id="pipe_split"
 name="&dollar;pipe&lowbar;split">, <ref id="pipe_sep"
 name="&dollar;pipe&lowbar;sep"> and <ref id="wait_key"
-name="&dollar;wait&lowbar;key"> control the exact behaviour of this
+name="&dollar;wait&lowbar;key"> control the exact behavior of this
 function.
 
 <bf/resend-message/<label id="resend-message"> (default: ESC e)<newline>
@@ -814,7 +814,7 @@ A &bsol; at the end of a line can be used to split commands over
 multiple lines, provided that the split points don't appear in the
 middle of command names.
 
-Please note that, unlike the various shells, mutt-ng interpretes a ``&bsol;''
+Please note that, unlike the various shells, mutt-ng interprets a ``&bsol;''
 at the end of a line also in comments. This allows you to disable a command
 split over multiple lines with only one ``&num;''.
 
@@ -1113,7 +1113,7 @@ possible to only specify one or the other).
 <itemize>
 <item>attachment
 <item>body (match <em/regexp/ in the body of messages)
-<item>bold (hiliting bold patterns in the body of messages)
+<item>bold (highlighting bold patterns in the body of messages)
 <item>error (error messages printed by Mutt)
 <item>header (match <em/regexp/ in the message header)
 <item>hdrdefault (default color of the message header in the pager)
@@ -1125,12 +1125,12 @@ possible to only specify one or the other).
 <item>quoted (text matching <ref id="quote_regexp"
 name="&dollar;quote&lowbar;regexp"> in the body of a message)
 <item>quoted1, quoted2, ..., quoted<bf/N/ (higher levels of quoting)
-<item>search (hiliting of words in the pager)
+<item>search (highlighting of words in the pager)
 <item>signature
 <item>status (mode lines used to display info about the mailbox or message)
 <item>tilde (the ``&tilde;'' used to pad blank lines in the pager)
 <item>tree (thread tree drawn in the message index and attachment menu)
-<item>underline (hiliting underlined patterns in the body of messages)
+<item>underline (highlighting underlined patterns in the body of messages)
 </itemize>
 
 <em/foreground/ and <em/background/ can be one of the following:
@@ -1285,7 +1285,7 @@ give a portion of the list's e-mail address.
 
 Specify as much of the address as you need to to remove ambiguity.  For
 example, if you've subscribed to the Mutt mailing list, you will receive mail
-addresssed to <em/mutt-users@mutt.org/.  So, to tell Mutt that this is a
+addressed to <em/mutt-users@mutt.org/.  So, to tell Mutt that this is a
 mailing list, you could add ``lists mutt-users'' to your
 initialization file.  To tell mutt that you are subscribed to it,
 add ``subscribe mutt-users'' to your initialization file instead.
@@ -1616,7 +1616,7 @@ under the ``Fuz2'' checksum, and that PureMessage registered with a
 DCC report indicate the checksum used -- in this case, ``Fuz2''.)
 
 If the &dollar;spam&lowbar;separator variable is unset, then each
-spam pattern match supercedes the previous one. Instead of getting
+spam pattern match supersedes the previous one. Instead of getting
 joined <em/format/ strings, you'll get only the last one to match.
 
 The spam tag is what will be displayed in the index when you use
@@ -1739,7 +1739,7 @@ If the filename ends with a vertical bar (|), then <em/filename/ is
 considered to be an executable program from which to read input (eg.
 <tt>source ~/bin/myscript|</tt>).
 
-<sect1>Configuring features conditionaly<label id="ifdef">
+<sect1>Configuring features conditionally<label id="ifdef">
 <p>
 Usage: <tt/ifdef/ <em/item/ <em/command/
 Usage: <tt/ifndef/ <em/item/ <em/command/
@@ -2085,7 +2085,7 @@ pattern language.  For example,
 </verb></tscreen>
 
 Without the quotes, the parenthesis wouldn't end.
-This would be seperated to two OR'd patterns: <em/&tilde;f me@(mutt\.org/
+This would be separated to two OR'd patterns: <em/&tilde;f me@(mutt\.org/
 and <em/cs\.hmc\.edu)/. They are never what you want.
 
 <sect2>Searching by Date
@@ -2278,10 +2278,10 @@ The available functions are:
 <tscreen><verb>
 sidebar-scroll-up      Scrolls the mailbox list up 1 page
 sidebar-scroll-down    Scrolls the mailbox list down 1 page
-sidebar-next           Hilights the next mailbox
-sidebar-next-new       Hilights the next mailbox with new mail
-sidebar-previous       Hilights the previous mailbox
-sidebar-open           Opens the currently hilighted mailbox
+sidebar-next           Highlights the next mailbox
+sidebar-next-new       Highlights the next mailbox with new mail
+sidebar-previous       Highlights the previous mailbox
+sidebar-open           Opens the currently highlighted mailbox
 </verb></tscreen>
 
 Reasonable key bindings look e.g. like this:
@@ -2487,7 +2487,7 @@ uninteresting threads and quickly find topics of value.
 <sect1>Editing threads
 <p>
 Mutt has the ability to dynamically restructure threads that are broken
-either by misconfigured software or bad behaviour from some
+either by misconfigured software or bad behavior from some
 correspondents. This allows to clean your mailboxes formats) from these
 annoyances which make it hard to follow a discussion.
 
@@ -2502,7 +2502,7 @@ You can fix this by tagging the reply, then moving to the parent message
 and using the ``link-threads'' function (bound to & by default). The
 reply will then be connected to this "parent" message.
 
-You can also connect multiple childs at once, tagging them and using the
+You can also connect multiple children at once, tagging them and using the
 tag-prefix command (';') or the auto_tag option.
 
 <sect2>Breaking threads
@@ -2542,10 +2542,10 @@ browsing.
 You can access the remote POP3 mailbox by selecting the folder
 <tt>pop://popserver/</tt>.
 
-You can select an alternative port by specifying it with the server, ie:
+You can select an alternative port by specifying it with the server, i.e.:
 <tt>pop://popserver:port/</tt>.
 
-You can also specify different username for each folder, ie:
+You can also specify different username for each folder, i.e.:
 <tt>pop://username@popserver[:port]/</tt>.
 
 Polling for new mail is more expensive over POP3 than locally. For this
@@ -2585,10 +2585,10 @@ the IMAP server. If you want to access another mail folder at the IMAP
 server, you should use <tt>imap://imapserver/path/to/folder</tt> where
 <tt>path/to/folder</tt> is the path of the folder you want to access.
 
-You can select an alternative port by specifying it with the server, ie:
+You can select an alternative port by specifying it with the server, i.e.:
 <tt>imap://imapserver:port/INBOX</tt>.
 
-You can also specify different username for each folder, ie:
+You can also specify different username for each folder, i.e.:
 <tt>imap://username@imapserver[:port]/INBOX</tt>.
 
 If Mutt was compiled with SSL support (by running the <em/configure/
@@ -2598,7 +2598,7 @@ SSL encrypted connections. To access a folder with IMAP/SSL, you should
 use <tt>imaps://[username@]imapserver[:port]/path/to/folder</tt> as your 
 folder path.
 
-Pine-compatible notation is also supported, ie
+Pine-compatible notation is also supported, i.e.
 <tt>{[username@]imapserver[:port][/ssl]}path/to/folder</tt>
 
 Note that not all servers use / as the hierarchy separator.  Mutt should
@@ -2674,7 +2674,7 @@ There are a few variables which control authentication:
 <item><ref id="imap_user" name="&dollar;imap&lowbar;user"> - controls
   the username under which you request authentication on the IMAP server,
   for all authenticators. This is overridden by an explicit username in
-  the mailbox path (ie by using a mailbox name of the form
+  the mailbox path (i.e. by using a mailbox name of the form
   <tt/{user@host}/).
 <item><ref id="imap_pass" name="&dollar;imap&lowbar;pass"> - a
   password which you may preset, used by all authentication methods where
@@ -2955,7 +2955,7 @@ Attachments appear as follows:
 </verb>
 
 The '-' denotes that Mutt will delete the file after sending (or
-postponing, or cancelling) the message.  It can be toggled with the
+postponing, or canceling) the message.  It can be toggled with the
 <tt/toggle-unlink/ command (default: u).  The next field is the MIME
 content-type, and can be changed with the <tt/edit-type/ command
 (default: ^T).  The next field is the encoding for the attachment,
@@ -3047,7 +3047,7 @@ respectively.
 The view command is a Unix command for viewing the type specified. There
 are two different types of commands supported. The default is to send
 the body of the MIME message to the command on stdin. You can change
-this behaviour by using &percnt;s as a parameter to your view command.
+this behavior by using &percnt;s as a parameter to your view command.
 This will cause Mutt to save the body of the MIME message to a temporary
 file, and then call the view command with the &percnt;s replaced by
 the name of the temporary file. In both cases, Mutt will turn over the
@@ -3092,7 +3092,7 @@ This is the simplest form of a mailcap file.
 
 <sect2>Secure use of mailcap
 <p>
-The interpretion of shell meta-characters embedded in MIME parameters
+The interpretation of shell meta-characters embedded in MIME parameters
 can lead to security problems in general.  Mutt tries to quote parameters
 in expansion of %s syntaxes properly, and avoids risky characters by
 substituting them, see the <ref id="mailcap_sanitize"
@@ -3357,7 +3357,7 @@ Mutt has some heuristics for determining which attachment of a
 multipart/alternative type to display.  First, mutt will check the 
 alternative&lowbar;order list to determine if one of the available types
 is preferred.  The alternative&lowbar;order list consists of a number of
-mimetypes in order, including support for implicit and explicit
+MIME types in order, including support for implicit and explicit
 wildcards, for example:
 <tscreen><verb>
 alternative_order text/enriched text/plain text application/postscript image/*
@@ -3401,7 +3401,7 @@ to send messages from the command line as well.
 -a      attach a file to a message
 -b      specify a blind carbon-copy (BCC) address
 -c      specify a carbon-copy (Cc) address
--e      specify a config command to be run after initilization files are read
+-e      specify a config command to be run after initialization files are read
 -f      specify a mailbox to load
 -F      specify an alternate file to read initialization commands
 -h      print help on command line options
