@@ -15603,7 +15603,7 @@ _ACEOF
 
 fi
 
-                                                                                                    ac_config_files="$ac_config_files Makefile intl/Makefile m4/Makefile po/Makefile.in doc/Makefile contrib/Makefile muttbug.sh imap/Makefile Muttrc.head doc/instdoc.sh"
+                                                                                                    ac_config_files="$ac_config_files Makefile intl/Makefile m4/Makefile po/Makefile.in doc/Makefile contrib/Makefile muttbug.sh imap/Makefile Muttngrc.head doc/instdoc.sh"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -16203,7 +16203,7 @@ do
   "contrib/Makefile" ) CONFIG_FILES="$CONFIG_FILES contrib/Makefile" ;;
   "muttbug.sh" ) CONFIG_FILES="$CONFIG_FILES muttbug.sh" ;;
   "imap/Makefile" ) CONFIG_FILES="$CONFIG_FILES imap/Makefile" ;;
-  "Muttrc.head" ) CONFIG_FILES="$CONFIG_FILES Muttrc.head" ;;
+  "Muttngrc.head" ) CONFIG_FILES="$CONFIG_FILES Muttngrc.head" ;;
   "doc/instdoc.sh" ) CONFIG_FILES="$CONFIG_FILES doc/instdoc.sh" ;;
   "depfiles" ) CONFIG_COMMANDS="$CONFIG_COMMANDS depfiles" ;;
   "default-1" ) CONFIG_COMMANDS="$CONFIG_COMMANDS default-1" ;;

@@ -76,7 +76,7 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	rfc2231.h rfc822.h sha1.h sort.h mime.types VERSION prepare \
 	nntp.h ChangeLog.nntp \
 	_regex.h OPS.MIX README.SECURITY remailer.c remailer.h browser.h \
-	mbyte.h	lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h Muttrc.head Muttrc \
+	mbyte.h	lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h Muttngrc.head Muttngrc \
 	makedoc.c stamp-doc-rc README.SSL smime.h\
 	muttbug pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh	\
 	ChangeLog.old mkchangelog.sh cvslog2changelog.pl mutt_idna.h \
@@ -186,12 +186,12 @@ mutt-dist:
 update-doc: stamp-doc-rc
 	(cd doc && $(MAKE) update-doc)
 
-Muttrc: stamp-doc-rc
+Muttngrc: stamp-doc-rc
 
-stamp-doc-rc: $(srcdir)/init.h makedoc Muttrc.head
-	-rm -f Muttrc stamp-doc-rc
+stamp-doc-rc: $(srcdir)/init.h makedoc Muttngrc.head
+	-rm -f Muttngrc stamp-doc-rc
 	$(CPP) $(INCLUDES) $(DEFS) $(CPPFLAGS) -D_MAKEDOC -C \
-		$(srcdir)/init.h | ./makedoc -c | cat Muttrc.head - > Muttrc
+		$(srcdir)/init.h | ./makedoc -c | cat Muttngrc.head - > Muttngrc
 	touch stamp-doc-rc
 
 
