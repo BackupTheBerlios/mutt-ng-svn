@@ -890,6 +890,12 @@ struct option_t MuttVars[] = {
   ** but can make closing an IMAP folder somewhat slower. This option
   ** exists to appease speed freaks.
   */
+  { "imap_reconnect",	DT_QUAD, R_NONE, OPT_IMAPRECONNECT, M_ASKYES },
+  /*
+  ** .pp
+  ** Controls whether or not Mutt will try to reconnect to IMAP server when
+  ** connection lost.
+  */
   { "imap_servernoise",		DT_BOOL, R_NONE, OPTIMAPSERVERNOISE, 1 },
   /*
   ** .pp

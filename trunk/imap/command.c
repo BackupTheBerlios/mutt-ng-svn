@@ -287,9 +287,11 @@ static void cmd_handle_fatal (IMAP_DATA* idata)
       !idata->ctx->closing)
   {
     mx_fastclose_mailbox (idata->ctx);
-    mutt_error (_("Mailbox closed"));
+    /*mutt_error (_("Mailbox closed"));
     mutt_sleep (1);
+    */
     idata->state = IMAP_DISCONNECTED;
+    imap_reconnect(idata->ctx);
   }
 
   if (idata->state != IMAP_SELECTED)
