@@ -306,7 +306,7 @@ void mutt_curses_error (const char *fmt, ...)
   dprint (1, (debugfile, "%s\n", Errorbuf));
   mutt_format_string (TmpErrorbuf, sizeof (TmpErrorbuf),
                       0, COLS-2, 0, 0, Errorbuf, sizeof (Errorbuf), 0);
-  sprintf(Errorbuf,sizeof(Errorbuf),"%s",TmpErrorbuf); /* overkill */
+  snprintf(Errorbuf,sizeof(Errorbuf),"%s",TmpErrorbuf); /* overkill */
 
   if (!option (OPTKEEPQUIET))
   {
