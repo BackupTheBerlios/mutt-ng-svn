@@ -1238,7 +1238,8 @@ static void mutt_restore_default (struct option_t *p)
 	    FREE (&pp->pattern);
 	    regfree (pp->rx);
 	    FREE (&pp->rx);
-	  }
+	  } else
+            mutt_str_replace (&pp->pattern, (char*) p->init);
 	}
       }
       break;
