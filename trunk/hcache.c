@@ -18,7 +18,7 @@
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
  */
 
-
+#include <stdint.h>
 
 #if HAVE_CONFIG_H
 #include "config.h"
@@ -66,7 +66,7 @@ header_cache
 typedef union
 {
         struct timeval timeval;
-        unsigned long long uid_validity;
+        uint64_t uid_validity;
 } validate;
 
 static void *
@@ -516,7 +516,7 @@ mutt_hcache_per_folder(const char *path, const char *folder)
 /* This function transforms a header into a char so that it is useable by
  * db_store */
 static void *
-mutt_hcache_dump(void *_db, HEADER *h, int *off, unsigned long long uid_validity)
+mutt_hcache_dump(void *_db, HEADER *h, int *off, uint64_t uid_validity)
 {
 	struct header_cache *db = _db;
 	unsigned char *d = NULL;
@@ -525,7 +525,7 @@ mutt_hcache_dump(void *_db, HEADER *h, int *off, unsigned long long uid_validity
 	d = lazy_malloc(sizeof(validate));
 
 	if (uid_validity) {
-		memcpy(d, &uid_validity, sizeof(long long));
+		memcpy(d, &uid_validity, sizeof(uint64_t));
 	} else {
 		struct timeval now;
 		gettimeofday(&now, NULL);
@@ -658,7 +658,7 @@ mutt_hcache_fetch(void *db, const char *filename, size_t (*keylen)(const char *f
 }
 
 int
-mutt_hcache_store(void *db, const char *filename, HEADER *header, unsigned long long uid_validity, size_t (*keylen)(const char *fn))
+mutt_hcache_store(void *db, const char *filename, HEADER *header, uint64_t uid_validity, size_t (*keylen)(const char *fn))
 {
 	struct header_cache *h = db;
 	datum key;
@@ -839,7 +839,7 @@ mutt_hcache_fetch(void *db, const char *filename, size_t (*keylen)(const char *f
 }
 
 int
-mutt_hcache_store(void *db, const char *filename, HEADER *header, unsigned long long uid_validity, size_t (*keylen)(const char *fn))
+mutt_hcache_store(void *db, const char *filename, HEADER *header, uint64_t uid_validity, size_t (*keylen)(const char *fn))
 {
 	DBT key;
 	DBT data;
