@@ -66,19 +66,20 @@ void calc_boundaries (int menu)
   tmp = Incoming;
   while (tmp != CurBuffy)
   {
-	  position++;
-	  tmp = tmp->next;
+    position++;
+    tmp = tmp->next;
   }
   // calculate the size of the screen we can use
   count = LINES - 2 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
   // calculate the position of the current mailbox on the screen
   mailbox_position = position%count;
+  if (mailbox_position == 0) mailbox_position=count;
   // determine topbuffy
   TopBuffy = CurBuffy;
   for(i = mailbox_position; i >1; i--) TopBuffy = TopBuffy->prev;
   // determine bottombuffy
   BottomBuffy = CurBuffy;
-  for(i = mailbox_position; i <= count && BottomBuffy->next; i++) BottomBuffy = BottomBuffy->next;
+  for(i = mailbox_position; i < count && BottomBuffy->next; i++) BottomBuffy = BottomBuffy->next;
 }
 
 static char * shortened_hierarchy(char * box) {
