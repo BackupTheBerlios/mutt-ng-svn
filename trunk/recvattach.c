@@ -419,7 +419,7 @@ static int mutt_query_save_attachment (FILE *fp, BODY *body, HEADER *hdr, char *
   prompt = _("Save to file: ");
   while (prompt)
   {
-    ret = mutt_get_field (_("Save to file ('.' for last used folder): ")
+    ret = mutt_get_field_att (_("Save to file ('.' for last used folder): ")
         , buf, sizeof (buf), M_FILE | M_CLEAR);
     if (((ret != 0) && (ret != 2)) || (!buf[0]))
       return -1;

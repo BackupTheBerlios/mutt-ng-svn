@@ -32,6 +32,8 @@ enum
   M_REDRAW_LINE                /* redraw entire line */
 };
 
+static int _mutt_enter_string_foo (char *buf, size_t buflen, int y, int x, int flags, int multiple, char ***files, int *numfiles, ENTER_STATE *state, int att_save);
+
 static int my_wcwidth (wchar_t wc)
 {
   int n = wcwidth (wc);
@@ -184,9 +186,23 @@ int  mutt_enter_string(char *buf, size_t buflen, int y, int x, int flags)
   return rv;
 }
 
-int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
+int _mutt_enter_string(char *buf, size_t buflen, int y, int x,
                         int flags, int multiple, char ***files, int *numfiles,
                         ENTER_STATE *state)
+{
+  return _mutt_enter_string_foo(buf,buflen,y,x,flags,multiple,files,numfiles,state,0);
+}
+
+int _mutt_enter_string_att(char *buf, size_t buflen, int y, int x,
+                        int flags, int multiple, char ***files, int *numfiles,
+                        ENTER_STATE *state)
+{
+  return _mutt_enter_string_foo(buf,buflen,y,x,flags,multiple,files,numfiles,state,1);
+}
+
+static int _mutt_enter_string_foo (char *buf, size_t buflen, int y, int x,
+                        int flags, int multiple, char ***files, int *numfiles,
+                        ENTER_STATE *state, int att_save) /* the last parameter is a hack!! */
 {
   int width = COLS - x - 1;
   int redraw;
@@ -614,7 +630,7 @@ self_insert:
       /* use the raw keypress */
       ch = LastKey;
 
-      if (ch == '.')
+      if (att_save && ch == '.')
       {
         rv = 2;
         goto bye;
