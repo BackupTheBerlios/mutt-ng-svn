@@ -18,6 +18,9 @@
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
  */
 
+#ifdef USE_HCACHE
+
+
 #if HAVE_CONFIG_H
 #include "config.h"
 #endif /* HAVE_CONFIG_H */
@@ -878,3 +881,5 @@ mutt_hcache_delete(void *db, const char *filename, size_t (*keylen)(const char *
 	return h->db->del(h->db, NULL, &key, 0);
 }
 #endif
+
+#endif /* USE_HCACHE */
