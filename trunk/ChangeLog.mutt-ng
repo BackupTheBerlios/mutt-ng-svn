@@ -1,5 +1,8 @@
 Changes specific to mutt-ng:
 
+2005-03-10:
+  * included CD's ifdef patch
+
 2005-03-05:
   * added color sidebar
 

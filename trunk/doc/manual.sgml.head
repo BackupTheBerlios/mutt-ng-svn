@@ -1709,6 +1709,19 @@ If the filename ends with a vertical bar (|), then <em/filename/ is
 considered to be an executable program from which to read input (eg.
 <tt>source ~/bin/myscript|</tt>).
 
+<sect1>Configuring features conditionnaly<label id="ifdef">
+<p>
+Usage: <tt/ifdef/ <em/item/ <em/command/
+
+This command allows to test if a feature has been compiled in, before
+actually executing the command. Item can be either the name of a
+function or a variable.
+
+Example:
+<tscreen><verb>
+ifdef imap_keepalive 'source ~/.mutt/imap_setup'
+</verb></tscreen>
+
 <sect1>Removing hooks<label id="unhook">
 <p>
 Usage: <tt/unhook/ &lsqb; * | <em/hook-type/ &rsqb;
