@@ -20,14 +20,14 @@
 .\"
 .TH dotlock 1 "AUGUST 1999" Unix "User Manuals"
 .SH NAME
-mutt_dotlock \- Lock mail spool files.
+muttng_dotlock \- Lock mail spool files.
 .SH SYNOPSIS
 .PP
-.B mutt_dotlock 
+.B muttng_dotlock 
 [-t|-f|-u|-d] [-p] [-r \fIretries\fP] \fIfile\fP
 .SH DESCRIPTION
 .PP
-.B mutt_dotlock
+.B muttng_dotlock
 implements the traditional mail spool file locking method:
 To lock \fIfile\fP, a file named \fIfile\fP.lock is
 created. The program operates with group mail privileges
@@ -36,53 +36,53 @@ if necessary.
 .PP
 .IP "-t"
 Just try.
-.B mutt_dotlock
+.B muttng_dotlock
 won't actually lock a file, but inform the invoking
 process if it's at all possible to lock \fIfile\fP.
 .IP "-f"
 Force the lock.  If another process holds a lock on
 \fIfile\fP longer than a certain amount of time, 
-.B mutt_dotlock
+.B muttng_dotlock
 will break that lock by removing the lockfile.
 .IP "-u"
 Unlock.
-.B mutt_dotlock 
+.B muttng_dotlock 
 will remove \fIfile\fP.lock.
 .IP "-d"
 Delete.
-.B mutt_dotlock
+.B muttng_dotlock
 will lock \fIfile\fP, remove it if it has length 0, and afterwards
 remove \fIfile\fP.lock.
 .IP "-p"
 Use privileges.  If given this option, 
-.B mutt_dotlock
+.B muttng_dotlock
 will operate with group mail privileges when creating and
 deleting lock files.
 .IP "-r \fIretries\fP"
 This command line option tells 
-.B mutt_dotlock 
+.B muttng_dotlock 
 to try locking
 \fIretries\fP times before giving up or (if invoked with
 the 
 .B -f
 command line option) break a lock.  The default value is 5.
-.B mutt_dotlock
+.B muttng_dotlock
 waits one second between successive locking attempts.  
 .SH FILES
 .PP
 .IP "\fIfile\fP.lock"
 The lock file 
-.B mutt_dotlock
+.B muttng_dotlock
 generates.
 .SH SEE ALSO
 .PP
 .BR fcntl (2),
 .BR flock (2),
 .BR lockfile (1),
-.BR mutt (1)
+.BR muttng (1)
 .SH DIAGNOSTICS
 .PP
-.B mutt_dotlock
+.B muttng_dotlock
 gives all diagnostics in its return values:
 .TP
 .B "0 \- DL_EX_OK"
@@ -96,37 +96,37 @@ lack of system memory and the like has occured.
 The 
 user wants to lock a file which has been locked by
 another process already.  If 
-.B mutt_dotlock
+.B muttng_dotlock
 is invoked with the
 .B -f 
 command line option, 
-.B mutt_dotlock
+.B muttng_dotlock
 won't generate this error, but break other processes'
 locks.
 .TP 
 .B "4 \- DL_EX_NEED_RPIVS"
 This return value only occurs if 
-.B mutt_dotlock 
+.B muttng_dotlock 
 has been invoked
 with the 
 .B -t
 command line option.  It means that
-.B mutt_dotlock
+.B muttng_dotlock
 will have to use its group mail privileges to lock
 \fIfile\fP.
 .TP
 .B "5 \- DL_EX_IMPOSSIBLE"
 This return value only occurs if
-.B mutt_dotlock
+.B muttng_dotlock
 has been invoked with the
 .B -t
 command line option.  It means that
-.B mutt_dotlock 
+.B muttng_dotlock 
 is unable to lock \fIfile\fP even with group mail
 privileges.
 .SH NOTES
 .PP
-.B mutt_dotlock
+.B muttng_dotlock
 tries to implement an NFS-safe dotlocking method which was
 borrowed from 
 .B lockfile
@@ -134,7 +134,7 @@ borrowed from
 .PP
 If the user can't open \fIfile\fP for reading with his
 normal privileges, 
-.B mutt_dotlock 
+.B muttng_dotlock 
 will return the
 .B DL_EX_ERROR
 exit value to avoid certain attacks against other users'
@@ -143,8 +143,8 @@ when checking permissions; for details of all this see the
 comments in dotlock.c.
 .SH HISTORY
 .PP
-.B mutt_dotlock
-is part of the Mutt mail user agent package.  It has been
+.B muttng_dotlock
+is part of the Mutt-ng mail user agent package.  It has been
 created to avoid running mutt with group mail privileges.
 .SH AUTHOR
 Thomas Roessler <roessler@guug.de>

@@ -1,13 +1,8 @@
-Subject: Developers' notes
-From: Thomas Roessler <roessler@guug.de>
-Date: Tue,  9 May 2000 19:48:08 +0200
-
-
 Required tools
 --------------
 
-If you are planning to hack on mutt-ng, please subscribe to the
-mutt-dev mailinglist (mutt-ng-deve-@lists.berlios.de).
+If you are planning to hack on Mutt-ng, please subscribe to the
+Mutt-ng-dev mailinglist (mutt-ng-deve-@lists.berlios.de).
 Announcements about recent development
 versions go to that mailing list, as go technical discussions and
 patches.
@@ -57,10 +52,11 @@ You'll need several GNU development utilities for working on mutt-ng:
 - GNU make may be needed for the dependency tricks
 
 
-Getting started from CVS
+Getting started from SVN
 ------------------------
 
-Once you've checked out a copy of the source from CVS, you'll need to
+Once you've checked out a copy of the source from SVN from
+svn.berlios.de/svnroot/repos/mutt-ng , you'll need to
 run the script called 'prepare' that is in the root directory.  The
 script does all the automake/autoconf magic that needs to be done with
 a fresh checkout.
@@ -69,13 +65,13 @@ a fresh checkout.
 A word about warnings
 ---------------------
 
-Mutt's default build process sets some pretty restrictive compiler
+Mutt-ng's default build process sets some pretty restrictive compiler
 flags which may lead to lots of warnings.  Generally, warnings are
 something which should be eliminated.
 
 Nevertheless, the code in intl/ is said to generate some warnings with
 the compiler settings we usually rely upon.  This code is not
-maintained by the mutt-ng developpers, so please redirect any comments to
+maintained by the Mutt-ng developpers, so please redirect any comments to
 the GNU gettext library's developpers.
 
 
@@ -99,7 +95,7 @@ Style Guide
 - when adding new options, make the old behaviour the
   default.
 
-- try to keep mutt-ng as portable as possible.
+- try to keep Mutt-ng as portable as possible.
 
 - do not use C++-style comments (i.e. "// Comment")
 
@@ -179,5 +175,3 @@ similar to [ntg]roff:
    This is used to protect indentations in tables.
 
 Do _not_ use any other SGML or nroff formatting instructions here!
-
-$Id: devel-notes.txt,v 3.0 2002/01/24 13:35:07 roessler Exp $
