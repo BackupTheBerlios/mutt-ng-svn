@@ -18,6 +18,7 @@
 #include "imap_private.h"
 #include "auth.h"
 
+#include "lib/mem.h"
 #include "lib/intl.h"
 
 #ifdef USE_SASL2
