@@ -1,5 +1,8 @@
 Changes specific to mutt-ng:
 
+2005-02-01:
+  * Merged in mutt changes from 1.5.6 to 1.5.7
+
 2005-01-30:
   * (Partially?) implemented IMAP reconnecting, needs more testing
 
