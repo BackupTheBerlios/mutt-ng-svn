@@ -54,7 +54,7 @@
 
 static const char *ReachingUs = N_("\
 To contact the developers, please mail to <mutt-ng-devel@lists.berlios.de>.\n\
-To report a bug, please use the flea(1) utility.\n");
+To report a bug, please use the fleang(1) utility.\n");
 
 static const char *Notice = N_("\
 Copyright (C) 1996-2002 Michael R. Elkins and others.\n\
