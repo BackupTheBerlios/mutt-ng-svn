@@ -1,5 +1,8 @@
 Changes specific to mutt-ng:
 
+2005-03-13:
+  * Merged in latest mutt changes up to 1.5.9
+
 2005-03-10:
   * included CD's ifdef patch plus extension ('ifndef', feature_*), see manual
 

@@ -1,3 +1,49 @@
+2005-03-13 16:29:09  Morten Bo Johansen  <mojo@mbjnet.dk>  (roessler)
+
+	* po/da.po: update
+
+2005-03-05 18:15:20  Christoph Ludwig  <cludwig@cdc.informatik.tu-darmstadt.de>  (roessler)
+
+	* crypt.c: The attached patch fixes a segfault I observed
+	today: mutt failed to check for a possible null pointer in
+	mutt_is_application_smime(Body*).
+
+2005-03-05 07:10:57  brendan  (brendan)
+
+	* mutt_sasl.c, mutt_sasl.h, mutt_socket.c, mutt_socket.h,
+	mutt_ssl.c, mutt_ssl_gnutls.c, mutt_ssl_nss.c, mutt_tunnel.c:
+	Rename open/close/read/write function pointers to avoid problems
+	with systems where standard open/close/read/write functions are
+	implemented with macros. Thanks to Aaron Crane and others for
+	their input about the problem.
+
+2005-03-01 15:53:25  Vsevolod Volkov  <vvv@mutt.org.ua>  (roessler)
+
+	* po/ru.po: update
+
+2005-03-01 15:52:33  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
+
+	* init.h: This is a spelling fix supplied by Cameron Simpson.
+
+2005-02-28 18:33:45  Mads Martin Joergensen  <mmj@suse.de>  (roessler)
+
+	* curs_main.c: Fix a crash.
+
+2005-02-28 15:15:23  Christoph Berg  <cb@df7cb.de>  (roessler)
+
+	* init.h, menu.c, mutt.h: I've updated the menu_context patch to
+	reintroduce the menu_move_off variable that hasn't made it into
+	1.5.8. The patch fixes menu_prev_line and menu_next_line which
+	didn't work with menu_context > 0 and also makes <current-middle>
+	work even if there are less messages than screen lines (thanks
+	to René Clerc and Vincent Lefevre for spotting these issues).
+
+2005-02-28 14:37:09  Udo Schweigert  <mutt@cert.siemens.de>  (roessler)
+
+	* smime.c: As pointed out in a separate thread, here is a patch
+	which fixes the problem of a failing openssl after interactively
+	selecting a recipient's key.
+
 2005-02-27 03:18:23  Brendan Cully  <brendan@kublai.com>  (brendan)
 
 	* imap/message.c: Turn brain back on before committing patches
@@ -27,6 +73,28 @@
 	It's a bit of a cut-and-paste job, but I've put my dreams of cleaning
 	up the IMAP codebase on hold. Gotta grow up some time.
 
+2005-02-16 09:34:06  ta_panta_rei  <7vvtch802@sneakemail.com>  (roessler)
+
+	* po/el.po: update
+
+2005-02-16 08:48:41  Ronny Haryanto  <ronnylist@haryan.to>  (roessler)
+
+	* po/id.po: update
+
+2005-02-15 19:28:24  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* doc/Makefile.in: Fix linuxdoc invocation.  Thanks to
+	Tamotsu Takahashi for tracking this down to an idiotic
+	non-backwards-compatible change to the way groff works.
+
+2005-02-15 19:03:51  Ivan Vilata i Balaguer  <ivan@selidor.net>  (roessler)
+
+	* po/ca.po: update
+
+2005-02-14 08:48:43  Vincent Lefevre  <vincent@vinc17.org>  (roessler)
+
+	* po/fr.po: update
+
 2005-02-13 17:37:31  Roland Rosenfeld  <roland@spinnaker.de>  (roessler)
 
 	* po/de.po: update
@@ -36,13 +104,23 @@
 	* Makefile.am: Include crypt-gpgme.h with the distribution.
 
 2005-02-13 00:25:37  Brendan Cully  <brendan@kublai.com>  (brendan)
-
+                                 
 	* configure.in, m4/gettext.m4, m4/iconv.m4: Use AC_HELP_STRING to
 	pretty print configure --help screen, with mixed results.
-
-  2005-02-12 21:04:22  Brendan Cully  <brendan@kublai.com>  (brendan)
-                                   
-  	* Makefile.am, imap/Makefile.am: Require at least automake 1.6
+                                 
+2005-02-12 21:04:22  Brendan Cully  <brendan@kublai.com>  (brendan)
+                                 
+	* Makefile.am, imap/Makefile.am: Require at least automake 1.6
+                                 
+2005-02-12 20:56:36  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+                                 
+	* po/zh_TW.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po,
+	po/zh_CN.po, po/pt_BR.po, po/ru.po, po/lt.po, po/nl.po, po/pl.po,
+	po/et.po, po/fr.po, po/gl.po, po/hu.po, po/id.po, po/it.po,
+	po/ja.po, po/ko.po, po/da.po, po/de.po, po/el.po, po/eo.po,
+	po/es.po, Makefile.am, VERSION, po/bg.po, po/ca.po, po/cs.po,
+	reldate.h: automatic post-release commit for mutt-1.5.8
+                                 
 2005-02-12 20:46:48  Vincent Lefevre  <vincent@vinc17.org>  (roessler)
 
 	* po/fr.po: update
@@ -252,7 +330,7 @@
 2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
                                  
      * hcache.c: - make hcache.c conform to mutt codingstyle
-     - use $Id: ChangeLog,v 3.384 2005/02/12 20:47:13 roessler Exp $ CVS keyword instead of %K% BitKeeper keyword
+     - use $Id: ChangeLog,v 3.406 2005/03/13 16:29:39 roessler Exp $ CVS keyword instead of %K% BitKeeper keyword
                                  
 2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
 

@@ -422,6 +422,7 @@ enum
   OPTMARKOLD,
   OPTMBOXPANE,
   OPTMENUSCROLL,	/* scroll menu instead of implicit next-page */
+  OPTMENUMOVEOFF,
   OPTMETAKEY,		/* interpret ALT-x as ESC-x */
   OPTMETOO,
   OPTMHPURGE,
