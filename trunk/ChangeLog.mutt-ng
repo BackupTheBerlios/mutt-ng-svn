@@ -2,8 +2,8 @@ Changes specific to mutt-ng:
 
 2005-02-23:
   * Integrated assume_charset patch from http://www.emaillab.org/mutt/download15.html.en
-  * Integrated patch bei Rocco Rutte to correct minor bugs
-  * fixed pager line at the bottom in the sidebar
+  * Integrated patch by Rocco Rutte to correct minor bugs
+  * Fixed huge multibyte handling fuckup (was I drunk?!)
 
 2005-02-22:
   * Merged mutt changes

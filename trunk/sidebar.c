@@ -208,7 +208,7 @@ int draw_sidebar(int menu) {
 
 	/* draw the divider */
 
-	for ( ; lines < LINES-2-(menu != MENU_PAGER); lines++ ) {
+	for ( ; lines < LINES-1-(menu != MENU_PAGER); lines++ ) {
 		move(lines, SidebarWidth - 1);
 		addch('|');
  #ifndef USE_SLANG_CURSES
@@ -249,7 +249,7 @@ int draw_sidebar(int menu) {
 		lines++;
 	}
 	SETCOLOR(MT_COLOR_NORMAL);
-	for ( ; lines < LINES - 2 - (menu != MENU_PAGER); lines++ ) {
+	for ( ; lines < LINES - 1 - (menu != MENU_PAGER); lines++ ) {
 		int i = 0;
 		move( lines, 0 );
 		for ( ; i < SidebarWidth - 1; i++ )
