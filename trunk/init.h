@@ -2920,6 +2920,27 @@ struct option_t MuttVars[] = {
   ** Controls whether mutt writes out the Bcc header when preparing
   ** messages to be sent.  Exim users may wish to use this.
   */
+  {"xterm_icon",       DT_STR,   R_BOTH, UL &XtermIcon,  UL "M%?n?AIL&ail?"},
+  /*
+  ** .pp
+  ** Controls the format of the icon title, as long as xterm_set_titles
+  ** is enabled. This string is identical in formatting to the one used by
+  ** ``$$status_format''.
+  */
+  {"xterm_set_titles", DT_BOOL,  R_BOTH, OPTXTERMSETTITLES, 0},
+  /*
+  ** .pp
+  ** Controls whether mutt sets the xterm title bar and icon name
+  ** (as long as you're in an appropriate terminal). The default must
+  ** be off to force in the validity checking.
+  */
+  {"xterm_title",      DT_STR,   R_BOTH, UL &XtermTitle, UL "Mutt with %?m?%m messages&no messages?%?n? [%n New]?"},
+  /*
+  ** .pp
+  ** Controls the format of the title bar of the xterm provided that
+  ** xterm_set_titles has been set. This string is identical in formatting
+  ** to the one used by ``$$status_format''.
+  */
 #ifdef USE_NNTP
   { "x_comment_to",   DT_BOOL, R_NONE, OPTXCOMMENTTO, 0 },
   /*

@@ -130,6 +130,8 @@ WHERE char *Tochars;
 WHERE char *TrashPath;
 WHERE char *Username;
 WHERE char *Visual;
+WHERE char *XtermTitle;
+WHERE char *XtermIcon;
 
 WHERE char *LastFolder;
 

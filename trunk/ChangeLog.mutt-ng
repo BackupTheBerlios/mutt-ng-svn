@@ -11,5 +11,6 @@ Changes specific to mutt-ng:
     * cd.purge_message patch
     * vvv.quote patch
     * vvv.nntp patch
+    * xterm title patch from SGI (http://freeware.sgi.com/source/mutt/)
   * fixed missing decoding of partially wrong RFC2047 headers (handling was too strict)
   * fixed wrong display of ISO-8859-1 names by removing parts of the multibyte-character handling
