@@ -26,6 +26,7 @@
 #include "mutt_regex.h"
 
 #include "lib/mem.h"
+#include "lib/str.h"
 #include "lib/intl.h"
 
 typedef struct _tlssockdata {
@@ -411,8 +412,8 @@ static int tls_check_stored_hostname (const gnutls_datum * cert,
         if (regexec (&preg, linestr, 3, pmatch, 0) == 0) {
           linestr[pmatch[1].rm_eo] = '\0';
           linestr[pmatch[2].rm_eo] = '\0';
-          if (strcmp (linestr + pmatch[1].rm_so, hostname) == 0 &&
-              strcmp (linestr + pmatch[2].rm_so, buf) == 0) {
+          if (mutt_strcmp (linestr + pmatch[1].rm_so, hostname) == 0 &&
+              mutt_strcmp (linestr + pmatch[2].rm_so, buf) == 0) {
             regfree (&preg);
             FREE(&linestr);
             fclose (fp);

@@ -98,6 +98,7 @@
 #include "lisp.h"
 #include "buffer.h"
 #include "syntax.h"
+#include "lib/str.h"
 
 #else /* not emacs */
 
@@ -176,29 +177,29 @@ enum { MUTT_ALNUM =
 
 static int ctype (const char *name)
 {
-  if (0 == strcmp (name, "alnum"))
+  if (0 == mutt_strcmp (name, "alnum"))
     return MUTT_ALNUM;
-  if (0 == strcmp (name, "alpha"))
+  if (0 == mutt_strcmp (name, "alpha"))
     return MUTT_ALPHA;
-  if (0 == strcmp (name, "blank"))
+  if (0 == mutt_strcmp (name, "blank"))
     return MUTT_BLANK;
-  if (0 == strcmp (name, "cntrl"))
+  if (0 == mutt_strcmp (name, "cntrl"))
     return MUTT_CNTRL;
-  if (0 == strcmp (name, "digit"))
+  if (0 == mutt_strcmp (name, "digit"))
     return MUTT_DIGIT;
-  if (0 == strcmp (name, "graph"))
+  if (0 == mutt_strcmp (name, "graph"))
     return MUTT_GRAPH;
-  if (0 == strcmp (name, "lower"))
+  if (0 == mutt_strcmp (name, "lower"))
     return MUTT_LOWER;
-  if (0 == strcmp (name, "print"))
+  if (0 == mutt_strcmp (name, "print"))
     return MUTT_PRINT;
-  if (0 == strcmp (name, "punct"))
+  if (0 == mutt_strcmp (name, "punct"))
     return MUTT_PUNCT;
-  if (0 == strcmp (name, "space"))
+  if (0 == mutt_strcmp (name, "space"))
     return MUTT_SPACE;
-  if (0 == strcmp (name, "upper"))
+  if (0 == mutt_strcmp (name, "upper"))
     return MUTT_UPPER;
-  if (0 == strcmp (name, "xdigit"))
+  if (0 == mutt_strcmp (name, "xdigit"))
     return MUTT_XDIGIT;
   return MUTT_INVALID;
 }
@@ -396,7 +397,7 @@ char *alloca ();
 
 #define BYTEWIDTH 8             /* In bits.  */
 
-#define STREQ(s1, s2) ((strcmp (s1, s2) == 0))
+#define STREQ(s1, s2) ((mutt_strcmp (s1, s2) == 0))
 
 #undef MAX
 #undef MIN

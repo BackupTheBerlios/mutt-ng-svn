@@ -12,6 +12,7 @@
 #endif
 
 #include "mutt.h"
+#include "lib/str.h"
 #include "sort.h"
 #include "mutt_idna.h"
 
@@ -212,13 +213,13 @@ int compare_spam (const void *a, const void *b)
   /* If either aptr or bptr is equal to data, there is no numeric    */
   /* value for that spam attribute. In this case, compare lexically. */
   if ((aptr == (*ppa)->env->spam->data) || (bptr == (*ppb)->env->spam->data))
-    return (SORTCODE (strcmp (aptr, bptr)));
+    return (SORTCODE (mutt_strcmp (aptr, bptr)));
 
   /* Otherwise, we have numeric value for both attrs. If these values */
   /* are equal, then we first fall back upon string comparison, then  */
   /* upon auxiliary sort.                                             */
   if (result == 0) {
-    result = strcmp (aptr, bptr);
+    result = mutt_strcmp (aptr, bptr);
     if (result == 0)
       AUXSORT (result, a, b);
   }

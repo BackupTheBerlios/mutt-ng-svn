@@ -117,7 +117,7 @@ char *make_sidebar_entry (char *box, int size, int new, int flagged)
 #if USE_IMAP
   if (ImapHomeNamespace && mutt_strlen (ImapHomeNamespace) > 0) {
     if (strncmp (box, ImapHomeNamespace, mutt_strlen (ImapHomeNamespace)) == 0
-        && strcmp (box, ImapHomeNamespace) != 0) {
+        && mutt_strcmp (box, ImapHomeNamespace) != 0) {
       box += mutt_strlen (ImapHomeNamespace) + 1;
     }
   }
@@ -311,7 +311,7 @@ int sidebar_draw (int menu)
       }
     }
     else {
-      if (Context && !strcmp (tmp->path, Context->path)) {
+      if (Context && !mutt_strcmp (tmp->path, Context->path)) {
         printw ("%.*s", SidebarWidth - delim_len,
                 make_sidebar_entry (basename (tmp->path),
                                     Context->msgcount, Context->unread,

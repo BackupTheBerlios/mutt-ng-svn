@@ -47,8 +47,9 @@
 #if !defined(HAVE_SNPRINTF) || !defined(HAVE_VSNPRINTF)
 
 #include <string.h>
-# include <ctype.h>
+#include <ctype.h>
 #include <sys/types.h>
+#include "lib/str.h"
 
 /* Define this as a fall through, HAVE_STDARG_H is probably already set */
 
@@ -766,7 +767,7 @@ int main (void)
     for (y = 0; fp_nums[y] != 0; y++) {
       snprintf (buf1, sizeof (buf1), fp_fmt[x], fp_nums[y]);
       sprintf (buf2, fp_fmt[x], fp_nums[y]);
-      if (strcmp (buf1, buf2)) {
+      if (mutt_strcmp (buf1, buf2)) {
         printf ("snprintf doesn't match Format: %s\n\tsnprintf = %s\n\tsprintf  = %s\n",        /* __SPRINTF_CHECKED__ */
                 fp_fmt[x], buf1, buf2);
         fail++;
@@ -778,7 +779,7 @@ int main (void)
     for (y = 0; int_nums[y] != 0; y++) {
       snprintf (buf1, sizeof (buf1), int_fmt[x], int_nums[y]);
       sprintf (buf2, int_fmt[x], int_nums[y]);
-      if (strcmp (buf1, buf2)) {
+      if (mutt_strcmp (buf1, buf2)) {
         printf ("snprintf doesn't match Format: %s\n\tsnprintf = %s\n\tsprintf  = %s\n",        /* __SPRINTF_CHECKED__ */
                 int_fmt[x], buf1, buf2);
         fail++;

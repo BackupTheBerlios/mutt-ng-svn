@@ -24,6 +24,7 @@
 #include "mutt.h"
 #include "mime.h"
 #include "charset.h"
+#include "lib/str.h"
 #include "rfc2047.h"
 #include "rfc2231.h"
 
@@ -229,7 +230,7 @@ static void rfc2231_list_insert (struct rfc2231_parameter **list,
     q = p;
     p = p->next;
 
-    c = strcmp (par->value, q->value);
+    c = mutt_strcmp (par->value, q->value);
     if ((c > 0) || (c == 0 && par->index >= q->index))
       break;
   }
@@ -278,7 +279,7 @@ static void rfc2231_join_continuations (PARAMETER ** head,
       rfc2231_free_parameter (&par);
       if ((par = q))
         valp = par->value;
-    } while (par && !strcmp (par->attribute, attribute));
+    } while (par && !mutt_strcmp (par->attribute, attribute));
 
     if (value) {
       if (encoded)

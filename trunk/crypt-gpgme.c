@@ -1002,7 +1002,7 @@ static int show_sig_summary (unsigned long sum,
       state_attach_puts (": ", s);
       if (t0)
         state_attach_puts (t0, s);
-      if (t1 && !(t0 && !strcmp (t0, t1))) {
+      if (t1 && !(t0 && !mutt_strcmp (t0, t1))) {
         if (t0)
           state_attach_puts (",", s);
         state_attach_puts (t1, s);
@@ -2479,7 +2479,7 @@ static int print_dn_part (FILE * fp, struct dn_array_s *dn, const char *key)
   int any = 0;
 
   for (; dn->key; dn++) {
-    if (!strcmp (dn->key, key)) {
+    if (!mutt_strcmp (dn->key, key)) {
       if (any)
         fputs (" + ", fp);
       print_utf8 (fp, dn->value, mutt_strlen (dn->value));
@@ -2505,7 +2505,7 @@ static void print_dn_parts (FILE * fp, struct dn_array_s *dn)
   /* now print the rest without any specific ordering */
   for (; dn->key; dn++) {
     for (i = 0; stdpart[i]; i++) {
-      if (!strcmp (dn->key, stdpart[i]))
+      if (!mutt_strcmp (dn->key, stdpart[i]))
         break;
     }
     if (!stdpart[i]) {
@@ -2979,7 +2979,7 @@ static void verify_key (crypt_key_t * key)
 
   k = key->kobj;
   gpgme_key_ref (k);
-  while ((s = k->chain_id) && k->subkeys && strcmp (s, k->subkeys->fpr)) {
+  while ((s = k->chain_id) && k->subkeys && mutt_strcmp (s, k->subkeys->fpr)) {
     putc ('\n', fp);
     err = gpgme_op_keylist_start (listctx, s, 0);
     gpgme_key_release (k);
