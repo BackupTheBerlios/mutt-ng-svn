@@ -421,6 +421,36 @@ int mutt_buffy_check (int force)
 	  }
 	}
 	closedir (dirp);
+#if 1
+  /* I commented this out because it led to an infite "New mail in ..." loop,
+   * and when looking at the code, the check seems to be overly eager.
+   *   -- ak
+   */
+	snprintf (path, sizeof (path), "%s/cur", tmp->path);
+	if ((dirp = opendir (path)) == NULL)
+	{
+	  tmp->magic = 0;
+	  break;
+	}
+	while ((de = readdir (dirp)) != NULL)
+	{
+	  char *p;
+	  if (*de->d_name != '.' && 
+	      (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')))
+	  {
+	    /* one new and undeleted message is enough */
+#if 0
+	    BuffyCount++;
+            /* we're checking for read and not new mail; 
+             * seems like copy'n'paste error
+             */
+	    tmp->has_new = tmp->new = 1;
+#endif
+            tmp->msgcount++;
+	  }
+	}
+	closedir (dirp);
+#endif
 	break;
 
       case M_MH:
