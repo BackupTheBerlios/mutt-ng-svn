@@ -600,7 +600,7 @@ int imap_open_mailbox (CONTEXT * ctx)
       pc += 3;
       pc = imap_next_word (pc);
 
-      sscanf (pc, "%u", &(idata->uid_validity));
+      sscanf (pc, "%lu", &(idata->uid_validity));
     }
 #endif
     else {

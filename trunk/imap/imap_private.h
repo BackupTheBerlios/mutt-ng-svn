@@ -164,7 +164,7 @@ typedef struct {
   IMAP_CACHE cache[IMAP_CACHE_LEN];
   int noclose:1;
 #ifdef USE_HCACHE
-  uint64_t uid_validity;
+  unsigned long uid_validity;
 #endif
 
   /* all folder flags - system flags AND keywords */

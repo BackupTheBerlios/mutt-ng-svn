@@ -65,7 +65,7 @@ static struct
 
 typedef union {
   struct timeval timeval;
-  uint64_t uid_validity;
+  unsigned long uid_validity;
 } validate;
 
 static void *lazy_malloc (size_t siz)
@@ -516,7 +516,7 @@ static const char *mutt_hcache_per_folder (const char *path,
 /* This function transforms a header into a char so that it is useable by
  * db_store */
 static void *mutt_hcache_dump (void *_db, HEADER * h, int *off,
-                               uint64_t uid_validity)
+                               unsigned long uid_validity)
 {
   struct header_cache *db = _db;
   unsigned char *d = NULL;
@@ -526,7 +526,7 @@ static void *mutt_hcache_dump (void *_db, HEADER * h, int *off,
   d = lazy_malloc (sizeof (validate));
 
   if (uid_validity) {
-    memcpy (d, &uid_validity, sizeof (uint64_t));
+    memcpy (d, &uid_validity, sizeof (unsigned long));
   }
   else {
     struct timeval now;
@@ -661,7 +661,7 @@ void *mutt_hcache_fetch (void *db, const char *filename,
 
 int
 mutt_hcache_store (void *db, const char *filename, HEADER * header,
-                   uint64_t uid_validity, size_t (*keylen) (const char *fn))
+                   unsigned long uid_validity, size_t (*keylen) (const char *fn))
 {
   struct header_cache *h = db;
   datum key;
@@ -841,7 +841,7 @@ void *mutt_hcache_fetch (void *db, const char *filename,
 
 int
 mutt_hcache_store (void *db, const char *filename, HEADER * header,
-                   uint64_t uid_validity, size_t (*keylen) (const char *fn))
+                   unsigned long uid_validity, size_t (*keylen) (const char *fn))
 {
   DBT key;
   DBT data;
