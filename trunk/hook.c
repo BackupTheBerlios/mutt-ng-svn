@@ -270,8 +270,7 @@ int mutt_parse_unhook (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
       }
       if (current_hook_type == type)
       {
-	snprintf (err->data, err->dsize,
-		  _("unhook: Can't delete a %s from within a %s."),
+	snprintf (err->data, err->dsize, _("unhook: Can't delete a %s from within a %s."),
 		  buf->data, buf->data);
 	return -1;
       }

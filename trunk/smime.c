@@ -542,7 +542,7 @@ char *smime_get_field_from_db (char *mailbox, char *query, short public, short m
 	  }
 	  else if (choice == M_YES)
 	  {
-	    snprintf (key,mutt_strlen(key)+1, fields[1]);
+	    snprintf (key,mutt_strlen(key)+1, "%s", fields[1]);
 	    ask = 0;
 	    break;
 	  }

@@ -690,7 +690,7 @@ static void init_menu (struct browser_state *state, MUTTMENU *menu, char *title,
   if (option (OPTNEWS))
   {
     if (buffy)
-      snprintf (title, titlelen, _("Subscribed newsgroups"));
+      snprintf (title, titlelen, "%s", _("Subscribed newsgroups"));
     else
       snprintf (title, titlelen, _("Newsgroups on server [%s]"),
 		CurrentNewsSrv->conn->account.host);
