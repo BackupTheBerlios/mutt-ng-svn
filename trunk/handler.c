@@ -1233,11 +1233,13 @@ static void print_flowed_line(char * line, STATE *s,int ql) {
   /* fprintf(stderr,"print_flowed_line will print `%s' with ql = %d\n",line,ql); */
 
   if (strlen(line)==0) {
-    if (s->prefix)
-      state_puts(s->prefix,s);
-    for (i=0;i<ql;++i) state_putc('>',s);
-    if (option(OPTSTUFFQUOTED))
-      state_putc(' ',s);
+    if (option (OPTQUOTEEMPTY)) {
+      if (s->prefix)
+        state_puts(s->prefix,s);
+      for (i=0;i<ql;++i) state_putc('>',s);
+      if (option(OPTSTUFFQUOTED))
+        state_putc(' ',s);
+    }
     state_putc('\n',s);
     return;
   }
