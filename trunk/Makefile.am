@@ -80,7 +80,7 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	makedoc.c stamp-doc-rc README.SSL smime.h\
 	muttngbug pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh	\
 	ChangeLog.old mkchangelog.sh cvslog2changelog.pl mutt_idna.h \
-	snprintf.c regex.c mutt_libesmtp.h
+	snprintf.c regex.c mutt_libesmtp.h crypt-gpgme.h
 
 muttng_dotlock_SOURCES = mutt_dotlock.c
 muttng_dotlock_LDADD = @LIBOBJS@

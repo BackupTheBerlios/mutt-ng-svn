@@ -16,6 +16,9 @@
  *     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
  */ 
 
+#ifdef HAVE_CONFIG_H
+# include "config.h"
+#endif
 
 #include <stdint.h>
 #include "mbyte.h"
