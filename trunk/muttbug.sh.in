@@ -146,17 +146,18 @@ case "$severity" in
 4|[Cc]) severity=critical  ;;
      *) severity=normal    ;;
 esac
-
-if test -x $DEBUGGER ; then
-	test -f core && CORE=core
-	echo "If Mutt-ng has crashed, it may have saved some program state in"
-	echo "a file named core.  We can include this information with the bug"
-	echo "report if you wish so."
-	echo "Do you want to include information gathered from a core file?"
-	echo "If yes, please enter the path - otherwise just say no: [$CORE]"
-	echo $n "> $c"
-	read _CORE
-	test "$_CORE" && CORE="$_CORE"
+if [ "$severity" != "wishlist" ] ; then
+    if test -x $DEBUGGER ; then
+    	test -f core && CORE=core
+    	echo "If Mutt-ng has crashed, it may have saved some program state in"
+    	echo "a file named core.  We can include this information with the bug"
+    	echo "report if you wish so."
+    	echo "Do you want to include information gathered from a core file?"
+    	echo "If yes, please enter the path - otherwise just say no: [$CORE]"
+    	echo $n "> $c"
+    	read _CORE
+    	test "$_CORE" && CORE="$_CORE"
+    fi
 fi
 
 echo $n "Do you want to include your personal Mutt-ng configuration files? [Y|n] $c"
@@ -175,7 +176,7 @@ esac
 
 if test -f /etc/debian_version ; then
 	DEBIAN=yes
-	echo $n "Checking whether mutt-ng has been installed as a package... $c"
+	echo $n "Checking whether Mutt-ng has been installed as a package... $c"
 	DEBIANVERSION="`dpkg -l muttng | grep '^[ih]' | awk '{print $3}'`" 2> /dev/null
 	if test "$DEBIANVERSION" ; then
 		DPKG=yes
@@ -183,18 +184,24 @@ if test -f /etc/debian_version ; then
 		DPKG=no
 		unset DEBIANVERSION
 	fi
-	echo "$DPKG"
-	echo $n "File this bug with Debian? [Y|n] $c"
-	read DPKG
-	case "$DPKG" in
-	[nN])	DPKG=no ;;
-	*)	DPKG=yes ;;
-	esac
+    if [ "$DPKG" == "yes" ] ; then
+    	echo "$DPKG"
+    	echo $n "File this bug with Debian? [Y|n] $c"
+    	read DPKG
+    	case "$DPKG" in
+    	[nN])	DPKG=no ;;
+    	*)	DPKG=yes ;;
+    	esac
+    fi
 else
 	DEBIAN=no
 	DPKG=no
 fi
-
+if [ "$DPKG" == "yes" ] ; then
+    echo ""
+    echo "Use reportbug muttng to report the bug to the debian bug tracking system..."
+    exit
+fi
 if rpm -q mutt > /dev/null 2> /dev/null ; then
 	echo "Mutt seems to come from an RPM package."
 	RPMVERSION="`rpm -q mutt`"
@@ -250,7 +257,6 @@ echo "@CC@"
 echo
 echo "- CFLAGS"
 echo @CFLAGS@
-
 
 echo
 echo "-- Mutt-ng Version Information"
