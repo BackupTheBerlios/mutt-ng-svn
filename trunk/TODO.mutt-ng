@@ -1,10 +1,18 @@
 Here's a list of all mutt-ng specific TODOs (not in priority order):
 
-Really make sure that there're no more files installed with conflicting
-paths between mutt <-> mutt-ng. Update documentation to state that
-there're new version of all helper programs.
+- We need to do a security audit. At least remove all the unsafe
+  function calls, even when they're marked with "secure" or "checked",
+  and replace it with secure alternatives instead. In this process,
+  remove any calls of functions for which we have internal library
+  alternatives already.
 
-We need to do a security audit. At least remove all the unsafe function calls, even when they're
-marked with "secure" or "checked", and replace it with secure alternatives instead.
+- Start cleanup and finally make all the patches work together. As some
+  starting hints: kill the caching for NNTP in favor of the header
+  caching patch, move as much code of optional compile-time features out
+  to their subdirectories, and so forth.
 
-convert all the names in manual.sgml.head/tail
+- Stop making up names of global functions with mutt_*; give meaningful
+  names and declare them in the right headers to eventually obsolote
+  protos.h
+
+- Convert all the names in manual.sgml.head/tail
