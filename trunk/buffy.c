@@ -303,8 +303,8 @@ int mutt_buffy_check (int force)
   
   for (tmp = Incoming; tmp; tmp = tmp->next)
   {
-	if ( tmp->new == 1 )
-		tmp->has_new = 1;
+    if ( tmp->new == 1 )
+      tmp->has_new = 1;
     tmp->new = 0;
 
 #ifdef USE_IMAP
@@ -323,7 +323,7 @@ int mutt_buffy_check (int force)
     else
 #endif
     if (stat (tmp->path, &sb) != 0 || sb.st_size == 0 ||
-	(!tmp->magic && (tmp->magic = mx_get_magic (tmp->path)) <= 0))
+       (!tmp->magic && (tmp->magic = mx_get_magic (tmp->path)) <= 0))
     {
       /* if the mailbox still doesn't exist, set the newly created flag to
        * be ready for when it does. */
@@ -338,20 +338,20 @@ int mutt_buffy_check (int force)
     /* check to see if the folder is the currently selected folder
      * before polling */
     if (!Context || !Context->path ||
-	 (
-	   (0
+         (
+           (0
 #ifdef USE_IMAP
-	    || tmp->magic == M_IMAP
+            || tmp->magic == M_IMAP
 #endif
 #ifdef USE_POP
-	    || tmp->magic == M_POP
+            || tmp->magic == M_POP
 #endif
 #ifdef USE_NNTP
-	    || tmp->magic == M_NNTP
+            || tmp->magic == M_NNTP
 #endif
-	   ) ? mutt_strcmp (tmp->path, Context->path) :
-	       (sb.st_dev != contex_sb.st_dev || sb.st_ino != contex_sb.st_ino)
-	 )
+           ) ? mutt_strcmp (tmp->path, Context->path) :
+               (sb.st_dev != contex_sb.st_dev || sb.st_ino != contex_sb.st_ino)
+         )
        )
     {
       switch (tmp->magic)
@@ -360,141 +360,148 @@ int mutt_buffy_check (int force)
       case M_MMDF:
 
     {
-	if (STAT_CHECK || tmp->msgcount == 0)
-	{
-	  BUFFY b = *tmp;
-	  int msgcount = 0;
-	  int msg_unread = 0;
-	  BuffyCount++;
-	  /* parse the mailbox, to see how much mail there is */
-	  ctx = mx_open_mailbox( tmp->path, M_READONLY | M_QUIET | M_NOSORT,
-	    NULL);
-	  if(ctx)
-	  {
-	      msgcount = ctx->msgcount;
-	      msg_unread = ctx->unread;
-	      mx_close_mailbox(ctx, 0);
-	  }
-	  *tmp = b;
-	  tmp->msgcount = msgcount;
-	  tmp->msg_unread = msg_unread;
-	  if(STAT_CHECK)
-	      tmp->has_new = tmp->new = 1;
-	}
+        if (STAT_CHECK || tmp->msgcount == 0)
+        {
+          BuffyCount++;
+          /* only do complete count if sidebar visible */
+          if (SidebarWidth > 0)
+          {
+            BUFFY b = *tmp;
+            int msgcount = 0;
+            int msg_unread = 0;
+            BuffyCount++;
+            /* parse the mailbox, to see how much mail there is */
+            ctx = mx_open_mailbox( tmp->path, M_READONLY | M_QUIET | M_NOSORT,
+              NULL);
+            if(ctx)
+            {
+                msgcount = ctx->msgcount;
+                msg_unread = ctx->unread;
+                mx_close_mailbox(ctx, 0);
+            }
+            *tmp = b;
+            tmp->msgcount = msgcount;
+            tmp->msg_unread = msg_unread;
+            if(STAT_CHECK)
+                tmp->has_new = tmp->new = 1;
+          }
+          else
+          {
+            /* sidebar invisible -> done */
+            tmp->new = 1;
+          }
+        }
 #ifdef BUFFY_SIZE
-	else
-	{
-	  /* some other program has deleted mail from the folder */
-	  tmp->size = (long) sb.st_size;
-	}
+          else
+          {
+            /* some other program has deleted mail from the folder */
+            tmp->size = (long) sb.st_size;
+          }
 #endif
-	if (tmp->newly_created &&
-	    (sb.st_ctime != sb.st_mtime || sb.st_ctime != sb.st_atime))
-	  tmp->newly_created = 0;
-	}
-	break;
+          if (tmp->newly_created &&
+              (sb.st_ctime != sb.st_mtime || sb.st_ctime != sb.st_atime))
+            tmp->newly_created = 0;
+          }
+        break;
 
       case M_MAILDIR:
 
-	snprintf (path, sizeof (path), "%s/new", tmp->path);
-	if ((dirp = opendir (path)) == NULL)
-	{
-	  tmp->magic = 0;
-	  break;
-	}
-	tmp->msgcount = 0;
-	tmp->msg_unread = 0;
-	while ((de = readdir (dirp)) != NULL)
-	{
-	  char *p;
-	  if (*de->d_name != '.' && 
-	      (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')))
-	  {
-	    /* one new and undeleted message is enough */
+        snprintf (path, sizeof (path), "%s/new", tmp->path);
+        if ((dirp = opendir (path)) == NULL)
+        {
+          tmp->magic = 0;
+          break;
+        }
+        tmp->msgcount = 0;
+        tmp->msg_unread = 0;
+        while ((de = readdir (dirp)) != NULL)
+        {
+          char *p;
+          if (*de->d_name != '.' && 
+              (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')))
+          {
+            /* one new and undeleted message is enough */
             if (tmp->new != 1)
-	    {
+            {
                BuffyCount++;
-	       tmp->has_new = tmp->new = 1;
-	    }
-	    tmp->msgcount++;
-	    tmp->msg_unread++;
-	  }
-	}
-	closedir (dirp);
-#if 1
-  /* I commented this out because it led to an infite "New mail in ..." loop,
-   * and when looking at the code, the check seems to be overly eager.
-   *   -- ak
-   */
-	snprintf (path, sizeof (path), "%s/cur", tmp->path);
-	if ((dirp = opendir (path)) == NULL)
-	{
-	  tmp->magic = 0;
-	  break;
-	}
-	while ((de = readdir (dirp)) != NULL)
-	{
-	  char *p;
-	  if (*de->d_name != '.' && 
-	      (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')))
-	  {
-	    /* one new and undeleted message is enough */
-#if 0
-	    BuffyCount++;
-            /* we're checking for read and not new mail; 
-             * seems like copy'n'paste error
-             */
-	    tmp->has_new = tmp->new = 1;
-#endif
+               tmp->has_new = tmp->new = 1;
+               if (SidebarWidth == 0)
+               {
+                 /* if sidebar invisible -> done */
+                 tmp->new = 1;
+                 break;
+               }
+            }
             tmp->msgcount++;
-	  }
-	}
-	closedir (dirp);
-#endif
-	break;
+            tmp->msg_unread++;
+          }
+        }
+        closedir (dirp);
+
+        if (SidebarWidth > 0)
+        {
+          /* only count total mail if sidebar visible */
+          snprintf (path, sizeof (path), "%s/cur", tmp->path);
+          if ((dirp = opendir (path)) == NULL)
+          {
+            tmp->magic = 0;
+            break;
+          }
+          while ((de = readdir (dirp)) != NULL)
+          {
+            char *p;
+            if (*de->d_name != '.' && 
+                (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')))
+            {
+              BuffyCount++;
+              tmp->msgcount++;
+            }
+          }
+          closedir (dirp);
+        }
+        break;
 
       case M_MH:
-	{
-      DIR *dp;
-      struct dirent *de;
-	  if ((tmp->new = mh_buffy (tmp->path)) > 0)
-	    BuffyCount++;
-  
-      if ((dp = opendir (path)) == NULL)
-        break;
-	  tmp->msgcount = 0;
-      while ((de = readdir (dp)))
-      {
-        if (mh_valid_message (de->d_name))
+        if ((tmp->new = mh_buffy (tmp->path)) > 0)
+          BuffyCount++;
+        if (SidebarWidth > 0)
         {
-		  tmp->msgcount++;
-		  tmp->has_new = tmp->new = 1;
+          DIR *dp;
+          struct dirent *de;
+          if ((dp = opendir (path)) == NULL)
+            break;
+              tmp->msgcount = 0;
+          while ((de = readdir (dp)))
+          {
+            if (mh_valid_message (de->d_name))
+            {
+              tmp->msgcount++;
+              tmp->has_new = tmp->new = 1;
+            }
+          }
+          closedir (dp);
         }
-      }
-      closedir (dp);
-    }
-	break;
-	
+        break;
+
 #ifdef USE_IMAP
       case M_IMAP:
-	  tmp->msgcount = imap_mailbox_check(tmp->path, 0);
-	if ((tmp->new = imap_mailbox_check (tmp->path, 1)) > 0) {
-	  BuffyCount++;
-	}
-	else
-	  tmp->new = 0;
-
-	break;
+        tmp->msgcount = imap_mailbox_check(tmp->path, 0);
+        if ((tmp->new = imap_mailbox_check (tmp->path, 1)) > 0) {
+          BuffyCount++;
+        }
+        else
+          tmp->new = 0;
+        break;
 #endif
 
 #ifdef USE_POP
       case M_POP:
-	break;
+        break;
 #endif
 
 #ifdef USE_NNTP
       case M_NNTP:
-	break;
+        break;
 #endif
       }
     }

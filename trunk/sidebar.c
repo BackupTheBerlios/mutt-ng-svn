@@ -243,6 +243,8 @@ int draw_sidebar(int menu) {
       SidebarWidth = 0;
     } else if(!prev_show_value && option(OPTMBOXPANE)) {
       SidebarWidth = saveSidebarWidth;
+      /* after toggle: force recounting of all mail */
+      mutt_buffy_check(1);
     }
     prev_show_value = option(OPTMBOXPANE);
   }
