@@ -2879,6 +2879,12 @@ struct option_t MuttVars[] = {
   ** machine without having to enter a password.
   */
 #endif
+  { "umask",	DT_NUM, R_NONE, UL &Umask, 0077 },
+  /*
+  ** .pp
+  ** This sets the umask that will be used by mutt-ng when creating all
+  ** kinds of files. If unset, the default value is 077.
+  */
   { "use_8bitmime",	DT_BOOL, R_NONE, OPTUSE8BITMIME, 0 },
   /*
   ** .pp

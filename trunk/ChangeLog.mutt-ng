@@ -1,4 +1,8 @@
 Changes specific to mutt-ng:
+
+2004-01-23:
+  * Implemented umask option after Wolfgang Karall's idea
+
 2004-01-22:
   * Reverted the xface patch as it broke a lot of things
   * Removed a few pscan(1) warnings

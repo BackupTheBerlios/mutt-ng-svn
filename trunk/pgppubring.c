@@ -50,6 +50,8 @@
 extern char *optarg;
 extern int optind;
 
+short Umask; /* dirty hack because we need Umask in lib.c but don't want globals.h there */
+
 #include "sha1.h"
 #include "md5.h"
 #include "lib.h"

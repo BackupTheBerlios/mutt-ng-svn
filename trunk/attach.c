@@ -723,7 +723,7 @@ mutt_save_attachment_open (char *path, int flags)
   if (flags == M_SAVE_APPEND)
     return fopen (path, "a");
   if (flags == M_SAVE_OVERWRITE)
-    return fopen (path, "w");		/* __FOPEN_CHECKED__ */
+    return safe_fopen (path, "w");		/* __FOPEN_CHECKED__ */
   
   return safe_fopen (path, "w");
 }
@@ -848,7 +848,7 @@ int mutt_decode_save_attachment (FILE *fp, BODY *m, char *path,
   if (flags == M_SAVE_APPEND)
     s.fpout = fopen (path, "a");
   else if (flags == M_SAVE_OVERWRITE)
-    s.fpout = fopen (path, "w");	/* __FOPEN_CHECKED__ */
+    s.fpout = safe_fopen (path, "w");	/* __FOPEN_CHECKED__ */
   else
     s.fpout = safe_fopen (path, "w");
 

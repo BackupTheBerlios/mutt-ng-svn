@@ -1897,7 +1897,7 @@ void mutt_body_handler (BODY *b, STATE *s)
 	/* restore final destination and substitute the tempfile for input */
 	s->fpout = fp;
 	fp = s->fpin;
-	s->fpin = fopen (tempfile, "r");
+	s->fpin = safe_fopen (tempfile, "r");
 	unlink (tempfile);
 
 	/* restore the prefix */

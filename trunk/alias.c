@@ -327,7 +327,7 @@ retry_name:
   if (mutt_get_field (_("Save to file: "), buf, sizeof (buf), M_FILE) != 0)
     return;
   mutt_expand_path (buf, sizeof (buf));
-  if ((rc = fopen (buf, "a")))
+  if ((rc = safe_fopen (buf, "a")))
   {
     if (mutt_check_alias_name (new->name, NULL))
       mutt_quote_filename (buf, sizeof (buf), new->name);

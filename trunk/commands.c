@@ -873,7 +873,7 @@ int mutt_update_list_file (char *filename, char *section, char *key, char *line)
     return (-1);
   }
   dprint (1, (debugfile, "Opening %s\n", filename));
-  if (!(ofp = fopen (filename, "w")))
+  if (!(ofp = safe_fopen (filename, "w")))
   {
     fclose (ifp);
     mutt_perror _("Unable to open new file for writing");

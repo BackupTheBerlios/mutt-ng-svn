@@ -38,6 +38,8 @@
 
 #include "lib.h"
 
+extern short Umask;
+
 void mutt_nocurses_error (const char *fmt, ...)
 {
   va_list ap;
@@ -381,6 +383,8 @@ int safe_open (const char *path, int flags)
  */
 FILE *safe_fopen (const char *path, const char *mode)
 {
+  /* first set the current umask */
+  umask(Umask);
   if (mode[0] == 'w')
   {
     int fd;

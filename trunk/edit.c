@@ -118,7 +118,7 @@ static int be_barf_file (const char *path, char **buf, int buflen)
   FILE *f;
   int i;
   
-  if ((f = fopen (path, "w")) == NULL)		/* __FOPEN_CHECKED__ */
+  if ((f = safe_fopen (path, "w")) == NULL)		/* __FOPEN_CHECKED__ */
   {
     addstr (strerror (errno));
     addch ('\n');

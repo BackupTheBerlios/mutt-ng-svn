@@ -187,6 +187,7 @@ WHERE short ReadInc;
 WHERE short SendmailWait;
 WHERE short SleepTime INITVAL (1);
 WHERE short Timeout;
+WHERE short Umask INITVAL(0077);
 WHERE short WrapMargin;
 WHERE short WriteInc;
 

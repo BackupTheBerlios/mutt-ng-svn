@@ -309,7 +309,7 @@ int mutt_open_append_compressed (CONTEXT *ctx)
 
   if (!is_new (ctx->realpath))
     if (ctx->magic == M_MBOX || ctx->magic == M_MMDF)
-      if ((fh = fopen (ctx->path, "w")))
+      if ((fh = safe_fopen (ctx->path, "w")))
 	fclose (fh);
   /* No error checking - the parent function will catch it */
 
