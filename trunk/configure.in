@@ -114,6 +114,7 @@ else
 		else
 			LIBGPGME_CFLAGS=`$GPGME_CONFIG --cflags`
 			LIBGPGME_LIBS=`$GPGME_CONFIG --libs`
+      MUTTLIBS="$MUTTLIBS $LIBGPGME_LIBS"
 			MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS crypt-gpgme.o crypt-mod-pgp-gpgme.o crypt-mod-smime-gpgme.o"
 			AC_DEFINE(CRYPT_BACKEND_GPGME, 1,
 			          [Defined, if GPGME support is enabled])
