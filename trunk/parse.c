@@ -42,7 +42,7 @@ static char *read_rfc822_line (FILE * f, char *line, size_t * linelen)
       return (line);
     }
 
-    buf += strlen (buf) - 1;
+    buf += mutt_strlen (buf) - 1;
     if (*buf == '\n') {
       /* we did get a full line. remove trailing space */
       while (ISSPACE (*buf))
@@ -91,7 +91,7 @@ LIST *mutt_parse_references (char *s, int in_reply_to)
     new = NULL;
 
     if (*s == '<') {
-      n = strlen (s);
+      n = mutt_strlen (s);
       if (s[n - 1] != '>') {
         o = s;
         s = NULL;
@@ -101,7 +101,7 @@ LIST *mutt_parse_references (char *s, int in_reply_to)
       new = safe_strdup (s);
     }
     else if (o) {
-      m = strlen (s);
+      m = mutt_strlen (s);
       if (s[m - 1] == '>') {
         new = safe_malloc (sizeof (char) * (n + m + 1));
         strcpy (new, o);        /* __STRCPY_CHECKED__ */
@@ -1253,7 +1253,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
   /* Keep track of the user-defined headers */
   if (!matched && user_hdrs) {
     /* restore the original line */
-    line[strlen (line)] = ':';
+    line[mutt_strlen (line)] = ':';
 
     if (weed && option (OPTWEED) && mutt_matches_ignore (line, Ignore)
         && !mutt_matches_ignore (line, UnIgnore))

@@ -400,7 +400,7 @@ static void fmtstr (char *buffer, size_t * currlen, size_t maxlen,
     value = "<NULL>";
   }
 
-  for (strln = 0; value[strln]; ++strln);       /* strlen */
+  for (strln = 0; value[strln]; ++strln);       /* mutt_strlen */
   padlen = min - strln;
   if (padlen < 0)
     padlen = 0;
@@ -687,7 +687,7 @@ int vsnprintf (char *str, size_t count, const char *fmt, va_list args)
 {
   str[0] = 0;
   dopr (str, count, fmt, args);
-  return (strlen (str));
+  return (mutt_strlen (str));
 }
 #endif /* !HAVE_VSNPRINTF */
 
@@ -715,7 +715,7 @@ int snprintf (va_alist)
 
   (void) vsnprintf (str, count, fmt, ap);
   VA_END;
-  return (strlen (str));
+  return (mutt_strlen (str));
 }
 
 #ifdef TEST_SNPRINTF

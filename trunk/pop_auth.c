@@ -87,7 +87,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
   mutt_message _("Authenticating (SASL)...");
 
   snprintf (buf, sizeof (buf), "AUTH %s", mech);
-  olen = strlen (buf);
+  olen = mutt_strlen (buf);
 
   /* looping protocol */
   FOREVER {
@@ -104,11 +104,11 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
 
 #ifdef USE_SASL2
     if (!mutt_strncmp (inbuf, "+ ", 2)
-        && sasl_decode64 (inbuf, strlen (inbuf), buf, LONG_STRING - 1,
+        && sasl_decode64 (inbuf, mutt_strlen (inbuf), buf, LONG_STRING - 1,
                           &len) != SASL_OK)
 #else
     if (!mutt_strncmp (inbuf, "+ ", 2)
-        && sasl_decode64 (inbuf, strlen (inbuf), buf, &len) != SASL_OK)
+        && sasl_decode64 (inbuf, mutt_strlen (inbuf), buf, &len) != SASL_OK)
 #endif
     {
       dprint (1,
@@ -203,9 +203,9 @@ static pop_auth_res_t pop_auth_apop (POP_DATA * pop_data, const char *method)
   /* Compute the authentication hash to send to the server */
   MD5Init (&mdContext);
   MD5Update (&mdContext, (unsigned char *) pop_data->timestamp,
-             strlen (pop_data->timestamp));
+             mutt_strlen (pop_data->timestamp));
   MD5Update (&mdContext, (unsigned char *) pop_data->conn->account.pass,
-             strlen (pop_data->conn->account.pass));
+             mutt_strlen (pop_data->conn->account.pass));
   MD5Final (digest, &mdContext);
 
   for (i = 0; i < sizeof (digest); i++)

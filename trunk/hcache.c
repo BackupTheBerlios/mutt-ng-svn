@@ -493,7 +493,7 @@ static const char *mutt_hcache_per_folder (const char *path,
   }
 
   MD5Init (&md5);
-  MD5Update (&md5, (unsigned char *) folder, strlen (folder));
+  MD5Update (&md5, (unsigned char *) folder, mutt_strlen (folder));
   MD5Final (md5sum, &md5);
 
   ret = snprintf (mutt_hcache_per_folder_path, _POSIX_PATH_MAX,

@@ -138,7 +138,7 @@ char *safe_strdup (const char *s)
 
   if (!s || !*s)
     return 0;
-  l = strlen (s) + 1;
+  l = mutt_strlen (s) + 1;
   p = (char *) safe_malloc (l);
   memcpy (p, s, l);
   return (p);
@@ -193,7 +193,7 @@ void mutt_str_adjust (char **p)
 {
   if (!p || !*p)
     return;
-  safe_realloc (p, strlen (*p) + 1);
+  safe_realloc (p, mutt_strlen (*p) + 1);
 }
 
 /* convert all characters in the string to lowercase */
@@ -307,7 +307,7 @@ int safe_symlink (const char *oldpath, const char *newpath)
     char abs_oldpath[_POSIX_PATH_MAX];
 
     if ((getcwd (abs_oldpath, sizeof abs_oldpath) == NULL) ||
-        (strlen (abs_oldpath) + 1 + strlen (oldpath) + 1 >
+        (mutt_strlen (abs_oldpath) + 1 + mutt_strlen (oldpath) + 1 >
          sizeof abs_oldpath))
       return -1;
 
@@ -550,7 +550,7 @@ char *mutt_substrdup (const char *begin, const char *end)
   if (end)
     len = end - begin;
   else
-    len = strlen (begin);
+    len = mutt_strlen (begin);
 
   p = safe_malloc (len + 1);
   memcpy (p, begin, len);
@@ -664,7 +664,7 @@ char *mutt_concat_path (char *d, const char *dir, const char *fname, size_t l)
 {
   const char *fmt = "%s/%s";
 
-  if (!*fname || (*dir && dir[strlen (dir) - 1] == '/'))
+  if (!*fname || (*dir && dir[mutt_strlen (dir) - 1] == '/'))
     fmt = "%s%s";
 
   snprintf (d, l, fmt, dir, fname);

@@ -266,7 +266,7 @@ static void rfc2231_join_continuations (PARAMETER ** head,
       if (encoded && par->encoded)
         rfc2231_decode_one (par->value, valp);
 
-      vl = strlen (par->value);
+      vl = mutt_strlen (par->value);
 
       safe_realloc (&value, l + vl + 1);
       strcpy (value + l, par->value);   /* __STRCPY_CHECKED__ */
@@ -311,10 +311,10 @@ int rfc2231_encode_string (char **pd)
 
   if (!Charset || !SendCharset ||
       !(charset = mutt_choose_charset (Charset, SendCharset,
-                                       *pd, strlen (*pd), &d, &dlen))) {
+                                       *pd, mutt_strlen (*pd), &d, &dlen))) {
     charset = safe_strdup (Charset ? Charset : "unknown-8bit");
     d = *pd;
-    dlen = strlen (d);
+    dlen = mutt_strlen (d);
   }
 
   if (!mutt_is_us_ascii (charset))
@@ -327,9 +327,9 @@ int rfc2231_encode_string (char **pd)
       ++ext;
 
   if (encode) {
-    e = safe_malloc (dlen + 2 * ext + strlen (charset) + 3);
+    e = safe_malloc (dlen + 2 * ext + mutt_strlen (charset) + 3);
     sprintf (e, "%s''", charset);       /* __SPRINTF_CHECKED__ */
-    t = e + strlen (e);
+    t = e + mutt_strlen (e);
     for (s = d, slen = dlen; slen; s++, slen--)
       if (*s < 0x20 || *s >= 0x7f ||
           strchr (MimeSpecials, *s) || strchr ("*'%", *s)) {

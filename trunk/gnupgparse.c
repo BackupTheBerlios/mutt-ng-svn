@@ -92,7 +92,7 @@ static void fix_uid (char *uid)
         memcpy (uid, buf, ob - buf);
         uid[ob - buf] = '\0';
       }
-      else if (ob - buf == n && (buf[n] = 0, strlen (buf) < n))
+      else if (ob - buf == n && (buf[n] = 0, mutt_strlen (buf) < n))
         memcpy (uid, buf, n);
     }
     FREE (&buf);

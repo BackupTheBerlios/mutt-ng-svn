@@ -5385,7 +5385,7 @@ re_comp (s)
   /* Match anchors at newlines.  */
   re_comp_buf.newline_anchor = 1;
 
-  ret = regex_compile (s, strlen (s), re_syntax_options, &re_comp_buf);
+  ret = regex_compile (s, mutt_strlen (s), re_syntax_options, &re_comp_buf);
 
   if (!ret)
     return NULL;
@@ -5402,7 +5402,7 @@ int
 re_exec (s)
      const char *s;
 {
-  const int len = strlen (s);
+  const int len = mutt_strlen (s);
 
   return
     0 <= re_search (&re_comp_buf, s, len, 0, len, (struct re_registers *) 0);
@@ -5499,8 +5499,8 @@ int regcomp (preg, pattern, cflags)
   preg->no_sub = !!(cflags & REG_NOSUB);
 
   /* POSIX says a null character in the pattern terminates it, so we
-     can use strlen here in compiling the pattern.  */
-  ret = regex_compile (pattern, strlen (pattern), syntax, preg);
+     can use mutt_strlen here in compiling the pattern.  */
+  ret = regex_compile (pattern, mutt_strlen (pattern), syntax, preg);
 
   /* POSIX doesn't distinguish between an unmatched open-group and an
      unmatched close-group: both are REG_EPAREN.  */
@@ -5535,7 +5535,7 @@ int regexec (preg, string, nmatch, pmatch, eflags)
   int ret;
   struct re_registers regs;
   regex_t private_preg;
-  int len = strlen (string);
+  int len = mutt_strlen (string);
   boolean want_reg_info = !preg->no_sub && nmatch > 0;
 
   private_preg = *preg;
@@ -5604,7 +5604,7 @@ size_t regerror (errcode, preg, errbuf, errbuf_size)
 
   msg = gettext (re_error_msgid[errcode]);
 
-  msg_size = strlen (msg) + 1;  /* Includes the null.  */
+  msg_size = mutt_strlen (msg) + 1;  /* Includes the null.  */
 
   if (errbuf_size != 0) {
     if (msg_size > errbuf_size) {

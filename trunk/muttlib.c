@@ -361,8 +361,8 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 #ifdef USE_IMAP
         /* if folder = {host} or imap[s]://host/: don't append slash */
         if (mx_is_imap (NONULL (Maildir)) &&
-            (Maildir[strlen (Maildir) - 1] == '}' ||
-             Maildir[strlen (Maildir) - 1] == '/'))
+            (Maildir[mutt_strlen (Maildir) - 1] == '}' ||
+             Maildir[mutt_strlen (Maildir) - 1] == '/'))
           strfcpy (p, NONULL (Maildir), sizeof (p));
         else
 #endif
@@ -494,7 +494,7 @@ char *mutt_gecos_name (char *dest, size_t destlen, struct passwd *pw)
   else
     strfcpy (dest, pw->pw_gecos, destlen);
 
-  pwnl = strlen (pw->pw_name);
+  pwnl = mutt_strlen (pw->pw_name);
 
   for (idx = 0; dest[idx]; idx++) {
     if (dest[idx] == '&') {
@@ -1235,7 +1235,7 @@ void state_prefix_putc (char c, STATE * s)
   if (s->flags & M_PENDINGPREFIX) {
     int i;
 
-    i = strlen (Quotebuf);
+    i = mutt_strlen (Quotebuf);
     Quotebuf[i++] = c;
     Quotebuf[i] = '\0';
     if (i == sizeof (Quotebuf) - 1 || c == '\n') {

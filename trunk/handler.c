@@ -238,7 +238,7 @@ void mutt_decode_quoted (STATE * s, long len, int istext, iconv_t cd)
     if (fgets (line, MIN ((ssize_t) sizeof (line), len + 1), s->fpin) == NULL)
       break;
 
-    linelen = strlen (line);
+    linelen = mutt_strlen (line);
     len -= linelen;
 
     /*
@@ -940,7 +940,7 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
   fprintf (stderr, "flowed_max = %d\n", flowed_max);
 
   while (bytes > 0 && fgets (line, sizeof (line), s->fpin)) {
-    bytes -= strlen (line);
+    bytes -= mutt_strlen (line);
     tail = NULL;
 
     last_full = full;
@@ -970,7 +970,7 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
        */
 
       full = 0;
-      l = strlen (t + 1);
+      l = mutt_strlen (t + 1);
       t[0] = ' ';
       t[1] = '\0';
 
@@ -1123,7 +1123,7 @@ static void print_flowed_line (char *line, STATE * s, int ql)
 {
   int width;
   char *pos, *oldpos;
-  int len = strlen (line);
+  int len = mutt_strlen (line);
   int i;
 
   if (MaxLineLength > 0) {
@@ -1147,7 +1147,7 @@ static void print_flowed_line (char *line, STATE * s, int ql)
 
   /* fprintf(stderr,"print_flowed_line will print `%s' with ql = %d\n",line,ql); */
 
-  if (strlen (line) == 0) {
+  if (mutt_strlen (line) == 0) {
     if (option (OPTQUOTEEMPTY)) {
       if (s->prefix)
         state_puts(s->prefix,s);
@@ -1230,24 +1230,24 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
   while (bytes > 0 && fgets (buf, sizeof (buf), s->fpin)) {
 
     /* fprintf(stderr,"read `%s'",buf); */
-    bytes -= strlen (buf);
+    bytes -= mutt_strlen (buf);
 
     newql = get_quote_level (buf);
 
     if ((t = strrchr (buf, '\n')) || (t = strrchr (buf, '\r'))) {
       *t = '\0';
-      if (strlen (curline) > 0 && curline[strlen (curline) - 1] == ' '
+      if (mutt_strlen (curline) > 0 && curline[mutt_strlen (curline) - 1] == ' '
           && newql == quotelevel
           && strcmp (curline + quotelevel, "-- ") != 0) {
         if (buf[newql] == ' ')
-          curline[strlen (curline) - 1] = '\0';
+          curline[mutt_strlen (curline) - 1] = '\0';
 
-        curline = realloc (curline, curline_len + strlen (buf));
+        curline = realloc (curline, curline_len + mutt_strlen (buf));
         if (curline_len == 1)
           *curline = '\0';
-        curline_len += strlen (buf);
+        curline_len += mutt_strlen (buf);
         safe_strncat (curline, curline_len, buf + newql,
-                      strlen (buf + newql));
+                      mutt_strlen (buf + newql));
       }
       else {
         if (first_line) {
@@ -1258,11 +1258,11 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
         }
         FREE (&curline);
         curline_len = 1;
-        curline = realloc (curline, curline_len + strlen (buf));
+        curline = realloc (curline, curline_len + mutt_strlen (buf));
         if (curline_len == 1)
           *curline = '\0';
-        curline_len += strlen (buf);
-        safe_strncat (curline, curline_len, buf, strlen (buf));
+        curline_len += mutt_strlen (buf);
+        safe_strncat (curline, curline_len, buf, mutt_strlen (buf));
         quotelevel = newql;
       }
     }

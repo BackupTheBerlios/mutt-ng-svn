@@ -873,8 +873,8 @@ int mutt_update_list_file (char *filename, char *section, char *key,
       done++;
       break;
     }
-    else if (key && !strncmp (buf, key, strlen (key)) &&
-             (!*key || buf[strlen (key)] == ' ')) {
+    else if (key && !strncmp (buf, key, mutt_strlen (key)) &&
+             (!*key || buf[mutt_strlen (key)] == ' ')) {
       c = buf;
       ext = 0;
       while (*c && (*c != '\r') && (*c != '\n'))
@@ -943,7 +943,7 @@ void mutt_edit_content_type (HEADER * h, BODY * b, FILE * fp)
     size_t l;
 
     for (p = b->parameter; p; p = p->next) {
-      l = strlen (buf);
+      l = mutt_strlen (buf);
 
       rfc822_cat (tmp, sizeof (tmp), p->value, MimeSpecials);
       snprintf (buf + l, sizeof (buf) - l, "; %s=%s", p->attribute, tmp);

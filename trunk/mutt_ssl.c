@@ -369,7 +369,7 @@ static char *x509_get_part (char *line, const char *ndx)
 
   c = strstr (line, ndx);
   if (c) {
-    c += strlen (ndx);
+    c += mutt_strlen (ndx);
     c2 = strchr (c, '/');
     if (c2)
       *c2 = '\0';

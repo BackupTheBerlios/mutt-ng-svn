@@ -331,7 +331,7 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t * inbytesleft,
 
         for (t = inrepls; *t; t++) {
           ICONV_CONST char *ib1 = *t;
-          size_t ibl1 = strlen (*t);
+          size_t ibl1 = mutt_strlen (*t);
           char *ob1 = ob;
           size_t obl1 = obl;
 
@@ -351,7 +351,7 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t * inbytesleft,
         outrepl = "?";
       iconv (cd, 0, 0, &ob, &obl);
       if (obl) {
-        int n = strlen (outrepl);
+        int n = mutt_strlen (outrepl);
 
         if (n > obl) {
           outrepl = "?";
@@ -402,7 +402,7 @@ int mutt_convert_string (char **ps, const char *from, const char *to,
     else
       outrepl = "?";
 
-    len = strlen (s);
+    len = mutt_strlen (s);
     ib = s, ibl = len + 1;
     obl = MB_LEN_MAX * ibl;
     ob = buf = safe_malloc (obl + 1);

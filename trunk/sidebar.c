@@ -85,7 +85,7 @@ static char *shortened_hierarchy (char *box)
   int i, j;
   char *new_box;
 
-  for (i = 0; i < strlen (box); ++i) {
+  for (i = 0; i < mutt_strlen (box); ++i) {
     if (box[i] == '.')
       ++dots;
     else if (isupper (box[i]))
@@ -94,9 +94,9 @@ static char *shortened_hierarchy (char *box)
   last_dot = strrchr (box, '.');
   if (last_dot) {
     ++last_dot;
-    new_box = safe_malloc (strlen (last_dot) + 2 * dots + 1);
+    new_box = safe_malloc (mutt_strlen (last_dot) + 2 * dots + 1);
     new_box[0] = box[0];
-    for (i = 1, j = 1; i < strlen (box); ++i) {
+    for (i = 1, j = 1; i < mutt_strlen (box); ++i) {
       if (box[i] == '.') {
         new_box[j++] = '.';
         new_box[j] = 0;
@@ -130,10 +130,10 @@ char *make_sidebar_entry (char *box, int size, int new, int flagged)
   entry[SidebarWidth] = 0;
   for (; i < SidebarWidth; entry[i++] = ' ');
 #if USE_IMAP
-  if (ImapHomeNamespace && strlen (ImapHomeNamespace) > 0) {
-    if (strncmp (box, ImapHomeNamespace, strlen (ImapHomeNamespace)) == 0
+  if (ImapHomeNamespace && mutt_strlen (ImapHomeNamespace) > 0) {
+    if (strncmp (box, ImapHomeNamespace, mutt_strlen (ImapHomeNamespace)) == 0
         && strcmp (box, ImapHomeNamespace) != 0) {
-      box += strlen (ImapHomeNamespace) + 1;
+      box += mutt_strlen (ImapHomeNamespace) + 1;
     }
   }
 #endif
@@ -146,7 +146,7 @@ char *make_sidebar_entry (char *box, int size, int new, int flagged)
     box = shortened_hierarchy (box);
     shortened = 1;
   }
-  i = strlen (box);
+  i = mutt_strlen (box);
   strncpy (entry, box, i < SidebarWidth - dlen ? i : SidebarWidth - dlen);
 
   if (new) {

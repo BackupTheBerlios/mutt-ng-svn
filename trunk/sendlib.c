@@ -1787,11 +1787,11 @@ static void mutt_gen_localpart (char *buf, unsigned int len, char *fmt)
         break;
       case 'O':
         snprintf (tmp, sizeof (tmp), "%lo", (unsigned long) now);
-        safe_strncat (buf, len, tmp, strlen (tmp));
+        safe_strncat (buf, len, tmp, mutt_strlen (tmp));
         break;
       case 'p':
         snprintf (tmp, sizeof (tmp), "%u", (unsigned int) getpid ());
-        safe_strncat (buf, len, tmp, strlen (tmp));
+        safe_strncat (buf, len, tmp, mutt_strlen (tmp));
         break;
       case 'P':
         snprintf (tmp, sizeof (tmp), "%c", MsgIdPfx);
@@ -1800,11 +1800,11 @@ static void mutt_gen_localpart (char *buf, unsigned int len, char *fmt)
         break;
       case 'r':
         snprintf (tmp, sizeof (tmp), "%u", (unsigned int) rand ());
-        safe_strncat (buf, len, tmp, strlen (tmp));
+        safe_strncat (buf, len, tmp, mutt_strlen (tmp));
         break;
       case 'R':
         snprintf (tmp, sizeof (tmp), "%x", (unsigned int) rand ());
-        safe_strncat (buf, len, tmp, strlen (tmp));
+        safe_strncat (buf, len, tmp, mutt_strlen (tmp));
         break;
       case 's':
         snprintf (tmp, sizeof (tmp), "%02d", tm->tm_sec);
@@ -1812,11 +1812,11 @@ static void mutt_gen_localpart (char *buf, unsigned int len, char *fmt)
         break;
       case 'T':
         snprintf (tmp, sizeof (tmp), "%u", (unsigned int) now);
-        safe_strncat (buf, len, tmp, strlen (tmp));
+        safe_strncat (buf, len, tmp, mutt_strlen (tmp));
         break;
       case 'X':
         snprintf (tmp, sizeof (tmp), "%x", (unsigned int) now);
-        safe_strncat (buf, len, tmp, strlen (tmp));
+        safe_strncat (buf, len, tmp, mutt_strlen (tmp));
         break;
       case 'Y':
         snprintf (tmp, sizeof (tmp), "%04d", tm->tm_year + 1900);       /* this will break in the year 10000 ;-) */
@@ -1853,7 +1853,7 @@ char *mutt_gen_msgid (void)
   if (!(fqdn = mutt_fqdn (0)))
     fqdn = NONULL (Hostname);
 
-  localpart_length = sizeof (buf) - strlen (fqdn) - 4;  /* the 4 characters are '<', '@', '>' and '\0' */
+  localpart_length = sizeof (buf) - mutt_strlen (fqdn) - 4;  /* the 4 characters are '<', '@', '>' and '\0' */
 
   mutt_gen_localpart (localpart, localpart_length, MsgIdFormat);
 

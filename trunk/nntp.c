@@ -327,7 +327,7 @@ static int mutt_nntp_fetch (NNTP_DATA * nntp_data, char *query, char *msg,
       strfcpy (inbuf + lenbuf, p, sizeof (buf));
 
       if (chunk >= sizeof (buf)) {
-        lenbuf += strlen (p);
+        lenbuf += mutt_strlen (p);
       }
       else {
         line++;
@@ -822,7 +822,7 @@ int nntp_open_mailbox (CONTEXT * ctx)
 
   /* create NNTP-specific state struct if nof found in list */
   if ((nntp_data = (NNTP_DATA *) hash_find (serv->newsgroups, buf)) == NULL) {
-    nntp_data = safe_calloc (1, sizeof (NNTP_DATA) + strlen (buf) + 1);
+    nntp_data = safe_calloc (1, sizeof (NNTP_DATA) + mutt_strlen (buf) + 1);
     nntp_data->group = (char *) nntp_data + sizeof (NNTP_DATA);
     strcpy (nntp_data->group, buf);
     hash_insert (serv->newsgroups, nntp_data->group, nntp_data, 0);
@@ -1009,7 +1009,7 @@ int nntp_post (const char *msg)
   buf[0] = '.';
   buf[1] = '\0';
   while (fgets (buf + 1, sizeof (buf) - 2, f) != NULL) {
-    len = strlen (buf);
+    len = mutt_strlen (buf);
     if (buf[len - 1] == '\n') {
       buf[len - 1] = '\r';
       buf[len] = '\n';
@@ -1023,7 +1023,7 @@ int nntp_post (const char *msg)
   }
   fclose (f);
 
-  if (buf[strlen (buf) - 1] != '\n')
+  if (buf[mutt_strlen (buf) - 1] != '\n')
     mutt_socket_write_d (nntp_data->nserv->conn, "\r\n", M_SOCK_LOG_HDR);
   mutt_socket_write_d (nntp_data->nserv->conn, ".\r\n", M_SOCK_LOG_HDR);
   if (mutt_socket_readln (buf, sizeof (buf), nntp_data->nserv->conn) < 0) {
@@ -1234,7 +1234,7 @@ static int add_group (char *buf, void *serv)
     return 0;
   if ((nntp_data = (NNTP_DATA *) hash_find (s->newsgroups, group)) == NULL) {
     n++;
-    nntp_data = safe_calloc (1, sizeof (NNTP_DATA) + strlen (group) + 1);
+    nntp_data = safe_calloc (1, sizeof (NNTP_DATA) + mutt_strlen (group) + 1);
     nntp_data->group = (char *) nntp_data + sizeof (NNTP_DATA);
     strcpy (nntp_data->group, group);
     nntp_data->nserv = s;

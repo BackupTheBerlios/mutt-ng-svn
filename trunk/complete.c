@@ -206,14 +206,14 @@ int mutt_complete (char *s, size_t slen)
         /* check to see if it is a directory */
         if (dirpart[0]) {
           strfcpy (buf, exp_dirpart, sizeof (buf));
-          strfcpy (buf + strlen (buf), "/", sizeof (buf) - strlen (buf));
+          strfcpy (buf + mutt_strlen (buf), "/", sizeof (buf) - mutt_strlen (buf));
         }
         else
           buf[0] = 0;
-        strfcpy (buf + strlen (buf), filepart, sizeof (buf) - strlen (buf));
+        strfcpy (buf + mutt_strlen (buf), filepart, sizeof (buf) - mutt_strlen (buf));
         if (stat (buf, &st) != -1 && (st.st_mode & S_IFDIR))
-          strfcpy (filepart + strlen (filepart), "/",
-                   sizeof (filepart) - strlen (filepart));
+          strfcpy (filepart + mutt_strlen (filepart), "/",
+                   sizeof (filepart) - mutt_strlen (filepart));
         init = 1;
       }
     }
@@ -224,8 +224,8 @@ int mutt_complete (char *s, size_t slen)
     strfcpy (s, dirpart, slen);
     if (mutt_strcmp ("/", dirpart) != 0 && dirpart[0] != '='
         && dirpart[0] != '+')
-      strfcpy (s + strlen (s), "/", slen - strlen (s));
-    strfcpy (s + strlen (s), filepart, slen - strlen (s));
+      strfcpy (s + mutt_strlen (s), "/", slen - mutt_strlen (s));
+    strfcpy (s + mutt_strlen (s), filepart, slen - mutt_strlen (s));
   }
   else
     strfcpy (s, filepart, slen);

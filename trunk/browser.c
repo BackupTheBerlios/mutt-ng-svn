@@ -479,7 +479,7 @@ static int examine_directory (MUTTMENU * menu, struct browser_state *state,
       if (!(data = (NNTP_DATA *) tmp->data))
         continue;
       if (prefix && *prefix && strncmp (prefix, data->group,
-                                        strlen (prefix)) != 0)
+                                        mutt_strlen (prefix)) != 0)
         continue;
       if (!((regexec (Mask.rx, data->group, 0, NULL, 0) == 0) ^ Mask.not))
         continue;
@@ -914,7 +914,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
             strfcpy (LastDir, state.entry[menu->current].name,
                      sizeof (LastDir));
             /* tack on delimiter here */
-            n = strlen (LastDir) + 1;
+            n = mutt_strlen (LastDir) + 1;
 
             /* special case "" needs no delimiter */
             url_parse_ciss (&url, state.entry[menu->current].name);

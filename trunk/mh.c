@@ -980,7 +980,7 @@ static void maildir_flags (char *dest, size_t destlen, HEADER * hdr)
               hdr->read ? "S" : "", hdr->deleted ? "T" : "",
               NONULL (hdr->maildir_flags));
     if (hdr->maildir_flags)
-      qsort (tmp, strlen (tmp), 1, ch_compar);
+      qsort (tmp, mutt_strlen (tmp), 1, ch_compar);
     snprintf (dest, destlen, ":2,%s", tmp);
   }
 }
