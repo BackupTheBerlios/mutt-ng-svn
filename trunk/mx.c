@@ -525,8 +525,10 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT * pctx)
 
   ctx->magic = mx_get_magic (path);
 
+#ifdef USE_COMPRESSED
   if (ctx->magic == M_COMPRESSED)
     mutt_open_read_compressed (ctx);
+#endif
 
   if (ctx->magic == 0)
     mutt_error (_("%s is not a mailbox."), path);
