@@ -587,7 +587,7 @@ int mutt_buffy_check (int force)
       BuffyNotify++;
     tmp->has_new = tmp->new > 0;
   }
-  if (BuffyCount > 0)
+  if (BuffyCount > 0 && SidebarWidth > 0)
     draw_sidebar (CurrentMenu);
   return (BuffyCount);
 }
