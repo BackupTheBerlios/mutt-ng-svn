@@ -76,15 +76,17 @@ enum output_formats_t {
 #define D_NL            (1 << 0)
 #define D_EM            (1 << 1)
 #define D_BF            (1 << 2)
-#define D_TAB           (1 << 3)
-#define D_NP            (1 << 4)
-#define D_INIT          (1 << 5)
-#define D_DL            (1 << 6)
-#define D_DT            (1 << 7)
+#define D_TT            (1 << 3)
+#define D_TAB           (1 << 4)
+#define D_NP            (1 << 5)
+#define D_INIT          (1 << 6)
+#define D_DL            (1 << 7)
+#define D_DT            (1 << 8)
 
 enum {
   SP_START_EM,
   SP_START_BF,
+  SP_START_TT,
   SP_END_FT,
   SP_NEWLINE,
   SP_NEWPAR,
@@ -188,7 +190,7 @@ static void add_var (const char *name)
   outbuf[outcount - 1].descr = NULL;
 }
 
-static int add (const char *s)
+static int add_s (const char *s)
 {
   size_t lnew = STRLEN (s), lold = STRLEN (outbuf[outcount - 1].descr);
 
@@ -215,7 +217,7 @@ static int add_c (int c)
   char buf[2] = "\0\0";
 
   buf[0] = c;
-  return (add (buf));
+  return (add_s (buf));
 }
 
 static void makedoc (FILE * in, FILE * out)
@@ -604,7 +606,7 @@ static void conf_char_to_escape (unsigned int c)
   char buff[16];
 
   char_to_escape (buff, c);
-  add (buff);
+  add_s (buff);
 }
 
 static void conf_print_strval (const char *v)
@@ -631,9 +633,9 @@ static void man_print_strval (const char *v)
     }
 
     if (*v == '"')
-      add ("\\(rq");
+      add_s ("\\(rq");
     else if (*v == '\\')
-      add ("\\\\");
+      add_s ("\\\\");
     else
       add_c (*v);
   }
@@ -657,27 +659,27 @@ static int sgml_fputc (int c)
 {
   switch (c) {
   case '<':
-    return add ("&lt;");
+    return add_s ("&lt;");
   case '>':
-    return add ("&gt;");
+    return add_s ("&gt;");
   case '$':
-    return add ("&dollar;");
+    return add_s ("&dollar;");
   case '_':
-    return add ("&lowbar;");
+    return add_s ("&lowbar;");
   case '%':
-    return add ("&percnt;");
+    return add_s ("&percnt;");
   case '&':
-    return add ("&amp;");
+    return add_s ("&amp;");
   case '\\':
-    return add ("&bsol;");
+    return add_s ("&bsol;");
   case '"':
-    return add ("&dquot;");
+    return add_s ("&dquot;");
   case '[':
-    return add ("&lsqb;");
+    return add_s ("&lsqb;");
   case ']':
-    return add ("&rsqb;");
+    return add_s ("&rsqb;");
   case '~':
-    return add ("&tilde;");
+    return add_s ("&tilde;");
   default:
     return add_c (c);
   }
@@ -703,59 +705,59 @@ static void print_confline (const char *varname, int type, const char *val)
     {
       if (type == DT_STR || type == DT_RX || type == DT_ADDR
           || type == DT_PATH) {
-        add ("\n# set ");
-        add (varname);
-        add ("\"");
+        add_s ("\n# set ");
+        add_s (varname);
+        add_s ("\"");
         conf_print_strval (val);
-        add ("\"");
+        add_s ("\"");
       }
       else if (type != DT_SYN) {
-        add ("\n# set ");
-        add (varname);
-        add ("=");
-        add (val);
+        add_s ("\n# set ");
+        add_s (varname);
+        add_s ("=");
+        add_s (val);
       }
 
-      add ("\n#\n# Name: ");
-      add (varname);
-      add ("\n# Type: ");
-      add (type2human (type));
+      add_s ("\n#\n# Name: ");
+      add_s (varname);
+      add_s ("\n# Type: ");
+      add_s (type2human (type));
       if (type == DT_STR || type == DT_RX || type == DT_ADDR
           || type == DT_PATH) {
-        add ("\n# Default: \"");
+        add_s ("\n# Default: \"");
         conf_print_strval (val);
-        add ("\"");
+        add_s ("\"");
       }
       else {
-        add ("\n# Default: ");
-        add (val);
+        add_s ("\n# Default: ");
+        add_s (val);
       }
 
-      add ("\n# ");
+      add_s ("\n# ");
       break;
     }
 
     /* manual page */
   case F_MAN:
     {
-      add (".TP\n.B ");
-      add (varname);
-      add ("\n.nf\n");
-      add ("Type: ");
-      add (type2human (type));
+      add_s (".TP\n.B ");
+      add_s (varname);
+      add_s ("\n.nf\n");
+      add_s ("Type: ");
+      add_s (type2human (type));
       add_c ('\n');
       if (type == DT_STR || type == DT_RX || type == DT_ADDR
           || type == DT_PATH) {
-        add ("Default: \\(lq");
+        add_s ("Default: \\(lq");
         man_print_strval (val);
-        add ("\\(rq\n");
+        add_s ("\\(rq\n");
       }
       else {
-        add ("Default: ");
-        add (val);
+        add_s ("Default: ");
+        add_s (val);
         add_c ('\n');
       }
-      add (".fi");
+      add_s (".fi");
 
       break;
     }
@@ -763,25 +765,25 @@ static void print_confline (const char *varname, int type, const char *val)
     /* SGML based manual */
   case F_SGML:
     {
-      add ("\n<sect2>");
+      add_s ("\n<sect2>");
       sgml_fputs (varname);
-      add ("<label id=\"");
-      add (varname);
-      add ("\">");
-      add ("\n<p>\nType: <tt>");
-      add (type2human (type));
-      add ("</tt>\n\n");
+      add_s ("<label id=\"");
+      add_s (varname);
+      add_s ("\">");
+      add_s ("\n<p>\nType: <tt>");
+      add_s (type2human (type));
+      add_s ("</tt>\n\n");
 
       if (type == DT_STR || type == DT_RX || type == DT_ADDR
           || type == DT_PATH) {
-        add ("<p>\nDefault: <tt>&dquot;");
+        add_s ("<p>\nDefault: <tt>&dquot;");
         sgml_print_strval (val);
-        add ("&dquot;</tt>");
+        add_s ("&dquot;</tt>");
       }
       else {
-        add ("<p>\nDefault: <tt>");
-        add (val);
-        add ("</tt>");
+        add_s ("<p>\nDefault: <tt>");
+        add_s (val);
+        add_s ("</tt>");
       }
       break;
     }
@@ -838,7 +840,7 @@ static int flush_doc (int docstat)
   if (docstat & (D_DL))
     docstat = print_it (SP_END_DL, NULL, docstat);
 
-  if (docstat & (D_EM | D_BF))
+  if (docstat & (D_EM | D_BF | D_TT))
     docstat = print_it (SP_END_FT, NULL, docstat);
 
   docstat = print_it (SP_NEWLINE, NULL, 0);
@@ -863,7 +865,7 @@ static int print_it (int special, char *str, int docstat)
         static int Continuation = 0;
 
       case SP_END_FT:
-        docstat &= ~(D_EM | D_BF);
+        docstat &= ~(D_EM | D_BF | D_TT);
         break;
       case SP_START_BF:
         docstat |= D_BF;
@@ -871,12 +873,15 @@ static int print_it (int special, char *str, int docstat)
       case SP_START_EM:
         docstat |= D_EM;
         break;
+      case SP_START_TT:
+        docstat |= D_TT;
+        break;
       case SP_NEWLINE:
         {
           if (onl)
             docstat |= onl;
           else {
-            add ("\n# ");
+            add_s ("\n# ");
             docstat |= D_NL;
           }
           if (docstat & D_DL)
@@ -891,15 +896,15 @@ static int print_it (int special, char *str, int docstat)
           }
 
           if (!(onl & D_NL))
-            add ("\n# ");
-          add ("\n# ");
+            add_s ("\n# ");
+          add_s ("\n# ");
           docstat |= D_NP;
           break;
         }
       case SP_START_TAB:
         {
           if (!onl)
-            add ("\n# ");
+            add_s ("\n# ");
           docstat |= D_TAB;
           break;
         }
@@ -935,9 +940,9 @@ static int print_it (int special, char *str, int docstat)
         {
           if (Continuation) {
             Continuation = 0;
-            add ("        ");
+            add_s ("        ");
           }
-          add (str);
+          add_s (str);
           if (docstat & D_DT) {
             int i;
 
@@ -958,22 +963,27 @@ static int print_it (int special, char *str, int docstat)
       switch (special) {
       case SP_END_FT:
         {
-          add ("\\fP");
+          add_s ("\\fP");
           docstat &= ~(D_EM | D_BF);
           break;
         }
       case SP_START_BF:
         {
-          add ("\\fB");
+          add_s ("\\fB");
           docstat |= D_BF;
           docstat &= ~D_EM;
           break;
         }
       case SP_START_EM:
         {
-          add ("\\fI");
+          add_s ("\\fI");
           docstat |= D_EM;
           docstat &= ~D_BF;
+          break;
+        }
+      case SP_START_TT:
+        {
+          docstat |= D_TT;
           break;
         }
       case SP_NEWLINE:
@@ -995,43 +1005,43 @@ static int print_it (int special, char *str, int docstat)
 
           if (!(onl & D_NL))
             add_c ('\n');
-          add (".IP\n");
+          add_s (".IP\n");
 
           docstat |= D_NP;
           break;
         }
       case SP_START_TAB:
         {
-          add ("\n.IP\n.DS\n.sp\n.ft CR\n.nf\n");
+          add_s ("\n.IP\n.DS\n.sp\n.ft CR\n.nf\n");
           docstat |= D_TAB | D_NL;
           break;
         }
       case SP_END_TAB:
         {
-          add ("\n.fi\n.ec\n.ft P\n.sp\n");
+          add_s ("\n.fi\n.ec\n.ft P\n.sp\n");
           docstat &= ~D_TAB;
           docstat |= D_NL;
           break;
         }
       case SP_START_DL:
         {
-          add ("\n.RS");
+          add_s ("\n.RS");
           docstat |= D_DL;
           break;
         }
       case SP_DT:
         {
-          add ("\n.IP ");
+          add_s ("\n.IP ");
           break;
         }
       case SP_DD:
         {
-          add ("\n");
+          add_s ("\n");
           break;
         }
       case SP_END_DL:
         {
-          add ("\n.RE");
+          add_s ("\n.RE");
           docstat &= ~D_DL;
           break;
         }
@@ -1040,15 +1050,15 @@ static int print_it (int special, char *str, int docstat)
           while (*str) {
             for (; *str; str++) {
               if (*str == '"')
-                add ("\\(rq");
+                add_s ("\\(rq");
               else if (*str == '\\')
-                add ("\\\\");
+                add_s ("\\\\");
               else if (!strncmp (str, "``", 2)) {
-                add ("\\(lq");
+                add_s ("\\(lq");
                 str++;
               }
               else if (!strncmp (str, "''", 2)) {
-                add ("\\(rq");
+                add_s ("\\(rq");
                 str++;
               }
               else
@@ -1068,24 +1078,33 @@ static int print_it (int special, char *str, int docstat)
       case SP_END_FT:
         {
           if (docstat & D_EM)
-            add ("</em>");
+            add_s ("</em>");
           if (docstat & D_BF)
-            add ("</bf>");
-          docstat &= ~(D_EM | D_BF);
+            add_s ("</bf>");
+          if (docstat & D_TT)
+            add_s ("</tt>");
+          docstat &= ~(D_EM | D_BF | D_TT);
           break;
         }
       case SP_START_BF:
         {
-          add ("<bf>");
+          add_s ("<bf>");
           docstat |= D_BF;
-          docstat &= ~D_EM;
+          docstat &= ~(D_EM | D_TT);
           break;
         }
       case SP_START_EM:
         {
-          add ("<em>");
+          add_s ("<em>");
           docstat |= D_EM;
-          docstat &= ~D_BF;
+          docstat &= ~(D_BF | D_TT);
+          break;
+        }
+      case SP_START_TT:
+        {
+          add_s ("<tt>");
+          docstat |= D_TT;
+          docstat &= ~(D_EM | D_BF);
           break;
         }
       case SP_NEWLINE:
@@ -1093,7 +1112,7 @@ static int print_it (int special, char *str, int docstat)
           if (onl)
             docstat |= onl;
           else {
-            add ("\n");
+            add_s ("\n");
             docstat |= D_NL;
           }
           break;
@@ -1106,51 +1125,51 @@ static int print_it (int special, char *str, int docstat)
           }
 
           if (!(onl & D_NL))
-            add ("\n");
-          add ("\n<p>\n");
+            add_s ("\n");
+          add_s ("\n<p>\n");
 
           docstat |= D_NP;
           break;
         }
       case SP_START_TAB:
         {
-          add ("\n<tscreen><verb>\n");
+          add_s ("\n<tscreen><verb>\n");
           docstat |= D_TAB | D_NL;
           break;
         }
       case SP_END_TAB:
         {
-          add ("\n</verb></tscreen>");
+          add_s ("\n</verb></tscreen>");
           docstat &= ~D_TAB;
           docstat |= D_NL;
           break;
         }
       case SP_START_DL:
         {
-          add ("\n<descrip>\n");
+          add_s ("\n<descrip>\n");
           docstat |= D_DL;
           break;
         }
       case SP_DT:
         {
-          add ("<tag>");
+          add_s ("<tag>");
           break;
         }
       case SP_DD:
         {
-          add ("</tag>");
+          add_s ("</tag>");
           break;
         }
       case SP_END_DL:
         {
-          add ("</descrip>\n");
+          add_s ("</descrip>\n");
           docstat &= ~D_DL;
           break;
         }
       case SP_STR:
         {
           if (docstat & D_TAB)
-            add (str);
+            add_s (str);
           else
             sgml_fputs (str);
           break;
@@ -1173,17 +1192,17 @@ void print_ref (int output_dollar, const char *ref)
   case F_MAN:
     if (output_dollar)
       add_c ('$');
-    add (ref);
+    add_s (ref);
     break;
 
   case F_SGML:
-    add ("<ref id=\"");
-    add (ref);
-    add ("\" name=\"");
+    add_s ("<ref id=\"");
+    add_s (ref);
+    add_s ("\" name=\"");
     if (output_dollar)
-      add ("&dollar;");
+      add_s ("&dollar;");
     sgml_fputs (ref);
-    add ("\">");
+    add_s ("\">");
     break;
 
   default:
@@ -1242,6 +1261,11 @@ static int handle_docline (char *l, int docstat)
     else if (!strncmp (s, "\\fB", 3)) {
       docstat = commit_buff (buff, &d, docstat);
       docstat = print_it (SP_START_BF, NULL, docstat);
+      s += 2;
+    }
+    else if (!strncmp (s, "\\fT", 3)) {
+      docstat = commit_buff (buff, &d, docstat);
+      docstat = print_it (SP_START_TT, NULL, docstat);
       s += 2;
     }
     else if (!strncmp (s, "\\fP", 3)) {

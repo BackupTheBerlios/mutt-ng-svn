@@ -140,6 +140,8 @@ similar to [ntg]roff:
  
  - \fB switches to boldface
 
+ - \fT switches to typewriter (only for SGML and ignored otherwise)
+
  - \fP switches to normal display
 
  - \(as can be used to represent an asterisk (*).  This is intended
