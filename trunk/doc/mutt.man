@@ -175,7 +175,7 @@ for one of the functions listed while Mutt-ng is running.
 For a more up-to-date list of bugs, errm, fleas, please visit the
 mutt-ng project's bug tracking system under http://developer.berlios.de/projects/mutt-ng/.  To
 report a bug, please use the
-.BR flea (1)
+.BR fleang (1)
 program.
 .SH NO WARRANTIES
 This program is distributed in the hope that it will be useful,
@@ -185,7 +185,7 @@ GNU General Public License for more details.
 .SH SEE ALSO
 .PP
 .BR curses (3),
-.BR flea (1),
+.BR fleang (1),
 .BR mailcap (5),
 .BR maildir (5),
 .BR mbox (5),
