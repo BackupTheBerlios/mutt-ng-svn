@@ -136,7 +136,8 @@ static char * shortened_hierarchy(char * box) {
 char *make_sidebar_entry(char *box, int size, int new, int flagged)
 {
   char *c;
-  int i = 0, dlen = mutt_strlen (SidebarDelim);
+  int i = 0, dlen = mutt_strlen (SidebarDelim), max = SidebarWidth-dlen-1,
+      shortened = 0;
 
   c = realloc(entry, SidebarWidth + 1);
   if ( c ) entry = c;
@@ -149,8 +150,14 @@ char *make_sidebar_entry(char *box, int size, int new, int flagged)
     }
   }
 #endif
-  if (option(OPTSHORTENHIERARCHY)) {
+  max -= quick_log10(size);
+  if (new)
+    max -= quick_log10(new) + 2;
+  if (flagged > 0)
+    max -= quick_log10(flagged) + 2;
+  if (option(OPTSHORTENHIERARCHY) && mutt_strlen(box) > max) {
     box = shortened_hierarchy(box);
+    shortened = 1;
   }
   i = strlen(box);
   strncpy( entry, box, i < SidebarWidth - dlen ? i :SidebarWidth - dlen);
@@ -171,7 +178,7 @@ char *make_sidebar_entry(char *box, int size, int new, int flagged)
     }
 
   }
-  if (option(OPTSHORTENHIERARCHY)) {
+  if (option(OPTSHORTENHIERARCHY) && shortened) {
     free(box);
   }
   return entry;
@@ -264,6 +271,8 @@ int draw_sidebar(int menu) {
   for ( ; tmp && lines < LINES-1 - (menu != MENU_PAGER || option (OPTSTATUSONTOP)); tmp = tmp->next ) {
     if ( tmp == CurBuffy )
       SETCOLOR(MT_COLOR_INDICATOR);
+    else if ( tmp->msg_flagged > 0 )
+      SETCOLOR(MT_COLOR_FLAGGED);
     else if ( tmp->msg_unread > 0 )
       SETCOLOR(MT_COLOR_NEW);
     else
