@@ -1057,6 +1057,15 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
     if (!ascii_strcasecmp ("rom", line + 1))
     {
       e->from = rfc822_parse_adrlist (e->from, p);
+      /* don't leave from info NULL if there's an invalid address (or
+       * whatever) in From: field; mutt would just display it as empty
+       * and mark mail/(esp.) news article as your own. aaargh! this
+       * bothered me for _years_ */
+      if (!e->from)
+      {
+        e->from = rfc822_new_address ();
+        e->from->personal = safe_strdup (line+6);
+      }
       matched = 1;
     }
 #ifdef USE_NNTP
