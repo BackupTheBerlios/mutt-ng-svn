@@ -486,7 +486,7 @@ void imap_unmunge_mbox_name (char *s)
   buf = safe_strdup (s);
   if (buf) {
     imap_utf7_decode (&buf);
-    strncpy (s, buf, strlen (s));
+    strncpy (s, buf, mutt_strlen (s));
   }
 
   FREE (&buf);

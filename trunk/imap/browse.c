@@ -111,7 +111,7 @@ int imap_browse (char *path, struct browser_state *state)
           imap_unmunge_mbox_name (cur_folder);
 
           if (!noinferiors && cur_folder[0] &&
-              (n = strlen (mbox)) < LONG_STRING - 1) {
+              (n = mutt_strlen (mbox)) < LONG_STRING - 1) {
             mbox[n++] = idata->delim;
             mbox[n] = '\0';
           }
@@ -362,7 +362,7 @@ static int browse_add_list_result (IMAP_DATA * idata, const char *cmd,
       if (isparent)
         noselect = 1;
       /* prune current folder from output */
-      if (isparent || mutt_strncmp (name, mx.mbox, strlen (name)))
+      if (isparent || mutt_strncmp (name, mx.mbox, mutt_strlen (name)))
         imap_add_folder (idata->delim, name, noselect, noinferiors, state,
                          isparent);
     }
@@ -417,9 +417,9 @@ static void imap_add_folder (char delim, char *folder, int noselect,
   (state->entry)[state->entrylen].name = safe_strdup (tmp);
 
   /* mark desc with delim in browser if it can have subfolders */
-  if (!isparent && !noinferiors && strlen (relpath) < sizeof (relpath) - 1) {
-    relpath[strlen (relpath) + 1] = '\0';
-    relpath[strlen (relpath)] = delim;
+  if (!isparent && !noinferiors && mutt_strlen (relpath) < sizeof (relpath) - 1) {
+    relpath[mutt_strlen (relpath) + 1] = '\0';
+    relpath[mutt_strlen (relpath)] = delim;
   }
 
   (state->entry)[state->entrylen].desc = safe_strdup (relpath);

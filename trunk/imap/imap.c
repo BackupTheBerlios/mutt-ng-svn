@@ -1392,14 +1392,14 @@ int imap_complete (char *dest, size_t dlen, char *path)
       /* if the folder isn't selectable, append delimiter to force browse
        * to enter it on second tab. */
       if (noselect) {
-        clen = strlen (list_word);
+        clen = mutt_strlen (list_word);
         list_word[clen++] = delim;
         list_word[clen] = '\0';
       }
       /* copy in first word */
       if (!completions) {
         strfcpy (completion, list_word, sizeof (completion));
-        matchlen = strlen (completion);
+        matchlen = mutt_strlen (completion);
         completions++;
         continue;
       }

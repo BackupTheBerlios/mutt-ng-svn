@@ -934,7 +934,7 @@ static int msg_has_flag (LIST * flag_list, const char *flag)
 
   flag_list = flag_list->next;
   while (flag_list) {
-    if (!ascii_strncasecmp (flag_list->data, flag, strlen (flag_list->data)))
+    if (!ascii_strncasecmp (flag_list->data, flag, mutt_strlen (flag_list->data)))
       return 1;
 
     flag_list = flag_list->next;
