@@ -814,6 +814,36 @@ A &bsol; at the end of a line can be used to split commands over
 multiple lines, provided that the split points don't appear in the
 middle of command names.
 
+Please note that, unlike the various shells, mutt-ng interpretes a ``&bsol;''
+at the end of a line also in comments. This allows you to disable a command
+split over multiple lines with only one ``&num;''.
+
+<tscreen><verb>
+# folder-hook . \
+  set realname="Michael \"MuttDude\" Elkins"
+</tscreen></verb>
+
+When testing your config files, beware the following caveat. The backslash
+at the end of the commented line extends the current line with the next line
+- then referred to as a ``continuation line''.  As the first line is
+commented with a hash (&num;) all following continuation lines are also
+part of a comment and therefore are ignored, too. So take care of comments
+when continuation lines are involved within your setup files!
+
+Abstract example:
+ 
+<tscreen><verb>
+line1\
+line2a # line2b\
+line3\
+line4
+line5
+</tscreen></verb>
+
+line1 ``continues'' until line4. however, the part after the &num; is a
+comment which includes line3 and line4. line5 is a new line of its own and
+thus is interpreted again.
+
 It is also possible to substitute the output of a Unix command in an
 initialization file.  This is accomplished by enclosing the command in
 backquotes (``).  For example,
