@@ -191,6 +191,7 @@ int imap_read_literal (FILE * fp, IMAP_DATA * idata, long bytes);
 void imap_expunge_mailbox (IMAP_DATA * idata);
 int imap_reconnect (CONTEXT * ctx);
 void imap_logout (IMAP_DATA * idata);
+int imap_sync_message (IMAP_DATA*, HEADER*, BUFFER*, int*);
 
 /* auth.c */
 int imap_authenticate (IMAP_DATA * idata);

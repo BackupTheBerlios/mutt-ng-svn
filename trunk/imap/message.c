@@ -621,13 +621,14 @@ fail:
 int imap_copy_messages (CONTEXT * ctx, HEADER * h, char *dest, int delete)
 {
   IMAP_DATA *idata;
-  BUFFER cmd;
+  BUFFER cmd, sync_cmd;
   char uid[11];
   char mbox[LONG_STRING];
   char mmbox[LONG_STRING];
   int rc;
   int n;
   IMAP_MBOX mx;
+  int err_continue = M_NO;
 
   idata = (IMAP_DATA *) ctx->data;
 
@@ -652,6 +653,7 @@ int imap_copy_messages (CONTEXT * ctx, HEADER * h, char *dest, int delete)
 
   imap_fix_path (idata, mx.mbox, mbox, sizeof (mbox));
 
+  memset (&sync_cmd, 0, sizeof (sync_cmd));
   memset (&cmd, 0, sizeof (cmd));
   mutt_buffer_addstr (&cmd, "UID COPY ");
 
@@ -667,6 +669,17 @@ int imap_copy_messages (CONTEXT * ctx, HEADER * h, char *dest, int delete)
                  "imap_copy_messages: Message contains attachments to be deleted\n"));
         return 1;
       }
+
+      if (ctx->hdrs[n]->tagged && ctx->hdrs[n]->active &&
+	  ctx->hdrs[n]->changed)
+      {
+	rc = imap_sync_message (idata, ctx->hdrs[n], &sync_cmd, &err_continue);
+	if (rc < 0)
+	{
+	  dprint (1, (debugfile, "imap_copy_messages: could not sync\n"));
+	  goto fail;
+	}
+      }
     }
 
     rc = imap_make_msg_set (idata, &cmd, M_TAG, 0);
@@ -680,6 +693,16 @@ int imap_copy_messages (CONTEXT * ctx, HEADER * h, char *dest, int delete)
     mutt_message (_("Copying message %d to %s..."), h->index + 1, mbox);
     snprintf (uid, sizeof (uid), "%u", HEADER_DATA (h)->uid);
     mutt_buffer_addstr (&cmd, uid);
+
+    if (h->active && h->changed)
+    {
+      rc = imap_sync_message (idata, h, &sync_cmd, &err_continue);
+      if (rc < 0)
+      {
+	dprint (1, (debugfile, "imap_copy_messages: could not sync\n"));
+	goto fail;
+      }
+    }
   }
 
   /* let's get it on */
@@ -734,12 +757,16 @@ int imap_copy_messages (CONTEXT * ctx, HEADER * h, char *dest, int delete)
 
   if (cmd.data)
     FREE (&cmd.data);
+  if (sync_cmd.data)
+    FREE (&sync_cmd.data);
   FREE (&mx.mbox);
   return 0;
 
 fail:
   if (cmd.data)
     FREE (&cmd.data);
+  if (sync_cmd.data)
+    FREE (&sync_cmd.data);
   FREE (&mx.mbox);
   return -1;
 }
