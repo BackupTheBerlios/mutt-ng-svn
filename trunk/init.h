@@ -3706,11 +3706,6 @@ const struct mapping_t SortKeyMethods[] = {
 /* functions used to parse commands in a rc file */
 
 static int parse_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-
-#if 0
-static int parse_rx_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-static int parse_rx_unlist (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-#endif
 static int parse_spam_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unlist (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 

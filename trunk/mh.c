@@ -42,11 +42,17 @@
 #include <string.h>
 #include <utime.h>
 
+#if HAVE_SYS_TIME_H
+#include <sys/time.h>
+#endif
+
 struct maildir {
   HEADER *h;
   char *canon_fname;
   unsigned header_parsed:1;
+#ifdef USE_INODESORT
   ino_t inode;
+#endif /* USE_INODESORT */
   struct maildir *next;
 };
 
@@ -632,7 +638,9 @@ static int maildir_parse_entry (CONTEXT * ctx, struct maildir ***last,
     entry = safe_calloc (sizeof (struct maildir), 1);
     entry->h = h;
     entry->header_parsed = (ctx->magic == M_MH);
+#ifdef USE_INODESORT
     entry->inode = inode;
+#endif /* USE_INODESORT */
     **last = entry;
     *last = &entry->next;
 
@@ -742,6 +750,7 @@ static int maildir_move_to_context (CONTEXT * ctx, struct maildir **md)
   return r;
 }
 
+#ifdef USE_INODESORT
 /*
  * Merge two maildir lists according to the inode numbers.
  */
@@ -818,6 +827,7 @@ static struct maildir *maildir_sort_inode (struct maildir *list)
   right = maildir_sort_inode (right);
   return maildir_merge_inode (left, right);
 }
+#endif /* USE_INODESORT */
 
 #if USE_HCACHE
 static size_t maildir_hcache_keylen (const char *fn)
@@ -925,7 +935,9 @@ int mh_read_dir (CONTEXT * ctx, const char *subdir)
     mhs_free_sequences (&mhs);
   }
 
+#ifdef USE_INODESORT
   md = maildir_sort_inode (md);
+#endif /* USE_INODESORT */
 
   if (ctx->magic == M_MAILDIR)
     maildir_delayed_parsing (ctx, md);
