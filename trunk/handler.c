@@ -1290,6 +1290,9 @@ static void text_plain_flowed_handler (BODY *a, STATE *s)
     if ((t=strrchr(buf,'\n')) || (t=strrchr(buf,'\r'))) {
       *t = '\0';
       if (strlen(curline)>0 && curline[strlen(curline)-1]==' ' && newql==quotelevel && strcmp(curline+quotelevel,"-- ")!=0) {
+        if (buf[newql]==' ')
+          curline[strlen(curline)-1] = '\0';
+
         curline = realloc(curline,curline_len+strlen(buf));
         if (curline_len == 1) *curline = '\0';
         curline_len+=strlen(buf);

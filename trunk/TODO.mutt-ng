@@ -1,5 +1,8 @@
 Here's a list of all mutt-ng specific TODOs:
 
+rename smime_keys, pgpewrap and pgpring
+muttngbug must call fleang, not flea
+
 We need to modify the build scripts and paths in the source so that mutt-ng doesn't conflict in any
 way with mutt.
 
