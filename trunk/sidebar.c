@@ -227,12 +227,6 @@ int draw_sidebar(int menu) {
   BUFFY *tmp;
   short delim_len = mutt_strlen (SidebarDelim);
 
-    if(strlen(SidebarDelim)>=SidebarWidth){
-        mutt_endwin(NULL);
-        printf("Your sidebar delimiter string is longer (or as long as) than the sidebar width. Make it shorter! \n");
-        exit(1);
-    }
-
   /* initialize first time */
   if(!initialized) {
     prev_show_value = option(OPTMBOXPANE);
@@ -254,7 +248,15 @@ int draw_sidebar(int menu) {
     prev_show_value = option(OPTMBOXPANE);
   }
 
-  if ( SidebarWidth == 0 ) return 0;
+  if (SidebarWidth > 0 && option (OPTMBOXPANE) && mutt_strlen (SidebarDelim) >= SidebarWidth) {
+    mutt_error (_("Value for sidebar_delim is too long. Disabling sidebar."));
+    sleep (2);
+    unset_option (OPTMBOXPANE);
+    return (0);
+  }
+
+  if (SidebarWidth == 0 || !option (OPTMBOXPANE))
+    return 0;
 
   /* draw the divider */
   /* SETCOLOR(MT_COLOR_STATUS); */
