@@ -348,7 +348,7 @@ static int exist_next_new () {
   int i = 0;
   if (list_empty(Incoming))
     return (-1);
-  i = CurBuffy;
+  i = CurBuffy + 1;
   while (i < Incoming->length)
     if (((BUFFY*) Incoming->data[i++])->msg_unread)
       return (i-1);
@@ -360,7 +360,7 @@ static int exist_prev_new () {
   int i = 0;
   if (list_empty(Incoming))
     return (-1);
-  i = CurBuffy;
+  i = CurBuffy - 1;
   while (i >= 0)
     if (((BUFFY*) Incoming->data[i--])->msg_unread)
       return (i+1);

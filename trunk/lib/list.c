@@ -15,7 +15,7 @@
 #include "mem.h"
 
 list2_t* list_new (void) {
-  return (safe_calloc (sizeof (list2_t), 1));
+  return (safe_calloc (1, sizeof (list2_t)));
 }
 
 void list_del (list2_t** l, void (*edel) (void**)) {
