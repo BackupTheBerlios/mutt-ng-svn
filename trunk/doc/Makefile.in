@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 3.4 2004/04/30 06:49:37 roessler Exp $
+# $Id: Makefile.in,v 3.6 2005/03/16 02:49:33 brendan Exp $
 
 SHELL = /bin/sh
 
@@ -21,6 +21,7 @@ VPATH = @srcdir@
 INSTALL = @INSTALL@
 CC = @CC@
 CPP = @CPP@
+EXEEXT = @EXEEXT@
 XCPPFLAGS = -I. @CPPFLAGS@
 CFLAGS = @CFLAGS@ $(XCPPFLAGS)
 LDFLAGS = @LDFLAGS@
@@ -150,7 +151,7 @@ dist distdir: Makefile $(DISTFILES)
 	done
 
 ../makedoc: $(top_srcdir)/makedoc.c
-	(cd .. && $(MAKE) makedoc)
+	(cd .. && $(MAKE) makedoc$(EXEEXT))
 
 # hack around autoconf mixing up patterns.
 at = @
