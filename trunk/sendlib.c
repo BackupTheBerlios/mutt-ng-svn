@@ -42,6 +42,10 @@
 #include <fcntl.h>
 #include <sys/utsname.h>
 
+#ifdef USE_LIBESMTP
+# include "mutt_libesmtp.h"
+#endif /* USE_LIBESMTP */
+
 #ifdef USE_NNTP
 #include <nntp.h>
 #endif
@@ -191,9 +195,6 @@ static void encode_quoted (FGETCONV * fc, FILE *fout, int istext)
       linelen = 3;
     }
 
-#ifdef USE_LIBESMTP
-# include "mutt_libesmtp.h"
-#endif /* USE_LIBESMTP */
 
     if (c == '\n' && istext)
     {
