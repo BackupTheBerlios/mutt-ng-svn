@@ -971,7 +971,7 @@ fill_buffer (FILE *f, long *last_pos, long offset, unsigned char *buf,
 	     unsigned char *fmt, size_t blen, int *buf_ready)
 {
   unsigned char *p;
-  static int b_read;
+  static int b_read = 0;
 
   if (*buf_ready == 0)
   {

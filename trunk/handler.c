@@ -961,6 +961,7 @@ static int flowed_visual_strlen (char *l, int i)
   return j;
 }
 
+#if 0
 static void text_plain_flowed_handler (BODY *a, STATE *s)
 {
   char line[LONG_STRING];
@@ -991,13 +992,19 @@ static void text_plain_flowed_handler (BODY *a, STATE *s)
   if (s->prefix)
     add = 1;
   
+  /*
   if ((flowed_max = FLOWED_MAX) > COLS - 3)
     flowed_max = COLS - 3;
   if (flowed_max > COLS - WrapMargin)
     flowed_max = COLS - WrapMargin;
   if (flowed_max <= 0)
     flowed_max = COLS;
-    
+    */
+  flowed_max = COLS - WrapMargin;
+  if (flowed_max <= 0)
+    flowed_max = COLS;
+  
+  fprintf(stderr,"flowed_max = %d\n",flowed_max);
 
   while (bytes > 0 && fgets (line, sizeof (line), s->fpin))
   {
@@ -1185,9 +1192,132 @@ static void text_plain_flowed_handler (BODY *a, STATE *s)
     state_putc ('\n', s);
   
 }
+#endif
 
+static int get_quote_level(char * line) {
+  int quoted;
+  for (quoted = 0; line[quoted] == '>'; quoted++);
+  return quoted;
+}
 
+static void print_flowed_line(char * line, STATE *s,int ql) {
+  int width;
+  char * pos, * oldpos;
+  char * t;
+  int len = strlen(line);
+  int i;
 
+  width = COLS - WrapMargin - ql - 1;
+  if (option(OPTSTUFFQUOTED))
+    --width;
+  if (width < 0)
+    width = COLS;
+
+  /* fprintf(stderr,"print_flowed_line will print `%s' with ql = %d\n",line,ql); */
+
+  if (strlen(line)==0) {
+    for (i=0;i<ql;++i) state_putc('>',s);
+    state_putc('\n',s);
+    return;
+  }
+
+  pos=line+ql+width;
+  oldpos=line+ql;
+  if (ql>0 && isblank(*oldpos)) ++oldpos;
+
+  /* fprintf(stderr,"oldpos = %p line+len = %p\n",oldpos,line+len); */
+
+  for (;oldpos<line+len;pos+=width) {
+    /* fprintf(stderr,"outer for loop\n"); */
+    if (pos<line+len) { /* only search a new position when we're not over the end of the string w/ pos */
+      /* fprintf(stderr,"if 1\n"); */
+      if (*pos == ' ') {
+        /* fprintf(stderr,"if 2: good luck! found a space\n"); */
+        *pos = '\0';
+        ++pos;
+      } else {
+        /* fprintf(stderr,"if 2: else\n"); */
+        char * save = pos;
+        while (pos>=oldpos && !isspace(*pos)) {
+          /* fprintf(stderr,"pos(%p) > oldpos(%p)\n",pos,oldpos); */
+          --pos;
+        }
+        if (pos < oldpos) {
+          /* fprintf(stderr,"wow, no space found, searching the other direction\n"); */
+          pos = save;
+          while (pos < line+len && *pos && !isspace(*pos)) {
+            /* fprintf(stderr,"pos(%p) < line+len(%p)\n",pos,line+len); */
+            ++pos;
+          }
+          /* fprintf(stderr,"found a space pos = %p\n",pos); */
+        }
+        *pos = '\0';
+        ++pos;
+      }
+    } else {
+      /* fprintf(stderr,"if 1 else\n"); */
+    }
+    for (i=0;i<ql;++i)
+      state_putc('>',s);
+    if (option(OPTSTUFFQUOTED) && ql>0) state_putc(' ',s);
+    state_puts(oldpos,s);
+    /* fprintf(stderr,"print_flowed_line: `%s'\n",oldpos); */
+    state_putc('\n',s);
+    oldpos = pos;
+  }
+  /*state_puts(line,s);
+  state_putc('\n',s);*/
+}
+
+static void text_plain_flowed_handler (BODY *a, STATE *s)
+{
+  int bytes = a->length;
+  char buf[LONG_STRING];
+  char * curline = strdup("");
+  char * t;
+  unsigned int curline_len = 1;
+  unsigned int quotelevel = 0, newql = 0;
+  int append_next_line = 0;
+  int first_line = 1;
+
+  while (bytes > 0 && fgets(buf,sizeof(buf),s->fpin)) {
+
+    /* fprintf(stderr,"read `%s'",buf); */
+    bytes -= strlen(buf);
+
+    newql = get_quote_level(buf);
+
+    if ((t=strrchr(buf,'\n')) || (t=strrchr(buf,'\r'))) {
+      *t = '\0';
+      if (strlen(curline)>0 && curline[strlen(curline)-1]==' ' && newql==quotelevel && strcmp(curline+quotelevel,"-- ")!=0) {
+        curline = realloc(curline,curline_len+strlen(buf));
+        if (curline_len == 1) *curline = '\0';
+        curline_len+=strlen(buf);
+        safe_strncat(curline,curline_len,buf+newql,strlen(buf+newql));
+      } else {
+        if (first_line) {
+          first_line = 0;
+        } else {
+          print_flowed_line(curline,s,quotelevel);
+        }
+        FREE(&curline);
+        curline_len = 1;
+        curline = realloc(curline,curline_len+strlen(buf));
+        if (curline_len == 1) *curline = '\0';
+        curline_len+=strlen(buf);
+        safe_strncat(curline,curline_len,buf,strlen(buf));
+        quotelevel = newql;
+      }
+    } else {
+      append_next_line = 1;
+      /* @todo: add handling of very long lines */
+    }
+  }
+  if (curline) {
+    print_flowed_line(curline,s,quotelevel);
+    FREE(&curline);
+  }
+}
 
 
 

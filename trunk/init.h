@@ -2929,6 +2929,13 @@ struct option_t MuttVars[] = {
   ** personal mailbox where you might have several unrelated messages with
   ** the subject ``hi'' which will get grouped together.
   */
+  { "stuff_quoted",	DT_BOOL, R_BOTH, OPTSTUFFQUOTED, 0 },
+  /*
+  ** .pp
+  ** If set, attachments with flowed format will have their quoting ``stuffed'',
+  ** i.e. a space will be inserted between the quote characters and the actual
+  ** text.
+  */
   { "suspend",		DT_BOOL, R_NONE, OPTSUSPEND, 1 },
   /*
   ** .pp
