@@ -2747,7 +2747,9 @@ CHECK_IMAP_ACL(IMAP_ACL_DELETE);
 	  case OP_SIDEBAR_SCROLL_UP:
 	  case OP_SIDEBAR_SCROLL_DOWN:
 	  case OP_SIDEBAR_NEXT:
+	  case OP_SIDEBAR_NEXT_NEW:
 	  case OP_SIDEBAR_PREV:
+	  case OP_SIDEBAR_PREV_NEW:
 	    scroll_sidebar(ch, MENU_PAGER);
 		break;
       default:

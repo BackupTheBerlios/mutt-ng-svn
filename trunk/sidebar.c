@@ -303,24 +303,63 @@ int draw_sidebar(int menu) {
   return 0;
 }
 
+BUFFY * exist_next_new()
+{
+	BUFFY *tmp = CurBuffy;
+	if(tmp == NULL) return NULL;
+	while (tmp->next != NULL)
+	{
+		tmp = tmp->next;
+		if(tmp->msg_unread) return tmp;
+	}
+	return NULL;
+}
+
+BUFFY * exist_prev_new()
+{
+	BUFFY *tmp = CurBuffy;
+	if(tmp == NULL) return NULL;
+	while (tmp->prev != NULL)
+	{
+		tmp = tmp->prev;
+		if(tmp->msg_unread) return tmp;
+	}
+	return NULL;
+}     
+
+
 void scroll_sidebar(int op, int menu)
 {
         if(!SidebarWidth) return;
         if(!CurBuffy) return;
+	BUFFY *tmp;
 
   switch (op) {
     case OP_SIDEBAR_NEXT:
       if ( CurBuffy->next == NULL ) return;
       CurBuffy = CurBuffy->next;
       break;
-    case OP_SIDEBAR_PREV:
-      if ( CurBuffy == Incoming ) return;
+    case OP_SIDEBAR_NEXT_NEW:
+      if ( (tmp = exist_next_new()) == NULL)
       {
-        BUFFY *tmp = Incoming;
-        while ( tmp->next && strcmp(tmp->next->path, CurBuffy->path) ) tmp = tmp->next;
-        CurBuffy = tmp;
+	      if (CurBuffy->next == NULL) return;
+	      CurBuffy = CurBuffy->next;
       }
+      else CurBuffy = tmp;
       break;
+    case OP_SIDEBAR_PREV:
+      if ( CurBuffy->prev == NULL ) return;
+      CurBuffy = CurBuffy->prev;
+     break;
+    case OP_SIDEBAR_PREV_NEW:
+      if ( (tmp = exist_prev_new()) == NULL)
+      {
+	      if(CurBuffy->prev == NULL) return;
+	      CurBuffy = CurBuffy->prev;
+      }
+      else CurBuffy = tmp;
+      break;
+     
     case OP_SIDEBAR_SCROLL_UP:
       CurBuffy = TopBuffy;
       if ( CurBuffy != Incoming ) {

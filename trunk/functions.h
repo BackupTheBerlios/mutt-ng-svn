@@ -175,6 +175,8 @@ struct binding_t OpMain[] = {
   { "sidebar-scroll-down",	OP_SIDEBAR_SCROLL_DOWN, NULL },
   { "sidebar-next",	OP_SIDEBAR_NEXT, NULL },
   { "sidebar-prev",	OP_SIDEBAR_PREV, NULL },
+  { "sidebar-next-new", OP_SIDEBAR_NEXT_NEW, NULL},
+  { "sidebar-prev-new", OP_SIDEBAR_PREV_NEW, NULL},
   { "sidebar-open", OP_SIDEBAR_OPEN, NULL },
   { NULL,			0,				NULL }
 };
@@ -288,6 +290,8 @@ struct binding_t OpPager[] = {
   { "sidebar-scroll-down",	OP_SIDEBAR_SCROLL_DOWN, NULL },
   { "sidebar-next",	OP_SIDEBAR_NEXT, NULL },
   { "sidebar-prev",	OP_SIDEBAR_PREV, NULL },
+  { "sidebar-next-new", OP_SIDEBAR_NEXT_NEW, NULL},
+  { "sidebar-prev-new", OP_SIDEBAR_PREV_NEW, NULL},
   { "sidebar-open", OP_SIDEBAR_OPEN, NULL },
   { NULL,		0,				NULL }
 };
