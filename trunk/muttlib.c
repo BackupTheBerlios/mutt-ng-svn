@@ -1318,8 +1318,10 @@ void state_prefix_putc (char c, STATE *s)
       while (regexec ((regex_t *) QuoteRegexp.rx, &Quotebuf[offset], 1, pmatch, 0) == 0)
 	offset += pmatch->rm_eo;
 
-      if (!option (OPTQUOTEEMPTY) && Quotebuf[0] == '\n')
-	strcpy (buf, Quotebuf);
+      if (!option (OPTQUOTEEMPTY) && Quotebuf[offset] == '\n') {
+        buf[0] = '\n';
+        buf[1] = '\0';
+      }
       else if (option (OPTQUOTEQUOTED) && offset)
       {
 	for (i = 0; i < offset; i++)
