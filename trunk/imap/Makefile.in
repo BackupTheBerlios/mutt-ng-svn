@@ -126,8 +126,6 @@ SMIMEAUX_TARGET = @SMIMEAUX_TARGET@
 STRIP = @STRIP@
 SUBVERSION = @SUBVERSION@
 U = @U@
-USE_GNUTLS_FALSE = @USE_GNUTLS_FALSE@
-USE_GNUTLS_TRUE = @USE_GNUTLS_TRUE@
 USE_GSS_FALSE = @USE_GSS_FALSE@
 USE_GSS_TRUE = @USE_GSS_TRUE@
 USE_INCLUDED_LIBINTL = @USE_INCLUDED_LIBINTL@
@@ -180,9 +178,9 @@ target_alias = @target_alias@
 AUTOMAKE_OPTIONS = foreign
 
 @USE_GSS_TRUE@GSSSOURCES = auth_gss.c
-@USE_SASL_FALSE@AUTHENTICATORS = auth_anon.c auth_cram.c
 
 @USE_SASL_TRUE@AUTHENTICATORS = auth_sasl.c
+@USE_SASL_FALSE@AUTHENTICATORS = auth_anon.c auth_cram.c
 
 EXTRA_DIST = BUGS README TODO auth_anon.c auth_cram.c auth_gss.c auth_sasl.c
 
@@ -204,8 +202,8 @@ LIBRARIES = $(noinst_LIBRARIES)
 libimap_a_AR = $(AR) cru
 libimap_a_LIBADD =
 am__libimap_a_SOURCES_DIST = auth.c auth_login.c browse.c command.c \
-	imap.c imap.h message.c utf7.c util.c auth_anon.c auth_cram.c \
-	auth_sasl.c auth_gss.c
+	imap.c imap.h message.c utf7.c util.c auth_sasl.c auth_anon.c \
+	auth_cram.c auth_gss.c
 @USE_SASL_TRUE@am__objects_1 = auth_sasl.$(OBJEXT)
 @USE_SASL_FALSE@am__objects_1 = auth_anon.$(OBJEXT) auth_cram.$(OBJEXT)
 @USE_GSS_TRUE@am__objects_2 = auth_gss.$(OBJEXT)
