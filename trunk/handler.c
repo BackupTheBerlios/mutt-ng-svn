@@ -1219,7 +1219,7 @@ static void print_flowed_line(char * line, STATE *s,int ql) {
     if (width < 0)
       width = MaxLineLength;
   } else {
-    width = COLS - WrapMargin - ql - 1;
+    width = COLS - SidebarWidth - WrapMargin - ql - 1;
     if (option(OPTSTUFFQUOTED))
       --width;
     if (width < 0)

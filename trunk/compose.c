@@ -588,7 +588,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 #endif
   menu->help = mutt_compile_help (helpstr, sizeof (helpstr), MENU_COMPOSE, ComposeHelp);
   
-  if (option (OPTSTATUSONTOP))
+  if (option(OPTMBOXPANE))
     mutt_buffy_check(1);
   while (loop)
   {
