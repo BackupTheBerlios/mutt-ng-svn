@@ -1,5 +1,11 @@
 Changes specific to mutt-ng:
 
+2005-02-05:
+  * Made message ID format configurable
+
+2005-02-04:
+  * Fixed another bug in ajg.last-folder patch
+
 2005-02-03:
   * Fixed stupid bug regarding saving attachments
   * applied ajg.last-folder patch
