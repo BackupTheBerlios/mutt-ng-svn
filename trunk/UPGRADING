@@ -91,9 +91,15 @@ rev123, please put it "into" init and removes this comment when done!
     ~*
 
   Other Changes:
+  
+    The config files were renamed. Instead of ~/.muttrc it's now
+    ~/.muttngrc, instead of /etc/Muttrc it's now /etc/Muttngrc and
+    so on.
 
-    The following tools were removed: bin/pgpewrap, bin/pgpring,
+    The following tools were removed:
+    bin/flea, bin/muttbug, bin/mutt_dotlock, bin/pgpewrap, bin/pgpring,
     bin/smime_keys and etc/mime.types.
-    They were replaced by: bin/pgpewrapng, bin/pgpringng,
-    bin/smime_keysng and etc/muttng-mime.types.
+    They were replaced by:
+    bin/fleang, bin/muttngbug, bin/muttng_dotlock, bin/pgpewrapng
+    bin/pgpringng, bin/smime_keysng and etc/muttng-mime.types.
     Please check and update your configuration.
