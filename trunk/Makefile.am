@@ -14,7 +14,12 @@ POP_SUBDIR = pop
 POP_INCLUDES = -I$(top_srcdir)/pop
 endif
 
-SUBDIRS = m4 po intl doc contrib $(IMAP_SUBDIR) $(POP_SUBDIR)
+if BUILD_NNTP
+NNTP_SUBDIR = nntp
+NNTP_INCLUDES = -I$(top_srcdir)/nntp
+endif
+
+SUBDIRS = m4 po intl doc contrib $(IMAP_SUBDIR) $(POP_SUBDIR) $(NNTP_SUBDIR)
 
 bin_SCRIPTS = muttngbug fleang
 
@@ -35,10 +40,10 @@ muttng_SOURCES = $(BUILT_SOURCES) \
 	muttlib.c editmsg.c utf8.c mbyte.c wcwidth.c md5c.c \
 	url.c ascii.c mutt_idna.c sidebar.c hcache.c crypt-mod.c crypt-mod.h
 
-muttng_LDADD = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(LIBPOP) $(MUTTLIBS) \
-	$(INTLLIBS) $(LIBICONV)
+muttng_LDADD = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(LIBPOP) $(LIBNNTP) \
+	$(MUTTLIBS) $(INTLLIBS) $(LIBICONV)
 
-muttng_DEPENDENCIES = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAPDEPS) $(LIBPOPDEPS) \
+muttng_DEPENDENCIES = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAPDEPS) $(LIBPOPDEPS) $(LIBNNTPDEPS) \
 	$(INTLDEPS)
 
 makedoc_SOURCES = makedoc.c
@@ -58,7 +63,7 @@ DEFS=-DPKGDATADIR=\"$(pkgdatadir)\" -DSYSCONFDIR=\"$(sysconfdir)\" \
 	-DBINDIR=\"$(bindir)\" -DMUTTLOCALEDIR=\"$(datadir)/locale\" \
 	-DHAVE_CONFIG_H=1
 
-INCLUDES=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(POP_INCLUDES) $(LIBGPGME_CFLAGS) -Iintl
+INCLUDES=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(POP_INCLUDES) $(NNTP_INCLUDES) $(LIBGPGME_CFLAGS) -Iintl
 
 CPPFLAGS=@CPPFLAGS@ -I$(includedir)
 
@@ -67,7 +72,7 @@ EXTRA_muttng_SOURCES = account.c md5c.c mutt_sasl.c mutt_socket.c mutt_ssl.c \
 	mutt_tunnel.c smime.c pgp.c pgpinvoke.c pgpkey.c \
 	pgplib.c sha1.c pgpmicalg.c gnupgparse.c resize.c dotlock.c remailer.c \
 	browser.h mbyte.h remailer.h url.h mutt_ssl_nss.c \
-	pgppacket.c mutt_idna.h nntp.c newsrc.c mutt_libesmtp.c \
+	pgppacket.c mutt_idna.h mutt_libesmtp.c \
 	sidebar.h crypt-mod-pgp-classic.c crypt-mod-smime-classic.c
 
 EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
@@ -79,7 +84,6 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	mutt_regex.h mutt_sasl.h mutt_socket.h mutt_ssl.h mutt_tunnel.h \
 	mx.h pager.h pgp.h protos.h reldate.h rfc1524.h rfc2047.h \
 	rfc2231.h rfc822.h sha1.h sort.h mime.types VERSION prepare \
-	nntp.h ChangeLog.nntp \
 	_regex.h OPS.MIX README.SECURITY remailer.c remailer.h browser.h \
 	mbyte.h	lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h Muttngrc.head Muttngrc \
 	makedoc.c stamp-doc-rc README.SSL smime.h\

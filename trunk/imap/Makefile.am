@@ -16,7 +16,7 @@ endif
 
 EXTRA_DIST = BUGS README TODO auth_anon.c auth_cram.c auth_gss.c auth_sasl.c
 
-INCLUDES = -I$(top_srcdir) -I../intl
+INCLUDES = -I$(top_srcdir) -I$(top_srcdir)/intl -I$(top_srcdir)/nntp
 
 noinst_LIBRARIES = libimap.a
 noinst_HEADERS = auth.h imap_private.h message.h
