@@ -17,6 +17,7 @@
  */ 
 
 
+#include <stdint.h>
 #include "mbyte.h"
 
 #ifdef DEBUG
@@ -32,6 +33,9 @@ void _mutt_make_string (char *, size_t, const char *, CONTEXT *,
 	HEADER *, format_flag);
 
 int mutt_extract_token (BUFFER *, BUFFER *, int);
+BUFFER * mutt_buffer_init (BUFFER *);
+BUFFER * mutt_buffer_from (BUFFER *, char *);
+void mutt_buffer_free(BUFFER **);
 void mutt_buffer_add (BUFFER*, const char*, size_t);
 void mutt_buffer_addstr (BUFFER*, const char*);
 void mutt_buffer_addch (BUFFER*, char);
@@ -105,10 +109,9 @@ void *mutt_hcache_open(const char *path, const char *folder);
 void mutt_hcache_close(void *db);
 HEADER *mutt_hcache_restore(const unsigned char *d, HEADER **oh);
 void *mutt_hcache_fetch(void *db, const char *filename, size_t (*keylen)(const char *fn));
-int mutt_hcache_store(void *db, const char *filename, HEADER *h, unsigned long long uid_validity, size_t (*keylen)(const char *fn));
+int mutt_hcache_store(void *db, const char *filename, HEADER *h, uint64_t uid_validity, size_t (*keylen)(const char *fn));
 int mutt_hcache_delete(void *db, const char *filename, size_t (*keylen)(const char *fn));
 #endif /* USE_HCACHE */
-
 
 ATTACHPTR **mutt_gen_attach_list (BODY *, int, ATTACHPTR **, short *, short *, int, int);
 
@@ -308,6 +311,7 @@ int mutt_is_valid_mailbox (const char *);
 int mutt_link_threads (HEADER *, HEADER *, CONTEXT *);
 int mutt_lookup_mime_type (BODY *, const char *);
 int mutt_match_rx_list (const char *, RX_LIST *);
+int mutt_match_spam_list (const char *, SPAM_LIST *, char *, int);
 int mutt_messages_in_thread (CONTEXT *, HEADER *, int);
 int mutt_multi_choice (char *prompt, char *letters);
 int mutt_needs_mailcap (BODY *);

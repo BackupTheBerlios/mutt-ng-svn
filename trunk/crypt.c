@@ -4,6 +4,7 @@
  * Copyright (C) 2001  Thomas Roessler <roessler@does-not-exist.org>
  *                     Oliver Ehli <elmy@acm.org>
  * Copyright (C) 2003  Werner Koch <wk@gnupg.org>
+ * Copyright (C) 2004 g10code GmbH
  *
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -107,64 +108,28 @@ static void disable_coredumps (void)
 int crypt_valid_passphrase(int flags)
 {
   time_t now = time (NULL);
+  int ret = 0;
 
 # if defined(HAVE_SETRLIMIT) &&(!defined(DEBUG))
   disable_coredumps ();
 # endif
 
   if ((WithCrypto & APPLICATION_PGP) && (flags & APPLICATION_PGP))
-  {
-    extern char PgpPass[STRING];
-    extern time_t PgpExptime;
-
-    if (pgp_use_gpg_agent())
-    {
-      *PgpPass = 0;
-      return 1; /* handled by gpg-agent */
-    }
-
-    if (now < PgpExptime) return 1; /* just use the cached copy. */
-    crypt_pgp_void_passphrase ();
-      
-    if (mutt_get_password (_("Enter PGP passphrase:"),
-                           PgpPass, sizeof (PgpPass)) == 0)
-    {
-      PgpExptime = time (NULL) + PgpTimeout;
-      return (1);
-    }
-    else
-      PgpExptime = 0;
-    }
+    ret = crypt_pgp_valid_passphrase ();
 
   if ((WithCrypto & APPLICATION_SMIME) && (flags & APPLICATION_SMIME))
-  {
-    extern char SmimePass[STRING];
-    extern time_t SmimeExptime;
+    ret = crypt_smime_valid_passphrase ();
 
-    if (now < SmimeExptime) return (1);
-    crypt_smime_void_passphrase ();
-      
-    if (mutt_get_password (_("Enter SMIME passphrase:"), SmimePass,
-			   sizeof (SmimePass)) == 0)
-    {
-      SmimeExptime = time (NULL) + SmimeTimeout;
-      return (1);
-    }
-    else
-      SmimeExptime = 0;
-  }
-
-  return (0);
+  return ret;
 }
 
 
 
-int mutt_protect (HEADER *msg, HEADER *cur, char *keylist)
+int mutt_protect (HEADER *msg, char *keylist)
 {
   BODY *pbody = NULL, *tmp_pbody = NULL;
   BODY *tmp_smime_pbody = NULL;
   BODY *tmp_pgp_pbody = NULL;
-  int traditional = 0;
   int flags = (WithCrypto & APPLICATION_PGP)? msg->security: 0;
   int i;
 
@@ -174,36 +139,25 @@ int mutt_protect (HEADER *msg, HEADER *cur, char *keylist)
   if ((msg->security & SIGN) && !crypt_valid_passphrase (msg->security))
     return (-1);
 
-  if ((WithCrypto & APPLICATION_PGP) && (msg->security & APPLICATION_PGP))
+  if ((WithCrypto & APPLICATION_PGP) && ((msg->security & PGPINLINE) == PGPINLINE))
   {
-    if ((msg->content->type == TYPETEXT) &&
-	!ascii_strcasecmp (msg->content->subtype, "plain"))
+    /* they really want to send it inline... go for it */
+    if (!isendwin ()) mutt_endwin _("Invoking PGP...");
+    pbody = crypt_pgp_traditional_encryptsign (msg->content, flags, keylist);
+    if (pbody)
     {
-      if (cur && cur->security && option (OPTPGPAUTOTRAD)
-	  && (option (OPTCRYPTREPLYENCRYPT)
-	      || option (OPTCRYPTREPLYSIGN)
-	      || option (OPTCRYPTREPLYSIGNENCRYPTED)))
-	{
-	  if(mutt_is_application_pgp(cur->content))
-	    traditional = 1;
-	}
-      else
-	{
-	  if ((i = query_quadoption (OPT_PGPTRADITIONAL, _("Create a traditional (inline) PGP message?"))) == -1)
-	    return -1;
-	  else if (i == M_YES)
-	    traditional = 1;
-	}
-    }
-    if (traditional)
-    {
-      if (!isendwin ()) mutt_endwin _("Invoking PGP...");
-      if (!(pbody = crypt_pgp_traditional_encryptsign (msg->content, flags, keylist)))
-	return -1;
-
       msg->content = pbody;
       return 0;
     }
+
+    /* otherwise inline won't work...ask for revert */
+    if ((i = query_quadoption (OPT_PGPMIMEAUTO, _("Message can't be sent inline.  Revert to using PGP/MIME?"))) != M_YES)
+      {
+	mutt_error _("Mail not sent.");
+	return -1;
+      }
+
+    /* go ahead with PGP/MIME */
   }
 
   if (!isendwin ()) mutt_endwin (NULL);
@@ -287,6 +241,7 @@ int mutt_protect (HEADER *msg, HEADER *cur, char *keylist)
 
       /* destroy temporary signature envelope when doing retainable 
        * signatures.
+
        */
       if (flags != msg->security)
       {
@@ -391,6 +346,9 @@ int mutt_is_application_pgp (BODY *m)
     else if (p && !ascii_strncasecmp ("pgp-keys", p, 7))
       t |= PGPKEY;
   }
+  if (t)
+    t |= PGPINLINE;
+
   return t;
 }
 

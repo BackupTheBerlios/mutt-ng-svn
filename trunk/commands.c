@@ -283,10 +283,10 @@ void ci_bounce_message (HEADER *h, int *redraw)
     mutt_format_string (prompt, sizeof (prompt),
 			0, COLS-extra_space, 0, 0,
 			prompt, sizeof (prompt), 0);
-    strncat (prompt, "...?", sizeof (prompt));
+    safe_strcat (prompt, sizeof (prompt), "...?");
   }
   else
-    strncat (prompt, "?", sizeof (prompt));
+    safe_strcat (prompt, sizeof (prompt), "?");
 
   if (query_quadoption (OPT_BOUNCE, prompt) != M_YES)
   {
@@ -324,7 +324,7 @@ static void pipe_set_flags (int decode, int print, int *cmflags, int *chflags)
   
 }
 
-void pipe_msg (HEADER *h, FILE *fp, int decode, int print)
+static void pipe_msg (HEADER *h, FILE *fp, int decode, int print)
 {
   int cmflags = 0;
   int chflags = CH_FROM;
@@ -502,9 +502,9 @@ int mutt_select_sort (int reverse)
   int method = Sort; /* save the current method in case of abort */
 
   switch (mutt_multi_choice (reverse ?
-			     _("Rev-Sort (d)ate/(f)rm/(r)ecv/(s)ubj/t(o)/(t)hread/(u)nsort/si(z)e/s(c)ore?: ") :
-			     _("Sort (d)ate/(f)rm/(r)ecv/(s)ubj/t(o)/(t)hread/(u)nsort/si(z)e/s(c)ore?: "),
-			     _("dfrsotuzc")))
+			     _("Rev-Sort (d)ate/(f)rm/(r)ecv/(s)ubj/t(o)/(t)hread/(u)nsort/si(z)e/s(c)ore/s(p)am?: ") :
+			     _("Sort (d)ate/(f)rm/(r)ecv/(s)ubj/t(o)/(t)hread/(u)nsort/si(z)e/s(c)ore/s(p)am?: "),
+			     _("dfrsotuzcp")))
   {
   case -1: /* abort - don't resort */
     return -1;
@@ -543,6 +543,10 @@ int mutt_select_sort (int reverse)
   
   case 9: /* s(c)ore */ 
     Sort = SORT_SCORE;
+    break;
+
+  case 10: /* s(p)am */
+    Sort = SORT_SPAM;
     break;
   }
   if (reverse)
@@ -1036,12 +1040,17 @@ void mutt_edit_content_type (HEADER *h, BODY *b, FILE *fp)
 
   /* inform the user */
   
+  snprintf (tmp, sizeof (tmp), "%s/%s", TYPE (b), NONULL (b->subtype));
   if (type_changed)
     mutt_message (_("Content-Type changed to %s."), tmp);
-  else if (b->type == TYPETEXT && charset_changed)
+  if (b->type == TYPETEXT && charset_changed)
+  {
+    if (type_changed)
+      mutt_sleep (1);
     mutt_message (_("Character set changed to %s; %s."),
 		  mutt_get_parameter ("charset", b->parameter),
 		  b->noconv ? _("not converting") : _("converting"));
+  }
 
   b->force_charset |= charset_changed ? 1 : 0;
 
@@ -1071,6 +1080,8 @@ static int _mutt_check_traditional_pgp (HEADER *h, int *redraw)
   MESSAGE *msg;
   int rv = 0;
   
+  h->security |= PGP_TRADITIONAL_CHECKED;
+  
   mutt_parse_mime_message (Context, h);
   if ((msg = mx_open_message (Context, h->msgno)) == NULL)
     return 0;
@@ -1089,12 +1100,13 @@ int mutt_check_traditional_pgp (HEADER *h, int *redraw)
 {
   int i;
   int rv = 0;
-  if (h)
+  if (h && !(h->security & PGP_TRADITIONAL_CHECKED))
     rv = _mutt_check_traditional_pgp (h, redraw);
   else
   {
     for (i = 0; i < Context->vcount; i++)
-      if (Context->hdrs[Context->v2r[i]]->tagged)
+      if (Context->hdrs[Context->v2r[i]]->tagged && 
+	  !(Context->hdrs[Context->v2r[i]]->security & PGP_TRADITIONAL_CHECKED))
 	rv = _mutt_check_traditional_pgp (Context->hdrs[Context->v2r[i]], redraw)
 	  || rv;
   }

@@ -274,7 +274,7 @@ status_format_str (char *buf, size_t buflen, char op, const char *src,
       if (!optional)
       {
 	snprintf (fmt, sizeof(fmt), "%%%ss", prefix);
-	snprintf (buf, buflen, fmt, Context ? Context->pattern : 0);
+	snprintf (buf, buflen, fmt, (Context && Context->pattern) ? Context->pattern : "");
       }
       else if (!Context || !Context->pattern)
 	optional = 0;

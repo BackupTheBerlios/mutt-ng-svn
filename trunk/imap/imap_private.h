@@ -20,6 +20,8 @@
 #ifndef _IMAP_PRIVATE_H
 #define _IMAP_PRIVATE_H 1
 
+#include <stdint.h>
+
 #include "imap.h"
 #include "mutt_socket.h"
 
@@ -180,7 +182,7 @@ typedef struct
   IMAP_CACHE cache[IMAP_CACHE_LEN];
   int noclose : 1;
 #ifdef USE_HCACHE
-  unsigned long long uid_validity;
+  uint64_t uid_validity;
 #endif
   
   /* all folder flags - system flags AND keywords */

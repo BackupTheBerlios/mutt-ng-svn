@@ -155,6 +155,45 @@ char *safe_strdup (const char *s)
   return (p);
 }
 
+char *safe_strcat (char *d, size_t l, const char *s)
+{
+  char *p = d;
+
+  if (!l) 
+    return d;
+
+  l--; /* Space for the trailing '\0'. */
+  
+  for (; *d && l; l--)
+    d++;
+  for (; *s && l; l--)
+    *d++ = *s++;
+
+  *d = '\0';
+  
+  return p;
+}
+
+char *safe_strncat (char *d, size_t l, const char *s, size_t sl)
+{
+  char *p = d;
+
+  if (!l)
+    return d;
+  
+  l--; /* Space for the trailing '\0'. */
+  
+  for (; *d && l; l--)
+    d++;
+  for (; *s && l && sl; l--, sl--)
+    *d++ = *s++;
+
+  *d = '\0';
+  
+  return p;
+}
+
+
 void mutt_str_replace (char **p, const char *s)
 {
   FREE (p);
@@ -183,13 +222,33 @@ char *mutt_strlower (char *s)
 
 void mutt_unlink (const char *s)
 {
+  int fd;
+  int flags;
   FILE *f;
-  struct stat sb;
+  struct stat sb, sb2;
   char buf[2048];
+
+  /* Defend against symlink attacks */
   
-  if (stat (s, &sb) == 0)
+#ifdef O_NOFOLLOW 
+  flags = O_RDWR | O_NOFOLLOW;
+#else
+  flags = O_RDWR;
+#endif
+  
+  if (lstat (s, &sb) == 0 && S_ISREG(sb.st_mode))
   {
-    if ((f = fopen (s, "r+")))
+    if ((fd = open (s, flags)) < 0)
+      return;
+    
+    if ((fstat (fd, &sb2) != 0) || !S_ISREG (sb2.st_mode) 
+	|| (sb.st_dev != sb2.st_dev) || (sb.st_ino != sb2.st_ino))
+    {
+      close (fd);
+      return;
+    }
+    
+    if ((f = fdopen (fd, "r+")))
     {
       unlink (s);
       memset (buf, 0, sizeof (buf));

@@ -470,6 +470,9 @@
 /*  Define to use fcntl() to lock folders.  */
 #undef USE_FCNTL
 
+/*  Define to sort files in a	maildir by inode number.  */
+#undef USE_INODESORT
+
 /* Define if you have problems with mutt not detecting
                    new/old mailboxes over NFS.  Some NFS implementations
                    incorrectly cache the attributes of small files. */
@@ -490,6 +493,15 @@
 /* Enable exact regeneration of email addresses as parsed?
                    NOTE: this requires significant more memory when defined. */
 #undef EXACT_ADDRESS
+
+/* Enable header caching */
+#undef USE_HCACHE
+
+/* GDBM Support */
+#undef HAVE_GDBM
+
+/* Sleepycat DB4 Support */
+#undef HAVE_DB4
 
 /* Enable header caching */
 #undef USE_HCACHE

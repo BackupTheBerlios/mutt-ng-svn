@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
+ * Copyright (C) 2004 g10 Code GmbH
  * 
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -162,6 +163,16 @@ static void redraw_crypt_lines (HEADER *msg)
     addstr (_("Sign"));
   else
     addstr (_("Clear"));
+
+  if ((WithCrypto & APPLICATION_PGP))
+    if ((msg->security & APPLICATION_PGP) 
+	&& (msg->security & (ENCRYPT | SIGN)))
+    {
+      if ((msg->security & INLINE))
+	addstr (_(" (inline)"));
+      else
+	addstr (_(" (PGP/MIME)"));
+    }
   clrtoeol ();
 
   move (HDR_CRYPTINFO, SidebarWidth);
@@ -171,164 +182,19 @@ static void redraw_crypt_lines (HEADER *msg)
     printw ("%s%s", _(" sign as: "), PgpSignAs ? PgpSignAs : _("<default>"));
 
   if ((WithCrypto & APPLICATION_SMIME)
-      && msg->security & APPLICATION_SMIME  && msg->security & SIGN) {
+     && msg->security & APPLICATION_SMIME  && msg->security & SIGN) {
       printw ("%s%s", _(" sign as: "), SmimeDefaultKey ? SmimeDefaultKey : _("<default>"));
   }
 
   if ((WithCrypto & APPLICATION_SMIME)
-       && msg->security & APPLICATION_SMIME  && (msg->security & ENCRYPT)) {
+       && (msg->security & APPLICATION_SMIME)
+       && (msg->security & ENCRYPT)
+       && SmimeCryptAlg
+       && *SmimeCryptAlg) {
       mvprintw (HDR_CRYPTINFO, SidebarWidth + 40, "%s%s", _("Encrypt with: "),
 		NONULL(SmimeCryptAlg));
       off = 20;
   }
-}
-
-
-
-static int pgp_send_menu (HEADER *msg, int *redraw)
-{
-  pgp_key_t p;
-  char input_signas[SHORT_STRING];
-
-  if (!(WithCrypto & APPLICATION_PGP))
-    return msg->security;
-
-  switch (mutt_multi_choice (_("PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, or (f)orget it? "),
-			     _("esabf")))
-  {
-  case 1: /* (e)ncrypt */
-    msg->security |= ENCRYPT;
-    break;
-
-  case 2: /* (s)ign */
-    msg->security |= SIGN;
-    break;
-
-  case 3: /* sign (a)s */
-    unset_option(OPTPGPCHECKTRUST);
-
-    if ((p = crypt_pgp_ask_for_key (_("Sign as: "), NULL,
-                                    KEYFLAG_CANSIGN, PGP_PUBRING)))
-    {
-      snprintf (input_signas, sizeof (input_signas), "0x%s",
-                crypt_pgp_keyid (p));
-      mutt_str_replace (&PgpSignAs, input_signas);
-      crypt_pgp_free_key (&p);
-      
-      msg->security |= SIGN;
-	
-      crypt_pgp_void_passphrase ();  /* probably need a different passphrase */
-    }
-    else
-    {
-      msg->security &= ~SIGN;
-    }
-
-    *redraw = REDRAW_FULL;
-    break;
-
-  case 4: /* (b)oth */
-    msg->security = ENCRYPT | SIGN;
-    break;
-
-  case 5: /* (f)orget it */
-    msg->security = 0;
-    break;
-  }
-
-  if (msg->security && msg->security != APPLICATION_PGP)
-    msg->security |= APPLICATION_PGP;
-  else
-    msg->security = 0;
-
-  if(*redraw)
-      redraw_crypt_lines (msg);
-  return (msg->security);
-}
-
-
-
-static int smime_send_menu (HEADER *msg, int *redraw)
-{
-  char *p;
-
-  if (!(WithCrypto & APPLICATION_SMIME))
-    return msg->security;
-
-  switch (mutt_multi_choice (_("S/MIME (e)ncrypt, (s)ign, encrypt (w)ith, sign (a)s, (b)oth, or (f)orget it? "),
-			     _("eswabf")))
-  {
-  case 1: /* (e)ncrypt */
-    msg->security |= ENCRYPT;
-    break;
-
-  case 3: /* encrypt (w)ith */
-    msg->security |= ENCRYPT;
-    switch (mutt_multi_choice (_("1: DES, 2: Triple-DES, 3: RC2-40,"
-				 " 4: RC2-64, 5: RC2-128, or (f)orget it? "),
-			       _("12345f"))) {
-    case 1:
-	mutt_str_replace (&SmimeCryptAlg, "des");
-	break;
-    case 2:
-	mutt_str_replace (&SmimeCryptAlg, "des3");
-	break;
-    case 3:
-	mutt_str_replace (&SmimeCryptAlg, "rc2-40");
-	break;
-    case 4:
-	mutt_str_replace (&SmimeCryptAlg, "rc2-64");
-	break;
-    case 5:
-	mutt_str_replace (&SmimeCryptAlg, "rc2-128");
-	break;
-    case 6: /* forget it */
-	break;
-    }
-    break;
-
-  case 2: /* (s)ign */
-      
-    if(!SmimeDefaultKey)
-	mutt_message("Can\'t sign: No key specified. use sign(as).");
-    else
-	msg->security |= SIGN;
-    break;
-
-  case 4: /* sign (a)s */
-
-    if ((p = crypt_smime_ask_for_key (_("Sign as: "), NULL, 0))) {
-      p[mutt_strlen (p)-1] = '\0';
-      mutt_str_replace (&SmimeDefaultKey, p);
-	
-      msg->security |= SIGN;
-
-      /* probably need a different passphrase */
-      crypt_smime_void_passphrase ();
-    }
-    else
-      msg->security &= ~SIGN;
-
-    *redraw = REDRAW_FULL;
-    break;
-
-  case 5: /* (b)oth */
-    msg->security = ENCRYPT | SIGN;
-    break;
-
-  case 6: /* (f)orget it */
-    msg->security = 0;
-    break;
-  }
-
-  if (msg->security && msg->security != APPLICATION_SMIME)
-    msg->security |= APPLICATION_SMIME;
-  else
-    msg->security = 0;
-
-  if(*redraw)
-      redraw_crypt_lines (msg);
-  return (msg->security);
 }
 
 
@@ -586,7 +452,7 @@ static unsigned long cum_attachs_size (MUTTMENU *menu)
 }
 
 /* prototype for use below */
-void compose_status_line (char *buf, size_t buflen, MUTTMENU *menu, 
+static void compose_status_line (char *buf, size_t buflen, MUTTMENU *menu, 
       const char *p);
 
 /*
@@ -652,7 +518,7 @@ compose_format_str (char *buf, size_t buflen, char op, const char *src,
   return (src);
 }
 
-void compose_status_line (char *buf, size_t buflen, MUTTMENU *menu, 
+static void compose_status_line (char *buf, size_t buflen, MUTTMENU *menu, 
       const char *p)
 {
   mutt_FormatString (buf, buflen, p, compose_format_str, 
@@ -725,24 +591,37 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	break;
       case OP_COMPOSE_EDIT_FROM:
 	menu->redraw = edit_address_list (HDR_FROM, &msg->env->from);
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
 	break;
       case OP_COMPOSE_EDIT_TO:
 #ifdef USE_NNTP
-	if (!news)
+	if (!news) {
 #endif
 	  menu->redraw = edit_address_list (HDR_TO, &msg->env->to);
+          mutt_message_hook (NULL, msg, M_SEND2HOOK);
+#ifdef USE_NNTP
+	}
+#endif
 	break;
       case OP_COMPOSE_EDIT_BCC:
 #ifdef USE_NNTP
-	if (!news)
+	if (!news) {
 #endif
 	  menu->redraw = edit_address_list (HDR_BCC, &msg->env->bcc);
+          mutt_message_hook (NULL, msg, M_SEND2HOOK);
+#ifdef USE_NNTP
+	}
+#endif
 	break;
       case OP_COMPOSE_EDIT_CC:
 #ifdef USE_NNTP
-	if (!news)
+	if (!news) {
 #endif
 	  menu->redraw = edit_address_list (HDR_CC, &msg->env->cc);
+          mutt_message_hook (NULL, msg, M_SEND2HOOK);	
+#ifdef USE_NNTP
+	}
+#endif
 	break;
 #ifdef USE_NNTP
       case OP_COMPOSE_EDIT_NEWSGROUPS:
@@ -815,9 +694,11 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  if (msg->env->subject)
 	    mutt_paddstr (W, msg->env->subject);
 	}
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
       case OP_COMPOSE_EDIT_REPLY_TO:
 	menu->redraw = edit_address_list (HDR_REPLYTO, &msg->env->reply_to);
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
 	break;
       case OP_COMPOSE_EDIT_FCC:
 	strfcpy (buf, fcc, sizeof (buf));
@@ -830,19 +711,22 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  fccSet = 1;
 	}
 	MAYBE_REDRAW (menu->redraw);
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
       case OP_COMPOSE_EDIT_MESSAGE:
 	if (Editor && (mutt_strcmp ("builtin", Editor) != 0) && !option (OPTEDITHDRS))
 	{
 	  mutt_edit_file (Editor, msg->content->filename);
 	  mutt_update_encoding (msg->content);
 	  menu->redraw = REDRAW_CURRENT | REDRAW_STATUS;
+	  mutt_message_hook (NULL, msg, M_SEND2HOOK);
 	  break;
 	}
 	/* fall through */
       case OP_COMPOSE_EDIT_HEADERS:
-	if (op == OP_COMPOSE_EDIT_HEADERS ||
-	    (op == OP_COMPOSE_EDIT_MESSAGE && option (OPTEDITHDRS)))
+	if (mutt_strcmp ("builtin", Editor) != 0 &&
+	    (op == OP_COMPOSE_EDIT_HEADERS ||
+	    (op == OP_COMPOSE_EDIT_MESSAGE && option (OPTEDITHDRS))))
 	{
 	  char *tag = NULL, *err = NULL;
 	  mutt_env_to_local (msg->env);
@@ -875,7 +759,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  menu->max = idxlen;
 	}
 
-	menu->redraw = REDRAW_FULL;
+        menu->redraw = REDRAW_FULL;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
 	break;
 
 
@@ -906,7 +791,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  unset_option(OPTNEEDREDRAW);
 	}
 	
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
 
 
       case OP_COMPOSE_ATTACH_FILE:
@@ -952,7 +838,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 
 	  menu->redraw |= REDRAW_INDEX | REDRAW_STATUS;
 	}
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
 
       case OP_COMPOSE_ATTACH_MESSAGE:
 #ifdef USE_NNTP
@@ -1084,7 +971,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  Sort = oldSort;
 	  SortAux = oldSortAux;
 	}
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
 
       case OP_DELETE:
 	CHECK_COUNT;
@@ -1103,7 +991,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  msg->content = idx[0]->content;
 
         menu->redraw |= REDRAW_STATUS;
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
 
 #define CURRENT idx[menu->current]->content
       
@@ -1121,6 +1010,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
         else
 	  mutt_message (_("The current attachment will be converted."));
 	menu->redraw = REDRAW_CURRENT;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
         break;
       }
 #undef CURRENT
@@ -1137,7 +1027,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  mutt_str_replace (&idx[menu->current]->content->description, buf);
 	  menu->redraw = REDRAW_CURRENT;
 	}
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
 
       case OP_COMPOSE_UPDATE_ENCODING:
         CHECK_COUNT;
@@ -1156,6 +1047,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
           mutt_update_encoding(idx[menu->current]->content);
 	  menu->redraw = REDRAW_CURRENT | REDRAW_STATUS;
 	}
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
         break;
       
       case OP_COMPOSE_TOGGLE_DISPOSITION:
@@ -1174,7 +1066,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 
 	  menu->redraw = REDRAW_CURRENT;
 	}
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
 
       case OP_COMPOSE_EDIT_ENCODING:
 	CHECK_COUNT;
@@ -1192,9 +1085,14 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  else
 	    mutt_error _("Invalid encoding.");
 	}
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
 
       case OP_COMPOSE_SEND_MESSAGE:
+
+        /* Note: We don't invoke send2-hook here, since we want to leave
+	 * users an opportunity to change settings from the ":" prompt.
+	 */
       
         if(check_attachments(idx, idxlen) != 0)
         {
@@ -1226,6 +1124,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	mutt_edit_file (NONULL(Editor), idx[menu->current]->content->filename);
 	mutt_update_encoding (idx[menu->current]->content);
 	menu->redraw = REDRAW_CURRENT | REDRAW_STATUS;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
 	break;
 
       case OP_COMPOSE_TOGGLE_UNLINK:
@@ -1241,6 +1140,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  menu->current++;
 # endif
 	menu->redraw = REDRAW_INDEX;
+        /* No send2hook since this doesn't change the message. */
 	break;
 
       case OP_COMPOSE_GET_ATTACHMENT:
@@ -1258,6 +1158,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
         else if (mutt_get_tmp_attachment(idx[menu->current]->content) == 0)
 	  menu->redraw = REDRAW_CURRENT;
 
+        /* No send2hook since this doesn't change the message. */
         break;
       
       case OP_COMPOSE_RENAME_FILE:
@@ -1284,7 +1185,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	    mutt_stamp_attachment(idx[menu->current]->content);
 	  
 	}
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
 
       case OP_COMPOSE_NEW_MIME:
 	{
@@ -1351,7 +1253,8 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	    menu->redraw = REDRAW_FULL;
 	  }
 	}
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);    
+        break;
 
       case OP_COMPOSE_EDIT_MIME:
 	CHECK_COUNT;
@@ -1360,24 +1263,28 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  mutt_update_encoding (idx[menu->current]->content);
 	  menu->redraw = REDRAW_FULL;
 	}
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
 
       case OP_VIEW_ATTACH:
       case OP_DISPLAY_HEADERS:
 	CHECK_COUNT;
 	mutt_attach_display_loop (menu, op, NULL, NULL, NULL, &idx, &idxlen, NULL, 0);
 	menu->redraw = REDRAW_FULL;
+        /* no send2hook, since this doesn't modify the message */
 	break;
 
       case OP_SAVE:
 	CHECK_COUNT;
 	mutt_save_attachment_list (NULL, menu->tagprefix, menu->tagprefix ?  msg->content : idx[menu->current]->content, NULL, menu);
 	MAYBE_REDRAW (menu->redraw);
+        /* no send2hook, since this doesn't modify the message */
 	break;
 
       case OP_PRINT:
 	CHECK_COUNT;
 	mutt_print_attachment_list (NULL, menu->tagprefix, menu->tagprefix ? msg->content : idx[menu->current]->content);
+        /* no send2hook, since this doesn't modify the message */
 	break;
 
       case OP_PIPE:
@@ -1385,8 +1292,9 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
         CHECK_COUNT;
 	mutt_pipe_attachment_list (NULL, menu->tagprefix, menu->tagprefix ? msg->content : idx[menu->current]->content, op == OP_FILTER);
 	if (op == OP_FILTER) /* cte might have changed */
-	  menu->redraw = menu->tagprefix ? REDRAW_FULL : REDRAW_CURRENT; 
+	  menu->redraw = menu->tagprefix ? REDRAW_FULL : REDRAW_CURRENT;
         menu->redraw |= REDRAW_STATUS;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
 	break;
 
       case OP_EXIT:
@@ -1479,9 +1387,10 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  }
 	  msg->security = 0;
 	}
-	msg->security = pgp_send_menu (msg, &menu->redraw);
+	msg->security = crypt_pgp_send_menu (msg, &menu->redraw);
 	redraw_crypt_lines (msg);
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
 
 
       case OP_FORGET_PASSPHRASE:
@@ -1504,15 +1413,17 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	  }
 	  msg->security = 0;
 	}
-	msg->security = smime_send_menu(msg, &menu->redraw);
+	msg->security = crypt_smime_send_menu(msg, &menu->redraw);
 	redraw_crypt_lines (msg);
-	break;
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
+        break;
 
 
 #ifdef MIXMASTER
       case OP_COMPOSE_MIX:
       
       	mix_make_chain (&msg->chain, &menu->redraw);
+        mutt_message_hook (NULL, msg, M_SEND2HOOK);
         break;
 #endif
 

@@ -1,5 +1,6 @@
 /*
  * Copyright (C) 1996-2002 Michael R. Elkins <me@mutt.org>
+ * Copyright (C) 2004 g10 Code GmbH
  * 
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -209,7 +210,7 @@ struct option_t MuttVars[] = {
   ** .pp
   ** .dl
   ** .dt %C  .dd charset
-  ** .dt %c  .dd reqiures charset conversion (n or c)
+  ** .dt %c  .dd requires charset conversion (n or c)
   ** .dt %D  .dd deleted flag
   ** .dt %d  .dd description
   ** .dt %e  .dd MIME content-transfer-encoding
@@ -333,7 +334,7 @@ struct option_t MuttVars[] = {
   { "compose_format",	DT_STR,	 R_BOTH, UL &ComposeFormat, UL "-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-" },
   /*
   ** .pp
-  ** Controls the format of the status line displayed in the \fCompose\fP
+  ** Controls the format of the status line displayed in the \fICompose\fP
   ** menu.  This string is similar to ``$$status_format'', but has its own
   ** set of printf()-like sequences:
   ** .pp
@@ -346,6 +347,12 @@ struct option_t MuttVars[] = {
   ** .pp
   ** See the text describing the ``$$status_format'' option for more 
   ** information on how to set ``$$compose_format''.
+  */
+  { "config_charset",	DT_STR,  R_NONE, UL &ConfigCharset, UL 0 },
+  /*
+  ** .pp
+  ** When defined, Mutt will recode commands in rc files from this
+  ** encoding.
   */
   { "confirmappend",	DT_BOOL, R_NONE, OPTCONFIRMAPPEND, 1 },
   /*
@@ -378,6 +385,17 @@ struct option_t MuttVars[] = {
   ** will be saved for later references.  Also see ``$$record'',
   ** ``$$save_name'', ``$$force_name'' and ``$fcc-hook''.
   */
+  
+  { "crypt_use_gpgme",  DT_BOOL, R_NONE, OPTCRYPTUSEGPGME, 0 },
+  /*
+  ** .pp
+  ** This variable controls the use the GPGME enabled crypto backends.
+  ** If it is set and Mutt was build with gpgme support, the gpgme code for
+  ** S/MIME and PGP will be used instead of the classic code.  Note, that
+  ** you need to use this option in .muttrc as it won't have any effect when 
+  ** used interactively.
+  */
+  
   { "crypt_autopgp",	DT_BOOL, R_NONE, OPTCRYPTAUTOPGP, 1 },
   /*
   ** .pp
@@ -441,8 +459,8 @@ struct option_t MuttVars[] = {
   { "digest_collapse",	DT_BOOL, R_NONE, OPTDIGESTCOLLAPSE, 1},
   /*
   ** .pp
-  ** If this option is \fIset\fP, mutt's revattach menu will not show the subparts of
-  ** individual messages in a digest.  To see these subparts, press 'v' on that menu.
+  ** If this option is \fIset\fP, mutt's received-attachments menu will not show the subparts of
+  ** individual messages in a multipart/digest.  To see these subparts, press 'v' on that menu.
   */
   { "display_filter",	DT_PATH, R_PAGER, UL &DisplayFilter, UL "" },
   /*
@@ -760,6 +778,13 @@ struct option_t MuttVars[] = {
   ** When set, mutt will not show the presence of missing messages in the
   ** thread tree.
   */
+  { "hide_thread_subject", DT_BOOL, R_TREE|R_INDEX, OPTHIDETHREADSUBJECT, 1 },
+  /*
+  ** .pp
+  ** When set, mutt will not show the subject of messages in the thread
+  ** tree that have the same subject as their parent or closest previously
+  ** displayed sibling.
+  */
   { "hide_top_limited",	DT_BOOL, R_TREE|R_INDEX, OPTHIDETOPLIMITED, 0 },
   /*
   ** .pp
@@ -813,8 +838,8 @@ struct option_t MuttVars[] = {
   ** This is a colon-delimited list of authentication methods mutt may
   ** attempt to use to log in to an IMAP server, in the order mutt should
   ** try them.  Authentication methods are either 'login' or the right
-  ** side of an IMAP 'AUTH=xxx' capability string, eg 'digest-md5',
-  ** 'gssapi' or 'cram-md5'. This parameter is case-insensitive. If this
+  ** side of an IMAP 'AUTH=xxx' capability string, eg 'digest-md5', 'gssapi'
+  ** or 'cram-md5'. This parameter is case-insensitive. If this
   ** parameter is unset (the default) mutt will try all available methods,
   ** in order from most-secure to least-secure.
   ** .pp
@@ -839,6 +864,15 @@ struct option_t MuttVars[] = {
   ** connecting to IMAP servers.
   */
 # endif
+  { "imap_headers",	DT_STR, R_INDEX, UL &ImapHeaders, UL 0},
+  /*
+  ** .pp
+  ** Mutt requests these header fields in addition to the default headers
+  ** ("DATE FROM SUBJECT TO CC MESSAGE-ID REFERENCES CONTENT-TYPE
+  ** CONTENT-DESCRIPTION IN-REPLY-TO REPLY-TO LINES X-LABEL") from IMAP
+  ** servers before displaying the index menu. You may want to add more
+  ** headers for spam detection. \fBNote:\fP This is a space separated list.
+  */
   { "imap_home_namespace",	DT_STR, R_NONE, UL &ImapHomeNamespace, UL 0},
   /*
   ** .pp
@@ -928,6 +962,12 @@ struct option_t MuttVars[] = {
   ** Controls whether or not a copy of the message(s) you are replying to
   ** is included in your reply.
   */
+  { "include_onlyfirst",	DT_BOOL, R_NONE, OPTINCLUDEONLYFIRST, 0},
+  /*
+  ** .pp
+  ** Controls whether or not Mutt includes only the first attachment
+  ** of the message you are replying.
+  */
   { "indent_string",	DT_STR,	 R_NONE, UL &Prefix, UL "> " },
   /*
   ** .pp
@@ -963,6 +1003,7 @@ struct option_t MuttVars[] = {
   ** .dt %E .dd number of messages in current thread
   ** .dt %f .dd entire From: line (address + real name)
   ** .dt %F .dd author name, or recipient name if the message is from you
+  ** .dt %H .dd spam attribute(s) of this message
   ** .dt %g .dd newsgroup name (if compiled with nntp support)
   ** .dt %i .dd message-id of the current message
   ** .dt %l .dd number of lines in the message (does not work with maildir,
@@ -1584,6 +1625,48 @@ struct option_t MuttVars[] = {
   ** removed, while the inner multipart/signed part is retained.
   ** (PGP only)
   */
+  { "pgp_create_traditional",	DT_SYN, R_NONE, UL "pgp_autoinline", 0 },
+  { "pgp_autoinline",		DT_BOOL, R_NONE, OPTPGPAUTOINLINE, 0 },
+  /*
+  ** .pp
+  ** This option controls whether Mutt generates old-style inline
+  ** (traditional) PGP encrypted or signed messages under certain
+  ** circumstances.  This can be overridden by use of the \fIpgp-menu\fP,
+  ** when inline is not required.
+  ** .pp
+  ** Note that Mutt might automatically use PGP/MIME for messages
+  ** which consist of more than a single MIME part.  Mutt can be
+  ** configured to ask before sending PGP/MIME messages when inline
+  ** (traditional) would not work.
+  ** See also: ``$$pgp_mime_auto''.
+  ** .pp
+  ** Also note that using the old-style PGP message format is \fBstrongly\fP
+  ** \fBdeprecated\fP.
+  ** (PGP only)
+  */
+  { "pgp_auto_traditional",	DT_SYN, R_NONE, UL "pgp_replyinline", 0 },
+  { "pgp_replyinline",		DT_BOOL, R_NONE, OPTPGPREPLYINLINE, 0 },
+  /*
+  ** .pp
+  ** Setting this variable will cause Mutt to always attempt to
+  ** create an inline (traditional) message when replying to a
+  ** message which is PGP encrypted/signed inline.  This can be
+  ** overridden by use of the \fIpgp-menu\fP, when inline is not
+  ** required.  This option does not automatically detect if the
+  ** (replied-to) message is inline; instead it relies on Mutt
+  ** internals for previously checked/flagged messages.
+  ** .pp
+  ** Note that Mutt might automatically use PGP/MIME for messages
+  ** which consist of more than a single MIME part.  Mutt can be
+  ** configured to ask before sending PGP/MIME messages when inline
+  ** (traditional) would not work.
+  ** See also: ``$$pgp_mime_auto''.
+  ** .pp
+  ** Also note that using the old-style PGP message format is \fBstrongly\fP
+  ** \fBdeprecated\fP.
+  ** (PGP only)
+  ** 
+  */
   { "pgp_show_unusable", DT_BOOL, R_NONE, OPTPGPSHOWUNUSABLE, 1 },
   /*
   ** .pp
@@ -1633,35 +1716,15 @@ struct option_t MuttVars[] = {
   ** `reverse-'.
   ** (PGP only)
   */
-  { "pgp_create_traditional", DT_QUAD, R_NONE, OPT_PGPTRADITIONAL, M_NO },
+  { "pgp_mime_auto", DT_QUAD, R_NONE, OPT_PGPMIMEAUTO, M_ASKYES },
   /*
   ** .pp
-  ** This option controls whether Mutt generates old-style inline PGP
-  ** encrypted or signed messages.
-  ** .pp
-  ** Note that PGP/MIME will be used automatically for messages which have
-  ** a character set different from us-ascii, or which consist of more than
-  ** a single MIME part.
+  ** This option controls whether Mutt will prompt you for
+  ** automatically sending a (signed/encrypted) message using
+  ** PGP/MIME when inline (traditional) fails (for any reason).
   ** .pp
   ** Also note that using the old-style PGP message format is \fBstrongly\fP
   ** \fBdeprecated\fP.
-  ** (PGP only)
-  */
-  { "pgp_auto_traditional", DT_BOOL, R_NONE, OPTPGPAUTOTRAD, 0 },
-  /*
-  ** .pp
-  ** This option causes Mutt to generate an old-style inline PGP
-  ** encrypted or signed message when replying to an old-style
-  ** message, and a PGP/MIME message when replying to a PGP/MIME
-  ** message.  Note that this option is only meaningful when using
-  ** ``$$crypt_replyencrypt'', ``$$crypt_replysign'', or
-  ** ``$$crypt_replysignencrypted''.
-  ** .pp
-  ** Also note that PGP/MIME will be used automatically for messages
-  ** which have a character set different from us-ascii, or which
-  ** consist of more than a single MIME part.
-  ** .pp
-  ** This option overrides ``$$pgp_create_traditional''
   ** (PGP only)
   */
 
@@ -1915,8 +1978,8 @@ struct option_t MuttVars[] = {
   /*
   ** .pp
   ** This command is used to extract only the signers X509 certificate from a S/MIME
-  **  signature, so that the certificate's owner may get compared to the email's 
-  ** 'From'-field.
+  ** signature, so that the certificate's owner may get compared to the
+  ** email's 'From'-field.
   ** (S/MIME only)
   */
   { "smime_import_cert_command", 	DT_STR, R_NONE, UL &SmimeImportCertCommand, 0},
@@ -1983,7 +2046,7 @@ struct option_t MuttVars[] = {
   ** use STARTTLS regardless of the server's capabilities.
   */
 # endif  
-  { "certificate_file",	DT_PATH, R_NONE, UL &SslCertFile, 0 },
+  { "certificate_file",	DT_PATH, R_NONE, UL &SslCertFile, UL "~/.mutt_certificates" },
   /*
   ** .pp
   ** This variable specifies the file where the certificates you trust
@@ -2048,6 +2111,30 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Example: set ssl_ca_certificates_file=/etc/ssl/certs/ca-certificates.crt
   */
+  { "ssl_client_cert", DT_PATH, R_NONE, UL &SslClientCert, 0 },
+  /*
+  ** .pp
+  ** The file containing a client certificate and its associated private
+  ** key.
+  */
+#ifdef USE_GNUTLS
+  { "ssl_min_dh_prime_bits", DT_NUM, R_NONE, UL &SslDHPrimeBits, 0 },
+  /*
+  ** .pp
+  ** This variable specifies the minimum acceptable prime size (in bits)
+  ** for use in any Diffie-Hellman key exchange. A value of 0 will use
+  ** the default from the GNUTLS library.
+  */
+  { "ssl_ca_certificates_file", DT_PATH, R_NONE, UL &SslCACertFile, 0 },
+  /*
+  ** .pp
+  ** This variable specifies a file containing trusted CA certificates.
+  ** Any server certificate that is signed with one of these CA
+  ** certificates are also automatically accepted.
+  ** .pp
+  ** Example: set ssl_ca_certificates_file=/etc/ssl/certs/ca-certificates.crt
+  */
+#endif
 #endif
 #endif
 
@@ -2395,8 +2482,10 @@ struct option_t MuttVars[] = {
   ** move the messages to another machine, and reply to some the messages
   ** from there.  If this variable is set, the default \fIFrom:\fP line of
   ** the reply messages is built using the address where you received the
-  ** messages you are replying to.  If the variable is unset, the
-  ** \fIFrom:\fP line will use your address on the current machine.
+  ** messages you are replying to \fBif\fP that address matches your
+  ** alternates.  If the variable is unset, or the address that would be
+  ** used doesn't match your alternates, the \fIFrom:\fP line will use
+  ** your address on the current machine.
   */
   { "reverse_realname",	DT_BOOL, R_BOTH, OPTREVREAL, 1 },
   /*
@@ -2622,6 +2711,7 @@ struct option_t MuttVars[] = {
   ** .  mailbox-order (unsorted)
   ** .  score
   ** .  size
+  ** .  spam
   ** .  subject
   ** .  threads
   ** .  to
@@ -2659,7 +2749,7 @@ struct option_t MuttVars[] = {
   ** order $$sort_aux is reversed again (which is not the right thing to do,
   ** but kept to not break any existing configuration setting).
   */
-  { "sort_browser",	DT_SORT|DT_SORT_BROWSER, R_NONE, UL &BrowserSort, SORT_SUBJECT },
+  { "sort_browser",	DT_SORT|DT_SORT_BROWSER, R_NONE, UL &BrowserSort, SORT_ALPHA },
   /*
   ** .pp
   ** Specifies how to sort entries in the file browser.  By default, the
@@ -2686,6 +2776,15 @@ struct option_t MuttVars[] = {
   ** setting of ``$$reply_regexp''.  With sort_re unset, mutt will attach
   ** the message whether or not this is the case, as long as the
   ** non-``$$reply_regexp'' parts of both messages are identical.
+  */
+  { "spam_separator",   DT_STR, R_NONE, UL &SpamSep, UL "," },
+  /*
+  ** .pp
+  ** ``$spam_separator'' controls what happens when multiple spam headers
+  ** are matched: if unset, each successive header will overwrite any
+  ** previous matches value for the spam label. If set, each successive
+  ** match will append to the previous, using ``$spam_separator'' as a
+  ** separator.
   */
   { "spoolfile",	DT_PATH, R_NONE, UL &Spoolfile, 0 },
   /*
@@ -3031,6 +3130,7 @@ const struct mapping_t SortMethods[] = {
   { "threads",		SORT_THREADS },
   { "to",		SORT_TO },
   { "score",		SORT_SCORE },
+  { "spam",		SORT_SPAM },
   { NULL,		0 }
 };
 
@@ -3049,6 +3149,7 @@ const struct mapping_t SortAuxMethods[] = {
 					 */
   { "to",		SORT_TO },
   { "score",		SORT_SCORE },
+  { "spam",		SORT_SPAM },
   { NULL,		0 }
 };
   
@@ -3081,6 +3182,7 @@ const struct mapping_t SortKeyMethods[] = {
 
 static int parse_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_rx_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
+static int parse_spam_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unlist (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_rx_unlist (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 
@@ -3095,6 +3197,9 @@ static int parse_my_hdr (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unmy_hdr (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_subscribe (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 
+static int parse_alternates (BUFFER *, BUFFER *, unsigned long, BUFFER *);
+static int parse_unalternates (BUFFER *, BUFFER *, unsigned long, BUFFER *);
+
 struct command_t
 {
   char *name;
@@ -3103,8 +3208,8 @@ struct command_t
 };
 
 struct command_t Commands[] = {
-  { "alternates",	parse_rx_list,		UL &Alternates },
-  { "unalternates",	parse_rx_unlist,	UL &Alternates },
+  { "alternates",	parse_alternates,	UL &Alternates },
+  { "unalternates",	parse_unalternates,	UL &Alternates },
 #ifdef USE_SOCKET
   { "account-hook",     mutt_parse_hook,        M_ACCOUNTHOOK },
 #endif
@@ -3149,8 +3254,11 @@ struct command_t Commands[] = {
   { "save-hook",	mutt_parse_hook,	M_SAVEHOOK },
   { "score",		mutt_parse_score,	0 },
   { "send-hook",	mutt_parse_hook,	M_SENDHOOK },
+  { "send2-hook",	mutt_parse_hook,	M_SEND2HOOK },
   { "set",		parse_set,		0 },
   { "source",		parse_source,		0 },
+  { "spam",		parse_spam_list,	M_SPAM },
+  { "nospam",		parse_spam_list,	M_NOSPAM },
   { "subscribe",	parse_subscribe,	0 },
   { "toggle",		parse_set,		M_SET_INV },
   { "unalias",		parse_unalias,		0 },

@@ -644,7 +644,7 @@ static int examine_mailboxes (MUTTMENU *menu, struct browser_state *state)
   return 0;
 }
 
-int select_file_search (MUTTMENU *menu, regex_t *re, int n)
+static int select_file_search (MUTTMENU *menu, regex_t *re, int n)
 {
 #ifdef USE_NNTP
   if (option (OPTNEWS))
@@ -653,7 +653,7 @@ int select_file_search (MUTTMENU *menu, regex_t *re, int n)
   return (regexec (re, ((struct folder_file *) menu->data)[n].name, 0, NULL, 0));
 }
 
-void folder_entry (char *s, size_t slen, MUTTMENU *menu, int num)
+static void folder_entry (char *s, size_t slen, MUTTMENU *menu, int num)
 {
   FOLDER folder;
 
@@ -715,7 +715,7 @@ static void init_menu (struct browser_state *state, MUTTMENU *menu, char *title,
   menu->redraw = REDRAW_FULL;
 }
 
-int file_tag (MUTTMENU *menu, int n, int m)
+static int file_tag (MUTTMENU *menu, int n, int m)
 {
   struct folder_file *ff = &(((struct folder_file *)menu->data)[n]);
   int ot;
@@ -803,8 +803,8 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
       else
       {
 	getcwd (LastDir, sizeof (LastDir));
-	strcat (LastDir, "/");	/* __STRCAT_CHECKED__ */
-	strncat (LastDir, f, i);
+	safe_strcat (LastDir, sizeof (LastDir), "/");
+	safe_strncat (LastDir, sizeof (LastDir), f, i);
       }
     }
     else
@@ -1177,21 +1177,21 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files, int *num
 	  {
 	    if (S_ISDIR (st.st_mode))
 	    {
-	      strfcpy (LastDir, buf, sizeof (LastDir));
 	      destroy_state (&state);
-	      if (examine_directory (menu, &state, LastDir, prefix) == 0)
-	      {
-		menu->current = 0; 
-		menu->top = 0; 
-		init_menu (&state, menu, title, sizeof (title), buffy);
-	      }
+	      if (examine_directory (menu, &state, buf, prefix) == 0)
+		strfcpy (LastDir, buf, sizeof (LastDir));
 	      else
 	      {
 		mutt_error _("Error scanning directory.");
-		destroy_state (&state);
-		mutt_menuDestroy (&menu);
-		goto bail;
+		if (examine_directory (menu, &state, LastDir, prefix) == -1)
+		{
+		  mutt_menuDestroy (&menu);
+		  goto bail;
+		}
 	      }
+	      menu->current = 0; 
+	      menu->top = 0; 
+	      init_menu (&state, menu, title, sizeof (title), buffy);
 	    }
 	    else
 	      mutt_error (_("%s is not a directory."), buf);

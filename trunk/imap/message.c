@@ -61,7 +61,7 @@ int imap_read_headers (IMAP_DATA* idata, int msgbegin, int msgend)
   IMAP_HEADER h;
   int rc, mfhrc, oldmsgcount;
   int fetchlast = 0;
-  const char *want_headers = "DATE FROM SUBJECT TO CC MESSAGE-ID REFERENCES CONTENT-TYPE IN-REPLY-TO REPLY-TO LINES X-LABEL";
+  const char *want_headers = "DATE FROM SUBJECT TO CC MESSAGE-ID REFERENCES CONTENT-TYPE CONTENT-DESCRIPTION IN-REPLY-TO REPLY-TO LINES LIST-POST X-LABEL";
 
 #if USE_HCACHE
   void *hc   = NULL;
@@ -77,13 +77,13 @@ int imap_read_headers (IMAP_DATA* idata, int msgbegin, int msgend)
 
   if (mutt_bit_isset (idata->capabilities,IMAP4REV1))
   {
-    snprintf (hdrreq, sizeof (hdrreq), "BODY.PEEK[HEADER.FIELDS (%s)]", 
-      want_headers); 
+    snprintf (hdrreq, sizeof (hdrreq), "BODY.PEEK[HEADER.FIELDS (%s%s%s)]", 
+	      want_headers, ImapHeaders ? " " : "", ImapHeaders ? ImapHeaders : ""); 
   } 
   else if (mutt_bit_isset (idata->capabilities,IMAP4))
   {
-    snprintf (hdrreq, sizeof (hdrreq), "RFC822.HEADER.LINES (%s)", 
-      want_headers);
+    snprintf (hdrreq, sizeof (hdrreq), "RFC822.HEADER.LINES (%s%s%s)", 
+      want_headers, ImapHeaders ? " " : "", ImapHeaders ? ImapHeaders : "");
   }
   else
   {	/* Unable to fetch headers for lower versions */
@@ -376,7 +376,7 @@ int imap_fetch_message (MESSAGE *msg, CONTEXT *ctx, int msgno)
    * command handler */
   h->active = 0;
   
-  snprintf (buf, sizeof (buf), "UID FETCH %d %s", HEADER_DATA(h)->uid,
+  snprintf (buf, sizeof (buf), "UID FETCH %u %s", HEADER_DATA(h)->uid,
 	    (mutt_bit_isset (idata->capabilities, IMAP4REV1) ?
 	     (option (OPTIMAPPEEK) ? "BODY.PEEK[]" : "BODY[]") :
 	     "RFC822"));
@@ -552,7 +552,7 @@ int imap_append_message (CONTEXT *ctx, MESSAGE *msg)
   rewind (fp);
   
   imap_munge_mbox_name (mbox, sizeof (mbox), mailbox);
-  snprintf (buf, sizeof (buf), "APPEND %s (\\Seen) {%d}", mbox, len);
+  snprintf (buf, sizeof (buf), "APPEND %s (\\Seen) {%lu}", mbox, len);
 
   imap_cmd_start (idata, buf);
 
@@ -778,8 +778,8 @@ void imap_add_keywords (char* s, HEADER* h, LIST* mailbox_flags, size_t slen)
   {
     if (msg_has_flag (mailbox_flags, keywords->data))
     {
-      strncat (s, keywords->data, slen);
-      strncat (s, " ", slen);
+      safe_strcat (s, slen, keywords->data);
+      safe_strcat (s, slen, " ");
     }
     keywords = keywords->next;
   }
@@ -876,19 +876,20 @@ static int msg_fetch_header (CONTEXT* ctx, IMAP_HEADER* h, char* buf, FILE* fp)
   if (msg_parse_fetch (h, buf) != -2)
     return rc;
   
-  if (imap_get_literal_count (buf, &bytes) < 0)
-    return rc;
-  imap_read_literal (fp, idata, bytes);
+  if (imap_get_literal_count (buf, &bytes) == 0)
+  {
+    imap_read_literal (fp, idata, bytes);
 
-  /* we may have other fields of the FETCH _after_ the literal
-   * (eg Domino puts FLAGS here). Nothing wrong with that, either.
-   * This all has to go - we should accept literals and nonliterals
-   * interchangeably at any time. */
-  if (imap_cmd_step (idata) != IMAP_CMD_CONTINUE)
-    return -2;
+    /* we may have other fields of the FETCH _after_ the literal
+     * (eg Domino puts FLAGS here). Nothing wrong with that, either.
+     * This all has to go - we should accept literals and nonliterals
+     * interchangeably at any time. */
+    if (imap_cmd_step (idata) != IMAP_CMD_CONTINUE)
+      return rc;
   
-  if (msg_parse_fetch (h, idata->cmd.buf) == -1)
-    return rc;
+    if (msg_parse_fetch (h, idata->cmd.buf) == -1)
+      return rc;
+  }
 
   rc = 0; /* success */
   

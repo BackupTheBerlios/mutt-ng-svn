@@ -1822,9 +1822,9 @@ char *mutt_gen_msgid (void)
   if(!(fqdn = mutt_fqdn(0)))
     fqdn = NONULL(Hostname);
 
-  snprintf (buf, sizeof (buf), "<%d%02d%02d%02d%02d%02d.G%c%d@%s>",
+  snprintf (buf, sizeof (buf), "<%d%02d%02d%02d%02d%02d.G%c%u@%s>",
 	    tm->tm_year + 1900, tm->tm_mon + 1, tm->tm_mday, tm->tm_hour,
-	    tm->tm_min, tm->tm_sec, MsgIdPfx, getpid (), fqdn);
+	    tm->tm_min, tm->tm_sec, MsgIdPfx, (unsigned int)getpid (), fqdn);
   MsgIdPfx = (MsgIdPfx == 'Z') ? 'A' : MsgIdPfx + 1;
   return (safe_strdup (buf));
 }
@@ -2376,40 +2376,42 @@ int mutt_bounce_message (FILE *fp, HEADER *h, ADDRESS *to)
 /* given a list of addresses, return a list of unique addresses */
 ADDRESS *mutt_remove_duplicates (ADDRESS *addr)
 {
-  ADDRESS *top = NULL;
+  ADDRESS *top = addr;
+  ADDRESS **last = &top;
   ADDRESS *tmp;
-  
-  if ((top = addr) == NULL)
-    return (NULL);
-  addr = addr->next;
-  top->next = NULL;
+  int dup;
+
   while (addr)
   {
-    tmp = top;
-    do {
-      if (addr->mailbox && tmp->mailbox &&
+    for (tmp = top, dup = 0; tmp && tmp != addr; tmp = tmp->next)
+    {
+      if (tmp->mailbox && addr->mailbox && 
 	  !ascii_strcasecmp (addr->mailbox, tmp->mailbox))
       {
-	/* duplicate address, just ignore it */
-	tmp = addr;
-	addr = addr->next;
-	tmp->next = NULL;
-	rfc822_free_address (&tmp);
+	dup = 1;
+	break;
       }
-      else if (!tmp->next)
-      {
-	/* unique address.  add it to the list */
-	tmp->next = addr;
-	addr = addr->next;
-	tmp = tmp->next;
-	tmp->next = NULL;
-	tmp = NULL; /* so we exit the loop */
-      }
-      else
-	tmp = tmp->next;
-    } while (tmp);
-  }
+    }
+    
+    if (dup)
+    {
+      dprint (2, (debugfile, "mutt_remove_duplicates: Removing %s\n",
+		  addr->mailbox));
+      
+      *last = addr->next;
 
+      addr->next = NULL;
+      rfc822_free_address(&addr);
+      
+      addr = *last;
+    }
+    else 
+    {
+      last = &addr->next;
+      addr = addr->next;
+    }
+  }
+  
   return (top);
 }
 
@@ -2504,6 +2506,8 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
       if (PgpSignAs && *PgpSignAs)
         fprintf (msg->fp, "<%s>", PgpSignAs);
     }
+    if (hdr->security & INLINE)
+      fputc ('I', msg->fp);
     fputc ('\n', msg->fp);
   }
 
@@ -2522,6 +2526,8 @@ int mutt_write_fcc (const char *path, HEADER *hdr, const char *msgid, int post, 
 	if (SmimeDefaultKey && *SmimeDefaultKey)
 	    fprintf (msg->fp, "<%s>", SmimeDefaultKey);
     }
+    if (hdr->security & INLINE)
+      fputc ('I', msg->fp);
     fputc ('\n', msg->fp);
   }
 

@@ -26,6 +26,7 @@
 #include "mx.h"
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
+#include "url.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -463,7 +464,7 @@ void mutt_make_post_indent (CONTEXT *ctx, HEADER *cur, FILE *out)
 
 static int include_reply (CONTEXT *ctx, HEADER *cur, FILE *out)
 {
-  int cmflags = M_CM_PREFIX | M_CM_DECODE | M_CM_CHARCONV;
+  int cmflags = M_CM_PREFIX | M_CM_DECODE | M_CM_CHARCONV | M_CM_REPLYING;
   int chflags = CH_DECODE;
 
   if (WithCrypto && (cur->security & ENCRYPT))
@@ -670,18 +671,22 @@ void mutt_make_forward_subject (ENVELOPE *env, CONTEXT *ctx, HEADER *cur)
 
   /* set the default subject for the message. */
   mutt_make_string (buffer, sizeof (buffer), NONULL(ForwFmt), ctx, cur);
-  env->subject = safe_strdup (buffer);
+  mutt_str_replace (&env->subject, buffer);
 }
 
 void mutt_make_misc_reply_headers (ENVELOPE *env, CONTEXT *ctx,
 				    HEADER *cur, ENVELOPE *curenv)
 {
+  /* This takes precedence over a subject that might have
+   * been taken from a List-Post header.  Is that correct?
+   */
   if (curenv->real_subj)
   {
+    FREE (&env->subject);
     env->subject = safe_malloc (mutt_strlen (curenv->real_subj) + 5);
     sprintf (env->subject, "Re: %s", curenv->real_subj);	/* __SPRINTF_CHECKED__ */
   }
-  else
+  else if (!env->subject)
     env->subject = safe_strdup ("Re: your mail");
   
 #ifdef USE_NNTP
@@ -1224,6 +1229,16 @@ ci_send_message (int flags,		/* send mode */
       msg->env = mutt_new_envelope ();
   }
 
+  /* Parse and use an eventual list-post header */
+  if ((flags & SENDLISTREPLY) 
+      && cur && cur->env && cur->env->list_post) 
+  {
+    /* Use any list-post header as a template */
+    url_parse_mailto (msg->env, NULL, cur->env->list_post);
+    /* We don't let them set the sender's address. */
+    rfc822_free_address (&msg->env->from);
+  }
+  
   if (! (flags & (SENDKEY | SENDPOSTPONED | SENDRESEND)))
   {
     pbody = mutt_new_body ();
@@ -1387,7 +1402,14 @@ ci_send_message (int flags,		/* send mode */
 	msg->security |= SIGN;
       if (option (OPTCRYPTREPLYSIGNENCRYPTED) && cur && (cur->security & ENCRYPT))
 	msg->security |= SIGN;
-    }      
+      if (WithCrypto & APPLICATION_PGP && (msg->security & (ENCRYPT | SIGN)))
+      {
+	if (option (OPTPGPAUTOINLINE))
+	  msg->security |= INLINE;
+	if (option (OPTPGPREPLYINLINE) && cur && (cur->security & INLINE))
+	  msg->security |= INLINE;
+      }
+    }
 
     if (WithCrypto && msg->security)
     {
@@ -1430,6 +1452,14 @@ ci_send_message (int flags,		/* send mode */
     if (!(msg->security & (APPLICATION_SMIME|APPLICATION_PGP)))
       msg->security = 0;
   }
+  
+  /* 
+   * This hook is even called for postponed messages, and can, e.g., be
+   * used for setting the editor, the sendmail path, or the
+   * envelope sender.
+   */
+  mutt_message_hook (NULL, msg, M_SEND2HOOK);
+  
   /* wait until now to set the real name portion of our return address so
      that $realname can be set in a send-hook */
   if (msg->env->from && !msg->env->from->personal
@@ -1479,6 +1509,8 @@ ci_send_message (int flags,		/* send mode */
       }
       else
 	mutt_edit_file (Editor, msg->content->filename);
+      
+      mutt_message_hook (NULL, msg, M_SEND2HOOK);
     }
 
     if (! (flags & (SENDPOSTPONED | SENDFORWARD | SENDKEY | SENDRESEND)))
@@ -1646,7 +1678,7 @@ main_loop:
       clear_content = msg->content;
   
       if ((crypt_get_keys (msg, &pgpkeylist) == -1) ||
-          mutt_protect (msg, cur, pgpkeylist) == -1)
+          mutt_protect (msg, pgpkeylist) == -1)
       {
         msg->content = mutt_remove_multipart (msg->content);
         
@@ -1726,7 +1758,7 @@ main_loop:
 	  /* this means writing only the main part */
 	  msg->content = clear_content->parts;
 
-	  if (mutt_protect (msg, cur, pgpkeylist) == -1)
+	  if (mutt_protect (msg, pgpkeylist) == -1)
 	  {
 	    /* we can't do much about it at this point, so
 	     * fallback to saving the whole thing to fcc

@@ -2218,6 +2218,17 @@ search_next:
 	  mutt_resend_message (NULL, extra->ctx, extra->hdr);
         redraw = REDRAW_FULL;
         break;
+
+      case OP_CHECK_TRADITIONAL:
+        CHECK_MODE (IsHeader (extra));
+        if (!(WithCrypto & APPLICATION_PGP))
+	  break;
+        if (!(extra->hdr->security & PGP_TRADITIONAL_CHECKED)) 
+        {
+	  ch = -1;
+	  rc = OP_CHECK_TRADITIONAL;
+	}
+        break;
       
       case OP_CREATE_ALIAS:
 	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
@@ -2430,7 +2441,7 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
       case OP_MAIL:
 	CHECK_MODE(IsHeader (extra) && !IsAttach (extra));
         CHECK_ATTACH;      
-	ci_send_message (0, NULL, NULL, extra->ctx, extra->hdr);
+	ci_send_message (0, NULL, NULL, extra->ctx, NULL);
 	redraw = REDRAW_FULL;
 	break;
 
@@ -2501,7 +2512,7 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
 	break;
 
       case OP_RECALL_MESSAGE:
-	CHECK_MODE(IsHeader (extra));
+	CHECK_MODE(IsHeader (extra) && !IsAttach(extra));
         CHECK_ATTACH;
 	ci_send_message (SENDPOSTPONED, NULL, NULL, extra->ctx, extra->hdr);
 	redraw = REDRAW_FULL;

@@ -1,3 +1,703 @@
+2005-01-27 20:52:13  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* main.c: Add USE_INODESORT to main.c's option dump.
+
+2005-01-27 20:38:02  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* commands.c: 0. In compose mode, press Ctrl-t to change
+	Content-Type.  1. Type "application/octet-stream" for example.
+	2. Press Ctrl-t again.	3. Type "text/plain; charset=us-ascii"
+	4. You will be asked "Convert to us-ascii upon sending?"
+	5. Press y or n.  6. You will see a strange message:
+	 "Content-Type changed to Convert to us-ascii upon sending?."
+
+2005-01-27 20:26:52  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* pgp.c: Return an error in pgp_decrypt_part when the PGP output
+	file is empty.
+
+2005-01-27 20:17:46  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
+
+	* curs_main.c: this patch doesn't raise an error if you try
+	to sync an empty mailbox which makes it possible to use such a
+	macro as this on an empty mailbox:
+
+	macro index y "<sync-mailbox><change-folder>?"	macro pager y
+	"<sync-mailbox><change-folder>?"
+
+2005-01-27 19:34:50  David Shaw  <dshaw@jabberwocky.com>  (roessler)
+
+	* pgp.c: Detect end of PGP armor header when a line is
+	whitespace-only.
+
+2005-01-27 19:18:15  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* smime.c: Void the S/MIME passphrase before prompting
+	the user to re-enter it.  Noted by TAKAHASHI Tamotsu
+	<ttakah@lapis.plala.or.jp>, but with memset replaced by
+	smime_void_passphrase().
+
+2005-01-27 19:00:59  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* curs_lib.c: Add terminal newline when it lacks after editing
+	a message.  Originally from TAKIZAWA Takashi.
+
+2005-01-27 18:58:14  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* Makefile.am: Include mutt_ssl_gnutls.c with the distribution.
+
+2005-01-27 18:54:24  Marco d'Itri  <md@Linux.IT>  (roessler)
+
+	* globals.h, imap/imap.c, imap/util.c, init.c, init.h, main.c,
+	mutt.h, mutt_sasl.c, mutt_socket.c, mutt_ssl.h, mutt_ssl_gnutls.c,
+	pop_lib.c: GNUTLS support.  Used in Debian since Nov. 2001.
+
+2005-01-27 18:48:41  Bill Nottingham  <notting@redhat.com>  (roessler)
+
+	* mutt_sasl.c: With SASL, expect the server to prompt for
+	additional auth data if we have some to send (#129961, upstream
+	#1845)
+
+	* contrib/sample.muttrc: Changes the sample.muttrc highlight to
+	catch https URLs as well.
+
+	* color.c, main.c: Support for the "default" color in Slang.
+
+2005-01-27 18:45:37  Florian Weimer   <fw@deneb.enyo.de>  (roessler)
+
+	* mh.c, configure.in: Read files in maildir folders in inode
+	order; this seems to reduce seek overhead on Linux.  Enabled by
+	default; to disable, run configure with --disable-inodesort.
+	(By way of Marco d'Itri.)
+
+2005-01-27 18:28:42  Marco d'Itri  <md@Linux.IT>  (roessler)
+
+	* pgp.c: Improved good signature check.
+
+	* contrib/gpg.rc, pgpinvoke.c: Make the default Muttrc work
+	out the box for people using gnupg-agent.  Wrote and applied a
+	one-line patch to make the %?p? conditional escape work correctly,
+	patch forwarded upstream. (Closes: #277646)
+
+	* pgpewrap.c: Don't segfault when invoked without any arguments.
+
+	* contrib/gpg.rc, pgp.c: Evaluate gpg's machine-parseable status
+	messages.
+
+	* smime_keys.pl: Add some sanity checks to smime_keys.pl.
+
+	* contrib/gpg.rc: A gpg command line contains both --verbose
+	and --no-verbose, remove the first.
+
+2005-01-26 14:33:08  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* status.c: And, thinking about it further, this should just be
+	an empty string, not "(null)".
+
+	* status.c: The last Context->pattern fix was still crap.
+	Ooooops. (Thanks Ralf.)
+
+2005-01-26 13:36:44  Thomas Glanzmann <sithglan@stud.uni-erlangen.de>  (roessler)
+
+	* Makefile.am, configure.in, globals.h, hcache.c, imap/imap.c,
+	imap/imap_private.h, imap/message.c, init.h, main.c, protos.h:
+	IMAP header cache.
+
+2005-01-26 12:37:38  Ralf Wildenhues  <wildenhues@ins.uni-bonn.de> (roessler)
+
+	* addrbook.c, browser.c, commands.c, compose.c, imap/utf7.c:
+	Make some functions static.
+
+2005-01-26 12:36:36  Ralf Wildenhues  <wildenhues@ins.uni-bonn.de>  (roessler)
+
+	* imap/command.c, imap/message.c: Fix some printf arguments.
+
+2005-01-26 12:21:46  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* status.c: Really fix it.  Thanks to Ralf for noting the
+	typo in my earlier commit.
+	
+	* status.c: A variant of
+	<http://marc.theaimsgroup.com/?l=mutt-dev&m=110053165002362&w=2>.
+	Spotted by Ralf Wildenhues <wildenhues@ins.uni-bonn.de>.
+
+2005-01-17 02:24:49  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* cvslog2changelog.pl: cvs log emits a timezone after the
+	hour, at least here. Adjust date regexp to handle that case.
+                                 
+2005-01-15 09:52:44  Adeodato Simó  <asp16@alu.ua.es>  (brendan)
+
+	* po/cs.po: Major translation updates forgotten in mutt-po.
+
+2005-01-15 08:01:35  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* Makefile.am: Update commit targets to work when
+	builddir != srcdir.
+
+2005-01-15 07:36:37  Adeodato Simó  <asp16@alu.ua.es>  (brendan)
+
+	* init.h: Document the interaction between $reverse_name and
+	the alternates. Debian #210679.
+
+	* doc/manual.sgml.head, doc/muttrc.man.head: Include reply-hook
+	in the reference section of the manual.
+	Debian 254294.
+
+	* doc/mutt.man: Small typo in the mutt.1 manpage: Qeury -> Query.
+	Debian #258621.
+
+	* doc/muttrc.man.head: Minor formatting issue in the muttrc.5
+	manpage.
+	Debian #272579.
+
+	* po/ca.po, po/sv.po: Minor corrections in these translations,
+	checked with their authors.
+
+	* po/de.po, po/it.po: Major translation updates forgotten in
+	mutt-po.
+
+2005-01-11 12:15:13  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* doc/manual.sgml.head, doc/muttrc.man.head: Document send2-hook.
+
+	* send.c: send2-hook should also be executed after the first
+	time the message is edited by the user.
+
+2005-01-09 15:35:51  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* doc/muttbug.man, muttbug.sh.in: Replace muttbug and its
+	documentation by a note that acknowledges the shut down of the
+	bug tracking system.
+
+2004-12-21 09:46:24  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* pgp.c: Fix Debian #275188.
+
+2004-12-07 19:50:04  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* compose.c, hook.c, init.c, init.h, mutt.h, send.c: Add
+	send2-hook and fix alternates handling.
+
+2004-11-19 16:16:51  René Clerc  <rene@clerc.nl>  (roessler)
+
+	* doc/manual.sgml.tail, doc/manual.sgml.head: Document
+	tag-prefix-cond.
+
+2004-11-08 08:43:17  Ralf Wildenhues  <wildenhues@ins.uni-bonn.de>  (roessler)
+
+	* imap/imap_private.h: Having a signed one-bit bitfield is quite
+	odd -- its value is either 0 or -1.  Although the current code
+	is not broken because it doesn't test equality to 1, IMHO it's
+	better not to use that.
+
+	* imap/message.c: There's a size_t in imap_append_message not
+	printed out portably.
+
+2004-11-02 13:30:58  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* copy.h: Fix flag confusion.  Noted by Vincent Lefevre.
+
+2004-10-30 21:59:00  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* browser.c, buffy.c, check_sec.sh, commands.c, edit.c,
+	imap/auth_cram.c, imap/auth_gss.c, imap/imap.c, imap/message.c,
+	lib.c, lib.h, mutt_ssl.c, muttlib.c, recvcmd.c, url.c:
+	safe_strcat, safe_strncat.  Thanks to Ulf H. for noting the
+	wrong use of strncat in part of the mutt code base.
+
+	* smime.c: Fix bad code in smime_get_field_from_db.  Problem noted
+	by Ulf Härnhammar <Ulf.Harnhammar.9485@student.uu.se>.
+
+2004-09-29 11:27:33  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* lib.c: Fix mutt_unlink race condition for systems without
+	O_NOFOLLOW.  Noted by Jarno Huuskonen <Jarno.Huuskonen@uku.fi>.
+
+2004-09-07 08:09:39  Matthias Andree  <matthias.andree@gmx.de>  (roessler)
+
+	* prepare: Fix parameter passing.
+
+2004-08-31 15:41:03  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* configure.in: Add AC_GNU_SOURCE.
+
+	* recvattach.c: Remove *two* layers of S/MIME from messages
+	before building the attachment tree.  A generic solution would
+	remove intransparent encodings all the way down the tree.
+
+2004-08-30 20:10:10  Moritz Schulte  <mo@g10code.com>  (roessler)
+
+	* compose.c: Only print additional information related to PGP
+	in case the current message is indeed to be encrypted/signed
+	with PGP.
+	
+	(This change is misattributed to Brendan Cully in the CVS.)
+
+2004-08-30 20:05:40  Brendan Cully  <brendan@kublai.com>  (roessler)
+
+	* globals.h, init.h, mutt_sasl.c, mutt_ssl.c: Here's a patch
+	to allow mutt to use SSL client certificates to authenticate
+	itself. To use, set ssl_client_cert to the path to your
+	certificate file (containing both the certificate and the private
+	key). It works with the SASL EXTERNAL authentication mechanism,
+	so you'll need to have SASL enabled as well.
+
+2004-08-30 20:03:35  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
+
+	* init.c: Fix a memory leak in the generic spam detection code.
+
+	* muttlib.c, protos.h: This wipes duplicated code, which I
+	introduced a while ago.
+
+2004-08-30 19:47:47  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* po/ja.po: update
+
+2004-08-21 07:35:16  Ivan Vilata i Balaguer  <ivan@selidor.net>  (roessler)
+
+	* po/ca.po: update
+
+2004-08-17 16:06:48  René Clerc  <rene@clerc.nl>  (roessler)
+
+	* po/nl.po: update
+
+2004-08-17 15:56:23  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* configure.in: Check for ssize_t, really.
+
+	* configure.in: Check for ssize_t.
+
+2004-08-17 15:25:31  Ronny Haryanto  <ronnylist@haryan.to>  (roessler)
+
+	* po/id.po: Corrected update.
+
+	* po/id.po: update
+
+2004-08-17 15:22:25  Vincent Lefevre  <vincent@vinc17.org>  (roessler)
+
+	* po/fr.po: update
+
+2004-08-17 13:42:01  Johan Svedberg  <johan@svedberg.pp.se>  (roessler)
+
+	* po/sv.po: update
+
+2004-08-16 21:37:43  Adeodato Simó  <asp16@alu.ua.es>  (roessler)
+
+	* headers.c: as of current cvs, setting "PGP: E" (or similar)
+	when header-editing a message does not work. the OP is set
+	(ENCRYPT, SIGN, whatever) but APPLICATION_PGP is missing.
+
+2004-08-16 21:36:38  Brendan Cully  <brendan@kublai.com>  (roessler)
+
+	* imap/imap.c: If STARTTLS fails to complete the SSL handshake,
+	the error is not propagated and mutt will attempt to log in
+	anyway, probably causing an infinite block on read. The attached
+	patch closes the socket in this case, and propagates the error
+	properly.
+
+	* imap/auth_sasl.c: The attached patch causes mutt to attempt
+	the next method in imap_authenticators if the previous method
+	failed, even if the server reported that the method was
+	available. Previously mutt would give up if any authentication
+	method failed.
+
+2004-08-16 21:34:22  Moritz Schulte   <moritz@g10code.com>  (roessler)
+
+	* compose.c: Only print "Encrypt with" field in case the used
+	S/MIME modules supports this feature.
+
+2004-08-16 21:33:35  Pawel Dziekonski  <dzieko@pwr.wroc.pl>  (roessler)
+
+	* po/pl.po: update
+
+2004-08-11 12:31:21  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
+
+	* imap/imap.c: Fix two IMAP memory leaks.
+
+	* imap/imap.c, imap/imap.h: Remove imap_close_connection.
+
+	* menu.c: Fix a memory leak in mutt_menuDestroy.
+
+2004-08-08 16:20:37  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
+
+	* muttlib.c, protos.h: Fix a memory leak.
+
+2004-08-08 16:19:15  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* pgp.c, smime.c: Fix the PGP and S/MIME menus. Complaints
+	and suggestions of many lead to these changes.	See mutt-dev
+	discussions around this time for details.
+
+	* Makefile.am, crypthash.h, md5.h, sha1.h: Fix uint32_t
+	portability problem. Reported by Steve Kennedy.
+
+2004-08-07 05:23:33  Johan Svedberg  <johan@svedberg.pp.se>  (roessler)
+
+	* po/sv.po: update
+
+2004-08-02 08:03:46  Nathan Dushman  <nhd+mutt@andrew.cmu.edu>  (roessler)
+
+	* imap/command.c: Fix the improvement to address #1655.
+
+2004-07-22 01:10:55  Brendan Cully  <brendan@kublai.com>  (roessler)
+
+	* imap/message.c: Quick fix for IMAP breakage.
+
+2004-07-21 22:15:40  Nathan Dushman  <nhd+mutt@andrew.cmu.edu>  (roessler)
+
+	* imap/command.c: This is a one-line patch that increases the
+	speed at which mutt opens IMAP mailboxes, and addresses bug #1655.
+
+2004-07-20 09:00:50  Pawel Dziekonski  <dzieko@pwr.wroc.pl>  (roessler)
+
+	* po/pl.po: update
+
+2004-07-20 08:17:21  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* imap/message.c, mutt.h, parse.c, send.c, url.c: Use List-Post
+	headers when doing list-reply.
+
+2004-07-19 21:44:23  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* globals.h, imap/message.c, init.h: Fix #1548.  (The first
+	variant, with $imap_headers specifying headers that are downloaded
+	in addition to the set required for mutt to work properly.)
+
+2004-07-19 21:41:43  David Champion  <dgc@uchicago.edu>  (roessler)
+
+	* mbox.c, mh.c, pgp.c, sendlib.c: Fix some compiler warnings.
+
+2004-07-19 21:39:28  Adeodato Simó  <asp16@alu.ua.es>  (roessler)
+
+	* doc/manual.sgml.head: Fixing a missing newline.
+
+2004-07-19 21:36:46  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
+
+	* Makefile.am: Fix IMAP breakage.
+
+2004-07-15 08:08:32  David Champion  <dgc@uchicago.edu>  (roessler)
+
+	* doc/manual.sgml.head, init.c, init.h, mutt.h: v3 of the generic
+	spam detection patch.
+
+2004-07-14 05:58:30  Moritz Schulte   <moritz@g10code.com>  (roessler)
+
+	* pgp.c: Do not forget to handle special-case for gpg-agent.
+
+2004-07-14 05:55:40  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* ChangeLog: Fix an earlier commit message.
+
+2004-07-14 05:45:18  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* browser.c: Fix Debian#237426.  (Experimental.)
+
+2004-07-14 05:39:23  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* compose.c: Don't invoke "builtin" as an external editor.  Note:
+	It's not clear to me that this is really the right approach.
+	Revisit Editor/Visual some time.
+
+2004-07-14 05:19:15  Elmar Hoffmann  <mutt-dev-ml@elho.net>  (roessler)
+
+	* init.h, mutt.h, thread.c: By default Mutt hides the subject
+	of messages in the thread tree that have the same subject as
+	their parent or closest previously displayed sibling. This patch
+	makes this optional, introducing the hide_thread_subject boolean
+	setting which defaults to the old behaviour.
+
+2004-07-14 05:07:18  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* mh.c: Some eye-candy during the delayed parsing of maildir
+	folders.
+
+2004-07-14 04:50:19  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* init.h, sort.h: Hack to fix $sort_browser documentation.
+
+	* copy.c, copy.h, handler.c, init.h, mutt.h, send.c:
+	$include_onlyfirst, again.
+
+2004-07-14 04:34:07  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* copy.c, copy.h, handler.c, init.h, mutt.h, send.c: Fix a cvs
+	commit SNAFU: This commit undoes the include_onlyfirst patch,
+	but leaves the generic spam detection by David Champion in place
+	(which, erroneously, hadn't been committed separately).
+
+2004-07-14 04:16:58  ttakah@lapis.plala.or.jp  (roessler)
+
+	* commands.c, copy.c, copy.h, doc/manual.sgml.head,
+	doc/muttrc.man.head, globals.h, handler.c, hdrline.c, init.c,
+	init.h, mutt.h, muttlib.c, parse.c, pattern.c, protos.h, send.c,
+	sort.c, sort.h: Introduce $include_onlyfirst.
+
+2004-07-12 13:35:27  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* pager.c: The limitations for OP_MAIL and OP_RECALL should
+	be identical.
+
+2004-07-12 13:22:24  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* init.c, sendlib.c: Add some debugging code, and rewrite the
+	previously-ununderstandable mutt_remove_duplicates.  (All this
+	done on the search for a problem that ultimately turned out to
+	be a configuration issue. Still, the changed code could come in
+	handy some day.)
+
+2004-07-11 16:25:00  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* pager.c: Fix #1882.
+
+2004-06-27 13:54:51  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* postpone.c: Experimental code for #1910.
+
+2004-06-26 08:45:29  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* commands.c: Fix #1909.
+
+2004-06-23 08:09:43  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* pgp.c: Zero out the PGP passphrase before asking for a new one.
+
+2004-06-17 20:39:20  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* smime.c: Change S/MIME send menu behavior to xor instead of or,
+	so it behaves the same way as the PGP send menu.
+
+2004-06-17 20:36:13  Moritz Schulte  <moritz@g10code.com>  (roessler)
+
+	* Makefile.am, compose.c, configure.in, crypt-mod-pgp-classic.c,
+	crypt-mod-smime-classic.c, crypt-mod.c, crypt-mod.h, crypt.c,
+	cryptglue.c, curs_lib.c, init.h, keymap.c, keymap.h, main.c,
+	mutt.h, mutt_crypt.h, mutt_curses.h, pgp.c, pgp.h, smime.c,
+	smime.h: This is the sequel to the crypto modularization changes
+	I did on 2003-01-21.  Moritz added another abstraction layer
+	which cleans up the code and allows the crypto modules to use
+	their own option menu.	Everything should work as it used to
+	but is now in a really good shape for part III, the Return of
+	the GnuPG Easy Makers. -wk
+
+	* crypt-mod-pgp-classic.c, crypt-mod-smime-classic.c, crypt-mod.c,
+	crypt-mod.h: New files.
+
+	* smime.c (smime_valid_passphrase, smime_send_menu): New
+	functions.  * smime.h: Removed macro: smime_valid_passphrase.
+	Declared: smime_valid_passphrase, smime_send_menu.  * pgp.c:
+	Include "mutt_menu.h".	(pgp_valid_passphrase, pgp_send_menu):
+	New functions.	* pgp.h: Removed macro: pgp_valid_passphrase.
+	Declared: pgp_valid_passphrase, pgp_send_menu.	*
+	mutt_curses.h: Declare: mutt_need_hard_redraw.	* mutt_crypt.h:
+	Declare: crypt_pgp_valid_passphrase, crypt_pgp_send_menu,
+	crypt_smime_valid_passphrase, crypt_smime_send_menu, crypt_init.
+	Adjust WithCrypto definition since the GPGME backend does not
+	exclude anymore the other `classic' backends.  (KEYFLAG_ISX509):
+	New symbol.  * mutt.h (enum): New symbol: OPTCRYPTUSEGPGME.
+	(struct body): New member: is_signed_data, warnsig.  * main.c
+	(main): Call crypt_init.  * keymap.c (km_get_table): Support for
+	MENU_KEY_SELECT_PGP and MENU_KEY_SELECT_SMIME.	(Menus): Added
+	entries fuer MENU_KEY_SELECT_PGP and MENU_KEY_SELECT_SMIME.
+	(km_init): Create bindings for MENU_KEY_SELECT_PGP and
+	MENU_KEY_SELECT_SMIME.	* keymap.h (enum): New enum symbols:
+	MENU_KEY_SELECT_PGP, MENU_KEY_SELECT_SMIME.  * init.h:
+	New configuration variable: crypt_use_gpgme.  * compose.c
+	(pgp_send_menu, smime_send_menu): Removed functions, they are now
+	contained in the crypto backend modules.  (mutt_compose_menu):
+	Use crypt_pgp_send_menu and crypt_smime_send_menu instead
+	pgp_send_menu and smime_send_menu.  * cryptglue.c: Slightly
+	rewritten in order to make use of the module mechanism used to
+	access crypto backends.  * curs_lib.c (mutt_need_hard_redraw):
+	New function.  * crypt.c (crypt_forget_passphrase): Adjust
+	for new crypto backend interface.  (crypt_valid_passphrase):
+	Stripped, use calls to crypt_pgp_valid_passphrase and
+	crypt_smime_valid_passphrase.
+
+2004-06-02 17:55:34  Alain Bench  <veronatif@free.fr>  (roessler)
+
+	* parse.c: Fix #1759.
+
+2004-04-30 06:49:37  Urs Janßen  <urs@tin.org>	(roessler)
+
+	* doc/Makefile.in, doc/mbox.man, doc/mmdf.man: mmdf(5), new mbox
+	(5).  (These changes have been sitting in my inbox for ages, tlr.)
+
+2004-04-13 15:10:38  Brendan Cully  <brendan@kublai.com>  (roessler)
+
+	* imap/message.c: Fix #1795
+
+2004-04-13 08:02:12  David Shaw  <dshaw@jabberwocky.com>  (roessler)
+
+	* crypt.c, init.h, mutt.h: Rename pgp_mime_ask to pgp_mime_auto;
+	change the default; change the error message given if that
+	variable is set to "no."
+
+2004-04-12 21:43:33  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* lib.c, attach.c: Don't open a file for writing that we have
+	unlinked before. Reported embarassingly long ago by Jarno
+	Huuskonen <Jarno.Huuskonen@uku.fi>.
+
+2004-04-12 21:19:31  Dale Woolridge  <dale-list-mutt-dev-2@woolridge.org>  (roessler)
+
+	* po/uk.po, po/zh_CN.po, po/zh_TW.po, po/pt_BR.po, po/ru.po,
+	po/sk.po, po/sv.po, po/tr.po, po/gl.po, po/hu.po, po/id.po,
+	po/it.po, po/ja.po, po/ko.po, po/lt.po, po/nl.po, po/pl.po,
+	po/cs.po, po/da.po, po/de.po, po/el.po, po/eo.po, po/es.po,
+	po/et.po, po/fr.po, compose.c, crypt.c, init.h, mutt.h,
+	mutt_crypt.h, po/ca.po, postpone.c, send.c, sendlib.c: See:
+	http://does-not-exist.org/mail-archives/mutt-dev/msg00843.html
+
+2004-04-12 20:37:19  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* copy.c: Fix #1804.  (From vincent@vinc17.org)
+
+	* commands.c, curs_main.c, mutt.h, mutt_crypt.h, pager.c,
+	recvattach.c: A belated fix for #1808 (Debian #233106): Make
+	sure check-traditional-pgp doesn't leave the pager context
+	unnecessarily.	This makes message-hooks like this one safe:
+
+	  message-hook '!(~g|~G) ~b"^-----BEGIN\ PGP\ (SIGNED\ )?MESSAGE"'
+		\ "exec check-traditional-pgp"
+
+2004-04-12 19:53:29  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* doc/manual.sgml.head, init.h: Various documentation fixes,
+	#1790.
+
+2004-04-12 19:47:59  Alain Bench  <veronatif@free.fr>  (roessler)
+
+	* doc/mbox.man, doc/muttbug.man: Fix #1831, Debian#237827.
+
+2004-04-12 19:42:10  Joël Riou  <joel.riou@normalesup.org>  (roessler)
+
+	* globals.h, init.c, init.h: Introduce config_charset.
+
+2004-04-12 19:37:59  Vsevolod Volkov  <vvv@mutt.org.ua>  (roessler)
+
+	* po/ru.po: update
+
+2004-04-12 19:37:23  Im Eunjea  <eunjea@koru.org>  (roessler)
+
+	* po/ko.po: update
+
+2004-04-12 19:34:45  Holger Weiss  <lists@jhweiss.de>  (roessler)
+
+	* doc/manual.sgml.head, doc/muttrc.man.head, mutt.h, pattern.c:
+	Unreferenced messages pattern: ~$
+
+2004-04-12 19:20:13  Paul WALKER  <paul.walker@st.com>  (roessler)
+
+	* mutt_sasl.c: SASL2 needs errno.h.
+
+2004-04-12 19:17:32  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* muttlib.c: Include the user ID with temporary file names.
+	Suggested by eravin@panix.com in #1833.
+
+	* doc/Makefile.in: Fix #1708 the brutal way, by installing
+	multiple copies of the muttbug (pardon, flea) manual page.
+
+2004-04-12 18:56:18  Neil Brown  <neilb@cse.unsw.edu.au>  (roessler)
+
+	* imap/auth_sasl.c: Fix Debian #206078, #214758; patch submitted
+	by Artur Czechowski as #1845.
+
+2004-03-21 16:02:10  Ivan Vilata i Balaguer  <ivan@selidor.net>  (roessler)
+
+	* po/ca.po: update
+
+2004-02-12 08:51:07  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* po/uk.po, po/zh_CN.po, po/zh_TW.po, po/sk.po, po/sv.po,
+	po/tr.po, po/pt_BR.po, po/ru.po, po/nl.po, po/pl.po, po/ja.po,
+	po/ko.po, po/lt.po, po/id.po, po/it.po, po/gl.po, po/hu.po,
+	po/es.po, po/et.po, po/fr.po, po/el.po, po/eo.po, po/da.po,
+	po/de.po, VERSION, po/bg.po, po/ca.po, po/cs.po, reldate.h,
+	ChangeLog: automatic post-release commit for mutt-1.4.2.1
+
+	* Makefile.am: (stable) Include regex.c and snprintf.c with
+	the distribution.
+
+2004-02-11 14:03:38  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* po/zh_TW.po, po/uk.po, po/zh_CN.po, po/tr.po, po/sv.po,
+	po/ru.po, po/sk.po, po/pt_BR.po, po/pl.po, po/nl.po, po/ko.po,
+	po/lt.po, po/ja.po, po/it.po, po/id.po, po/hu.po, po/gl.po,
+	po/et.po, po/fr.po, po/eo.po, po/es.po, po/el.po, po/de.po,
+	po/cs.po, po/da.po, po/ca.po, VERSION, po/bg.po, reldate.h,
+	ChangeLog: automatic post-release commit for mutt-1.4.2
+
+	* configure.in, menu.c: Backport an old bug fix, and make sure
+	configure can be created on recent systems.
+
+2004-02-11 08:20:25  Mads Martin Joergensen  <mmj@suse.de>  (roessler)
+
+	* init.c: Fix some warnings.
+
+2004-02-08 11:41:31  Edmund GRIMLEY EVANS  <edmundo@rano.org>  (roessler)
+
+	* charset.c: Fix a CP1255/8-related problem that's caused by a
+	glibc/iconv bug.
+
+2004-02-08 09:38:38  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* muttlib.c: Change the logic in mutt_open_read to only
+	catch directories -- mutt may legitimately read devices (think
+	/dev/null) or named pipes. Also delegate error reporting to the
+	calling function by setting errno.
+
+2004-02-07 21:40:11  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* po/ja.po: update
+
+2004-02-07 21:38:32  Juan Altmayer Pizzorno  <juan@altmayer.com>  (roessler)
+
+	* mbox.c: Hi, off_t is a 64-bit number (like on Mac OS X/darwin),
+	the percentages don't show right while mutt is reading/parsing
+	a mailbox.  Here's a patch (against 1.5.6i) to fix that.
+
+2004-02-07 21:36:41  David Yitzchak Cohen  <lists+mutt_devs@bigfatdave.com>  (roessler)
+
+	* init.c, muttlib.c: Looking at the code, the problem is pretty
+	obvious.  A recent patch to init.c (the one that was supposed
+	to prevent Mutt from silently failing to read nonexistant RC
+	files, IIRC) changed source_rc() to stat(2) the RC "file" before
+	trying to mutt_open_read() it.	There's only one problem here:
+	source_rc() has no way of knowing whether or not its "file"
+	is a file or a command.  I'm attaching a patch that fixes the
+	problem in what I believe is the right way.
+
+2004-02-05 14:17:25  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* menu.c: Back out the patch for #1697.
+
+2004-02-02 18:17:46  Roland Rosenfeld  <roland@spinnaker.de>  (roessler)
+
+	* po/de.po: update
+
+2004-02-02 10:26:14  Pawel Dziekonski  <dzieko@pwr.wroc.pl>  (roessler)
+
+	* po/pl.po: update
+
+2004-02-02 10:24:32  Im Eunjea  <eunjea@koru.org>  (roessler)
+
+	* po/ko.po: update
+
+2004-02-02 10:22:56  Vincent Lefevre  <vincent@vinc17.org>  (roessler)
+
+	* po/fr.po: update
+
+2004-02-01 18:26:13  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* po/pt_BR.po, po/ru.po, po/sk.po, po/sv.po, po/tr.po, po/uk.po,
+	po/zh_CN.po, po/zh_TW.po, po/id.po, po/it.po, po/ja.po, po/ko.po,
+	po/lt.po, po/nl.po, po/pl.po, VERSION, po/bg.po, po/ca.po,
+	po/cs.po, po/da.po, po/de.po, po/el.po, po/eo.po, po/es.po,
+	po/et.po, po/fr.po, po/gl.po, po/hu.po, reldate.h: automatic
+	post-release commit for mutt-1.5.6
+
 2004-02-01 18:00:16  Mike Schiraldi  <1074468571@schiraldi.org>  (roessler)
 
 	* init.c: As you all know, running "mutt -F foo.rc" will have

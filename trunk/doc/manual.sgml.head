@@ -568,7 +568,7 @@ Also see <ref id="edit_headers" name="edit&lowbar;headers">.
 <p>
 If you want to use PGP, you can specify 
 
-<tt/Pgp:/ &lsqb; <tt/E/ | <tt/S/ | <tt/S&lt;id/&gt; &rsqb; <newline>
+<tt/Pgp:/ &lsqb; <tt/E/ | <tt/S/ | <tt/S/<em/&lt;id&gt;/ &rsqb; <newline>
 
 ``E'' encrypts, ``S'' signs and
 ``S&lt;id&gt;'' signs with the given key, setting <ref
@@ -892,9 +892,11 @@ Usage: <tt/bind/ <em/map/ <em/key/ <em/function/
 This command allows you to change the default key bindings (operation
 invoked when pressing a key).
 
-<em/map/ specifies in which menu the binding belongs.  The currently
-defined maps are:
+<em/map/ specifies in which menu the binding belongs.  Multiple maps may
+be specified by separating them with commas (no additional whitespace is
+allowed). The currently defined maps are:
 
+<label id="maps">
 <descrip>
 <tag/generic/
 This is not a real menu, but is used as a fallback for all of the other
@@ -932,7 +934,7 @@ recalling a message the user was composing, but saved until later.
 control character, use the sequence <em/&bsol;Cx/, where <em/x/ is the
 letter of the control character (for example, to specify control-A use
 ``&bsol;Ca'').  Note that the case of <em/x/ as well as <em/&bsol;C/ is
-ignored, so that <em/&bsol;CA, &bsol;Ca, &bsol;cA/ and <em/&bsol;ca/ are all
+ignored, so that <em/&bsol;CA/, <em/&bsol;Ca/, <em/&bsol;cA/ and <em/&bsol;ca/ are all
 equivalent.  An alternative form is to specify the key as a three digit
 octal number prefixed with a ``&bsol;'' (for example <em/&bsol;177/ is
 equivalent to <em/&bsol;c?/).
@@ -1029,6 +1031,11 @@ actions.  When you press <em/key/ in menu <em/menu/, Mutt will behave as if
 you had typed <em/sequence/.  So if you have a common sequence of commands
 you type, you can create a macro to execute those commands with a single
 key.
+
+<em/menu/ is the <ref id="maps" name="map"> which the macro will be bound.
+Multiple maps may be specified by separating multiple menu arguments by
+commas. Whitespace may not be used in between the menu arguments and the
+commas separating them.
 
 <em/key/ and <em/sequence/ are expanded by the same rules as the <ref
 id="bind" name="key bindings">.  There are some additions however.  The
@@ -1393,10 +1400,11 @@ Usage: <tt/fcc-save-hook/ &lsqb;!&rsqb;<em/pattern/ <em/mailbox/
 This command is a shortcut, equivalent to doing both a <ref id="fcc-hook" name="fcc-hook">
 and a <ref id="save-hook" name="save-hook"> with its arguments.
 
-<sect1>Change settings based upon message recipients<label id="send-hook"><label id="reply-hook">
+<sect1>Change settings based upon message recipients<label id="send-hook"><label id="reply-hook"><label id="send2-hook">
 <p>
 Usage: <tt/reply-hook/ &lsqb;!&rsqb;<em/pattern/ <em/command/<newline>
-Usage: <tt/send-hook/ &lsqb;!&rsqb;<em/pattern/ <em/command/
+Usage: <tt/send-hook/ &lsqb;!&rsqb;<em/pattern/ <em/command/<newline>
+Usage: <tt/send2-hook/ &lsqb;!&rsqb;<em/pattern/ <em/command/
 
 These commands can be used to execute arbitrary configuration commands based
 upon recipients of the message.  <em/pattern/ is a regular expression
@@ -1409,7 +1417,14 @@ matched against all messages, both <em/new/ and <em/replies/.  <bf/Note:/
 <tt/reply-hook/s are matched <bf/before/ the <tt/send-hook/, <bf/regardless/
 of the order specified in the users's configuration file.
 
-For each type of <tt/send-hook/ or <tt/reply-hook/, When multiple matches
+<tt/send2-hook/ is matched every time a message is changed, either
+by editing it, or by using the compose menu to change its recipients
+or subject.  <tt/send2-hook/ is executed after <tt/send-hook/, and
+can, e.g., be used to set parameters such as the <ref id="sendmail"
+name="&dollar;sendmail"> variable depending on the message's sender
+address.
+
+For each type of <tt/send-hook/ or <tt/reply-hook/, when multiple matches
 occur, commands are executed in the order they are specified in the muttrc
 (for that type of hook).
 
@@ -1503,6 +1518,106 @@ specify the same pattern specified in the <tt/score/ command for it to be
 removed.  The pattern ``*'' is a special token which means to clear the list
 of all score entries.
 
+<sect1>Spam detection<label id="spam">
+<p>
+Usage: <tt/spam/ <em/pattern/ <em/format/<newline>
+Usage: <tt/nospam/ <em/pattern/
+
+Mutt has generalized support for external spam-scoring filters.
+By defining your spam patterns with the <tt/spam/ and <tt/nospam/
+commands, you can <em/limit/, <em/search/, and <em/sort/ your
+mail based on its spam attributes, as determined by the external
+filter. You also can display the spam attributes in your index
+display using the <tt/%H/ selector in the <ref id="index_format"
+name="&dollar;index&lowbar;format"> variable. (Tip: try <tt/%?H?[%H] ?/
+to display spam tags only when they are defined for a given message.)
+
+Your first step is to define your external filter's spam patterns using
+the <tt/spam/ command. <em/pattern/ should be a regular expression
+that matches a header in a mail message. If any message in the mailbox
+matches this regular expression, it will receive a ``spam tag'' or
+``spam attribute'' (unless it also matches a <tt/nospam/ pattern -- see
+below.) The appearance of this attribute is entirely up to you, and is
+governed by the <em/format/ parameter. <em/format/ can be any static
+text, but it also can include back-references from the <em/pattern/
+expression. (A regular expression ``back-reference'' refers to a
+sub-expression contained within parentheses.) <tt/%1/ is replaced with
+the first back-reference in the regex, <tt/%2/ with the second, etc.
+
+If you're using multiple spam filters, a message can have more than
+one spam-related header. You can define <tt/spam/ patterns for each
+filter you use. If a message matches two or more of these patterns, and
+the &dollar;spam&lowbar;separator variable is set to a string, then the
+message's spam tag will consist of all the <em/format/ strings joined
+together, with the value of &dollar;spam&lowbar;separator separating
+them.
+
+For example, suppose I use DCC, SpamAssassin, and PureMessage. I might
+define these spam settings:
+<tscreen><verb>
+spam "X-DCC-.*-Metrics:.*(....)=many"         "90+/DCC-%1"
+spam "X-Spam-Status: Yes"                     "90+/SA"
+spam "X-PerlMX-Spam: .*Probability=([0-9]+)%" "%1/PM"
+set spam_separator=", "
+</verb></tscreen>
+
+If I then received a message that DCC registered with ``many'' hits
+under the ``Fuz2'' checksum, and that PureMessage registered with a
+97% probability of being spam, that message's spam tag would read
+<tt>90+/DCC-Fuz2, 97/PM</tt>. (The four characters before ``=many'' in a
+DCC report indicate the checksum used -- in this case, ``Fuz2''.)
+
+If the &dollar;spam&lowbar;separator variable is unset, then each
+spam pattern match supercedes the previous one. Instead of getting
+joined <em/format/ strings, you'll get only the last one to match.
+
+The spam tag is what will be displayed in the index when you use
+<tt/%H/ in the <tt/&dollar;index&lowbar;format/ variable. It's also the
+string that the <tt/~H/ pattern-matching expression matches against for
+<em/search/ and <em/limit/ functions. And it's what sorting by spam
+attribute will use as a sort key.
+
+That's a pretty complicated example, and most people's actual
+environments will have only one spam filter. The simpler your
+configuration, the more effective mutt can be, especially when it comes
+to sorting.
+
+Generally, when you sort by spam tag, mutt will sort <em/lexically/ --
+that is, by ordering strings alphnumerically. However, if a spam tag
+begins with a number, mutt will sort numerically first, and lexically
+only when two numbers are equal in value. (This is like UNIX's
+<tt/sort -n/.) A message with no spam attributes at all -- that is, one
+that didn't match <em/any/ of your <tt/spam/ patterns -- is sorted at
+lowest priority. Numbers are sorted next, beginning with 0 and ranging
+upward. Finally, non-numeric strings are sorted, with ``a'' taking lower
+priority than ``z''. Clearly, in general, sorting by spam tags is most
+effective when you can coerce your filter to give you a raw number. But
+in case you can't, mutt can still do something useful.
+
+The <tt/nospam/ command can be used to write exceptions to <tt/spam/
+patterns. If a header pattern matches something in a <tt/spam/ command,
+but you nonetheless do not want it to receive a spam tag, you can list a
+more precise pattern under a <tt/nospam/ command.
+
+If the <em/pattern/ given to <tt/nospam/ is exactly the same as the
+<em/pattern/ on an existing <tt/spam/ list entry, the effect will be to
+remove the entry from the spam list, instead of adding an exception.
+Likewise, if the <em/pattern/ for a <tt/spam/ command matches an entry
+on the <tt/nospam/ list, that <tt/nospam/ entry will be removed. If the
+<em/pattern/ for <tt/nospam/ is ``*'', <em/all entries on both lists/
+will be removed. This might be the default action if you use <tt/spam/
+and <tt/nospam/ in conjunction with a <tt/folder-hook/.
+
+You can have as many <tt/spam/ or <tt/nospam/ commands as you like.
+You can even do your own primitive spam detection within mutt -- for
+example, if you consider all mail from <tt/MAILER-DAEMON/ to be spam,
+you can use a <tt/spam/ command like this:
+
+<tscreen><verb>
+spam "^From: .*MAILER-DAEMON"       "999"
+</verb></tscreen>
+
+
 <sect1>Setting variables<label id="set">
 <p>
 Usage: <tt/set/ &lsqb;no|inv&rsqb;<em/variable/&lsqb;=<em/value/&rsqb; &lsqb; <em/variable/ ... &rsqb;<newline>
@@ -1574,7 +1689,7 @@ path of your home directory.
 
 If the filename ends with a vertical bar (|), then <em/filename/ is
 considered to be an executable program from which to read input (eg.
-<tt/source ~/bin/myscript|/).
+<tt>source ~/bin/myscript|</tt>).
 
 <sect1>Removing hooks<label id="unhook">
 <p>
@@ -1770,6 +1885,7 @@ messages:
 ~f USER         messages originating from USER
 ~g              cryptographically signed messages
 ~G              cryptographically encrypted messages
+~H EXPR         messages with a spam attribute matching EXPR
 ~h EXPR         messages which contain EXPR in the message header
 ~k		message contains PGP key material
 ~i ID           message which match ID in the ``Message-ID'' field
@@ -1795,6 +1911,7 @@ messages:
 ~y EXPR         messages which contain EXPR in the `X-Label' field
 ~z [MIN]-[MAX]  messages with a size in the range MIN to MAX *)
 ~=		duplicated messages (see $duplicate_threads)
+~$		unreferenced messages (requires threaded view)
 </verb></tscreen>
 
 Where EXPR, USER, ID, and SUBJECT are 
@@ -1871,8 +1988,9 @@ pattern language.  For example,
 ~f "me@(mutt\.org|cs\.hmc\.edu)"
 </verb></tscreen>
 
-Without the quotes, the parenthesis would truncate the regular expression
-to simply <em/me@/, which is probably not what you want.
+Without the quotes, the parenthesis wouldn't end.
+This would be seperated to two OR'd patterns: <em/&tilde;f me@(mutt\.org/
+and <em/cs\.hmc\.edu)/. They are never what you want.
 
 <sect2>Searching by Date
 <p>
@@ -1961,6 +2079,13 @@ be applied to all tagged messages if that operation can be used in that
 manner.  If the <ref id="auto_tag" name="&dollar;auto&lowbar;tag">
 variable is set, the next operation applies to the tagged messages
 automatically, without requiring the ``tag-prefix''.
+
+In <ref id="macro" name="macros"> or <ref id="push" name="push"> commands,
+you can use the ``tag-prefix-cond'' operator.  If there are no tagged
+messages, mutt will "eat" the rest of the macro to abort it's execution.
+Mutt will stop "eating" the macro when it encounters the ``end-cond''
+operator;  after this operator the rest of the macro will be executed as
+normal.
 
 <sect1>Using Hooks<label id="hooks">
 <p>
@@ -2056,7 +2181,7 @@ There are two mechanisms for accessing the query function of mutt.  One
 is to do a query from the index menu using the query function (default: Q).
 This will prompt for a query, then bring up the query menu which will
 list the matching responses.  From the query menu, you can select
-addresses to create aliases, or to mail.  You can tag multiple messages
+addresses to create aliases, or to mail.  You can tag multiple addresses
 to mail, start a new query, or have a new query appended to the current
 responses.
 
@@ -2278,7 +2403,7 @@ You can also specify different username for each folder, ie:
 Polling for new mail is more expensive over POP3 than locally. For this
 reason the frequency at which Mutt will check for mail remotely can be
 controlled by the
-<ref id="pop&lowbar;checkinterval" name="&dollar;pop&lowbar;checkinterval">
+<ref id="pop_checkinterval" name="&dollar;pop&lowbar;checkinterval">
 variable, which defaults to every 60 seconds.
 
 If Mutt was compiled with SSL support (by running the <em/configure/
@@ -2335,12 +2460,12 @@ paths accordingly.
 When browsing folders on an IMAP server, you can toggle whether to look
 at only the folders you are subscribed to, or all folders with the
 <em/toggle-subscribed/ command.  See also the 
-<ref id="imap&lowbar;list&lowbar;subscribed"
+<ref id="imap_list_subscribed"
 name="&dollar;imap&lowbar;list&lowbar;subscribed"> variable.
 
 Polling for new mail on an IMAP server can cause noticeable delays. So, you'll
 want to carefully tune the
-<ref id="mail&lowbar;check" name="&dollar;mail&lowbar;check">
+<ref id="mail_check" name="&dollar;mail&lowbar;check">
 and
 <ref id="timeout" name="&dollar;timeout">
 variables. Personally I use
@@ -2401,15 +2526,15 @@ in the following order: SASL, ANONYMOUS, GSSAPI, CRAM-MD5, LOGIN.
 
 There are a few variables which control authentication: 
 <itemize>
-<item><ref id="imap&lowbar;user" name="&dollar;imap&lowbar;user"> - controls
+<item><ref id="imap_user" name="&dollar;imap&lowbar;user"> - controls
   the username under which you request authentication on the IMAP server,
   for all authenticators. This is overridden by an explicit username in
   the mailbox path (ie by using a mailbox name of the form
   <tt/{user@host}/).
-<item><ref id="imap&lowbar;pass" name="&dollar;imap&lowbar;pass"> - a
+<item><ref id="imap_pass" name="&dollar;imap&lowbar;pass"> - a
   password which you may preset, used by all authentication methods where
   a password is needed.
-<item><ref id="imap&lowbar;authenticators"
+<item><ref id="imap_authenticators"
   name="&dollar;imap&lowbar;authenticators"> - a colon-delimited list of IMAP
   authentication methods to try, in the order you wish to try them. If
   specified, this overrides mutt's default (attempt everything, in the order
@@ -2436,7 +2561,7 @@ account-hook imap://host2/ 'set tunnel="ssh host2 /usr/libexec/imapd"'
 
 <sect1>Start a WWW Browser on URLs (EXTERNAL)<label id="urlview">
 <p>
-If a message contains URLs (<em/unified ressource locator/ = address in the
+If a message contains URLs (<em/unified resource locator/ = address in the
 WWW space like <em>http://www.mutt.org/</em>), it is efficient to get
 a menu with all the URLs and start a WWW browser on one of them.  This
 functionality is provided by the external urlview program which can be
@@ -3112,7 +3237,7 @@ associated with this extension will then be used to process the attachment
 according to the rules in the mailcap file and according to any other configuration
 options (such as auto&lowbar;view) specified.  Common usage would be:
 <tscreen><verb>
-mime-lookup application/octet-stream application/X-Lotus-Manuscript
+mime_lookup application/octet-stream application/X-Lotus-Manuscript
 </verb></tscreen>
 
 In addition, the unmime&lowbar;lookup command may be used to disable this feature
@@ -3222,9 +3347,9 @@ The following are the commands understood by mutt.
 <item>
 <tt><ref id="ignore" name="unignore"></tt> <em/pattern/ &lsqb; <em/pattern/ ... &rsqb;
 <item>
-<tt><ref id="lists" name="lists"></tt> <em/address/ &lsqb; <em/address/ ... &rsqb; 
+<tt><ref id="lists" name="lists"></tt> <em/regexp/ &lsqb; <em/regexp/ ... &rsqb; 
 <item>
-<tt><ref id="lists" name="unlists"></tt> <em/address/ &lsqb; <em/address/ ... &rsqb; 
+<tt><ref id="lists" name="unlists"></tt> <em/regexp/ &lsqb; <em/regexp/ ... &rsqb; 
 <item>
 <tt><ref id="macro" name="macro"></tt> <em/menu/ <em/key/ <em/sequence/ &lsqb; <em/description/ &rsqb; 
 <item>
@@ -3262,15 +3387,21 @@ The following are the commands understood by mutt.
 <item>
 <tt><ref id="send-hook" name="send-hook"></tt> <em/regexp/ <em/command/
 <item>
+<tt><ref id="reply-hook" name="reply-hook"></tt> <em/regexp/ <em/command/
+<item>
 <tt><ref id="set" name="set"></tt> &lsqb;no|inv&rsqb;<em/variable/&lsqb;=<em/value/&rsqb; &lsqb; <em/variable/ ... &rsqb;
 <item>
 <tt><ref id="set" name="unset"></tt> <em/variable/ &lsqb;<em/variable/ ... &rsqb;
 <item>
 <tt><ref id="source" name="source"></tt> <em/filename/
 <item>
-<tt><ref id="lists" name="subscribe"></tt> <em/address/ &lsqb; <em/address/ ... &rsqb; 
+<tt><ref id="spam" name="spam"></tt> <em/pattern/ <em/format/
 <item>
-<tt><ref id="lists" name="unsubscribe"></tt> <em/address/ &lsqb; <em/address/ ... &rsqb; 
+<tt><ref id="spam" name="nospam"></tt> <em/pattern/
+<item>
+<tt><ref id="lists" name="subscribe"></tt> <em/regexp/ &lsqb; <em/regexp/ ... &rsqb; 
+<item>
+<tt><ref id="lists" name="unsubscribe"></tt> <em/regexp/ &lsqb; <em/regexp/ ... &rsqb; 
 <item>
 <tt><ref id="set" name="toggle"></tt> <em/variable/ &lsqb;<em/variable/ ... &rsqb;
 <item>

@@ -24,6 +24,7 @@
 #include "mutt_socket.h"
 
 #ifdef USE_SASL2
+#include <errno.h>
 #include <netdb.h>
 #include <sasl/sasl.h>
 #else
@@ -189,7 +190,7 @@ int mutt_sasl_client_new (CONNECTION* conn, sasl_conn_t** saslconn)
       service = "imap";
       break;
     case M_ACCT_TYPE_POP:
-      service = "pop-3";
+      service = "pop";
       break;
     default:
       dprint (1, (debugfile, "mutt_sasl_client_new: account type unset\n"));
@@ -310,8 +311,8 @@ dprint(1,(debugfile, "local ip: %s, remote ip:%s\n", iplocalport, ipremoteport))
       return -1;
     }
 #ifdef USE_SASL2
-    dprint (2, (debugfile, "External authentication name: %s\n","NULL"));
-    if (sasl_setprop (*saslconn, SASL_AUTH_EXTERNAL, NULL) != SASL_OK)
+    dprint (2, (debugfile, "External authentication name: %s\n", conn->account.user));
+    if (sasl_setprop (*saslconn, SASL_AUTH_EXTERNAL, conn->account.user) != SASL_OK)
      {
       dprint (1, (debugfile, "mutt_sasl_client_new: Error setting external properties\n"));
       return -1;

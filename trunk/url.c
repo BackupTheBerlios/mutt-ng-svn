@@ -169,8 +169,11 @@ int url_parse_ciss (ciss_url_t *ciss, char *src)
 }
 
 /* url_ciss_tostring: output the URL string for a given CISS object. */
+
 int url_ciss_tostring (ciss_url_t* ciss, char* dest, size_t len, int flags)
 {
+  long l;
+
   if (ciss->scheme == U_UNKNOWN)
     return -1;
 
@@ -178,25 +181,26 @@ int url_ciss_tostring (ciss_url_t* ciss, char* dest, size_t len, int flags)
 
   if (ciss->host)
   {
-    strncat (dest, "//", len - strlen (dest));
+    safe_strcat (dest, len, "//");
+    len -= (l = strlen (dest)); dest += l;
+    
     if (ciss->user) {
       if (flags & U_DECODE_PASSWD && ciss->pass)
-	snprintf (dest + strlen (dest), len - strlen (dest), "%s:%s@",
-		  ciss->user, ciss->pass);
+	snprintf (dest, len, "%s:%s@", ciss->user, ciss->pass);
       else
-	snprintf (dest + strlen (dest), len - strlen (dest), "%s@",
-		  ciss->user);
+	snprintf (dest, len, "%s@", ciss->user);
+
+      len -= (l = strlen (dest)); dest += l;
     }
 
     if (ciss->port)
-      snprintf (dest + strlen (dest), len - strlen (dest), "%s:%hu/",
-		ciss->host, ciss->port);
+      snprintf (dest, len, "%s:%hu/", ciss->host, ciss->port);
     else
-      snprintf (dest + strlen (dest), len - strlen (dest), "%s/", ciss->host);
+      snprintf (dest, len, "%s/", ciss->host);
   }
 
   if (ciss->path)
-    strncat (dest, ciss->path, len - strlen (dest));
+    safe_strcat (dest, len, ciss->path);
 
   return 0;
 }
@@ -238,7 +242,10 @@ int url_parse_mailto (ENVELOPE *e, char **body, const char *src)
     url_pct_decode (value);
 
     if (!ascii_strcasecmp (tag, "body"))
-      mutt_str_replace (body, value);
+    {
+      if (body)
+	mutt_str_replace (body, value);
+    }
     else 
     {
       taglen = strlen (tag);

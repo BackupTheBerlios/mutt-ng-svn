@@ -1,4 +1,4 @@
-# $Id: sample.muttrc,v 3.3 2003/04/02 08:43:24 roessler Exp $
+# $Id: sample.muttrc,v 3.4 2005/01/27 18:47:57 roessler Exp $
 
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 #
@@ -145,7 +145,7 @@ color attachment brightmagenta default
 color search default green	# how to hilite search patterns in the pager
 
 color header brightred default ^(From|Subject):
-color body magenta default "(ftp|http)://[^ ]+"	# point out URLs
+color body magenta default "(ftp|http|https)://[^ ]+"	# point out URLs
 color body magenta default [-a-z_0-9.]+@[-a-z_0-9.]+	# e-mail addresses
 color underline brightgreen default
 

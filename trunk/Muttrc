@@ -197,7 +197,7 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # following printf-style sequences are understood:
 # 
 # %C      charset
-# %c      reqiures charset conversion (n or c)
+# %c      requires charset conversion (n or c)
 # %D      deleted flag
 # %d      description
 # %e      MIME content-transfer-encoding
@@ -393,7 +393,7 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # Default: "-- Mutt: Compose  [Approx. msg size: %l   Atts: %a]%>-"
 # 
 # 
-# Controls the format of the status line displayed in the \fCompose
+# Controls the format of the status line displayed in the Compose
 # menu.  This string is similar to ``$status_format'', but has its own
 # set of printf()-like sequences:
 # 
@@ -405,6 +405,17 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # 
 # See the text describing the ``$status_format'' option for more 
 # information on how to set ``$compose_format''.
+# 
+# 
+# set config_charset=""
+#
+# Name: config_charset
+# Type: string
+# Default: ""
+# 
+# 
+# When defined, Mutt will recode commands in rc files from this
+# encoding.
 # 
 # 
 # set confirmappend=yes
@@ -461,6 +472,20 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # This variable controls whether or not copies of your outgoing messages
 # will be saved for later references.  Also see ``$record'',
 # ``$save_name'', ``$force_name'' and ``fcc-hook''.
+# 
+# 
+# set crypt_use_gpgme=no
+#
+# Name: crypt_use_gpgme
+# Type: boolean
+# Default: no
+# 
+# 
+# This variable controls the use the GPGME enabled crypto backends.
+# If it is set and Mutt was build with gpgme support, the gpgme code for
+# S/MIME and PGP will be used instead of the classic code.  Note, that
+# you need to use this option in .muttrc as it won't have any effect when 
+# used interactively.
 # 
 # 
 # set crypt_autopgp=yes
@@ -560,8 +585,8 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # Default: yes
 # 
 # 
-# If this option is set, mutt's revattach menu will not show the subparts of
-# individual messages in a digest.  To see these subparts, press 'v' on that menu.
+# If this option is set, mutt's received-attachments menu will not show the subparts of
+# individual messages in a multipart/digest.  To see these subparts, press 'v' on that menu.
 # 
 # 
 # set display_filter=""
@@ -1010,6 +1035,18 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # thread tree.
 # 
 # 
+# set hide_thread_subject=yes
+#
+# Name: hide_thread_subject
+# Type: boolean
+# Default: yes
+# 
+# 
+# When set, mutt will not show the subject of messages in the thread
+# tree that have the same subject as their parent or closest previously
+# displayed sibling.
+# 
+# 
 # set hide_top_limited=no
 #
 # Name: hide_top_limited
@@ -1096,8 +1133,8 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # This is a colon-delimited list of authentication methods mutt may
 # attempt to use to log in to an IMAP server, in the order mutt should
 # try them.  Authentication methods are either 'login' or the right
-# side of an IMAP 'AUTH=xxx' capability string, eg 'digest-md5',
-# 'gssapi' or 'cram-md5'. This parameter is case-insensitive. If this
+# side of an IMAP 'AUTH=xxx' capability string, eg 'digest-md5', 'gssapi'
+# or 'cram-md5'. This parameter is case-insensitive. If this
 # parameter is unset (the default) mutt will try all available methods,
 # in order from most-secure to least-secure.
 # 
@@ -1129,6 +1166,20 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # 
 # If this variable is set, Mutt will always use SSL when
 # connecting to IMAP servers.
+# 
+# 
+# set imap_headers=""
+#
+# Name: imap_headers
+# Type: string
+# Default: ""
+# 
+# 
+# Mutt requests these header fields in addition to the default headers
+# ("DATE FROM SUBJECT TO CC MESSAGE-ID REFERENCES CONTENT-TYPE
+# CONTENT-DESCRIPTION IN-REPLY-TO REPLY-TO LINES X-LABEL") from IMAP
+# servers before displaying the index menu. You may want to add more
+# headers for spam detection. Note: This is a space separated list.
 # 
 # 
 # set imap_home_namespace=""
@@ -1261,6 +1312,17 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # 
 # Controls whether or not a copy of the message(s) you are replying to
 # is included in your reply.
+# 
+# 
+# set include_onlyfirst=no
+#
+# Name: include_onlyfirst
+# Type: boolean
+# Default: no
+# 
+# 
+# Controls whether or not Mutt includes only the first attachment
+# of the message you are replying.
 # 
 # 
 # set indent_string="> "
@@ -2161,6 +2223,55 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # (PGP only)
 # 
 # 
+# set pgp_autoinline=no
+#
+# Name: pgp_autoinline
+# Type: boolean
+# Default: no
+# 
+# 
+# This option controls whether Mutt generates old-style inline
+# (traditional) PGP encrypted or signed messages under certain
+# circumstances.  This can be overridden by use of the pgp-menu,
+# when inline is not required.
+# 
+# Note that Mutt might automatically use PGP/MIME for messages
+# which consist of more than a single MIME part.  Mutt can be
+# configured to ask before sending PGP/MIME messages when inline
+# (traditional) would not work.
+# See also: ``$pgp_mime_auto''.
+# 
+# Also note that using the old-style PGP message format is strongly
+# deprecated.
+# (PGP only)
+# 
+# 
+# set pgp_replyinline=no
+#
+# Name: pgp_replyinline
+# Type: boolean
+# Default: no
+# 
+# 
+# Setting this variable will cause Mutt to always attempt to
+# create an inline (traditional) message when replying to a
+# message which is PGP encrypted/signed inline.  This can be
+# overridden by use of the pgp-menu, when inline is not
+# required.  This option does not automatically detect if the
+# (replied-to) message is inline; instead it relies on Mutt
+# internals for previously checked/flagged messages.
+# 
+# Note that Mutt might automatically use PGP/MIME for messages
+# which consist of more than a single MIME part.  Mutt can be
+# configured to ask before sending PGP/MIME messages when inline
+# (traditional) would not work.
+# See also: ``$pgp_mime_auto''.
+# 
+# Also note that using the old-style PGP message format is strongly
+# deprecated.
+# (PGP only)
+# 
+# 
 # set pgp_show_unusable=yes
 #
 # Name: pgp_show_unusable
@@ -2234,44 +2345,19 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # (PGP only)
 # 
 # 
-# set pgp_create_traditional=no
+# set pgp_mime_auto=ask-yes
 #
-# Name: pgp_create_traditional
+# Name: pgp_mime_auto
 # Type: quadoption
-# Default: no
+# Default: ask-yes
 # 
 # 
-# This option controls whether Mutt generates old-style inline PGP
-# encrypted or signed messages.
-# 
-# Note that PGP/MIME will be used automatically for messages which have
-# a character set different from us-ascii, or which consist of more than
-# a single MIME part.
+# This option controls whether Mutt will prompt you for
+# automatically sending a (signed/encrypted) message using
+# PGP/MIME when inline (traditional) fails (for any reason).
 # 
 # Also note that using the old-style PGP message format is strongly
 # deprecated.
-# (PGP only)
-# 
-# 
-# set pgp_auto_traditional=no
-#
-# Name: pgp_auto_traditional
-# Type: boolean
-# Default: no
-# 
-# 
-# This option causes Mutt to generate an old-style inline PGP
-# encrypted or signed message when replying to an old-style
-# message, and a PGP/MIME message when replying to a PGP/MIME
-# message.  Note that this option is only meaningful when using
-# ``$crypt_replyencrypt'', ``$crypt_replysign'', or
-# ``$crypt_replysignencrypted''.
-# 
-# Also note that PGP/MIME will be used automatically for messages
-# which have a character set different from us-ascii, or which
-# consist of more than a single MIME part.
-# 
-# This option overrides ``$pgp_create_traditional''
 # (PGP only)
 # 
 # 
@@ -2656,8 +2742,8 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # 
 # 
 # This command is used to extract only the signers X509 certificate from a S/MIME
-# signature, so that the certificate's owner may get compared to the email's 
-# 'From'-field.
+# signature, so that the certificate's owner may get compared to the
+# email's 'From'-field.
 # (S/MIME only)
 # 
 # 
@@ -2709,11 +2795,11 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # use STARTTLS regardless of the server's capabilities.
 # 
 # 
-# set certificate_file=""
+# set certificate_file="~/.mutt_certificates"
 #
 # Name: certificate_file
 # Type: path
-# Default: ""
+# Default: "~/.mutt_certificates"
 # 
 # 
 # This variable specifies the file where the certificates you trust
@@ -2783,6 +2869,17 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # 
 # This variables specifies whether to attempt to use TLSv1 in the
 # SSL authentication process.
+# 
+# 
+# set ssl_client_cert=""
+#
+# Name: ssl_client_cert
+# Type: path
+# Default: ""
+# 
+# 
+# The file containing a client certificate and its associated private
+# key.
 # 
 # 
 # set pipe_split=no
@@ -3279,8 +3376,10 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # move the messages to another machine, and reply to some the messages
 # from there.  If this variable is set, the default From: line of
 # the reply messages is built using the address where you received the
-# messages you are replying to.  If the variable is unset, the
-# From: line will use your address on the current machine.
+# messages you are replying to if that address matches your
+# alternates.  If the variable is unset, or the address that would be
+# used doesn't match your alternates, the From: line will use
+# your address on the current machine.
 # 
 # 
 # set reverse_realname=yes
@@ -3621,6 +3720,7 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 #    mailbox-order (unsorted)
 #    score
 #    size
+#    spam
 #    subject
 #    threads
 #    to
@@ -3666,11 +3766,11 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # but kept to not break any existing configuration setting).
 # 
 # 
-# set sort_browser=subject
+# set sort_browser=alpha
 #
 # Name: sort_browser
 # Type: sort order
-# Default: subject
+# Default: alpha
 # 
 # 
 # Specifies how to sort entries in the file browser.  By default, the
@@ -3700,6 +3800,20 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # setting of ``$reply_regexp''.  With sort_re unset, mutt will attach
 # the message whether or not this is the case, as long as the
 # non-``$reply_regexp'' parts of both messages are identical.
+# 
+# 
+# set spam_separator=","
+#
+# Name: spam_separator
+# Type: string
+# Default: ","
+# 
+# 
+# ``spam_separator'' controls what happens when multiple spam headers
+# are matched: if unset, each successive header will overwrite any
+# previous matches value for the spam label. If set, each successive
+# match will append to the previous, using ``spam_separator'' as a
+# separator.
 # 
 # 
 # set spoolfile=""
@@ -3995,18 +4109,6 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # sending messages.  If unset, no `From:' header field will be
 # generated unless the user explicitly sets one using the ``my_hdr''
 # command.
-# 
-# 
-# set use_ipv6=yes
-#
-# Name: use_ipv6
-# Type: boolean
-# Default: yes
-# 
-# 
-# When set, Mutt will look for IPv6 addresses of hosts it tries to
-# contact.  If this option is unset, Mutt will restrict itself to IPv4 addresses.
-# Normally, the default should work.
 # 
 # 
 # set use_ipv6=yes

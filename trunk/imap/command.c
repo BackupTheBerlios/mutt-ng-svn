@@ -408,7 +408,7 @@ static int cmd_handle_untagged (IMAP_DATA* idata)
 /* cmd_make_sequence: make a tag suitable for starting an IMAP command */
 static void cmd_make_sequence (IMAP_DATA* idata)
 {
-  snprintf (idata->cmd.seq, sizeof (idata->cmd.seq), "a%04d", idata->seqno++);
+  snprintf (idata->cmd.seq, sizeof (idata->cmd.seq), "a%04u", idata->seqno++);
 
   if (idata->seqno > 9999)
     idata->seqno = 0;
@@ -481,19 +481,20 @@ static void cmd_parse_fetch (IMAP_DATA* idata, char* s)
 
   msgno = atoi (s);
   
+  if (msgno <= idata->ctx->msgcount)
   /* see cmd_parse_expunge */
-  for (cur = 0; cur < idata->ctx->msgcount; cur++)
-  {
-    h = idata->ctx->hdrs[cur];
-    
-    if (h->active && h->index+1 == msgno)
+    for (cur = 0; cur < idata->ctx->msgcount; cur++)
     {
-      dprint (2, (debugfile, "Message UID %d updated\n", HEADER_DATA(h)->uid));
-      break;
+      h = idata->ctx->hdrs[cur];
+      
+      if (h->active && h->index+1 == msgno)
+      {
+	dprint (2, (debugfile, "Message UID %d updated\n", HEADER_DATA(h)->uid));
+	break;
+      }
+      
+      h = NULL;
     }
-
-    h = NULL;
-  }
   
   if (!h)
   {

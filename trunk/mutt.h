@@ -1,5 +1,7 @@
+
 /*
  * Copyright (C) 1996-2002 Michael R. Elkins <me@mutt.org>
+ * Copyright (C) 2004 g10 Code GmbH
  * 
  *     This program is free software; you can redistribute it and/or modify
  *     it under the terms of the GNU General Public License as published by
@@ -160,6 +162,8 @@ typedef enum
 #define M_CRYPTHOOK	(1<<8)
 #define M_ACCOUNTHOOK	(1<<9)
 #define M_REPLYHOOK	(1<<10)
+#define M_SEND2HOOK     (1<<11)
+
 #ifdef USE_COMPRESSED
 #define M_OPENHOOK	(1<<12)
 #define M_APPENDHOOK	(1<<13)
@@ -226,9 +230,11 @@ enum
   M_DATE,
   M_DATE_RECEIVED,
   M_DUPLICATED,
+  M_UNREFERENCED,
   M_ID,
   M_BODY,
   M_HEADER,
+  M_HORMEL,
   M_WHOLE_MSG,
   M_SENDER,
   M_MESSAGE,
@@ -291,7 +297,7 @@ enum
   OPT_MIMEFWD,
   OPT_MIMEFWDREST,
   OPT_MOVE,
-  OPT_PGPTRADITIONAL, /* create old-style PGP messages */
+  OPT_PGPMIMEAUTO,     /* ask to revert to PGP/MIME when inline fails */
 #ifdef USE_POP
   OPT_POPDELETE,
   OPT_POPRECONNECT,
@@ -335,6 +341,9 @@ enum
 #define M_SEL_MULTI	(1<<1)
 #define M_SEL_FOLDER	(1<<2)
 
+/* flags for parse_spam_list */
+#define M_SPAM          1
+#define M_NOSPAM        2
 
 /* boolean vars */
 enum
@@ -379,6 +388,7 @@ enum
   OPTHIDDENHOST,
   OPTHIDELIMITED,
   OPTHIDEMISSING,
+  OPTHIDETHREADSUBJECT,
   OPTHIDETOPLIMITED,
   OPTHIDETOPMISSING,
   OPTIGNORELISTREPLYTO,
@@ -402,6 +412,7 @@ enum
 # endif
 #endif
   OPTIMPLICITAUTOVIEW,
+  OPTINCLUDEONLYFIRST,
   OPTKEEPFLAGGED,
   OPTMAILCAPSANITIZE,
   OPTMAILDIRTRASH,
@@ -443,6 +454,7 @@ enum
   OPTSIGDASHES,
   OPTSIGONTOP,
   OPTSORTRE,
+  OPTSPAMSEP,
   OPTSTATUSONTOP,
   OPTSTRICTTHREADS,
   OPTSUSPEND,
@@ -466,6 +478,8 @@ enum
   OPTXMAILER,
   OPTXTERMSETTITLES,
 
+  OPTCRYPTUSEGPGME,
+
   /* PGP options */
   
   OPTCRYPTAUTOSIGN,
@@ -482,7 +496,6 @@ enum
   OPTPGPIGNORESUB,
   OPTPGPCHECKEXIT,
   OPTPGPLONGIDS,
-  OPTPGPAUTOTRAD,
 #if 0
   OPTPGPENCRYPTSELF,
 #endif
@@ -490,6 +503,8 @@ enum
   OPTPGPSTRICTENC,
   OPTFORWDECRYPT,
   OPTPGPSHOWUNUSABLE,
+  OPTPGPAUTOINLINE,
+  OPTPGPREPLYINLINE,
 
   /* news options */
 
@@ -568,10 +583,21 @@ typedef struct rx_list_t
   struct rx_list_t *next;
 } RX_LIST;
 
+typedef struct spam_list_t
+{
+  REGEXP *rx;
+  int     nmatch;
+  char   *template;
+  struct spam_list_t *next;
+} SPAM_LIST;
+ 
+
 #define mutt_new_list() safe_calloc (1, sizeof (LIST))
+#define mutt_new_spam_list() safe_calloc (1, sizeof (SPAM_LIST))
 #define mutt_new_rx_list() safe_calloc (1, sizeof (RX_LIST))
 void mutt_free_list (LIST **);
 void mutt_free_rx_list (RX_LIST **);
+void mutt_free_spam_list (SPAM_LIST **);
 LIST *mutt_copy_list (LIST *);
 int mutt_matches_ignore (const char *, LIST *);
 /* add an element to a list */
@@ -600,6 +626,7 @@ typedef struct envelope
   ADDRESS *sender;
   ADDRESS *reply_to;
   ADDRESS *mail_followup_to;
+  char *list_post;		/* this stores a mailto URL, or nothing */
   char *subject;
   char *real_subj;		/* offset of the real subject */
   char *message_id;
@@ -613,6 +640,7 @@ typedef struct envelope
   char *followup_to;
   char *x_comment_to;
 #endif
+  BUFFER *spam;
   LIST *references;		/* message references (in reverse order) */
   LIST *in_reply_to;		/* in-reply-to header content */
   LIST *userhdrs;		/* user defined headers */
@@ -693,8 +721,20 @@ typedef struct body
   				/* send mode: don't adjust the character
 				 * set when in send-mode.
 				 */
+  unsigned int is_signed_data : 1; /* A lot of MUAs don't indicate
+                                      S/MIME signed-data correctly,
+                                      e.g. they use foo.p7m even for
+                                      the name of signed data.  This
+                                      flag is used to keep track of
+                                      the actual message type.  It
+                                      gets set during the verification
+                                      (which is done if the encryption
+                                      try failed) and check by the
+                                      function to figure the type of
+                                      the message. */
 
   unsigned int goodsig : 1;	/* good cryptographic signature */
+  unsigned int warnsig : 1;     /* maybe good signature */
   unsigned int badsig : 1;	/* bad cryptographic signature (needed to check encrypted s/mime-signatures) */
 
   unsigned int collapsed : 1;	/* used by recvattach */
@@ -703,7 +743,7 @@ typedef struct body
 
 typedef struct header
 {
-  unsigned int security : 9;  /* bit 0-6: flags, bit 7,8: application.
+  unsigned int security : 11;  /* bit 0-6: flags, bit 7,8: application.
 				 see: crypt.h pgplib.h, smime.h */
 
   unsigned int mime : 1;    		/* has a Mime-Version header? */
@@ -908,6 +948,8 @@ typedef struct
 #define M_WEED          (1<<3) /* weed headers even when not in display mode */
 #define M_CHARCONV	(1<<4) /* Do character set conversions */
 #define M_PRINTING	(1<<5) /* are we printing? - M_DISPLAY "light" */
+#define M_REPLYING	(1<<6) /* are we replying? */
+#define M_FIRSTDONE	(1<<7) /* the first attachment has been done */
 
 #define state_set_prefix(s) ((s)->flags |= M_PENDINGPREFIX)
 #define state_reset_prefix(s) ((s)->flags &= ~M_PENDINGPREFIX)

@@ -638,17 +638,21 @@ void mutt_free_envelope (ENVELOPE **p)
 {
   if (!*p) return;
   rfc822_free_address (&(*p)->return_path);
+  rfc822_free_address (&(*p)->from);
   rfc822_free_address (&(*p)->to);
   rfc822_free_address (&(*p)->cc);
   rfc822_free_address (&(*p)->bcc);
   rfc822_free_address (&(*p)->sender);
-  rfc822_free_address (&(*p)->from);
   rfc822_free_address (&(*p)->reply_to);
   rfc822_free_address (&(*p)->mail_followup_to);
+
+  FREE (&(*p)->list_post);
   FREE (&(*p)->subject);
+  /* real_subj is just an offset to subject and shouldn't be freed */
   FREE (&(*p)->message_id);
   FREE (&(*p)->supersedes);
   FREE (&(*p)->date);
+  FREE (&(*p)->x_label);
   FREE (&(*p)->organization);
 #ifdef USE_NNTP
   FREE (&(*p)->newsgroups);
@@ -656,6 +660,8 @@ void mutt_free_envelope (ENVELOPE **p)
   FREE (&(*p)->followup_to);
   FREE (&(*p)->x_comment_to);
 #endif
+
+  mutt_buffer_free (&(*p)->spam);
   mutt_free_list (&(*p)->references);
   mutt_free_list (&(*p)->in_reply_to);
   mutt_free_list (&(*p)->userhdrs);
@@ -664,7 +670,7 @@ void mutt_free_envelope (ENVELOPE **p)
 
 void _mutt_mktemp (char *s, const char *src, int line)
 {
-  snprintf (s, _POSIX_PATH_MAX, "%s/mutt-%s-%d-%d", NONULL (Tempdir), NONULL(Hostname), (int) getpid (), Counter++);
+  snprintf (s, _POSIX_PATH_MAX, "%s/mutt-%s-%d-%d-%d", NONULL (Tempdir), NONULL(Hostname), (int) getuid(), (int) getpid (), Counter++);
   dprint (1, (debugfile, "%s:%d: mutt_mktemp returns \"%s\".\n", src, line, s));
   unlink (s);
 }
@@ -815,8 +821,8 @@ void mutt_expand_fmt (char *dest, size_t destlen, const char *fmt, const char *s
   
   if (!found && destlen > 0)
   {
-    strncat (dest, " ", destlen);
-    strncat (dest, src, destlen-1);
+    safe_strcat (dest, destlen, " ");
+    safe_strcat (dest, destlen, src);
   }
   
 }
@@ -1144,6 +1150,8 @@ void mutt_FormatString (char *dest,		/* output buffer */
 FILE *mutt_open_read (const char *path, pid_t *thepid)
 {
   FILE *f;
+  struct stat s;
+
   int len = mutt_strlen (path);
 
   if (path[len - 1] == '|')
@@ -1159,6 +1167,13 @@ FILE *mutt_open_read (const char *path, pid_t *thepid)
   }
   else
   {
+    if (stat (path, &s) < 0)
+      return (NULL);
+    if (S_ISDIR (s.st_mode))
+    {
+      errno = EINVAL;
+      return (NULL);
+    }
     f = fopen (path, "r");
     *thepid = -1;
   }
@@ -1333,6 +1348,49 @@ void mutt_sleep (short s)
     sleep (s);
 }
 
+/*
+ * Creates and initializes a BUFFER*. If passed an existing BUFFER*,
+ * just initializes. Frees anything already in the buffer.
+ *
+ * Disregards the 'destroy' flag, which seems reserved for caller.
+ * This is bad, but there's no apparent protocol for it.
+ */
+BUFFER * mutt_buffer_init(BUFFER *b)
+{
+  if (!b)
+  {
+    b = safe_malloc(sizeof(BUFFER));
+    if (!b)
+      return NULL;
+  }
+  else
+  {
+    safe_free(b->data);
+  }
+  memset(b, 0, sizeof(BUFFER));
+  return b;
+}
+
+/*
+ * Creates and initializes a BUFFER*. If passed an existing BUFFER*,
+ * just initializes. Frees anything already in the buffer. Copies in
+ * the seed string.
+ *
+ * Disregards the 'destroy' flag, which seems reserved for caller.
+ * This is bad, but there's no apparent protocol for it.
+ */
+BUFFER * mutt_buffer_from(BUFFER *b, char *seed)
+{
+  if (!seed)
+    return NULL;
+
+  b = mutt_buffer_init(b);
+  b->data = safe_strdup (seed);
+  b->dsize = mutt_strlen (seed);
+  b->dptr = (char *) b->data + b->dsize;
+  return b;
+}
+
 void mutt_buffer_addstr (BUFFER* buf, const char* s)
 {
   mutt_buffer_add (buf, s, mutt_strlen (s));
@@ -1341,6 +1399,16 @@ void mutt_buffer_addstr (BUFFER* buf, const char* s)
 void mutt_buffer_addch (BUFFER* buf, char c)
 {
   mutt_buffer_add (buf, &c, 1);
+}
+
+void mutt_buffer_free (BUFFER **p)
+{
+  if (!p || !*p) 
+    return;
+
+   FREE(&(*p)->data);
+   /* dptr is just an offset to data and shouldn't be freed */
+   FREE(p);
 }
 
 /* dynamically grows a BUFFER to accomodate s, in increments of 128 bytes.
@@ -1429,6 +1497,21 @@ void mutt_free_rx_list (RX_LIST **list)
   }
 }
 
+void mutt_free_spam_list (SPAM_LIST **list)
+{
+  SPAM_LIST *p;
+  
+  if (!list) return;
+  while (*list)
+  {
+    p = *list;
+    *list = (*list)->next;
+    mutt_free_regexp (&p->rx);
+    safe_free(&p->template);
+    FREE (&p);
+  }
+}
+
 int mutt_match_rx_list (const char *s, RX_LIST *l)
 {
   if (!s)  return 0;
@@ -1438,6 +1521,57 @@ int mutt_match_rx_list (const char *s, RX_LIST *l)
     if (regexec (l->rx->rx, s, (size_t) 0, (regmatch_t *) 0, (int) 0) == 0)
     {
       dprint (5, (debugfile, "mutt_match_rx_list: %s matches %s\n", s, l->rx->pattern));
+      return 1;
+    }
+  }
+
+  return 0;
+}
+
+int mutt_match_spam_list (const char *s, SPAM_LIST *l, char *text, int x)
+{
+  static regmatch_t *pmatch = NULL;
+  static int nmatch = 0;
+  int i, n, tlen;
+  char *p;
+
+  if (!s)  return 0;
+
+  tlen = 0;
+
+  for (; l; l = l->next)
+  {
+    /* If this pattern needs more matches, expand pmatch. */
+    if (l->nmatch > nmatch)
+    {
+      safe_realloc (&pmatch, l->nmatch * sizeof(regmatch_t));
+      nmatch = l->nmatch;
+    }
+
+    /* Does this pattern match? */
+    if (regexec (l->rx->rx, s, (size_t) l->nmatch, (regmatch_t *) pmatch, (int) 0) == 0)
+    {
+      dprint (5, (debugfile, "mutt_match_spam_list: %s matches %s\n", s, l->rx->pattern));
+      dprint (5, (debugfile, "mutt_match_spam_list: %d subs\n", l->rx->rx->re_nsub));
+
+      /* Copy template into text, with substitutions. */
+      for (p = l->template; *p;)
+      {
+	if (*p == '%')
+	{
+	  n = atoi(++p);			/* find pmatch index */
+	  while (isdigit(*p))
+	    ++p;				/* skip subst token */
+	  for (i = pmatch[n].rm_so; (i < pmatch[n].rm_eo) && (tlen < x); i++)
+	    text[tlen++] = s[i];
+	}
+	else
+	{
+	  text[tlen++] = *p++;
+	}
+      }
+      text[tlen] = '\0';
+      dprint (5, (debugfile, "mutt_match_spam_list: \"%s\"\n", text));
       return 1;
     }
   }

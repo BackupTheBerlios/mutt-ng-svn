@@ -101,7 +101,7 @@ as an argument.
 .PP
 .nf
 \fBauto_view\fP \fItype\fP[\fB/\fP\fIsubtype\fP] [ ... ]
-\fBunauto_view\fP \fItype\fP[fB/\fP\fIsubtype\fP] [ ... ]
+\fBunauto_view\fP \fItype\fP[\fB/\fP\fIsubtype\fP] [ ... ]
 .fi
 .IP
 This commands permits you to specify that mutt should automatically
@@ -125,9 +125,10 @@ the file name, and not use a
 entry given for the original MIME type.  For instance, you may add
 the \fBapplication/octet-stream\fP MIME type to this list.
 .TP
-\fBbind\fP \fImap\fP \fIkey\fP \fIfunction\fP
-This command binds the given \fIkey\fP for the given \fImap\fP to
-the given \fIfunction\fP.
+\fBbind\fP \fImap1,map2,...\fP \fIkey\fP \fIfunction\fP
+This command binds the given \fIkey\fP for the given \fImap\fP or maps
+to the given \fIfunction\fP. Multiple maps may be specified by
+separating them with commas (no whitespace is allowed).
 .IP
 Valid maps are:
 .BR generic ", " alias ", " attach ", " 
@@ -179,7 +180,8 @@ executed in the order given in the configuration file.
 .TP
 \fBmacro\fP \fImap\fP \fIkey\fP \fIsequence\fP [ \fIdescription\fP ]
 This command binds the given \fIsequence\fP of keys to the given
-\fIkey\fP in the given \fImap\fP.  For valid maps, see \fBbind\fP.
+\fIkey\fP in the given \fImap\fP or maps.  For valid maps, see \fBbind\fP. To
+specify multipe maps, put only a comma between the maps.
 .PP
 .nf
 \fBcolor\fP \fIobject\fP \fIforeground\fP \fIbackground\fP [ \fI regexp\fP ]
@@ -290,6 +292,24 @@ When composing a message matching \fIpattern\fP, \fIcommand\fP is
 executed.  When multiple \fBsend-hook\fPs match, they are executed
 in the order in which they occur in the configuration file.
 .TP
+\fBsend2-hook\fP [\fB!\fP]\fIpattern\fP \fIcommand\fP
+Whenever a message matching \fIpattern\fP is changed (either by
+editing it or by using the compose menu), \fIcommand\fP
+is executed. When multiple \fBsend2-hook\fPs match, they are
+executed in the order in which they occur in the configuration file.
+Possible applications include setting the $sendmail variable when a
+message's from header is changed.
+.IP
+\fBsend2-hook\fP execution is not triggered by use of
+\fBenter-command\fP from the compose menu.
+.TP
+\fBreply-hook\fP [\fB!\fP]\fIpattern\fP \fIcommand\fP
+When replying to a message matching \fIpattern\fP, \fIcommand\fP is
+executed.  When multiple \fBreply-hook\fPs match, they are executed
+in the order in which they occur in the configuration file, but all
+\fBreply-hook\fPs are matched and executed before \fBsend-hook\fPs,
+regardless of their order in the configuration file.
+.TP
 \fBcrypt-hook\fP \fIpattern\fP \fIkey-id\fP
 The crypt-hook command provides a method by which you can
 specify the ID of the public key to be used when encrypting messages
@@ -354,6 +374,15 @@ variables will reset to their system defaults.
 \fBsource\fP \fIfilename\fP
 The given file will be evaluated as a configuration file.
 .TP
+.nf
+\fBspam\fP \fIpattern\fP \fIformat\fP
+\fBnospam\fP \fIpattern\fP
+.fi
+These commands define spam-detection patterns from external spam
+filters, so that mutt can sort, limit, and search on
+``spam tags'' or ``spam attributes'', or display them
+in the index. See the Mutt manual for details.
+.TP
 \fBunhook\fP [\fB * \fP | \fIhook-type\fP ]
 This command will remove all hooks of a given type, or all hooks
 when \(lq\fB*\fP\(rq is used as an argument.  \fIhook-type\fP
@@ -402,6 +431,7 @@ l l.
 ~f \fIEXPR\fP	messages originating from \fIEXPR\fP
 ~g	PGP signed messages
 ~G	PGP encrypted messages
+~H \fIEXPR\fP	messages with spam tags matching \fIEXPR\fP
 ~h \fIEXPR\fP	messages which contain \fIEXPR\fP in the message header
 ~k	message contains PGP key material
 ~i \fIEXPR\fP	message which match \fIEXPR\fP in the \(lqMessage-ID\(rq field
@@ -425,6 +455,7 @@ l l.
 ~x \fIEXPR\fP	messages which contain \fIEXPR\fP in the \(lqReferences\(rq field
 ~z \fIMIN\fP-\fIMAX\fP	messages with a size in the range \fIMIN\fP to \fIMAX\fP
 ~=	duplicated messages (see $duplicate_threads)
+~$	unreferenced message (requries threaded view)
 .TE
 .PP
 In the above, \fIEXPR\fP is a regular expression.

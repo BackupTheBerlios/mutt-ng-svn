@@ -27,8 +27,8 @@ muttng_SOURCES = $(BUILT_SOURCES) \
 	rfc822.c rfc1524.c rfc2047.c rfc2231.c \
 	score.c send.c sendlib.c signal.c sort.c \
 	status.c system.c thread.c charset.c history.c lib.c \
-	muttlib.c editmsg.c utf8.c mbyte.c wcwidth.c \
-	url.c ascii.c mutt_idna.c sidebar.c hcache.c
+	muttlib.c editmsg.c utf8.c mbyte.c wcwidth.c md5c.c \
+	url.c ascii.c mutt_idna.c sidebar.c hcache.c crypt-mod.c crypt-mod.h
 
 muttng_LDADD = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(MUTTLIBS) \
 	$(INTLLIBS) $(LIBICONV)
@@ -63,12 +63,12 @@ EXTRA_muttng_SOURCES = account.c md5c.c mutt_sasl.c mutt_socket.c mutt_ssl.c \
 	pgplib.c sha1.c pgpmicalg.c gnupgparse.c resize.c dotlock.c remailer.c \
 	browser.h mbyte.h remailer.h url.h mutt_ssl_nss.c \
 	pgppacket.c mutt_idna.h nntp.c newsrc.c mutt_libesmtp.c \
-	sidebar.h
+	sidebar.h crypt-mod-pgp-classic.c crypt-mod-smime-classic.c
 
 EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	configure acconfig.h account.h \
 	compress.h \
-	attach.h buffy.h charset.h copy.h dotlock.h functions.h gen_defs \
+	attach.h buffy.h charset.h copy.h crypthash.h dotlock.h functions.h gen_defs \
 	globals.h hash.h history.h init.h keymap.h mutt_crypt.h \
 	mailbox.h mapping.h md5.h mime.h mutt.h mutt_curses.h mutt_menu.h \
 	mutt_regex.h mutt_sasl.h mutt_socket.h mutt_ssl.h mutt_tunnel.h \
@@ -155,23 +155,24 @@ install-data-local: Muttngrc
 # used manually.
 
 pclean:
-	cat /dev/null > PATCHES
+	cat /dev/null > $(top_srcdir)/PATCHES
 
 check-security:
-	./check_sec.sh
+	(cd $(top_srcdir) && ./check_sec.sh)
 
 commit-real:
-	cvs commit
+	(cd $(top_srcdir) && cvs commit)
 
 commit-changelog:
-	cvs commit -m "# changelog commit" ChangeLog
+	(cd $(top_srcdir) && cvs commit -m "# changelog commit" ChangeLog)
 
 commit: pclean check-security commit-real changelog commit-changelog
 
 changelog:
-	cvs update ChangeLog
-	sh ./mkchangelog.sh | fmt -c | cat  - ChangeLog > ChangeLog.$$$$ && mv ChangeLog.$$$$ ChangeLog
-	$${VISUAL:-vi} ChangeLog
+	(cd $(top_srcdir); \
+	cvs update ChangeLog; \
+	sh ./mkchangelog.sh | fmt -c | cat  - ChangeLog > ChangeLog.$$$$ && mv ChangeLog.$$$$ ChangeLog; \
+	$${VISUAL:-vi} ChangeLog)
 
 ChangeLog: changelog
 

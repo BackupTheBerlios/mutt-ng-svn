@@ -127,7 +127,7 @@ int mmdf_parse_mailbox (CONTEXT *ctx)
       count++;
       if (!ctx->quiet && ReadInc && ((count % ReadInc == 0) || count == 1))
 	mutt_message (_("Reading %s... %d (%d%%)"), ctx->path, count,
-		      loc / (ctx->size / 100 + 1));
+		      (int)(loc / (ctx->size / 100 + 1)));
 
 
       if (ctx->msgcount == ctx->hdrmax)
@@ -286,7 +286,7 @@ int mbox_parse_mailbox (CONTEXT *ctx)
 
       if (!ctx->quiet && ReadInc && ((count % ReadInc == 0) || count == 1))
 	mutt_message (_("Reading %s... %d (%d%%)"), ctx->path, count,
-		      ftell (ctx->fp) / (ctx->size / 100 + 1));
+		      (int)(ftell (ctx->fp) / (ctx->size / 100 + 1)));
 
       if (ctx->msgcount == ctx->hdrmax)
 	mx_alloc_memory (ctx);
@@ -791,7 +791,7 @@ int mbox_sync_mailbox (CONTEXT *ctx, int *index_hint)
       j++;
       if (!ctx->quiet && WriteInc && ((i % WriteInc) == 0 || j == 1))
 	mutt_message (_("Writing messages... %d (%d%%)"), i,
-		      ftell (ctx->fp) / (ctx->size / 100 + 1));
+		      (int)(ftell (ctx->fp) / (ctx->size / 100 + 1)));
 
       if (ctx->magic == M_MMDF)
       {
@@ -928,8 +928,8 @@ int mbox_sync_mailbox (CONTEXT *ctx, int *index_hint)
     
     char savefile[_POSIX_PATH_MAX];
     
-    snprintf (savefile, sizeof (savefile), "%s/mutt.%s-%s-%d",
-	      NONULL (Tempdir), NONULL(Username), NONULL(Hostname), getpid ());
+    snprintf (savefile, sizeof (savefile), "%s/mutt.%s-%s-%u",
+	      NONULL (Tempdir), NONULL(Username), NONULL(Hostname), (unsigned int)getpid ());
     rename (tempfile, savefile);
     mutt_unblock_signals ();
     mx_fastclose_mailbox (ctx);

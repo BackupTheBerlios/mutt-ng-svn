@@ -1,4 +1,4 @@
-# $Id: Makefile.in,v 3.2 2002/12/07 14:15:01 roessler Exp $
+# $Id: Makefile.in,v 3.4 2004/04/30 06:49:37 roessler Exp $
 
 SHELL = /bin/sh
 
@@ -44,6 +44,7 @@ DISTFILES = Makefile.in dotlock.man  	\
 	muttrc.man.tail			\
 	muttrc.man			\
 	mbox.man			\
+	mmdf.man			\
 	manual.sgml.head		\
 	manual.sgml.tail		\
 	manual.sgml			\

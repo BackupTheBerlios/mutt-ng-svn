@@ -39,6 +39,7 @@ WHERE char *Attribution;
 WHERE char *AttachFormat;
 WHERE char *Charset;
 WHERE char *ComposeFormat;
+WHERE char *ConfigCharset;
 WHERE char *ContentType;
 WHERE char *DefaultHook;
 WHERE char *DateFmt;
@@ -56,6 +57,7 @@ WHERE char *Hostname;
 #ifdef USE_IMAP
 WHERE char *ImapAuthenticators INITVAL (NULL);
 WHERE char *ImapDelimChars INITVAL (NULL);
+WHERE char *ImapHeaders;
 WHERE char *ImapHomeNamespace INITVAL (NULL);
 WHERE char *ImapPass INITVAL (NULL);
 WHERE char *ImapUser INITVAL (NULL);
@@ -125,12 +127,14 @@ WHERE char *SmtpHost;
 WHERE unsigned short SmtpPort;
 #endif
 WHERE char *Spoolfile;
+WHERE char *SpamSep;
 #if defined(USE_SSL) || defined(USE_NSS) || defined(USE_GNUTLS)
 WHERE char *SslCertFile INITVAL (NULL);
 #endif
 #if defined(USE_SSL) || defined(USE_NSS)
 WHERE char *SslEntropyFile INITVAL (NULL);
 #endif
+WHERE char *SslClientCert INITVAL (NULL);
 #ifdef USE_GNUTLS
 WHERE short SslDHPrimeBits;
 WHERE char *SslCACertFile INITVAL (NULL);
@@ -157,6 +161,8 @@ WHERE LIST *UnIgnore INITVAL(0);
 WHERE RX_LIST *Alternates INITVAL(0);
 WHERE RX_LIST *MailLists INITVAL(0);
 WHERE RX_LIST *SubscribedLists INITVAL(0);
+WHERE SPAM_LIST *SpamList INITVAL(0);
+WHERE RX_LIST *NoSpamList INITVAL(0);
 
 /* bit vector for boolean variables */
 #ifdef MAIN_C

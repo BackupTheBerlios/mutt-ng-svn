@@ -430,7 +430,7 @@ int imap_open_connection (IMAP_DATA* idata)
 	  {
 	    mutt_error (_("Could not negotiate TLS connection"));
 	    mutt_sleep (1);
-	    goto bail;
+	    goto err_close_conn;
 	  }
 	  else
 	  {
@@ -460,6 +460,7 @@ int imap_open_connection (IMAP_DATA* idata)
 
  err_close_conn:
   mutt_socket_close (idata->conn);
+  idata->state = IMAP_DISCONNECTED;
  bail:
   FREE (&idata->capstr);
   return -1;
@@ -793,12 +794,14 @@ void imap_logout (IMAP_DATA* idata)
   imap_cmd_start (idata, "LOGOUT");
   while (imap_cmd_step (idata) == IMAP_CMD_CONTINUE)
     ;
+  FREE(& idata->cmd.buf);
+  FREE(& idata);
 }
 
+/*
 int imap_close_connection (CONTEXT *ctx)
 {
   dprint (1, (debugfile, "imap_close_connection(): closing connection\n"));
-  /* if the server didn't shut down on us, close the connection gracefully */
   if (CTX_DATA->status != IMAP_BYE)
   {
     mutt_message _("Closing connection to IMAP server...");
@@ -810,6 +813,7 @@ int imap_close_connection (CONTEXT *ctx)
   CTX_DATA->conn->data = NULL;
   return 0;
 }
+*/
 
 /* imap_set_flag: append str to flags if we currently have permission
  *   according to aclbit */
@@ -818,7 +822,7 @@ static void imap_set_flag (IMAP_DATA* idata, int aclbit, int flag,
 {
   if (mutt_bit_isset (idata->rights, aclbit))
     if (flag)
-      strncat (flags, str, flsize);
+      safe_strcat (flags, flsize, str);
 }
 
 /* imap_make_msg_set: make an IMAP4rev1 UID message set out of a set of

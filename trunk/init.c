@@ -365,6 +365,112 @@ static int add_to_rx_list (RX_LIST **list, const char *s, int flags, BUFFER *err
   return 0;
 }
 
+static int add_to_spam_list (SPAM_LIST **list, const char *pat, const char *templ, BUFFER *err)
+{
+  SPAM_LIST *t = NULL, *last = NULL;
+  REGEXP *rx;
+  int n;
+  const char *p;
+
+  if (!pat || !*pat || !templ)
+    return 0;
+
+  if (!(rx = mutt_compile_regexp (pat, REG_ICASE)))
+  {
+    snprintf (err->data, err->dsize, _("Bad regexp: %s"), pat);
+    return -1;
+  }
+
+  /* check to make sure the item is not already on this list */
+  for (last = *list; last; last = last->next)
+  {
+    if (ascii_strcasecmp (rx->pattern, last->rx->pattern) == 0)
+    {
+      /* Already on the list. Formerly we just skipped this case, but
+       * now we're supporting removals, which means we're supporting
+       * re-adds conceptually. So we probably want this to imply a
+       * removal, then do an add. We can achieve the removal by freeing
+       * the template, and leaving t pointed at the current item.
+       */
+      t = last;
+      safe_free(&t->template);
+      break;
+    }
+    if (!last->next)
+      break;
+  }
+
+  /* If t is set, it's pointing into an extant SPAM_LIST* that we want to
+   * update. Otherwise we want to make a new one to link at the list's end.
+   */
+  if (!t)
+  {
+    t = mutt_new_spam_list();
+    t->rx = rx;
+    if (last)
+      last->next = t;
+    else
+      *list = t;
+  }
+
+  /* Now t is the SPAM_LIST* that we want to modify. It is prepared. */
+  t->template = safe_strdup(templ);
+
+  /* Find highest match number in template string */
+  t->nmatch = 0;
+  for (p = templ; *p;)
+  {
+    if (*p == '%')
+    {
+        n = atoi(++p);
+        if (n > t->nmatch)
+          t->nmatch = n;
+        while (*p && isdigit((int)*p))
+          ++p;
+    }
+    else
+        ++p;
+  }
+  t->nmatch++;		/* match 0 is always the whole expr */
+
+  return 0;
+}
+
+static int remove_from_spam_list (SPAM_LIST **list, const char *pat)
+{
+  SPAM_LIST *spam, *prev;
+  int nremoved = 0;
+
+  /* Being first is a special case. */
+  spam = *list;
+  if (spam->rx && !mutt_strcmp(spam->rx->pattern, pat))
+  {
+    *list = spam->next;
+    mutt_free_regexp(&spam->rx);
+    safe_free(&spam->template);
+    safe_free(&spam);
+    return 1;
+  }
+
+  prev = spam;
+  for (spam = prev->next; spam;)
+  {
+    if (!mutt_strcmp(spam->rx->pattern, pat))
+    {
+      prev->next = spam->next;
+      mutt_free_regexp(&spam->rx);
+      safe_free(&spam->template);
+      safe_free(&spam);
+      spam = prev->next;
+      ++nremoved;
+    }
+    else
+      spam = spam->next;
+  }
+
+  return nremoved;
+}
+
 
 static void remove_from_list (LIST **l, const char *str)
 {
@@ -504,6 +610,101 @@ static int parse_rx_unlist (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *
   return 0;
 }
 
+static void _alternates_clean (void)
+{
+  int i;
+  if (Context && Context->msgcount) 
+  {
+    for (i = 0; i < Context->msgcount; i++)
+      Context->hdrs[i]->recip_valid = 0;
+  }
+}
+
+static int parse_alternates (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+{
+  _alternates_clean();
+  return parse_rx_list (buf, s, data, err);
+}
+
+static int parse_unalternates (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+{
+  _alternates_clean();
+  return parse_rx_unlist (buf, s, data, err);
+}
+
+static int parse_spam_list (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
+{
+  BUFFER templ;
+
+  memset(&templ, 0, sizeof(templ));
+
+  /* Insist on at least one parameter */
+  if (!MoreArgs(s))
+  {
+    if (data == M_SPAM)
+      strfcpy(err->data, _("spam: no matching pattern"), err->dsize);
+    else
+      strfcpy(err->data, _("nospam: no matching pattern"), err->dsize);
+    return -1;
+  }
+
+  /* Extract the first token, a regexp */
+  mutt_extract_token (buf, s, 0);
+
+  /* data should be either M_SPAM or M_NOSPAM. M_SPAM is for spam commands. */
+  if (data == M_SPAM)
+  {
+    /* If there's a second parameter, it's a template for the spam tag. */
+    if (MoreArgs(s))
+    {
+      mutt_extract_token (&templ, s, 0);
+
+      /* Add to the spam list. */
+      if (add_to_spam_list (&SpamList, buf->data, templ.data, err) != 0) {
+	  FREE(&templ.data);
+          return -1;
+      }
+      FREE(&templ.data);
+    }
+
+    /* If not, try to remove from the nospam list. */
+    else
+    {
+      remove_from_rx_list(&NoSpamList, buf->data);
+    }
+
+    return 0;
+  }
+
+  /* M_NOSPAM is for nospam commands. */
+  else if (data == M_NOSPAM)
+  {
+    /* nospam only ever has one parameter. */
+
+    /* "*" is a special case. */
+    if (!mutt_strcmp(buf->data, "*"))
+    {
+      mutt_free_spam_list (&SpamList);
+      mutt_free_rx_list (&NoSpamList);
+      return 0;
+    }
+
+    /* If it's on the spam list, just remove it. */
+    if (remove_from_spam_list(&SpamList, buf->data) != 0)
+      return 0;
+
+    /* Otherwise, add it to the nospam list. */
+    if (add_to_rx_list (&NoSpamList, buf->data, REG_ICASE, err) != 0)
+      return -1;
+
+    return 0;
+  }
+
+  /* This should not happen. */
+  strfcpy(err->data, "This is no good at all.", err->dsize);
+  return -1;
+}
+
 static int parse_unlist (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 {
   do
@@ -614,6 +815,9 @@ static int parse_alias (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 
   mutt_extract_token (buf, s, 0);
 
+  dprint (2, (debugfile, "parse_alias: First token is '%s'.\n",
+	      buf->data));
+
   /* check to see if an alias with this name already exists */
   for (; tmp; tmp = tmp->next)
   {
@@ -641,6 +845,8 @@ static int parse_alias (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
   }
 
   mutt_extract_token (buf, s, M_TOKEN_QUOTE | M_TOKEN_SPACE | M_TOKEN_SEMICOLON);
+  dprint (2, (debugfile, "parse_alias: Second token is '%s'.\n",
+	      buf->data));
   tmp->addr = mutt_parse_adrlist (tmp->addr, buf->data);
   if (last)
     last->next = tmp;
@@ -652,6 +858,21 @@ static int parse_alias (BUFFER *buf, BUFFER *s, unsigned long data, BUFFER *err)
 	      estr, tmp->name);
     return -1;
   }
+#ifdef DEBUG
+  if (debuglevel >= 2) 
+  {
+    ADDRESS *a;
+    for (a = tmp->addr; a; a = a->next)
+    {
+      if (!a->group)
+	dprint (2, (debugfile, "parse_alias:   %s\n",
+		    a->mailbox));
+      else
+	dprint (2, (debugfile, "parse_alias:   Group %s\n",
+		    a->mailbox));
+    }
+  }
+#endif
   return 0;
 }
 
@@ -864,10 +1085,7 @@ static void mutt_restore_default (struct option_t *p)
 	  char *s = (char *) p->init;
 
 	  pp->rx = safe_calloc (1, sizeof (regex_t));
-	  pp->pattern = safe_strdup ((char *) p->init);
-	  if (mutt_strcmp (p->option, "alternates") == 0)
-	    flags |= REG_ICASE;
-	  else if (mutt_strcmp (p->option, "mask") != 0)
+	  if (mutt_strcmp (p->option, "mask") != 0)
 	    flags |= mutt_which_case ((const char *) p->init);
 	  if (mutt_strcmp (p->option, "mask") == 0 && *s == '!')
 	  {
@@ -1015,7 +1233,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
 	if (DTYPE (MuttVars[idx].type) == DT_ADDR)
 	  rfc822_free_address ((ADDRESS **) MuttVars[idx].data);
 	else
-	  FREE (MuttVars[idx].data);
+	  FREE ((void *)MuttVars[idx].data);
       }
       else if (query || *s->dptr != '=')
       {
@@ -1044,7 +1262,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
         if (DTYPE (MuttVars[idx].type) == DT_ADDR)
 	  rfc822_free_address ((ADDRESS **) MuttVars[idx].data);
         else
-	  FREE (MuttVars[idx].data);
+	  FREE ((void *)MuttVars[idx].data);
 
         mutt_extract_token (tmp, s, 0);
         if (DTYPE (MuttVars[idx].type) == DT_PATH)
@@ -1079,8 +1297,7 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
 	break;
       }
 
-      if (option(OPTATTACHMSG) && (!mutt_strcmp(MuttVars[idx].option, "alternates")
-				   || !mutt_strcmp(MuttVars[idx].option, "reply_regexp")))
+      if (option(OPTATTACHMSG) && !mutt_strcmp(MuttVars[idx].option, "reply_regexp"))
       {
 	snprintf (err->data, err->dsize, "Operation not permitted when in attach-message mode.");
 	r = -1;
@@ -1096,11 +1313,8 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
       {
 	int not = 0;
 
-	/* $alternates is case-insensitive,
-	   $mask is case-sensitive */
-	if (mutt_strcmp (MuttVars[idx].option, "alternates") == 0)
-	  flags |= REG_ICASE;
-	else if (mutt_strcmp (MuttVars[idx].option, "mask") != 0)
+	/* $mask is case-sensitive */
+	if (mutt_strcmp (MuttVars[idx].option, "mask") != 0)
 	  flags |= mutt_which_case (tmp->data);
 
 	p = tmp->data;
@@ -1154,15 +1368,6 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
 	    }
 	  }
 #undef CUR_ENV
-	}
-	
-	if(Context && Context->msgcount &&
-	   mutt_strcmp(MuttVars[idx].option, "alternates") == 0)
-	{
-	  int i;
-	  
-	  for(i = 0; i < Context->msgcount; i++)
-	    Context->hdrs[i]->recip_valid = 0;
 	}
       }
     }
@@ -1363,24 +1568,16 @@ static int parse_set (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
 static int source_rc (const char *rcfile, BUFFER *err)
 {
   FILE *f;
-  int line = 0, rc = 0;
+  int line = 0, rc = 0, conv = 0;
   BUFFER token;
   char *linebuf = NULL;
+  char *currentline = NULL;
   size_t buflen;
   pid_t pid;
-  struct stat s;
 
-  if (stat (rcfile, &s) < 0)
-  {
-    snprintf (err->data, err->dsize, _("%s: stat: %s"), rcfile, strerror (errno));
-    return (-1);
-  }
-  if (!S_ISREG (s.st_mode))
-  {
-    snprintf (err->data, err->dsize, _("%s: not a regular file"), rcfile);
-    return (-1);
-  }
-
+  dprint (2, (debugfile, "Reading configuration file '%s'.\n",
+	  rcfile));
+  
   if ((f = mutt_open_read (rcfile, &pid)) == NULL)
   {
     snprintf (err->data, err->dsize, "%s: %s", rcfile, strerror (errno));
@@ -1390,15 +1587,32 @@ static int source_rc (const char *rcfile, BUFFER *err)
   memset (&token, 0, sizeof (token));
   while ((linebuf = mutt_read_line (linebuf, &buflen, f, &line)) != NULL)
   {
-    if (mutt_parse_rc_line (linebuf, &token, err) == -1)
+    conv=ConfigCharset && (*ConfigCharset) && Charset;
+    if (conv) 
+    {
+      currentline=safe_strdup(linebuf);
+      if (!currentline) continue;
+      mutt_convert_string(&currentline, ConfigCharset, Charset, 0);
+    } 
+    else 
+      currentline=linebuf;
+
+    if (mutt_parse_rc_line (currentline, &token, err) == -1)
     {
       mutt_error (_("Error in %s, line %d: %s"), rcfile, line, err->data);
-      if (--rc < -MAXERRS)
+      if (--rc < -MAXERRS) 
+      {
+        if (conv) FREE(&currentline);
         break;
+      }
     }
     else
+    {
       if (rc < 0)
         rc = -1;
+    }
+    if (conv)
+      FREE(&currentline);
   }
   FREE (&token.data);
   FREE (&linebuf);
