@@ -1207,6 +1207,8 @@ static void print_flowed_line(char * line, STATE *s,int ql) {
   int len = strlen(line);
   int i;
 
+  fprintf(stderr,"prefix = `%s'\n",s->prefix);
+
   width = COLS - WrapMargin - ql - 1;
   if (option(OPTSTUFFQUOTED))
     --width;
@@ -1216,7 +1218,11 @@ static void print_flowed_line(char * line, STATE *s,int ql) {
   /* fprintf(stderr,"print_flowed_line will print `%s' with ql = %d\n",line,ql); */
 
   if (strlen(line)==0) {
+    if (s->prefix)
+      state_puts(s->prefix,s);
     for (i=0;i<ql;++i) state_putc('>',s);
+    if (option(OPTSTUFFQUOTED))
+      state_putc(' ',s);
     state_putc('\n',s);
     return;
   }
@@ -1257,11 +1263,15 @@ static void print_flowed_line(char * line, STATE *s,int ql) {
     } else {
       /* fprintf(stderr,"if 1 else\n"); */
     }
+    if (s->prefix)
+      state_puts(s->prefix,s);
     for (i=0;i<ql;++i)
       state_putc('>',s);
-    if (option(OPTSTUFFQUOTED) && ql>0) state_putc(' ',s);
+    if (option(OPTSTUFFQUOTED) && (ql>0 || s->prefix)) state_putc(' ',s);
     state_puts(oldpos,s);
     /* fprintf(stderr,"print_flowed_line: `%s'\n",oldpos); */
+    if (pos<line+len)
+      state_putc(' ',s);
     state_putc('\n',s);
     oldpos = pos;
   }

@@ -1,5 +1,8 @@
 Changes specific to mutt-ng:
 
+2005-02-10:
+  * quoting fix for f=f handler (fix for bug #3345)
+
 2005-02-06:
   * rewrote handler for f=f attachments to produce nicer output
 
