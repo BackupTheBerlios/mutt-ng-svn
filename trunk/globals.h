@@ -6,6 +6,10 @@
  * It's licensed under the GNU General Public License,
  * please see the file GPL in the top level source directory.
  */
+#ifndef _GLOBALS_H
+#define _GLOBALS_H
+
+#include "lib/str.h"
 
 WHERE void (*mutt_error) (const char *, ...);
 WHERE void (*mutt_message) (const char *, ...);
@@ -300,3 +304,5 @@ extern const char *Months[];
 #include "sort.h"
 #include "mutt_crypt.h"
 #endif /* MAIN_C */
+
+#endif /* !_GLOBALS_H */
