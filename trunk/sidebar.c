@@ -3,6 +3,9 @@
  * Copyright (C) ????-2004 Justin Hibbits <jrh29@po.cwru.edu>
  * Copyright (C) 2004 Thomer M. Gil <mutt@thomer.com>
  *
+ * Parts were written/modified by:
+ * Rocco Rutte <pdmef@cs.tu-berlin.de>
+ *
  * This file is part of mutt-ng, see http://www.muttng.org/.
  * It's licensed under the GNU General Public License,
  * please see the file GPL in the top level source directory.
