@@ -396,38 +396,11 @@ int mutt_buffy_check (int force)
       case M_MBOX:
       case M_MMDF:
 
-    {
-        if (STAT_CHECK || tmp->msgcount == 0)
-        {
-          BuffyCount++;
-          /* only do complete count if sidebar visible */
-          if (SidebarWidth > 0)
-          {
-            BUFFY b = *tmp;
-            int msgcount = 0;
-            int msg_unread = 0;
+        if (SidebarWidth == 0 || !option (OPTMBOXPANE)) {
+          if (STAT_CHECK) {
             BuffyCount++;
-            /* parse the mailbox, to see how much mail there is */
-            ctx = mx_open_mailbox( tmp->path, M_READONLY | M_QUIET | M_NOSORT,
-              NULL);
-            if(ctx)
-            {
-                msgcount = ctx->msgcount;
-                msg_unread = ctx->unread;
-                mx_close_mailbox(ctx, 0);
-            }
-            *tmp = b;
-            tmp->msgcount = msgcount;
-            tmp->msg_unread = msg_unread;
-            if(STAT_CHECK)
-                tmp->has_new = tmp->new = 1;
+            tmp->new = tmp->has_new = 1;
           }
-          else
-          {
-            /* sidebar invisible -> done */
-            tmp->new = 1;
-          }
-        }
 #ifdef BUFFY_SIZE
           else
           {
@@ -435,10 +408,25 @@ int mutt_buffy_check (int force)
             tmp->size = (long) sb.st_size;
           }
 #endif
-          if (tmp->newly_created &&
-              (sb.st_ctime != sb.st_mtime || sb.st_ctime != sb.st_atime))
-            tmp->newly_created = 0;
+        } else if (SidebarWidth > 0 && option (OPTMBOXPANE) && 
+                   (STAT_CHECK || tmp->msgcount == 0)) {
+          /* sidebar visible */
+          int msg_count = 0, msg_unread = 0, msg_new = 0;
+          BuffyCount++;
+          if ((ctx = mx_open_mailbox (tmp->path, M_READONLY | M_QUIET | M_NOSORT, NULL)) != NULL) {
+            msg_count = ctx->msgcount;
+            msg_unread = ctx->unread;
+            msg_new = ctx->new;
+            mx_close_mailbox (ctx, 0);
           }
+          tmp->msgcount = msg_count;
+          tmp->msg_unread = msg_unread;
+          tmp->new = msg_new;
+          tmp->has_new = msg_new > 0;
+        }
+        if (tmp->newly_created &&
+            (sb.st_ctime != sb.st_mtime || sb.st_ctime != sb.st_atime))
+          tmp->newly_created = 0;
         break;
 
       case M_MAILDIR:
@@ -451,6 +439,7 @@ int mutt_buffy_check (int force)
         }
         tmp->msgcount = 0;
         tmp->msg_unread = 0;
+        tmp->new = 0;
         while ((de = readdir (dirp)) != NULL)
         {
           char *p;
@@ -458,23 +447,22 @@ int mutt_buffy_check (int force)
               (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')))
           {
             /* one new and undeleted message is enough */
-            if (tmp->new != 1)
+            if (tmp->new == 0)
             {
                BuffyCount++;
                tmp->has_new = tmp->new = 1;
-               if (SidebarWidth == 0)
-               {
+               if (SidebarWidth == 0 || !option (OPTMBOXPANE))
                  /* if sidebar invisible -> done */
                  break;
-               }
             }
             tmp->msgcount++;
             tmp->msg_unread++;
+            tmp->new++;
           }
         }
         closedir (dirp);
 
-        if (SidebarWidth > 0)
+        if (SidebarWidth > 0 && option (OPTMBOXPANE))
         {
           /* only count total mail if sidebar visible */
           snprintf (path, sizeof (path), "%s/cur", tmp->path);
@@ -499,7 +487,7 @@ int mutt_buffy_check (int force)
       case M_MH:
         if ((tmp->new = mh_buffy (tmp->path)) > 0)
           BuffyCount++;
-        if (SidebarWidth > 0)
+        if (SidebarWidth > 0 && option (OPTMBOXPANE))
         {
           DIR *dp;
           struct dirent *de;

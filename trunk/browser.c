@@ -569,6 +569,7 @@ static int examine_directory (MUTTMENU *menu, struct browser_state *state,
   }
   closedir (dp);
   }
+  draw_sidebar (CurrentMenu);
   browser_sort (state);
   return 0;
 }
