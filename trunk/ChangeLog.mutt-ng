@@ -1,5 +1,8 @@
 Changes specific to mutt-ng:
 
+2005-02-23:
+  * Integrated assume_charset patch from http://www.emaillab.org/mutt/download15.html.en
+
 2005-02-22:
   * Merged mutt changes
   * Sidebar now honors the imap_home_namespace

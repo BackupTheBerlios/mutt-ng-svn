@@ -34,6 +34,7 @@ WHERE ADDRESS *From;
 
 WHERE char *AliasFile;
 WHERE char *AliasFmt;
+WHERE char *AssumedCharset;
 WHERE char *AttachSep;
 WHERE char *Attribution;
 WHERE char *AttachFormat;
@@ -48,6 +49,7 @@ WHERE char *DsnNotify;
 WHERE char *DsnReturn;
 WHERE char *Editor;
 WHERE char *EscChar;
+WHERE char *FileCharset;
 WHERE char *FolderFormat;
 WHERE char *ForwFmt;
 WHERE char *Fqdn;
