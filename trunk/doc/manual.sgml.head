@@ -1709,18 +1709,50 @@ If the filename ends with a vertical bar (|), then <em/filename/ is
 considered to be an executable program from which to read input (eg.
 <tt>source ~/bin/myscript|</tt>).
 
-<sect1>Configuring features conditionnaly<label id="ifdef">
+<sect1>Configuring features conditionaly<label id="ifdef">
 <p>
 Usage: <tt/ifdef/ <em/item/ <em/command/
+Usage: <tt/ifndef/ <em/item/ <em/command/
 
-This command allows to test if a feature has been compiled in, before
-actually executing the command. Item can be either the name of a
-function or a variable.
+These command allows to test if a variable, function or certain feature
+is available or not respectively, before actually executing the command.
+<tt/ifdef/ (short for ``if defined) handles commands if upon
+availability while <tt/ifndef/ (short for ``if not defined'') does if
+not. The <em/command/ may be any valid fraction of a configuration file.
 
-Example:
+All names of variables and functions may be tested. Additionally, the
+following compile-features may be tested when prefixed with 'feature_':
+ncurses, slang, iconv, idn, dotlock, standalone, pop, nntp, imap, ssl,
+gnutls, sasl, sasl2, libesmtp, compressed, color, classic_pgp,
+classic_smime, gpgme, header_cache.
+
+Examples follow.
+
+To only source a file with IMAP related settings only if IMAP support is
+compiled in, use:
 <tscreen><verb>
-ifdef imap_keepalive 'source ~/.mutt/imap_setup'
+ifdef feature_imap 'source ~/.mutt-ng/imap_setup'
+# or
+# ifdef imap_user 'source ~/.mutt-ng/imap_setup'
+# or
+# ...
 </verb></tscreen>
+
+To exit mutt-ng directly if no NNTP support is compiled in:
+<tscreen><verb>
+ifndef feature_nntp 'push q'
+# or
+# ifndef newsrc 'push q'
+# or
+# ...
+</verb/</tscreen>
+
+To only set the <ref id="imap_mail_check"
+name="&lt;&dollar;imap&lowbar;mail&lowbar;check"> when the system's SVN
+is recent enough to have it:
+<tscreen><verb>
+ifdef imap_mail_check 'set imap_mail_check=300'
+</tscreen></verb>
 
 <sect1>Removing hooks<label id="unhook">
 <p>

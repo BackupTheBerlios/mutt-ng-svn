@@ -72,6 +72,12 @@ struct option_t
   unsigned long init; /* initial value */
 };
 
+struct feature_t
+{
+  char* name;
+  short builtin;
+};
+
 #define UL (unsigned long)
 
 #endif /* _MAKEDOC */
@@ -3454,6 +3460,132 @@ struct option_t MuttVars[] = {
   { NULL }
 };
 
+const struct feature_t Features[] = {
+  { "ncurses", 
+#ifdef NCURSES_VERSION
+    1
+#else
+    0
+#endif
+  }, { "slang",
+#ifdef USE_SLANG_CURSES
+    1
+#else
+    0
+#endif
+  }, { "iconv",
+#ifdef _LIBICONV_VERSION
+    1
+#else
+    0
+#endif
+  }, { "idn",
+#ifdef HAVE_LIBIDN
+    1
+#else
+    0
+#endif
+  }, { "dotlock",
+#ifdef USE_DOTLOCK
+    1
+#else
+    0
+#endif
+  }, { "standalone",
+#ifdef DL_STANDALONE
+    1
+#else
+    0
+#endif
+  }, { "pop",
+#ifdef USE_POP
+    1
+#else
+    0
+#endif
+  }, { "nntp",
+#ifdef USE_NNTP
+    1
+#else
+    0
+#endif
+  }, { "imap",
+#ifdef USE_IMAP
+    1
+#else
+    0
+#endif
+  }, { "ssl",
+#ifdef USE_SSL
+    1
+#else
+    0
+#endif
+  }, { "gnutls",
+#ifdef USE_GNUTLS
+    1
+#else
+    0
+#endif
+  }, { "sasl",
+#ifdef USE_SASL
+    1
+#else
+    0
+#endif
+  }, { "sasl2",
+#ifdef USE_SASL2
+    1
+#else
+    0
+#endif
+  }, { "libesmtp",
+#ifdef USE_LIBESMTP
+    1
+#else
+    0
+#endif
+  }, { "compressed",
+#ifdef USE_COMPRESSED
+    1
+#else
+    0
+#endif
+  }, { "color",
+#ifdef HAVE_COLOR
+    1
+#else
+    0
+#endif
+  }, { "classic_pgp",
+#ifdef CRYPT_BACKEND_CLASSIC_PGP
+    1
+#else
+    0
+#endif
+  }, { "classic_smime",
+#ifdef CRYPT_BACKEND_CLASSIC_SMIME
+    1
+#else
+    0
+#endif
+  }, { "gpgme",
+#ifdef CRYPT_BACKEND_GPGME
+    1
+#else
+    0
+#endif
+  }, { "header_cache",
+#ifdef USE_HCACHE
+    1
+#else
+    0
+#endif
+  },
+  /* last */
+  { NULL,       0 }
+};
+
 const struct mapping_t SortMethods[] = {
   { "date",		SORT_DATE },
   { "date-sent",	SORT_DATE },
@@ -3571,8 +3703,9 @@ struct command_t Commands[] = {
   { "append-hook",	mutt_parse_hook,	M_APPENDHOOK },
 #endif
   { "hdr_order",	parse_list,		UL &HeaderOrderList },
+  { "ifdef",		parse_ifdef,		1 },
+  { "ifndef",		parse_ifdef,		0 },
 #ifdef HAVE_ICONV
-  { "ifdef",		parse_ifdef,		0 },
   { "iconv-hook",	mutt_parse_hook,	M_ICONVHOOK }, 
 #endif
   { "ignore",		parse_ignore,		0 },

@@ -16,8 +16,9 @@ this still likely is incomplete. Please report missing items to
 
 2005-03-10
 
-  New Configuration Command (from CD's ifdef Patch):
+  New Configuration Command (based on CD's ifdef Patch):
     - ifdef
+    - ifndef
 
 2005-03-07
 

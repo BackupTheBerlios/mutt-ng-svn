@@ -567,19 +567,41 @@ static int parse_ifdef (BUFFER *tmp, BUFFER *s, unsigned long data, BUFFER *err)
 	  break;
 	}
     }
+  /* check for feature_* */
+  if (!res) {
+    char* p = NULL;
+    i = 0;
+    j = mutt_strlen (tmp->data);
+    /* need at least input of 'feature_X' */
+    if (j >= 7) {
+      p = tmp->data + 7;
+      j -= 7;
+      while (Features[i].name) {
+        if (mutt_strlen (Features[i].name) == j &&
+            ascii_strncasecmp (Features[i].name, p, j)) {
+          res = 1;
+          break;
+        }
+        i++;
+      }
+    }
+  }
 
   if (!MoreArgs (s))
   {
-    snprintf (err->data, err->dsize, _("ifdef: too few arguments"));
+    if (data)
+      snprintf (err->data, err->dsize, _("ifdef: too few arguments"));
+    else
+      snprintf (err->data, err->dsize, _("ifndef: too few arguments"));
     return (-1);
   }
   mutt_extract_token (tmp, s, M_TOKEN_SPACE);
 
-  if (res)
+  if ((data && res) || (!data && !res))
   {
     if (mutt_parse_rc_line (tmp->data, &token, err) == -1)
     {
-      mutt_error ("Erreur: %s", err->data);
+      mutt_error ("Error: %s", err->data);
       FREE (&token.data);
       return (-1);
     }
