@@ -2,7 +2,7 @@ Required tools
 --------------
 
 If you are planning to hack on Mutt-ng, please subscribe to the
-Mutt-ng-dev mailinglist (mutt-ng-deve-@lists.berlios.de).
+Mutt-ng-devel mailinglist (mutt-ng-deve-l@lists.berlios.de).
 Announcements about recent development
 versions go to that mailing list, as go technical discussions and
 patches.
