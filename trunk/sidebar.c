@@ -253,7 +253,7 @@ int draw_sidebar(int menu) {
   /* draw the divider */
   /* SETCOLOR(MT_COLOR_STATUS); */
     SETCOLOR(MT_COLOR_SIDEBAR);
-  for (lines = option (OPTSTATUSONTOP) ? 0 : 1; 
+  for (lines = 1;
        lines < LINES-1-(menu != MENU_PAGER || option (OPTSTATUSONTOP)); lines++ ) {
     move(lines, SidebarWidth - delim_len);
     addstr (NONULL (SidebarDelim));
