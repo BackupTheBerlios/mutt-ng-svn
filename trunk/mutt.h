@@ -94,6 +94,8 @@
 #define CH_WEED_DELIVERED (1<<13) /* weed eventual Delivered-To headers */
 #define CH_FORCE_FROM	(1<<14)	/* give CH_FROM precedence over CH_WEED? */
 #define CH_NOQFROM	(1<<15)	/* give CH_FROM precedence over CH_WEED? */
+#define CH_UPDATE_IRT	(1<<16) /* update In-Reply-To: */
+#define CH_UPDATE_REFS	(1<<17) /* update References: */
 
 /* flags for mutt_enter_string() */
 #define  M_ALIAS   1      /* do alias "completion" by calling up the alias-menu */
@@ -560,8 +562,8 @@ typedef struct rx_list_t
 #define mutt_new_rx_list() safe_calloc (1, sizeof (RX_LIST))
 void mutt_free_list (LIST **);
 void mutt_free_rx_list (RX_LIST **);
+LIST *mutt_copy_list (LIST *);
 int mutt_matches_ignore (const char *, LIST *);
-
 /* add an element to a list */
 LIST *mutt_add_list (LIST *, const char *);
 
@@ -710,6 +712,8 @@ typedef struct header
   unsigned int subject_changed : 1; 	/* used for threading */
   unsigned int threaded : 1;	    	/* used for threading */
   unsigned int display_subject : 1; 	/* used for threading */
+  unsigned int irt_changed : 1; /* In-Reply-To changed to link/break threads */
+  unsigned int refs_changed : 1; /* References changed to break thread */
   unsigned int recip_valid : 1;  	/* is_recipient is valid */
   unsigned int active : 1;	    	/* message is not to be removed */
   unsigned int trash : 1;		/* message is marked as trashed on disk.
@@ -752,6 +756,10 @@ typedef struct header
   
   char *tree;           	/* character string to print thread tree */
   struct thread *thread;
+
+#ifdef IMAP_EDIT_THREADS
+  ENVELOPE *new_env;	/* envelope information for rethreading */
+#endif
 
 #ifdef MIXMASTER
   LIST *chain;
@@ -817,6 +825,7 @@ typedef struct
   char *pattern;                /* limit pattern string */
   pattern_t *limit_pattern;     /* compiled limit pattern */
   HEADER **hdrs;
+  HEADER *last_tag;		/* last tagged msg. used to link threads */
   THREAD *tree;			/* top of thread tree */
   HASH *id_hash;		/* hash table by msg id */
   HASH *subj_hash;		/* hash table by subject */

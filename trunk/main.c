@@ -240,6 +240,12 @@ static void show_version (void)
         "-USE_IMAP  "
 #endif
 
+#ifdef IMAP_EDIT_THREADS
+        "+IMAP_EDIT_THREADS  "
+#else
+        "-IMAP_EDIT_THREADS  "
+#endif
+
 #ifdef USE_GSS
 	"+USE_GSS  "
 #else

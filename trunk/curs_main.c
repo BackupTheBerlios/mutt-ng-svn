@@ -1121,6 +1121,9 @@ CHECK_IMAP_ACL(IMAP_ACL_DELETE);
         else
         {
           mutt_set_flag (Context, CURHDR, M_TAG, !CURHDR->tagged);
+          Context->last_tag = CURHDR->tagged ? CURHDR :
+            ((Context->last_tag == CURHDR && !CURHDR->tagged)
+            ? NULL : Context->last_tag);
           menu->redraw = REDRAW_STATUS;
           if (option (OPTRESOLVE) && menu->current < Context->vcount - 1)
           {

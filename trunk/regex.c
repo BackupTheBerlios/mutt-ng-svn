@@ -202,6 +202,7 @@ static int ctype(const char *name)
   return MUTT_INVALID;
 }
 
+#ifndef HAVE_ISCTYPE
 static int isctype(char c, int desc)
 {
   switch (desc) {
@@ -220,6 +221,7 @@ static int isctype(char c, int desc)
   }
   return 0; /* false */
 }
+#endif
 
 static void
 init_syntax_once ()

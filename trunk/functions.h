@@ -69,6 +69,7 @@ struct binding_t OpGeneric[] = {
 struct binding_t OpMain[] = {
   { "create-alias",		OP_CREATE_ALIAS,		"a" },
   { "bounce-message",		OP_BOUNCE_MESSAGE,		"b" },
+  { "break-thread",		OP_MAIN_BREAK_THREAD,		"#" },
   { "change-folder",		OP_MAIN_CHANGE_FOLDER,		"c" },
   { "change-folder-readonly",	OP_MAIN_CHANGE_FOLDER_READONLY,	"\033c" },
 #ifdef USE_NNTP
@@ -107,6 +108,7 @@ struct binding_t OpMain[] = {
   { "next-undeleted",		OP_MAIN_NEXT_UNDELETED,		"j" },
   { "previous-undeleted",	OP_MAIN_PREV_UNDELETED,		"k" },
   { "limit",			OP_MAIN_LIMIT,			"l" },
+  { "link-threads",		OP_MAIN_LINK_THREADS,		"&" },
   { "list-reply",		OP_LIST_REPLY,			"L" },
   { "mail",			OP_MAIL,			"m" },
   { "toggle-new",		OP_TOGGLE_NEW,			"N" },
@@ -178,6 +180,7 @@ struct binding_t OpMain[] = {
 };
 
 struct binding_t OpPager[] = {
+  { "break-thread",	OP_MAIN_BREAK_THREAD,		"#" },
   { "create-alias",	OP_CREATE_ALIAS,		"a" },
   { "bounce-message",	OP_BOUNCE_MESSAGE,		"b" },
   { "change-folder",	OP_MAIN_CHANGE_FOLDER,		"c" },
@@ -208,6 +211,7 @@ struct binding_t OpPager[] = {
   { "next-entry",	OP_NEXT_ENTRY,			"J" },
   { "previous-undeleted",OP_MAIN_PREV_UNDELETED,	"k" },
   { "previous-entry",	OP_PREV_ENTRY,			"K" },
+  { "link-threads",	OP_MAIN_LINK_THREADS,		"&" },
   { "list-reply",	OP_LIST_REPLY,			"L" },
   { "redraw-screen",	OP_REDRAW,			"\014" },
   { "mail",		OP_MAIL,			"m" },

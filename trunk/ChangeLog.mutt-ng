@@ -2,6 +2,8 @@ Changes specific to mutt-ng:
 2004-01-22:
   * Reverted the xface patch as it broke a lot of things
   * Removed a few pscan(1) warnings
+  * Integrated the following patches:
+    * edit-threads patch
 
 2004-01-14:
   * Integrated the following patches:
