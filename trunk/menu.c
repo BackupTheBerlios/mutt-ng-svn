@@ -157,8 +157,12 @@ void menu_pad_string (char *s, size_t n)
   int shift = option (OPTARROWCURSOR) ? 3 : 0;
   int cols = COLS - shift - SidebarWidth;
 
-  mutt_format_string (s, n, cols, cols, 0, ' ', s, strlen (s), 1);
-  s[n - 1] = 0;
+  char tmpbuf[n];
+
+  mutt_format_string (tmpbuf, n, cols, cols, 0, ' ', s, strlen (s), 1);
+  tmpbuf[n - 1] = 0;
+
+  snprintf(s,n,"%s",tmpbuf); /* overkill */
 }
 
 void menu_redraw_full (MUTTMENU *menu)

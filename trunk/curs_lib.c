@@ -296,6 +296,7 @@ void mutt_query_exit (void)
 
 void mutt_curses_error (const char *fmt, ...)
 {
+  char TmpErrorbuf[STRING];
   va_list ap;
 
   va_start (ap, fmt);
@@ -303,8 +304,9 @@ void mutt_curses_error (const char *fmt, ...)
   va_end (ap);
   
   dprint (1, (debugfile, "%s\n", Errorbuf));
-  mutt_format_string (Errorbuf, sizeof (Errorbuf),
+  mutt_format_string (TmpErrorbuf, sizeof (TmpErrorbuf),
                       0, COLS-2, 0, 0, Errorbuf, sizeof (Errorbuf), 0);
+  sprintf(Errorbuf,sizeof(Errorbuf),"%s",TmpErrorbuf); /* overkill */
 
   if (!option (OPTKEEPQUIET))
   {
@@ -321,14 +323,16 @@ void mutt_curses_error (const char *fmt, ...)
 
 void mutt_curses_message (const char *fmt, ...)
 {
+  char TmpErrorbuf[STRING];
   va_list ap;
 
   va_start (ap, fmt);
   vsnprintf (Errorbuf, sizeof (Errorbuf), fmt, ap);
   va_end (ap);
 
-  mutt_format_string (Errorbuf, sizeof (Errorbuf),
+  mutt_format_string (TmpErrorbuf, sizeof (TmpErrorbuf),
                       0, COLS-2, 0, 0, Errorbuf, sizeof (Errorbuf), 0);
+  snprintf(Errorbuf,sizeof(Errorbuf),"%s",TmpErrorbuf); /* overkill */
 
   if (!option (OPTKEEPQUIET))
   {
