@@ -26,14 +26,13 @@
 #include "buffy.h"
 #include <libgen.h>
 #include "keymap.h"
-#include <stdbool.h>
 #include <ctype.h>
 
 /*BUFFY *CurBuffy = 0;*/
 static BUFFY *TopBuffy = 0;
 static BUFFY *BottomBuffy = 0;
 static int known_lines = 0;
-static bool initialized = false;
+static short initialized = 0;
 static int prev_show_value;
 static short saveSidebarWidth;
 static char *entry = 0;
@@ -233,7 +232,7 @@ int draw_sidebar(int menu) {
     prev_show_value = option(OPTMBOXPANE);
     saveSidebarWidth = SidebarWidth;
     if(!option(OPTMBOXPANE)) SidebarWidth = 0;
-    initialized = true;
+    initialized = 1;
   }
 
   /* save or restore the value SidebarWidth */
