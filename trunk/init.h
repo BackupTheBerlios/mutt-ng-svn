@@ -1061,6 +1061,34 @@ struct option_t MuttVars[] = {
   ** \fBDON'T CHANGE THIS SETTING UNLESS YOU ARE REALLY SURE WHAT YOU ARE
   ** DOING!\fP
   */
+#if USE_HCACHE
+
+  { "header_cache", DT_PATH, R_NONE, UL &HeaderCache, 0 },
+  /*
+  ** .pp
+  ** The header_cache variable points to the header cache database. If
+  ** header_cache points to a directory there will be created one header cache
+  ** database per folder within this directory. If it doesn't point to a directory a
+  ** global header cache for all folders is used. Per default it is unset and so
+  ** no header caching will be used.
+  */
+  { "maildir_header_cache_verify", DT_BOOL, R_NONE, OPTHCACHEVERIFY, 1 },
+  /*
+  ** .pp
+  ** Check for Maildir unaware programs other than mutt having modified maildir
+  ** files when the header cache is in use.  This incurs one stat(2) per
+  ** message every time the folder is opened.
+  */
+  { "header_cache_pagesize", DT_STR, R_NONE, UL &HeaderCachePageSize, UL "16384" },
+  /*
+  ** .pp
+  ** Change the maildir header cache database page size.  Too large
+  ** or too small of a page size for the common header can waste
+  ** space, memory effectiveness, or CPU time. The default should be more or
+  ** less the best you can get. For details google after mutt maildir header
+  ** cache (first hit).
+  */
+#endif /* USE_HCACHE */
   { "maildir_trash", DT_BOOL, R_NONE, OPTMAILDIRTRASH, 0 },
   /*
   ** .pp

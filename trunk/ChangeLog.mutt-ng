@@ -8,6 +8,7 @@ Changes specific to mutt-ng:
       can select between OpenSSL and GNU TLS.
     * Florian Weimer's sort maildir entries by inode number patch
     * little pgpewrap fix
+    * Thomas Glanzmann's hcache patch
   * Corrected email addresses et al.
 
 2004-01-14:

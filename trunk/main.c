@@ -448,6 +448,12 @@ static void show_version (void)
 	"-HAVE_GETADDRINFO  "
 #endif
 
+#if USE_HCACHE
+	"+USE_HCACHE  "
+#else
+	"-USE_HCACHE  "
+#endif
+
 	);
 
 #ifdef ISPELL
