@@ -101,6 +101,12 @@ struct option_t
 # ifndef USE_LIBESMTP
 #  define USE_LIBESMTP
 # endif
+# ifndef USE_NNTP
+#  define USE_NNTP
+# endif
+# ifndef USE_GNUTLS
+#  define USE_GNUTLS
+# endif
 #endif
 
 struct option_t MuttVars[] = {
@@ -2199,27 +2205,8 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Example: set ssl_ca_certificates_file=/etc/ssl/certs/ca-certificates.crt
   */
-#ifdef USE_GNUTLS
-  { "ssl_min_dh_prime_bits", DT_NUM, R_NONE, UL &SslDHPrimeBits, 0 },
-  /*
-  ** .pp
-  ** This variable specifies the minimum acceptable prime size (in bits)
-  ** for use in any Diffie-Hellman key exchange. A value of 0 will use
-  ** the default from the GNUTLS library.
-  */
-  { "ssl_ca_certificates_file", DT_PATH, R_NONE, UL &SslCACertFile, 0 },
-  /*
-  ** .pp
-  ** This variable specifies a file containing trusted CA certificates.
-  ** Any server certificate that is signed with one of these CA
-  ** certificates are also automatically accepted.
-  ** .pp
-  ** Example: set ssl_ca_certificates_file=/etc/ssl/certs/ca-certificates.crt
-  */
 #endif
 #endif
-#endif
-
   { "pipe_split",	DT_BOOL, R_NONE, OPTPIPESPLIT, 0 },
   /*
   ** .pp
