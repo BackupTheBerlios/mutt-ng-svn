@@ -6,3 +6,5 @@ there're new version of all helper programs.
 
 We need to do a security audit. At least remove all the unsafe function calls, even when they're
 marked with "secure" or "checked", and replace it with secure alternatives instead.
+
+convert all the names in manual.sgml.head/tail
