@@ -28,7 +28,7 @@ mutt_SOURCES = $(BUILT_SOURCES) \
 	score.c send.c sendlib.c signal.c sort.c \
 	status.c system.c thread.c charset.c history.c lib.c \
 	muttlib.c editmsg.c utf8.c mbyte.c wcwidth.c \
-	url.c ascii.c mutt_idna.c
+	url.c ascii.c mutt_idna.c sidebar.c
 
 mutt_LDADD = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(MUTTLIBS) \
 	$(INTLLIBS) $(LIBICONV)
@@ -62,8 +62,8 @@ EXTRA_mutt_SOURCES = account.c md5c.c mutt_sasl.c mutt_socket.c mutt_ssl.c \
 	mutt_tunnel.c pop.c pop_auth.c pop_lib.c smime.c pgp.c pgpinvoke.c pgpkey.c \
 	pgplib.c sha1.c pgpmicalg.c gnupgparse.c resize.c dotlock.c remailer.c \
 	browser.h mbyte.h remailer.h url.h mutt_ssl_nss.c \
-	pgppacket.c mutt_idna.h \
-	nntp.c newsrc.c mutt_libesmtp.c
+	pgppacket.c mutt_idna.h nntp.c newsrc.c mutt_libesmtp.c \
+	sidebar.h
 
 EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	configure acconfig.h account.h \

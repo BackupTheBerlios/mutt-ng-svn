@@ -2140,6 +2140,26 @@ folder will be appended.
 
 
 .TP
+.B sidebar_visible
+.nf
+Type: boolean
+Default: no
+.fi
+.IP
+This specifies whether or not to show the mailbox list pane.
+
+
+.TP
+.B sidebar_width
+.nf
+Type: number
+Default: 0
+.fi
+.IP
+The width of the mailbox list pane (left sidebar like in GUIs).
+
+
+.TP
 .B mbox_type
 .nf
 Type: folder magic

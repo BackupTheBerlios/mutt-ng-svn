@@ -75,7 +75,7 @@ enum
 
 #define HDR_XOFFSET 14
 #define TITLE_FMT "%14s" /* Used for Prompts, which are ASCII */
-#define W (COLS - HDR_XOFFSET)
+#define W (COLS - HDR_XOFFSET - SidebarWidth)
 
 static char *Prompts[] =
 {
@@ -141,16 +141,16 @@ static void redraw_crypt_lines (HEADER *msg)
   if ((WithCrypto & APPLICATION_PGP) && (WithCrypto & APPLICATION_SMIME))
   {     
     if (!msg->security)
-      mvaddstr (HDR_CRYPT, 0,     "    Security: ");
+      mvaddstr (HDR_CRYPT, SidebarWidth,     "    Security: ");
     else if (msg->security & APPLICATION_SMIME)
-      mvaddstr (HDR_CRYPT, 0,     "      S/MIME: ");
+      mvaddstr (HDR_CRYPT, SidebarWidth,     "      S/MIME: ");
     else if (msg->security & APPLICATION_PGP)
-      mvaddstr (HDR_CRYPT, 0,     "         PGP: ");
+      mvaddstr (HDR_CRYPT, SidebarWidth,     "         PGP: ");
   }
   else if ((WithCrypto & APPLICATION_SMIME))
-    mvaddstr (HDR_CRYPT, 0,     "      S/MIME: ");
+    mvaddstr (HDR_CRYPT, SidebarWidth,     "      S/MIME: ");
   else if ((WithCrypto & APPLICATION_PGP))
-    mvaddstr (HDR_CRYPT, 0,     "         PGP: ");
+    mvaddstr (HDR_CRYPT, SidebarWidth,     "         PGP: ");
   else
     return;
 
@@ -164,7 +164,7 @@ static void redraw_crypt_lines (HEADER *msg)
     addstr (_("Clear"));
   clrtoeol ();
 
-  move (HDR_CRYPTINFO, 0);
+  move (HDR_CRYPTINFO, SidebarWidth);
   clrtoeol ();
   if ((WithCrypto & APPLICATION_PGP)
       && msg->security & APPLICATION_PGP  && msg->security & SIGN)
@@ -177,7 +177,7 @@ static void redraw_crypt_lines (HEADER *msg)
 
   if ((WithCrypto & APPLICATION_SMIME)
        && msg->security & APPLICATION_SMIME  && (msg->security & ENCRYPT)) {
-      mvprintw (HDR_CRYPTINFO, 40, "%s%s", _("Encrypt with: "),
+      mvprintw (HDR_CRYPTINFO, SidebarWidth + 40, "%s%s", _("Encrypt with: "),
 		NONULL(SmimeCryptAlg));
       off = 20;
   }
@@ -339,7 +339,7 @@ static void redraw_mix_line (LIST *chain)
   int c;
   char *t;
 
-  mvaddstr (HDR_MIX, 0,     "     Mix: ");
+  mvaddstr (HDR_MIX, SidebarWidth,     "     Mix: ");
 
   if (!chain)
   {
@@ -354,7 +354,7 @@ static void redraw_mix_line (LIST *chain)
     if (t && t[0] == '0' && t[1] == '\0')
       t = "<random>";
     
-    if (c + mutt_strlen (t) + 2 >= COLS)
+    if (c + mutt_strlen (t) + 2 >= COLS - SidebarWidth)
       break;
 
     addstr (NONULL(t));
@@ -406,7 +406,7 @@ static void draw_envelope_addr (int line, ADDRESS *addr)
 
   buf[0] = 0;
   rfc822_write_address (buf, sizeof (buf), addr, 1);
-  mvprintw (line, 0, TITLE_FMT, Prompts[line - 1]);
+  mvprintw (line, SidebarWidth, TITLE_FMT, Prompts[line - 1]);
   mutt_paddstr (W, buf);
 }
 
@@ -435,10 +435,10 @@ static void draw_envelope (HEADER *msg, char *fcc)
     }
   }
 #endif
-  mvprintw (HDR_SUBJECT, 0, TITLE_FMT, Prompts[HDR_SUBJECT - 1]);
+  mvprintw (HDR_SUBJECT, SidebarWidth, TITLE_FMT, Prompts[HDR_SUBJECT - 1]);
   mutt_paddstr (W, NONULL (msg->env->subject));
   draw_envelope_addr (HDR_REPLYTO, msg->env->reply_to);
-  mvprintw (HDR_FCC, 0, TITLE_FMT, Prompts[HDR_FCC - 1]);
+  mvprintw (HDR_FCC, SidebarWidth, TITLE_FMT, Prompts[HDR_FCC - 1]);
   mutt_paddstr (W, fcc);
 
   if (WithCrypto)
@@ -449,7 +449,7 @@ static void draw_envelope (HEADER *msg, char *fcc)
 #endif
 
   SETCOLOR (MT_COLOR_STATUS);
-  mvaddstr (HDR_ATTACH - 1, 0, _("-- Attachments"));
+  mvaddstr (HDR_ATTACH - 1, SidebarWidth, _("-- Attachments"));
   BKGDSET (MT_COLOR_STATUS);
   clrtoeol ();
 
@@ -487,7 +487,7 @@ static int edit_address_list (int line, ADDRESS **addr)
   /* redraw the expanded list so the user can see the result */
   buf[0] = 0;
   rfc822_write_address (buf, sizeof (buf), *addr, 1);
-  move (line, HDR_XOFFSET);
+  move (line, HDR_XOFFSET+SidebarWidth);
   mutt_paddstr (W, buf);
   
   return 0;
@@ -810,7 +810,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	if (mutt_get_field ("Subject: ", buf, sizeof (buf), 0) == 0)
 	{
 	  mutt_str_replace (&msg->env->subject, buf);
-	  move (HDR_SUBJECT, HDR_XOFFSET);
+	  move (HDR_SUBJECT, HDR_XOFFSET + SidebarWidth);
 	  clrtoeol ();
 	  if (msg->env->subject)
 	    mutt_paddstr (W, msg->env->subject);
@@ -825,7 +825,7 @@ int mutt_compose_menu (HEADER *msg,   /* structure for new message */
 	{
 	  strfcpy (fcc, buf, _POSIX_PATH_MAX);
 	  mutt_pretty_mailbox (fcc);
-	  move (HDR_FCC, HDR_XOFFSET);
+	  move (HDR_FCC, HDR_XOFFSET + SidebarWidth);
 	  mutt_paddstr (W, fcc);
 	  fccSet = 1;
 	}

@@ -27,7 +27,11 @@ typedef struct buffy_t
   long size;
 #endif				/* BUFFY_SIZE */
   struct buffy_t *next;
+  struct buffy_t *prev;
   short new;			/* mailbox has new mail */
+  short has_new;		/* set it new if new and not read */
+  int msgcount;			/* total number of messages */
+  int msg_unread;		/* number of unread messages */
   short notified;		/* user has been notified */
   short magic;			/* mailbox type */
   short newly_created;		/* mbox or mmdf just popped into existence */

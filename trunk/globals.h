@@ -180,6 +180,9 @@ WHERE short ScoreThresholdDelete;
 WHERE short ScoreThresholdRead;
 WHERE short ScoreThresholdFlag;
 
+WHERE struct buffy_t *CurBuffy INITVAL(0);
+WHERE short DrawFullLine INITVAL(0);
+WHERE short SidebarWidth;
 #ifdef USE_IMAP
 WHERE short ImapKeepalive;
 #endif

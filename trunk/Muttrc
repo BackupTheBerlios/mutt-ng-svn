@@ -1494,6 +1494,26 @@ macro pager   <f1> "!less /usr/local/doc/mutt/manual.txt\n" "Show Mutt documenta
 # folder will be appended.
 # 
 # 
+# set sidebar_visible=no
+#
+# Name: sidebar_visible
+# Type: boolean
+# Default: no
+# 
+# 
+# This specifies whether or not to show the mailbox list pane.
+# 
+# 
+# set sidebar_width=0
+#
+# Name: sidebar_width
+# Type: number
+# Default: 0
+# 
+# 
+# The width of the mailbox list pane (left sidebar like in GUIs).
+# 
+# 
 # set mbox_type=mbox
 #
 # Name: mbox_type

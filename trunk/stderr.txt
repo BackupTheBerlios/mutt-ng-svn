@@ -1,0 +1,114 @@
+km_dokey got 98 (b) tmp.op = 0
+km_dokey got 58 (:) tmp.op = 0
+km_dokey got 58 (:) tmp.op = 0
+86 200
+km_dokey got 116 (t) tmp.op = 0
+km_dokey got 111 (o) tmp.op = 0
+km_dokey got 103 (g) tmp.op = 0
+km_dokey got 103 (g) tmp.op = 0
+km_dokey got 108 (l) tmp.op = 0
+km_dokey got 101 (e) tmp.op = 0
+km_dokey got 32 ( ) tmp.op = 0
+km_dokey got 115 (s) tmp.op = 0
+km_dokey got 105 (i) tmp.op = 0
+km_dokey got 100 (d) tmp.op = 0
+km_dokey got 101 (e) tmp.op = 0
+km_dokey got 98 (b) tmp.op = 0
+km_dokey got 97 (a) tmp.op = 0
+km_dokey got 114 (r) tmp.op = 0
+km_dokey got 95 (_) tmp.op = 0
+km_dokey got 118 (v) tmp.op = 0
+km_dokey got 105 (i) tmp.op = 0
+km_dokey got 115 (s) tmp.op = 0
+km_dokey got 105 (i) tmp.op = 0
+km_dokey got 98 (b) tmp.op = 0
+km_dokey got 108 (l) tmp.op = 0
+km_dokey got 101 (e) tmp.op = 0
+km_dokey got 13 () tmp.op = 0
+km_dokey got 14 () tmp.op = 0
+198 200
+km_dokey got 14 () tmp.op = 0
+198 200
+km_dokey got 14 () tmp.op = 0
+198 200
+km_dokey got 14 () tmp.op = 0
+198 200
+km_dokey got 14 () tmp.op = 0
+198 200
+km_dokey got 14 () tmp.op = 0
+198 200
+km_dokey got 14 () tmp.op = 0
+198 200
+km_dokey got 14 () tmp.op = 0
+198 200
+km_dokey got 14 () tmp.op = 0
+198 200
+km_dokey got 14 () tmp.op = 0
+198 200
+km_dokey got 98 (b) tmp.op = 0
+km_dokey got 58 (:) tmp.op = 0
+km_dokey got 58 (:) tmp.op = 0
+86 200
+km_dokey got 116 (t) tmp.op = 0
+km_dokey got 111 (o) tmp.op = 0
+km_dokey got 103 (g) tmp.op = 0
+km_dokey got 103 (g) tmp.op = 0
+km_dokey got 108 (l) tmp.op = 0
+km_dokey got 101 (e) tmp.op = 0
+km_dokey got 32 ( ) tmp.op = 0
+km_dokey got 115 (s) tmp.op = 0
+km_dokey got 105 (i) tmp.op = 0
+km_dokey got 100 (d) tmp.op = 0
+km_dokey got 101 (e) tmp.op = 0
+km_dokey got 98 (b) tmp.op = 0
+km_dokey got 97 (a) tmp.op = 0
+km_dokey got 114 (r) tmp.op = 0
+km_dokey got 95 (_) tmp.op = 0
+km_dokey got 118 (v) tmp.op = 0
+km_dokey got 105 (i) tmp.op = 0
+km_dokey got 115 (s) tmp.op = 0
+km_dokey got 105 (i) tmp.op = 0
+km_dokey got 98 (b) tmp.op = 0
+km_dokey got 108 (l) tmp.op = 0
+km_dokey got 101 (e) tmp.op = 0
+km_dokey got 13 () tmp.op = 0
+km_dokey got 98 (b) tmp.op = 0
+km_dokey got 58 (:) tmp.op = 0
+km_dokey got 58 (:) tmp.op = 0
+86 200
+km_dokey got 116 (t) tmp.op = 0
+km_dokey got 111 (o) tmp.op = 0
+km_dokey got 103 (g) tmp.op = 0
+km_dokey got 103 (g) tmp.op = 0
+km_dokey got 108 (l) tmp.op = 0
+km_dokey got 101 (e) tmp.op = 0
+km_dokey got 32 ( ) tmp.op = 0
+km_dokey got 115 (s) tmp.op = 0
+km_dokey got 105 (i) tmp.op = 0
+km_dokey got 100 (d) tmp.op = 0
+km_dokey got 101 (e) tmp.op = 0
+km_dokey got 98 (b) tmp.op = 0
+km_dokey got 97 (a) tmp.op = 0
+km_dokey got 114 (r) tmp.op = 0
+km_dokey got 95 (_) tmp.op = 0
+km_dokey got 118 (v) tmp.op = 0
+km_dokey got 105 (i) tmp.op = 0
+km_dokey got 115 (s) tmp.op = 0
+km_dokey got 105 (i) tmp.op = 0
+km_dokey got 98 (b) tmp.op = 0
+km_dokey got 108 (l) tmp.op = 0
+km_dokey got 101 (e) tmp.op = 0
+km_dokey got 13 () tmp.op = 0
+km_dokey got 16 () tmp.op = 0
+199 200
+km_dokey got 16 () tmp.op = 0
+199 200
+km_dokey got 16 () tmp.op = 0
+199 200
+km_dokey got 263 () tmp.op = 0
+km_dokey got 263 () tmp.op = 0
+0 200
+km_dokey got 63 (?) tmp.op = 0
+km_dokey got 63 (?) tmp.op = 0
+km_dokey got 113 (q) tmp.op = 0
+158 200

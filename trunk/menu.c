@@ -20,6 +20,7 @@
 #include "mutt_curses.h"
 #include "mutt_menu.h"
 #include "mbyte.h"
+#include "sidebar.h"
 
 #ifdef USE_IMAP
 #include "imap.h"
@@ -159,7 +160,7 @@ static void menu_make_entry (char *s, int l, MUTTMENU *menu, int i)
 void menu_pad_string (char *s, size_t n)
 {
   int shift = option (OPTARROWCURSOR) ? 3 : 0;
-  int cols = COLS - shift;
+  int cols = COLS - shift - SidebarWidth;
 
   mutt_format_string (s, n, cols, cols, 0, ' ', s, strlen (s), 1);
   s[n - 1] = 0;
@@ -209,6 +210,7 @@ void menu_redraw_index (MUTTMENU *menu)
   char buf[STRING];
   int i;
 
+  draw_sidebar(1);
   for (i = menu->top; i < menu->top + menu->pagelen; i++)
   {
     if (i < menu->max)
@@ -219,7 +221,7 @@ void menu_redraw_index (MUTTMENU *menu)
       if (option (OPTARROWCURSOR))
       {
         attrset (menu->color (i));
-        CLEARLINE (i - menu->top + menu->offset);
+        CLEARLINE_WIN (i - menu->top + menu->offset);
 
         if (i == menu->current)
         {
@@ -230,7 +232,7 @@ void menu_redraw_index (MUTTMENU *menu)
           addch (' ');
         }
         else
-          move (i - menu->top + menu->offset, 3);
+          move (i - menu->top + menu->offset, SidebarWidth + 3);
 
         print_enriched_string (menu->color(i), (unsigned char *) buf, 1);
         SETCOLOR (MT_COLOR_NORMAL);          
@@ -245,14 +247,14 @@ void menu_redraw_index (MUTTMENU *menu)
           BKGDSET (MT_COLOR_INDICATOR);
         }
 
-        CLEARLINE (i - menu->top + menu->offset);
+        CLEARLINE_WIN (i - menu->top + menu->offset);
         print_enriched_string (menu->color(i), (unsigned char *) buf, i != menu->current);
         SETCOLOR (MT_COLOR_NORMAL);
         BKGDSET (MT_COLOR_NORMAL);
       }
     }
     else
-      CLEARLINE (i - menu->top + menu->offset);
+      CLEARLINE_WIN (i - menu->top + menu->offset);
   }
   menu->redraw = 0;
 }
@@ -267,7 +269,7 @@ void menu_redraw_motion (MUTTMENU *menu)
     return;
   }
   
-  move (menu->oldcurrent + menu->offset - menu->top, 0);
+  move (menu->oldcurrent + menu->offset - menu->top, SidebarWidth);
   SETCOLOR (MT_COLOR_NORMAL);
   BKGDSET (MT_COLOR_NORMAL);
 
@@ -282,13 +284,13 @@ void menu_redraw_motion (MUTTMENU *menu)
       clrtoeol ();
       menu_make_entry (buf, sizeof (buf), menu, menu->oldcurrent);
       menu_pad_string (buf, sizeof (buf));
-      move (menu->oldcurrent + menu->offset - menu->top, 3);
+      move (menu->oldcurrent + menu->offset - menu->top, SidebarWidth + 3);
       print_enriched_string (menu->color(menu->oldcurrent), (unsigned char *) buf, 1);
       SETCOLOR (MT_COLOR_NORMAL);
     }
 
     /* now draw it in the new location */
-    move (menu->current + menu->offset - menu->top, 0);
+    move (menu->current + menu->offset - menu->top, SidebarWidth);
     attrset (menu->color (menu->current));
     ADDCOLOR (MT_COLOR_INDICATOR);
     addstr ("->");
@@ -309,7 +311,7 @@ void menu_redraw_motion (MUTTMENU *menu)
     attrset (menu->color (menu->current));
     ADDCOLOR (MT_COLOR_INDICATOR);
     BKGDSET (MT_COLOR_INDICATOR);
-    CLEARLINE (menu->current - menu->top + menu->offset);
+    CLEARLINE_WIN (menu->current - menu->top + menu->offset);
     print_enriched_string (menu->color(menu->current), (unsigned char *) buf, 0);
     SETCOLOR (MT_COLOR_NORMAL);
     BKGDSET (MT_COLOR_NORMAL);
@@ -321,7 +323,7 @@ void menu_redraw_current (MUTTMENU *menu)
 {
   char buf[STRING];
   
-  move (menu->current + menu->offset - menu->top, 0);
+  move (menu->current + menu->offset - menu->top, SidebarWidth);
   menu_make_entry (buf, sizeof (buf), menu, menu->current);
   menu_pad_string (buf, sizeof (buf));
 

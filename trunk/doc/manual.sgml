@@ -4467,6 +4467,24 @@ This specifies the folder into which read mail in your ``<ref id="spoolfile" nam
 folder will be appended.
 
 
+<sect2>sidebar&lowbar;visible<label id="sidebar_visible">
+<p>
+Type: boolean<newline>
+Default: no
+
+<p>
+This specifies whether or not to show the mailbox list pane.
+
+
+<sect2>sidebar&lowbar;width<label id="sidebar_width">
+<p>
+Type: number<newline>
+Default: 0
+
+<p>
+The width of the mailbox list pane (left sidebar like in GUIs).
+
+
 <sect2>mbox&lowbar;type<label id="mbox_type">
 <p>
 Type: folder magic<newline>

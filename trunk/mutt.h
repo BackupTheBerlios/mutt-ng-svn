@@ -390,6 +390,7 @@ enum
   OPTMAILDIRTRASH,
   OPTMARKERS,
   OPTMARKOLD,
+  OPTMBOXPANE,
   OPTMENUSCROLL,	/* scroll menu instead of implicit next-page */
   OPTMETAKEY,		/* interpret ALT-x as ESC-x */
   OPTMETOO,

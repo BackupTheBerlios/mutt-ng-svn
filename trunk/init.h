@@ -1098,6 +1098,16 @@ struct option_t MuttVars[] = {
   ** This specifies the folder into which read mail in your ``$$spoolfile''
   ** folder will be appended.
   */
+  { "sidebar_visible", DT_BOOL, R_BOTH, OPTMBOXPANE, 0 },
+  /*
+  ** .pp
+  ** This specifies whether or not to show the mailbox list pane.
+  */
+  { "sidebar_width", DT_NUM, R_BOTH, UL &SidebarWidth, 0 },
+  /*
+  ** .pp
+  ** The width of the mailbox list pane (left sidebar like in GUIs).
+  */
   { "mbox_type",	DT_MAGIC,R_NONE, UL &DefaultMagic, M_MBOX },
   /*
   ** .pp

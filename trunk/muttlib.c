@@ -1014,7 +1014,10 @@ void mutt_FormatString (char *dest,		/* output buffer */
 	ch = *src++; /* pad char */
 	/* calculate space left on line.  if we've already written more data
 	   than will fit on the line, ignore the rest of the line */
-	count = (COLS < destlen ? COLS : destlen);
+	if ( DrawFullLine )
+	  count = (COLS < destlen ? COLS : destlen);
+	else
+	  count = ((COLS-SidebarWidth) < destlen ? COLS - SidebarWidth : destlen);
 	if (count > wlen)
 	{
 	  count -= wlen; /* how many chars left on this line */

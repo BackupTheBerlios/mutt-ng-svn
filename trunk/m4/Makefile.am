@@ -10,6 +10,7 @@ glibc21.m4 \
 gssapi.m4 \
 iconv.m4 \
 lcmessage.m4 \
+libesmtp.m4 \
 progtest.m4
 ##m4-files-end
 

@@ -263,7 +263,7 @@ int mutt_buffy_check (int force)
   char path[_POSIX_PATH_MAX];
   struct stat contex_sb;
   time_t t;
-
+  CONTEXT *ctx;
 #ifdef USE_IMAP
   /* update postponed count as well, on force */
   if (force)
@@ -299,6 +299,8 @@ int mutt_buffy_check (int force)
   
   for (tmp = Incoming; tmp; tmp = tmp->next)
   {
+	if ( tmp->new == 1 )
+		tmp->has_new = 1;
     tmp->new = 0;
 
 #ifdef USE_IMAP
@@ -353,10 +355,27 @@ int mutt_buffy_check (int force)
       case M_MBOX:
       case M_MMDF:
 
-	if (STAT_CHECK)
+    {
+	if (STAT_CHECK || tmp->msgcount == 0)
 	{
+	  BUFFY b = *tmp;
+	  int msgcount = 0;
+	  int msg_unread = 0;
 	  BuffyCount++;
-	  tmp->new = 1;
+	  /* parse the mailbox, to see how much mail there is */
+	  ctx = mx_open_mailbox( tmp->path, M_READONLY | M_QUIET | M_NOSORT,
+	    NULL);
+	  if(ctx)
+	  {
+	      msgcount = ctx->msgcount;
+	      msg_unread = ctx->unread;
+	      mx_close_mailbox(ctx, 0);
+	  }
+	  *tmp = b;
+	  tmp->msgcount = msgcount;
+	  tmp->msg_unread = msg_unread;
+	  if(STAT_CHECK)
+	      tmp->has_new = tmp->new = 1;
 	}
 #ifdef BUFFY_SIZE
 	else
@@ -368,12 +387,34 @@ int mutt_buffy_check (int force)
 	if (tmp->newly_created &&
 	    (sb.st_ctime != sb.st_mtime || sb.st_ctime != sb.st_atime))
 	  tmp->newly_created = 0;
-
+	}
 	break;
 
       case M_MAILDIR:
 
 	snprintf (path, sizeof (path), "%s/new", tmp->path);
+	if ((dirp = opendir (path)) == NULL)
+	{
+	  tmp->magic = 0;
+	  break;
+	}
+	tmp->msgcount = 0;
+	tmp->msg_unread = 0;
+	while ((de = readdir (dirp)) != NULL)
+	{
+	  char *p;
+	  if (*de->d_name != '.' && 
+	      (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')))
+	  {
+	    /* one new and undeleted message is enough */
+	    BuffyCount++;
+	    tmp->has_new = tmp->new = 1;
+        tmp->msgcount++;
+		tmp->msg_unread++;
+	  }
+	}
+	closedir (dirp);
+	snprintf (path, sizeof (path), "%s/cur", tmp->path);
 	if ((dirp = opendir (path)) == NULL)
 	{
 	  tmp->magic = 0;
@@ -387,22 +428,41 @@ int mutt_buffy_check (int force)
 	  {
 	    /* one new and undeleted message is enough */
 	    BuffyCount++;
-	    tmp->new = 1;
-	    break;
+	    tmp->has_new = tmp->new = 1;
+        tmp->msgcount++;
 	  }
 	}
 	closedir (dirp);
 	break;
 
       case M_MH:
-	if ((tmp->new = mh_buffy (tmp->path)) > 0)
-	  BuffyCount++;
+	{
+      DIR *dp;
+      struct dirent *de;
+	  if ((tmp->new = mh_buffy (tmp->path)) > 0)
+	    BuffyCount++;
+  
+      if ((dp = opendir (path)) == NULL)
+        break;
+	  tmp->msgcount = 0;
+      while ((de = readdir (dp)))
+      {
+        if (mh_valid_message (de->d_name))
+        {
+		  tmp->msgcount++;
+		  tmp->has_new = tmp->new = 1;
+        }
+      }
+      closedir (dp);
+    }
 	break;
 	
 #ifdef USE_IMAP
       case M_IMAP:
-	if ((tmp->new = imap_mailbox_check (tmp->path, 1)) > 0)
+	  tmp->msgcount = imap_mailbox_check(tmp->path, 0);
+	if ((tmp->new = imap_mailbox_check (tmp->path, 1)) > 0) {
 	  BuffyCount++;
+	}
 	else
 	  tmp->new = 0;
 
