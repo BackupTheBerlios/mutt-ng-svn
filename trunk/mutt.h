@@ -451,6 +451,7 @@ enum
   OPTWRAP,
   OPTWRAPSEARCH,
   OPTWRITEBCC,		/* write out a bcc header? */
+  OPTXFACE,
   OPTXMAILER,
   OPTXTERMSETTITLES,
 
@@ -603,6 +604,7 @@ typedef struct envelope
 #endif
   LIST *references;		/* message references (in reverse order) */
   LIST *in_reply_to;		/* in-reply-to header content */
+  LIST *x_face;			/* X-Face header content */
   LIST *userhdrs;		/* user defined headers */
 } ENVELOPE;
 

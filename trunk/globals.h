@@ -242,6 +242,8 @@ WHERE char *SmimeGetCertEmailCommand;
 
 
 
+WHERE int slrnface_fd INITVAL (-1);
+
 #ifdef DEBUG
 WHERE FILE *debugfile INITVAL (0);
 WHERE int debuglevel INITVAL (0);

@@ -967,6 +967,8 @@ int main (int argc, char **argv)
 
     mutt_folder_hook (folder);
 
+    mutt_start_slrnface();
+
     if((Context = mx_open_mailbox (folder, ((flags & M_RO) || option (OPTREADONLY)) ? M_READONLY : 0, NULL))
        || !explicit_folder)
     {
@@ -975,6 +977,8 @@ int main (int argc, char **argv)
 	FREE (&Context);
     }
     mutt_endwin (Errorbuf);
+
+    mutt_stop_slrnface();
   }
 
   exit (0);

@@ -84,6 +84,27 @@ static char *read_rfc822_line (FILE *f, char *line, size_t *linelen)
   /* not reached */
 }
 
+static LIST *mutt_add_x_face (LIST *lst, char *face)
+{
+  LIST *n;
+
+  n = safe_malloc(sizeof(LIST));
+  n->data = safe_strdup(face);
+  n->next = NULL;
+
+  if (lst)
+  {
+    LIST *l;
+
+    for(l = lst; l->next; l = l->next);
+    l->next = n;
+  }
+  else
+    lst = n;
+
+  return lst;
+}
+
 LIST *mutt_parse_references (char *s, int in_reply_to)
 {
   LIST *t, *lst = NULL;
@@ -1235,6 +1256,11 @@ int mutt_parse_rfc822_line (ENVELOPE *e, HEADER *hdr, char *line, char *p, short
     else if (ascii_strcasecmp (line+1, "-label") == 0)
     {
       e->x_label = safe_strdup(p);
+      matched = 1;
+    }
+    else if (ascii_strcasecmp (line+1, "-face") == 0)
+    {
+      e->x_face = mutt_add_x_face (e->x_face, p);
       matched = 1;
     }
 #ifdef USE_NNTP

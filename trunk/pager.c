@@ -1447,6 +1447,57 @@ upNLines (int nlines, struct line_t *info, int cur, int hiding)
   return cur;
 }
 
+static void
+mutt_display_xface (HEADER *hdr)
+{
+  LIST *face;
+  char buf[2000];
+
+  if (slrnface_fd < 0)
+    return;
+
+  if (!hdr)
+    return;
+
+  face = hdr->env->x_face;
+
+  if (face == NULL || face->data == NULL)
+    write(slrnface_fd, "clear\n", sizeof "clear");
+  else
+    do {
+      int len;
+
+      len = snprintf (buf, sizeof (buf), "xface %s\n", face->data);
+      if (len <= sizeof (buf))
+      {
+	write (slrnface_fd, buf, len);
+	break;
+      }
+      /*
+       * slrnface will ignore X-Faces larger than approx. 2000 chars, so
+       * try the next one, if it exists.
+       */
+    } while (face = face->next);
+}
+
+static void
+mutt_clear_xface (void)
+{
+  if (slrnface_fd < 0)
+    return;
+
+  write(slrnface_fd, "clear\n", sizeof "clear");
+}
+
+static void
+mutt_show_xface (void)
+{
+  if (slrnface_fd < 0)
+    return;
+
+  write(slrnface_fd, "show\n", sizeof "show");
+}
+
 static struct mapping_t PagerHelp[] = {
   { N_("Exit"),	OP_EXIT },
   { N_("PrevPg"), OP_PREV_PAGE },
@@ -1568,6 +1619,9 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t *extra)
     mutt_make_help (buffer, sizeof (buffer), _("Help"), MENU_PAGER, OP_HELP);
     snprintf (helpstr, sizeof (helpstr), "%s %s", tmphelp, buffer);
   }
+
+  if (IsHeader (extra))
+    mutt_display_xface(extra->hdr);
 
   while (ch != -1)
   {
@@ -2098,7 +2152,9 @@ search_next:
 	if (! InHelp)
 	{
 	  InHelp = 1;
+	  mutt_clear_xface ();
 	  mutt_help (MENU_PAGER);
+	  mutt_show_xface ();
 	  redraw = REDRAW_FULL;
 	  InHelp = 0;
 	}
@@ -2415,7 +2471,9 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
       case OP_MAIL:
 	CHECK_MODE(IsHeader (extra) && !IsAttach (extra));
         CHECK_ATTACH;      
+ 	mutt_clear_xface();
 	ci_send_message (0, NULL, NULL, extra->ctx, extra->hdr);
+ 	mutt_show_xface();
 	redraw = REDRAW_FULL;
 	break;
 
@@ -2423,17 +2481,20 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
       case OP_POST:
 	CHECK_MODE(IsHeader (extra) && !IsAttach (extra));
 	CHECK_ATTACH;
+	mutt_clear_xface();
 	if (extra->ctx && extra->ctx->magic == M_NNTP &&
 	    !((NNTP_DATA *)extra->ctx->data)->allowed &&
 	    query_quadoption (OPT_TOMODERATED,_("Posting to this group not allowed, may be moderated. Continue?")) != M_YES)
 	  break;
 	ci_send_message (SENDNEWS, NULL, NULL, extra->ctx, NULL);
+	mutt_show_xface();
 	redraw = REDRAW_FULL;
 	break;
 
       case OP_FORWARD_TO_GROUP:
 	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
 	CHECK_ATTACH;
+	mutt_clear_xface();
 	if (extra->ctx && extra->ctx->magic == M_NNTP &&
 	    !((NNTP_DATA *)extra->ctx->data)->allowed &&
 	    query_quadoption (OPT_TOMODERATED,_("Posting to this group not allowed, may be moderated. Continue?")) != M_YES)
@@ -2443,12 +2504,14 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
 			       extra->idxlen, extra->bdy, SENDNEWS);
 	else
 	  ci_send_message (SENDNEWS|SENDFORWARD, NULL, NULL, extra->ctx, extra->hdr);
+	mutt_show_xface();
 	redraw = REDRAW_FULL;
 	break;
 
       case OP_FOLLOWUP:
 	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
 	CHECK_ATTACH;
+	mutt_clear_xface();
 
         if (IsMsgAttach (extra))
 	  followup_to = extra->bdy->hdr->env->followup_to;
@@ -2468,6 +2531,7 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
 	  else
 	    ci_send_message (SENDNEWS|SENDREPLY, NULL, NULL,
 			     extra->ctx, extra->hdr);
+	  mutt_show_xface();
 	  redraw = REDRAW_FULL;
 	  break;
 	}
@@ -2475,53 +2539,63 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
 
       case OP_REPLY:
 	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
-        CHECK_ATTACH;      
+        CHECK_ATTACH;
+	mutt_clear_xface();
         if (IsMsgAttach (extra)) 
 	  mutt_attach_reply (extra->fp, extra->hdr, extra->idx,
 			     extra->idxlen, extra->bdy,
 			     SENDREPLY);
 	else
 	  ci_send_message (SENDREPLY, NULL, NULL, extra->ctx, extra->hdr);
+	mutt_show_xface();
 	redraw = REDRAW_FULL;
 	break;
 
       case OP_RECALL_MESSAGE:
 	CHECK_MODE(IsHeader (extra));
         CHECK_ATTACH;
+	mutt_clear_xface();
 	ci_send_message (SENDPOSTPONED, NULL, NULL, extra->ctx, extra->hdr);
+	mutt_show_xface();
 	redraw = REDRAW_FULL;
 	break;
 
       case OP_GROUP_REPLY:
 	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         CHECK_ATTACH;
+	mutt_clear_xface();
         if (IsMsgAttach (extra))
 	  mutt_attach_reply (extra->fp, extra->hdr, extra->idx,
 			     extra->idxlen, extra->bdy, SENDREPLY|SENDGROUPREPLY);
         else
 	  ci_send_message (SENDREPLY | SENDGROUPREPLY, NULL, NULL, extra->ctx, extra->hdr);
+	mutt_show_xface();
 	redraw = REDRAW_FULL;
 	break;
 
       case OP_LIST_REPLY:
 	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         CHECK_ATTACH;        
+	mutt_clear_xface();
         if (IsMsgAttach (extra))
 	  mutt_attach_reply (extra->fp, extra->hdr, extra->idx,
 			     extra->idxlen, extra->bdy, SENDREPLY|SENDLISTREPLY);
         else
 	  ci_send_message (SENDREPLY | SENDLISTREPLY, NULL, NULL, extra->ctx, extra->hdr);
+	mutt_show_xface();
 	redraw = REDRAW_FULL;
 	break;
 
       case OP_FORWARD_MESSAGE:
 	CHECK_MODE(IsHeader (extra) || IsMsgAttach (extra));
         CHECK_ATTACH;
+	mutt_clear_xface();
         if (IsMsgAttach (extra))
 	  mutt_attach_forward (extra->fp, extra->hdr, extra->idx,
 			       extra->idxlen, extra->bdy, 0);
         else
 	  ci_send_message (SENDFORWARD, NULL, NULL, extra->ctx, extra->hdr);
+	mutt_show_xface();
 	redraw = REDRAW_FULL;
 	break;
 
@@ -2571,7 +2645,9 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
 	break;
 
       case OP_SHELL_ESCAPE:
+	mutt_clear_xface ();
 	mutt_shell_escape ();
+	mutt_show_xface ();
 	MAYBE_REDRAW (redraw);
 	break;
 
@@ -2739,5 +2815,6 @@ CHECK_IMAP_ACL(IMAP_ACL_DELETE);
   FREE (&lineInfo);
   if (index)
     mutt_menuDestroy(&index);
+  mutt_clear_xface ();
   return (rc != -1 ? rc : 0);
 }

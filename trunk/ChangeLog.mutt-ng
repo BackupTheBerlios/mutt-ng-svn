@@ -2,6 +2,7 @@ Changes specific to mutt-ng:
 2004-01-14:
   * Integrated the following patches:
     * rr.compressed for compressed folders
+    * dw.xface for X-Face support via slrnface
   * Changed User-Agent string
   * Added operating_system to set fake operating system for User-Agent string
 
