@@ -177,8 +177,8 @@ sysconfdir = @sysconfdir@
 target_alias = @target_alias@
 
 noinst_PROGRAMS = test_muttng
-test_muttng_SOURCES = test_muttng.c
-test_muttng_INCLUDES = @CFLAGS@ test_muttng.h
+test_muttng_SOURCES = test_muttng.c ../lib.c
+test_muttng_INCLUDES = @CFLAGS@ test_muttng.h -I../
 test_muttng_LIBS = @LIBS@
 subdir = test
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -188,7 +188,7 @@ CONFIG_CLEAN_FILES =
 noinst_PROGRAMS = test_muttng$(EXEEXT)
 PROGRAMS = $(noinst_PROGRAMS)
 
-am_test_muttng_OBJECTS = test_muttng.$(OBJEXT)
+am_test_muttng_OBJECTS = test_muttng.$(OBJEXT) lib.$(OBJEXT)
 test_muttng_OBJECTS = $(am_test_muttng_OBJECTS)
 test_muttng_LDADD = $(LDADD)
 test_muttng_DEPENDENCIES =
@@ -232,6 +232,12 @@ distclean-compile:
 
 .c.obj:
 	$(COMPILE) -c `if test -f '$<'; then $(CYGPATH_W) '$<'; else $(CYGPATH_W) '$(srcdir)/$<'; fi`
+
+lib.o: ../lib.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib.o `test -f '../lib.c' || echo '$(srcdir)/'`../lib.c
+
+lib.obj: ../lib.c
+	$(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS) -c -o lib.obj `if test -f '../lib.c'; then $(CYGPATH_W) '../lib.c'; else $(CYGPATH_W) '$(srcdir)/../lib.c'; fi`
 uninstall-info-am:
 
 ETAGS = etags
