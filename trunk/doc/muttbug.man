@@ -17,28 +17,24 @@
 .\"     along with this program; if not, write to the Free Software
 .\"     Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
 .\"
-.TH flea 1 "January 2005" Unix "User Manuals"
+.TH fleang 1 "January 2005" Unix "User Manuals"
 .SH NAME
-flea \- Report a bug (or rather a flea) in mutt. (OBSOLETE)
+fleang \- Report a bug (or rather a flea) in Mutt-ng. (OBSOLETE)
 .SH DESCRIPTION
 .PP
-.B flea
+.B fleang
 used to be a shell script which helped you to submit a bug report against the 
-.BR mutt (1)
+.BR muttng (1)
 mail user agent.
 .PP
-The mutt bug tracking system broke down under the spam thrown at it and
-was shut down in January 2005.  To report a bug in mutt, please use
-your system's bug reporting system if mutt came as part of your
-system, or refer to the mutt web site at
-.I http://www.mutt.org
-for more information.
+If you want to submit bugs with a web interface use:
+http://developer.berlios.de/bugs/?group_id=2853
 .PP
-.B flea
+.B fleang
 is now a shell script that prints a short error message and exits.
 .SH
 AUTHOR
 .PP
-.B flea
+.B fleang
 and this manual page were written by Thomas Roessler
 <roessler@does-not-exist.org>.
