@@ -203,7 +203,7 @@ void menu_redraw_index (MUTTMENU * menu)
   char buf[STRING];
   int i;
 
-  draw_sidebar (1);
+  sidebar_draw (1);
   for (i = menu->top; i < menu->top + menu->pagelen; i++) {
     if (i < menu->max) {
       menu_make_entry (buf, sizeof (buf), menu, i);

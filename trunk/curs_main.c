@@ -459,7 +459,7 @@ int mutt_index_menu (void)
     mutt_buffy_check (1);       /* force the buffy check after we enter the folder */
     /* record folder we open to place sidebar indicator properly */
     if (Context && Context->path)
-      set_curbuffy (Context->path);
+      sidebar_set_current (Context->path);
   }
 
   FOREVER {
@@ -514,7 +514,7 @@ int mutt_index_menu (void)
                       ("Mailbox was externally modified.  Flags may be wrong."));
         else if (check == M_NEW_MAIL) {
           /* on new mail: redraw sidebar */
-          draw_sidebar (CurrentMenu);
+          sidebar_draw (CurrentMenu);
           mutt_message (_("New mail in this mailbox."));
 
           if (option (OPTBEEPNEW))
@@ -556,10 +556,10 @@ int mutt_index_menu (void)
     if (op != -1)
       mutt_curs_set (0);
     if (menu->redraw & REDRAW_SIDEBAR)
-      draw_sidebar (menu->menu);
+      sidebar_draw (menu->menu);
     if (menu->redraw & REDRAW_FULL) {
       menu_redraw_full (menu);
-      draw_sidebar (menu->menu);
+      sidebar_draw (menu->menu);
       mutt_show_error ();
     }
 
@@ -585,7 +585,7 @@ int mutt_index_menu (void)
         SETCOLOR (MT_COLOR_STATUS);
         mutt_paddstr (COLS, buf);
         SETCOLOR (MT_COLOR_NORMAL);
-        set_buffystats (Context);
+        sidebar_set_buffystats (Context);
         menu->redraw &= ~REDRAW_STATUS;
         if (option (OPTXTERMSETTITLES)) {
           menu_status_line (buf, sizeof (buf), menu, NONULL (XtermTitle));
@@ -1223,9 +1223,7 @@ int mutt_index_menu (void)
       }
 
       if (op == OP_SIDEBAR_OPEN) {
-        if (!CurBuffy)
-          break;
-        strncpy (buf, CurBuffy->path, sizeof (buf));
+        strncpy (buf, NONULL(sidebar_get_current ()), sizeof (buf));
       }
       else if (mutt_enter_fname (cp, buf, sizeof (buf), &menu->redraw, 1) ==
                -1)
@@ -1243,7 +1241,7 @@ int mutt_index_menu (void)
       else
 #endif
         mutt_expand_path (buf, sizeof (buf));
-      set_curbuffy (buf);
+      sidebar_set_current (buf);
       if (mx_get_magic (buf) <= 0) {
         mutt_error (_("%s is not a mailbox."), buf);
         break;
@@ -2377,7 +2375,7 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
     case OP_SIDEBAR_PREV:
     case OP_SIDEBAR_NEXT_NEW:
     case OP_SIDEBAR_PREV_NEW:
-      scroll_sidebar (op, menu->menu);
+      sidebar_scroll (op, menu->menu);
       break;
     default:
       if (menu->menu == MENU_MAIN)

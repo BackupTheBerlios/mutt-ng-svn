@@ -26,63 +26,43 @@
 #include <libgen.h>
 #include <ctype.h>
 
-/*BUFFY *CurBuffy = 0;*/
-static BUFFY *TopBuffy = 0;
-static BUFFY *BottomBuffy = 0;
+static int TopBuffy = 0;
+static int CurBuffy = 0;
 static int known_lines = 0;
 static short initialized = 0;
 static int prev_show_value;
 static short saveSidebarWidth;
 static char *entry = 0;
 
-static int quick_log10 (int n)
-{
+/* computes how many digets a number has;
+ * FIXME move out to library?
+ */
+static int quick_log10 (int n) {
   int len = 0;
 
   for (; n > 9; len++, n /= 10);
   return (++len);
 }
 
-/* CurBuffy should contain a valid buffy 
- * mailbox before calling this function!!! */
+/* computes first entry to be shown */
 void calc_boundaries (int menu)
 {
-  BUFFY *tmp = Incoming;
-  int position;
-  int i, count, mailbox_position;
+  int lines = 0;
 
+  if (list_empty(Incoming))
+    return;
   /* correct known_lines if it has changed because of a window resize */
-  if (known_lines != LINES) {
+  if (known_lines != LINES)
     known_lines = LINES;
-  }
-  /* fix all the prev links on all the mailboxes
-   * FIXME move this over to buffy.c where it belongs */
-  for (; tmp->next != 0; tmp = tmp->next)
-    tmp->next->prev = tmp;
-
-  /* calculate the position of the current mailbox */
-  position = 1;
-  tmp = Incoming;
-  while (tmp != CurBuffy) {
-    position++;
-    tmp = tmp->next;
-  }
-  /* calculate the size of the screen we can use */
-  count = LINES - 2 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
-  /* calculate the position of the current mailbox on the screen */
-  mailbox_position = position % count;
-  if (mailbox_position == 0)
-    mailbox_position = count;
-  /* determine topbuffy */
-  TopBuffy = CurBuffy;
-  for (i = mailbox_position; i > 1; i--)
-    TopBuffy = TopBuffy->prev;
-  /* determine bottombuffy */
-  BottomBuffy = CurBuffy;
-  for (i = mailbox_position; i < count && BottomBuffy->next; i++)
-    BottomBuffy = BottomBuffy->next;
+  lines = LINES - 2 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
+  TopBuffy = CurBuffy - (CurBuffy % lines);
+  if (TopBuffy < 0)
+    TopBuffy = 0;
 }
 
+/* compresses hierarchy in folder names;
+ * FIXME move out to library?
+ */
 static char *shortened_hierarchy (char *box)
 {
   int dots = 0;
@@ -120,6 +100,9 @@ static char *shortened_hierarchy (char *box)
   return safe_strdup (box);
 }
 
+/* print single item
+ * FIXME this is completely fucked up right now
+ */
 char *make_sidebar_entry (char *box, int size, int new, int flagged)
 {
   int i = 0, dlen, max, shortened = 0;
@@ -197,49 +180,47 @@ char *make_sidebar_entry (char *box, int size, int new, int flagged)
   return entry;
 }
 
-void set_curbuffy (char buf[LONG_STRING])
-{
-  BUFFY *tmp = CurBuffy = Incoming;
-
-  if (!Incoming)
-    return;
-
-  while (1) {
-    if (!mutt_strcmp (tmp->path, buf)) {
-      CurBuffy = tmp;
-      break;
-    }
-
-    if (tmp->next)
-      tmp = tmp->next;
-    else
-      break;
-  }
+/* returns folder name of currently 
+ * selected folder for <sidebar-open>
+ */
+const char* sidebar_get_current (void) {
+  if (list_empty(Incoming))
+    return (NULL);
+  return ((char*) ((BUFFY*) Incoming->data[CurBuffy])->path);
 }
 
-void set_buffystats (CONTEXT * Context)
-{
-  BUFFY *tmp = Incoming;
-
-  if (!Context)
-    return;
-  while (tmp) {
-    if (mutt_strcmp (tmp->path, Context->path) == 0) {
-      tmp->new = Context->new;
-      tmp->msg_unread = Context->unread;
-      tmp->msgcount = Context->msgcount;
-      tmp->msg_flagged = Context->flagged;
-      break;
-    }
-    tmp = tmp->next;
-  }
+/* internally sets item to buf */
+void sidebar_set_current (const char* buf) {
+  int i = buffy_lookup (buf);
+  if (i >= 0)
+    CurBuffy = i;
 }
 
-int draw_sidebar (int menu)
+/* fix counters for a context
+ * FIXME since ctx must not be of our business, move it elsewhere
+ */
+void sidebar_set_buffystats (CONTEXT* Context) {
+  int i = 0;
+  BUFFY* tmp = NULL;
+  if (!Context || list_empty(Incoming) || (i = buffy_lookup (Context->path)) < 0)
+    return;
+  tmp = (BUFFY*) Incoming->data[i];
+  tmp->new = Context->new;
+  tmp->msg_unread = Context->unread;
+  tmp->msgcount = Context->msgcount;
+  tmp->msg_flagged = Context->flagged;
+}
+
+/* actually draws something
+ * FIXME this needs some clue when to do it
+ * FIXME this is completely fucked up right now
+ */
+int sidebar_draw (int menu)
 {
 
   int lines = option (OPTHELP) ? 1 : 0;
   BUFFY *tmp;
+  int i = 0;
   short delim_len = mutt_strlen (SidebarDelim);
 
   /* initialize first time */
@@ -277,7 +258,6 @@ int draw_sidebar (int menu)
     return 0;
 
   /* draw the divider */
-  /* SETCOLOR(MT_COLOR_STATUS); */
   SETCOLOR (MT_COLOR_SIDEBAR);
   for (lines = 1;
        lines < LINES - 1 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
@@ -294,24 +274,17 @@ int draw_sidebar (int menu)
   }
   SETCOLOR (MT_COLOR_NORMAL);
 
-  if (Incoming == 0)
+  if (list_empty(Incoming))
     return 0;
+
   lines = option (OPTHELP) ? 1 : 0;     /* go back to the top */
 
-  if (CurBuffy == 0)
-    CurBuffy = Incoming;
-#if 0
-  if (known_lines != LINES || TopBuffy == 0 || BottomBuffy == 0)
-#endif
-    calc_boundaries (menu);
+  calc_boundaries (menu);
 
-  tmp = TopBuffy;
-
-  for (;
-       tmp && lines < LINES - 1 - (menu != MENU_PAGER
-                                   || option (OPTSTATUSONTOP));
-       tmp = tmp->next) {
-    if (tmp == CurBuffy)
+  for (i = TopBuffy; i < Incoming->length && lines < LINES - 1 - 
+       (menu != MENU_PAGER || option (OPTSTATUSONTOP)); i++) {
+    tmp = (BUFFY*) Incoming->data[i];
+    if (i == CurBuffy)
       SETCOLOR (MT_COLOR_INDICATOR);
     else if (tmp->msg_flagged > 0)
       SETCOLOR (MT_COLOR_FLAGGED);
@@ -370,97 +343,93 @@ int draw_sidebar (int menu)
   return 0;
 }
 
-BUFFY *exist_next_new ()
-{
-  BUFFY *tmp = CurBuffy;
-
-  if (tmp == NULL)
-    return NULL;
-  while (tmp->next != NULL) {
-    tmp = tmp->next;
-    if (tmp->msg_unread)
-      return tmp;
-  }
-  return NULL;
+/* returns index of new item with new mail or -1 */
+static int exist_next_new () {
+  int i = 0;
+  if (list_empty(Incoming))
+    return (-1);
+  i = CurBuffy;
+  while (i < Incoming->length)
+    if (((BUFFY*) Incoming->data[i++])->msg_unread)
+      return (i-1);
+  return (-1);
 }
 
-BUFFY *exist_prev_new ()
-{
-  BUFFY *tmp = CurBuffy;
-
-  if (tmp == NULL)
-    return NULL;
-  while (tmp->prev != NULL) {
-    tmp = tmp->prev;
-    if (tmp->msg_unread)
-      return tmp;
-  }
-  return NULL;
+/* returns index of prev item with new mail or -1 */
+static int exist_prev_new () {
+  int i = 0;
+  if (list_empty(Incoming))
+    return (-1);
+  i = CurBuffy;
+  while (i >= 0)
+    if (((BUFFY*) Incoming->data[i--])->msg_unread)
+      return (i+1);
+  return (-1);
 }
 
+void sidebar_scroll (int op, int menu) {
+  int i = 0;
 
-void scroll_sidebar (int op, int menu)
-{
-  BUFFY *tmp;
-
-  if (!SidebarWidth)
-    return;
-  if (!CurBuffy)
+  if (!SidebarWidth || list_empty(Incoming))
     return;
 
   switch (op) {
   case OP_SIDEBAR_NEXT:
     if (!option (OPTSIDEBARNEWMAILONLY)) {
-      if (CurBuffy->next == NULL) {
+      if (CurBuffy + 1 == Incoming->length) {
         mutt_error (_("You are on the last mailbox."));
         return;
       }
-      CurBuffy = CurBuffy->next;
+      CurBuffy++;
       break;
     }                           /* the fall-through is intentional */
   case OP_SIDEBAR_NEXT_NEW:
-    if ((tmp = exist_next_new ()) == NULL) {
+    if ((i = exist_next_new ()) < 0) {
       mutt_error (_("No next mailboxes with new mail."));
       return;
     }
     else
-      CurBuffy = tmp;
+      CurBuffy = i;
     break;
   case OP_SIDEBAR_PREV:
     if (!option (OPTSIDEBARNEWMAILONLY)) {
-      if (CurBuffy->prev == NULL) {
+      if (CurBuffy == 0) {
         mutt_error (_("You are on the first mailbox."));
         return;
       }
-      CurBuffy = CurBuffy->prev;
+      CurBuffy--;
       break;
     }                           /* the fall-through is intentional */
   case OP_SIDEBAR_PREV_NEW:
-    if ((tmp = exist_prev_new ()) == NULL) {
+    if ((i = exist_prev_new ()) < 0) {
       mutt_error (_("No previous mailbox with new mail."));
       return;
     }
     else
-      CurBuffy = tmp;
+      CurBuffy = i;
     break;
 
   case OP_SIDEBAR_SCROLL_UP:
-    CurBuffy = TopBuffy;
-    if (CurBuffy != Incoming) {
-      calc_boundaries (menu);
-      CurBuffy = CurBuffy->prev;
+    if (TopBuffy == 0) {
+      mutt_error (_("You are on the first mailbox."));
+      return;
     }
+    CurBuffy -= known_lines;
+    if (CurBuffy < 0)
+      CurBuffy = 0;
     break;
   case OP_SIDEBAR_SCROLL_DOWN:
-    CurBuffy = BottomBuffy;
-    if (CurBuffy->next) {
-      calc_boundaries (menu);
-      CurBuffy = CurBuffy->next;
+    if (TopBuffy + known_lines >= Incoming->length) {
+      mutt_error (_("You are on the last mailbox."));
+      return;
     }
+    CurBuffy += known_lines;
+    if (CurBuffy >= Incoming->length)
+      CurBuffy = Incoming->length;
     break;
   default:
     return;
   }
   calc_boundaries (menu);
-  draw_sidebar (menu);
+  sidebar_draw (menu);
 }

@@ -30,6 +30,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/list.h"
 
 #include <stdlib.h>
 #include <dirent.h>
@@ -497,7 +498,7 @@ static int examine_directory (MUTTMENU * menu, struct browser_state *state,
     DIR *dp;
     struct dirent *de;
     char buffer[_POSIX_PATH_MAX + SHORT_STRING];
-    BUFFY *tmp;
+    int i = -1;
 
     while (stat (d, &s) == -1) {
       if (errno == ENOENT) {
@@ -545,14 +546,12 @@ static int examine_directory (MUTTMENU * menu, struct browser_state *state,
           (!S_ISLNK (s.st_mode)))
         continue;
 
-      tmp = Incoming;
-      while (tmp && mutt_strcmp (buffer, tmp->path))
-        tmp = tmp->next;
-      add_folder (menu, state, de->d_name, &s, NULL, (tmp) ? tmp->new : 0);
+      i = buffy_lookup (buffer);
+      add_folder (menu, state, de->d_name, &s, NULL, i >= 0 ? ((BUFFY*) Incoming->data[i])->new : 0);
     }
     closedir (dp);
   }
-  draw_sidebar (CurrentMenu);
+  sidebar_draw (CurrentMenu);
   browser_sort (state);
   return 0;
 }
@@ -585,7 +584,8 @@ static int examine_mailboxes (MUTTMENU * menu, struct browser_state *state)
   else
 #endif
   {
-    BUFFY *tmp = Incoming;
+    int i = 0;
+    BUFFY* tmp;
 
     if (!Incoming)
       return (-1);
@@ -593,7 +593,8 @@ static int examine_mailboxes (MUTTMENU * menu, struct browser_state *state)
 
     init_state (state, menu);
 
-    do {
+    for (i = 0; i < Incoming->length; i++) {
+      tmp = (BUFFY*) Incoming->data[i];
 #ifdef USE_IMAP
       if (mx_is_imap (tmp->path)) {
         add_folder (menu, state, tmp->path, NULL, NULL, tmp->new);
@@ -624,7 +625,6 @@ static int examine_mailboxes (MUTTMENU * menu, struct browser_state *state)
 
       add_folder (menu, state, buffer, &s, NULL, tmp->new);
     }
-    while ((tmp = tmp->next));
   }
   browser_sort (state);
   return 0;
