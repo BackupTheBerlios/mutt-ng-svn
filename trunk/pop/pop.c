@@ -42,7 +42,8 @@ static int fetch_message (char *line, void *file)
 static int pop_read_header (POP_DATA * pop_data, HEADER * h)
 {
   FILE *f;
-  int ret, index;
+  int index;
+  pop_query_status ret;
   long length;
   char buf[LONG_STRING];
   char tempfile[_POSIX_PATH_MAX];
@@ -55,20 +56,20 @@ static int pop_read_header (POP_DATA * pop_data, HEADER * h)
 
   snprintf (buf, sizeof (buf), "LIST %d\r\n", h->refno);
   ret = pop_query (pop_data, buf, sizeof (buf));
-  if (ret == 0) {
+  if (ret == PQ_OK) {
     sscanf (buf, "+OK %d %ld", &index, &length);
 
     snprintf (buf, sizeof (buf), "TOP %d 0\r\n", h->refno);
     ret = pop_fetch_data (pop_data, buf, NULL, fetch_message, f);
 
     if (pop_data->cmd_top == 2) {
-      if (ret == 0) {
+      if (ret == PQ_OK) {
         pop_data->cmd_top = 1;
 
         dprint (1, (debugfile, "pop_read_header: set TOP capability\n"));
       }
 
-      if (ret == -2) {
+      if (ret == PQ_ERR) {
         pop_data->cmd_top = 0;
 
         dprint (1, (debugfile, "pop_read_header: unset TOP capability\n"));
@@ -79,7 +80,7 @@ static int pop_read_header (POP_DATA * pop_data, HEADER * h)
   }
 
   switch (ret) {
-  case 0:
+  case PQ_OK:
     {
       rewind (f);
       h->env = mutt_read_rfc822_header (f, h, 0, 0);
@@ -91,12 +92,12 @@ static int pop_read_header (POP_DATA * pop_data, HEADER * h)
       }
       break;
     }
-  case -2:
+  case PQ_ERR:
     {
       mutt_error ("%s", pop_data->err_msg);
       break;
     }
-  case -3:
+  case PFD_FUNCT_ERROR:
     {
       mutt_error _("Can't write header to temporary file!");
 
@@ -152,7 +153,8 @@ static int fetch_uidl (char *line, void *data)
  */
 static int pop_fetch_headers (CONTEXT * ctx)
 {
-  int i, ret, old_count, new_count;
+  int i, old_count, new_count;
+  pop_query_status ret;
   POP_DATA *pop_data = (POP_DATA *) ctx->data;
 
   time (&pop_data->check_time);
@@ -167,13 +169,13 @@ static int pop_fetch_headers (CONTEXT * ctx)
   ctx->msgcount = old_count;
 
   if (pop_data->cmd_uidl == 2) {
-    if (ret == 0) {
+    if (ret == PQ_OK) {
       pop_data->cmd_uidl = 1;
 
       dprint (1, (debugfile, "pop_fetch_headers: set UIDL capability\n"));
     }
 
-    if (ret == -2 && pop_data->cmd_uidl == 2) {
+    if (ret == PQ_ERR && pop_data->cmd_uidl == 2) {
       pop_data->cmd_uidl = 0;
 
       dprint (1, (debugfile, "pop_fetch_headers: unset UIDL capability\n"));
@@ -182,7 +184,7 @@ static int pop_fetch_headers (CONTEXT * ctx)
     }
   }
 
-  if (ret == 0) {
+  if (ret == PQ_OK) {
     for (i = 0; i < old_count; i++)
       if (ctx->hdrs[i]->refno == -1)
         ctx->hdrs[i]->deleted = 1;
@@ -192,7 +194,7 @@ static int pop_fetch_headers (CONTEXT * ctx)
                     i + 1 - old_count, new_count - old_count);
 
       ret = pop_read_header (pop_data, ctx->hdrs[i]);
-      if (ret < 0)
+      if (ret != PQ_OK)
         break;
 
       ctx->msgcount++;
@@ -202,7 +204,7 @@ static int pop_fetch_headers (CONTEXT * ctx)
       mx_update_context (ctx, i - old_count);
   }
 
-  if (ret < 0) {
+  if (ret != PQ_OK) {
     for (i = ctx->msgcount; i < new_count; i++)
       mutt_free_header (&ctx->hdrs[i]);
     return ret;
@@ -248,7 +250,7 @@ int pop_open_mailbox (CONTEXT * ctx)
   conn->data = pop_data;
 
   FOREVER {
-    if (pop_reconnect (ctx) < 0)
+    if (pop_reconnect (ctx) != PQ_OK)
       return -1;
 
     ctx->size = pop_data->size;
@@ -343,7 +345,7 @@ int pop_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
   }
 
   FOREVER {
-    if (pop_reconnect (ctx) < 0)
+    if (pop_reconnect (ctx) != PQ_OK)
       return -1;
 
     /* verify that massage index is correct */
@@ -367,19 +369,19 @@ int pop_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
     snprintf (buf, sizeof (buf), "RETR %d\r\n", h->refno);
 
     ret = pop_fetch_data (pop_data, buf, m, fetch_message, msg->fp);
-    if (ret == 0)
+    if (ret == PQ_OK)
       break;
 
     safe_fclose (&msg->fp);
     unlink (path);
 
-    if (ret == -2) {
+    if (ret == PQ_ERR) {
       mutt_error ("%s", pop_data->err_msg);
       mutt_sleep (2);
       return -1;
     }
 
-    if (ret == -3) {
+    if (ret == PFD_FUNCT_ERROR) {
       mutt_error _("Can't write message to temporary file!");
 
       mutt_sleep (2);
@@ -417,17 +419,18 @@ int pop_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
 }
 
 /* update POP mailbox - delete messages from server */
-int pop_sync_mailbox (CONTEXT * ctx, int *index_hint)
+pop_query_status pop_sync_mailbox (CONTEXT * ctx, int *index_hint)
 {
-  int i, ret;
+  int i;
+  pop_query_status ret;
   char buf[LONG_STRING];
   POP_DATA *pop_data = (POP_DATA *) ctx->data;
 
   pop_data->check_time = 0;
 
   FOREVER {
-    if (pop_reconnect (ctx) < 0)
-      return -1;
+    if (pop_reconnect (ctx) != PQ_OK)
+      return PQ_NOT_CONNECTED;
 
     mutt_message (_("Marking %d messages deleted..."), ctx->deleted);
 
@@ -438,22 +441,22 @@ int pop_sync_mailbox (CONTEXT * ctx, int *index_hint)
       }
     }
 
-    if (ret == 0) {
+    if (ret == PQ_OK) {
       strfcpy (buf, "QUIT\r\n", sizeof (buf));
       ret = pop_query (pop_data, buf, sizeof (buf));
     }
 
-    if (ret == 0) {
+    if (ret == PQ_OK) {
       pop_data->clear_cache = 1;
       pop_clear_cache (pop_data);
       pop_data->status = POP_DISCONNECTED;
-      return 0;
+      return PQ_OK;
     }
 
-    if (ret == -2) {
+    if (ret == PQ_ERR) {
       mutt_error ("%s", pop_data->err_msg);
       mutt_sleep (2);
-      return -1;
+      return PQ_NOT_CONNECTED;
     }
   }
 }
@@ -496,7 +499,8 @@ void pop_fetch_mail (void)
   char buffer[LONG_STRING];
   char msgbuf[SHORT_STRING];
   char *url, *p;
-  int i, delanswer, last = 0, msgs, bytes, rset = 0, ret;
+  int i, delanswer, last = 0, msgs, bytes, rset = 0;
+  pop_query_status ret;
   CONNECTION *conn;
   CONTEXT ctx;
   MESSAGE *msg = NULL;
@@ -543,9 +547,9 @@ void pop_fetch_mail (void)
   /* find out how many messages are in the mailbox. */
   strfcpy (buffer, "STAT\r\n", sizeof (buffer));
   ret = pop_query (pop_data, buffer, sizeof (buffer));
-  if (ret == -1)
+  if (ret == PQ_NOT_CONNECTED)
     goto fail;
-  if (ret == -2) {
+  if (ret == PQ_ERR) {
     mutt_error ("%s", pop_data->err_msg);
     goto finish;
   }
@@ -556,9 +560,9 @@ void pop_fetch_mail (void)
   if (msgs > 0 && option (OPTPOPLAST)) {
     strfcpy (buffer, "LAST\r\n", sizeof (buffer));
     ret = pop_query (pop_data, buffer, sizeof (buffer));
-    if (ret == -1)
+    if (ret == PQ_NOT_CONNECTED)
       goto fail;
-    if (ret == 0)
+    if (ret == PQ_OK)
       sscanf (buffer, "+OK %d", &last);
   }
 
@@ -584,32 +588,32 @@ void pop_fetch_mail (void)
     else {
       snprintf (buffer, sizeof (buffer), "RETR %d\r\n", i);
       ret = pop_fetch_data (pop_data, buffer, NULL, fetch_message, msg->fp);
-      if (ret == -3)
+      if (ret == PFD_FUNCT_ERROR)
         rset = 1;
 
-      if (ret == 0 && mx_commit_message (msg, &ctx) != 0) {
+      if (ret == PQ_OK && mx_commit_message (msg, &ctx) != 0) {
         rset = 1;
-        ret = -3;
+        ret = PFD_FUNCT_ERROR;
       }
 
       mx_close_message (&msg);
     }
 
-    if (ret == 0 && delanswer == M_YES) {
+    if (ret == PQ_OK && delanswer == M_YES) {
       /* delete the message on the server */
       snprintf (buffer, sizeof (buffer), "DELE %d\r\n", i);
       ret = pop_query (pop_data, buffer, sizeof (buffer));
     }
 
-    if (ret == -1) {
+    if (ret == PQ_NOT_CONNECTED) {
       mx_close_mailbox (&ctx, NULL);
       goto fail;
     }
-    if (ret == -2) {
+    if (ret == PQ_ERR) {
       mutt_error ("%s", pop_data->err_msg);
       break;
     }
-    if (ret == -3) {
+    if (ret == -3) { /* this is -3 when ret != 0, because it will keep the value from before *gna* */
       mutt_error _("Error while writing mailbox!");
 
       break;
@@ -624,14 +628,14 @@ void pop_fetch_mail (void)
   if (rset) {
     /* make sure no messages get deleted */
     strfcpy (buffer, "RSET\r\n", sizeof (buffer));
-    if (pop_query (pop_data, buffer, sizeof (buffer)) == -1)
+    if (pop_query (pop_data, buffer, sizeof (buffer)) == PQ_NOT_CONNECTED)
       goto fail;
   }
 
 finish:
   /* exit gracefully */
   strfcpy (buffer, "QUIT\r\n", sizeof (buffer));
-  if (pop_query (pop_data, buffer, sizeof (buffer)) == -1)
+  if (pop_query (pop_data, buffer, sizeof (buffer)) == PQ_NOT_CONNECTED)
     goto fail;
   mutt_socket_close (conn);
   FREE (&pop_data);

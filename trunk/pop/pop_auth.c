@@ -161,7 +161,7 @@ bail:
   /* terminate SASL sessoin if the last responce is not +OK nor -ERR */
   if (!mutt_strncmp (inbuf, "+ ", 2)) {
     snprintf (buf, sizeof (buf), "*\r\n");
-    if (pop_query (pop_data, buf, sizeof (buf)) == -1)
+    if (pop_query (pop_data, buf, sizeof (buf)) == PQ_NOT_CONNECTED)
       return POP_A_SOCKET;
   }
 
@@ -216,9 +216,9 @@ static pop_auth_res_t pop_auth_apop (POP_DATA * pop_data, const char *method)
             hash);
 
   switch (pop_query (pop_data, buf, sizeof (buf))) {
-  case 0:
+  case PQ_OK:
     return POP_A_SUCCESS;
-  case -1:
+  case PQ_NOT_CONNECTED:
     return POP_A_SOCKET;
   }
 
@@ -233,9 +233,9 @@ static pop_auth_res_t pop_auth_apop (POP_DATA * pop_data, const char *method)
 static pop_auth_res_t pop_auth_user (POP_DATA * pop_data, const char *method)
 {
   char buf[LONG_STRING];
-  int ret;
+  pop_query_status ret;
 
-  if (!pop_data->cmd_user)
+  if (pop_data->cmd_user == USER_NOT_AVAILABLE)
     return POP_A_UNAVAIL;
 
   mutt_message _("Logging in...");
@@ -243,15 +243,15 @@ static pop_auth_res_t pop_auth_user (POP_DATA * pop_data, const char *method)
   snprintf (buf, sizeof (buf), "USER %s\r\n", pop_data->conn->account.user);
   ret = pop_query (pop_data, buf, sizeof (buf));
 
-  if (pop_data->cmd_user == 2) {
-    if (ret == 0) {
-      pop_data->cmd_user = 1;
+  if (pop_data->cmd_user == USER_UNKNOWN) {
+    if (ret == PQ_OK) {
+      pop_data->cmd_user = USER_AVAILABLE;
 
       dprint (1, (debugfile, "pop_auth_user: set USER capability\n"));
     }
 
-    if (ret == -2) {
-      pop_data->cmd_user = 0;
+    if (ret == PQ_ERR) {
+      pop_data->cmd_user = USER_NOT_AVAILABLE;
 
       dprint (1, (debugfile, "pop_auth_user: unset USER capability\n"));
       snprintf (pop_data->err_msg, sizeof (pop_data->err_msg),
@@ -259,7 +259,7 @@ static pop_auth_res_t pop_auth_user (POP_DATA * pop_data, const char *method)
     }
   }
 
-  if (ret == 0) {
+  if (ret == PQ_OK) {
     snprintf (buf, sizeof (buf), "PASS %s\r\n", pop_data->conn->account.pass);
     ret = pop_query_d (pop_data, buf, sizeof (buf),
 #ifdef DEBUG
@@ -270,9 +270,9 @@ static pop_auth_res_t pop_auth_user (POP_DATA * pop_data, const char *method)
   }
 
   switch (ret) {
-  case 0:
+  case PQ_OK:
     return POP_A_SUCCESS;
-  case -1:
+  case PQ_NOT_CONNECTED:
     return POP_A_SOCKET;
   }
 

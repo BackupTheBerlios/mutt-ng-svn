@@ -42,6 +42,19 @@ typedef struct {
   char *path;
 } POP_CACHE;
 
+typedef enum pop_query_status_e {
+  PFD_FUNCT_ERROR = -3, /* pop_fetch_data uses pop_query_status and this return value */
+  PQ_ERR = -2,
+  PQ_NOT_CONNECTED = -1,
+  PQ_OK = 0
+} pop_query_status;
+
+typedef enum cmd_user_status_e {
+  USER_NOT_AVAILABLE = 0,
+  USER_AVAILABLE,
+  USER_UNKNOWN
+} cmd_user_status;
+
 typedef struct {
   CONNECTION *conn;
   unsigned int status:2;
@@ -49,7 +62,7 @@ typedef struct {
   unsigned int use_stls:2;
   unsigned int cmd_capa:1;      /* optional command CAPA */
   unsigned int cmd_stls:1;      /* optional command STLS */
-  unsigned int cmd_user:2;      /* optional command USER */
+  cmd_user_status cmd_user;      /* optional command USER */
   unsigned int cmd_uidl:2;      /* optional command UIDL */
   unsigned int cmd_top:2;       /* optional command TOP */
   unsigned int resp_codes:1;    /* server supports extended response codes */
@@ -80,18 +93,18 @@ void pop_apop_timestamp (POP_DATA *, char *);
 #define pop_query(A,B,C) pop_query_d(A,B,C,NULL)
 int pop_parse_path (const char *, ACCOUNT *);
 int pop_connect (POP_DATA *);
-int pop_open_connection (POP_DATA *);
-int pop_query_d (POP_DATA *, char *, size_t, char *);
-int pop_fetch_data (POP_DATA *, char *, char *, int (*funct) (char *, void *),
+pop_query_status pop_open_connection (POP_DATA *);
+pop_query_status pop_query_d (POP_DATA *, char *, size_t, char *);
+pop_query_status pop_fetch_data (POP_DATA *, char *, char *, int (*funct) (char *, void *),
                     void *);
-int pop_reconnect (CONTEXT *);
+pop_query_status pop_reconnect (CONTEXT *);
 void pop_logout (CONTEXT *);
 void pop_error (POP_DATA *, char *);
 
 /* pop.c */
 int pop_check_mailbox (CONTEXT *, int *);
 int pop_open_mailbox (CONTEXT *);
-int pop_sync_mailbox (CONTEXT *, int *);
+pop_query_status pop_sync_mailbox (CONTEXT *, int *);
 int pop_fetch_message (MESSAGE *, CONTEXT *, int);
 void pop_close_mailbox (CONTEXT *);
 void pop_fetch_mail (void);

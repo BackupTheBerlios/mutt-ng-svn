@@ -125,7 +125,7 @@ static int fetch_auth (char *line, void *data)
  * -1 - conection lost,
  * -2 - execution error.
 */
-static int pop_capabilities (POP_DATA * pop_data, int mode)
+static pop_query_status pop_capabilities (POP_DATA * pop_data, int mode)
 {
   char buf[LONG_STRING];
 
@@ -150,13 +150,13 @@ static int pop_capabilities (POP_DATA * pop_data, int mode)
   if (mode == 0 || pop_data->cmd_capa) {
     strfcpy (buf, "CAPA\r\n", sizeof (buf));
     switch (pop_fetch_data (pop_data, buf, NULL, fetch_capa, pop_data)) {
-    case 0:
+    case PQ_OK:
       {
         pop_data->cmd_capa = 1;
         break;
       }
-    case -1:
-      return -1;
+    case PQ_NOT_CONNECTED:
+      return PQ_NOT_CONNECTED;
     }
   }
 
@@ -167,8 +167,8 @@ static int pop_capabilities (POP_DATA * pop_data, int mode)
     pop_data->cmd_top = 2;
 
     strfcpy (buf, "AUTH\r\n", sizeof (buf));
-    if (pop_fetch_data (pop_data, buf, NULL, fetch_auth, pop_data) == -1)
-      return -1;
+    if (pop_fetch_data (pop_data, buf, NULL, fetch_auth, pop_data) == PQ_NOT_CONNECTED)
+      return PQ_NOT_CONNECTED;
   }
 
   /* Check capabilities */
@@ -183,12 +183,12 @@ static int pop_capabilities (POP_DATA * pop_data, int mode)
       msg = _("Command UIDL is not supported by server.");
     if (msg && pop_data->cmd_capa) {
       mutt_error (msg);
-      return -2;
+      return PQ_ERR;
     }
     pop_data->capabilities = 1;
   }
 
-  return 0;
+  return PQ_OK;
 }
 
 /*
@@ -230,24 +230,24 @@ int pop_connect (POP_DATA * pop_data)
  * -2 - invalid command or execution error,
  * -3 - authentication canceled.
 */
-int pop_open_connection (POP_DATA * pop_data)
+pop_query_status pop_open_connection (POP_DATA * pop_data)
 {
-  int ret;
+  pop_query_status ret;
   unsigned int n, size;
   char buf[LONG_STRING];
 
   ret = pop_connect (pop_data);
-  if (ret < 0) {
+  if (ret != PQ_OK) {
     mutt_sleep (2);
     return ret;
   }
 
   ret = pop_capabilities (pop_data, 0);
-  if (ret == -1)
+  if (ret == PQ_NOT_CONNECTED)
     goto err_conn;
-  if (ret == -2) {
+  if (ret == PQ_ERR) {
     mutt_sleep (2);
-    return -2;
+    return PQ_ERR;
   }
 
 #if (defined(USE_SSL) || defined(USE_GNUTLS)) && !defined(USE_NSS)
@@ -257,7 +257,7 @@ int pop_open_connection (POP_DATA * pop_data)
       ret = query_quadoption (OPT_SSLSTARTTLS,
                               _("Secure connection with TLS?"));
       if (ret == -1)
-        return -2;
+        return PQ_ERR;
       pop_data->use_stls = 1;
       if (ret == M_YES)
         pop_data->use_stls = 2;
@@ -265,9 +265,9 @@ int pop_open_connection (POP_DATA * pop_data)
     if (pop_data->use_stls == 2) {
       strfcpy (buf, "STLS\r\n", sizeof (buf));
       ret = pop_query (pop_data, buf, sizeof (buf));
-      if (ret == -1)
+      if (ret == PQ_NOT_CONNECTED)
         goto err_conn;
-      if (ret != 0) {
+      if (ret != PQ_OK) {
         mutt_error ("%s", pop_data->err_msg);
         mutt_sleep (2);
       }
@@ -279,16 +279,16 @@ int pop_open_connection (POP_DATA * pop_data)
       {
         mutt_error (_("Could not negotiate TLS connection"));
         mutt_sleep (2);
-        return -2;
+        return PQ_ERR;
       }
       else {
         /* recheck capabilities after STLS completes */
         ret = pop_capabilities (pop_data, 1);
-        if (ret == -1)
+        if (ret == PQ_NOT_CONNECTED)
           goto err_conn;
-        if (ret == -2) {
+        if (ret == PQ_ERR) {
           mutt_sleep (2);
-          return -2;
+          return PQ_ERR;
         }
       }
     }
@@ -296,28 +296,28 @@ int pop_open_connection (POP_DATA * pop_data)
 #endif
 
   ret = pop_authenticate (pop_data);
-  if (ret == -1)
+  if (ret == PQ_NOT_CONNECTED)
     goto err_conn;
-  if (ret == -3)
+  if (ret == PFD_FUNCT_ERROR)
     mutt_clear_error ();
-  if (ret != 0)
+  if (ret != PQ_OK)
     return ret;
 
   /* recheck capabilities after authentication */
   ret = pop_capabilities (pop_data, 2);
-  if (ret == -1)
+  if (ret == PQ_NOT_CONNECTED)
     goto err_conn;
-  if (ret == -2) {
+  if (ret == PQ_ERR) {
     mutt_sleep (2);
-    return -2;
+    return PQ_ERR;
   }
 
   /* get total size of mailbox */
   strfcpy (buf, "STAT\r\n", sizeof (buf));
   ret = pop_query (pop_data, buf, sizeof (buf));
-  if (ret == -1)
+  if (ret == PQ_NOT_CONNECTED)
     goto err_conn;
-  if (ret == -2) {
+  if (ret == PQ_ERR) {
     mutt_error ("%s", pop_data->err_msg);
     mutt_sleep (2);
     return ret;
@@ -325,20 +325,20 @@ int pop_open_connection (POP_DATA * pop_data)
 
   sscanf (buf, "+OK %u %u", &n, &size);
   pop_data->size = size;
-  return 0;
+  return PQ_OK;
 
 err_conn:
   pop_data->status = POP_DISCONNECTED;
   mutt_error _("Server closed connection!");
 
   mutt_sleep (2);
-  return -1;
+  return PQ_NOT_CONNECTED;
 }
 
 /* logout from POP server */
 void pop_logout (CONTEXT * ctx)
 {
-  int ret = 0;
+  pop_query_status ret = 0;
   char buf[LONG_STRING];
   POP_DATA *pop_data = (POP_DATA *) ctx->data;
 
@@ -350,7 +350,7 @@ void pop_logout (CONTEXT * ctx)
       ret = pop_query (pop_data, buf, sizeof (buf));
     }
 
-    if (ret != -1) {
+    if (ret != PQ_NOT_CONNECTED) {
       strfcpy (buf, "QUIT\r\n", sizeof (buf));
       pop_query (pop_data, buf, sizeof (buf));
     }
@@ -368,13 +368,13 @@ void pop_logout (CONTEXT * ctx)
  * -1 - conection lost,
  * -2 - invalid command or execution error.
 */
-int pop_query_d (POP_DATA * pop_data, char *buf, size_t buflen, char *msg)
+pop_query_status pop_query_d (POP_DATA * pop_data, char *buf, size_t buflen, char *msg)
 {
   int dbg = M_SOCK_LOG_CMD;
   char *c;
 
   if (pop_data->status != POP_CONNECTED)
-    return -1;
+    return PQ_NOT_CONNECTED;
 
 #ifdef DEBUG
   /* print msg instaed of real command */
@@ -392,13 +392,13 @@ int pop_query_d (POP_DATA * pop_data, char *buf, size_t buflen, char *msg)
 
   if (mutt_socket_readln (buf, buflen, pop_data->conn) < 0) {
     pop_data->status = POP_DISCONNECTED;
-    return -1;
+    return PQ_NOT_CONNECTED;
   }
   if (!mutt_strncmp (buf, "+OK", 3))
-    return 0;
+    return PQ_OK;
 
   pop_error (pop_data, buf);
-  return -2;
+  return PQ_ERR;
 }
 
 /*
@@ -410,18 +410,19 @@ int pop_query_d (POP_DATA * pop_data, char *buf, size_t buflen, char *msg)
  * -2 - invalid command or execution error,
  * -3 - error in funct(*line, *data)
  */
-int pop_fetch_data (POP_DATA * pop_data, char *query, char *msg,
+pop_query_status pop_fetch_data (POP_DATA * pop_data, char *query, char *msg,
                     int (*funct) (char *, void *), void *data)
 {
   char buf[LONG_STRING];
   char *inbuf;
   char *p;
-  int ret, chunk, line = 0;
+  pop_query_status ret;
+  int chunk, line = 0;
   size_t lenbuf = 0;
 
   strfcpy (buf, query, sizeof (buf));
   ret = pop_query (pop_data, buf, sizeof (buf));
-  if (ret < 0)
+  if (ret != PQ_OK)
     return ret;
 
   inbuf = safe_malloc (sizeof (buf));
@@ -432,7 +433,7 @@ int pop_fetch_data (POP_DATA * pop_data, char *query, char *msg,
                             M_SOCK_LOG_HDR);
     if (chunk < 0) {
       pop_data->status = POP_DISCONNECTED;
-      ret = -1;
+      ret = PQ_NOT_CONNECTED;
       break;
     }
 
@@ -453,7 +454,7 @@ int pop_fetch_data (POP_DATA * pop_data, char *query, char *msg,
       if (msg && ReadInc && (line % ReadInc == 0))
         mutt_message ("%s %d", msg, line);
       if (ret == 0 && funct (inbuf, data) < 0)
-        ret = -3;
+        ret = PFD_FUNCT_ERROR;
       lenbuf = 0;
     }
 
@@ -483,21 +484,21 @@ static int check_uidl (char *line, void *data)
 }
 
 /* reconnect and verify idnexes if connection was lost */
-int pop_reconnect (CONTEXT * ctx)
+pop_query_status pop_reconnect (CONTEXT * ctx)
 {
-  int ret;
+  pop_query_status ret;
   POP_DATA *pop_data = (POP_DATA *) ctx->data;
 
   if (pop_data->status == POP_CONNECTED)
-    return 0;
+    return PQ_OK;
   if (pop_data->status == POP_BYE)
-    return -1;
+    return PQ_NOT_CONNECTED;
 
   FOREVER {
     mutt_socket_close (pop_data->conn);
 
     ret = pop_open_connection (pop_data);
-    if (ret == 0) {
+    if (ret == PQ_OK) {
       char *msg = _("Verifying message indexes...");
       int i;
 
@@ -507,22 +508,22 @@ int pop_reconnect (CONTEXT * ctx)
       mutt_message (msg);
 
       ret = pop_fetch_data (pop_data, "UIDL\r\n", msg, check_uidl, ctx);
-      if (ret == -2) {
+      if (ret == PQ_ERR) {
         mutt_error ("%s", pop_data->err_msg);
         mutt_sleep (2);
       }
     }
-    if (ret == 0)
-      return 0;
+    if (ret == PQ_OK)
+      return PQ_OK;
 
     pop_logout (ctx);
 
-    if (ret < -1)
-      return -1;
+    if (ret == PQ_ERR)
+      return PQ_NOT_CONNECTED;
 
     if (query_quadoption (OPT_POPRECONNECT,
                           _("Connection lost. Reconnect to POP server?")) !=
         M_YES)
-      return -1;
+      return PQ_NOT_CONNECTED;
   }
 }
