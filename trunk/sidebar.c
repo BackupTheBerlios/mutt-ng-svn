@@ -227,6 +227,12 @@ int draw_sidebar(int menu) {
   BUFFY *tmp;
   short delim_len = mutt_strlen (SidebarDelim);
 
+    if(strlen(SidebarDelim)>=SidebarWidth){
+        mutt_endwin(NULL);
+        printf("Your sidebar delimiter string is longer (or as long as) than the sidebar width. Make it shorter! \n");
+        exit(1);
+    }
+
   /* initialize first time */
   if(!initialized) {
     prev_show_value = option(OPTMBOXPANE);
@@ -256,7 +262,14 @@ int draw_sidebar(int menu) {
   for (lines = 1;
        lines < LINES-1-(menu != MENU_PAGER || option (OPTSTATUSONTOP)); lines++ ) {
     move(lines, SidebarWidth - delim_len);
-    addstr (NONULL (SidebarDelim));
+    if (option (OPTASCIICHARS))
+      addstr (NONULL (SidebarDelim));
+    else if(!option(OPTASCIICHARS) && !strcmp(SidebarDelim,"|"))
+      addch(ACS_VLINE);
+    else if ((Charset_is_utf8) && !strcmp(SidebarDelim, "|"))
+      addstr ("\342\224\202");
+    else
+      addstr (NONULL (SidebarDelim));
   }
   SETCOLOR(MT_COLOR_NORMAL);
 
