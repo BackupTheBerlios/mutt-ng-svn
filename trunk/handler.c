@@ -35,6 +35,7 @@
 #include "copy.h"
 #include "charset.h"
 #include "mutt_crypt.h"
+#include "lib.h"
 
 
 #define BUFI_SIZE 1000
@@ -1231,7 +1232,7 @@ static void print_flowed_line(char * line, STATE *s,int ql) {
 
   pos=line+ql+width;
   oldpos=line+ql;
-  if (ql>0 && isblank(*oldpos)) ++oldpos;
+  if (ql>0 && ISBLANK(*oldpos)) ++oldpos;
 
   /* fprintf(stderr,"oldpos = %p line+len = %p\n",oldpos,line+len); */
 

@@ -60,8 +60,8 @@ srcdir_DOCFILES = PGP-Notes.txt applying-patches.txt	\
 
 
 topsrcdir_DOCFILES = COPYRIGHT GPL INSTALL ChangeLog	\
-	ChangeLog.old					\
-	README NEWS TODO README.SECURITY README.SSL 
+	ChangeLog.old ChangeLog.mutt-ng			\
+	README NEWS TODO TODO.mutt-ng README.SECURITY README.SSL 
 
 all: muttrc.man try-html try-txt
 

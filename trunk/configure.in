@@ -197,13 +197,13 @@ main ()
         if test $withval = yes; then
                 if test -d $srcdir/../slang; then
                         mutt_cv_slang=$srcdir/../slang/src
-                        CPPFLAGS="$CPPFLAGS -I${mutt_cv_slang}"
+                        CFLAGS="$CFLAGS -I${mutt_cv_slang}"
                         LDFLAGS="$LDFLAGS -L${mutt_cv_slang}/objs"
                 else
                         if test -d $mutt_cv_prefix/include/slang; then
-                                CPPFLAGS="$CPPFLAGS -I$mutt_cv_prefix/include/slang"
+                                CFLAGS="$CFLAGS -I$mutt_cv_prefix/include/slang"
                         elif test -d /usr/include/slang; then
-                                CPPFLAGS="$CPPFLAGS -I/usr/include/slang"
+                                CFLAGS="$CFLAGS -I/usr/include/slang"
                         fi
                         mutt_cv_slang=yes
                 fi
@@ -211,15 +211,15 @@ main ()
                 dnl ---Check to see if $withval is a source directory
                 if test -f $withval/src/slang.h; then
                         mutt_cv_slang=$withval/src
-                        CPPFLAGS="$CPPFLAGS -I${mutt_cv_slang}"
+                        CFLAGS="$CFLAGS -I${mutt_cv_slang}"
                         LDFLAGS="$LDFLAGS -L${mutt_cv_slang}/objs"
                 else
                         dnl ---Must be installed somewhere
                         mutt_cv_slang=$withval
                         if test -d $withval/include/slang; then
-                                CPPFLAGS="$CPPFLAGS -I${withval}/include/slang"
+                                CFLAGS="$CFLAGS -I${withval}/include/slang"
                         elif test -d $withval/include; then
-                                CPPFLAGS="$CPPFLAGS -I${withval}/include"
+                                CFLAGS="$CFLAGS -I${withval}/include"
                         fi
                         LDFLAGS="$LDFLAGS -L${withval}/lib"
                 fi

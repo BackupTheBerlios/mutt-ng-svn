@@ -91,6 +91,7 @@
    on some systems */
 # define SKIPWS(c) while (*(c) && isspace ((unsigned char) *(c))) c++;
 
+#define ISBLANK(c) (c == ' ' || c == '\t')
 /*
  * These functions aren't defined in lib.c, but
  * they are used there.
