@@ -991,9 +991,8 @@ struct option_t MuttVars[] = {
   ** new mail in IMAP folders. This is split from the ``$mail_check'' variable
   ** to generate less traffic and get more accurate information for local folders.
   ** .pp
-  ** To not brake current setups, this defaults to the value of ``$mail_check''.
-  ** Depending on your connection and speed of your IMAP server, you may want to
-  ** increase it.
+  ** It defaults to the default value of ``$mail_check'' which is 5 seconds. But
+  ** you may want to increase it.
   */
   { "imap_pass", 	DT_STR,  R_NONE, UL &ImapPass, UL 0 },
   /*

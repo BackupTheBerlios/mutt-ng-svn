@@ -241,10 +241,9 @@ int draw_sidebar(int menu) {
       saveSidebarWidth = SidebarWidth;
       SidebarWidth = 0;
     } else if(!prev_show_value && option(OPTMBOXPANE)) {
-      SidebarWidth = 0;
-      /* after toggle: force recounting of all mail */
-      mutt_buffy_check(1);
       SidebarWidth = saveSidebarWidth;
+      /* after toggle: force recounting of all mail */
+      mutt_buffy_check(2);
     }
     prev_show_value = option(OPTMBOXPANE);
   }
@@ -252,7 +251,7 @@ int draw_sidebar(int menu) {
   if ( SidebarWidth == 0 ) return 0;
 
   /* draw the divider */
-  //SETCOLOR(MT_COLOR_STATUS);
+  /* SETCOLOR(MT_COLOR_STATUS); */
     SETCOLOR(MT_COLOR_SIDEBAR);
   for (lines = option (OPTSTATUSONTOP) ? 0 : 1; 
        lines < LINES-1-(menu != MENU_PAGER || option (OPTSTATUSONTOP)); lines++ ) {

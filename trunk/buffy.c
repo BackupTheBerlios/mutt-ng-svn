@@ -297,6 +297,11 @@ int mutt_parse_mailboxes (BUFFER *path, BUFFER *s, unsigned long data, BUFFER *e
 #define STAT_CHECK (sb.st_mtime > sb.st_atime || (tmp->newly_created && sb.st_ctime == sb.st_mtime && sb.st_ctime == sb.st_atime))
 #endif /* BUFFY_SIZE */
 
+/* values for force:
+ * 0    don't force any checks + update sidebar
+ * 1    force all checks + update sidebar
+ * 2    force all checks + _don't_ update sidebar
+ */
 int mutt_buffy_check (int force)
 {
   BUFFY *tmp;
@@ -309,7 +314,7 @@ int mutt_buffy_check (int force)
   CONTEXT *ctx;
 #ifdef USE_IMAP
   /* update postponed count as well, on force */
-  if (force)
+  if (force != 0)
     mutt_update_num_postponed ();
 #endif
 
@@ -317,7 +322,7 @@ int mutt_buffy_check (int force)
   if (!Incoming)
     return 0;
   now = time (NULL);
-  if (!force && (now - BuffyTime < BuffyTimeout)
+  if (force == 0 && (now - BuffyTime < BuffyTimeout)
 #ifdef USE_IMAP
       && (now - ImapBuffyTime < ImapBuffyTimeout))
 #else
@@ -326,11 +331,11 @@ int mutt_buffy_check (int force)
     return BuffyCount;
 
   last1 = BuffyTime;
-  if (force || now - BuffyTime >= BuffyTimeout)
+  if (force != 0 || now - BuffyTime >= BuffyTimeout)
     BuffyTime = now;
 #ifdef USE_IMAP
   last2 = ImapBuffyTime;
-  if (force || now - ImapBuffyTime >= ImapBuffyTimeout)
+  if (force != 0 || now - ImapBuffyTime >= ImapBuffyTimeout)
     ImapBuffyTime = now;
 #endif
   BuffyCount = 0;
@@ -406,13 +411,11 @@ int mutt_buffy_check (int force)
       case M_MBOX:
       case M_MMDF:
         /* only check on force or $mail_check reached */
-        if (force || (now - last1 >= BuffyTimeout)) {
-          tmp->new = 0;
-          tmp->msg_unread = 0;
+        if (force != 0 || (now - last1 >= BuffyTimeout)) {
           if (SidebarWidth == 0 || !option (OPTMBOXPANE)) {
             if (STAT_CHECK) {
               BuffyCount++;
-              tmp->new = tmp->has_new = 1;
+              tmp->new = 1;
             }
 #ifdef BUFFY_SIZE
             else
@@ -424,33 +427,25 @@ int mutt_buffy_check (int force)
           } else if (SidebarWidth > 0 && option (OPTMBOXPANE) && 
                     (STAT_CHECK || tmp->msgcount == 0)) {
             /* sidebar visible */
-            int msg_count = 0, msg_new = 0, msg_unread = 0;
             BuffyCount++;
             if ((ctx = mx_open_mailbox (tmp->path, M_READONLY | M_QUIET | M_NOSORT, NULL)) != NULL) {
-              msg_count = ctx->msgcount;
-              msg_new = ctx->new;
-              msg_unread = ctx->unread;
+              tmp->msgcount = ctx->msgcount;
+              tmp->new = ctx->new;
+              tmp->msg_unread = ctx->new;       /* for sidebar, wtf? */
+              tmp->msg_flagged = ctx->flagged;
               mx_close_mailbox (ctx, 0);
             }
-            tmp->msgcount = msg_count;
-            tmp->new = msg_new;
-            tmp->msg_unread = msg_unread;
-            tmp->has_new = msg_new > 0;
           }
           if (tmp->newly_created &&
               (sb.st_ctime != sb.st_mtime || sb.st_ctime != sb.st_atime))
             tmp->newly_created = 0;
-          tmp->has_new = tmp->new > 0;
-        } else if (tmp->new > 0) {
-          /* keep current stats if !force and !$mail_check reached */
+        } else if (tmp->new > 0)
           BuffyCount++;
-          tmp->has_new = 1;
-        }
         break;
 
       case M_MAILDIR:
         /* only check on force or $mail_check reached */
-        if (force || (now - last1 >= BuffyTimeout)) {
+        if (force != 0 || (now - last1 >= BuffyTimeout)) {
           snprintf (path, sizeof (path), "%s/new", tmp->path);
           if ((dirp = opendir (path)) == NULL)
           {
@@ -470,7 +465,7 @@ int mutt_buffy_check (int force)
               if (tmp->new == 0)
               {
                 BuffyCount++;
-                tmp->has_new = tmp->new = 1;
+                tmp->new = 1;
                 if (SidebarWidth == 0 || !option (OPTMBOXPANE))
                   /* if sidebar invisible -> done */
                   break;
@@ -481,7 +476,6 @@ int mutt_buffy_check (int force)
             }
           }
           closedir (dirp);
-          tmp->has_new = tmp->new > 0;
 
           if (SidebarWidth > 0 && option (OPTMBOXPANE))
           {
@@ -492,29 +486,27 @@ int mutt_buffy_check (int force)
               tmp->magic = 0;
               break;
             }
+            tmp->msg_flagged = 0;
             while ((de = readdir (dirp)) != NULL)
             {
               char *p;
-              if (*de->d_name != '.' && 
-                  (!(p = strstr (de->d_name, ":2,")) || !strchr (p + 3, 'T')))
-              {
-                tmp->msgcount++;
+              if (*de->d_name != '.' && (p = strstr (de->d_name, ":2,")) != NULL) {
+                if (!strchr (p + 3, 'T'))
+                  tmp->msgcount++;
+                if (strchr (p + 3, 'F'))
+                  tmp->msg_flagged++;
               }
             }
             closedir (dirp);
           }
-        } else if (tmp->new > 0) {
+        } else if (tmp->new > 0)
           /* keep current stats if !force and !$mail_check reached */
           BuffyCount++;
-          tmp->has_new = 1;
-        }
         break;
 
       case M_MH:
         /* only check on force or $mail_check reached */
-        if (force || (now - last1 >= BuffyTimeout)) {
-          tmp->new = 0;
-          tmp->msg_unread = 0;
+        if (force != 0 || (now - last1 >= BuffyTimeout)) {
           if ((tmp->new = mh_buffy (tmp->path)) > 0)
             BuffyCount++;
           if (SidebarWidth > 0 && option (OPTMBOXPANE))
@@ -523,7 +515,9 @@ int mutt_buffy_check (int force)
             struct dirent *de;
             if ((dp = opendir (path)) == NULL)
               break;
-                tmp->msgcount = 0;
+            tmp->new = 0;
+            tmp->msgcount = 0;
+            tmp->msg_unread = 0;
             while ((de = readdir (dp)))
             {
               if (mh_valid_message (de->d_name))
@@ -535,33 +529,27 @@ int mutt_buffy_check (int force)
             }
             closedir (dp);
           }
-          tmp->has_new = tmp->new > 0;
-        } else if (tmp->new > 0) {
+        } else if (tmp->new > 0)
           /* keep current stats if !force and !$mail_check reached */
           BuffyCount++;
-          tmp->has_new = 1;
-        }
         break;
 
 #ifdef USE_IMAP
       case M_IMAP:
         /* only check on force or $imap_mail_check reached */
-        if (force || (now - last2 >= ImapBuffyTimeout)) {
-          tmp->new = 0;
-          tmp->msg_unread = 0;
+        if (force != 0 || (now - last2 >= ImapBuffyTimeout)) {
           tmp->msgcount = imap_mailbox_check (tmp->path, 0);
           if ((tmp->new = imap_mailbox_check (tmp->path, 1)) > 0) {
             BuffyCount++;
-            tmp->has_new = tmp->new > 0;
             tmp->msg_unread = tmp->new; /* for sidebar; wtf? */
           }
-          else
+          else {
             tmp->new = 0;
-        } else if (tmp->new > 0) {
+            tmp->msg_unread = 0;
+          }
+        } else if (tmp->new > 0)
           /* keep current stats if !force and !$imap_mail_check reached */
           BuffyCount++;
-          tmp->has_new = 1;
-        }
         break;
 #endif
 
@@ -587,7 +575,7 @@ int mutt_buffy_check (int force)
       BuffyNotify++;
     tmp->has_new = tmp->new > 0;
   }
-  if (BuffyCount > 0 && SidebarWidth > 0)
+  if (BuffyCount > 0 && force != 2)
     draw_sidebar (CurrentMenu);
   return (BuffyCount);
 }
