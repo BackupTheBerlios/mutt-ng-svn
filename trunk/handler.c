@@ -1217,13 +1217,18 @@ static void print_flowed_line(char * line, STATE *s,int ql) {
       --width;
     if (width < 0)
       width = MaxLineLength;
-  } else {
-    width = COLS - SidebarWidth - WrapMargin - ql - 1;
+  } 
+  else {
+    if (option(OPTMBOXPANE))
+      width = COLS - SidebarWidth - WrapMargin - ql - 1;
+    else
+      width = COLS - WrapMargin - ql - 1;
+    
     if (option(OPTSTUFFQUOTED))
       --width;
     if (width < 0)
       width = COLS;
-  }
+  } 
 
   /* fprintf(stderr,"print_flowed_line will print `%s' with ql = %d\n",line,ql); */
 

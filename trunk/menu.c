@@ -158,9 +158,12 @@ static void menu_make_entry (char *s, int l, MUTTMENU *menu, int i)
 void menu_pad_string (char *s, size_t n)
 {
   int shift = option (OPTARROWCURSOR) ? 3 : 0;
-  int cols = COLS - shift - SidebarWidth;
+  int cols; 
   char* tmpbuf = safe_malloc (n);
-
+  if (option(OPTMBOXPANE))
+    cols = COLS - shift - SidebarWidth;
+  else
+    cols = COLS - shift;
   mutt_format_string (tmpbuf, n, cols, cols, 0, ' ', s, strlen (s), 1);
   tmpbuf[n - 1] = 0;
   snprintf(s,n,"%s",tmpbuf); /* overkill */
