@@ -86,16 +86,16 @@ static int fetch_capa (char *line, void *data)
   }
 
   else if (!ascii_strncasecmp (line, "STLS", 4))
-    pop_data->cmd_stls = 1;
+    pop_data->cmd_stls = CMD_AVAILABLE;
 
   else if (!ascii_strncasecmp (line, "USER", 4))
-    pop_data->cmd_user = 1;
+    pop_data->cmd_user = CMD_AVAILABLE;
 
   else if (!ascii_strncasecmp (line, "UIDL", 4))
-    pop_data->cmd_uidl = 1;
+    pop_data->cmd_uidl = CMD_AVAILABLE;
 
   else if (!ascii_strncasecmp (line, "TOP", 3))
-    pop_data->cmd_top = 1;
+    pop_data->cmd_top = CMD_AVAILABLE;
 
   return 0;
 }
@@ -135,11 +135,11 @@ static pop_query_status pop_capabilities (POP_DATA * pop_data, int mode)
 
   /* init capabilities */
   if (mode == 0) {
-    pop_data->cmd_capa = 0;
-    pop_data->cmd_stls = 0;
-    pop_data->cmd_user = 0;
-    pop_data->cmd_uidl = 0;
-    pop_data->cmd_top = 0;
+    pop_data->cmd_capa = CMD_NOT_AVAILABLE;
+    pop_data->cmd_stls = CMD_NOT_AVAILABLE;
+    pop_data->cmd_user = CMD_NOT_AVAILABLE;
+    pop_data->cmd_uidl = CMD_NOT_AVAILABLE;
+    pop_data->cmd_top = CMD_NOT_AVAILABLE;
     pop_data->resp_codes = 0;
     pop_data->expire = 1;
     pop_data->login_delay = 0;
@@ -147,12 +147,17 @@ static pop_query_status pop_capabilities (POP_DATA * pop_data, int mode)
   }
 
   /* Execute CAPA command */
-  if (mode == 0 || pop_data->cmd_capa) {
+  if (mode == 0 || pop_data->cmd_capa != CMD_NOT_AVAILABLE) {
     strfcpy (buf, "CAPA\r\n", sizeof (buf));
     switch (pop_fetch_data (pop_data, buf, NULL, fetch_capa, pop_data)) {
     case PQ_OK:
       {
-        pop_data->cmd_capa = 1;
+        pop_data->cmd_capa = CMD_AVAILABLE;
+        break;
+      }
+    case PQ_ERR:
+      {
+        pop_data->cmd_capa = CMD_NOT_AVAILABLE;
         break;
       }
     case PQ_NOT_CONNECTED:
@@ -161,10 +166,10 @@ static pop_query_status pop_capabilities (POP_DATA * pop_data, int mode)
   }
 
   /* CAPA not supported, use defaults */
-  if (mode == 0 && !pop_data->cmd_capa) {
-    pop_data->cmd_user = 2;
-    pop_data->cmd_uidl = 2;
-    pop_data->cmd_top = 2;
+  if (mode == 0 && pop_data->cmd_capa == CMD_NOT_AVAILABLE) {
+    pop_data->cmd_user = CMD_UNKNOWN;
+    pop_data->cmd_uidl = CMD_UNKNOWN;
+    pop_data->cmd_top = CMD_UNKNOWN;
 
     strfcpy (buf, "AUTH\r\n", sizeof (buf));
     if (pop_fetch_data (pop_data, buf, NULL, fetch_auth, pop_data) == PQ_NOT_CONNECTED)
@@ -177,11 +182,11 @@ static pop_query_status pop_capabilities (POP_DATA * pop_data, int mode)
 
     if (!pop_data->expire)
       msg = _("Unable to leave messages on server.");
-    if (!pop_data->cmd_top)
+    if (pop_data->cmd_top == CMD_NOT_AVAILABLE)
       msg = _("Command TOP is not supported by server.");
-    if (!pop_data->cmd_uidl)
+    if (pop_data->cmd_uidl == CMD_NOT_AVAILABLE)
       msg = _("Command UIDL is not supported by server.");
-    if (msg && pop_data->cmd_capa) {
+    if (msg && pop_data->cmd_capa != CMD_AVAILABLE) {
       mutt_error (msg);
       return PQ_ERR;
     }
@@ -197,7 +202,7 @@ static pop_query_status pop_capabilities (POP_DATA * pop_data, int mode)
  * -1 - conection lost,
  * -2 - invalid response.
 */
-int pop_connect (POP_DATA * pop_data)
+pop_query_status pop_connect (POP_DATA * pop_data)
 {
   char buf[LONG_STRING];
 
@@ -206,7 +211,7 @@ int pop_connect (POP_DATA * pop_data)
       mutt_socket_readln (buf, sizeof (buf), pop_data->conn) < 0) {
     mutt_error (_("Error connecting to server: %s"),
                 pop_data->conn->account.host);
-    return -1;
+    return PQ_NOT_CONNECTED;
   }
 
   pop_data->status = POP_CONNECTED;
@@ -215,12 +220,12 @@ int pop_connect (POP_DATA * pop_data)
     *pop_data->err_msg = '\0';
     pop_error (pop_data, buf);
     mutt_error ("%s", pop_data->err_msg);
-    return -2;
+    return PQ_ERR;
   }
 
   pop_apop_timestamp (pop_data, buf);
 
-  return 0;
+  return PQ_OK;
 }
 
 /*
@@ -483,7 +488,7 @@ static int check_uidl (char *line, void *data)
   return 0;
 }
 
-/* reconnect and verify idnexes if connection was lost */
+/* reconnect and verify indexes if connection was lost */
 pop_query_status pop_reconnect (CONTEXT * ctx)
 {
   pop_query_status ret;

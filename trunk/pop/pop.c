@@ -39,11 +39,12 @@ static int fetch_message (char *line, void *file)
  * -2 - invalid command or execution error,
  * -3 - error writing to tempfile
  */
-static int pop_read_header (POP_DATA * pop_data, HEADER * h)
+static pop_query_status pop_read_header (POP_DATA * pop_data, HEADER * h)
 {
   FILE *f;
   int index;
   pop_query_status ret;
+  cmd_status status;
   long length;
   char buf[LONG_STRING];
   char tempfile[_POSIX_PATH_MAX];
@@ -51,7 +52,7 @@ static int pop_read_header (POP_DATA * pop_data, HEADER * h)
   mutt_mktemp (tempfile);
   if (!(f = safe_fopen (tempfile, "w+"))) {
     mutt_perror (tempfile);
-    return -3;
+    return PFD_FUNCT_ERROR;
   }
 
   snprintf (buf, sizeof (buf), "LIST %d\r\n", h->refno);
@@ -62,15 +63,15 @@ static int pop_read_header (POP_DATA * pop_data, HEADER * h)
     snprintf (buf, sizeof (buf), "TOP %d 0\r\n", h->refno);
     ret = pop_fetch_data (pop_data, buf, NULL, fetch_message, f);
 
-    if (pop_data->cmd_top == 2) {
+    if (pop_data->cmd_top == CMD_UNKNOWN) {
       if (ret == PQ_OK) {
-        pop_data->cmd_top = 1;
+        pop_data->cmd_top = CMD_AVAILABLE;
 
         dprint (1, (debugfile, "pop_read_header: set TOP capability\n"));
       }
 
       if (ret == PQ_ERR) {
-        pop_data->cmd_top = 0;
+        pop_data->cmd_top = CMD_NOT_AVAILABLE;
 
         dprint (1, (debugfile, "pop_read_header: unset TOP capability\n"));
         snprintf (pop_data->err_msg, sizeof (pop_data->err_msg),
@@ -168,15 +169,15 @@ static int pop_fetch_headers (CONTEXT * ctx)
   new_count = ctx->msgcount;
   ctx->msgcount = old_count;
 
-  if (pop_data->cmd_uidl == 2) {
+  if (pop_data->cmd_uidl == CMD_UNKNOWN) {
     if (ret == PQ_OK) {
-      pop_data->cmd_uidl = 1;
+      pop_data->cmd_uidl = CMD_AVAILABLE;
 
       dprint (1, (debugfile, "pop_fetch_headers: set UIDL capability\n"));
     }
 
-    if (ret == PQ_ERR && pop_data->cmd_uidl == 2) {
-      pop_data->cmd_uidl = 0;
+    if (ret == PQ_ERR && pop_data->cmd_uidl == CMD_UNKNOWN) {
+      pop_data->cmd_uidl = CMD_NOT_AVAILABLE;
 
       dprint (1, (debugfile, "pop_fetch_headers: unset UIDL capability\n"));
       snprintf (pop_data->err_msg, sizeof (pop_data->err_msg),

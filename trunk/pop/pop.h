@@ -49,22 +49,22 @@ typedef enum pop_query_status_e {
   PQ_OK = 0
 } pop_query_status;
 
-typedef enum cmd_user_status_e {
-  USER_NOT_AVAILABLE = 0,
-  USER_AVAILABLE,
-  USER_UNKNOWN
-} cmd_user_status;
+typedef enum cmd_status_e {
+  CMD_NOT_AVAILABLE = 0,
+  CMD_AVAILABLE,
+  CMD_UNKNOWN /* unknown whether it is available or not */
+} cmd_status;
 
 typedef struct {
   CONNECTION *conn;
   unsigned int status:2;
   unsigned int capabilities:1;
   unsigned int use_stls:2;
-  unsigned int cmd_capa:1;      /* optional command CAPA */
-  unsigned int cmd_stls:1;      /* optional command STLS */
-  cmd_user_status cmd_user;      /* optional command USER */
-  unsigned int cmd_uidl:2;      /* optional command UIDL */
-  unsigned int cmd_top:2;       /* optional command TOP */
+  cmd_status cmd_capa;      /* optional command CAPA */
+  cmd_status cmd_stls;      /* optional command STLS */
+  cmd_status cmd_user;      /* optional command USER */
+  cmd_status cmd_uidl;      /* optional command UIDL */
+  cmd_status cmd_top;       /* optional command TOP */
   unsigned int resp_codes:1;    /* server supports extended response codes */
   unsigned int expire:1;        /* expire is greater than 0 */
   unsigned int clear_cache:1;

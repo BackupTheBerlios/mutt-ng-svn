@@ -235,7 +235,7 @@ static pop_auth_res_t pop_auth_user (POP_DATA * pop_data, const char *method)
   char buf[LONG_STRING];
   pop_query_status ret;
 
-  if (pop_data->cmd_user == USER_NOT_AVAILABLE)
+  if (pop_data->cmd_user == CMD_NOT_AVAILABLE)
     return POP_A_UNAVAIL;
 
   mutt_message _("Logging in...");
@@ -243,15 +243,15 @@ static pop_auth_res_t pop_auth_user (POP_DATA * pop_data, const char *method)
   snprintf (buf, sizeof (buf), "USER %s\r\n", pop_data->conn->account.user);
   ret = pop_query (pop_data, buf, sizeof (buf));
 
-  if (pop_data->cmd_user == USER_UNKNOWN) {
+  if (pop_data->cmd_user == CMD_UNKNOWN) {
     if (ret == PQ_OK) {
-      pop_data->cmd_user = USER_AVAILABLE;
+      pop_data->cmd_user = CMD_AVAILABLE;
 
       dprint (1, (debugfile, "pop_auth_user: set USER capability\n"));
     }
 
     if (ret == PQ_ERR) {
-      pop_data->cmd_user = USER_NOT_AVAILABLE;
+      pop_data->cmd_user = CMD_NOT_AVAILABLE;
 
       dprint (1, (debugfile, "pop_auth_user: unset USER capability\n"));
       snprintf (pop_data->err_msg, sizeof (pop_data->err_msg),
@@ -298,7 +298,7 @@ static pop_auth_t pop_authenticators[] = {
  * -2 - login failed,
  * -3 - authentication canceled.
 */
-int pop_authenticate (POP_DATA * pop_data)
+pop_query_status pop_authenticate (POP_DATA * pop_data)
 {
   ACCOUNT *acct = &pop_data->conn->account;
   pop_auth_t *authenticator;
@@ -310,7 +310,7 @@ int pop_authenticate (POP_DATA * pop_data)
 
   if (mutt_account_getuser (acct) || !acct->user[0] ||
       mutt_account_getpass (acct) || !acct->pass[0])
-    return -3;
+    return PFD_FUNCT_ERROR;
 
   if (PopAuthenticators && *PopAuthenticators) {
     /* Try user-specified list of authentication methods */
@@ -330,12 +330,12 @@ int pop_authenticate (POP_DATA * pop_data)
           ret = authenticator->authenticate (pop_data, method);
           if (ret == POP_A_SOCKET)
             switch (pop_connect (pop_data)) {
-            case 0:
+            case PQ_OK:
               {
                 ret = authenticator->authenticate (pop_data, method);
                 break;
               }
-            case -2:
+            case PQ_ERR:
               ret = POP_A_FAILURE;
             }
 
@@ -365,13 +365,13 @@ int pop_authenticate (POP_DATA * pop_data)
       ret = authenticator->authenticate (pop_data, authenticator->method);
       if (ret == POP_A_SOCKET)
         switch (pop_connect (pop_data)) {
-        case 0:
+        case PQ_OK:
           {
             ret =
               authenticator->authenticate (pop_data, authenticator->method);
             break;
           }
-        case -2:
+        case PQ_ERR:
           ret = POP_A_FAILURE;
         }
 
@@ -387,13 +387,13 @@ int pop_authenticate (POP_DATA * pop_data)
 
   switch (ret) {
   case POP_A_SUCCESS:
-    return 0;
+    return PQ_OK;
   case POP_A_SOCKET:
-    return -1;
+    return PQ_NOT_CONNECTED;
   case POP_A_UNAVAIL:
     if (!attempts)
       mutt_error (_("No authenticators available"));
   }
 
-  return -2;
+  return PQ_ERR;
 }
