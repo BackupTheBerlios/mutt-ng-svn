@@ -3,6 +3,8 @@ Changes specific to mutt-ng:
 2005-02-27:
   * integrated patch to highlight the next mailbox which includes new mail in sidebar
   * makes sidebar fit into screen in the pager
+  * improved usenet usability (pattern '~*' as real name filter, more address parsing)
+  * added color for flagged mailboxes in sidebar
 
 2005-02-24:
   * Integrated another sidebar fix and a build fix from Rocco Rutte.
