@@ -120,12 +120,16 @@ static char * shortened_hierarchy(char * box) {
 
 char *make_sidebar_entry(char *box, int size, int new, int flagged)
 {
-  char *c;
-  int i = 0, dlen = mutt_strlen (SidebarDelim), max = SidebarWidth-dlen-1,
-      shortened = 0;
+  int i = 0, dlen, max, shortened = 0;
+  int offset;
 
-  c = realloc(entry, SidebarWidth + 1);
-  if ( c ) entry = c;
+  if (SidebarWidth > COLS)
+    SidebarWidth = COLS;
+
+  dlen = mutt_strlen(SidebarDelim);
+  max = SidebarWidth - dlen - 1;
+
+  safe_realloc(&entry, SidebarWidth + 1);
   entry[SidebarWidth] = 0;
   for (; i < SidebarWidth; entry[i++] = ' ' );
 #if USE_IMAP
@@ -149,20 +153,30 @@ char *make_sidebar_entry(char *box, int size, int new, int flagged)
 
   if ( new ) {
     if (flagged>0) {
-      sprintf(entry + SidebarWidth - 5 - quick_log10(size) - dlen - quick_log10(new) - quick_log10(flagged),
+      offset = SidebarWidth - 5 - quick_log10(size) - dlen - quick_log10(new) - quick_log10(flagged);
+      if (offset<0) offset = 0;
+      snprintf(entry + offset, SidebarWidth - dlen - offset + 1,
               "% d(%d)[%d]", size, new, flagged);
     } else {
-      sprintf(entry + SidebarWidth - 3 - quick_log10(size) - dlen - quick_log10(new),
+      offset = SidebarWidth - 3 - quick_log10(size) - dlen - quick_log10(new);
+      if (offset<0) offset = 0;
+      snprintf(entry + offset, SidebarWidth - dlen - offset + 1,
               "% d(%d)", size, new);
     }
   } else {
     if (flagged>0) {
-      sprintf( entry + SidebarWidth - 3 - quick_log10(size) - dlen - quick_log10(flagged), "% d[%d]", size,flagged);
+      offset = SidebarWidth - 3 - quick_log10(size) - dlen - quick_log10(flagged);
+      if (offset<0) offset = 0;
+      snprintf( entry + offset, SidebarWidth - dlen - offset + 1,
+              "% d[%d]", size,flagged);
     } else {
-      sprintf( entry + SidebarWidth - 1 - quick_log10(size) - dlen, "% d", size);
+      offset = SidebarWidth - 1 - quick_log10(size) - dlen;
+      if (offset<0) offset = 0;
+      snprintf( entry + offset, SidebarWidth - dlen - offset + 1,
+              "% d", size);
     }
-
   }
+
   if (option(OPTSHORTENHIERARCHY) && shortened) {
     free(box);
   }
