@@ -87,6 +87,13 @@ char *make_sidebar_entry(char *box, int size, int new)
 	if ( c ) entry = c;
 	entry[SidebarWidth] = 0;
 	for (; i < SidebarWidth; entry[i++] = ' ' );
+#if USE_IMAP
+	if (ImapHomeNamespace && strlen(ImapHomeNamespace)>0) {
+    if (strncmp(box,ImapHomeNamespace,strlen(ImapHomeNamespace))==0 && strcmp(box,ImapHomeNamespace)!=0) {
+      box+=strlen(ImapHomeNamespace)+1;
+    }
+  }
+#endif
 	i = strlen(box);
 	strncpy( entry, box, i < SidebarWidth ? i :SidebarWidth );
 
