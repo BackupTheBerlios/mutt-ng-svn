@@ -298,7 +298,7 @@ enum
   OPT_QUIT,
   OPT_REPLYTO,
   OPT_RECALL,
-#ifdef USE_SSL
+#if defined(USE_SSL) || defined(USE_GNUTLS)
   OPT_SSLSTARTTLS,
 #endif
   OPT_SUBJECT,
@@ -381,15 +381,19 @@ enum
   OPTIMAPPASSIVE,
   OPTIMAPPEEK,
   OPTIMAPSERVERNOISE,
-# ifdef USE_SSL
+# if defined(USE_SSL) || defined(USE_GNUTLS)
   OPTIMAPFORCESSL,
 # endif
 #endif
-#if defined(USE_SSL) || defined(USE_NSS)
+#if defined(USE_SSL) || defined(USE_NSS) || defined(USE_GNUTLS)
+# ifndef USE_GNUTLS
   OPTSSLV2,
+# endif
   OPTSSLV3,
   OPTTLSV1,
+# ifndef USE_GNUTLS
   OPTSSLSYSTEMCERTS,
+# endif
 #endif
   OPTIMPLICITAUTOVIEW,
   OPTKEEPFLAGGED,

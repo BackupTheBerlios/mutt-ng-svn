@@ -831,7 +831,7 @@ struct option_t MuttVars[] = {
   ** as folder separators for displaying IMAP paths. In particular it
   ** helps in using the '=' shortcut for your \fIfolder\fP variable.
   */
-# ifdef USE_SSL
+# if defined(USE_SSL) || defined(USE_GNUTLS)
   { "imap_force_ssl",		DT_BOOL, R_NONE, OPTIMAPFORCESSL, 0 },
   /*
   ** .pp
@@ -1939,8 +1939,8 @@ struct option_t MuttVars[] = {
   */
 #endif
  
-#if defined(USE_SSL)||defined(USE_NSS)
-# ifndef USE_NSS  
+#if defined(USE_SSL)||defined(USE_NSS)||defined(USE_GNUTLS)
+# if defined(USE_SSL)||defined(USE_GNUTLS)
   { "ssl_starttls", DT_QUAD, R_NONE, OPT_SSLSTARTTLS, M_YES },
   /*
   ** .pp
@@ -1964,6 +1964,7 @@ struct option_t MuttVars[] = {
   ** .pp
   ** Example: set certificate_file=~/.mutt/certificates
   */
+# ifndef USE_GNUTLS
   { "ssl_usesystemcerts", DT_BOOL, R_NONE, OPTSSLSYSTEMCERTS, 1 },
   /*
   ** .pp
@@ -1983,6 +1984,7 @@ struct option_t MuttVars[] = {
   ** This variables specifies whether to attempt to use SSLv2 in the
   ** SSL authentication process.
   */
+# endif
   { "ssl_use_sslv3", DT_BOOL, R_NONE, OPTSSLV3, 1 },
   /*
   ** .pp
@@ -1995,6 +1997,24 @@ struct option_t MuttVars[] = {
   ** This variables specifies whether to attempt to use TLSv1 in the
   ** SSL authentication process.
   */
+#ifdef USE_GNUTLS
+  { "ssl_min_dh_prime_bits", DT_NUM, R_NONE, UL &SslDHPrimeBits, 0 },
+  /*
+  ** .pp
+  ** This variable specifies the minimum acceptable prime size (in bits)
+  ** for use in any Diffie-Hellman key exchange. A value of 0 will use
+  ** the default from the GNUTLS library.
+  */
+  { "ssl_ca_certificates_file", DT_PATH, R_NONE, UL &SslCACertFile, 0 },
+  /*
+  ** .pp
+  ** This variable specifies a file containing trusted CA certificates.
+  ** Any server certificate that is signed with one of these CA
+  ** certificates are also automatically accepted.
+  ** .pp
+  ** Example: set ssl_ca_certificates_file=/etc/ssl/certs/ca-certificates.crt
+  */
+#endif
 #endif
 
   { "pipe_split",	DT_BOOL, R_NONE, OPTPIPESPLIT, 0 },

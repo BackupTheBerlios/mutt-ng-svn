@@ -596,6 +596,34 @@ AC_ARG_WITH(ssl, [  --with-ssl[=PFX]           Compile in SSL support for POP/IM
 ])
 AM_CONDITIONAL(USE_SSL, test x$need_ssl = xyes)
 
+AC_ARG_WITH(gnutls, [  --with-gnutls[=PFX]        Compile in GNU TLS support for POP/IMAP],
+[   if test "$need_ssl" = "yes"
+    then
+      AC_MSG_ERROR([In order to compile in GNU TLS support, you must first disable SSL support])
+    fi
+    if test "$with_gnutls" != "no"
+    then
+      if test "$need_socket" != "yes"; then
+        AC_MSG_ERROR([GNU TLS support is only useful with POP or IMAP support])
+      fi
+      if test "$with_gnutls" != "yes"
+      then
+        LDFLAGS="$LDFLAGS -L$withval/lib"
+        CPPFLAGS="$CPPFLAGS -I$withval/include"
+      fi
+#saved_LIBS="$LIBS"
+
+      AC_CHECK_LIB([gnutls], [gnutls_init],, AC_MSG_ERROR(Unable to find GNU TLS library))
+
+      AC_DEFINE(USE_GNUTLS,1,[ Define if you want support for GNU TLS. ])
+#LIBS="$saved_LIBS"
+#MUTTLIBS="$MUTTLIBS -lgnutls"
+      MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS mutt_ssl_gnutls.o"
+      need_gnutls=yes
+    fi
+])
+AM_CONDITIONAL(USE_GNUTLS, test x$need_gnutls = xyes)
+
 dnl SSL support via NSS
 AC_ARG_WITH(nss, [  --with-nss[=PFX]           Compile in SSL support for POP/IMAP via NSS],
 [       if test "$with_nss" != no

@@ -329,6 +329,9 @@
 /* Define if you have the esmtp library (-lesmtp).  */
 #undef HAVE_LIBESMTP
 
+/* Define if you have the gnutls library (-lgnutls).  */
+#undef HAVE_LIBGNUTLS
+
 /* Define if you have the idn library (-lidn).  */
 #undef HAVE_LIBIDN
 
@@ -442,6 +445,9 @@
 
 /*  Define if you want support for SSL.  */
 #undef USE_SSL
+
+/*  Define if you want support for GNU TLS.  */
+#undef USE_GNUTLS
 
 /*  Define if you want support for SSL via the NSS library.  */
 #undef USE_NSS

@@ -4,6 +4,8 @@ Changes specific to mutt-ng:
   * Removed a few pscan(1) warnings
   * Integrated the following patches:
     * edit-threads patch
+    * gnutls patch including integration into configure script, i.e. the user
+      can select between OpenSSL and GNU TLS.
 
 2004-01-14:
   * Integrated the following patches:

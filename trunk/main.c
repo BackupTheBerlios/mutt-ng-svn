@@ -259,6 +259,12 @@ static void show_version (void)
 	"-USE_SSL  "
 #endif
 
+#ifdef USE_GNUTLS
+	"+USE_GNUTLS  "
+#else
+	"-USE_GNUTLS  "
+#endif
+
 #ifdef USE_SASL
 	"+USE_SASL  "
 #else
