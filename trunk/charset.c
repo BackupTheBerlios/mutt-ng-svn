@@ -25,6 +25,10 @@
 #include "mutt.h"
 #include "charset.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #ifndef EILSEQ
 # define EILSEQ EINVAL
 #endif

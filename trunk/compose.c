@@ -36,6 +36,10 @@
 #include "nntp.h"
 #endif
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <errno.h>
 #include <string.h>
 #include <sys/stat.h>

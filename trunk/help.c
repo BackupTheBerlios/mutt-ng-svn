@@ -13,6 +13,9 @@
 # include "config.h"
 #endif
 
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "keymap.h"

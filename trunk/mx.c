@@ -47,6 +47,10 @@
 
 #include "mutt_crypt.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <dirent.h>
 #include <fcntl.h>
 #include <sys/file.h>

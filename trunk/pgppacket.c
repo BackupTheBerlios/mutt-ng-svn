@@ -22,6 +22,8 @@
 #include "pgplib.h"
 #include "pgppacket.h"
 
+#include "lib/mem.h"
+
 #define CHUNKSIZE 1024
 
 static unsigned char *pbuf = NULL;

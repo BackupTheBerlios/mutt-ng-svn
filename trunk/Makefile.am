@@ -96,7 +96,7 @@ muttng_dotlock_LDADD = @LIBOBJS@
 muttng_dotlock_DEPENDENCIES = @LIBOBJS@
 
 pgpringng_SOURCES = pgppubring.c pgplib.c lib.c extlib.c sha1.c md5c.c pgppacket.c ascii.c
-pgpringng_LDADD = @LIBOBJS@ $(INTLLIBS) 
+pgpringng_LDADD = @LIBOBJS@ $(INTLLIBS) -Llib -lsane
 pgpringng_DEPENDENCIES = @LIBOBJS@ $(INTLDEPS)
 
 pgpewrapng_SOURCES = pgpewrap.c

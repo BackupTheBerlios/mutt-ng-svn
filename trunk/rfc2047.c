@@ -17,6 +17,9 @@
 #include "charset.h"
 #include "rfc2047.h"
 
+#include "lib/mem.h"
+#include "lib/str.h"
+
 #include <ctype.h>
 #include <errno.h>
 #include <stdio.h>

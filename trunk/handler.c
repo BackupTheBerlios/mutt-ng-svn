@@ -28,6 +28,9 @@
 #include "mutt_crypt.h"
 #include "lib.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
 
 #define BUFI_SIZE 1000
 #define BUFO_SIZE 2000

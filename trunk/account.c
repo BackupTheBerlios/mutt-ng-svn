@@ -17,6 +17,10 @@
 #include "account.h"
 #include "url.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 /* mutt_account_match: compare account info (host/port/user) */
 int mutt_account_match (const ACCOUNT * a1, const ACCOUNT * a2)
 {

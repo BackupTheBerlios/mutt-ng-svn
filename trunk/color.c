@@ -15,6 +15,10 @@
 #include "mutt_curses.h"
 #include "mapping.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>

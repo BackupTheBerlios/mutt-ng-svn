@@ -25,6 +25,9 @@
 #include "mutt_ssl.h"
 #include "mutt_regex.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+
 typedef struct _tlssockdata {
   gnutls_session state;
   gnutls_certificate_credentials xcred;

@@ -13,6 +13,10 @@
 
 #include "mutt.h"
 #include "sort.h"
+
+#include "lib/mem.h"
+#include "lib/intl.h"
+
 #include <string.h>
 #include <stdlib.h>
 

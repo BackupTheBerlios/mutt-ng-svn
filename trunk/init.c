@@ -26,11 +26,13 @@
 #include "mutt_ssl.h"
 #endif
 
-
-
 #include "mx.h"
 #include "init.h"
 #include "mailbox.h"
+
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -366,7 +368,7 @@ static int add_to_spam_list (SPAM_LIST ** list, const char *pat,
        * the template, and leaving t pointed at the current item.
        */
       t = last;
-      safe_free (&t->template);
+      FREE(t->template);
       break;
     }
     if (!last->next)
@@ -416,8 +418,8 @@ static int remove_from_spam_list (SPAM_LIST ** list, const char *pat)
   if (spam->rx && !mutt_strcmp (spam->rx->pattern, pat)) {
     *list = spam->next;
     mutt_free_regexp (&spam->rx);
-    safe_free (&spam->template);
-    safe_free (&spam);
+    FREE(&spam->template);
+    FREE(&spam);
     return 1;
   }
 
@@ -426,8 +428,8 @@ static int remove_from_spam_list (SPAM_LIST ** list, const char *pat)
     if (!mutt_strcmp (spam->rx->pattern, pat)) {
       prev->next = spam->next;
       mutt_free_regexp (&spam->rx);
-      safe_free (&spam->template);
-      safe_free (&spam);
+      FREE(spam->template);
+      FREE(spam);
       spam = prev->next;
       ++nremoved;
     }
@@ -2175,7 +2177,7 @@ void mutt_init (int skip_sys_rc, LIST * commands)
     if ((f = safe_fopen (SYSCONFDIR "/nntpserver", "r"))) {
       buffer[0] = '\0';
       fgets (buffer, sizeof (buffer), f);
-      p = &buffer;
+      p = (char*) &buffer;
       SKIPWS (p);
       i = p;
       while (*i && (*i != ' ') && (*i != '\t') && (*i != '\r')

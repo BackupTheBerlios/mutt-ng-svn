@@ -23,6 +23,10 @@
 #include "compress.h"
 #endif
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <sys/stat.h>
 #include <dirent.h>
 #include <string.h>

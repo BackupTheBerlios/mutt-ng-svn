@@ -31,6 +31,10 @@
 #include "pgp.h"
 #include "rfc822.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 /*
  * The actual command line formatter.
  */

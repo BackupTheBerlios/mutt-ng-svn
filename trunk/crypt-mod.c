@@ -12,6 +12,7 @@
 #endif
 
 #include "crypt-mod.h"
+#include "lib/mem.h"
 
 /* A type an a variable to keep track of registered crypto modules. */
 typedef struct crypt_module *crypt_module_t;

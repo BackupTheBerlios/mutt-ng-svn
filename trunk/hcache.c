@@ -43,6 +43,8 @@
 #include "lib.h"
 #include "md5.h"
 
+#include "lib/mem.h"
+
 #if HAVE_GDBM
 static struct
   header_cache {

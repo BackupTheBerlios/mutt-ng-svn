@@ -23,6 +23,8 @@
 #include "lib.h"
 #include "pgplib.h"
 
+#include "lib/mem.h"
+
 const char *pgp_pkalgbytype (unsigned char type)
 {
   switch (type) {

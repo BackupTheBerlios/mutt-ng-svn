@@ -66,7 +66,7 @@ void _safe_realloc (void *ptr, size_t siz, int line, const char* fname) {
   *p = r;
 }
 
-void safe_free (void *ptr) {
+void _safe_free (void *ptr) {
   void **p = (void **) ptr;
 
   if (*p) {

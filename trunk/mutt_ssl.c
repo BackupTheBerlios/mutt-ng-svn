@@ -26,6 +26,10 @@
 #include "mutt_curses.h"
 #include "mutt_ssl.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #if OPENSSL_VERSION_NUMBER >= 0x00904000L
 #define READ_X509_KEY(fp, key)	PEM_read_X509(fp, key, NULL, NULL)
 #else

@@ -17,6 +17,8 @@
 
 #include "mutt.h"
 
+#include "lib/mem.h"
+
 #define SOMEPRIME 149711
 
 int hash_string (const unsigned char *s, int n)

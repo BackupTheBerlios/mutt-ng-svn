@@ -25,6 +25,9 @@
 #include "mutt_socket.h"
 #include "mutt_curses.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+
 static int MuttNssInitialized = 0;
 
 /* internal data struct we use with the CONNECTION.  this is where NSS-specific

@@ -70,8 +70,6 @@
 
 #include <ctype.h>
 
-#include <wchar.h>
-
 struct interval {
   int first;
   int last;

@@ -26,6 +26,8 @@
 #include "mutt.h"
 #include "mutt_crypt.h"
 
+#include "lib/intl.h"
+
 #include "crypt-mod.h"
 
 /*

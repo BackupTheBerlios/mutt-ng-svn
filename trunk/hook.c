@@ -19,6 +19,10 @@
 #include "compress.h"
 #endif
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <limits.h>
 #include <string.h>
 #include <stdlib.h>

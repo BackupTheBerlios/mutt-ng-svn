@@ -18,6 +18,10 @@
 #include "mapping.h"
 #include "mutt_crypt.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>

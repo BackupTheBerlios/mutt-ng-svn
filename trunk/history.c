@@ -13,6 +13,7 @@
 
 #include "mutt.h"
 #include "history.h"
+#include "lib/mem.h"
 
 /* global vars used for the string-history routines */
 

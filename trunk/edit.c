@@ -17,6 +17,10 @@
 #include "mutt_curses.h"
 #include "mutt_idna.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>

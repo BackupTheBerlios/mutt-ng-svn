@@ -27,6 +27,10 @@
 
 #include "mutt_crypt.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <string.h>
 #include <ctype.h>
 #include <unistd.h>
@@ -1336,7 +1340,7 @@ BUFFER *mutt_buffer_init (BUFFER * b)
       return NULL;
   }
   else {
-    safe_free (b->data);
+    FREE(&b->data);
   }
   memset (b, 0, sizeof (BUFFER));
   return b;
@@ -1477,8 +1481,8 @@ void mutt_free_spam_list (SPAM_LIST ** list)
     p = *list;
     *list = (*list)->next;
     mutt_free_regexp (&p->rx);
-    safe_free (&p->template);
-    FREE (&p);
+    FREE(&p->template);
+    FREE(&p);
   }
 }
 

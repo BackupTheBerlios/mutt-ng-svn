@@ -20,6 +20,10 @@
 #include "mutt_crypt.h"
 #include "url.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <string.h>
 #include <ctype.h>
 #include <sys/stat.h>

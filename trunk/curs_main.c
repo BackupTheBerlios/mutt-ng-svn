@@ -39,6 +39,9 @@
 #include "nntp.h"
 #endif
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
 
 #include <ctype.h>
 #include <stdlib.h>

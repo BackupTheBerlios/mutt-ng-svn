@@ -20,6 +20,8 @@
 #include "nntp.h"
 #endif
 
+#include "lib/str.h"
+
 #include <dirent.h>
 #include <string.h>
 #include <sys/types.h>

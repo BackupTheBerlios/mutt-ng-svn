@@ -40,6 +40,9 @@
 /* for hexval */
 #include "mime.h"
 
+#include "lib/mem.h"
+#include "lib/str.h"
+
 /****************
  * Read the GNUPG keys.  For now we read the complete keyring by
  * calling gnupg in a special mode.

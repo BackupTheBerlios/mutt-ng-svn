@@ -18,6 +18,9 @@
 #include "mailbox.h"
 #include "mx.h"
 
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <sys/stat.h>
 #include <errno.h>
 

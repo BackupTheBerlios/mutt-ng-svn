@@ -21,6 +21,10 @@
 #include "pager.h"
 #include "mbyte.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <termios.h>
 #include <sys/types.h>
 #include <fcntl.h>

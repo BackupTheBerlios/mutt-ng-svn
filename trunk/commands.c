@@ -36,6 +36,10 @@
 #include "buffy.h"
 #endif
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <errno.h>
 #include <unistd.h>
 #include <stdlib.h>

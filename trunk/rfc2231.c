@@ -27,6 +27,8 @@
 #include "rfc2047.h"
 #include "rfc2231.h"
 
+#include "lib/mem.h"
+
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>

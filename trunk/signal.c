@@ -14,6 +14,8 @@
 #include "mutt.h"
 #include "mutt_curses.h"
 
+#include "lib/intl.h"
+
 #include <signal.h>
 #include <string.h>
 #include <sys/wait.h>

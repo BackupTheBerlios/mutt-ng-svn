@@ -30,6 +30,10 @@
 
 #include "mutt_idna.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #define terminate_string(a, b, c) do { if ((b) < (c)) a[(b)] = 0; else \
 	a[(c)] = 0; } while (0)
 

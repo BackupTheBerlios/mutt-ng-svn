@@ -27,6 +27,10 @@
 #endif
 #include "sidebar.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <stdlib.h>
 #include <dirent.h>
 #include <string.h>

@@ -26,6 +26,9 @@
 #include "imap.h"
 #endif
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+
 #include <string.h>
 #include <sys/stat.h>
 #include <dirent.h>

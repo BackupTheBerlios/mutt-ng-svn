@@ -6,8 +6,16 @@
  * It's licensed under the GNU General Public License,
  * please see the file GPL in the top level source directory.
  */
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif
 
 #include "mutt.h"
+
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <errno.h>
 #include <auth-client.h>
 #include <libesmtp.h>

@@ -21,6 +21,8 @@
 
 #include "mime.h"
 
+#include "lib/mem.h"
+
 #include <ctype.h>
 
 static struct mapping_t UrlMap[] = {

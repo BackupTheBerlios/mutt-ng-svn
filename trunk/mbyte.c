@@ -19,6 +19,8 @@
 #include "mbyte.h"
 #include "charset.h"
 
+#include "lib/intl.h"
+
 #include <errno.h>
 
 #include <ctype.h>

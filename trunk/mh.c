@@ -24,6 +24,10 @@
 #include "buffy.h"
 #include "sort.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <dirent.h>

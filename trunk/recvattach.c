@@ -24,6 +24,10 @@
 #include "copy.h"
 #include "mutt_crypt.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <ctype.h>
 #include <stdlib.h>
 #include <unistd.h>

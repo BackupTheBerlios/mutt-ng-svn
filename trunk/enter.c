@@ -18,6 +18,8 @@
 #include "keymap.h"
 #include "history.h"
 
+#include "lib/mem.h"
+
 #include <string.h>
 
 /* redraw flags for mutt_enter_string() */

@@ -30,6 +30,9 @@
 
 #include "lib.h"
 
+#include "lib/mem.h"
+#include "lib/str.h"
+
 extern short Umask;
 
 void mutt_nocurses_error (const char *fmt, ...)

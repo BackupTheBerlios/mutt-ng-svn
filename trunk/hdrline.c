@@ -18,6 +18,8 @@
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
 
+#include "lib/str.h"
+
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>

@@ -23,6 +23,10 @@
 #include "copy.h"
 #include "mutt_idna.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 /* some helper functions to verify that we are exclusively operating
  * on message/rfc822 attachments
  */

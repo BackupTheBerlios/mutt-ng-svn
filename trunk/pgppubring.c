@@ -26,6 +26,9 @@
 # include "config.h"
 #endif
 
+#include "lib/mem.h"
+#include "lib/str.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

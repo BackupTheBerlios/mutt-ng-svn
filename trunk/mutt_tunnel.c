@@ -16,6 +16,10 @@
 #include "mutt_socket.h"
 #include "mutt_tunnel.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <netinet/in.h>
 #include <sys/types.h>
 #include <sys/socket.h>

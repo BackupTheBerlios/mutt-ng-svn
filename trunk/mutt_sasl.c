@@ -18,6 +18,8 @@
 #include "mutt_sasl.h"
 #include "mutt_socket.h"
 
+#include "lib/mem.h"
+
 #ifdef USE_SASL2
 #include <errno.h>
 #include <netdb.h>

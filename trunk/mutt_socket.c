@@ -23,6 +23,10 @@
 
 #include "mutt_idna.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <unistd.h>
 #include <netinet/in.h>
 #include <netdb.h>

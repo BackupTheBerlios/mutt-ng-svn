@@ -20,6 +20,9 @@
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
 
+#include "lib/mem.h"
+#include "lib/str.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>

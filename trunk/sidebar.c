@@ -17,8 +17,13 @@
 #include "mutt_curses.h"
 #include "sidebar.h"
 #include "buffy.h"
-#include <libgen.h>
 #include "keymap.h"
+
+#include "lib/mem.h"
+#include "lib/str.h"
+#include "lib/intl.h"
+
+#include <libgen.h>
 #include <ctype.h>
 
 /*BUFFY *CurBuffy = 0;*/

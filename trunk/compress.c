@@ -15,6 +15,10 @@
 #include "mailbox.h"
 #include "mutt_curses.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <errno.h>
 #include <string.h>
 #include <unistd.h>

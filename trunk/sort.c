@@ -15,6 +15,8 @@
 #include "sort.h"
 #include "mutt_idna.h"
 
+#include "lib/intl.h"
+
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>

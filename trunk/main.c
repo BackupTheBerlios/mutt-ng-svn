@@ -27,6 +27,10 @@
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <string.h>
 #include <stdlib.h>
 #include <locale.h>
@@ -69,6 +73,7 @@ Copyright (C) 2000-2002 Edmund Grimley Evans <edmundo@rano.org>\n\n\
 Parts were written/modified by:\n\
 Andreas Krennmair <ak@synflood.at>\n\
 Nico Golde <nico@ngolde.de>\n\
+Rocco Rutte <pdmef@cs.tu-berlin.de>\n\
 \n\
 Lots of others not mentioned here contributed lots of code,\n\
 fixes, and suggestions.\n\

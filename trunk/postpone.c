@@ -25,6 +25,10 @@
 #endif
 #include "mutt_crypt.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <ctype.h>
 #include <unistd.h>
 #include <string.h>

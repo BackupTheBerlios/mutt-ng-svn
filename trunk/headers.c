@@ -15,6 +15,8 @@
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
 
+#include "lib/intl.h"
+
 #include <sys/stat.h>
 #include <string.h>
 #include <ctype.h>

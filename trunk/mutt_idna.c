@@ -15,6 +15,10 @@
 #include "charset.h"
 #include "mutt_idna.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 /* The low-level interface we use. */
 
 #ifndef HAVE_LIBIDN

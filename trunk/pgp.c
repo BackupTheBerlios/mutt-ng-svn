@@ -27,6 +27,10 @@
 #include "mime.h"
 #include "copy.h"
 
+#include "lib/mem.h"
+#include "lib/intl.h"
+#include "lib/str.h"
+
 #include <sys/wait.h>
 #include <string.h>
 #include <stdlib.h>
