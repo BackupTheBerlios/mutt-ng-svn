@@ -1662,7 +1662,7 @@ int ci_send_message (int flags, /* send mode */
    */
 
 #ifdef USE_IMAP
-  if ((flags & SENDBATCH) && fcc[0] && mx_is_imap (fcc))
+  if ((flags & SENDBATCH) && fcc[0] && mx_get_magic (fcc) == M_IMAP)
     fcc[0] = '\0';
 #endif
 

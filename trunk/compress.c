@@ -12,6 +12,7 @@
 #ifdef USE_COMPRESSED
 
 #include "mx.h"
+#include "mbox.h"
 #include "mutt_curses.h"
 
 #include "lib/mem.h"
@@ -474,6 +475,17 @@ int mutt_slow_close_compressed (CONTEXT * ctx)
   FREE (&ctx->compressinfo);
 
   return (0);
+}
+
+mx_t* compress_reg_mx (void) {
+  mx_t* fmt = safe_calloc (1, sizeof (mx_t));
+  fmt->type = M_COMPRESSED;
+  fmt->local = 1;
+  fmt->mx_is_magic = mbox_is_magic;
+  fmt->mx_check_empty = mbox_check_empty;
+  fmt->mx_access = access;
+  fmt->mx_open_mailbox = mutt_open_read_compressed;
+  return (fmt);
 }
 
 #endif /* USE_COMPRESSED */

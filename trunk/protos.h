@@ -220,7 +220,8 @@ void mutt_normalize_time (struct tm *);
 void mutt_paddstr (int, const char *);
 void mutt_parse_mime_message (CONTEXT * ctx, HEADER *);
 void mutt_parse_part (FILE *, BODY *);
-void mutt_perror (const char *);
+#define mutt_perror(a) _mutt_perror (a, __FILE__, __LINE__)
+void _mutt_perror (const char*, const char*,int);
 void mutt_prepare_envelope (ENVELOPE *, int);
 void mutt_unprepare_envelope (ENVELOPE *);
 void mutt_pretty_mailbox (char *);

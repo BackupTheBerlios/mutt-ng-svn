@@ -351,7 +351,7 @@ static int _mutt_pipe_message (HEADER * h, char *cmd,
     mutt_endwin (NULL);
 
     if ((thepid = mutt_create_filter (cmd, &fpout, NULL, NULL)) < 0) {
-      mutt_perror _("Can't create filter process");
+      mutt_perror (_("Can't create filter process"));
 
       return 1;
     }
@@ -382,7 +382,7 @@ static int _mutt_pipe_message (HEADER * h, char *cmd,
                              M_MESSAGEHOOK);
           mutt_endwin (NULL);
           if ((thepid = mutt_create_filter (cmd, &fpout, NULL, NULL)) < 0) {
-            mutt_perror _("Can't create filter process");
+            mutt_perror (_("Can't create filter process"));
 
             return 1;
           }
@@ -399,7 +399,7 @@ static int _mutt_pipe_message (HEADER * h, char *cmd,
     else {
       mutt_endwin (NULL);
       if ((thepid = mutt_create_filter (cmd, &fpout, NULL, NULL)) < 0) {
-        mutt_perror _("Can't create filter process");
+        mutt_perror (_("Can't create filter process"));
 
         return 1;
       }
@@ -741,7 +741,7 @@ int mutt_save_message (HEADER * h, int delete,
   mutt_message (_("Copying to %s..."), buf);
 
 #ifdef USE_IMAP
-  if (Context->magic == M_IMAP && !(decode || decrypt) && mx_is_imap (buf)) {
+  if (Context->magic == M_IMAP && !(decode || decrypt) && mx_get_magic (buf) == M_IMAP) {
     switch (imap_copy_messages (Context, h, buf, delete)) {
       /* success */
     case 0:
@@ -816,20 +816,20 @@ int mutt_update_list_file (char *filename, char *section, char *key,
   if ((ifp = safe_fopen (filename, "a")))
     fclose (ifp);
   if (_mutt_rename_file (filename, oldfile, 1)) {
-    mutt_perror _("Unable to create backup file");
+    mutt_perror (_("Unable to create backup file"));
 
     return (-1);
   }
   dprint (1, (debugfile, "Opening %s\n", oldfile));
   if (!(ifp = safe_fopen (oldfile, "r"))) {
-    mutt_perror _("Unable to open backup file for reading");
+    mutt_perror (_("Unable to open backup file for reading"));
 
     return (-1);
   }
   dprint (1, (debugfile, "Opening %s\n", filename));
   if (!(ofp = safe_fopen (filename, "w"))) {
     fclose (ifp);
-    mutt_perror _("Unable to open new file for writing");
+    mutt_perror (_("Unable to open new file for writing"));
 
     return (-1);
   }

@@ -270,7 +270,7 @@ static const char *folder_format_str (char *dest, size_t destlen, char op,
 
   case 'N':
 #ifdef USE_IMAP
-    if (mx_is_imap (folder->ff->desc)) {
+    if (mx_get_magic (folder->ff->desc) == M_IMAP) {
       if (!optional) {
         snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
         snprintf (dest, destlen, tmp, folder->ff->new);
@@ -595,19 +595,19 @@ static int examine_mailboxes (MUTTMENU * menu, struct browser_state *state)
     for (i = 0; i < Incoming->length; i++) {
       tmp = (BUFFY*) Incoming->data[i];
 #ifdef USE_IMAP
-      if (mx_is_imap (tmp->path)) {
+      if (mx_get_magic (tmp->path) == M_IMAP) {
         add_folder (menu, state, tmp->path, NULL, NULL, tmp->new);
         continue;
       }
 #endif
 #ifdef USE_POP
-      if (mx_is_pop (tmp->path)) {
+      if (mx_get_magic (tmp->path) == M_POP) {
         add_folder (menu, state, tmp->path, NULL, NULL, tmp->new);
         continue;
       }
 #endif
 #ifdef USE_NNTP
-      if (mx_is_nntp (tmp->path)) {
+      if (mx_get_magic (tmp->path) == M_NNTP) {
         add_folder (menu, state, tmp->path, NULL, NULL, tmp->new);
         continue;
       }
@@ -764,7 +764,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
   if (*f) {
     mutt_expand_path (f, flen);
 #ifdef USE_IMAP
-    if (mx_is_imap (f)) {
+    if (mx_get_magic (f) == M_IMAP) {
       init_state (&state, NULL);
       state.imap_browse = 1;
       imap_browse (f, &state);
@@ -809,7 +809,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
       strfcpy (LastDir, NONULL (Maildir), sizeof (LastDir));
 
 #ifdef USE_IMAP
-    if (!buffy && mx_is_imap (LastDir)) {
+    if (!buffy && mx_get_magic (LastDir) == M_IMAP) {
       init_state (&state, NULL);
       state.imap_browse = 1;
       imap_browse (LastDir, &state);
@@ -1133,7 +1133,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
         buffy = 0;
         mutt_expand_path (buf, sizeof (buf));
 #ifdef USE_IMAP
-        if (mx_is_imap (buf)) {
+        if (mx_get_magic (buf) == M_IMAP) {
           strfcpy (LastDir, buf, sizeof (LastDir));
           destroy_state (&state);
           init_state (&state, NULL);
@@ -1290,7 +1290,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
           goto bail;
       }
 #ifdef USE_IMAP
-      else if (mx_is_imap (LastDir)) {
+      else if (mx_get_magic (LastDir) == M_IMAP) {
         init_state (&state, NULL);
         state.imap_browse = 1;
         imap_browse (LastDir, &state);

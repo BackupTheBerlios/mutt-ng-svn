@@ -11,7 +11,7 @@
 #define _BROWSER_H 1
 
 #ifdef USE_NNTP
-#include "nntp.h"
+#include "nntp/nntp.h"
 #endif
 
 struct folder_file {

@@ -862,13 +862,13 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
 #endif
           mutt_expand_path (fname, sizeof (fname));
 #ifdef USE_IMAP
-        if (!mx_is_imap (fname))
+        if (mx_get_magic (fname) != M_IMAP)
 #endif
 #ifdef USE_POP
-          if (!mx_is_pop (fname))
+          if (mx_get_magic (fname) != M_POP)
 #endif
 #ifdef USE_NNTP
-            if (!mx_is_nntp (fname) && !option (OPTNEWS))
+            if (mx_get_magic (fname) != M_NNTP && !option (OPTNEWS))
 #endif
               /* check to make sure the file exists and is readable */
               if (access (fname, R_OK) == -1) {

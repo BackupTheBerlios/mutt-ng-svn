@@ -1375,7 +1375,7 @@ BODY *smime_sign_message (BODY * a)
   if ((thepid = smime_invoke_sign (&smimein, NULL, &smimeerr,
                                    -1, fileno (smimeout), -1,
                                    filetosign)) == -1) {
-    mutt_perror _("Can't open OpenSSL subprocess!");
+    mutt_perror (_("Can't open OpenSSL subprocess!"));
 
     fclose (smimeout);
     mutt_unlink (signedfile);

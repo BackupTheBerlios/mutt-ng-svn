@@ -112,7 +112,7 @@ int mutt_complete (char *s, size_t slen)
   else
     strfcpy (imap_path, s, sizeof (imap_path));
 
-  if (mx_is_imap (imap_path))
+  if (mx_get_magic (imap_path) == M_IMAP)
     return imap_complete (s, slen, imap_path);
 #endif
 

@@ -361,13 +361,13 @@ void mutt_endwin (const char *msg)
   }
 }
 
-void mutt_perror (const char *s)
+void _mutt_perror (const char *s, const char* filename, int line)
 {
   char *p = strerror (errno);
 
   dprint (1, (debugfile, "%s: %s (errno = %d)\n", s,
               p ? p : "unknown error", errno));
-  mutt_error ("%s: %s (errno = %d)", s, p ? p : _("unknown error"), errno);
+  mutt_error ("%s: %s (errno = %d) from %s:%i", s, p ? p : _("unknown error"), errno, filename, line);
 }
 
 int mutt_any_key_to_continue (const char *s)

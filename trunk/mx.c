@@ -27,15 +27,18 @@
 #endif
 
 #ifdef USE_IMAP
-#include "imap.h"
+#include "imap/imap.h"
+#include "imap/mx_imap.h"
 #endif
 
 #ifdef USE_POP
-#include "pop.h"
+#include "pop/pop.h"
+#include "pop/mx_pop.h"
 #endif
 
 #ifdef USE_NNTP
-#include "nntp.h"
+#include "nntp/nntp.h"
+#include "nntp/mx_nntp.h"
 #endif
 
 #ifdef BUFFY_SIZE
@@ -51,6 +54,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/list.h"
 
 #include <dirent.h>
 #include <fcntl.h>
@@ -65,6 +69,8 @@
 #include <utime.h>
 #endif
 
+static list2_t* MailboxFormats = NULL;
+#define MX_COMMAND(idx,cmd) ((mx_t*) MailboxFormats->data[idx])->cmd
 
 #define mutt_is_spool(s)  (safe_strcmp (Spoolfile, s) == 0)
 
@@ -142,6 +148,19 @@ static int undotlock_file (const char *path, int fd)
 }
 
 #endif /* USE_DOTLOCK */
+
+/* looks up index of type for path in MailboxFormats */
+static int mx_get_idx (const char* path) {
+  int i = 0, t = 0;
+
+  for (i = 0; i < MailboxFormats->length; i++) {
+    t = MX_COMMAND(i,mx_is_magic)(path);
+    fprintf (stderr, "          test %s for %i == %i\n", NONULL(path), i, t);
+    if (t >= 1)
+      return (t-1);     /* use type as index for array */
+  }
+  return (-1);
+}
 
 /* Args:
  *	excl		if excl != 0, request an exclusive lock
@@ -306,175 +325,17 @@ void mx_unlink_empty (const char *path)
   close (fd);
 }
 
-/* try to figure out what type of mailbox ``path'' is
- *
- * return values:
- *	M_*	mailbox type
- *	0	not a mailbox
- *	-1	error
- */
+/* try to figure out what type of mailbox ``path'' is */
+int mx_get_magic (const char *path) {
+  int i = 0;
 
-#ifdef USE_IMAP
-int mx_is_imap (const char *p)
-{
-  url_scheme_t scheme;
-
-  if (!p)
-    return 0;
-
-  if (*p == '{')
-    return 1;
-
-  scheme = url_check_scheme (p);
-  if (scheme == U_IMAP || scheme == U_IMAPS)
-    return 1;
-
-  return 0;
-}
-#endif
-
-#ifdef USE_POP
-int mx_is_pop (const char *p)
-{
-  url_scheme_t scheme;
-
-  if (!p)
-    return 0;
-
-  scheme = url_check_scheme (p);
-  if (scheme == U_POP || scheme == U_POPS)
-    return 1;
-
-  return 0;
-}
-#endif
-
-#ifdef USE_NNTP
-int mx_is_nntp (const char *p)
-{
-  url_scheme_t scheme;
-
-  if (!p)
-    return 0;
-
-  scheme = url_check_scheme (p);
-  if (scheme == U_NNTP || scheme == U_NNTPS)
-    return 1;
-
-  return 0;
-}
-#endif
-
-int mx_get_magic (const char *path)
-{
-  struct stat st;
-  int magic = 0;
-  char tmp[_POSIX_PATH_MAX];
-  FILE *f;
-
-#ifdef USE_IMAP
-  if (mx_is_imap (path))
-    return M_IMAP;
-#endif /* USE_IMAP */
-
-#ifdef USE_POP
-  if (mx_is_pop (path))
-    return M_POP;
-#endif /* USE_POP */
-
-#ifdef USE_NNTP
-  if (mx_is_nntp (path))
-    return M_NNTP;
-#endif /* USE_NNTP */
-
-  if (stat (path, &st) == -1) {
-    dprint (1,
-            (debugfile, "mx_get_magic(): unable to stat %s: %s (errno %d).\n",
-             path, strerror (errno), errno));
+  if (safe_strlen (path) == 0)
     return (-1);
+  if ((i = mx_get_idx (path)) >= 0) {
+    fprintf (stderr, "%s is %i\n", NONULL(path), i);
+    return (MX_COMMAND(i,type));
   }
-
-  if (S_ISDIR (st.st_mode)) {
-    /* check for maildir-style mailbox */
-
-    snprintf (tmp, sizeof (tmp), "%s/cur", path);
-    if (stat (tmp, &st) == 0 && S_ISDIR (st.st_mode))
-      return (M_MAILDIR);
-
-    /* check for mh-style mailbox */
-
-    snprintf (tmp, sizeof (tmp), "%s/.mh_sequences", path);
-    if (access (tmp, F_OK) == 0)
-      return (M_MH);
-
-    snprintf (tmp, sizeof (tmp), "%s/.xmhcache", path);
-    if (access (tmp, F_OK) == 0)
-      return (M_MH);
-
-    snprintf (tmp, sizeof (tmp), "%s/.mew_cache", path);
-    if (access (tmp, F_OK) == 0)
-      return (M_MH);
-
-    snprintf (tmp, sizeof (tmp), "%s/.mew-cache", path);
-    if (access (tmp, F_OK) == 0)
-      return (M_MH);
-
-    snprintf (tmp, sizeof (tmp), "%s/.sylpheed_cache", path);
-    if (access (tmp, F_OK) == 0)
-      return (M_MH);
-
-    /* 
-     * ok, this isn't an mh folder, but mh mode can be used to read
-     * Usenet news from the spool. ;-) 
-     */
-
-    snprintf (tmp, sizeof (tmp), "%s/.overview", path);
-    if (access (tmp, F_OK) == 0)
-      return (M_MH);
-
-  }
-  else if (st.st_size == 0) {
-    /* hard to tell what zero-length files are, so assume the default magic */
-    if (DefaultMagic == M_MBOX || DefaultMagic == M_MMDF)
-      return (DefaultMagic);
-    else
-      return (M_MBOX);
-  }
-  else if ((f = fopen (path, "r")) != NULL) {
-#ifndef BUFFY_SIZE
-    struct utimbuf times;
-#endif
-
-    fgets (tmp, sizeof (tmp), f);
-    if (safe_strncmp ("From ", tmp, 5) == 0)
-      magic = M_MBOX;
-    else if (safe_strcmp (MMDF_SEP, tmp) == 0)
-      magic = M_MMDF;
-    safe_fclose (&f);
-#ifndef BUFFY_SIZE
-    /* need to restore the times here, the file was not really accessed,
-     * only the type was accessed.  This is important, because detection
-     * of "new mail" depends on those times set correctly.
-     */
-    times.actime = st.st_atime;
-    times.modtime = st.st_mtime;
-    utime (path, &times);
-#endif
-  }
-  else {
-    dprint (1,
-            (debugfile,
-             "mx_get_magic(): unable to open file %s for reading.\n", path));
-    mutt_perror (path);
-    return (-1);
-  }
-
-#ifdef USE_COMPRESSED
-  if (magic == 0 && mutt_can_read_compressed (path))
-    return M_COMPRESSED;
-#endif
-
-  return (magic);
+  return (-1);
 }
 
 /*
@@ -501,12 +362,11 @@ int mx_set_magic (const char *s)
  *   we use the normal access() flags. */
 int mx_access (const char *path, int flags)
 {
-#ifdef USE_IMAP
-  if (mx_is_imap (path))
-    return imap_access (path, flags);
-#endif
+  int i = 0;
 
-  return access (path, flags);
+  if ((i = mx_get_idx (path)) >= 0 && MX_COMMAND(i,mx_access))
+    return (MX_COMMAND(i,mx_access)(path,flags));
+  return (0);
 }
 
 static int mx_open_mailbox_append (CONTEXT * ctx, int flags)
@@ -524,7 +384,7 @@ static int mx_open_mailbox_append (CONTEXT * ctx, int flags)
 
 #ifdef USE_IMAP
 
-  if (mx_is_imap (ctx->path))
+  if (mx_get_magic (ctx->path) == M_IMAP)
     return imap_open_mailbox_append (ctx);
 
 #endif
@@ -665,10 +525,8 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT * pctx)
 
   ctx->magic = mx_get_magic (path);
 
-#ifdef USE_COMPRESSED
   if (ctx->magic == M_COMPRESSED)
     mutt_open_read_compressed (ctx);
-#endif
 
   if (ctx->magic == 0)
     mutt_error (_("%s is not a mailbox."), path);
@@ -693,42 +551,8 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT * pctx)
   if (!ctx->quiet)
     mutt_message (_("Reading %s..."), ctx->path);
 
-  switch (ctx->magic) {
-  case M_MH:
-    rc = mh_read_dir (ctx, NULL);
-    break;
-
-  case M_MAILDIR:
-    rc = maildir_read_dir (ctx);
-    break;
-
-  case M_MMDF:
-  case M_MBOX:
-    rc = mbox_open_mailbox (ctx);
-    break;
-
-#ifdef USE_IMAP
-  case M_IMAP:
-    rc = imap_open_mailbox (ctx);
-    break;
-#endif /* USE_IMAP */
-
-#ifdef USE_POP
-  case M_POP:
-    rc = pop_open_mailbox (ctx);
-    break;
-#endif /* USE_POP */
-
-#ifdef USE_NNTP
-  case M_NNTP:
-    rc = nntp_open_mailbox (ctx);
-    break;
-#endif /* USE_NNTP */
-
-  default:
-    rc = -1;
-    break;
-  }
+  if ((rc = mx_get_idx (ctx->path)) >= 0)
+    rc = MX_COMMAND(rc,mx_open_mailbox)(ctx);
 
   if (rc == 0) {
     if ((flags & M_NOSORT) == 0) {
@@ -1000,7 +824,7 @@ int mx_close_mailbox (CONTEXT * ctx, int *index_hint)
     /* try to use server-side copy first */
     i = 1;
 
-    if (ctx->magic == M_IMAP && mx_is_imap (mbox)) {
+    if (ctx->magic == M_IMAP && mx_get_magic (mbox) == M_IMAP) {
       /* tag messages for moving, and clear old tags, if any */
       for (i = 0; i < ctx->msgcount; i++)
         if (ctx->hdrs[i]->read && !ctx->hdrs[i]->deleted
@@ -1576,7 +1400,7 @@ int mx_commit_message (MESSAGE * msg, CONTEXT * ctx)
 
   if (r == 0 && (ctx->magic == M_MBOX || ctx->magic == M_MMDF)
       && (fflush (msg->fp) == EOF || fsync (fileno (msg->fp)) == -1)) {
-    mutt_perror _("Can't write message");
+    mutt_perror (_("Can't write message"));
 
     r = -1;
   }
@@ -1713,17 +1537,41 @@ void mx_update_context (CONTEXT * ctx, int new_messages)
  */
 int mx_check_empty (const char *path)
 {
-  switch (mx_get_magic (path)) {
-  case M_MBOX:
-  case M_MMDF:
-    return mbox_check_empty (path);
-  case M_MH:
-    return mh_check_empty (path);
-  case M_MAILDIR:
-    return maildir_check_empty (path);
-  default:
-    errno = EINVAL;
-    return -1;
+  int i = 0;
+  if ((i = mx_get_idx (path)) >= 0 && MX_COMMAND(i,mx_check_empty))
+    return (MX_COMMAND(i,mx_check_empty)(path));
+  errno = EINVAL;
+  return (-1);
+}
+
+void mx_init (void) {
+#ifdef DEBUG
+  int i = 0;
+#endif
+  list_push_back (&MailboxFormats, (void*) mbox_reg_mx ());
+  list_push_back (&MailboxFormats, (void*) mmdf_reg_mx ());
+  list_push_back (&MailboxFormats, (void*) mh_reg_mx ());
+  list_push_back (&MailboxFormats, (void*) maildir_reg_mx ());
+#ifdef USE_IMAP
+  list_push_back (&MailboxFormats, (void*) imap_reg_mx ());
+#endif
+#ifdef USE_POP
+  list_push_back (&MailboxFormats, (void*) pop_reg_mx ());
+#endif
+#ifdef USE_NNTP
+  list_push_back (&MailboxFormats, (void*) nntp_reg_mx ());
+#endif
+#ifdef USE_COMPRESSED
+  list_push_back (&MailboxFormats, (void*) compress_reg_mx ());
+#endif
+#ifdef DEBUG
+  /* check module registration for completeness with debug versions */
+#define EXITWITHERR(m) do { fprintf(stderr, "error: incomplete mx module: %s is missing for type %i\n",m,i);exit(1); } while (0)
+  for (i = 0; i < MailboxFormats->length; i++) {
+    if (MX_COMMAND(i,type) < 1)         EXITWITHERR("type");
+    if (!MX_COMMAND(i,mx_is_magic))     EXITWITHERR("mx_is_magic");
+    if (!MX_COMMAND(i,mx_open_mailbox)) EXITWITHERR("mx_open_mailbox");
   }
-  /* not reached */
+#undef EXITWITHERR
+#endif /* DEBUG */
 }

@@ -1626,7 +1626,7 @@ void autoview_handler (BODY * a, STATE * s)
     }
 
     if (thepid < 0) {
-      mutt_perror _("Can't create filter");
+      mutt_perror (_("Can't create filter"));
 
       if (s->flags & M_DISPLAY) {
         state_mark_attach (s);

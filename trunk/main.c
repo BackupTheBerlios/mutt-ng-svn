@@ -47,7 +47,7 @@
 #endif
 
 #ifdef USE_NNTP
-#include <nntp.h>
+#include "nntp/nntp.h"
 #endif
 
 static const char *ReachingUs = N_("\
@@ -696,10 +696,11 @@ int main (int argc, char **argv)
     start_curses ();
 
   /* set defaults and read init files */
+  mx_init ();
   mutt_init (flags & M_NOSYSRC, commands);
   mutt_free_list (&commands);
 
-  /* Initialize crypto backends.  */
+  /* Initialize crypto */
   crypt_init ();
 
   if (queries)
@@ -743,7 +744,7 @@ int main (int argc, char **argv)
     mutt_expand_path (fpath, sizeof (fpath));
 #ifdef USE_IMAP
     /* we're not connected yet - skip mail folder creation */
-    if (!mx_is_imap (fpath))
+    if (mx_get_magic (fpath) != M_IMAP)
 #endif
       if (stat (fpath, &sb) == -1 && errno == ENOENT) {
         snprintf (msg, sizeof (msg), _("%s does not exist. Create it?"),

@@ -912,7 +912,7 @@ void maildir_delayed_parsing (CONTEXT * ctx, struct maildir *md)
  *	subdir [IN]	NULL for MH mailboxes, otherwise the subdir of the
  *			maildir mailbox to read from
  */
-int mh_read_dir (CONTEXT * ctx, const char *subdir)
+static int _mh_read_dir (CONTEXT * ctx, const char *subdir)
 {
   struct maildir *md;
   struct mh_sequences mhs;
@@ -947,13 +947,17 @@ int mh_read_dir (CONTEXT * ctx, const char *subdir)
   return 0;
 }
 
+int mh_read_dir (CONTEXT* ctx) {
+  return (_mh_read_dir (ctx, NULL));
+}
+
 /* read a maildir style mailbox */
 int maildir_read_dir (CONTEXT * ctx)
 {
   /* maildir looks sort of like MH, except that there are two subdirectories
    * of the main folder path from which to read messages
    */
-  if (mh_read_dir (ctx, "new") == -1 || mh_read_dir (ctx, "cur") == -1)
+  if (_mh_read_dir (ctx, "new") == -1 || _mh_read_dir (ctx, "cur") == -1)
     return (-1);
 
   return 0;
@@ -1921,4 +1925,84 @@ int mh_check_empty (const char *path)
   closedir (dp);
 
   return r;
+}
+
+int mh_is_magic (const char* path) {
+  struct stat st;
+  char tmp[_POSIX_PATH_MAX];
+
+  if (stat (path, &st) == -1)
+    return (-1);
+
+  if (S_ISDIR (st.st_mode)) {
+    snprintf (tmp, sizeof (tmp), "%s/.mh_sequences", path);
+    if (access (tmp, F_OK) == 0)
+      return (M_MH);
+
+    snprintf (tmp, sizeof (tmp), "%s/.xmhcache", path);
+    if (access (tmp, F_OK) == 0)
+      return (M_MH);
+
+    snprintf (tmp, sizeof (tmp), "%s/.mew_cache", path);
+    if (access (tmp, F_OK) == 0)
+      return (M_MH);
+
+    snprintf (tmp, sizeof (tmp), "%s/.mew-cache", path);
+    if (access (tmp, F_OK) == 0)
+      return (M_MH);
+
+    snprintf (tmp, sizeof (tmp), "%s/.sylpheed_cache", path);
+    if (access (tmp, F_OK) == 0)
+      return (M_MH);
+
+    /* 
+     * ok, this isn't an mh folder, but mh mode can be used to read
+     * Usenet news from the spool. ;-) 
+     */
+
+    snprintf (tmp, sizeof (tmp), "%s/.overview", path);
+    if (access (tmp, F_OK) == 0)
+      return (M_MH);
+  }
+  return (-1);
+}
+
+int maildir_is_magic (const char* path) {
+  struct stat st;
+  char tmp[_POSIX_PATH_MAX];
+
+  if (stat (path, &st) == -1)
+    return (0);
+  if (S_ISDIR (st.st_mode)) {
+    snprintf (tmp, sizeof (tmp), "%s/cur", path);
+    if (stat (tmp, &st) == 0 && S_ISDIR (st.st_mode))
+      return (M_MAILDIR);
+  }
+  return (-1);
+}
+
+/* routines common to maildir and mh */
+static mx_t* reg_mx (void) {
+  mx_t* fmt = safe_calloc (1, sizeof (mx_t));
+  fmt->local = 1;
+  fmt->mx_access = access;
+  return (fmt);
+}
+
+mx_t* mh_reg_mx (void) {
+  mx_t* fmt = reg_mx ();
+  fmt->type = M_MH;
+  fmt->mx_check_empty = mh_check_empty;
+  fmt->mx_is_magic = mh_is_magic;
+  fmt->mx_open_mailbox = mh_read_dir;
+  return (fmt);
+}
+
+mx_t* maildir_reg_mx (void) {
+  mx_t* fmt = reg_mx ();
+  fmt->type = M_MAILDIR;
+  fmt->mx_check_empty = maildir_check_empty;
+  fmt->mx_is_magic = maildir_is_magic;
+  fmt->mx_open_mailbox = maildir_read_dir;
+  return (fmt);
 }

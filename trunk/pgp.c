@@ -921,7 +921,7 @@ BODY *pgp_sign_message (BODY * a)
 
   if ((thepid = pgp_invoke_sign (&pgpin, &pgpout, &pgperr,
                                  -1, -1, -1, signedfile)) == -1) {
-    mutt_perror _("Can't open PGP subprocess!");
+    mutt_perror (_("Can't open PGP subprocess!"));
 
     fclose (fp);
     unlink (sigfile);
@@ -1341,7 +1341,7 @@ BODY *pgp_traditional_encryptsign (BODY * a, int flags, char *keylist)
   if ((thepid = pgp_invoke_traditional (&pgpin, NULL, NULL,
                                         -1, fileno (pgpout), fileno (pgperr),
                                         pgpinfile, keylist, flags)) == -1) {
-    mutt_perror _("Can't invoke PGP");
+    mutt_perror (_("Can't invoke PGP"));
 
     fclose (pgpout);
     fclose (pgperr);

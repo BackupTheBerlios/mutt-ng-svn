@@ -363,7 +363,7 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
       {
 #ifdef USE_IMAP
         /* if folder = {host} or imap[s]://host/: don't append slash */
-        if (mx_is_imap (NONULL (Maildir)) &&
+        if (mx_get_magic (NONULL (Maildir)) == M_IMAP &&
             (Maildir[safe_strlen (Maildir) - 1] == '}' ||
              Maildir[safe_strlen (Maildir) - 1] == '/'))
           strfcpy (p, NONULL (Maildir), sizeof (p));
@@ -460,7 +460,7 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 #ifdef USE_IMAP
   /* Rewrite IMAP path in canonical form - aids in string comparisons of
    * folders. May possibly fail, in which case s should be the same. */
-  if (mx_is_imap (s))
+  if (mx_get_magic (s) == M_IMAP)
     imap_expand_path (s, slen);
 #endif
 

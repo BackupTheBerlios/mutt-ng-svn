@@ -180,7 +180,7 @@ void imap_pretty_mailbox (char *path)
 
   tlen = safe_strlen (target.mbox);
   /* check whether we can do '=' substitution */
-  if (mx_is_imap (Maildir) && !imap_parse_path (Maildir, &home)) {
+  if (mx_get_magic (Maildir) == M_IMAP && !imap_parse_path (Maildir, &home)) {
     hlen = safe_strlen (home.mbox);
     if (tlen && mutt_account_match (&home.account, &target.account) &&
         !safe_strncmp (home.mbox, target.mbox, hlen)) {

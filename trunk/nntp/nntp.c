@@ -17,6 +17,7 @@
 #include "mutt_curses.h"
 #include "sort.h"
 #include "mx.h"
+#include "mx_nntp.h"
 #include "mime.h"
 #include "rfc1524.h"
 #include "rfc2047.h"

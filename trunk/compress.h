@@ -6,6 +6,10 @@
  * It's licensed under the GNU General Public License,
  * please see the file GPL in the top level source directory.
  */
+#ifndef _COMPRESS_H
+#define _COMPRESS_H
+
+#include "mx.h"
 
 int mutt_can_read_compressed (const char *);
 int mutt_can_append_compressed (const char *);
@@ -16,3 +20,7 @@ int mutt_sync_compressed (CONTEXT *);
 int mutt_test_compress_command (const char *);
 int mutt_check_mailbox_compressed (CONTEXT *);
 void mutt_fast_close_compressed (CONTEXT *);
+
+mx_t* compress_reg_mx (void);
+
+#endif /* _COMPRESS_H */

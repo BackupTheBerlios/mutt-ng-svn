@@ -322,17 +322,17 @@ int mutt_buffy_check (int force)
   for (i = 0; i < Incoming->length; i++) {
     tmp = (BUFFY*) Incoming->data[i];
 #ifdef USE_IMAP
-    if (mx_is_imap (tmp->path))
+    if (mx_get_magic (tmp->path) == M_IMAP)
       tmp->magic = M_IMAP;
     else
 #endif
 #ifdef USE_POP
-    if (mx_is_pop (tmp->path))
+    if (mx_get_magic (tmp->path) == M_IMAP)
       tmp->magic = M_POP;
     else
 #endif
 #ifdef USE_NNTP
-    if ((tmp->magic == M_NNTP) || mx_is_nntp (tmp->path))
+    if (mx_get_magic (tmp->path) == M_NNTP)
       tmp->magic = M_NNTP;
     else
 #endif

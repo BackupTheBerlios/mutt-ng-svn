@@ -66,7 +66,7 @@ int mutt_get_tmp_attachment (BODY * a)
       mutt_stamp_attachment (a);
   }
   else
-    mutt_perror (fpin ? tempfile : a->filename);
+    mutt_perror(fpin ? tempfile : a->filename);
 
   if (fpin)
     fclose (fpin);
@@ -128,7 +128,7 @@ int mutt_compose_attachment (BODY * a)
           char tempfile[_POSIX_PATH_MAX];
 
           if ((fp = safe_fopen (a->filename, "r")) == NULL) {
-            mutt_perror _("Failure to open file to parse headers.");
+            mutt_perror (_("Failure to open file to parse headers."));
 
             goto bailout;
           }
@@ -156,7 +156,7 @@ int mutt_compose_attachment (BODY * a)
             fseek (fp, b->offset, 0);
             mutt_mktemp (tempfile);
             if ((tfp = safe_fopen (tempfile, "w")) == NULL) {
-              mutt_perror _("Failure to open file to strip headers.");
+              mutt_perror (_("Failure to open file to strip headers."));
 
               goto bailout;
             }
@@ -165,7 +165,7 @@ int mutt_compose_attachment (BODY * a)
             fclose (tfp);
             mutt_unlink (a->filename);
             if (mutt_rename_file (tempfile, a->filename) != 0) {
-              mutt_perror _("Failure to rename file.");
+              mutt_perror (_("Failure to rename file."));
 
               goto bailout;
             }
@@ -623,7 +623,7 @@ int mutt_pipe_attachment (FILE * fp, BODY * b, const char *path,
       thepid = mutt_create_filter (path, &s.fpout, NULL, NULL);
 
     if (thepid < 0) {
-      mutt_perror _("Can't create filter");
+      mutt_perror (_("Can't create filter"));
 
       goto bail;
     }
@@ -652,7 +652,7 @@ int mutt_pipe_attachment (FILE * fp, BODY * b, const char *path,
       thepid = mutt_create_filter (path, &ofp, NULL, NULL);
 
     if (thepid < 0) {
-      mutt_perror _("Can't create filter");
+      mutt_perror (_("Can't create filter"));
 
       safe_fclose (&ifp);
       goto bail;
@@ -930,7 +930,7 @@ int mutt_print_attachment (FILE * fp, BODY * a)
       }
 
       if ((thepid = mutt_create_filter (command, &fpout, NULL, NULL)) < 0) {
-        mutt_perror _("Can't create filter");
+        mutt_perror (_("Can't create filter"));
 
         rfc1524_free_entry (&entry);
         safe_fclose (&ifp);
@@ -985,7 +985,7 @@ int mutt_print_attachment (FILE * fp, BODY * a)
       mutt_endwin (NULL);
       if ((thepid =
            mutt_create_filter (NONULL (PrintCmd), &fpout, NULL, NULL)) < 0) {
-        mutt_perror _("Can't create filter");
+        mutt_perror (_("Can't create filter"));
 
         goto bail0;
       }

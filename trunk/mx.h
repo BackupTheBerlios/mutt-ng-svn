@@ -17,7 +17,10 @@
 #ifndef _MX_H
 #define _MX_H
 
-/* supported mailbox formats */
+/*
+ * supported mailbox formats
+ * in mx_init() the registration order must be exactly as given here!!!1!
+ */
 enum {
   M_MBOX = 1,
   M_MMDF,
@@ -36,6 +39,24 @@ enum {
     , M_COMPRESSED
 #endif
 };
+
+typedef struct {
+  /* folder magic */
+  int type;
+  /* may we stat() it? */
+  unsigned int local : 1;
+  /* tests if given path is of its magic */
+  int (*mx_is_magic) (const char*);
+  /* tests if folder is empty */
+  int (*mx_check_empty) (const char*);
+  /* test for access */
+  int (*mx_access) (const char*, int);
+  /* read mailbox into ctx structure */
+  int (*mx_open_mailbox) (CONTEXT*);
+} mx_t;
+
+/* called from main: init all folder types */
+void mx_init (void);
 
 /* flags for mx_open_mailbox() */
 #define M_NOSORT	(1<<0)  /* do not sort the mailbox after opening it */
@@ -88,16 +109,6 @@ int mx_close_message (MESSAGE **);
 int mx_get_magic (const char *);
 int mx_set_magic (const char *);
 int mx_check_mailbox (CONTEXT *, int *, int);
-
-#ifdef USE_IMAP
-int mx_is_imap (const char *);
-#endif
-#ifdef USE_POP
-int mx_is_pop (const char *);
-#endif
-#ifdef USE_NNTP
-int mx_is_nntp (const char *);
-#endif
 
 int mx_access (const char *, int);
 int mx_check_empty (const char *);

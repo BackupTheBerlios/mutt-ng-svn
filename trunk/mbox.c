@@ -1154,3 +1154,71 @@ int mbox_check_empty (const char *path)
 
   return ((st.st_size == 0));
 }
+
+int mbox_is_magic (const char* path) {
+  struct stat st;
+  int magic = 0;
+  FILE* f;
+  char tmp[_POSIX_PATH_MAX];
+
+  if (stat (path, &st) == -1)
+    return (-1);
+
+  if (st.st_size == 0) {
+    /* hard to tell what zero-length files are, so assume the default magic */
+    if (DefaultMagic == M_MBOX || DefaultMagic == M_MMDF)
+      return (DefaultMagic);
+    else
+      return (M_MBOX);
+  }
+  else if ((f = fopen (path, "r")) != NULL) {
+#ifndef BUFFY_SIZE
+    struct utimbuf times;
+#endif
+    fgets (tmp, sizeof (tmp), f);
+    if (safe_strncmp ("From ", tmp, 5) == 0)
+      magic = M_MBOX;
+    else if (safe_strcmp (MMDF_SEP, tmp) == 0)
+      magic = M_MMDF;
+    safe_fclose (&f);
+#ifndef BUFFY_SIZE
+    /* need to restore the times here, the file was not really accessed,
+     * only the type was accessed.  This is important, because detection
+     * of "new mail" depends on those times set correctly.
+     */
+    times.actime = st.st_atime;
+    times.modtime = st.st_mtime;
+    utime (path, &times);
+#endif
+  } else {
+    mutt_perror (path);
+    return (-1);         /* fopen failed */
+  }
+
+#ifdef USE_COMPRESSED
+  if (magic == 0 && mutt_can_read_compressed (path))
+    return (M_COMPRESSED);
+#endif
+  return (magic);
+}
+
+static mx_t* reg_mx (void) {
+  mx_t* fmt = safe_calloc (1, sizeof (mx_t));
+  fmt->local = 1;
+  fmt->mx_check_empty = mbox_check_empty;
+  fmt->mx_is_magic = mbox_is_magic;
+  fmt->mx_access = access;
+  fmt->mx_open_mailbox = mbox_open_mailbox;
+  return (fmt);
+}
+
+mx_t* mbox_reg_mx (void) {
+  mx_t* fmt = reg_mx ();
+  fmt->type = M_MBOX;
+  return (fmt);
+}
+mx_t* mmdf_reg_mx (void) {
+  mx_t* fmt = reg_mx ();
+  fmt->type = M_MMDF;
+  return (fmt);
+}
