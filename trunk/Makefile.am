@@ -2,7 +2,7 @@
 ## Use aclocal -I m4; automake --foreign
 
 AUTOMAKE_OPTIONS = foreign
-EXTRA_PROGRAMS = mutt_dotlock pgpring makedoc
+EXTRA_PROGRAMS = muttng_dotlock pgpring makedoc
 
 if BUILD_IMAP
 IMAP_SUBDIR = imap
@@ -11,7 +11,7 @@ endif
 
 SUBDIRS = m4 po intl doc contrib $(IMAP_SUBDIR)
 
-bin_SCRIPTS = muttbug flea
+bin_SCRIPTS = muttngbug fleang
 
 BUILT_SOURCES = keymap_defs.h patchlist.c
 
@@ -78,13 +78,13 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	_regex.h OPS.MIX README.SECURITY remailer.c remailer.h browser.h \
 	mbyte.h	lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h Muttngrc.head Muttngrc \
 	makedoc.c stamp-doc-rc README.SSL smime.h\
-	muttbug pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh	\
+	muttngbug pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh	\
 	ChangeLog.old mkchangelog.sh cvslog2changelog.pl mutt_idna.h \
 	snprintf.c regex.c mutt_libesmtp.h
 
-mutt_dotlock_SOURCES = mutt_dotlock.c
-mutt_dotlock_LDADD = @LIBOBJS@
-mutt_dotlock_DEPENDENCIES = @LIBOBJS@
+muttng_dotlock_SOURCES = mutt_dotlock.c
+muttng_dotlock_LDADD = @LIBOBJS@
+muttng_dotlock_DEPENDENCIES = @LIBOBJS@
 
 pgpring_SOURCES = pgppubring.c pgplib.c lib.c extlib.c sha1.c md5c.c pgppacket.c ascii.c
 pgpring_LDADD = @LIBOBJS@ $(INTLLIBS) 
@@ -102,9 +102,9 @@ LDADD = @LIBOBJS@ @INTLLIBS@
 
 OPS=@OPS@
 
-flea:	muttbug.sh
-	cp muttbug.sh flea
-	chmod +x flea
+fleang:	muttbug.sh
+	cp muttbug.sh fleang
+	chmod +x fleang
 
 smime_keys: $(srcdir)/smime_keys.pl
 	cp $(srcdir)/smime_keys.pl smime_keys
@@ -127,14 +127,14 @@ patchlist.c: $(srcdir)/PATCHES $(srcdir)/patchlist.sh
 	$(srcdir)/patchlist.sh < $(srcdir)/PATCHES > patchlist.c
 
 install-exec-local:
-	if test -f $(DESTDIR)$(bindir)/mutt.dotlock && test -f $(DESTDIR)$(bindir)/mutt_dotlock ; then	\
+	if test -f $(DESTDIR)$(bindir)/mutt.dotlock && test -f $(DESTDIR)$(bindir)/muttng_dotlock ; then	\
 		rm -f $(DESTDIR)$(bindir)/mutt.dotlock ;		\
-		ln -sf $(DESTDIR)$(bindir)/mutt_dotlock $(DESTDIR)$(bindir)/mutt.dotlock ; \
+		ln -sf $(DESTDIR)$(bindir)/muttng_dotlock $(DESTDIR)$(bindir)/mutt.dotlock ; \
 	fi
-	if test -f $(DESTDIR)$(bindir)/mutt_dotlock && test x@DOTLOCK_GROUP@ != x ; then \
-		chgrp @DOTLOCK_GROUP@ $(DESTDIR)$(bindir)/mutt_dotlock && \
-		chmod @DOTLOCK_PERMISSION@ $(DESTDIR)$(bindir)/mutt_dotlock || \
-		{ echo "Can't fix mutt_dotlock's permissions!" >&2 ; exit 1 ; } \
+	if test -f $(DESTDIR)$(bindir)/muttng_dotlock && test x@DOTLOCK_GROUP@ != x ; then \
+		chgrp @DOTLOCK_GROUP@ $(DESTDIR)$(bindir)/muttng_dotlock && \
+		chmod @DOTLOCK_PERMISSION@ $(DESTDIR)$(bindir)/muttng_dotlock || \
+		{ echo "Can't fix muttng_dotlock's permissions!" >&2 ; exit 1 ; } \
 	fi
 
 install-data-local: Muttngrc
