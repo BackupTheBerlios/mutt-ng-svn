@@ -18,8 +18,8 @@
 #include "mime.h"
 #include "mapping.h"
 #include "sort.h"
-#ifdef USE_IMAP
 #include "mx.h"
+#ifdef USE_IMAP
 #include "imap.h"
 #endif
 #include "mutt_crypt.h"
