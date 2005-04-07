@@ -550,8 +550,7 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT * pctx)
   if (!ctx->quiet)
     mutt_message (_("Reading %s..."), ctx->path);
 
-  if ((rc = mx_get_idx (ctx->path)) >= 0)
-    rc = MX_COMMAND(rc,mx_open_mailbox)(ctx);
+  rc = MX_COMMAND(ctx->magic-1,mx_open_mailbox)(ctx);
 
   if (rc == 0) {
     if ((flags & M_NOSORT) == 0) {

@@ -1972,7 +1972,7 @@ int maildir_is_magic (const char* path) {
   char tmp[_POSIX_PATH_MAX];
 
   if (stat (path, &st) == -1)
-    return (0);
+    return (-1);
   if (S_ISDIR (st.st_mode)) {
     snprintf (tmp, sizeof (tmp), "%s/cur", path);
     if (stat (tmp, &st) == 0 && S_ISDIR (st.st_mode))

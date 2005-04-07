@@ -1161,7 +1161,7 @@ int mbox_is_magic (const char* path) {
   FILE* f;
   char tmp[_POSIX_PATH_MAX];
 
-  if (stat (path, &st) == -1)
+  if (stat (path, &st) == -1 || S_ISDIR(st.st_mode))
     return (-1);
 
   if (st.st_size == 0) {
