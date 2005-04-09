@@ -40,6 +40,28 @@ enum {
 #endif
 };
 
+enum {
+  ACL_LOOKUP = 0,
+  ACL_READ,
+  ACL_SEEN,
+  ACL_WRITE,
+  ACL_INSERT,
+  ACL_POST,
+  ACL_CREATE,
+  ACL_DELETE,
+  ACL_ADMIN,
+
+  RIGHTSMAX
+};
+
+/* ugly hack to define macro once (for pager+index) */
+#define CHECK_MX_ACL(c,f,s) if(!mx_acl_check(c,f)) \
+                     {\
+                        mutt_flushinp (); \
+                        mutt_error(_("%s not permitted by ACL."), s); \
+                        break; \
+                     }
+
 typedef struct {
   /* folder magic */
   int type;
@@ -53,6 +75,9 @@ typedef struct {
   int (*mx_access) (const char*, int);
   /* read mailbox into ctx structure */
   int (*mx_open_mailbox) (CONTEXT*);
+  /* check ACL flags; if not implemented, always assume granted
+   * permissions */
+  int (*mx_acl_check) (CONTEXT*, int);
 } mx_t;
 
 /* called from main: init all folder types */
@@ -95,6 +120,11 @@ typedef struct {
 
 WHERE short DefaultMagic INITVAL (M_MBOX);
 
+/*
+ * please use the following _ONLY_ when doing "something"
+ * with folders
+ */
+
 CONTEXT *mx_open_mailbox (const char *, int, CONTEXT *);
 
 MESSAGE *mx_open_message (CONTEXT *, int);
@@ -112,6 +142,8 @@ int mx_check_mailbox (CONTEXT *, int *, int);
 
 int mx_access (const char *, int);
 int mx_check_empty (const char *);
+
+int mx_acl_check (CONTEXT*, int);
 
 void mx_alloc_memory (CONTEXT *);
 void mx_update_context (CONTEXT *, int);

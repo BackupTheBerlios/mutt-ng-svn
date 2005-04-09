@@ -81,17 +81,6 @@ N_("Function not permitted in attach-message mode.");
 			break; \
 		     }
 
-#ifdef USE_IMAP
-/* the error message returned here could be better. */
-#define CHECK_IMAP_ACL(aclbit) if (Context->magic == M_IMAP) \
-		if (mutt_bit_isset (((IMAP_DATA *)Context->data)->capabilities, ACL) \
-		&& !mutt_bit_isset(((IMAP_DATA *)Context->data)->rights,aclbit)){ \
-			mutt_flushinp(); \
-			mutt_error ("Operation not permitted by the IMAP ACL for this mailbox"); \
-			break; \
-		}
-#endif
-
 struct q_class_t {
   int length;
   int index;
@@ -2100,9 +2089,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       CHECK_MODE (IsHeader (extra));
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_DELETE);
-#endif
+      CHECK_MX_ACL (Context, ACL_DELETE, _("Deletion"));
 
       mutt_set_flag (Context, extra->hdr, M_DELETE, 1);
       mutt_set_flag (Context, extra->hdr, M_PURGED,
@@ -2121,9 +2108,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       CHECK_MODE (IsHeader (extra));
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_DELETE);
-#endif
+      CHECK_MX_ACL (Context, ACL_DELETE, _("Deletion"));
 
       r = mutt_thread_set_flag (extra->hdr, M_DELETE, 1,
                                 ch == OP_DELETE_THREAD ? 0 : 1);
@@ -2235,27 +2220,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       CHECK_MODE (IsHeader (extra));
       CHECK_READONLY;
 
-#ifdef USE_POP
-      if (Context->magic == M_POP) {
-        mutt_flushinp ();
-        mutt_error _("Can't change 'important' flag on POP server.");
-
-        break;
-      }
-#endif
-
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_WRITE);
-#endif
-
-#ifdef USE_NNTP
-      if (Context->magic == M_NNTP) {
-        mutt_flushinp ();
-        mutt_error _("Can't change 'important' flag on NNTP server.");
-
-        break;
-      }
-#endif
+      CHECK_MX_ACL (Context, ACL_WRITE, _("Flagging"));
 
       mutt_set_flag (Context, extra->hdr, M_FLAG, !extra->hdr->flagged);
       redraw = REDRAW_STATUS | REDRAW_INDEX;
@@ -2472,9 +2437,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       CHECK_MODE (IsHeader (extra));
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_SEEN);
-#endif
+      CHECK_MX_ACL (Context, ACL_SEEN, _("Toggling"));
 
       if (extra->hdr->read || extra->hdr->old)
         mutt_set_flag (Context, extra->hdr, M_NEW, 1);
@@ -2493,9 +2456,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       CHECK_MODE (IsHeader (extra));
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_DELETE);
-#endif
+      CHECK_MX_ACL (Context, ACL_DELETE, _("Undeletion"));
 
       mutt_set_flag (Context, extra->hdr, M_DELETE, 0);
       mutt_set_flag (Context, extra->hdr, M_PURGED, 0);
@@ -2511,9 +2472,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       CHECK_MODE (IsHeader (extra));
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_DELETE);
-#endif
+      CHECK_MX_ACL (Context, ACL_DELETE, _("Undeletion"));
 
       r = mutt_thread_set_flag (extra->hdr, M_DELETE, 0,
                                 ch == OP_UNDELETE_THREAD ? 0 : 1)

@@ -656,22 +656,22 @@ int imap_open_mailbox (CONTEXT * ctx)
   if (mutt_bit_isset (idata->capabilities, ACL)) {
     if (imap_check_acl (idata))
       goto fail;
-    if (!(mutt_bit_isset (idata->rights, IMAP_ACL_DELETE) ||
-          mutt_bit_isset (idata->rights, IMAP_ACL_SEEN) ||
-          mutt_bit_isset (idata->rights, IMAP_ACL_WRITE) ||
-          mutt_bit_isset (idata->rights, IMAP_ACL_INSERT)))
+    if (!(mutt_bit_isset (idata->rights, ACL_DELETE) ||
+          mutt_bit_isset (idata->rights, ACL_SEEN) ||
+          mutt_bit_isset (idata->rights, ACL_WRITE) ||
+          mutt_bit_isset (idata->rights, ACL_INSERT)))
       ctx->readonly = 1;
   }
   /* assume we have all rights if ACL is unavailable */
   else {
-    mutt_bit_set (idata->rights, IMAP_ACL_LOOKUP);
-    mutt_bit_set (idata->rights, IMAP_ACL_READ);
-    mutt_bit_set (idata->rights, IMAP_ACL_SEEN);
-    mutt_bit_set (idata->rights, IMAP_ACL_WRITE);
-    mutt_bit_set (idata->rights, IMAP_ACL_INSERT);
-    mutt_bit_set (idata->rights, IMAP_ACL_POST);
-    mutt_bit_set (idata->rights, IMAP_ACL_CREATE);
-    mutt_bit_set (idata->rights, IMAP_ACL_DELETE);
+    mutt_bit_set (idata->rights, ACL_LOOKUP);
+    mutt_bit_set (idata->rights, ACL_READ);
+    mutt_bit_set (idata->rights, ACL_SEEN);
+    mutt_bit_set (idata->rights, ACL_WRITE);
+    mutt_bit_set (idata->rights, ACL_INSERT);
+    mutt_bit_set (idata->rights, ACL_POST);
+    mutt_bit_set (idata->rights, ACL_CREATE);
+    mutt_bit_set (idata->rights, ACL_DELETE);
   }
 
   ctx->hdrmax = count;
@@ -900,17 +900,17 @@ int imap_sync_message (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
 
   flags[0] = '\0';
       
-  imap_set_flag (idata, IMAP_ACL_SEEN, hdr->read, "\\Seen ",
+  imap_set_flag (idata, ACL_SEEN, hdr->read, "\\Seen ",
 		 flags, sizeof (flags));
-  imap_set_flag (idata, IMAP_ACL_WRITE, hdr->flagged,
+  imap_set_flag (idata, ACL_WRITE, hdr->flagged,
 		 "\\Flagged ", flags, sizeof (flags));
-  imap_set_flag (idata, IMAP_ACL_WRITE, hdr->replied,
+  imap_set_flag (idata, ACL_WRITE, hdr->replied,
 		 "\\Answered ", flags, sizeof (flags));
-  imap_set_flag (idata, IMAP_ACL_DELETE, hdr->deleted,
+  imap_set_flag (idata, ACL_DELETE, hdr->deleted,
 		 "\\Deleted ", flags, sizeof (flags));
 
   /* now make sure we don't lose custom tags */
-  if (mutt_bit_isset (idata->rights, IMAP_ACL_WRITE))
+  if (mutt_bit_isset (idata->rights, ACL_WRITE))
     imap_add_keywords (flags, hdr, idata->flags, sizeof (flags));
 
   mutt_remove_trailing_ws (flags);
@@ -919,10 +919,10 @@ int imap_sync_message (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
    * explicitly revoke all system flags (if we have permission) */
   if (!*flags)
   {
-    imap_set_flag (idata, IMAP_ACL_SEEN, 1, "\\Seen ", flags, sizeof (flags));
-    imap_set_flag (idata, IMAP_ACL_WRITE, 1, "\\Flagged ", flags, sizeof (flags));
-    imap_set_flag (idata, IMAP_ACL_WRITE, 1, "\\Answered ", flags, sizeof (flags));
-    imap_set_flag (idata, IMAP_ACL_DELETE, 1, "\\Deleted ", flags, sizeof (flags));
+    imap_set_flag (idata, ACL_SEEN, 1, "\\Seen ", flags, sizeof (flags));
+    imap_set_flag (idata, ACL_WRITE, 1, "\\Flagged ", flags, sizeof (flags));
+    imap_set_flag (idata, ACL_WRITE, 1, "\\Answered ", flags, sizeof (flags));
+    imap_set_flag (idata, ACL_DELETE, 1, "\\Deleted ", flags, sizeof (flags));
 
     mutt_remove_trailing_ws (flags);
 
@@ -993,7 +993,7 @@ int imap_sync_mailbox (CONTEXT * ctx, int expunge, int *index_hint)
   memset (&cmd, 0, sizeof (cmd));
 
   /* if we are expunging anyway, we can do deleted messages very quickly... */
-  if (expunge && mutt_bit_isset (idata->rights, IMAP_ACL_DELETE)) {
+  if (expunge && mutt_bit_isset (idata->rights, ACL_DELETE)) {
     mutt_buffer_addstr (&cmd, "UID STORE ");
     deleted = imap_make_msg_set (idata, &cmd, M_DELETE, 1);
 
@@ -1051,7 +1051,7 @@ int imap_sync_mailbox (CONTEXT * ctx, int expunge, int *index_hint)
 
   /* We must send an EXPUNGE command if we're not closing. */
   if (expunge && !(ctx->closing) &&
-      mutt_bit_isset (idata->rights, IMAP_ACL_DELETE)) {
+      mutt_bit_isset (idata->rights, ACL_DELETE)) {
     mutt_message _("Expunging messages from server...");
 
     /* Set expunge bit so we don't get spurious reopened messages */

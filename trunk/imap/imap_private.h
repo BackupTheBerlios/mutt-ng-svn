@@ -73,20 +73,7 @@ enum {
   IMAP_NS_SHARED
 };
 
-/* ACL Rights */
-enum {
-  IMAP_ACL_LOOKUP = 0,
-  IMAP_ACL_READ,
-  IMAP_ACL_SEEN,
-  IMAP_ACL_WRITE,
-  IMAP_ACL_INSERT,
-  IMAP_ACL_POST,
-  IMAP_ACL_CREATE,
-  IMAP_ACL_DELETE,
-  IMAP_ACL_ADMIN,
-
-  RIGHTSMAX
-};
+/* ACL Rights are moved to ../mx.h */
 
 /* Capabilities we are interested in */
 enum {

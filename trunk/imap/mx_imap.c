@@ -1,5 +1,8 @@
-
-
+/*
+ * This file is part of mutt-ng, see http://www.muttng.org/.
+ * It's licensed under the GNU General Public License,
+ * please see the file GPL in the top level source directory.
+ */
 #ifdef HAVE_CONFIG_H
 #include "config.h"
 #endif
@@ -25,6 +28,11 @@ static int imap_is_magic (const char* path) {
   return ((s == U_IMAP || s == U_IMAPS) ? M_IMAP : -1);
 }
 
+static int acl_check_imap (CONTEXT* ctx, int bit) {
+  return (!mutt_bit_isset (((IMAP_DATA*) ctx->data)->capabilities, ACL) ||
+          mutt_bit_isset (((IMAP_DATA*) ctx->data)->rights, bit));
+}
+
 mx_t* imap_reg_mx (void) {
   mx_t* fmt = safe_calloc (1, sizeof (mx_t));
 
@@ -33,5 +41,6 @@ mx_t* imap_reg_mx (void) {
   fmt->mx_is_magic = imap_is_magic;
   fmt->mx_access = imap_access;
   fmt->mx_open_mailbox = imap_open_mailbox;
+  fmt->mx_acl_check = acl_check_imap;
   return (fmt);
 }

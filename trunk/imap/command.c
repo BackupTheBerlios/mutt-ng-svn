@@ -515,31 +515,31 @@ static void cmd_parse_myrights (IMAP_DATA * idata, char *s)
   while (*s && !isspace ((unsigned char) *s)) {
     switch (*s) {
     case 'l':
-      mutt_bit_set (idata->rights, IMAP_ACL_LOOKUP);
+      mutt_bit_set (idata->rights, ACL_LOOKUP);
       break;
     case 'r':
-      mutt_bit_set (idata->rights, IMAP_ACL_READ);
+      mutt_bit_set (idata->rights, ACL_READ);
       break;
     case 's':
-      mutt_bit_set (idata->rights, IMAP_ACL_SEEN);
+      mutt_bit_set (idata->rights, ACL_SEEN);
       break;
     case 'w':
-      mutt_bit_set (idata->rights, IMAP_ACL_WRITE);
+      mutt_bit_set (idata->rights, ACL_WRITE);
       break;
     case 'i':
-      mutt_bit_set (idata->rights, IMAP_ACL_INSERT);
+      mutt_bit_set (idata->rights, ACL_INSERT);
       break;
     case 'p':
-      mutt_bit_set (idata->rights, IMAP_ACL_POST);
+      mutt_bit_set (idata->rights, ACL_POST);
       break;
     case 'c':
-      mutt_bit_set (idata->rights, IMAP_ACL_CREATE);
+      mutt_bit_set (idata->rights, ACL_CREATE);
       break;
     case 'd':
-      mutt_bit_set (idata->rights, IMAP_ACL_DELETE);
+      mutt_bit_set (idata->rights, ACL_DELETE);
       break;
     case 'a':
-      mutt_bit_set (idata->rights, IMAP_ACL_ADMIN);
+      mutt_bit_set (idata->rights, ACL_ADMIN);
       break;
     }
     s++;

@@ -85,17 +85,6 @@ static const char *No_visible = N_("No visible messages.");
                                 break; \
                         }
 
-#ifdef USE_IMAP
-/* the error message returned here could be better. */
-#define CHECK_IMAP_ACL(aclbit) if (Context->magic == M_IMAP) \
-                if (mutt_bit_isset (((IMAP_DATA *)Context->data)->capabilities, ACL) \
-                && !mutt_bit_isset(((IMAP_DATA *)Context->data)->rights,aclbit)){ \
-                        mutt_flushinp(); \
-                        mutt_error ("Operation not permitted by the IMAP ACL for this mailbox"); \
-                        break; \
-                }
-#endif
-
 #define CHECK_ATTACH if(option(OPTATTACHMSG)) \
                      {\
                         mutt_flushinp (); \
@@ -920,9 +909,7 @@ int mutt_index_menu (void)
       CHECK_VISIBLE;
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_DELETE);
-#endif
+      CHECK_MX_ACL (Context, ACL_DELETE, _("Deletion"));
 
       CHECK_ATTACH;
       mutt_pattern_func (M_DELETE, _("Delete messages matching: "));
@@ -1100,9 +1087,7 @@ int mutt_index_menu (void)
       CHECK_VISIBLE;
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_DELETE);
-#endif
+      CHECK_MX_ACL (Context, ACL_DELETE, _("Undeletion"));
 
       if (mutt_pattern_func (M_UNDELETE, _("Undelete messages matching: ")) ==
           0)
@@ -1648,27 +1633,7 @@ int mutt_index_menu (void)
       CHECK_VISIBLE;
       CHECK_READONLY;
 
-#ifdef USE_POP
-      if (Context->magic == M_POP) {
-        mutt_flushinp ();
-        mutt_error (_("Can't change 'important' flag on POP server."));
-
-        break;
-      }
-#endif
-
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_WRITE);
-#endif
-
-#ifdef USE_NNTP
-      if (Context->magic == M_NNTP) {
-        mutt_flushinp ();
-        mutt_error (_("Can't change 'important' flag on NNTP server."));
-
-        break;
-      }
-#endif
+      CHECK_MX_ACL (Context, ACL_WRITE, _("Flagging"));
 
       if (tag) {
         for (j = 0; j < Context->vcount; j++) {
@@ -1701,9 +1666,7 @@ int mutt_index_menu (void)
       CHECK_VISIBLE;
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_SEEN);
-#endif
+      CHECK_MX_ACL (Context, ACL_SEEN, _("Toggling"));
 
       if (tag) {
         for (j = 0; j < Context->vcount; j++) {
@@ -1809,10 +1772,6 @@ int mutt_index_menu (void)
       CHECK_MSGCOUNT;
       CHECK_VISIBLE;
       CHECK_READONLY;
-
-/* #ifdef USE_IMAP
-CHECK_IMAP_ACL(IMAP_ACL_WRITE);
-#endif */
 
       if (mutt_change_flag (tag ? NULL : CURHDR, (op == OP_MAIN_SET_FLAG)) ==
           0) {
@@ -1947,9 +1906,7 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
       CHECK_VISIBLE;
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_DELETE);
-#endif
+      CHECK_MX_ACL (Context, ACL_DELETE, _("Deletion"));
 
       if (tag) {
         mutt_tag_set_flag (M_DELETE, 1);
@@ -1989,9 +1946,7 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
       CHECK_VISIBLE;
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_DELETE);
-#endif
+      CHECK_MX_ACL (Context, ACL_DELETE, _("Deletion"));
 
       rc = mutt_thread_set_flag (CURHDR, M_DELETE, 1,
                                  op == OP_DELETE_THREAD ? 0 : 1);
@@ -2042,27 +1997,7 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
       CHECK_READONLY;
       CHECK_ATTACH;
 
-#ifdef USE_POP
-      if (Context->magic == M_POP) {
-        mutt_flushinp ();
-        mutt_error (_("Can't edit message on POP server."));
-
-        break;
-      }
-#endif
-
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_INSERT);
-#endif
-
-#ifdef USE_NNTP
-      if (Context->magic == M_NNTP) {
-        mutt_flushinp ();
-        mutt_error (_("Can't edit message on newsserver."));
-
-        break;
-      }
-#endif
+      CHECK_MX_ACL (Context, ACL_INSERT, _("Editing"));
 
       if (option (OPTPGPAUTODEC)
           && (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED)))
@@ -2168,9 +2103,7 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
       CHECK_VISIBLE;
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_SEEN);
-#endif
+      CHECK_MX_ACL (Context, ACL_SEEN, _("Marking as read"));
 
       rc = mutt_thread_set_flag (CURHDR, M_READ, 1,
                                  op == OP_MAIN_READ_THREAD ? 0 : 1);
@@ -2291,9 +2224,7 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
       CHECK_VISIBLE;
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_DELETE);
-#endif
+      CHECK_MX_ACL (Context, ACL_DELETE, _("Undeletion"));
 
       if (tag) {
         mutt_tag_set_flag (M_DELETE, 0);
@@ -2320,9 +2251,7 @@ CHECK_IMAP_ACL(IMAP_ACL_WRITE);
       CHECK_VISIBLE;
       CHECK_READONLY;
 
-#ifdef USE_IMAP
-      CHECK_IMAP_ACL (IMAP_ACL_DELETE);
-#endif
+      CHECK_MX_ACL (Context, ACL_DELETE, _("Undeletion"));
 
       rc = mutt_thread_set_flag (CURHDR, M_DELETE, 0,
                                  op == OP_UNDELETE_THREAD ? 0 : 1)

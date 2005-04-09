@@ -1542,6 +1542,15 @@ int mx_check_empty (const char *path)
   return (-1);
 }
 
+int mx_acl_check (CONTEXT* ctx, int flag) {
+  if (!ctx || ctx->magic <= 0 || ctx->magic >= MailboxFormats->length)
+    return (0);
+  /* if no acl_check defined for module, assume permission is granted */
+  if (!MX_COMMAND(ctx->magic-1,mx_acl_check))
+    return (1);
+  return (MX_COMMAND(ctx->magic-1,mx_acl_check)(ctx,flag));
+}
+
 void mx_init (void) {
 #ifdef DEBUG
   int i = 0;
