@@ -1448,7 +1448,12 @@ fail:
 /* reconnect if connection was lost */
 int imap_reconnect (CONTEXT * ctx)
 {
-  IMAP_DATA *imap_data = (IMAP_DATA *) ctx->data;
+  IMAP_DATA *imap_data;
+
+  if (!ctx)
+    return (-1);
+
+  imap_data = (IMAP_DATA *) ctx->data;
 
   if (imap_data) {
     if (imap_data->status == IMAP_CONNECTED)
