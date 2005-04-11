@@ -1,3 +1,7 @@
+2005-04-10 09:37:51  Johan Svedberg  <johan@svedberg.pp.se>  (roessler)
+
+	* po/sv.po: update
+
 2005-04-03 00:14:51  Daniel Jacobowitz  <dan@debian.org>  (brendan)
 
 	* imap/imap.c, imap/imap_private.h, imap/message.c: Synchronise
@@ -405,7 +409,7 @@
 2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
                                  
      * hcache.c: - make hcache.c conform to mutt codingstyle
-     - use $Id: ChangeLog,v 3.420 2005/04/03 00:15:36 brendan Exp $ CVS keyword instead of %K% BitKeeper keyword
+     - use $Id: ChangeLog,v 3.421 2005/04/10 09:38:17 roessler Exp $ CVS keyword instead of %K% BitKeeper keyword
                                  
 2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
 
