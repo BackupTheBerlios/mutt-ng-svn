@@ -1543,7 +1543,7 @@ int mx_check_empty (const char *path)
 }
 
 int mx_acl_check (CONTEXT* ctx, int flag) {
-  if (!ctx || ctx->magic <= 0 || ctx->magic >= MailboxFormats->length)
+  if (!ctx || ctx->magic <= 0 || ctx->magic > MailboxFormats->length)
     return (0);
   /* if no acl_check defined for module, assume permission is granted */
   if (!MX_COMMAND(ctx->magic-1,mx_acl_check))
