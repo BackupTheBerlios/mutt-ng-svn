@@ -93,19 +93,25 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
 <sect>Getting Started
 <p>
 
-This section is intended as a brief overview of how to use Mutt.  There are
-many other features which are described elsewhere in the manual.  There
+This section is intended as a brief overview of how to use Mutt-ng.  There are
+many other features which are described elsewhere in the manual.  
+<--
+There
 is even more information available in the Mutt FAQ and various web
 pages.  See the <htmlurl url="http://www.mutt.org/mutt/"
 name="Mutt Page"> for more details.
+-->
 
 The key bindings described in this section are the defaults as distributed.
 Your local system administrator may have altered the defaults for your site.
 You can always type ``?'' in any menu to display the current bindings.
 
-The first thing you need to do is invoke mutt, simply by typing mutt
+The first thing you need to do is invoke mutt-ng simply by typing muttng
 at the command line.  There are various command-line options, see 
-either the mutt man page or the <ref id="commandline" name="reference">.
+either the muttng man page or the <ref id="commandline" name="reference">.
+
+If you have used mutt in the past the easiest thing to have a proper
+configuration file is to source ~/.muttrc in ~/.muttngrc.
 
 <sect1>Moving Around in Menus
 <p>
@@ -126,7 +132,7 @@ q               quit            exit the current menu
 
 <sect1>Editing Input Fields<label id="editing">
 <p>
-Mutt has a builtin line editor which is used as the primary way to input
+Mutt-ng has a builtin line editor which is used as the primary way to input
 textual data such as email addresses or filenames.  The keys used to move
 around while editing are very similar to those of Emacs.
 
@@ -165,7 +171,7 @@ front of the cursor rather than under, you could use
 <p>
 
 Similar to many other mail clients, there are two modes in which mail is
-read in Mutt.  The first is the index of messages in the mailbox, which is
+read in Mutt-ng.  The first is the index of messages in the mailbox, which is
 called the ``index'' in Mutt.  The second mode is the display of the
 message contents.  This is called the ``pager.''
 
@@ -252,7 +258,7 @@ to.  They can be customized with the
 <sect2>The Pager
 <p>
 
-By default, Mutt uses its builtin pager to display the body of messages.
+By default, Mutt-ng uses its builtin pager to display the body of messages.
 The pager is very similar to the Unix program <em/less/ though not nearly as
 featureful.
 
@@ -278,14 +284,14 @@ Also, the internal pager supports a couple other advanced features. For
 one, it will accept and translate the ``standard'' nroff sequences for
 bold and underline. These sequences are a series of either the letter,
 backspace (^H), the letter again for bold or the letter, backspace,
-``&lowbar;'' for denoting underline. Mutt will attempt to display these
+``&lowbar;'' for denoting underline. Mutt-ng will attempt to display these
 in bold and underline respectively if your terminal supports them. If
 not, you can use the bold and underline <ref id="color" name="color">
 objects to specify a color or mono attribute for them.
 
 Additionally, the internal pager supports the ANSI escape sequences for
-character attributes.  Mutt translates them into the correct color and
-character settings.  The sequences Mutt supports are:
+character attributes.  Mutt-ng translates them into the correct color and
+character settings.  The sequences Mutt-ng supports are:
 
 <p>
 <tscreen><verb>
