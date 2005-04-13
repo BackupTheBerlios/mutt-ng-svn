@@ -43,7 +43,7 @@ muttng_SOURCES = $(BUILT_SOURCES) \
 muttng_LDADD = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(LIBPOP) $(LIBNNTP) \
 	-Llib -lsane $(MUTTLIBS) $(INTLLIBS) $(LIBICONV)
 
-muttng_DEPENDENCIES = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(top_srcdir)/lib/libsane.a \
+muttng_DEPENDENCIES = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(top_builddir)/lib/libsane.a \
 	$(LIBIMAPDEPS) $(LIBPOPDEPS) $(LIBNNTPDEPS) $(INTLDEPS)
 
 makedoc_SOURCES = makedoc.c
