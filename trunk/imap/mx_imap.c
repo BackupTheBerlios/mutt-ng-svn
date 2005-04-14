@@ -7,6 +7,8 @@
 #include "config.h"
 #endif
 
+#include <sys/stat.h>
+
 #include "mutt.h"
 #include "imap_private.h"
 
@@ -18,7 +20,7 @@
 
 #include "url.h"
 
-static int imap_is_magic (const char* path) {
+int imap_is_magic (const char* path, struct stat* st) {
   url_scheme_t s;
   if (!path || !*path)
     return (-1);

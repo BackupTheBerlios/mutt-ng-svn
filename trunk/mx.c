@@ -71,6 +71,7 @@
 
 static list2_t* MailboxFormats = NULL;
 #define MX_COMMAND(idx,cmd) ((mx_t*) MailboxFormats->data[idx])->cmd
+#define MX_IDX(idx) (idx >= 0 && idx < MailboxFormats->length)
 
 #define mutt_is_spool(s)  (safe_strcmp (Spoolfile, s) == 0)
 
@@ -152,11 +153,24 @@ static int undotlock_file (const char *path, int fd)
 /* looks up index of type for path in MailboxFormats */
 static int mx_get_idx (const char* path) {
   int i = 0, t = 0;
+  struct stat st;
 
+  /* first, test all non-local folders to avoid stat() call */
   for (i = 0; i < MailboxFormats->length; i++) {
-    t = MX_COMMAND(i,mx_is_magic)(path);
+    if (!MX_COMMAND(i,local))
+      t = MX_COMMAND(i,mx_is_magic)(path, NULL);
     if (t >= 1)
-      return (t-1);     /* use type as index for array */
+      return (t-1);
+  }
+  if (stat (path, &st) == 0) {
+    /* if stat() succeeded, keep testing until success and
+     * pass stat() info so that we only need to do it once */
+    for (i = 0; i < MailboxFormats->length; i++) {
+      if (MX_COMMAND(i,local))
+        t = MX_COMMAND(i,mx_is_magic)(path, &st);
+      if (t >= 1)
+        return (t-1);
+    }
   }
   return (-1);
 }
@@ -333,6 +347,12 @@ int mx_get_magic (const char *path) {
   if ((i = mx_get_idx (path)) >= 0)
     return (MX_COMMAND(i,type));
   return (-1);
+}
+
+int mx_is_local (int m) {
+  if (!MX_IDX(m))
+    return (0);
+  return (MX_COMMAND(m,local));
 }
 
 /*
@@ -520,7 +540,8 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT * pctx)
     return ctx;
   }
 
-  ctx->magic = mx_get_magic (path);
+  if (!MX_IDX(ctx->magic-1))
+    ctx->magic = mx_get_magic (path);
 
 #ifdef USE_COMPRESSED
   if (ctx->magic == M_COMPRESSED)
@@ -822,7 +843,7 @@ int mx_close_mailbox (CONTEXT * ctx, int *index_hint)
     /* try to use server-side copy first */
     i = 1;
 
-    if (ctx->magic == M_IMAP && mx_get_magic (mbox) == M_IMAP) {
+    if (ctx->magic == M_IMAP && imap_is_magic (mbox, NULL) == M_IMAP) {
       /* tag messages for moving, and clear old tags, if any */
       for (i = 0; i < ctx->msgcount; i++)
         if (ctx->hdrs[i]->read && !ctx->hdrs[i]->deleted
@@ -1543,7 +1564,7 @@ int mx_check_empty (const char *path)
 }
 
 int mx_acl_check (CONTEXT* ctx, int flag) {
-  if (!ctx || ctx->magic <= 0 || ctx->magic > MailboxFormats->length)
+  if (!ctx || !MX_IDX(ctx->magic-1))
     return (0);
   /* if no acl_check defined for module, assume permission is granted */
   if (!MX_COMMAND(ctx->magic-1,mx_acl_check))

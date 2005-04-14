@@ -7,6 +7,8 @@
 #include "config.h"
 #endif
 
+#include <sys/stat.h>
+
 #include "mutt.h"
 #include "nntp.h"
 
@@ -18,7 +20,7 @@
 
 #include "url.h"
 
-static int nntp_is_magic (const char* path) {
+static int nntp_is_magic (const char* path, struct stat* st) {
   url_scheme_t s = url_check_scheme (NONULL (path));
   return ((s == U_NNTP || s == U_NNTPS) ? M_NNTP : -1);
 }

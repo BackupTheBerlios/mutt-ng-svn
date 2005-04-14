@@ -22,6 +22,7 @@
 
 #ifdef USE_IMAP
 #include "imap.h"
+#include "imap/mx_imap.h"
 #endif
 
 #include "mutt_crypt.h"
@@ -363,7 +364,7 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
       {
 #ifdef USE_IMAP
         /* if folder = {host} or imap[s]://host/: don't append slash */
-        if (mx_get_magic (NONULL (Maildir)) == M_IMAP &&
+        if (imap_is_magic (NONULL (Maildir), NULL) == M_IMAP &&
             (Maildir[safe_strlen (Maildir) - 1] == '}' ||
              Maildir[safe_strlen (Maildir) - 1] == '/'))
           strfcpy (p, NONULL (Maildir), sizeof (p));
@@ -460,7 +461,7 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 #ifdef USE_IMAP
   /* Rewrite IMAP path in canonical form - aids in string comparisons of
    * folders. May possibly fail, in which case s should be the same. */
-  if (mx_get_magic (s) == M_IMAP)
+  if (imap_is_magic (s, NULL) == M_IMAP)
     imap_expand_path (s, slen);
 #endif
 

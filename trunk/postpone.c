@@ -21,6 +21,7 @@
 #include "mx.h"
 #ifdef USE_IMAP
 #include "imap.h"
+#include "imap/mx_imap.h"
 #endif
 #include "mutt_crypt.h"
 
@@ -75,7 +76,7 @@ int mutt_num_postponed (int force)
 
 #ifdef USE_IMAP
   /* LastModify is useless for IMAP */
-  if (mx_get_magic (Postponed) == M_IMAP) {
+  if (imap_is_magic (Postponed, NULL) == M_IMAP) {
     if (force) {
       short newpc;
 

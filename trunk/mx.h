@@ -17,6 +17,8 @@
 #ifndef _MX_H
 #define _MX_H
 
+#include <sys/stat.h>
+
 /*
  * supported mailbox formats
  * in mx_init() the registration order must be exactly as given here!!!1!
@@ -68,7 +70,7 @@ typedef struct {
   /* may we stat() it? */
   unsigned int local : 1;
   /* tests if given path is of its magic */
-  int (*mx_is_magic) (const char*);
+  int (*mx_is_magic) (const char*, struct stat*);
   /* tests if folder is empty */
   int (*mx_check_empty) (const char*);
   /* test for access */
@@ -136,8 +138,14 @@ int mx_close_mailbox (CONTEXT *, int *);
 int mx_sync_mailbox (CONTEXT *, int *);
 int mx_commit_message (MESSAGE *, CONTEXT *);
 int mx_close_message (MESSAGE **);
-int mx_get_magic (const char *);
+
+/* determines magic for given folder */
+int mx_get_magic (const char*);
+/* sets/parses DefaultMagic */
 int mx_set_magic (const char *);
+/* tests whether given folder magic is (valid and) local */
+int mx_is_local (int);
+
 int mx_check_mailbox (CONTEXT *, int *, int);
 
 int mx_access (const char *, int);

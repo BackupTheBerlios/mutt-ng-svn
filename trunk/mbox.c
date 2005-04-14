@@ -1155,16 +1155,15 @@ int mbox_check_empty (const char *path)
   return ((st.st_size == 0));
 }
 
-int mbox_is_magic (const char* path) {
-  struct stat st;
-  int magic = 0;
+int mbox_is_magic (const char* path, struct stat* st) {
+  int magic = -1;
   FILE* f;
   char tmp[_POSIX_PATH_MAX];
 
-  if (stat (path, &st) == -1 || S_ISDIR(st.st_mode))
+  if (S_ISDIR(st->st_mode))
     return (-1);
 
-  if (st.st_size == 0) {
+  if (st->st_size == 0) {
     /* hard to tell what zero-length files are, so assume the default magic */
     if (DefaultMagic == M_MBOX || DefaultMagic == M_MMDF)
       return (DefaultMagic);
@@ -1186,8 +1185,8 @@ int mbox_is_magic (const char* path) {
      * only the type was accessed.  This is important, because detection
      * of "new mail" depends on those times set correctly.
      */
-    times.actime = st.st_atime;
-    times.modtime = st.st_mtime;
+    times.actime = st->st_atime;
+    times.modtime = st->st_mtime;
     utime (path, &times);
 #endif
   } else {
@@ -1196,7 +1195,7 @@ int mbox_is_magic (const char* path) {
   }
 
 #ifdef USE_COMPRESSED
-  if (magic == 0 && mutt_can_read_compressed (path))
+  if (magic == -1 && mutt_can_read_compressed (path))
     return (M_COMPRESSED);
 #endif
   return (magic);

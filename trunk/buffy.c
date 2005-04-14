@@ -271,7 +271,7 @@ int mutt_buffy_check (int force)
   struct stat contex_sb;
   time_t now, last1;
   CONTEXT *ctx;
-  int i = 0;
+  int i = 0, local = 0;
 #ifdef USE_IMAP
   time_t last2;
 
@@ -303,45 +303,21 @@ int mutt_buffy_check (int force)
   BuffyCount = 0;
   BuffyNotify = 0;
 
-#ifdef USE_IMAP
-  if (!Context || Context->magic != M_IMAP)
-#endif
-#ifdef USE_POP
-    if (!Context || Context->magic != M_POP)
-#endif
-#ifdef USE_NNTP
-      if (!Context || Context->magic != M_NNTP)
-#endif
-        /* check device ID and serial number instead of comparing paths */
-        if (!Context || !Context->path
-            || stat (Context->path, &contex_sb) != 0) {
-          contex_sb.st_dev = 0;
-          contex_sb.st_ino = 0;
-        }
+  if ((!Context || mx_is_local (Context->magic-1)) && stat (Context->path, &contex_sb) != 0) {
+    /* check device ID and serial number instead of comparing paths */
+    contex_sb.st_dev = 0;
+    contex_sb.st_ino = 0;
+  }
 
   for (i = 0; i < Incoming->length; i++) {
     tmp = (BUFFY*) Incoming->data[i];
-#ifdef USE_IMAP
-    if (mx_get_magic (tmp->path) == M_IMAP)
-      tmp->magic = M_IMAP;
-    else
-#endif
-#ifdef USE_POP
-    if (mx_get_magic (tmp->path) == M_IMAP)
-      tmp->magic = M_POP;
-    else
-#endif
-#ifdef USE_NNTP
-    if (mx_get_magic (tmp->path) == M_NNTP)
-      tmp->magic = M_NNTP;
-    else
-#endif
-    if (stat (tmp->path, &sb) != 0 || sb.st_size == 0 ||
-          (!tmp->magic && (tmp->magic = mx_get_magic (tmp->path)) <= 0)) {
+    tmp->magic = mx_get_magic (tmp->path);
+    local = mx_is_local (tmp->magic-1);
+    if ((tmp->magic <= 0 || local) && (stat (tmp->path, &sb) != 0 || sb.st_size == 0)) {
       /* if the mailbox still doesn't exist, set the newly created flag to
        * be ready for when it does. */
       tmp->newly_created = 1;
-      tmp->magic = 0;
+      tmp->magic = -1;
 #ifdef BUFFY_SIZE
       tmp->size = 0;
 #endif
@@ -350,30 +326,9 @@ int mutt_buffy_check (int force)
 
     /* check to see if the folder is the currently selected folder
      * before polling */
-    if (!Context || !Context->path || ((0
-#ifdef USE_IMAP
-                                        || tmp->magic == M_IMAP
-#endif
-#ifdef USE_POP
-                                        || tmp->magic == M_POP
-#endif
-#ifdef USE_NNTP
-                                        || tmp->magic == M_NNTP
-#endif
-                                       )? safe_strcmp (tmp->path,
-                                                       Context->path) : (sb.
-                                                                         st_dev
-                                                                         !=
-                                                                         contex_sb.
-                                                                         st_dev
-                                                                         ||
-                                                                         sb.
-                                                                         st_ino
-                                                                         !=
-                                                                         contex_sb.
-                                                                         st_ino)
-        )
-      ) {
+    if (!Context || !Context->path || (local ? (sb.st_dev != contex_sb.st_dev ||
+                                                sb.st_ino != contex_sb.st_ino) :
+                                       safe_strcmp (tmp->path, Context->path))) {
       switch (tmp->magic) {
       case M_MBOX:
       case M_MMDF:
@@ -520,15 +475,6 @@ int mutt_buffy_check (int force)
         break;
 #endif
 
-#ifdef USE_POP
-      case M_POP:
-        break;
-#endif
-
-#ifdef USE_NNTP
-      case M_NNTP:
-        break;
-#endif
       }
     }
 #ifdef BUFFY_SIZE

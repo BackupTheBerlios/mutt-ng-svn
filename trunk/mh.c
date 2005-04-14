@@ -1927,14 +1927,10 @@ int mh_check_empty (const char *path)
   return r;
 }
 
-int mh_is_magic (const char* path) {
-  struct stat st;
+static int mh_is_magic (const char* path, struct stat* st) {
   char tmp[_POSIX_PATH_MAX];
 
-  if (stat (path, &st) == -1)
-    return (-1);
-
-  if (S_ISDIR (st.st_mode)) {
+  if (S_ISDIR (st->st_mode)) {
     snprintf (tmp, sizeof (tmp), "%s/.mh_sequences", path);
     if (access (tmp, F_OK) == 0)
       return (M_MH);
@@ -1967,15 +1963,13 @@ int mh_is_magic (const char* path) {
   return (-1);
 }
 
-int maildir_is_magic (const char* path) {
-  struct stat st;
+static int maildir_is_magic (const char* path, struct stat* st) {
+  struct stat sb;
   char tmp[_POSIX_PATH_MAX];
 
-  if (stat (path, &st) == -1)
-    return (-1);
-  if (S_ISDIR (st.st_mode)) {
+  if (S_ISDIR (st->st_mode)) {
     snprintf (tmp, sizeof (tmp), "%s/cur", path);
-    if (stat (tmp, &st) == 0 && S_ISDIR (st.st_mode))
+    if (stat (tmp, &sb) == 0 && S_ISDIR (sb.st_mode))
       return (M_MAILDIR);
   }
   return (-1);

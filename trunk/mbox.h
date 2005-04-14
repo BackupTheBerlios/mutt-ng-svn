@@ -15,6 +15,8 @@
 #ifndef _MBOX_H
 #define _MBOX_H
 
+#include <sys/stat.h>
+
 #include "mx.h"
 
 #define MMDF_SEP "\001\001\001\001\n"
@@ -28,7 +30,8 @@ int mbox_parse_mailbox (CONTEXT *);
 int mmdf_parse_mailbox (CONTEXT *);
 void mbox_unlock_mailbox (CONTEXT *);
 int mbox_check_empty (const char *);
-int mbox_is_magic (const char*);
+/* this is still here for compressed folders support... */
+int mbox_is_magic (const char*, struct stat*);
 
 int mbox_strict_cmp_headers (const HEADER *, const HEADER *);
 int mbox_reopen_mailbox (CONTEXT *, int *);
