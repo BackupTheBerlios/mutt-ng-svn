@@ -216,6 +216,7 @@ int sidebar_draw (int menu)
 {
 
   int lines = option (OPTHELP) ? 1 : 0;
+  int draw_devider=1;
   BUFFY *tmp;
   int i = 0;
   short delim_len = safe_strlen (SidebarDelim);
@@ -224,8 +225,10 @@ int sidebar_draw (int menu)
   if (!initialized) {
     prev_show_value = option (OPTMBOXPANE);
     saveSidebarWidth = SidebarWidth;
-    if (!option (OPTMBOXPANE))
+    if (!option (OPTMBOXPANE)){
       SidebarWidth = 0;
+      draw_devider = 1;
+    }
     initialized = 1;
   }
 
@@ -253,21 +256,23 @@ int sidebar_draw (int menu)
 
   if (SidebarWidth == 0 || !option (OPTMBOXPANE))
     return 0;
-
-  /* draw the divider */
-  SETCOLOR (MT_COLOR_SIDEBAR);
-  for (lines = 1;
-       lines < LINES - 1 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
-       lines++) {
-    move (lines, SidebarWidth - delim_len);
-    if (option (OPTASCIICHARS))
-      addstr (NONULL (SidebarDelim));
-    else if (!option (OPTASCIICHARS) && !safe_strcmp (SidebarDelim, "|"))
-      addch (ACS_VLINE);
-    else if ((Charset_is_utf8) && !safe_strcmp (SidebarDelim, "|"))
-      addstr ("\342\224\202");
-    else
-      addstr (NONULL (SidebarDelim));
+  /* draw devider only if necessary (if the sidebar becomes visible e.g.)*/
+  if (draw_devider == 1){
+    /* draw the divider */
+    SETCOLOR (MT_COLOR_SIDEBAR);
+    for (lines = 1;
+         lines < LINES - 1 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
+         lines++) {
+      move (lines, SidebarWidth - delim_len);
+      if (option (OPTASCIICHARS))
+        addstr (NONULL (SidebarDelim));
+      else if (!option (OPTASCIICHARS) && !safe_strcmp (SidebarDelim, "|"))
+        addch (ACS_VLINE);
+      else if ((Charset_is_utf8) && !safe_strcmp (SidebarDelim, "|"))
+        addstr ("\342\224\202");
+      else
+        addstr (NONULL (SidebarDelim));
+    }
   }
   SETCOLOR (MT_COLOR_NORMAL);
 
