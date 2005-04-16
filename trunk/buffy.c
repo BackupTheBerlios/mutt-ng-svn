@@ -303,7 +303,8 @@ int mutt_buffy_check (int force)
   BuffyCount = 0;
   BuffyNotify = 0;
 
-  if ((!Context || mx_is_local (Context->magic-1)) && stat (Context->path, &contex_sb) != 0) {
+  if (!Context || !Context->path || 
+      (mx_is_local (Context->magic-1) && stat (Context->path, &contex_sb) != 0)) {
     /* check device ID and serial number instead of comparing paths */
     contex_sb.st_dev = 0;
     contex_sb.st_ino = 0;
