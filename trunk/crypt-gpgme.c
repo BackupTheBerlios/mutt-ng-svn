@@ -2960,7 +2960,7 @@ static void verify_key (crypt_key_t * key)
 
   mutt_mktemp (tempfile);
   if (!(fp = safe_fopen (tempfile, "w"))) {
-    mutt_perror _("Can't create temporary file");
+    mutt_perror (_("Can't create temporary file"));
 
     return;
   }
