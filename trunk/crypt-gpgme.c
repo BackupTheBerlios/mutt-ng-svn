@@ -112,10 +112,10 @@ static gpgme_key_t signature_key = NULL;
  * General helper functions.
  */
 
-/* return true when S pints to a didgit or letter. */
+/* return true when S points to a didgit or letter. */
 static int digit_or_letter (const unsigned char *s)
 {
-  return ((*s >= '0' && *s < '9')
+  return ((*s >= '0' && *s <= '9')
           || (*s >= 'A' && *s <= 'Z')
           || (*s >= 'a' && *s <= 'z'));
 }
