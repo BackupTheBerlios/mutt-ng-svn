@@ -130,6 +130,8 @@ WHERE char *SendCharset;
 WHERE char *Sendmail;
 WHERE char *Shell;
 WHERE char *SidebarDelim;
+WHERE char *SidebarNumberFormat;
+WHERE char *SidebarBoundary;
 WHERE char *Signature;
 WHERE char *SignOffString;
 WHERE char *SimpleSearch;

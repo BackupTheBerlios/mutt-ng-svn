@@ -1,5 +1,12 @@
 Changes specific to mutt-ng:
 
+2005-04-18:
+  * sidebar updates: eventually counting can be disabled and
+    $sidebar_newmail_only works way better
+
+2005-04-18 (up to):
+  * Re-design, re-organization and cleanup still in progress
+
 2005-03-13:
   * Merged in latest mutt changes up to 1.5.9
 

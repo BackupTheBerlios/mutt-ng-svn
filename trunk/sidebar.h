@@ -16,5 +16,7 @@ void sidebar_scroll (int, int);
 void sidebar_set_buffystats (CONTEXT *);
 const char* sidebar_get_current (void);
 void sidebar_set_current (const char*);
+/* returns one if mutt_buffy_check should thorougly count */
+int sidebar_need_count (void);
 
 #endif /* _SIDEBAR_H */

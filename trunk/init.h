@@ -1338,6 +1338,13 @@ struct option_t MuttVars[] = {
    ** .pp
    ** It may, for example, look as: ``\fTmutt-ng 1.5.9i (Linux)\fP''.
    */
+  {"sidebar_boundary", DT_STR, R_BOTH, UL &SidebarBoundary, UL "." },
+  /*
+   ** .pp
+   ** When the sidebar is displayed and $$sidebar_shorten_hierarchy is \fIset\fP, this
+   ** variable specifies the characters at which to split a folder name into
+   ** ``hierarchy items.''
+   */
   {"sidebar_delim", DT_STR, R_BOTH, UL &SidebarDelim, UL "|"},
   /*
    ** .pp
@@ -1359,6 +1366,37 @@ struct option_t MuttVars[] = {
   /*
    ** .pp
    ** If \fIset\fP, only folders with new mail will be shown in the sidebar.
+   */
+  {"sidebar_number_format", DT_STR, R_BOTH, UL &SidebarNumberFormat, UL "%c%?n?(%n)?%?f?[%f]?"},
+  /*
+   ** .pp
+   ** This variable controls how message counts are printed when the sidebar
+   ** is enabled. If this variable is \fIempty\fP (\fIand only if\fP), no numbers
+   ** will be printed \fIand\fP mutt-ng won't frequently count mail (which
+   ** may be a great speedup esp. with mbox-style mailboxes.)
+   ** .pp
+   ** The following \fTprintf(3)\fP-like sequences are supported:
+   ** .pp
+   ** .dl
+   ** .dt %c .dd Total number of messages.
+   ** .dt %f .dd Number of flagged messages.
+   ** .dt %n .dd Number of new messages.
+   ** .de
+   ** .pp
+   ** The \fT%f\fP and \fT%n\fP expandos may optionally be printed non-zero.
+   */
+  {"sidebar_shorten_hierarchy", DT_BOOL, R_NONE, OPTSHORTENHIERARCHY, 0},
+  /*
+   ** .pp
+   ** When \fIset\fP, the ``hierarchy'' of the sidebar entries will be shortened
+   ** only if they cannot be printed in full length (because ``$$sidebar_width''
+   ** is set to a too low value). For example, if the newsgroup name 
+   ** ``de.alt.sysadmin.recovery'' doesn't fit on the screen, it'll get shortened
+   ** ``d.a.s.recovery'' while ``de.alt.d0'' still would and thus will not get 
+   ** shortened.
+   ** .pp
+   ** At which characters this compression is done is controled via the
+   ** $$sidebar_boundary variable.
    */
   {"mbox_type", DT_MAGIC, R_NONE, UL &DefaultMagic, M_MBOX},
   /*
@@ -2972,16 +3010,7 @@ struct option_t MuttVars[] = {
    ** ``newsrc'' file and into the news cache.
    */
 #endif
-  {"shorten_hierarchy", DT_BOOL, R_NONE, OPTSHORTENHIERARCHY, 0},
-  /*
-   ** .pp
-   ** When \fIset\fP, the ``hierarchy'' of the sidebar entries will be shortened
-   ** only if they cannot be printed in full length (because ``$$sidebar_width''
-   ** is set to a too low value). For example, if the newsgroup name 
-   ** ``de.alt.sysadmin.recovery'' doesn't fit on the screen, it'll get shortened
-   ** ``d.a.s.recovery'' while ``de.alt.d0'' still would and thus will not get 
-   ** shortened.
-   */
+  {"shorten_hierarchy", DT_SYN, R_NONE, UL "sidebar_shorten_hierarchy", 0 },
 #ifdef USE_NNTP
   {"show_new_news", DT_BOOL, R_NONE, OPTSHOWNEWNEWS, 1},
   /*

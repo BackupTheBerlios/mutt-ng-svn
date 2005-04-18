@@ -30,19 +30,8 @@ static int TopBuffy = 0;
 static int CurBuffy = 0;
 static int known_lines = 0;
 static short initialized = 0;
-static int prev_show_value;
+static short prev_show_value;
 static short saveSidebarWidth;
-static char *entry = 0;
-
-/* computes how many digets a number has;
- * FIXME move out to library?
- */
-static int quick_log10 (int n) {
-  int len = 0;
-
-  for (; n > 9; len++, n /= 10);
-  return (++len);
-}
 
 /* computes first entry to be shown */
 void calc_boundaries (int menu)
@@ -55,7 +44,16 @@ void calc_boundaries (int menu)
   if (known_lines != LINES)
     known_lines = LINES;
   lines = LINES - 2 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
-  TopBuffy = CurBuffy - (CurBuffy % lines);
+  if (option (OPTSIDEBARNEWMAILONLY)) {
+    int i = CurBuffy;
+    TopBuffy = CurBuffy - 1;
+    while (i >= 0) {
+      if (((BUFFY*) Incoming->data[i])->new > 0)
+        TopBuffy = i;
+      i--;
+    }
+  } else
+    TopBuffy = CurBuffy - (CurBuffy % lines);
   if (TopBuffy < 0)
     TopBuffy = 0;
 }
@@ -63,24 +61,29 @@ void calc_boundaries (int menu)
 static char *shortened_hierarchy (char *box)
 {
   int dots = 0;
-  char *last_dot;
+  char *last_dot = NULL;
   int i, j;
   char *new_box;
 
+  if (!SidebarBoundary || !*SidebarBoundary)
+    return (safe_strdup (box));
+
   for (i = 0; i < safe_strlen (box); ++i) {
-    if (box[i] == '.')
+    if (strchr (SidebarBoundary, box[i]))
       ++dots;
-    else if (isupper (box[i]))
-      return (safe_strdup (box));
   }
-  last_dot = strrchr (box, '.');
+  for (i = safe_strlen (box); i >= 0; i--)
+    if (strchr (SidebarBoundary, box[i])) {
+      last_dot = &box[i];
+      break;
+    }
   if (last_dot) {
     ++last_dot;
     new_box = safe_malloc (safe_strlen (last_dot) + 2 * dots + 1);
     new_box[0] = box[0];
     for (i = 1, j = 1; i < safe_strlen (box); ++i) {
-      if (box[i] == '.') {
-        new_box[j++] = '.';
+      if (strchr (SidebarBoundary, box[i])) {
+        new_box[j++] = box[i];
         new_box[j] = 0;
         if (&box[i + 1] != last_dot) {
           new_box[j++] = box[i + 1];
@@ -97,84 +100,104 @@ static char *shortened_hierarchy (char *box)
   return safe_strdup (box);
 }
 
+static const char* sidebar_number_format (char* dest, size_t destlen, char op,
+                                          const char* src, const char* fmt,
+                                          const char* ifstr, const char* elstr,
+                                          unsigned long data, format_flag flags) {
+  char tmp[SHORT_STRING];
+  BUFFY* b = (BUFFY*) Incoming->data[data];
+  int opt = flags & M_FORMAT_OPTIONAL;
+  int c = Context && safe_strcmp (Context->path, b->path) == 0;
+
+  switch (op) {
+    case 'c':
+      snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
+      snprintf (dest, destlen, tmp, c ? Context->msgcount : b->msgcount);
+      break;
+    case 'n':
+      if (!opt) {
+        snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
+        snprintf (dest, destlen, tmp, c ? Context->unread : b->msg_unread);
+      } else if ((c && Context->unread == 0) || (!c && b->msg_unread == 0))
+        opt = 0;
+      break;
+    case 'f':
+      if (!opt) {
+        snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
+        snprintf (dest, destlen, tmp, c ? Context->flagged : b->msg_flagged);
+      } else if ((c && Context->flagged == 0) || (!c && b->msg_flagged == 0))
+        opt = 0;
+      break;
+  }
+
+  if (opt)
+    mutt_FormatString (dest, destlen, ifstr, sidebar_number_format,
+                       data, M_FORMAT_OPTIONAL);
+  else if (flags & M_FORMAT_OPTIONAL)
+    mutt_FormatString (dest, destlen, elstr, sidebar_number_format,
+                       data, M_FORMAT_OPTIONAL);
+  return (src);
+}
+
+int sidebar_need_count (void) {
+  if (!option (OPTMBOXPANE) || SidebarWidth == 0 ||
+      !SidebarNumberFormat || !*SidebarNumberFormat)
+    return (0);
+  return (1);
+}
+
 /* print single item
- * FIXME this is completely fucked up right now
+ * returns:
+ *      0       item was not printed ('cause of $sidebar_newmail_only)
+ *      1       item was printed
  */
-char *make_sidebar_entry (char *box, int size, int new, int flagged)
+int make_sidebar_entry (char* box, int idx, size_t len)
 {
-  int i = 0, dlen, max, shortened = 0;
-  int offset;
+  int shortened = 0, lencnt = 0;
+  char no[SHORT_STRING], entry[SHORT_STRING];
+#if USE_IMAP
+  int l = safe_strlen (ImapHomeNamespace);
+#endif
 
   if (SidebarWidth > COLS)
     SidebarWidth = COLS;
 
-  dlen = safe_strlen (SidebarDelim);
-  max = SidebarWidth - dlen - 1;
+  if (option (OPTSIDEBARNEWMAILONLY) && box && Context && Context->path && 
+      safe_strcmp (Context->path, box) != 0 && 
+      ((BUFFY*) Incoming->data[idx])->new == 0)
+    /* if $sidebar_newmail_only is set, don't display the
+     * box only if it's not the currently opened
+     * (i.e. always display the currently opened) */
+    return (0);
 
-  safe_realloc (&entry, SidebarWidth + 1);
-  entry[SidebarWidth] = 0;
-  for (; i < SidebarWidth; entry[i++] = ' ');
+  mutt_FormatString (no, len, NONULL (SidebarNumberFormat),
+                     sidebar_number_format, idx, M_FORMAT_OPTIONAL);
+  lencnt = safe_strlen (no);
+  memset (&entry, ' ', sizeof (entry));
+
 #if USE_IMAP
-  if (ImapHomeNamespace && safe_strlen (ImapHomeNamespace) > 0) {
-    if (strncmp (box, ImapHomeNamespace, safe_strlen (ImapHomeNamespace)) == 0
-        && safe_strcmp (box, ImapHomeNamespace) != 0) {
-      box += safe_strlen (ImapHomeNamespace) + 1;
-    }
-  }
+  if (l > 0 && safe_strncmp (box, ImapHomeNamespace, l) == 0 && 
+      safe_strlen (box) > l)
+    box += l + 1;
+  else
 #endif
-  max -= quick_log10 (size);
-  if (new)
-    max -= quick_log10 (new) + 2;
-  if (flagged > 0)
-    max -= quick_log10 (flagged) + 2;
-  if (option (OPTSHORTENHIERARCHY) && safe_strlen (box) > max) {
+    box = basename (box);
+
+  if (option (OPTSHORTENHIERARCHY) && safe_strlen (box) > len-lencnt-1) {
     box = shortened_hierarchy (box);
     shortened = 1;
   }
-  i = safe_strlen (box);
-  strncpy (entry, box, i < SidebarWidth - dlen ? i : SidebarWidth - dlen);
 
-  if (new) {
-    if (flagged > 0) {
-      offset =
-        SidebarWidth - 5 - quick_log10 (size) - dlen - quick_log10 (new) -
-        quick_log10 (flagged);
-      if (offset < 0)
-        offset = 0;
-      snprintf (entry + offset, SidebarWidth - dlen - offset + 1,
-                "% d(%d)[%d]", size, new, flagged);
-    }
-    else {
-      offset =
-        SidebarWidth - 3 - quick_log10 (size) - dlen - quick_log10 (new);
-      if (offset < 0)
-        offset = 0;
-      snprintf (entry + offset, SidebarWidth - dlen - offset + 1,
-                "% d(%d)", size, new);
-    }
-  }
-  else {
-    if (flagged > 0) {
-      offset =
-        SidebarWidth - 3 - quick_log10 (size) - dlen - quick_log10 (flagged);
-      if (offset < 0)
-        offset = 0;
-      snprintf (entry + offset, SidebarWidth - dlen - offset + 1,
-                "% d[%d]", size, flagged);
-    }
-    else {
-      offset = SidebarWidth - 1 - quick_log10 (size) - dlen;
-      if (offset < 0)
-        offset = 0;
-      snprintf (entry + offset, SidebarWidth - dlen - offset + 1,
-                "% d", size);
-    }
-  }
+  snprintf (entry, len-lencnt-1, "%s", box);
+  entry[safe_strlen (entry)] = ' ';
+  strncpy (entry + (len - lencnt), no, lencnt);
 
-  if (option (OPTSHORTENHIERARCHY) && shortened) {
-    free (box);
-  }
-  return entry;
+  addnstr (entry, len);
+
+  if (shortened)
+    FREE(&box);
+
+  return (1);
 }
 
 /* returns folder name of currently 
@@ -210,16 +233,14 @@ void sidebar_set_buffystats (CONTEXT* Context) {
 
 /* actually draws something
  * FIXME this needs some clue when to do it
- * FIXME this is completely fucked up right now
  */
 int sidebar_draw (int menu)
 {
 
-  int lines = option (OPTHELP) ? 1 : 0;
-  int draw_devider=1;
+  int lines = option (OPTHELP) ? 1 : 0, draw_devider = 1, i = 0;
   BUFFY *tmp;
-  int i = 0;
   short delim_len = safe_strlen (SidebarDelim);
+  char blank[SHORT_STRING];
 
   /* initialize first time */
   if (!initialized) {
@@ -278,69 +299,33 @@ int sidebar_draw (int menu)
 
   if (list_empty(Incoming))
     return 0;
-
   lines = option (OPTHELP) ? 1 : 0;     /* go back to the top */
-
   calc_boundaries (menu);
 
+  /* actually print items */
   for (i = TopBuffy; i < Incoming->length && lines < LINES - 1 - 
        (menu != MENU_PAGER || option (OPTSTATUSONTOP)); i++) {
     tmp = (BUFFY*) Incoming->data[i];
+
     if (i == CurBuffy)
       SETCOLOR (MT_COLOR_INDICATOR);
     else if (tmp->msg_flagged > 0)
       SETCOLOR (MT_COLOR_FLAGGED);
-    else if (tmp->msg_unread > 0)
+    else if (tmp->new > 0)
       SETCOLOR (MT_COLOR_NEW);
     else
       SETCOLOR (MT_COLOR_NORMAL);
 
     move (lines, 0);
-    if (option (OPTSIDEBARNEWMAILONLY)) {
-      if (tmp->msg_unread > 0) {
-        if (Context && !safe_strcmp (tmp->path, Context->path)) {
-          printw ("%.*s", SidebarWidth - delim_len,
-                  make_sidebar_entry (basename (tmp->path),
-                                      Context->msgcount, Context->unread,
-                                      Context->flagged));
-          tmp->msg_unread = Context->unread;
-          tmp->msgcount = Context->msgcount;
-          tmp->msg_flagged = Context->flagged;
-        }
-        else
-          printw ("%.*s", SidebarWidth - delim_len,
-                  make_sidebar_entry (basename (tmp->path),
-                                      tmp->msgcount, tmp->msg_unread,
-                                      tmp->msg_flagged));
-        lines++;
-      }
-    }
-    else {
-      if (Context && !safe_strcmp (tmp->path, Context->path)) {
-        printw ("%.*s", SidebarWidth - delim_len,
-                make_sidebar_entry (basename (tmp->path),
-                                    Context->msgcount, Context->unread,
-                                    Context->flagged));
-        tmp->msg_unread = Context->unread;
-        tmp->msgcount = Context->msgcount;
-        tmp->msg_flagged = Context->flagged;
-      }
-      else
-        printw ("%.*s", SidebarWidth - delim_len,
-                make_sidebar_entry (basename (tmp->path),
-                                    tmp->msgcount, tmp->msg_unread,
-                                    tmp->msg_flagged));
-      lines++;
-    }
+    lines += make_sidebar_entry (tmp->path, i, SidebarWidth-delim_len);
   }
-  SETCOLOR (MT_COLOR_NORMAL);
-  for (; lines < LINES - 1 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
-       lines++) {
-    int i = 0;
 
+  /* fill with blanks to bottom */
+  memset (&blank, ' ', sizeof (blank));
+  SETCOLOR (MT_COLOR_NORMAL);
+  for (; lines < LINES - 1 - (menu != MENU_PAGER || option (OPTSTATUSONTOP)); lines++) {
     move (lines, 0);
-    for (; i < SidebarWidth - delim_len; i++)
-      addch (' ');
+    addnstr (blank, SidebarWidth-delim_len);
   }
   return 0;
 }
@@ -352,7 +337,7 @@ static int exist_next_new () {
     return (-1);
   i = CurBuffy + 1;
   while (i < Incoming->length)
-    if (((BUFFY*) Incoming->data[i++])->msg_unread)
+    if (((BUFFY*) Incoming->data[i++])->new > 0)
       return (i-1);
   return (-1);
 }
@@ -364,7 +349,7 @@ static int exist_prev_new () {
     return (-1);
   i = CurBuffy - 1;
   while (i >= 0)
-    if (((BUFFY*) Incoming->data[i--])->msg_unread)
+    if (((BUFFY*) Incoming->data[i--])->new > 0)
       return (i+1);
   return (-1);
 }

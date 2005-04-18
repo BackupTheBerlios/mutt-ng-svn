@@ -271,7 +271,7 @@ int mutt_buffy_check (int force)
   struct stat contex_sb;
   time_t now, last1;
   CONTEXT *ctx;
-  int i = 0, local = 0;
+  int i = 0, local = 0, count = 0;
 #ifdef USE_IMAP
   time_t last2;
 
@@ -302,6 +302,8 @@ int mutt_buffy_check (int force)
 #endif
   BuffyCount = 0;
   BuffyNotify = 0;
+
+  count = sidebar_need_count ();
 
   if (!Context || !Context->path || 
       (mx_is_local (Context->magic-1) && stat (Context->path, &contex_sb) != 0)) {
@@ -335,7 +337,7 @@ int mutt_buffy_check (int force)
       case M_MMDF:
         /* only check on force or $mail_check reached */
         if (force != 0 || (now - last1 >= BuffyTimeout)) {
-          if (SidebarWidth == 0 || !option (OPTMBOXPANE)) {
+          if (!count) {
             if (STAT_CHECK) {
               BuffyCount++;
               tmp->new = 1;
@@ -347,8 +349,7 @@ int mutt_buffy_check (int force)
             }
 #endif
           }
-          else if (SidebarWidth > 0 && option (OPTMBOXPANE) &&
-                   (STAT_CHECK || tmp->msgcount == 0)) {
+          else if (STAT_CHECK || tmp->msgcount == 0) {
             /* sidebar visible */
             BuffyCount++;
             if ((ctx =
@@ -389,7 +390,7 @@ int mutt_buffy_check (int force)
               if (tmp->new == 0) {
                 BuffyCount++;
                 tmp->new = 1;
-                if (SidebarWidth == 0 || !option (OPTMBOXPANE))
+                if (!count)
                   /* if sidebar invisible -> done */
                   break;
               }
@@ -400,7 +401,7 @@ int mutt_buffy_check (int force)
           }
           closedir (dirp);
 
-          if (SidebarWidth > 0 && option (OPTMBOXPANE)) {
+          if (count) {
             /* only count total mail if sidebar visible */
             snprintf (path, sizeof (path), "%s/cur", tmp->path);
             if ((dirp = opendir (path)) == NULL) {
@@ -432,7 +433,7 @@ int mutt_buffy_check (int force)
         if (force != 0 || (now - last1 >= BuffyTimeout)) {
           if ((tmp->new = mh_buffy (tmp->path)) > 0)
             BuffyCount++;
-          if (SidebarWidth > 0 && option (OPTMBOXPANE)) {
+          if (count) {
             DIR *dp;
             struct dirent *de;
 
