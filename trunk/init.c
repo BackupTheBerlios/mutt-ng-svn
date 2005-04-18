@@ -41,6 +41,8 @@
 #include <errno.h>
 #include <sys/wait.h>
 
+list2_t* Synonyms;
+
 void toggle_quadoption (int opt)
 {
   int n = opt / 4;
@@ -91,9 +93,12 @@ int mutt_option_index (char *s)
   int i;
 
   for (i = 0; MuttVars[i].option; i++)
-    if (safe_strcmp (s, MuttVars[i].option) == 0)
+    if (safe_strcmp (s, MuttVars[i].option) == 0) {
+      if (MuttVars[i].type == DT_SYN)
+        list_push_back (&Synonyms, &MuttVars[i]);
       return (MuttVars[i].type ==
               DT_SYN ? mutt_option_index ((char *) MuttVars[i].data) : i);
+    }
   return (-1);
 }
 
@@ -2281,6 +2286,19 @@ void mutt_init (int skip_sys_rc, LIST * commands)
 
   if (mutt_execute_commands (commands) != 0)
     need_pause = 1;
+
+  /* warn about synonym variables */
+  if (!list_empty(Synonyms)) {
+    int i = 0;
+    fprintf (stderr, _("Warning: the following synonym variables were found:\n"));
+    for (i = 0; i < Synonyms->length; i++)
+      fprintf (stderr, "$%s (for $%s)\n",
+               ((struct option_t*) Synonyms->data[i])->option,
+               (char*) ((struct option_t*) Synonyms->data[i])->data);
+    fprintf (stderr, _("Warning: Synonym variables are scheduled for removal.\n"));
+    list_del (&Synonyms, NULL);
+    need_pause = 1;
+  }
 
   if (need_pause && !option (OPTNOCURSES)) {
     if (mutt_any_key_to_continue (NULL) == -1)
