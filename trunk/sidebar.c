@@ -72,7 +72,7 @@ static char *shortened_hierarchy (char *box)
     if (strchr (SidebarBoundary, box[i]))
       ++dots;
   }
-  for (i = safe_strlen (box); i >= 0; i--)
+  for (i = safe_strlen (box)-1; i >= 0; i--)
     if (strchr (SidebarBoundary, box[i])) {
       last_dot = &box[i];
       break;
