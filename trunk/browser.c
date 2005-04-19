@@ -12,6 +12,7 @@
 #endif
 
 #include "mutt.h"
+#include "mx.h"
 #include "mutt_curses.h"
 #include "mutt_menu.h"
 #include "buffy.h"
