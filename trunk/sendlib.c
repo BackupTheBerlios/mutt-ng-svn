@@ -974,7 +974,7 @@ int mutt_lookup_mime_type (BODY * att, const char *path)
       snprintf (buf, sizeof (buf), "%s/.mime.types", NONULL (Homedir));
       break;
     case 1:
-      strfcpy (buf, SYSCONFDIR "/mime.types", sizeof (buf));
+      strfcpy (buf, SYSCONFDIR "/muttng-mime.types", sizeof (buf));
       break;
     case 2:
       strfcpy (buf, PKGDATADIR "/mime.types", sizeof (buf));
