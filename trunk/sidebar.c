@@ -41,9 +41,11 @@ void calc_boundaries (int menu)
   if (list_empty(Incoming))
     return;
   /* correct known_lines if it has changed because of a window resize */
-  if (known_lines != LINES)
-    known_lines = LINES;
+  /*  if (known_lines != LINES)
+    known_lines = LINES; */
+  
   lines = LINES - 2 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
+  known_lines = lines;
   if (option (OPTSIDEBARNEWMAILONLY)) {
     int i = CurBuffy;
     TopBuffy = CurBuffy - 1;
@@ -188,7 +190,7 @@ int make_sidebar_entry (char* box, int idx, size_t len)
     shortened = 1;
   }
 
-  snprintf (entry, len-lencnt-1, "%s", box);
+  snprintf (entry, len-lencnt, "%s", box);
   entry[safe_strlen (entry)] = ' ';
   strncpy (entry + (len - lencnt), no, lencnt);
 
@@ -397,7 +399,7 @@ void sidebar_scroll (int op, int menu) {
     break;
 
   case OP_SIDEBAR_SCROLL_UP:
-    if (TopBuffy == 0) {
+    if (CurBuffy == 0) {
       mutt_error (_("You are on the first mailbox."));
       return;
     }
@@ -406,13 +408,13 @@ void sidebar_scroll (int op, int menu) {
       CurBuffy = 0;
     break;
   case OP_SIDEBAR_SCROLL_DOWN:
-    if (TopBuffy + known_lines >= Incoming->length) {
+    if (CurBuffy + 1 == Incoming->length) {
       mutt_error (_("You are on the last mailbox."));
       return;
     }
     CurBuffy += known_lines;
     if (CurBuffy >= Incoming->length)
-      CurBuffy = Incoming->length;
+      CurBuffy = Incoming->length - 1;
     break;
   default:
     return;
