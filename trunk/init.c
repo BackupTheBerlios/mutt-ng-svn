@@ -2292,7 +2292,7 @@ void mutt_init (int skip_sys_rc, LIST * commands)
     int i = 0;
     fprintf (stderr, _("Warning: the following synonym variables were found:\n"));
     for (i = 0; i < Synonyms->length; i++)
-      fprintf (stderr, "$%s (for $%s)\n",
+      fprintf (stderr, "$%s ($%s should be used)\n",
                ((struct option_t*) Synonyms->data[i])->option,
                (char*) ((struct option_t*) Synonyms->data[i])->data);
     fprintf (stderr, _("Warning: Synonym variables are scheduled for removal.\n"));
