@@ -17,6 +17,7 @@
 #include "mutt_curses.h"
 #include "keymap.h"
 #include "history.h"
+#include "buffy.h"
 
 #include "lib/mem.h"
 
@@ -439,7 +440,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
         if (flags & M_EFILE) {
           first = 1;            /* clear input if user types a real key later */
           my_wcstombs (buf, buflen, state->wbuf, state->curpos);
-          mutt_buffy (buf, buflen);
+          buffy_next (buf, buflen);
           state->curpos = state->lastchar =
             my_mbstowcs (&state->wbuf, &state->wbuflen, 0, buf);
           break;

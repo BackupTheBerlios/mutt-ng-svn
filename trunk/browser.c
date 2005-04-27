@@ -478,7 +478,7 @@ static int examine_directory (MUTTMENU * menu, struct browser_state *state,
     NNTP_DATA *data;
     NNTP_SERVER *news = CurrentNewsSrv;
 
-/*  mutt_buffy_check (0); */
+/*  buffy_check (0); */
     init_state (state, menu);
 
     for (tmp = news->list; tmp; tmp = tmp->next) {
@@ -520,7 +520,7 @@ static int examine_directory (MUTTMENU * menu, struct browser_state *state,
       return (-1);
     }
 
-    mutt_buffy_check (0);
+    buffy_check (0);
 
     if ((dp = opendir (d)) == NULL) {
       mutt_perror (d);
@@ -569,7 +569,7 @@ static int examine_mailboxes (MUTTMENU * menu, struct browser_state *state)
     NNTP_DATA *data;
     NNTP_SERVER *news = CurrentNewsSrv;
 
-/*  mutt_buffy_check (0); */
+/*  buffy_check (0); */
     init_state (state, menu);
 
     for (tmp = news->list; tmp; tmp = tmp->next) {
@@ -590,7 +590,7 @@ static int examine_mailboxes (MUTTMENU * menu, struct browser_state *state)
 
     if (!Incoming)
       return (-1);
-    mutt_buffy_check (0);
+    buffy_check (0);
 
     init_state (state, menu);
 
@@ -687,7 +687,7 @@ static void init_menu (struct browser_state *state, MUTTMENU * menu,
   else
 #endif
   if (buffy)
-    snprintf (title, titlelen, _("Mailboxes [%d]"), mutt_buffy_check (0));
+    snprintf (title, titlelen, _("Mailboxes [%d]"), buffy_check (0));
   else {
     strfcpy (path, LastDir, sizeof (path));
     mutt_pretty_mailbox (path);
@@ -1306,7 +1306,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
       break;
 
     case OP_BUFFY_LIST:
-      mutt_buffy_list ();
+      buffy_list ();
       break;
 
     case OP_BROWSER_NEW_FILE:

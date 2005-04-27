@@ -25,6 +25,7 @@
 #include "attach.h"
 #include "mbyte.h"
 #include "sidebar.h"
+#include "buffy.h"
 
 #include "mx.h"
 
@@ -2498,7 +2499,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       break;
 
     case OP_BUFFY_LIST:
-      mutt_buffy_list ();
+      buffy_list ();
       redraw |= REDRAW_SIDEBAR;
       break;
 

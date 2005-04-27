@@ -44,5 +44,7 @@ mx_t* imap_reg_mx (void) {
   fmt->mx_access = imap_access;
   fmt->mx_open_mailbox = imap_open_mailbox;
   fmt->mx_acl_check = acl_check_imap;
+  fmt->mx_fastclose_mailbox = imap_close_mailbox;
+  fmt->mx_sync_mailbox = imap_sync_mailbox;
   return (fmt);
 }

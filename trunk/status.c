@@ -17,6 +17,7 @@
 #include "sort.h"
 #include "mapping.h"
 #include "mx.h"
+#include "buffy.h"
 
 #include "lib/mem.h"
 #include "lib/intl.h"
@@ -68,9 +69,9 @@ static const char *status_format_str (char *buf, size_t buflen, char op,
   case 'b':
     if (!optional) {
       snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
-      snprintf (buf, buflen, fmt, mutt_buffy_check (0));
+      snprintf (buf, buflen, fmt, buffy_check (0));
     }
-    else if (!mutt_buffy_check (0))
+    else if (!buffy_check (0))
       optional = 0;
     break;
 

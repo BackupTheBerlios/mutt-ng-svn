@@ -30,21 +30,27 @@ typedef struct buffy_t {
   short newly_created;          /* mbox or mmdf just popped into existence */
 } BUFFY;
 
+/* folders with incomming mail (via mailboxes command) */
 WHERE list2_t* Incoming;
 WHERE short BuffyTimeout INITVAL (3);
-
-/*
- * looks up a path in Incoming list
- * there needs to be an extra function since we have everything but
- * object of type BUFFY when we want to a do a lookup ;-(
- */
-int buffy_lookup (const char*);
-
 extern time_t BuffyDoneTime;    /* last time we knew for sure how much mail there was */
 
+/* looks up a path in Incoming list (returns index) */
+int buffy_lookup (const char*);
+/* handles mailboxes commands */
+int buffy_parse_mailboxes (BUFFER*, BUFFER*, unsigned long, BUFFER*);
+/* from given path, gets next mailbox in Incoming with new mail */
+void buffy_next (char*, size_t);
+/* checks mailboxes for new mail (returns number) */
+int buffy_check (int);
+/* lists mailboxes with new mail */
+int buffy_list (void);
+/* wrapper around buffy_list() */
+int buffy_notify (void);
+
 #ifdef BUFFY_SIZE
-BUFFY *mutt_find_mailbox (const char *path);
-void mutt_update_mailbox (BUFFY * b);
+BUFFY *buffy_find_mailbox (const char *path);
+void buffy_update_mailbox (BUFFY * b);
 #endif
 
 #endif /* !_BUFFY_H */

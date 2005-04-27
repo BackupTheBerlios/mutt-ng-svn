@@ -444,7 +444,7 @@ int mutt_index_menu (void)
                                   IndexHelp);
 
   if (!attach_msg) {
-    mutt_buffy_check (1);       /* force the buffy check after we enter the folder */
+    buffy_check (1);       /* force the buffy check after we enter the folder */
     /* record folder we open to place sidebar indicator properly */
     if (Context && Context->path)
       sidebar_set_current (Context->path);
@@ -529,12 +529,12 @@ int mutt_index_menu (void)
     if (!attach_msg) {
       /* check for new mail in the incoming folders */
       oldcount = newcount;
-      if ((newcount = mutt_buffy_check (0)) != oldcount) {
+      if ((newcount = buffy_check (0)) != oldcount) {
         menu->redraw |= REDRAW_STATUS;
         menu->redraw |= REDRAW_SIDEBAR;
       }
       if (do_buffy_notify) {
-        if (mutt_buffy_notify () && option (OPTBEEPNEW))
+        if (buffy_notify () && option (OPTBEEPNEW))
           beep ();
       }
       else
@@ -1203,7 +1203,7 @@ int mutt_index_menu (void)
       {
         if (Context && Context->path)
           strncpy (buf, Context->path, sizeof (buf));
-        mutt_buffy (buf, sizeof (buf));
+        buffy_next (buf, sizeof (buf));
       }
 
       if (op == OP_SIDEBAR_OPEN) {
@@ -1272,7 +1272,7 @@ int mutt_index_menu (void)
         menu->current = 0;
 
 #ifdef USE_NNTP
-      /* mutt_buffy_check() must be done with mail-reader mode! */
+      /* buffy_check() must be done with mail-reader mode! */
       menu->help = mutt_compile_help (helpstr, sizeof (helpstr), MENU_MAIN,
                                       (Context
                                        && (Context->magic ==
@@ -1280,7 +1280,7 @@ int mutt_index_menu (void)
                                       IndexHelp);
 #endif
       mutt_clear_error ();
-      mutt_buffy_check (1);     /* force the buffy check after we have changed
+      buffy_check (1);     /* force the buffy check after we have changed
                                    the folder */
       menu->redraw = REDRAW_FULL;
       set_option (OPTSEARCHINVALID);
@@ -2277,7 +2277,7 @@ int mutt_index_menu (void)
       break;
 
     case OP_BUFFY_LIST:
-      mutt_buffy_list ();
+      buffy_list ();
       menu->redraw = REDRAW_FULL;
       break;
 

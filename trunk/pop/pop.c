@@ -424,7 +424,7 @@ int pop_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
 }
 
 /* update POP mailbox - delete messages from server */
-pop_query_status pop_sync_mailbox (CONTEXT * ctx, int *index_hint)
+pop_query_status pop_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
 {
   int i;
   pop_query_status ret;

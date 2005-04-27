@@ -68,6 +68,9 @@ struct mh_sequences {
 #define MH_SEQ_REPLIED (1 << 1)
 #define MH_SEQ_FLAGGED (1 << 2)
 
+/* prototypes */
+static int maildir_check_empty (const char*);
+
 static void mhs_alloc (struct mh_sequences *mhs, int i)
 {
   int j;
@@ -947,12 +950,12 @@ static int _mh_read_dir (CONTEXT * ctx, const char *subdir)
   return 0;
 }
 
-int mh_read_dir (CONTEXT* ctx) {
+static int mh_read_dir (CONTEXT* ctx) {
   return (_mh_read_dir (ctx, NULL));
 }
 
 /* read a maildir style mailbox */
-int maildir_read_dir (CONTEXT * ctx)
+static int maildir_read_dir (CONTEXT * ctx)
 {
   /* maildir looks sort of like MH, except that there are two subdirectories
    * of the main folder path from which to read messages
@@ -1378,7 +1381,7 @@ static int maildir_sync_message (CONTEXT * ctx, int msgno)
   return (0);
 }
 
-int mh_sync_mailbox (CONTEXT * ctx, int *index_hint)
+static int mh_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
 {
   char path[_POSIX_PATH_MAX], tmp[_POSIX_PATH_MAX];
   int i, j;
@@ -1871,7 +1874,7 @@ FILE *maildir_open_find_message (const char *folder, const char *msg)
  * 0 if there are messages in the mailbox
  * -1 on error
  */
-int maildir_check_empty (const char *path)
+static int maildir_check_empty (const char *path)
 {
   DIR *dp;
   struct dirent *de;
@@ -1980,6 +1983,7 @@ static mx_t* reg_mx (void) {
   mx_t* fmt = safe_calloc (1, sizeof (mx_t));
   fmt->local = 1;
   fmt->mx_access = access;
+  fmt->mx_sync_mailbox = mh_sync_mailbox;
   return (fmt);
 }
 

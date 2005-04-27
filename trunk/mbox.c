@@ -15,6 +15,7 @@
 
 #include "mutt.h"
 #include "mx.h"
+#include "buffy.h"
 #include "mbox.h"
 #include "sort.h"
 #include "copy.h"
@@ -52,6 +53,9 @@ int mbox_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
   return 0;
 }
 
+/* prototypes */
+static int mbox_reopen_mailbox (CONTEXT*, int*);
+
 /* parameters:
  * ctx - context to lock
  * excl - exclusive lock?
@@ -81,7 +85,7 @@ void mbox_unlock_mailbox (CONTEXT * ctx)
   }
 }
 
-int mmdf_parse_mailbox (CONTEXT * ctx)
+static int mmdf_parse_mailbox (CONTEXT * ctx)
 {
   char buf[HUGE_STRING];
   char return_path[LONG_STRING];
@@ -219,7 +223,7 @@ int mmdf_parse_mailbox (CONTEXT * ctx)
  * NOTE: it is assumed that the mailbox being read has been locked before
  * this routine gets called.  Strange things could happen if it's not!
  */
-int mbox_parse_mailbox (CONTEXT * ctx)
+static int mbox_parse_mailbox (CONTEXT * ctx)
 {
   struct stat sb;
   char buf[HUGE_STRING], return_path[STRING];
@@ -388,7 +392,7 @@ int mbox_parse_mailbox (CONTEXT * ctx)
 #undef PREV
 
 /* open a mbox or mmdf style mailbox */
-int mbox_open_mailbox (CONTEXT * ctx)
+static int mbox_open_mailbox (CONTEXT * ctx)
 {
   int rc;
 
@@ -631,7 +635,7 @@ int mbox_check_mailbox (CONTEXT * ctx, int *index_hint)
  *	0	success
  *	-1	failure
  */
-int mbox_sync_mailbox (CONTEXT * ctx, int *index_hint)
+static int _mbox_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
 {
   char tempfile[_POSIX_PATH_MAX];
   char buf[32];
@@ -713,7 +717,7 @@ int mbox_sync_mailbox (CONTEXT * ctx, int *index_hint)
     mutt_error
       _("sync: mbox modified, but no modified messages! (report this bug)");
     mutt_sleep (5);             /* the mutt_error /will/ get cleared! */
-    dprint (1, (debugfile, "mbox_sync_mailbox(): no modified messages.\n"));
+    dprint (1, (debugfile, "_mbox_sync_mailbox(): no modified messages.\n"));
     unlink (tempfile);
     goto bail;
   }
@@ -809,7 +813,7 @@ int mbox_sync_mailbox (CONTEXT * ctx, int *index_hint)
   if (fclose (fp) != 0) {
     fp = NULL;
     dprint (1,
-            (debugfile, "mbox_sync_mailbox: fclose() returned non-zero.\n"));
+            (debugfile, "_mbox_sync_mailbox: fclose() returned non-zero.\n"));
     unlink (tempfile);
     mutt_perror (tempfile);
     mutt_sleep (5);
@@ -830,7 +834,7 @@ int mbox_sync_mailbox (CONTEXT * ctx, int *index_hint)
     mx_fastclose_mailbox (ctx);
     dprint (1,
             (debugfile,
-             "mbox_sync_mailbox: unable to reopen temp copy of mailbox!\n"));
+             "_mbox_sync_mailbox: unable to reopen temp copy of mailbox!\n"));
     mutt_perror (tempfile);
     mutt_sleep (5);
     return (-1);
@@ -843,14 +847,14 @@ int mbox_sync_mailbox (CONTEXT * ctx, int *index_hint)
       (ctx->magic == M_MMDF && safe_strcmp (MMDF_SEP, buf) != 0)) {
     dprint (1,
             (debugfile,
-             "mbox_sync_mailbox: message not in expected position."));
+             "_mbox_sync_mailbox: message not in expected position."));
     dprint (1, (debugfile, "\tLINE: %s\n", buf));
     i = -1;
   }
   else {
     if (fseek (ctx->fp, offset, SEEK_SET) != 0) {       /* return to proper offset */
       i = -1;
-      dprint (1, (debugfile, "mbox_sync_mailbox: fseek() failed\n"));
+      dprint (1, (debugfile, "_mbox_sync_mailbox: fseek() failed\n"));
     }
     else {
       /* copy the temp mailbox back into place starting at the first
@@ -964,6 +968,19 @@ bail:                          /* Come here in case of disaster */
   return rc;
 }
 
+static int mbox_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint) {
+#ifdef BUFFY_SIZE
+  BUFFY* tmp = NULL;
+#endif
+  int rc = _mbox_sync_mailbox (ctx, unused, index_hint);
+
+#ifdef BUFFY_SIZE
+  if ((tmp = buffy_find_mailbox (ctx->path)) && tmp->new == 0)
+    buffy_update_mailbox (tmp);
+#endif
+  return (rc);
+}
+
 /* close a mailbox opened in write-mode */
 int mbox_close_mailbox (CONTEXT * ctx)
 {
@@ -979,7 +996,7 @@ int mbox_close_mailbox (CONTEXT * ctx)
   return 0;
 }
 
-int mbox_reopen_mailbox (CONTEXT * ctx, int *index_hint)
+static int mbox_reopen_mailbox (CONTEXT * ctx, int *index_hint)
 {
   int (*cmp_headers) (const HEADER *, const HEADER *) = NULL;
   HEADER **old_hdrs;
@@ -1208,6 +1225,7 @@ static mx_t* reg_mx (void) {
   fmt->mx_is_magic = mbox_is_magic;
   fmt->mx_access = access;
   fmt->mx_open_mailbox = mbox_open_mailbox;
+  fmt->mx_sync_mailbox = mbox_sync_mailbox;
   return (fmt);
 }
 

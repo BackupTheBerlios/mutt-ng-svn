@@ -51,7 +51,7 @@ static short BuffyNotify = 0;   /* # of unnotified new boxes */
 /* Find the last message in the file. 
  * upon success return 0. If no message found - return -1 */
 
-int fseek_last_message (FILE * f)
+static int fseek_last_message (FILE * f)
 {
   long int pos;
   char buffer[BUFSIZ + 9];      /* 7 for "\n\nFrom " */
@@ -94,7 +94,7 @@ int fseek_last_message (FILE * f)
 }
 
 /* Return 1 if the last message is new */
-int test_last_status_new (FILE * f)
+static int test_last_status_new (FILE * f)
 {
   HEADER *hdr;
   ENVELOPE *tmp_envelope;
@@ -114,7 +114,7 @@ int test_last_status_new (FILE * f)
   return result;
 }
 
-int test_new_folder (const char *path)
+static int test_new_folder (const char *path)
 {
   FILE *f;
   int rc = 0;
@@ -133,7 +133,7 @@ int test_new_folder (const char *path)
   return rc;
 }
 
-BUFFY *mutt_find_mailbox (const char *path)
+BUFFY *buffy_find_mailbox (const char *path)
 {
   struct stat sb;
   struct stat tmp_sb;
@@ -152,7 +152,7 @@ BUFFY *mutt_find_mailbox (const char *path)
   return (NULL);
 }
 
-void mutt_update_mailbox (BUFFY * b)
+void buffy_update_mailbox (BUFFY * b)
 {
   struct stat sb;
 
@@ -184,7 +184,7 @@ int buffy_lookup (const char* path) {
   return (-1);
 }
 
-int mutt_parse_mailboxes (BUFFER * path, BUFFER * s, unsigned long data,
+int buffy_parse_mailboxes (BUFFER * path, BUFFER * s, unsigned long data,
                           BUFFER * err)
 {
   BUFFY* tmp;
@@ -261,7 +261,7 @@ int mutt_parse_mailboxes (BUFFER * path, BUFFER * s, unsigned long data,
  * 1    force all checks + update sidebar
  * 2    force all checks + _don't_ update sidebar
  */
-int mutt_buffy_check (int force)
+int buffy_check (int force)
 {
   BUFFY *tmp;
   struct stat sb;
@@ -353,7 +353,7 @@ int mutt_buffy_check (int force)
             /* sidebar visible */
             BuffyCount++;
             if ((ctx =
-                 mx_open_mailbox (tmp->path, M_READONLY | M_QUIET | M_NOSORT,
+                 mx_open_mailbox (tmp->path, M_READONLY | M_QUIET | M_NOSORT | M_COUNT,
                                   NULL)) != NULL) {
               tmp->msgcount = ctx->msgcount;
               tmp->new = ctx->new;
@@ -495,7 +495,7 @@ int mutt_buffy_check (int force)
   return (BuffyCount);
 }
 
-int mutt_buffy_list (void)
+int buffy_list (void)
 {
   BUFFY *tmp;
   char path[_POSIX_PATH_MAX];
@@ -506,7 +506,7 @@ int mutt_buffy_list (void)
   int i = 0;
 
   if (option (OPTFORCEBUFFYCHECK))
-    mutt_buffy_check (1);
+    buffy_check (1);
 
   pos = 0;
   first = 1;
@@ -554,10 +554,10 @@ int mutt_buffy_list (void)
   return (0);
 }
 
-int mutt_buffy_notify (void)
+int buffy_notify (void)
 {
-  if (mutt_buffy_check (0) && BuffyNotify) {
-    return (mutt_buffy_list ());
+  if (buffy_check (0) && BuffyNotify) {
+    return (buffy_list ());
   }
   return (0);
 }
@@ -568,7 +568,7 @@ int mutt_buffy_notify (void)
  * given a folder name, this routine gives the next incoming folder with new
  * new mail.
  */
-void mutt_buffy (char *s, size_t slen)
+void buffy_next (char *s, size_t slen)
 {
   int i = 0, c = 0;
 
@@ -576,7 +576,7 @@ void mutt_buffy (char *s, size_t slen)
     return;
 
   mutt_expand_path (s, _POSIX_PATH_MAX);
-  if (mutt_buffy_check (0) == 0) {
+  if (buffy_check (0) == 0) {
     *s = '\0';
     return;
   }
@@ -590,9 +590,9 @@ void mutt_buffy (char *s, size_t slen)
   }
   if (c == i) {
     *s = '\0';
-    /* something went wrong since we're here when mutt_buffy_check
+    /* something went wrong since we're here when buffy_check
      * reported new mail */
-    mutt_buffy_check (0);
+    buffy_check (0);
   } else {
     strfcpy (s, ((BUFFY*) Incoming->data[c])->path, slen);
     mutt_pretty_mailbox (s);

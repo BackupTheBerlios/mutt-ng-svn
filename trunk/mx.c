@@ -65,9 +65,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#ifndef BUFFY_SIZE
 #include <utime.h>
-#endif
 
 static list2_t* MailboxFormats = NULL;
 #define MX_COMMAND(idx,cmd) ((mx_t*) MailboxFormats->data[idx])->cmd
@@ -529,6 +527,8 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT * pctx)
     ctx->quiet = 1;
   if (flags & M_READONLY)
     ctx->readonly = 1;
+  if (flags & M_COUNT)
+    ctx->counting = 1;
 
   if (flags & (M_APPEND | M_NEWFOLDER)) {
     if (mx_open_mailbox_append (ctx, flags) != 0) {
@@ -602,18 +602,8 @@ void mx_fastclose_mailbox (CONTEXT * ctx)
   if (!ctx)
     return;
 
-#ifdef USE_IMAP
-  if (ctx->magic == M_IMAP)
-    imap_close_mailbox (ctx);
-#endif /* USE_IMAP */
-#ifdef USE_POP
-  if (ctx->magic == M_POP)
-    pop_close_mailbox (ctx);
-#endif /* USE_POP */
-#ifdef USE_NNTP
-  if (ctx->magic == M_NNTP)
-    nntp_fastclose_mailbox (ctx);
-#endif /* USE_NNTP */
+  if (MX_IDX(ctx->magic-1) && MX_COMMAND(ctx->magic-1,mx_fastclose_mailbox))
+    MX_COMMAND(ctx->magic-1,mx_fastclose_mailbox(ctx));
   if (ctx->subj_hash)
     hash_destroy (&ctx->subj_hash, NULL);
   if (ctx->id_hash)
@@ -638,57 +628,14 @@ void mx_fastclose_mailbox (CONTEXT * ctx)
 /* save changes to disk */
 static int sync_mailbox (CONTEXT * ctx, int *index_hint)
 {
-#ifdef BUFFY_SIZE
-  BUFFY *tmp = NULL;
-#endif
   int rc = -1;
 
   if (!ctx->quiet)
     mutt_message (_("Writing %s..."), ctx->path);
 
-  switch (ctx->magic) {
-  case M_MBOX:
-  case M_MMDF:
-    rc = mbox_sync_mailbox (ctx, index_hint);
-#ifdef BUFFY_SIZE
-    tmp = mutt_find_mailbox (ctx->path);
-#endif
-    break;
-
-  case M_MH:
-  case M_MAILDIR:
-    rc = mh_sync_mailbox (ctx, index_hint);
-    break;
-
-#ifdef USE_IMAP
-  case M_IMAP:
-    /* extra argument means EXPUNGE */
-    rc = imap_sync_mailbox (ctx, 1, index_hint);
-    break;
-#endif /* USE_IMAP */
-
-#ifdef USE_POP
-  case M_POP:
-    rc = pop_sync_mailbox (ctx, index_hint);
-    break;
-#endif /* USE_POP */
-
-#ifdef USE_NNTP
-  case M_NNTP:
-    rc = nntp_sync_mailbox (ctx);
-    break;
-#endif /* USE_NNTP */
-  }
-
-#if 0
-  if (!ctx->quiet && !ctx->shutup && rc == -1)
-    mutt_error (_("Could not synchronize mailbox %s!"), ctx->path);
-#endif
-
-#ifdef BUFFY_SIZE
-  if (tmp && tmp->new == 0)
-    mutt_update_mailbox (tmp);
-#endif
+  if (MX_IDX(ctx->magic-1))
+    /* the 1 is only of interest for IMAP and means EXPUNGE */
+    rc = MX_COMMAND(ctx->magic-1,mx_sync_mailbox(ctx,1,index_hint));
 
 #ifdef USE_COMPRESSED
   if (rc == 0 && ctx->compressinfo)
@@ -1520,7 +1467,7 @@ void mx_update_context (CONTEXT * ctx, int new_messages)
       /* FREE (&h->env->supersedes); should I ? */
       if (h2) {
         h2->superseded = 1;
-        if (option (OPTSCORE))
+        if (!ctx->counting && option (OPTSCORE))
           mutt_score_message (ctx, h2, 1);
       }
     }
@@ -1528,11 +1475,13 @@ void mx_update_context (CONTEXT * ctx, int new_messages)
     /* add this message to the hash tables */
     if (ctx->id_hash && h->env->message_id)
       hash_insert (ctx->id_hash, h->env->message_id, h, 0);
-    if (ctx->subj_hash && h->env->real_subj)
-      hash_insert (ctx->subj_hash, h->env->real_subj, h, 1);
+    if (!ctx->counting) {
+      if (ctx->subj_hash && h->env->real_subj)
+        hash_insert (ctx->subj_hash, h->env->real_subj, h, 1);
 
-    if (option (OPTSCORE))
-      mutt_score_message (ctx, h, 0);
+      if (option (OPTSCORE))
+        mutt_score_message (ctx, h, 0);
+    }
 
     if (h->changed)
       ctx->changed = 1;
@@ -1599,6 +1548,7 @@ void mx_init (void) {
     if (MX_COMMAND(i,type) < 1)         EXITWITHERR("type");
     if (!MX_COMMAND(i,mx_is_magic))     EXITWITHERR("mx_is_magic");
     if (!MX_COMMAND(i,mx_open_mailbox)) EXITWITHERR("mx_open_mailbox");
+/*    if (!MX_COMMAND(i,mx_sync_mailbox)) EXITWITHERR("mx_sync_mailbox");*/
   }
 #undef EXITWITHERR
 #endif /* DEBUG */

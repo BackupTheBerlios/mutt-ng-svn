@@ -264,7 +264,7 @@ int sidebar_draw (int menu)
     else if (!prev_show_value && option (OPTMBOXPANE)) {
       SidebarWidth = saveSidebarWidth;
       /* after toggle: force recounting of all mail */
-      mutt_buffy_check (2);
+      buffy_check (2);
     }
     prev_show_value = option (OPTMBOXPANE);
   }

@@ -18,6 +18,7 @@
 #define _MX_H
 
 #include <sys/stat.h>
+#include <utime.h>
 
 /*
  * supported mailbox formats
@@ -80,6 +81,10 @@ typedef struct {
   /* check ACL flags; if not implemented, always assume granted
    * permissions */
   int (*mx_acl_check) (CONTEXT*, int);
+  /* fast closing */
+  void (*mx_fastclose_mailbox) (CONTEXT*);
+  /* write out changes */
+  int (*mx_sync_mailbox) (CONTEXT*, int, int*);
 } mx_t;
 
 /* called from main: init all folder types */
@@ -91,8 +96,9 @@ void mx_init (void);
 #define M_READONLY	(1<<2)  /* open in read-only mode */
 #define M_QUIET		(1<<3)  /* do not print any messages */
 #define M_NEWFOLDER	(1<<4)  /* create a new folder - same as M_APPEND, but uses
-                                 * safe_fopen() for mbox-style folders.
-                                 */
+                                 * safe_fopen() for mbox-style folders. */
+#define M_COUNT         (1<<5)  /* just do counting? needed to do speed optimizations
+                                   for sidebar */
 
 /* mx_open_new_message() */
 #define M_ADD_FROM	1       /* add a From_ line */

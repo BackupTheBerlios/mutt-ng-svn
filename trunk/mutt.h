@@ -885,6 +885,7 @@ typedef struct {
   unsigned int quiet:1;         /* inhibit status messages? */
   unsigned int collapsed:1;     /* are all threads collapsed? */
   unsigned int closing:1;       /* mailbox is being closed */
+  unsigned int counting:1;      /* do we just want to cound? */
 } CONTEXT;
 
 typedef struct attachptr {

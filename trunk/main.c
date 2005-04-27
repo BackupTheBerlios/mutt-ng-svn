@@ -883,13 +883,13 @@ int main (int argc, char **argv)
   }
   else {
     if (flags & M_BUFFY) {
-      if (!mutt_buffy_check (0)) {
+      if (!buffy_check (0)) {
         mutt_endwin _("No mailbox with new mail.");
 
         exit (1);
       }
       folder[0] = 0;
-      mutt_buffy (folder, sizeof (folder));
+      buffy_next (folder, sizeof (folder));
     }
     else if (flags & M_SELECT) {
 #ifdef USE_NNTP

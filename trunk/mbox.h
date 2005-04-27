@@ -19,23 +19,17 @@
 
 #include "mx.h"
 
+/* TODO all of these must disappear to achieve good information hiding */
+
 #define MMDF_SEP "\001\001\001\001\n"
 
-int mbox_sync_mailbox (CONTEXT *, int *);
-int mbox_open_mailbox (CONTEXT *);
 int mbox_check_mailbox (CONTEXT *, int *);
 int mbox_close_mailbox (CONTEXT *);
 int mbox_lock_mailbox (CONTEXT *, int, int);
-int mbox_parse_mailbox (CONTEXT *);
-int mmdf_parse_mailbox (CONTEXT *);
 void mbox_unlock_mailbox (CONTEXT *);
 int mbox_check_empty (const char *);
-/* this is still here for compressed folders support... */
 int mbox_is_magic (const char*, struct stat*);
-
 int mbox_strict_cmp_headers (const HEADER *, const HEADER *);
-int mbox_reopen_mailbox (CONTEXT *, int *);
-
 int mbox_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr);
 
 mx_t* mbox_reg_mx (void);

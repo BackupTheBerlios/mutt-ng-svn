@@ -1094,7 +1094,7 @@ void nntp_delete_data (void *p)
   FREE (p);
 }
 
-int nntp_sync_mailbox (CONTEXT * ctx)
+int nntp_sync_mailbox (CONTEXT * ctx, int unused1, int* unused2)
 {
   NNTP_DATA *data = ctx->data;
 
@@ -1141,7 +1141,7 @@ int nntp_close_mailbox (CONTEXT * ctx)
         return -1;
     }
   }
-  nntp_sync_mailbox (ctx);
+  nntp_sync_mailbox (ctx, 0, NULL);
   if (ctx->data && ((NNTP_DATA *) ctx->data)->nserv) {
     NNTP_SERVER *news;
 

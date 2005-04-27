@@ -103,7 +103,7 @@ NNTP_DATA *mutt_newsgroup_uncatchup (NNTP_SERVER *, char *);
 void nntp_clear_cacheindex (NNTP_SERVER *);
 int mutt_newsrc_update (NNTP_SERVER *);
 int nntp_open_mailbox (CONTEXT *);
-int nntp_sync_mailbox (CONTEXT *);
+int nntp_sync_mailbox (CONTEXT *, int, int*);
 int nntp_check_mailbox (CONTEXT *);
 int nntp_close_mailbox (CONTEXT *);
 void nntp_fastclose_mailbox (CONTEXT *);
