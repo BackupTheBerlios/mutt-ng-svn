@@ -1094,19 +1094,6 @@ int mx_sync_mailbox (CONTEXT * ctx, int *index_hint)
   return (rc);
 }
 
-#ifdef USE_IMAP
-int imap_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
-{
-  char tmp[_POSIX_PATH_MAX];
-
-  mutt_mktemp (tmp);
-  if ((msg->fp = safe_fopen (tmp, "w")) == NULL)
-    return (-1);
-  msg->path = safe_strdup (tmp);
-  return 0;
-}
-#endif
-
 /* args:
  *	dest	destintation mailbox
  *	hdr	message being copied (required for maildir support, because
@@ -1115,30 +1102,11 @@ int imap_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
 MESSAGE *mx_open_new_message (CONTEXT * dest, HEADER * hdr, int flags)
 {
   MESSAGE *msg;
-  int (*func) (MESSAGE *, CONTEXT *, HEADER *);
   ADDRESS *p = NULL;
 
-  switch (dest->magic) {
-  case M_MMDF:
-  case M_MBOX:
-    func = mbox_open_new_message;
-    break;
-  case M_MAILDIR:
-    func = maildir_open_new_message;
-    break;
-  case M_MH:
-    func = mh_open_new_message;
-    break;
-#ifdef USE_IMAP
-  case M_IMAP:
-    func = imap_open_new_message;
-    break;
-#endif
-  default:
-    dprint (1,
-            (debugfile,
-             "mx_open_new_message(): function unimplemented for mailbox type %d.\n",
-             dest->magic));
+  if (!MX_IDX(dest->magic-1)) {
+    dprint (1, (debugfile, "mx_open_new_message(): function "
+                "unimplemented for mailbox type %d.\n", dest->magic));
     return (NULL);
   }
 
@@ -1156,7 +1124,7 @@ MESSAGE *mx_open_new_message (CONTEXT * dest, HEADER * hdr, int flags)
   if (msg->received == 0)
     time (&msg->received);
 
-  if (func (msg, dest, hdr) == 0) {
+  if (MX_COMMAND(dest->magic-1,mx_open_new_message)(msg, dest, hdr) == 0) {
     if (dest->magic == M_MMDF)
       fputs (MMDF_SEP, msg->fp);
 

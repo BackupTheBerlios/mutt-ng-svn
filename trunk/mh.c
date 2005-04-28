@@ -970,7 +970,7 @@ static int maildir_read_dir (CONTEXT * ctx)
  * Open a new (temporary) message in an MH folder.
  */
 
-int mh_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
+static int mh_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
 {
   return mh_mkstemp (dest, &msg->fp, &msg->path);
 }
@@ -1018,7 +1018,7 @@ static void maildir_flags (char *dest, size_t destlen, HEADER * hdr)
  *
  */
 
-int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
+static int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
 {
   int fd;
   char path[_POSIX_PATH_MAX];
@@ -1993,6 +1993,7 @@ mx_t* mh_reg_mx (void) {
   fmt->mx_check_empty = mh_check_empty;
   fmt->mx_is_magic = mh_is_magic;
   fmt->mx_open_mailbox = mh_read_dir;
+  fmt->mx_open_new_message = mh_open_new_message;
   return (fmt);
 }
 
@@ -2002,5 +2003,6 @@ mx_t* maildir_reg_mx (void) {
   fmt->mx_check_empty = maildir_check_empty;
   fmt->mx_is_magic = maildir_is_magic;
   fmt->mx_open_mailbox = maildir_read_dir;
+  fmt->mx_open_new_message = maildir_open_new_message;
   return (fmt);
 }

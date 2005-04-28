@@ -47,7 +47,7 @@ struct m_update_t {
 };
 
 
-int mbox_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
+static int mbox_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
 {
   msg->fp = dest->fp;
   return 0;
@@ -1225,6 +1225,7 @@ static mx_t* reg_mx (void) {
   fmt->mx_is_magic = mbox_is_magic;
   fmt->mx_access = access;
   fmt->mx_open_mailbox = mbox_open_mailbox;
+  fmt->mx_open_new_message = mbox_open_new_message;
   fmt->mx_sync_mailbox = mbox_sync_mailbox;
   return (fmt);
 }

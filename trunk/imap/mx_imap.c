@@ -35,6 +35,17 @@ static int acl_check_imap (CONTEXT* ctx, int bit) {
           mutt_bit_isset (((IMAP_DATA*) ctx->data)->rights, bit));
 }
 
+static int imap_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
+{
+  char tmp[_POSIX_PATH_MAX];
+
+  mutt_mktemp (tmp);
+  if ((msg->fp = safe_fopen (tmp, "w")) == NULL)
+    return (-1);
+  msg->path = safe_strdup (tmp);
+  return 0;
+}
+
 mx_t* imap_reg_mx (void) {
   mx_t* fmt = safe_calloc (1, sizeof (mx_t));
 
@@ -43,6 +54,7 @@ mx_t* imap_reg_mx (void) {
   fmt->mx_is_magic = imap_is_magic;
   fmt->mx_access = imap_access;
   fmt->mx_open_mailbox = imap_open_mailbox;
+  fmt->mx_open_new_message = imap_open_new_message;
   fmt->mx_acl_check = acl_check_imap;
   fmt->mx_fastclose_mailbox = imap_close_mailbox;
   fmt->mx_sync_mailbox = imap_sync_mailbox;

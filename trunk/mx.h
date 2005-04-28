@@ -66,6 +66,19 @@ enum {
                      }
 
 typedef struct {
+  FILE *fp;                     /* pointer to the message data */
+  char *path;                   /* path to temp file */
+  short magic;                  /* type of mailbox this message belongs to */
+  short write;                  /* nonzero if message is open for writing */
+  struct {
+    unsigned read:1;
+    unsigned flagged:1;
+    unsigned replied:1;
+  } flags;
+  time_t received;              /* the time at which this message was received */
+} MESSAGE;
+
+typedef struct {
   /* folder magic */
   int type;
   /* may we stat() it? */
@@ -78,6 +91,8 @@ typedef struct {
   int (*mx_access) (const char*, int);
   /* read mailbox into ctx structure */
   int (*mx_open_mailbox) (CONTEXT*);
+  /* open new message */
+  int (*mx_open_new_message) (MESSAGE*, CONTEXT*, HEADER*);
   /* check ACL flags; if not implemented, always assume granted
    * permissions */
   int (*mx_acl_check) (CONTEXT*, int);
@@ -112,19 +127,6 @@ enum {
   M_REOPENED,                   /* mailbox was reopened */
   M_FLAGS                       /* nondestructive flags change (IMAP) */
 };
-
-typedef struct {
-  FILE *fp;                     /* pointer to the message data */
-  char *path;                   /* path to temp file */
-  short magic;                  /* type of mailbox this message belongs to */
-  short write;                  /* nonzero if message is open for writing */
-  struct {
-    unsigned read:1;
-    unsigned flagged:1;
-    unsigned replied:1;
-  } flags;
-  time_t received;              /* the time at which this message was received */
-} MESSAGE;
 
 WHERE short DefaultMagic INITVAL (M_MBOX);
 
