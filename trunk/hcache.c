@@ -370,6 +370,13 @@ static unsigned char *dump_envelope (ENVELOPE * e, unsigned char *d, int *off)
   d = dump_char (e->date, d, off);
   d = dump_char (e->x_label, d, off);
 
+#ifdef USE_NNTP
+  d = dump_char (e->newsgroups, d, off);
+  d = dump_char (e->xref, d, off);
+  d = dump_char (e->followup_to, d, off);
+  d = dump_char (e->x_comment_to, d, off);
+#endif
+
   d = dump_list (e->references, d, off);
   d = dump_list (e->in_reply_to, d, off);
   d = dump_list (e->userhdrs, d, off);
@@ -402,6 +409,13 @@ static void restore_envelope (ENVELOPE * e, const unsigned char *d, int *off)
   restore_char (&e->supersedes, d, off);
   restore_char (&e->date, d, off);
   restore_char (&e->x_label, d, off);
+  
+#ifdef USE_NNTP
+  restore_char (&e->newsgroups, d, off);
+  restore_char (&e->xref, d, off);
+  restore_char (&e->followup_to, d, off);
+  restore_char (&e->x_comment_to, d, off);
+#endif
 
   restore_list (&e->references, d, off);
   restore_list (&e->in_reply_to, d, off);
@@ -457,6 +471,11 @@ static int generate_crc32 ()
 #ifdef USE_IMAP
   crc =
     crc32 (crc, (unsigned char const *) "USE_IMAP", safe_strlen ("USE_IMAP"));
+#endif
+
+#ifdef USE_NNTP
+  crc =
+    crc32 (crc, (unsigned char const *) "USE_NNTP", safe_strlen ("USE_NNTP"));
 #endif
   return crc;
 }
