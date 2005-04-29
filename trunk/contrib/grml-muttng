@@ -80,7 +80,7 @@ $IMAPDATA
     set reply_regexp="^((aw|antw.?|antwort|re|r e|r?f|sv):[ \t]*)*"
 
 # Format Options
-    set forw_format="(forw) %s"
+    set forward_format="(forw) %s"
     set index_format="%4C %Z %[!%y%m%d] %-17.17F (%3l) %s"
     set pager_format="%S [%C/%T] %n (%l) %s"
     set status_format="%v: %f (%s) [%M/%m] [N=%n,*=%t,new=%b]"
@@ -119,7 +119,7 @@ $IMAPDATA
 # sidebar stuff:
   set sidebar_visible="no"
   set sidebar_width=25
-  set shorten_hierarchy
+  set sidebar_shorten_hierarchy
   color sidebar_new yellow default
 
 # keybindings:

@@ -40,15 +40,15 @@ set edit_headers		# let me edit the message header when composing
 #set forward_decode		# weed and MIME decode forwaded messages
 #set forward_format="[%a: %s]"	# subject to use when forwarding messages
 #set forward_quote		# quote the header and body of forward msgs
-#set hdr_format="%4C %Z %{%m/%d} [%2N] %-15.15F (%4c) %s"
-set hdr_format="%4C %Z %{%m/%d} %-15.15F (%4c) %s" # format of the index
+#set index_format="%4C %Z %{%m/%d} [%2N] %-15.15F (%4c) %s"
+set index_format="%4C %Z %{%m/%d} %-15.15F (%4c) %s" # format of the index
 #set hdrs			# include `my_hdr' lines in outgoing messages
 #set header			# include message header when replying
 set help			# show the help lines
 #set history=20			# number of lines of history to remember
 #set hostname="mutt.org"	# my DNS domain
 set include			# always include messages when replying
-#set indent_string="> "		# how to quote replied text
+#set indent_stringing="> "		# how to quote replied text
 #set locale="C"			# locale to use for printing time
 #set mailcap_path="~/.mailcap:/usr/local/share/mailcap"
 set nomark_old			# i don't care about whether a message is old
@@ -65,7 +65,7 @@ set pager_index_lines=6		# how many index lines to show in the pager
 #set pager_stop			# don't move to the next message on next-page
 #set pgp_strict_enc		# use Q-P encoding when needed for PGP
 set postponed=+postponed	# mailbox to store postponed messages in
-#set post_indent_string='---end quoted text---'
+#set post_indent_stringing='---end quoted text---'
 #set print=ask-yes		# ask me if I really want to print messages
 set print_command=/bin/false	# how to print things (I like to save trees)
 set noprompt_after	# ask me for a command after the external pager exits
@@ -105,7 +105,7 @@ set tilde			# virtual lines to pad blank lines in the pager
 set nouse_domain		# don't qualify local addresses with $domain
 #set use_from			# always generate the `From:' header field
 set use_mailcap=yes		# always use a mailcap entry when found
-set pgp_verify_sig=no		# don't automatically verify message signatures
+set crypt_verify_sig=no		# don't automatically verify message signatures
 #set visual=vim			# editor invoked by ~v in the builtin editor
 #set nowait_key			# prompt when a pipe returns normal status
 set write_inc=25		# show progress while writing mailboxes
@@ -253,7 +253,7 @@ save-hook ^judge +diplomacy
 # <command> is executed when opening a mailbox matching <pattern>
 
 #folder-hook . 'set sort=date-sent'
-#folder-hook mutt 'set hdr_format="%4C %Z %02m/%02N %-20.20F (%4l) %s"'
+#folder-hook mutt 'set index_format="%4C %Z %02m/%02N %-20.20F (%4l) %s"'
 #folder-hook =mutt my_hdr Revolution: \#9 # real comment
 
 #folder-hook . 'set reply_regexp="^re:[ \t]*"'

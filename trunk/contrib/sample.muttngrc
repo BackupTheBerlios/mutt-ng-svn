@@ -603,7 +603,7 @@ save-hook .                                           +archiv/save-`date +%Y-%m`
 
 
 # Send-Hooks. No PGP-autosign for all messages.
-send-hook . "unset pgp_autosign"
+send-hook . "unset crypt_autosign"
 
 # Define an atriibution-line an a from-header which use, 
 # when send a message to this mailinglist.
@@ -612,11 +612,11 @@ send-hook ^mailingliste@.*invalid\\.foo$ \
 
 # PGP-autoencrypt and set a new attribution-line for this recipient.
 send-hook ^gerd.geppert@(bar|foobar|invalid)\\.tld \
-      'set pgp_autoencrypt attribution="Hallo %v,\n\n* Du schriebst:\n" ; my_hdr From: "Andreas Kneib" <akneib@inval.id>'
+      'set crypt_autoencrypt attribution="Hallo %v,\n\n* Du schriebst:\n" ; my_hdr From: "Andreas Kneib" <akneib@inval.id>'
 
 # PGP-autosign and set a new attribution-line for this recipient.
 send-hook ^.*@foobar.invalid \
-      'set pgp_autosign attribution="Hallo %v,\n\n* Du schriebst:\n"'
+      'set crypt_autosign attribution="Hallo %v,\n\n* Du schriebst:\n"'
 
 
 # Send-hook for newsgroups. "!~t." means: Messages with no To:-header.
