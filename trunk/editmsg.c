@@ -53,6 +53,7 @@ static int edit_one_message (CONTEXT * ctx, HEADER * cur)
 
   struct stat sb;
   time_t mtime = 0;
+  size_t size = 0;
 
   mutt_mktemp (tmp);
 
@@ -81,8 +82,10 @@ static int edit_one_message (CONTEXT * ctx, HEADER * cur)
     goto bail;
   }
 
-  if (stat (tmp, &sb) == 0)
+  if (stat (tmp, &sb) == 0) {
     mtime = sb.st_mtime;
+    size = sb.st_size;
+  }
 
   /*
    * 2002-09-05 me@sigpipe.org
@@ -111,7 +114,7 @@ static int edit_one_message (CONTEXT * ctx, HEADER * cur)
     goto bail;
   }
 
-  if (sb.st_mtime == mtime) {
+  if (sb.st_mtime == mtime && sb.st_size == size) {
     mutt_message (_("Message not modified!"));
     rc = 1;
     goto bail;
