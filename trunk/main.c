@@ -228,6 +228,11 @@ static void show_version (void)
 #else
          "-USE_INODESORT   "
 #endif
+#if USE_HCACHE
+         "+USE_HCACHE  "
+#else
+         "-USE_HCACHE  "
+#endif
     );
   puts (
 #ifdef USE_POP
@@ -245,11 +250,6 @@ static void show_version (void)
 #else
          "-USE_IMAP  "
 #endif
-#ifdef IMAP_EDIT_THREADS
-         "+IMAP_EDIT_THREADS  "
-#else
-         "-IMAP_EDIT_THREADS  "
-#endif
 #ifdef USE_GSS
          "+USE_GSS  "
 #else
@@ -259,11 +259,6 @@ static void show_version (void)
          "+USE_SSL  "
 #else
          "-USE_SSL  "
-#endif
-#ifdef USE_GNUTLS
-         "+USE_GNUTLS  "
-#else
-         "-USE_GNUTLS  "
 #endif
 #ifdef USE_GNUTLS
          "+USE_GNUTLS  "
@@ -423,16 +418,6 @@ static void show_version (void)
 #else
          "-HAVE_GETADDRINFO  "
 #endif
-#if USE_HCACHE
-         "+USE_HCACHE  "
-#else
-         "-USE_HCACHE  "
-#endif
-#if USE_HCACHE
-         "+USE_HCACHE  "
-#else
-         "-USE_HCACHE  "
-#endif
     );
 
 #ifdef ISPELL
@@ -454,6 +439,7 @@ static void show_version (void)
 
   puts (_(ReachingUs));
 
+  puts (_("Mutt-ng is based on the following patches written for mutt:\n"));
   mutt_print_patchlist ();
 
   exit (0);
