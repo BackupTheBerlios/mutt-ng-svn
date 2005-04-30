@@ -30,6 +30,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <sys/wait.h>
 #include <string.h>
@@ -1311,7 +1312,7 @@ static int verify_one (BODY * sigbdy, STATE * s,
   gpgme_release (ctx);
 
   state_attach_puts (_("[-- End signature information --]\n\n"), s);
-  dprint (1, (debugfile, "verify_one: returning %d.\n", badsig));
+  debug_print (1, ("returning %d.\n", badsig));
 
   return badsig ? 1 : anywarn ? 2 : 0;
 }
@@ -1778,7 +1779,7 @@ void pgp_gpgme_application_handler (BODY * m, STATE * s)
 
   char body_charset[STRING];    /* Only used for clearsigned messages. */
 
-  dprint (2, (debugfile, "Entering pgp_application_pgp handler\n"));
+  debug_print (2, ("Entering pgp_application_pgp handler\n"));
 
   /* For clearsigned messages we won't be able to get a character set
      but we know that this may only be text thus we assume Latin-1
@@ -1983,7 +1984,7 @@ void pgp_gpgme_application_handler (BODY * m, STATE * s)
                          " of PGP message! --]\n\n"), s);
     return;
   }
-  dprint (2, (debugfile, "Leaving pgp_application_pgp handler\n"));
+  debug_print (2, ("Leaving pgp_application_pgp handler\n"));
 }
 
 /* 
@@ -1999,7 +2000,7 @@ void pgp_gpgme_encrypted_handler (BODY * a, STATE * s)
   BODY *orig_body = a;
   int is_signed;
 
-  dprint (2, (debugfile, "Entering pgp_encrypted handler\n"));
+  debug_print (2, ("Entering pgp_encrypted handler\n"));
   a = a->parts;
   if (!a || a->type != TYPEAPPLICATION || !a->subtype
       || ascii_strcasecmp ("pgp-encrypted", a->subtype)
@@ -2064,7 +2065,7 @@ void pgp_gpgme_encrypted_handler (BODY * a, STATE * s)
 
   fclose (fpout);
   mutt_unlink (tempfile);
-  dprint (2, (debugfile, "Leaving pgp_encrypted handler\n"));
+  debug_print (2, ("Leaving pgp_encrypted handler\n"));
 }
 
 /* Support for application/smime */
@@ -2076,7 +2077,7 @@ void smime_gpgme_application_handler (BODY * a, STATE * s)
   int is_signed;
 
 
-  dprint (2, (debugfile, "Entering smime_encrypted handler\n"));
+  debug_print (2, ("Entering smime_encrypted handler\n"));
 
   a->warnsig = 0;
   mutt_mktemp (tempfile);
@@ -2133,7 +2134,7 @@ void smime_gpgme_application_handler (BODY * a, STATE * s)
 
   fclose (fpout);
   mutt_unlink (tempfile);
-  dprint (2, (debugfile, "Leaving smime_encrypted handler\n"));
+  debug_print (2, ("Leaving smime_encrypted handler\n"));
 }
 
 
@@ -3455,16 +3456,13 @@ static crypt_key_t *crypt_getkeybyaddr (ADDRESS * a, short abilities,
   if (!keys)
     return NULL;
 
-  dprint (5, (debugfile, "crypt_getkeybyaddr: looking for %s <%s>.",
-              a->personal, a->mailbox));
+  debug_print (5, ("looking for %s <%s>.\n", a->personal, a->mailbox));
 
   for (k = keys; k; k = k->next) {
-    dprint (5, (debugfile, "  looking at key: %s `%.15s'\n",
-                crypt_keyid (k), k->uid));
+    debug_print (5, ("  looking at key: %s `%.15s'\n", crypt_keyid (k), k->uid));
 
     if (abilities && !(k->flags & abilities)) {
-      dprint (5, (debugfile, "  insufficient abilities: Has %x, want %x\n",
-                  k->flags, abilities));
+      debug_print (5, ("  insufficient abilities: Has %x, want %x\n", k->flags, abilities));
       continue;
     }
 
@@ -3568,8 +3566,7 @@ static crypt_key_t *crypt_getkeybystr (char *p, short abilities,
       continue;
 
     match = 0;
-    dprint (5, (debugfile, "crypt_getkeybystr: matching \"%s\" against "
-                "key %s, \"%s\": ", p, crypt_keyid (k), k->uid));
+    debug_print (5, ("matching \"%s\" against " "key %s, \"%s\":\n", p, crypt_keyid (k), k->uid));
 
     if (!*p || !safe_strcasecmp (p, crypt_keyid (k))
         || (!safe_strncasecmp (p, "0x", 2)
@@ -3580,7 +3577,7 @@ static crypt_key_t *crypt_getkeybystr (char *p, short abilities,
         || str_isstr (k->uid, p)) {
       crypt_key_t *tmp;
 
-      dprint (5, (debugfile, "match.\n"));
+      debug_print (5, ("match.\n"));
 
       *matches_endp = tmp = crypt_copy_key (k);
       matches_endp = &tmp->next;

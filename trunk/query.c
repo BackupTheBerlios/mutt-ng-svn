@@ -20,6 +20,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -85,7 +86,7 @@ static QUERY *run_query (char *s, int quiet)
   mutt_expand_file_fmt (cmd, sizeof (cmd), QueryCmd, s);
 
   if ((thepid = mutt_create_filter (cmd, NULL, &fp, NULL)) < 0) {
-    dprint (1, (debugfile, "unable to fork command: %s", cmd));
+    debug_print (1, ("unable to fork command: %s\n", cmd));
     return 0;
   }
   if (!quiet)
@@ -128,7 +129,7 @@ static QUERY *run_query (char *s, int quiet)
   FREE (&buf);
   fclose (fp);
   if (mutt_wait_filter (thepid)) {
-    dprint (1, (debugfile, "Error: %s\n", msg));
+    debug_print (1, ("Error: %s\n", msg));
     if (!quiet)
       mutt_error ("%s", msg);
   }

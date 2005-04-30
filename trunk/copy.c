@@ -21,6 +21,7 @@
 
 #include "lib/mem.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -116,12 +117,12 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
    */
   if (flags & CH_REORDER) {
     for (t = HeaderOrderList; t; t = t->next) {
-      dprint (1, (debugfile, "Reorder list: %s\n", t->data));
+      debug_print (1, ("Reorder list: %s\n", t->data));
       hdr_count++;
     }
   }
 
-  dprint (1, (debugfile, "WEED is %s\n", (flags & CH_WEED) ? "Set" : "Not"));
+  debug_print (1, ("WEED is %s\n", (flags & CH_WEED) ? "Set" : "Not"));
 
   headers = safe_calloc (hdr_count, sizeof (char *));
 
@@ -198,7 +199,7 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
       if (flags & CH_REORDER) {
         for (t = HeaderOrderList, x = 0; (t); t = t->next, x++) {
           if (!ascii_strncasecmp (buf, t->data, safe_strlen (t->data))) {
-            dprint (2, (debugfile, "Reorder: %s matches %s\n", t->data, buf));
+            debug_print (2, ("Reorder: %s matches %s\n", t->data, buf));
             break;
           }
         }
@@ -208,8 +209,7 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
     }                           /* If beginning of header */
 
     if (!ignore) {
-      dprint (2,
-              (debugfile, "Reorder: x = %d; hdr_count = %d\n", x, hdr_count));
+      debug_print (2, ("Reorder: x = %d; hdr_count = %d\n", x, hdr_count));
       if (!this_one)
         this_one = safe_strdup (buf);
       else {
@@ -682,7 +682,7 @@ mutt_copy_message (FILE * fpout, CONTEXT * src, HEADER * hdr, int flags,
        _mutt_copy_message (fpout, msg->fp, hdr, hdr->content, flags,
                            chflags)) == 0 && (ferror (fpout)
                                               || feof (fpout))) {
-    dprint (1, (debugfile, "_mutt_copy_message failed to detect EOF!\n"));
+    debug_print (1, ("_mutt_copy_message failed to detect EOF!\n"));
     r = -1;
   }
   mx_close_message (&msg);

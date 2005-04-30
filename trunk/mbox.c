@@ -27,6 +27,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <sys/stat.h>
 #include <dirent.h>
@@ -142,7 +143,7 @@ static int mmdf_parse_mailbox (CONTEXT * ctx)
 
       if (fgets (buf, sizeof (buf) - 1, ctx->fp) == NULL) {
         /* TODO: memory leak??? */
-        dprint (1, (debugfile, "mmdf_parse_mailbox: unexpected EOF\n"));
+        debug_print (1, ("unexpected EOF\n"));
         break;
       }
 
@@ -150,7 +151,7 @@ static int mmdf_parse_mailbox (CONTEXT * ctx)
 
       if (!is_from (buf, return_path, sizeof (return_path), &t)) {
         if (fseek (ctx->fp, loc, SEEK_SET) != 0) {
-          dprint (1, (debugfile, "mmdf_parse_mailbox: fseek() failed\n"));
+          debug_print (1, ("fseek() failed\n"));
           mutt_error _("Mailbox is corrupt!");
 
           return (-1);
@@ -171,7 +172,7 @@ static int mmdf_parse_mailbox (CONTEXT * ctx)
               fgets (buf, sizeof (buf) - 1, ctx->fp) == NULL ||
               safe_strcmp (MMDF_SEP, buf) != 0) {
             if (fseek (ctx->fp, loc, SEEK_SET) != 0)
-              dprint (1, (debugfile, "mmdf_parse_mailbox: fseek() failed\n"));
+              debug_print (1, ("fseek() failed\n"));
             hdr->content->length = -1;
           }
         }
@@ -204,7 +205,7 @@ static int mmdf_parse_mailbox (CONTEXT * ctx)
       ctx->msgcount++;
     }
     else {
-      dprint (1, (debugfile, "mmdf_parse_mailbox: corrupt mailbox!\n"));
+      debug_print (1, ("corrupt mailbox!\n"));
       mutt_error _("Mailbox is corrupt!");
 
       return (-1);
@@ -310,13 +311,11 @@ static int mbox_parse_mailbox (CONTEXT * ctx)
           if (fseek (ctx->fp, tmploc, SEEK_SET) != 0 ||
               fgets (buf, sizeof (buf), ctx->fp) == NULL ||
               safe_strncmp ("From ", buf, 5) != 0) {
-            dprint (1,
-                    (debugfile,
-                     "mbox_parse_mailbox: bad content-length in message %d (cl=%ld)\n",
-                     curhdr->index, curhdr->content->length));
-            dprint (1, (debugfile, "\tLINE: %s", buf));
+            debug_print (1, ("bad content-length in message %d (cl=%ld)\n",
+                        curhdr->index, curhdr->content->length));
+            debug_print (1, ("LINE: %s\n", buf));
             if (fseek (ctx->fp, loc, SEEK_SET) != 0) {  /* nope, return the previous position */
-              dprint (1, (debugfile, "mbox_parse_mailbox: fseek() failed\n"));
+              debug_print (1, ("fseek() failed\n"));
             }
             curhdr->content->length = -1;
           }
@@ -337,7 +336,7 @@ static int mbox_parse_mailbox (CONTEXT * ctx)
 
             /* count the number of lines in this message */
             if (fseek (ctx->fp, loc, SEEK_SET) != 0)
-              dprint (1, (debugfile, "mbox_parse_mailbox: fseek() failed\n"));
+              debug_print (1, ("fseek() failed\n"));
             while (cl-- > 0) {
               if (fgetc (ctx->fp) == '\n')
                 curhdr->lines++;
@@ -346,7 +345,7 @@ static int mbox_parse_mailbox (CONTEXT * ctx)
 
           /* return to the offset of the next message separator */
           if (fseek (ctx->fp, tmploc, SEEK_SET) != 0)
-            dprint (1, (debugfile, "mbox_parse_mailbox: fseek() failed\n"));
+            debug_print (1, ("fseek() failed\n"));
         }
       }
 
@@ -576,12 +575,12 @@ int mbox_check_mailbox (CONTEXT * ctx, int *index_hint)
        * folder.
        */
       if (fseek (ctx->fp, ctx->size, SEEK_SET) != 0)
-        dprint (1, (debugfile, "mbox_check_mailbox: fseek() failed\n"));
+        debug_print (1, ("fseek() failed\n"));
       if (fgets (buffer, sizeof (buffer), ctx->fp) != NULL) {
         if ((ctx->magic == M_MBOX && safe_strncmp ("From ", buffer, 5) == 0)
             || (ctx->magic == M_MMDF && safe_strcmp (MMDF_SEP, buffer) == 0)) {
           if (fseek (ctx->fp, ctx->size, SEEK_SET) != 0)
-            dprint (1, (debugfile, "mbox_check_mailbox: fseek() failed\n"));
+            debug_print (1, ("fseek() failed\n"));
           if (ctx->magic == M_MBOX)
             mbox_parse_mailbox (ctx);
           else
@@ -603,7 +602,7 @@ int mbox_check_mailbox (CONTEXT * ctx, int *index_hint)
           modified = 1;
       }
       else {
-        dprint (1, (debugfile, "mbox_check_mailbox: fgets returned NULL.\n"));
+        debug_print (1, ("fgets returned NULL.\n"));
         modified = 1;
       }
     }
@@ -717,7 +716,7 @@ static int _mbox_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
     mutt_error
       _("sync: mbox modified, but no modified messages! (report this bug)");
     mutt_sleep (5);             /* the mutt_error /will/ get cleared! */
-    dprint (1, (debugfile, "_mbox_sync_mailbox(): no modified messages.\n"));
+    debug_print (1, ("no modified messages.\n"));
     unlink (tempfile);
     goto bail;
   }
@@ -812,8 +811,7 @@ static int _mbox_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
 
   if (fclose (fp) != 0) {
     fp = NULL;
-    dprint (1,
-            (debugfile, "_mbox_sync_mailbox: fclose() returned non-zero.\n"));
+    debug_print (1, ("fclose() returned non-zero.\n"));
     unlink (tempfile);
     mutt_perror (tempfile);
     mutt_sleep (5);
@@ -832,9 +830,7 @@ static int _mbox_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
   if ((fp = fopen (tempfile, "r")) == NULL) {
     mutt_unblock_signals ();
     mx_fastclose_mailbox (ctx);
-    dprint (1,
-            (debugfile,
-             "_mbox_sync_mailbox: unable to reopen temp copy of mailbox!\n"));
+    debug_print (1, ("unable to reopen temp copy of mailbox!\n"));
     mutt_perror (tempfile);
     mutt_sleep (5);
     return (-1);
@@ -845,16 +841,14 @@ static int _mbox_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
       fgets (buf, sizeof (buf), ctx->fp) == NULL ||
       (ctx->magic == M_MBOX && safe_strncmp ("From ", buf, 5) != 0) ||
       (ctx->magic == M_MMDF && safe_strcmp (MMDF_SEP, buf) != 0)) {
-    dprint (1,
-            (debugfile,
-             "_mbox_sync_mailbox: message not in expected position."));
-    dprint (1, (debugfile, "\tLINE: %s\n", buf));
+    debug_print (1, ("message not in expected position.\n"));
+    debug_print (1, ("LINE: %s\n", buf));
     i = -1;
   }
   else {
     if (fseek (ctx->fp, offset, SEEK_SET) != 0) {       /* return to proper offset */
       i = -1;
-      dprint (1, (debugfile, "_mbox_sync_mailbox: fseek() failed\n"));
+      debug_print (1, ("fseek() failed\n"));
     }
     else {
       /* copy the temp mailbox back into place starting at the first
@@ -1059,7 +1053,7 @@ static int mbox_reopen_mailbox (CONTEXT * ctx, int *index_hint)
   case M_MBOX:
   case M_MMDF:
     if (fseek (ctx->fp, 0, SEEK_SET) != 0) {
-      dprint (1, (debugfile, "mbox_reopen_mailbox: fseek() failed\n"));
+      debug_print (1, ("fseek() failed\n"));
       rc = -1;
     }
     else {

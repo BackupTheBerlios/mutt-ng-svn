@@ -27,6 +27,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -188,7 +189,7 @@ static int rfc1524_mailcap_parse (BODY * a,
       /* ignore comments */
       if (*buf == '#')
         continue;
-      dprint (2, (debugfile, "mailcap entry: %s\n", buf));
+      debug_print (2, ("mailcap entry: %s\n", buf));
 
       /* check type */
       ch = get_field (buf);
@@ -212,7 +213,7 @@ static int rfc1524_mailcap_parse (BODY * a,
       while (ch) {
         field = ch;
         ch = get_field (ch);
-        dprint (2, (debugfile, "field: %s\n", field));
+        debug_print (2, ("field: %s\n", field));
 
         if (!ascii_strcasecmp (field, "needsterminal")) {
           if (entry)
@@ -376,7 +377,7 @@ int rfc1524_mailcap_lookup (BODY * a, char *type, rfc1524_entry * entry,
     path[x] = '\0';
     mutt_expand_path (path, sizeof (path));
 
-    dprint (2, (debugfile, "Checking mailcap file: %s\n", path));
+    debug_print (2, ("Checking mailcap file: %s\n", path));
     found = rfc1524_mailcap_parse (a, path, type, entry, opt);
   }
 

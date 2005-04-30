@@ -26,6 +26,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <unistd.h>
 #include <netinet/in.h>
@@ -59,9 +60,7 @@ int mutt_socket_close (CONNECTION * conn)
   int rc = -1;
 
   if (conn->fd < 0)
-    dprint (1,
-            (debugfile,
-             "mutt_socket_close: Attempt to close closed connection.\n"));
+    debug_print (1, ("Attempt to close closed connection.\n"));
   else
     rc = conn->conn_close (conn);
 
@@ -76,9 +75,7 @@ int mutt_socket_read (CONNECTION * conn, char *buf, size_t len)
   int rc;
 
   if (conn->fd < 0) {
-    dprint (1,
-            (debugfile,
-             "mutt_socket_read: attempt to read from closed connection\n"));
+    debug_print (1, ("attempt to read from closed connection\n"));
     return -1;
   }
 
@@ -99,28 +96,23 @@ int mutt_socket_write_d (CONNECTION * conn, const char *buf, int dbg)
   int rc;
   int len;
 
-  dprint (dbg, (debugfile, "> %s", buf));
+  debug_print (dbg, ("> %s", buf));
 
   if (conn->fd < 0) {
-    dprint (1,
-            (debugfile,
-             "mutt_socket_write: attempt to write to closed connection\n"));
+    debug_print (1, ("attempt to write to closed connection\n"));
     return -1;
   }
 
   len = safe_strlen (buf);
   if ((rc = conn->conn_write (conn, buf, len)) < 0) {
-    dprint (1, (debugfile,
-                "mutt_socket_write: error writing, closing socket\n"));
+    debug_print (1, ("error writing, closing socket\n"));
     mutt_socket_close (conn);
 
     return -1;
   }
 
   if (rc < len) {
-    dprint (1, (debugfile,
-                "mutt_socket_write: ERROR: wrote %d of %d bytes!\n", rc,
-                len));
+    debug_print (1, ("ERROR: wrote %d of %d bytes!\n", rc, len));
   }
 
   return rc;
@@ -134,9 +126,7 @@ int mutt_socket_readchar (CONNECTION * conn, char *c)
       conn->available =
         conn->conn_read (conn, conn->inbuf, sizeof (conn->inbuf));
     else {
-      dprint (1,
-              (debugfile,
-               "mutt_socket_readchar: attempt to read from closed connection.\n"));
+      debug_print (1, ("attempt to read from closed connection.\n"));
       return -1;
     }
     conn->bufpos = 0;
@@ -177,7 +167,7 @@ int mutt_socket_readln_d (char *buf, size_t buflen, CONNECTION * conn,
   else
     buf[i] = '\0';
 
-  dprint (dbg, (debugfile, "< %s\n", buf));
+  debug_print (dbg, ("< %s\n", buf));
 
   /* number of bytes read, not safe_strlen */
   return i + 1;
@@ -281,9 +271,9 @@ static int socket_preconnect (void)
   int save_errno;
 
   if (safe_strlen (Preconnect)) {
-    dprint (2, (debugfile, "Executing preconnect: %s\n", Preconnect));
+    debug_print (2, ("Executing preconnect: %s\n", Preconnect));
     rc = mutt_system (Preconnect);
-    dprint (2, (debugfile, "Preconnect result: %d\n", rc));
+    debug_print (2, ("Preconnect result: %d\n", rc));
     if (rc) {
       save_errno = errno;
       mutt_perror (_("Preconnect command failed."));
@@ -309,7 +299,7 @@ static int socket_connect (int fd, struct sockaddr *sa)
     sa_size = sizeof (struct sockaddr_in6);
 #endif
   else {
-    dprint (1, (debugfile, "Unknown address family!\n"));
+    debug_print (1, ("Unknown address family!\n"));
     return -1;
   }
 
@@ -322,7 +312,7 @@ static int socket_connect (int fd, struct sockaddr *sa)
 
   if (connect (fd, sa, sa_size) < 0) {
     save_errno = errno;
-    dprint (2, (debugfile, "Connection failed. errno: %d...\n", errno));
+    debug_print (2, ("Connection failed. errno: %d...\n", errno));
     SigInt = 0;                 /* reset in case we caught SIGINTR while in connect() */
   }
 

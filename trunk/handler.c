@@ -31,6 +31,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #define BUFI_SIZE 1000
 #define BUFO_SIZE 2000
@@ -287,8 +288,7 @@ void mutt_decode_base64 (STATE * s, long len, int istext, iconv_t cd)
         buf[i++] = ch;
     }
     if (i != 4) {
-      dprint (2, (debugfile, "%s:%d [mutt_decode_base64()]: "
-                  "didn't get a multiple of 4 chars.\n", __FILE__, __LINE__));
+      debug_print (2, ("didn't get a multiple of 4 chars.\n"));
       break;
     }
 

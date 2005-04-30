@@ -18,6 +18,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <errno.h>
 #include <string.h>
@@ -230,7 +231,7 @@ int mutt_open_read_compressed (CONTEXT * ctx)
   cmd = get_compression_cmd (ci->open, ctx);
   if (cmd == NULL)
     return (-1);
-  dprint (2, (debugfile, "DecompressCmd: '%s'\n", cmd));
+  debug_print (2, ("DecompressCmd: '%s'\n", cmd));
 
   if ((fp = fopen (ctx->realpath, "r")) == NULL) {
     mutt_perror (ctx->realpath);
@@ -318,8 +319,7 @@ int mutt_open_append_compressed (CONTEXT * ctx)
 /* close a compressed mailbox */
 void mutt_fast_close_compressed (CONTEXT * ctx)
 {
-  dprint (2, (debugfile, "mutt_fast_close_compressed called on '%s'\n",
-              ctx->path));
+  debug_print (2, ("called on '%s'\n", ctx->path));
 
   if (ctx->compressinfo) {
     if (ctx->fp)
@@ -368,7 +368,7 @@ int mutt_sync_compressed (CONTEXT * ctx)
     return (-1);
   }
 
-  dprint (2, (debugfile, "CompressCommand: '%s'\n", cmd));
+  debug_print (2, ("CompressCommand: '%s'\n", cmd));
 
   endwin ();
   fflush (stdout);
@@ -400,8 +400,7 @@ int mutt_slow_close_compressed (CONTEXT * ctx)
   char *cmd;
   COMPRESS_INFO *ci = (COMPRESS_INFO *) ctx->compressinfo;
 
-  dprint (2, (debugfile, "mutt_slow_close_compressed called on '%s'\n",
-              ctx->path));
+  debug_print (2, ("called on '%s'\n", ctx->path));
 
   if (!(ctx->append && ((append = get_append_command (ctx->realpath, ctx))
                         || (append = ci->close)))) {    /* if we can not or should not append,
@@ -442,7 +441,7 @@ int mutt_slow_close_compressed (CONTEXT * ctx)
     return (-1);
   }
 
-  dprint (2, (debugfile, "CompressCmd: '%s'\n", cmd));
+  debug_print (2, ("CompressCmd: '%s'\n", cmd));
 
   endwin ();
   fflush (stdout);

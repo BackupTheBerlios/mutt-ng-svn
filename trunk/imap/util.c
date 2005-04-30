@@ -21,6 +21,7 @@
 
 #include "lib/mem.h"
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -79,7 +80,7 @@ int imap_parse_path (const char *path, IMAP_MBOX * mx)
       ImapPort = ntohs (service->s_port);
     else
       ImapPort = IMAP_PORT;
-    dprint (3, (debugfile, "Using default IMAP port %d\n", ImapPort));
+    debug_print (3, ("Using default IMAP port %d\n", ImapPort));
   }
   if (!ImapsPort) {
     service = getservbyname ("imaps", "tcp");
@@ -87,7 +88,7 @@ int imap_parse_path (const char *path, IMAP_MBOX * mx)
       ImapsPort = ntohs (service->s_port);
     else
       ImapsPort = IMAP_SSL_PORT;
-    dprint (3, (debugfile, "Using default IMAPS port %d\n", ImapsPort));
+    debug_print (3, ("Using default IMAPS port %d\n", ImapsPort));
   }
 
   /* Defaults */
@@ -131,7 +132,7 @@ int imap_parse_path (const char *path, IMAP_MBOX * mx)
     }
 
     if ((n = sscanf (tmp, "%127[^:/]%127s", mx->account.host, tmp)) < 1) {
-      dprint (1, (debugfile, "imap_parse_path: NULL host in %s\n", path));
+      debug_print (1, ("NULL host in %s\n", path));
       FREE (&mx->mbox);
       return -1;
     }
@@ -143,9 +144,7 @@ int imap_parse_path (const char *path, IMAP_MBOX * mx)
         if (!ascii_strncmp (tmp, "ssl", 3))
           mx->account.flags |= M_ACCT_SSL;
         else {
-          dprint (1,
-                  (debugfile,
-                   "imap_parse_path: Unknown connection type in %s\n", path));
+          debug_print (1, ("Unknown connection type in %s\n", path));
           FREE (&mx->mbox);
           return -1;
         }

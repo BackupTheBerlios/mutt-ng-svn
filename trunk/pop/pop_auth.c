@@ -18,6 +18,7 @@
 
 #include "lib/mem.h"
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <unistd.h>
@@ -54,9 +55,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
   unsigned char client_start;
 
   if (mutt_sasl_client_new (pop_data->conn, &saslconn) < 0) {
-    dprint (1,
-            (debugfile,
-             "pop_auth_sasl: Error allocating SASL connection.\n"));
+    debug_print (1, ("Error allocating SASL connection.\n"));
     return POP_A_FAILURE;
   }
 
@@ -77,9 +76,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
   }
 
   if (rc != SASL_OK && rc != SASL_CONTINUE) {
-    dprint (1,
-            (debugfile,
-             "pop_auth_sasl: Failure starting authentication exchange. No shared mechanisms?\n"));
+    debug_print (1, ("Failure starting authentication exchange. No shared mechanisms?\n"));
 
     /* SASL doesn't support suggested mechanisms, so fall back */
     return POP_A_UNAVAIL;
@@ -114,9 +111,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
         && sasl_decode64 (inbuf, strlen (inbuf), buf, &len) != SASL_OK)
 #endif
     {
-      dprint (1,
-              (debugfile,
-               "pop_auth_sasl: error base64-decoding server response.\n"));
+      debug_print (1, ("error base64-decoding server response.\n"));
       goto bail;
     }
 
@@ -136,9 +131,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
     /* send out response, or line break if none needed */
     if (pc) {
       if (sasl_encode64 (pc, olen, buf, sizeof (buf), &olen) != SASL_OK) {
-        dprint (1,
-                (debugfile,
-                 "pop_auth_sasl: error base64-encoding client response.\n"));
+        debug_print (1, ("error base64-encoding client response.\n"));
         goto bail;
       }
 
@@ -250,13 +243,13 @@ static pop_auth_res_t pop_auth_user (POP_DATA * pop_data, const char *method)
     if (ret == PQ_OK) {
       pop_data->cmd_user = CMD_AVAILABLE;
 
-      dprint (1, (debugfile, "pop_auth_user: set USER capability\n"));
+      debug_print (1, ("set USER capability\n"));
     }
 
     if (ret == PQ_ERR) {
       pop_data->cmd_user = CMD_NOT_AVAILABLE;
 
-      dprint (1, (debugfile, "pop_auth_user: unset USER capability\n"));
+      debug_print (1, ("unset USER capability\n"));
       snprintf (pop_data->err_msg, sizeof (pop_data->err_msg),
                 _("Command USER is not supported by server."));
     }
@@ -266,10 +259,10 @@ static pop_auth_res_t pop_auth_user (POP_DATA * pop_data, const char *method)
     snprintf (buf, sizeof (buf), "PASS %s\r\n", pop_data->conn->account.pass);
     ret = pop_query_d (pop_data, buf, sizeof (buf),
 #ifdef DEBUG
-                       /* don't print the password unless we're at the ungodly debugging level */
-                       debuglevel < M_SOCK_LOG_FULL ? "PASS *\r\n" :
+    /* don't print the password unless we're at the ungodly debugging level */
+    DebugLevel < M_SOCK_LOG_FULL ? "PASS *\r\n" :
 #endif
-                       NULL);
+    NULL);
   }
 
   switch (ret) {
@@ -324,7 +317,7 @@ pop_query_status pop_authenticate (POP_DATA * pop_data)
       comma = strchr (method, ':');
       if (comma)
         *comma++ = '\0';
-      dprint (2, (debugfile, "pop_authenticate: Trying method %s\n", method));
+      debug_print (2, ("Trying method %s\n", method));
       authenticator = pop_authenticators;
 
       while (authenticator->authenticate) {
@@ -360,8 +353,7 @@ pop_query_status pop_authenticate (POP_DATA * pop_data)
   }
   else {
     /* Fall back to default: any authenticator */
-    dprint (2,
-            (debugfile, "pop_authenticate: Using any available method.\n"));
+    debug_print (2, ("Using any available method.\n"));
     authenticator = pop_authenticators;
 
     while (authenticator->authenticate) {

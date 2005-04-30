@@ -26,6 +26,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -97,8 +98,7 @@ int mutt_compose_attachment (BODY * a)
         strfcpy (command, entry->composecommand, sizeof (command));
       if (rfc1524_expand_filename (entry->nametemplate,
                                    a->filename, newfile, sizeof (newfile))) {
-        dprint (1, (debugfile, "oldfile: %s\t newfile: %s\n",
-                    a->filename, newfile));
+        debug_print (1, ("oldfile: %s\t newfile: %s\n", a->filename, newfile));
         if (safe_symlink (a->filename, newfile) == -1) {
           if (mutt_yesorno (_("Can't match nametemplate, continue?"), M_YES)
               != M_YES)
@@ -219,8 +219,7 @@ int mutt_edit_attachment (BODY * a)
       strfcpy (command, entry->editcommand, sizeof (command));
       if (rfc1524_expand_filename (entry->nametemplate,
                                    a->filename, newfile, sizeof (newfile))) {
-        dprint (1, (debugfile, "oldfile: %s\t newfile: %s\n",
-                    a->filename, newfile));
+        debug_print (1, ("oldfile: %s\t newfile: %s\n", a->filename, newfile));
         if (safe_symlink (a->filename, newfile) == -1) {
           if (mutt_yesorno (_("Can't match nametemplate, continue?"), M_YES)
               != M_YES)
@@ -327,8 +326,7 @@ void mutt_check_lookup_list (BODY * b, char *type, int len)
                   n == TYPEMULTIPART ? "multipart" :
                   n == TYPETEXT ? "text" :
                   n == TYPEVIDEO ? "video" : "other", tmp.subtype);
-        dprint (1, (debugfile, "mutt_check_lookup_list: \"%s\" -> %s\n",
-                    b->filename, type));
+        debug_print (1, ("\"%s\" -> %s\n", b->filename, type));
       }
       if (tmp.subtype)
         FREE (&tmp.subtype);
@@ -891,7 +889,7 @@ int mutt_print_attachment (FILE * fp, BODY * a)
     rfc1524_entry *entry;
     int piped = FALSE;
 
-    dprint (2, (debugfile, "Using mailcap...\n"));
+    debug_print (2, ("Using mailcap...\n"));
 
     entry = rfc1524_new_entry ();
     rfc1524_mailcap_lookup (a, type, entry, M_PRINT);
@@ -971,8 +969,7 @@ int mutt_print_attachment (FILE * fp, BODY * a)
     mutt_mktemp (newfile);
     if (mutt_decode_save_attachment (fp, a, newfile, M_PRINTING, 0) == 0) {
 
-      dprint (2,
-              (debugfile, "successfully decoded %s type attachment to %s\n",
+      debug_print (2, ("successfully decoded %s type attachment to %s\n",
                type, newfile));
 
       if ((ifp = fopen (newfile, "r")) == NULL) {
@@ -980,7 +977,7 @@ int mutt_print_attachment (FILE * fp, BODY * a)
         goto bail0;
       }
 
-      dprint (2, (debugfile, "successfully opened %s read-only\n", newfile));
+      debug_print (2, ("successfully opened %s read-only\n", newfile));
 
       mutt_endwin (NULL);
       if ((thepid =
@@ -990,7 +987,7 @@ int mutt_print_attachment (FILE * fp, BODY * a)
         goto bail0;
       }
 
-      dprint (2, (debugfile, "Filter created.\n"));
+      debug_print (2, ("Filter created.\n"));
 
       mutt_copy_stream (ifp, fpout);
 

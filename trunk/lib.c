@@ -32,6 +32,7 @@
 
 #include "lib/mem.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 extern short Umask;
 
@@ -104,7 +105,7 @@ int mutt_copy_bytes (FILE * in, FILE * out, size_t size)
     if ((chunk = fread (buf, 1, chunk, in)) < 1)
       break;
     if (fwrite (buf, 1, chunk, out) != chunk) {
-      /* dprint (1, (debugfile, "mutt_copy_bytes(): fwrite() returned short byte count\n")); */
+      debug_print (1, ("fwrite() returned short byte count\n"));
       return (-1);
     }
     size -= chunk;
@@ -250,7 +251,7 @@ int safe_open (const char *path, int flags)
   /* make sure the file is not symlink */
   if (lstat (path, &osb) < 0 || fstat (fd, &nsb) < 0 ||
       compare_stat (&osb, &nsb) == -1) {
-/*    dprint (1, (debugfile, "safe_open(): %s is a symlink!\n", path)); */
+    debug_print (1, ("%s is a symlink!\n", path));
     close (fd);
     return (-1);
   }

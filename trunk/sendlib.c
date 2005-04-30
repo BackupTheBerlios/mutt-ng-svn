@@ -28,6 +28,7 @@
 #include "lib/mem.h"
 #include "lib/str.h"
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -456,9 +457,7 @@ int mutt_write_mime_body (BODY * a, FILE * f)
   if (a->type == TYPEMULTIPART) {
     /* First, find the boundary to use */
     if (!(p = mutt_get_parameter ("boundary", a->parameter))) {
-      dprint (1,
-              (debugfile,
-               "mutt_write_mime_body(): no boundary parameter found!\n"));
+      debug_print (1, ("no boundary parameter found!\n"));
       mutt_error _("No boundary parameter found! [report this error]");
 
       return (-1);
@@ -486,9 +485,7 @@ int mutt_write_mime_body (BODY * a, FILE * f)
   }
 
   if ((fpin = fopen (a->filename, "r")) == NULL) {
-    dprint (1,
-            (debugfile, "write_mime_body: %s no longer exists!\n",
-             a->filename));
+    debug_print (1, ("%s no longer exists!\n", a->filename));
     mutt_error (_("%s no longer exists!"), a->filename);
     return -1;
   }
@@ -898,8 +895,7 @@ CONTENT *mutt_get_content_info (const char *fname, BODY * b)
   }
 
   if ((fp = fopen (fname, "r")) == NULL) {
-    dprint (1, (debugfile, "mutt_get_content_info: %s: %s (errno %d).\n",
-                fname, strerror (errno), errno));
+    debug_print (1, ("%s: %s (errno %d).\n", fname, strerror (errno), errno));
     return (NULL);
   }
 
@@ -980,10 +976,7 @@ int mutt_lookup_mime_type (BODY * att, const char *path)
       strfcpy (buf, PKGDATADIR "/mime.types", sizeof (buf));
       break;
     default:
-      dprint (1,
-              (debugfile,
-               "mutt_lookup_mime_type: Internal error, count = %d.\n",
-               count));
+      debug_print (1, ("Internal error, count = %d.\n", count));
       goto bye;                 /* shouldn't happen */
     }
 
@@ -2397,8 +2390,7 @@ ADDRESS *mutt_remove_duplicates (ADDRESS * addr)
     }
 
     if (dup) {
-      dprint (2, (debugfile, "mutt_remove_duplicates: Removing %s\n",
-                  addr->mailbox));
+      debug_print (2, ("Removing %s\n", addr->mailbox));
 
       *last = addr->next;
 
@@ -2443,10 +2435,7 @@ int mutt_write_fcc (const char *path, HEADER * hdr, const char *msgid,
     set_noconv_flags (hdr->content, 1);
 
   if (mx_open_mailbox (path, M_APPEND | M_QUIET, &f) == NULL) {
-    dprint (1,
-            (debugfile,
-             "mutt_write_fcc(): unable to open mailbox %s in append-mode, aborting.\n",
-             path));
+    debug_print (1, ("unable to open mailbox %s in append-mode, aborting.\n", path));
     return (-1);
   }
 
@@ -2561,8 +2550,7 @@ int mutt_write_fcc (const char *path, HEADER * hdr, const char *msgid,
 
     fflush (tempfp);
     if (ferror (tempfp)) {
-      dprint (1,
-              (debugfile, "mutt_write_fcc(): %s: write failed.\n", tempfile));
+      debug_print (1, ("%s: write failed.\n", tempfile));
       fclose (tempfp);
       unlink (tempfile);
       mx_commit_message (msg, &f);      /* XXX - really? */

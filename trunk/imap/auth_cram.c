@@ -22,6 +22,7 @@
 #define MD5_DIGEST_LEN 16
 
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 /* forward declarations */
 static void hmac_md5 (const char *password, char *challenge,
@@ -59,17 +60,17 @@ imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA * idata, const char *method)
   while (rc == IMAP_CMD_CONTINUE);
 
   if (rc != IMAP_CMD_RESPOND) {
-    dprint (1, (debugfile, "Invalid response from server: %s\n", ibuf));
+    debug_print (1, ("Invalid response from server: %s\n", ibuf));
     goto bail;
   }
 
   if ((len = mutt_from_base64 (obuf, idata->cmd.buf + 2)) == -1) {
-    dprint (1, (debugfile, "Error decoding base64 response.\n"));
+    debug_print (1, ("Error decoding base64 response.\n"));
     goto bail;
   }
 
   obuf[len] = '\0';
-  dprint (2, (debugfile, "CRAM challenge: %s\n", obuf));
+  debug_print (2, ("CRAM challenge: %s\n", obuf));
 
   /* The client makes note of the data and then responds with a string
    * consisting of the user name, a space, and a 'digest'. The latter is
@@ -93,7 +94,7 @@ imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA * idata, const char *method)
             hmac_response[9], hmac_response[10], hmac_response[11],
             hmac_response[12], hmac_response[13], hmac_response[14],
             hmac_response[15]);
-  dprint (2, (debugfile, "CRAM response: %s\n", obuf));
+  debug_print (2, ("CRAM response: %s\n", obuf));
 
   /* XXX - ibuf must be long enough to store the base64 encoding of obuf, 
    * plus the additional debris
@@ -109,7 +110,7 @@ imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA * idata, const char *method)
   while (rc == IMAP_CMD_CONTINUE);
 
   if (rc != IMAP_CMD_OK) {
-    dprint (1, (debugfile, "Error receiving server response.\n"));
+    debug_print (1, ("Error receiving server response.\n"));
     goto bail;
   }
 

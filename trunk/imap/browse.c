@@ -20,6 +20,7 @@
 #include "lib/mem.h"
 #include "lib/str.h"
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 #include "mutt.h"
 #include "imap_private.h"
@@ -99,7 +100,7 @@ int imap_browse (char *path, struct browser_state *state)
     strncpy (mbox, buf, sizeof (mbox) - 1);
     n = safe_strlen (mbox);
 
-    dprint (3, (debugfile, "imap_browse: mbox: %s\n", mbox));
+    debug_print (3, ("mbox: %s\n", mbox));
 
     /* if our target exists and has inferiors, enter it if we
      * aren't already going to */
@@ -148,7 +149,7 @@ int imap_browse (char *path, struct browser_state *state)
       mbox[n] = '\0';
 
       if (showparents) {
-        dprint (3, (debugfile, "imap_init_browse: adding parent %s\n", mbox));
+        debug_print (3, ("adding parent %s\n", mbox));
         imap_add_folder (idata->delim, mbox, 1, 0, state, 1);
       }
 
@@ -188,17 +189,17 @@ int imap_browse (char *path, struct browser_state *state)
     /* Listing the home namespace, so INBOX should be included. Home 
      * namespace is not "", so we have to list it explicitly. We ask the 
      * server to see if it has descendants. */
-    dprint (3, (debugfile, "imap_browse: adding INBOX\n"));
+    debug_print (3, ("adding INBOX\n"));
     if (browse_add_list_result (idata, "LIST \"\" \"INBOX\"", state, 0))
       goto fail;
   }
 
   nsup = state->entrylen;
 
-  dprint (3, (debugfile, "imap_browse: Quoting mailbox scan: %s -> ", mbox));
+  debug_print (3, ("Quoting mailbox scan: %s:\n", mbox));
   snprintf (buf, sizeof (buf), "%s%%", mbox);
   imap_quote_string (buf2, sizeof (buf2), buf);
-  dprint (3, (debugfile, "%s\n", buf2));
+  debug_print (3, ("%s\n", buf2));
   snprintf (buf, sizeof (buf), "%s \"\" %s", list_cmd, buf2);
   if (browse_add_list_result (idata, buf, state, 0))
     goto fail;
@@ -219,8 +220,7 @@ int imap_browse (char *path, struct browser_state *state)
       if (nsi[i].listable && !nsi[i].home_namespace) {
         imap_add_folder (nsi[i].delim, nsi[i].prefix, nsi[i].noselect,
                          nsi[i].noinferiors, state, 0);
-        dprint (3, (debugfile, "imap_browse: adding namespace: %s\n",
-                    nsi[i].prefix));
+        debug_print (3, ("adding namespace: %s\n", nsi[i].prefix));
       }
   }
 
@@ -241,16 +241,12 @@ int imap_mailbox_create (const char *folder)
   short n;
 
   if (imap_parse_path (folder, &mx) < 0) {
-    dprint (1, (debugfile, "imap_mailbox_create: Bad starting path %s\n",
-                folder));
+    debug_print (1, ("Bad starting path %s\n", folder));
     return -1;
   }
 
   if (!(idata = imap_conn_find (&mx.account, M_IMAP_CONN_NONEW))) {
-    dprint (1,
-            (debugfile,
-             "imap_mailbox_create: Couldn't find open connection to %s",
-             mx.account.host));
+    debug_print (1, ("Couldn't find open connection to %s\n", mx.account.host));
     goto fail;
   }
 
@@ -295,16 +291,12 @@ int imap_mailbox_rename (const char *mailbox)
   char newname[SHORT_STRING];
 
   if (imap_parse_path (mailbox, &mx) < 0) {
-    dprint (1, (debugfile, "imap_mailbox_rename: Bad source mailbox %s\n",
-                mailbox));
+    debug_print (1, ("Bad source mailbox %s\n", mailbox));
     return -1;
   }
 
   if (!(idata = imap_conn_find (&mx.account, M_IMAP_CONN_NONEW))) {
-    dprint (1,
-            (debugfile,
-             "imap_mailbox_rename: Couldn't find open connection to %s",
-             mx.account.host));
+    debug_print (1, ("Couldn't find open connection to %s\n", mx.account.host));
     goto fail;
   }
 
@@ -346,9 +338,7 @@ static int browse_add_list_result (IMAP_DATA * idata, const char *cmd,
   IMAP_MBOX mx;
 
   if (imap_parse_path (state->folder, &mx)) {
-    dprint (2, (debugfile,
-                "browse_add_list_result: current folder %s makes no sense\n",
-                state->folder));
+    debug_print (2, ("current folder %s makes no sense\n", state->folder));
     return -1;
   }
 
@@ -509,8 +499,7 @@ static int browse_get_namespace (IMAP_DATA * idata, char *nsbuf, int nsblen,
             }
             /* skip "" namespaces, they are already listed at the root */
             if ((ns[0] != '\0') && (nsbused < nsblen) && (*nns < nsilen)) {
-              dprint (3,
-                      (debugfile, "browse_get_namespace: adding %s\n", ns));
+              debug_print (3, ("adding %s\n", ns));
               nsi->type = type;
               /* Cyrus doesn't append the delimiter to the namespace,
                * but UW-IMAP does. We'll strip it here and add it back

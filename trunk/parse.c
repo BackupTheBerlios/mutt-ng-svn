@@ -23,6 +23,7 @@
 #include "lib/intl.h"
 #include "lib/str.h"
 #include "lib/rx.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -168,12 +169,11 @@ static PARAMETER *parse_parameters (const char *s)
   const char *p;
   size_t i;
 
-  dprint (2, (debugfile, "parse_parameters: `%s'\n", s));
+  debug_print (2, ("`%s'\n", s));
 
   while (*s) {
     if ((p = strpbrk (s, "=;")) == NULL) {
-      dprint (1,
-              (debugfile, "parse_parameters: malformed parameter: %s\n", s));
+      debug_print (1, ("malformed parameter: %s\n", s));
       goto bail;
     }
 
@@ -233,8 +233,7 @@ static PARAMETER *parse_parameters (const char *s)
 
       new->value = safe_strdup (buffer);
 
-      dprint (2, (debugfile, "parse_parameter: `%s' = `%s'\n",
-                  new->attribute ? new->attribute : "",
+      debug_print (2, ("`%s' = `%s'\n", new->attribute ? new->attribute : "", 
                   new->value ? new->value : ""));
 
       /* Add this parameter to the list */
@@ -246,9 +245,7 @@ static PARAMETER *parse_parameters (const char *s)
         head = cur = new;
     }
     else {
-      dprint (1,
-              (debugfile, "parse_parameters(): parameter with no value: %s\n",
-               s));
+      debug_print (1, ("parameter with no value: %s\n", s));
       s = p;
     }
 
@@ -431,16 +428,12 @@ BODY *mutt_read_mime_header (FILE * fp, int digest)
       c++;
       SKIPWS (c);
       if (!*c) {
-        dprint (1,
-                (debugfile,
-                 "mutt_read_mime_header(): skipping empty header field: %s\n",
-                 line));
+        debug_print (1, ("skipping empty header field: %s\n", line));
         continue;
       }
     }
     else {
-      dprint (1,
-              (debugfile, "read_mime_header: bogus MIME header: %s\n", line));
+      debug_print (1, ("bogus MIME header: %s\n", line));
       break;
     }
 
@@ -836,9 +829,7 @@ time_t mutt_parse_date (const char *s, HEADER * h)
       else if (sscanf (t, "%d:%d", &hour, &min) == 2)
         sec = 0;
       else {
-        dprint (1,
-                (debugfile, "parse_date: could not process time format: %s\n",
-                 t));
+        debug_print (1, ("could not process time format: %s\n", t));
         return (-1);
       }
       tm.tm_hour = hour;
@@ -898,9 +889,7 @@ time_t mutt_parse_date (const char *s, HEADER * h)
   }
 
   if (count < 4) {              /* don't check for missing timezone */
-    dprint (1,
-            (debugfile,
-             "parse_date(): error parsing date format, using received time\n"));
+    debug_print (1, ("error parsing date format, using received time\n"));
     return (-1);
   }
 
@@ -1380,7 +1369,7 @@ ENVELOPE *mutt_read_rfc822_header (FILE * f, HEADER * hdr, short user_hdrs,
         }
 
         if (e->spam && e->spam->data)
-          dprint (5, (debugfile, "p822: spam = %s\n", e->spam->data));
+          debug_print (5, ("spam = %s\n", e->spam->data));
       }
     }
 
@@ -1424,9 +1413,7 @@ ENVELOPE *mutt_read_rfc822_header (FILE * f, HEADER * hdr, short user_hdrs,
 
     /* check for missing or invalid date */
     if (hdr->date_sent <= 0) {
-      dprint (1,
-              (debugfile,
-               "read_rfc822_header(): no date found, using received time from msg separator\n"));
+      debug_print (1, ("no date found, using received time from msg separator\n"));
       hdr->date_sent = hdr->received;
     }
   }

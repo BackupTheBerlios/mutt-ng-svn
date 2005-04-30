@@ -29,6 +29,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #if OPENSSL_VERSION_NUMBER >= 0x00904000L
 #define READ_X509_KEY(fp, key)	PEM_read_X509(fp, key, NULL, NULL)
@@ -86,19 +87,19 @@ int mutt_ssl_starttls (CONNECTION * conn)
   ssldata = (sslsockdata *) safe_calloc (1, sizeof (sslsockdata));
   /* the ssl_use_xxx protocol options don't apply. We must use TLS in TLS. */
   if (!(ssldata->ctx = SSL_CTX_new (TLSv1_client_method ()))) {
-    dprint (1, (debugfile, "mutt_ssl_starttls: Error allocating SSL_CTX\n"));
+    debug_print (1, ("Error allocating SSL_CTX\n"));
     goto bail_ssldata;
   }
 
   ssl_get_client_cert (ssldata, conn);
 
   if (!(ssldata->ssl = SSL_new (ssldata->ctx))) {
-    dprint (1, (debugfile, "mutt_ssl_starttls: Error allocating SSL\n"));
+    debug_print (1, ("Error allocating SSL\n"));
     goto bail_ctx;
   }
 
   if (SSL_set_fd (ssldata->ssl, conn->fd) != 1) {
-    dprint (1, (debugfile, "mutt_ssl_starttls: Error setting fd\n"));
+    debug_print (1, ("Error setting fd\n"));
     goto bail_ssl;
   }
 
@@ -435,13 +436,13 @@ static int check_certificate_by_signer (X509 * peercert)
     if (X509_STORE_set_default_paths (ctx))
       pass++;
     else
-      dprint (2, (debugfile, "X509_STORE_set_default_paths failed\n"));
+      debug_print (2, ("X509_STORE_set_default_paths failed\n"));
   }
 
   if (X509_STORE_load_locations (ctx, SslCertFile, NULL))
     pass++;
   else
-    dprint (2, (debugfile, "X509_STORE_load_locations_failed\n"));
+    debug_print (2, ("X509_STORE_load_locations_failed\n"));
 
   if (pass == 0) {
     /* nothing to do */
@@ -460,7 +461,7 @@ static int check_certificate_by_signer (X509 * peercert)
     err = X509_STORE_CTX_get_error (&xsc);
     snprintf (buf, sizeof (buf), "%s (%d)",
               X509_verify_cert_error_string (err), err);
-    dprint (2, (debugfile, "X509_verify_cert: %s\n", buf));
+    debug_print (2, ("X509_verify_cert: %s\n", buf));
   }
 #endif
   X509_STORE_CTX_cleanup (&xsc);
@@ -479,13 +480,13 @@ static int check_certificate_by_digest (X509 * peercert)
 
   /* expiration check */
   if (X509_cmp_current_time (X509_get_notBefore (peercert)) >= 0) {
-    dprint (2, (debugfile, "Server certificate is not yet valid\n"));
+    debug_print (2, ("Server certificate is not yet valid\n"));
     mutt_error (_("Server certificate is not yet valid"));
     mutt_sleep (2);
     return 0;
   }
   if (X509_cmp_current_time (X509_get_notAfter (peercert)) <= 0) {
-    dprint (2, (debugfile, "Server certificate has expired"));
+    debug_print (2, ("Server certificate has expired\n"));
     mutt_error (_("Server certificate has expired"));
     mutt_sleep (2);
     return 0;
@@ -536,13 +537,13 @@ static int ssl_check_certificate (sslsockdata * data)
   char *name = NULL, *c;
 
   if (check_certificate_by_signer (data->cert)) {
-    dprint (1, (debugfile, "ssl_check_certificate: signer check passed\n"));
+    debug_print (1, ("signer check passed\n"));
     return 1;
   }
 
   /* automatic check from user's database */
   if (SslCertFile && check_certificate_by_digest (data->cert)) {
-    dprint (1, (debugfile, "ssl_check_certificate: digest check passed\n"));
+    debug_print (1, ("digest check passed\n"));
     return 1;
   }
 
@@ -643,7 +644,7 @@ static int ssl_check_certificate (sslsockdata * data)
 static void ssl_get_client_cert (sslsockdata * ssldata, CONNECTION * conn)
 {
   if (SslClientCert) {
-    dprint (2, (debugfile, "Using client certificate %s\n", SslClientCert));
+    debug_print (2, ("Using client certificate %s\n", SslClientCert));
     SSL_CTX_set_default_passwd_cb_userdata (ssldata->ctx, &conn->account);
     SSL_CTX_set_default_passwd_cb (ssldata->ctx, ssl_passwd_cb);
     SSL_CTX_use_certificate_file (ssldata->ctx, SslClientCert,
@@ -660,7 +661,7 @@ static int ssl_passwd_cb (char *buf, int size, int rwflag, void *userdata)
   if (mutt_account_getuser (account))
     return 0;
 
-  dprint (2, (debugfile, "ssl_passwd_cb: getting password for %s@%s:%u\n",
+  debug_print (2, ("getting password for %s@%s:%u\n",
               account->user, account->host, account->port));
 
   if (mutt_account_getpass (account))

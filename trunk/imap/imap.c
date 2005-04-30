@@ -30,6 +30,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <unistd.h>
 #include <ctype.h>
@@ -75,12 +76,12 @@ int imap_access (const char *path, int flags)
   else if (mutt_bit_isset (idata->capabilities, STATUS))
     snprintf (buf, sizeof (buf), "STATUS %s (UID-VALIDITY)", mbox);
   else {
-    dprint (2, (debugfile, "imap_access: STATUS not supported?\n"));
+    debug_print (2, ("STATUS not supported?\n"));
     return -1;
   }
 
   if (imap_exec (idata, buf, IMAP_CMD_FAIL_OK) < 0) {
-    dprint (1, (debugfile, "imap_access: Can't check STATUS of %s\n", mbox));
+    debug_print (1, ("Can't check STATUS of %s\n", mbox));
     return -1;
   }
 
@@ -178,14 +179,11 @@ int imap_read_literal (FILE * fp, IMAP_DATA * idata, long bytes)
 
   int r = 0;
 
-  dprint (2, (debugfile, "imap_read_literal: reading %ld bytes\n", bytes));
+  debug_print (2, ("reading %ld bytes\n", bytes));
 
   for (pos = 0; pos < bytes; pos++) {
     if (mutt_socket_readchar (idata->conn, &c) != 1) {
-      dprint (1,
-              (debugfile,
-               "imap_read_literal: error during read, %ld bytes read\n",
-               pos));
+      debug_print (1, ("error during read, %ld bytes read\n", pos));
       idata->status = IMAP_FATAL;
 
       return -1;
@@ -204,8 +202,8 @@ int imap_read_literal (FILE * fp, IMAP_DATA * idata, long bytes)
 #endif
     fputc (c, fp);
 #ifdef DEBUG
-    if (debuglevel >= IMAP_LOG_LTRL)
-      fputc (c, debugfile);
+    if (DebugLevel >= IMAP_LOG_LTRL)
+      fputc (c, DebugFile);
 #endif
   }
 
@@ -224,9 +222,7 @@ void imap_expunge_mailbox (IMAP_DATA * idata)
     h = idata->ctx->hdrs[i];
 
     if (h->index == -1) {
-      dprint (2,
-              (debugfile, "Expunging message UID %d.\n",
-               HEADER_DATA (h)->uid));
+      debug_print (2, ("Expunging message UID %d.\n", HEADER_DATA (h)->uid));
 
       h->active = 0;
 
@@ -277,11 +273,11 @@ static int imap_get_delim (IMAP_DATA * idata)
   while (rc == IMAP_CMD_CONTINUE);
 
   if (rc != IMAP_CMD_OK) {
-    dprint (1, (debugfile, "imap_get_delim: failed.\n"));
+    debug_print (1, ("failed.\n"));
     return -1;
   }
 
-  dprint (2, (debugfile, "Delimiter: %c\n", idata->delim));
+  debug_print (2, ("Delimiter: %c\n", idata->delim));
 
   return -1;
 }
@@ -372,8 +368,7 @@ IMAP_DATA *imap_conn_find (const ACCOUNT * account, int flags)
     if (!imap_authenticate (idata)) {
       idata->state = IMAP_AUTHENTICATED;
       if (idata->conn->ssf)
-        dprint (2, (debugfile, "Communication encrypted at %d bits\n",
-                    idata->conn->ssf));
+        debug_print (2, ("Communication encrypted at %d bits\n", idata->conn->ssf));
     }
     else
       mutt_account_unsetpass (&idata->conn->account);
@@ -472,13 +467,13 @@ static char *imap_get_flags (LIST ** hflags, char *s)
 
   /* sanity-check string */
   if (ascii_strncasecmp ("FLAGS", s, 5) != 0) {
-    dprint (1, (debugfile, "imap_get_flags: not a FLAGS response: %s\n", s));
+    debug_print (1, ("not a FLAGS response: %s\n", s));
     return NULL;
   }
   s += 5;
   SKIPWS (s);
   if (*s != '(') {
-    dprint (1, (debugfile, "imap_get_flags: bogus FLAGS response: %s\n", s));
+    debug_print (1, ("bogus FLAGS response: %s\n", s));
     return NULL;
   }
 
@@ -501,8 +496,7 @@ static char *imap_get_flags (LIST ** hflags, char *s)
 
   /* note bad flags response */
   if (*s != ')') {
-    dprint (1, (debugfile,
-                "imap_get_flags: Unterminated FLAGS response: %s\n", s));
+    debug_print (1, ("Unterminated FLAGS response: %s\n", s));
     mutt_free_list (hflags);
 
     return NULL;
@@ -577,14 +571,14 @@ int imap_open_mailbox (CONTEXT * ctx)
     if (ascii_strncasecmp ("FLAGS", pc, 5) == 0) {
       /* don't override PERMANENTFLAGS */
       if (!idata->flags) {
-        dprint (2, (debugfile, "Getting mailbox FLAGS\n"));
+        debug_print (2, ("Getting mailbox FLAGS\n"));
         if ((pc = imap_get_flags (&(idata->flags), pc)) == NULL)
           goto fail;
       }
     }
     /* PERMANENTFLAGS are massaged to look like FLAGS, then override FLAGS */
     else if (ascii_strncasecmp ("OK [PERMANENTFLAGS", pc, 18) == 0) {
-      dprint (2, (debugfile, "Getting mailbox PERMANENTFLAGS\n"));
+      debug_print (2, ("Getting mailbox PERMANENTFLAGS\n"));
       /* safe to call on NULL */
       mutt_free_list (&(idata->flags));
       /* skip "OK [PERMANENT" so syntax is the same as FLAGS */
@@ -595,7 +589,7 @@ int imap_open_mailbox (CONTEXT * ctx)
 #ifdef USE_HCACHE
     /* save UIDVALIDITY for the header cache */
     else if (ascii_strncasecmp ("OK [UIDVALIDITY", pc, 14) == 0) {
-      dprint (2, (debugfile, "Getting mailbox UIDVALIDITY\n"));
+      debug_print (2, ("Getting mailbox UIDVALIDITY\n"));
       pc += 3;
       pc = imap_next_word (pc);
 
@@ -629,26 +623,25 @@ int imap_open_mailbox (CONTEXT * ctx)
   if (!ascii_strncasecmp
       (imap_get_qualifier (idata->cmd.buf), "[READ-ONLY]", 11)
       && !mutt_bit_isset (idata->capabilities, ACL)) {
-    dprint (2, (debugfile, "Mailbox is read-only.\n"));
+    debug_print (2, ("Mailbox is read-only.\n"));
     ctx->readonly = 1;
   }
 
 #ifdef DEBUG
   /* dump the mailbox flags we've found */
-  if (debuglevel > 2) {
+  if (DebugLevel > 2) {
     if (!idata->flags)
-      dprint (3, (debugfile, "No folder flags found\n"));
+      debug_print (3, ("No folder flags found\n"));
     else {
       LIST *t = idata->flags;
 
-      dprint (3, (debugfile, "Mailbox flags: "));
+      debug_print (3, ("Mailbox flags:\n"));
 
       t = t->next;
       while (t) {
-        dprint (3, (debugfile, "[%s] ", t->data));
+        debug_print (3, ("[%s]\n", t->data));
         t = t->next;
       }
-      dprint (3, (debugfile, "\n"));
     }
   }
 #endif
@@ -685,8 +678,7 @@ int imap_open_mailbox (CONTEXT * ctx)
     goto fail;
   }
 
-  dprint (2,
-          (debugfile, "imap_open_mailbox: msgcount is %d\n", ctx->msgcount));
+  debug_print (2, ("msgcount is %d\n", ctx->msgcount));
   FREE (&mx.mbox);
   return 0;
 
@@ -776,7 +768,7 @@ void imap_logout (IMAP_DATA * idata)
 /*
 int imap_close_connection (CONTEXT *ctx)
 {
-  dprint (1, (debugfile, "imap_close_connection(): closing connection\n"));
+  debug_print (1, (debugfile, "imap_close_connection(): closing connection\n"));
   if (CTX_DATA->status != IMAP_BYE)
   {
     mutt_message _("Closing connection to IMAP server...");
@@ -972,7 +964,7 @@ int imap_sync_mailbox (CONTEXT * ctx, int expunge, int *index_hint)
   idata = (IMAP_DATA *) ctx->data;
 
   if (idata->state != IMAP_SELECTED) {
-    dprint (2, (debugfile, "imap_sync_mailbox: no mailbox selected\n"));
+    debug_print (2, ("no mailbox selected\n"));
     return -1;
   }
 
@@ -1027,15 +1019,11 @@ int imap_sync_mailbox (CONTEXT * ctx, int expunge, int *index_hint)
        * This works better if we're expunging, of course. */
       if (ctx->hdrs[n]->refs_changed || ctx->hdrs[n]->irt_changed ||
           ctx->hdrs[n]->attach_del) {
-        dprint (3,
-                (debugfile,
-                 "imap_sync_mailbox: Attachments to be deleted, falling back to _mutt_save_message\n"));
+        debug_print (3, ("Attachments to be deleted, falling back to _mutt_save_message\n"));
         if (!appendctx)
           appendctx = mx_open_mailbox (ctx->path, M_APPEND | M_QUIET, NULL);
         if (!appendctx) {
-          dprint (1,
-                  (debugfile,
-                   "imap_sync_mailbox: Error opening mailbox in append mode\n"));
+          debug_print (1, ("Error opening mailbox in append mode\n"));
         }
         else
           _mutt_save_message (ctx->hdrs[n], appendctx, 1, 0, 0);
@@ -1222,15 +1210,12 @@ int imap_mailbox_check (char *path, int new)
         if (isdigit ((unsigned char) *s)) {
           if (*s != '0') {
             msgcount = atoi (s);
-            dprint (2,
-                    (debugfile, "%d new messages in %s\n", msgcount, path));
+            debug_print (2, ("%d new messages in %s\n", msgcount, path));
           }
         }
       }
       else
-        dprint (1,
-                (debugfile,
-                 "imap_mailbox_check: STATUS response doesn't match requested mailbox.\n"));
+        debug_print (1, ("STATUS response doesn't match requested mailbox.\n"));
     }
   }
   while (rc == IMAP_CMD_CONTINUE);
@@ -1371,7 +1356,7 @@ int imap_complete (char *dest, size_t dlen, char *path)
 
   /* verify passed in path is an IMAP path */
   if (imap_parse_path (path, &mx)) {
-    dprint (2, (debugfile, "imap_complete: bad path %s\n", path));
+    debug_print (2, ("bad path %s\n", path));
     return -1;
   }
 

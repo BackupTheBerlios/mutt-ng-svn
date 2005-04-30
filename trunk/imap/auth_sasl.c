@@ -20,6 +20,7 @@
 
 #include "lib/mem.h"
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 #ifdef USE_SASL2
 #include <sasl/sasl.h>
@@ -47,8 +48,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
   unsigned char client_start;
 
   if (mutt_sasl_client_new (idata->conn, &saslconn) < 0) {
-    dprint (1, (debugfile,
-                "imap_auth_sasl: Error allocating SASL connection.\n"));
+    debug_print (1, ("Error allocating SASL connection.\n"));
     return IMAP_AUTH_FAILURE;
   }
 
@@ -97,11 +97,9 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
 
   if (rc != SASL_OK && rc != SASL_CONTINUE) {
     if (method)
-      dprint (2, (debugfile, "imap_auth_sasl: %s unavailable\n", method));
+      debug_print (2, ("%s unavailable\n", method));
     else
-      dprint (1,
-              (debugfile,
-               "imap_auth_sasl: Failure starting authentication exchange. No shared mechanisms?\n"));
+      debug_print (1, ("Failure starting authentication exchange. No shared mechanisms?\n"));
     /* SASL doesn't support LOGIN, so fall back */
 
     return IMAP_AUTH_UNAVAIL;
@@ -120,7 +118,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
     while (irc == IMAP_CMD_CONTINUE);
 
     if (method && irc == IMAP_CMD_NO) {
-      dprint (2, (debugfile, "imap_auth_sasl: %s failed\n", method));
+      debug_print (2, ("%s failed\n", method));
       sasl_dispose (&saslconn);
       return IMAP_AUTH_UNAVAIL;
     }
@@ -137,9 +135,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
       if (sasl_decode64 (idata->cmd.buf + 2, safe_strlen (idata->cmd.buf + 2), buf,
 #endif
                          &len) != SASL_OK) {
-        dprint (1,
-                (debugfile,
-                 "imap_auth_sasl: error base64-decoding server response.\n"));
+        debug_print (1, ("error base64-decoding server response.\n"));
         goto bail;
       }
     }
@@ -158,9 +154,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
     /* send out response, or line break if none needed */
     if (olen) {
       if (sasl_encode64 (pc, olen, buf, sizeof (buf), &olen) != SASL_OK) {
-        dprint (1,
-                (debugfile,
-                 "imap_auth_sasl: error base64-encoding client response.\n"));
+        debug_print (1, ("error base64-encoding client response.\n"));
         goto bail;
       }
 
@@ -179,8 +173,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
     /* If SASL has errored out, send an abort string to the server */
     if (rc < 0) {
       mutt_socket_write (idata->conn, "*\r\n");
-      dprint (1,
-              (debugfile, "imap_auth_sasl: sasl_client_step error %d\n", rc));
+      debug_print (1, ("sasl_client_step error %d\n", rc));
     }
 
     olen = 0;

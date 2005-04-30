@@ -14,6 +14,7 @@
 #endif
 
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 #include "mutt.h"
 #include "imap_private.h"
@@ -46,8 +47,8 @@ imap_auth_res_t imap_auth_login (IMAP_DATA * idata, const char *method)
   /* don't print the password unless we're at the ungodly debugging level
    * of 5 or higher */
 
-  if (debuglevel < IMAP_LOG_PASS)
-    dprint (2, (debugfile, "Sending LOGIN command for %s...\n",
+  if (DebugLevel < IMAP_LOG_PASS)
+    debug_print (2, ("Sending LOGIN command for %s...\n",
                 idata->conn->account.user));
 #endif
 

@@ -16,6 +16,7 @@
 #include "mutt_idna.h"
 
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 #include <sys/stat.h>
 #include <string.h>
@@ -66,8 +67,7 @@ void mutt_edit_headers (const char *editor,
   mutt_edit_file (editor, path);
   stat (path, &st);
   if (mtime == st.st_mtime) {
-    dprint (1,
-            (debugfile, "ci_edit_headers(): temp file was not modified.\n"));
+    debug_print (1, ("temp file was not modified.\n"));
     /* the file has not changed! */
     mutt_unlink (path);
     return;

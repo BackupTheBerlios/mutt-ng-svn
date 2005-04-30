@@ -28,6 +28,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <ctype.h>
 #include <unistd.h>
@@ -83,15 +84,10 @@ int mutt_num_postponed (int force)
       newpc = imap_mailbox_check (Postponed, 0);
       if (newpc >= 0) {
         PostCount = newpc;
-        dprint (2,
-                (debugfile,
-                 "mutt_num_postponed: %d postponed IMAP messages found.\n",
-                 PostCount));
+        debug_print (2, ("%d postponed IMAP messages found.\n", PostCount));
       }
       else
-        dprint (2,
-                (debugfile,
-                 "mutt_num_postponed: using old IMAP postponed count.\n"));
+        debug_print (2, ("using old IMAP postponed count.\n"));
     }
     return PostCount;
   }

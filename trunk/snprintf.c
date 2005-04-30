@@ -50,6 +50,7 @@
 #include <ctype.h>
 #include <sys/types.h>
 #include "lib/str.h"
+#include "lib/debug.h"
 
 /* Define this as a fall through, HAVE_STDARG_H is probably already set */
 
@@ -479,7 +480,7 @@ static void fmtint (char *buffer, size_t * currlen, size_t maxlen,
     spadlen = -spadlen;         /* Left Justifty */
 
 #ifdef DEBUG_SNPRINTF
-  dprint (1, (debugfile, "zpad: %d, spad: %d, min: %d, max: %d, place: %d\n",
+  debug_print (1, ("zpad: %d, spad: %d, min: %d, max: %d, place: %d\n",
               zpadlen, spadlen, min, max, place));
 #endif
 
@@ -602,7 +603,7 @@ static void fmtfp (char *buffer, size_t * currlen, size_t maxlen,
   }
 
 #ifdef DEBUG_SNPRINTF
-  dprint (1, (debugfile, "fmtfp: %f =? %d.%d\n", fvalue, intpart, fracpart));
+  debug_print (1, ("fmtfp: %f =? %d.%d\n", fvalue, intpart, fracpart));
 #endif
 
   /* Convert integer part */

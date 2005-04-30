@@ -39,6 +39,7 @@
 #include "lib/intl.h"
 #include "lib/str.h"
 #include "lib/rx.h"
+#include "lib/debug.h"
 
 #include <sys/stat.h>
 #include <ctype.h>
@@ -915,7 +916,7 @@ fill_buffer (FILE * f, long *last_pos, long offset, unsigned char *buf,
       }
       else if (*p == '\033' && *(p + 1) == ']'
                && check_attachment_marker ((char *) p) == 0) {
-        dprint (2, (debugfile, "fill_buffer: Seen attachment marker.\n"));
+        debug_print (2, ("seen attachment marker.\n"));
         while (*p++ != '\a')    /* skip pseudo-ANSI sequence */
           ;
       }
@@ -974,8 +975,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
 
     k = mbrtowc (&wc, (char *) buf + ch, cnt - ch, &mbstate);
     if (k == -2 || k == -1) {
-      dprint (1, (debugfile, "%s:%d: mbrtowc returned %d; errno = %d.\n",
-                  __FILE__, __LINE__, k, errno));
+      debug_print (1, ("mbrtowc returned %d; errno = %d.\n", k, errno));
       if (col + 4 > wrap_cols)
         break;
       col += 4;

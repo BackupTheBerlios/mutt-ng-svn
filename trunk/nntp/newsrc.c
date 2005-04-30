@@ -26,6 +26,7 @@
 #include "lib/mem.h"
 #include "lib/str.h"
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -124,7 +125,7 @@ static int nntp_parse_newsrc_line (NNTP_SERVER * news, char *line)
     data->lastMessage = data->entries[x - 1].last;
   data->num = x;
   mutt_newsgroup_stat (data);
-  dprint (2, (debugfile, "parse_line: Newsgroup %s\n", data->group));
+  debug_print (2, ("Newsgroup %s\n", data->group));
 
   return 0;
 }
@@ -437,7 +438,7 @@ void nntp_get_status (CONTEXT * ctx, HEADER * h, char *group, int article)
   if (!data) {
 #ifdef DEBUG
     if (group)
-      dprint (3, (debugfile, "newsgroup %s not found\n", group));
+      debug_print (3, ("newsgroup %s not found\n", group));
 #endif
     return;
   }
@@ -644,7 +645,7 @@ int mutt_newsrc_update (NNTP_SERVER * news)
     if (!data || !data->rc)
       continue;
     nntp_create_newsrc_line (data, &buf, &line, &llen);
-    dprint (2, (debugfile, "Added to newsrc: %s", line));
+    debug_print (2, ("Added to newsrc: %s\n", line));
     line += safe_strlen (line);
   }
   /* newrc being fully rewritten */
@@ -715,7 +716,7 @@ void nntp_clear_cacheindex (NNTP_SERVER * news)
     if (!data || data->subscribed || !data->cache)
       continue;
     nntp_delete_cache (data);
-    dprint (2, (debugfile, "Removed from .index: %s\n", data->group));
+    debug_print (2, ("Removed from .index: %s\n", data->group));
   }
   return;
 }

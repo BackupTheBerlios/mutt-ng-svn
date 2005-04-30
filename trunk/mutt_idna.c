@@ -18,6 +18,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 /* The low-level interface we use. */
 
@@ -68,10 +69,7 @@ int mutt_idna_to_local (const char *in, char **out, int flags)
     if (!irrev && idna_to_ascii_8z (tmp, &t2, 1) != IDNA_SUCCESS)
       irrev = 1;
     if (!irrev && ascii_strcasecmp (t2, in)) {
-      dprint (1,
-              (debugfile,
-               "mutt_idna_to_local: Not reversible. in = '%s', t2 = '%s'.\n",
-               in, t2));
+      debug_print (1, ("not reversible. in = '%s', t2 = '%s'.\n", in, t2));
       irrev = 1;
     }
 

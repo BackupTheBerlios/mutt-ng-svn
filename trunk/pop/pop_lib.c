@@ -21,6 +21,7 @@
 
 #include "lib/mem.h"
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <unistd.h>
@@ -388,7 +389,7 @@ pop_query_status pop_query_d (POP_DATA * pop_data, char *buf, size_t buflen, cha
   /* print msg instaed of real command */
   if (msg) {
     dbg = M_SOCK_LOG_FULL;
-    dprint (M_SOCK_LOG_CMD, (debugfile, "> %s", msg));
+    debug_print (M_SOCK_LOG_CMD, ("> %s", msg));
   }
 #endif
 

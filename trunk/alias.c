@@ -19,6 +19,7 @@
 #include "lib/intl.h"
 #include "lib/str.h"
 #include "lib/rx.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -49,10 +50,7 @@ static ADDRESS *mutt_expand_aliases_r (ADDRESS * a, LIST ** expn)
         i = 0;
         for (u = *expn; u; u = u->next) {
           if (safe_strcmp (a->mailbox, u->data) == 0) { /* alias already found */
-            dprint (1,
-                    (debugfile,
-                     "mutt_expand_aliases_r(): loop in alias found for '%s'\n",
-                     a->mailbox));
+            debug_print(1, ("loop in alias found for '%s'\n", a->mailbox));
             i = 1;
             break;
           }
@@ -487,59 +485,44 @@ int mutt_addr_is_user (ADDRESS * addr)
 {
   /* NULL address is assumed to be the user. */
   if (!addr) {
-    dprint (5, (debugfile, "mail_addr_is_user: yes, NULL address\n"));
+    debug_print(5, ("yes, NULL address\n"));
     return 1;
   }
   if (!addr->mailbox) {
-    dprint (5, (debugfile, "mail_addr_is_user: no, no mailbox\n"));
+    debug_print(5, ("no, no mailbox\n"));
     return 0;
   }
 
   if (ascii_strcasecmp (addr->mailbox, Username) == 0) {
-    dprint (5,
-            (debugfile, "mail_addr_is_user: yes, %s = %s\n", addr->mailbox,
-             Username));
+    debug_print(5, ("yes, %s = %s\n", addr->mailbox, Username));
     return 1;
   }
   if (string_is_address (addr->mailbox, Username, Hostname)) {
-    dprint (5,
-            (debugfile, "mail_addr_is_user: yes, %s = %s @ %s \n",
-             addr->mailbox, Username, Hostname));
+    debug_print(5, ("yes, %s = %s @ %s \n", addr->mailbox, Username, Hostname));
     return 1;
   }
   if (string_is_address (addr->mailbox, Username, mutt_fqdn (0))) {
-    dprint (5,
-            (debugfile, "mail_addr_is_user: yes, %s = %s @ %s \n",
-             addr->mailbox, Username, mutt_fqdn (0)));
+    debug_print(5, ("yes, %s = %s @ %s \n", addr->mailbox, Username, mutt_fqdn (0)));
     return 1;
   }
   if (string_is_address (addr->mailbox, Username, mutt_fqdn (1))) {
-    dprint (5,
-            (debugfile, "mail_addr_is_user: yes, %s = %s @ %s \n",
-             addr->mailbox, Username, mutt_fqdn (1)));
+    debug_print(5, ("yes, %s = %s @ %s \n", addr->mailbox, Username, mutt_fqdn (1)));
     return 1;
   }
 
   if (From && !ascii_strcasecmp (From->mailbox, addr->mailbox)) {
-    dprint (5,
-            (debugfile, "mail_addr_is_user: yes, %s = %s\n", addr->mailbox,
-             From->mailbox));
+    debug_print(5, ("yes, %s = %s\n", addr->mailbox, From->mailbox));
     return 1;
   }
 
   if (rx_list_match (Alternates, addr->mailbox)) {
-    dprint (5,
-            (debugfile, "mail_addr_is_user: yes, %s matched by alternates.\n",
-             addr->mailbox));
+    debug_print(5, ("yes, %s matched by alternates.\n", addr->mailbox));
     if (rx_list_match (UnAlternates, addr->mailbox))
-      dprint (5,
-              (debugfile,
-               "mail_addr_is_user: but, %s matched by unalternates.\n",
-               addr->mailbox));
+      debug_print(5, ("but, %s matched by unalternates.\n", addr->mailbox));
     else
       return 1;
   }
 
-  dprint (5, (debugfile, "mail_addr_is_user: no, all failed.\n"));
+  debug_print(5, ("no, all failed.\n"));
   return 0;
 }

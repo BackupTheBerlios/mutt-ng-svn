@@ -25,6 +25,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -1208,10 +1209,8 @@ int ci_send_message (int flags, /* send mode */
     }
 
     if (!tempfp) {
-      dprint (1,
-              (debugfile,
-               "newsend_message: can't create tempfile %s (errno=%d)\n",
-               msg->content->filename, errno));
+      debug_print (1, ("can't create tempfile %s (errno=%d)\n", 
+                  msg->content->filename, errno));
       mutt_perror (msg->content->filename);
       goto cleanup;
     }

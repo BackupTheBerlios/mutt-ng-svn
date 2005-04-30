@@ -23,6 +23,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -811,17 +812,15 @@ pgp_key_t pgp_getkeybyaddr (ADDRESS * a, short abilities, pgp_ring_t keyring)
   if (!keys)
     return NULL;
 
-  dprint (5, (debugfile, "pgp_getkeybyaddr: looking for %s <%s>.",
-              a->personal, a->mailbox));
-
+  debug_print (5, ("looking for %s <%s>\n", a->personal, a->mailbox));
 
   for (k = keys; k; k = kn) {
     kn = k->next;
 
-    dprint (5, (debugfile, "  looking at key: %s\n", pgp_keyid (k)));
+    debug_print (5, ("  looking at key: %s\n", pgp_keyid (k)));
 
     if (abilities && !(k->flags & abilities)) {
-      dprint (5, (debugfile, "  insufficient abilities: Has %x, want %x\n",
+      debug_print (5, ("  insufficient abilities: Has %x, want %x\n",
                   k->flags, abilities));
       continue;
     }
@@ -928,17 +927,14 @@ pgp_key_t pgp_getkeybystr (char *p, short abilities, pgp_ring_t keyring)
     match = 0;
 
     for (a = k->address; a; a = a->next) {
-      dprint (5,
-              (debugfile,
-               "pgp_getkeybystr: matching \"%s\" against key %s, \"%s\": ", p,
-               pgp_keyid (k), a->addr));
+      debug_print (5, ("matching \"%s\" against key %s, \"%s\":\n", p, pgp_keyid (k), a->addr));
       if (!*p || safe_strcasecmp (p, pgp_keyid (k)) == 0
           || (!safe_strncasecmp (p, "0x", 2)
               && !safe_strcasecmp (p + 2, pgp_keyid (k)))
           || (option (OPTPGPLONGIDS) && !safe_strncasecmp (p, "0x", 2)
               && !safe_strcasecmp (p + 2, k->keyid + 8))
           || str_isstr (a->addr, p)) {
-        dprint (5, (debugfile, "match.\n"));
+        debug_print (5, ("match.\n"));
         match = 1;
         break;
       }

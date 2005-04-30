@@ -28,6 +28,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -696,9 +697,7 @@ static int maildir_parse_dir (CONTEXT * ctx, struct maildir ***last,
 
     /* FOO - really ignore the return value? */
 
-    dprint (2,
-            (debugfile, "%s:%d: parsing %s\n", __FILE__, __LINE__,
-             de->d_name));
+    debug_print (2, ("parsing %s\n", de->d_name));
     maildir_parse_entry (ctx, last, subdir, de->d_name, count, is_old,
                          de->d_ino);
   }
@@ -713,16 +712,12 @@ static int maildir_add_to_context (CONTEXT * ctx, struct maildir *md)
 
   while (md) {
 
-    dprint (2, (debugfile, "%s:%d maildir_add_to_context(): Considering %s\n",
-                __FILE__, __LINE__, NONULL (md->canon_fname)));
+    debug_print (2, ("considering %s\n", NONULL (md->canon_fname)));
 
     if (md->h) {
-      dprint (2,
-              (debugfile,
-               "%s:%d Adding header structure. Flags: %s%s%s%s%s\n", __FILE__,
-               __LINE__, md->h->flagged ? "f" : "", md->h->deleted ? "D" : "",
-               md->h->replied ? "r" : "", md->h->old ? "O" : "",
-               md->h->read ? "R" : ""));
+      debug_print (2, ("flags: %s%s%s%s%s\n", md->h->flagged ? "f" : "",
+                  md->h->deleted ? "D" : "", md->h->replied ? "r" : "",
+                  md->h->old ? "O" : "", md->h->read ? "R" : ""));
       if (ctx->msgcount == ctx->hdrmax)
         mx_alloc_memory (ctx);
 
@@ -1047,8 +1042,7 @@ static int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr
               dest->path, subdir, (long) time (NULL),
               (unsigned int) getpid (), Counter++, NONULL (Hostname), suffix);
 
-    dprint (2, (debugfile, "maildir_open_new_message (): Trying %s.\n",
-                path));
+    debug_print (2, ("trying %s.\n", path));
 
     umask (Umask);
     if ((fd = open (path, O_WRONLY | O_EXCL | O_CREAT, 0666)) == -1) {
@@ -1058,7 +1052,7 @@ static int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr
       }
     }
     else {
-      dprint (2, (debugfile, "maildir_open_new_message (): Success.\n"));
+      debug_print (2, ("success.\n"));
       msg->path = safe_strdup (path);
       break;
     }
@@ -1125,8 +1119,7 @@ int maildir_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr)
               NONULL (Hostname), suffix);
     snprintf (full, _POSIX_PATH_MAX, "%s/%s", ctx->path, path);
 
-    dprint (2, (debugfile, "maildir_commit_message (): renaming %s to %s.\n",
-                msg->path, full));
+    debug_print (2, ("renaming %s to %s.\n", msg->path, full));
 
     if (safe_rename (msg->path, full) == 0) {
       if (hdr)
@@ -1344,10 +1337,7 @@ static int maildir_sync_message (CONTEXT * ctx, int msgno)
     char *p;
 
     if ((p = strrchr (h->path, '/')) == NULL) {
-      dprint (1,
-              (debugfile,
-               "maildir_sync_message: %s: unable to find subdir!\n",
-               h->path));
+      debug_print (1, ("%s: unable to find subdir!\n", h->path));
       return (-1);
     }
     p++;

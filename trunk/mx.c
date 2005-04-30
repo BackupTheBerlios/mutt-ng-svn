@@ -55,6 +55,7 @@
 #include "lib/intl.h"
 #include "lib/str.h"
 #include "lib/list.h"
+#include "lib/debug.h"
 
 #include <dirent.h>
 #include <fcntl.h>
@@ -200,7 +201,7 @@ int mx_lock_file (const char *path, int fd, int excl, int dot, int timeout)
   while (fcntl (fd, F_SETLK, &lck) == -1) {
     struct stat sb;
 
-    dprint (1, (debugfile, "mx_lock_file(): fcntl errno %d.\n", errno));
+    debug_print (1, ("fcntl errno %d.\n", errno));
     if (errno != EAGAIN && errno != EACCES) {
       mutt_perror ("fcntl");
       return (-1);
@@ -1105,8 +1106,7 @@ MESSAGE *mx_open_new_message (CONTEXT * dest, HEADER * hdr, int flags)
   ADDRESS *p = NULL;
 
   if (!MX_IDX(dest->magic-1)) {
-    dprint (1, (debugfile, "mx_open_new_message(): function "
-                "unimplemented for mailbox type %d.\n", dest->magic));
+    debug_print (1, ("function unimplemented for mailbox type %d.\n", dest->magic));
     return (NULL);
   }
 
@@ -1206,7 +1206,7 @@ int mx_check_mailbox (CONTEXT * ctx, int *index_hint, int lock)
     }
   }
 
-  dprint (1, (debugfile, "mx_check_mailbox: null or invalid context.\n"));
+  debug_print (1, ("null or invalid context.\n"));
   return (-1);
 }
 
@@ -1236,8 +1236,7 @@ MESSAGE *mx_open_message (CONTEXT * ctx, int msgno)
 
       if (msg->fp == NULL) {
         mutt_perror (path);
-        dprint (1, (debugfile, "mx_open_message: fopen: %s: %s (errno %d).\n",
-                    path, strerror (errno), errno));
+        debug_print (1, ("fopen: %s: %s (errno %d).\n", path, strerror (errno), errno));
         FREE (&msg);
       }
     }
@@ -1271,10 +1270,7 @@ MESSAGE *mx_open_message (CONTEXT * ctx, int msgno)
 #endif /* USE_NNTP */
 
   default:
-    dprint (1,
-            (debugfile,
-             "mx_open_message(): function not implemented for mailbox type %d.\n",
-             ctx->magic));
+    debug_print (1, ("function not implemented for mailbox type %d.\n", ctx->magic));
     FREE (&msg);
     break;
   }
@@ -1288,10 +1284,7 @@ int mx_commit_message (MESSAGE * msg, CONTEXT * ctx)
   int r = 0;
 
   if (!(msg->write && ctx->append)) {
-    dprint (1,
-            (debugfile,
-             "mx_commit_message(): msg->write = %d, ctx->append = %d\n",
-             msg->write, ctx->append));
+    debug_print (1, ("msg->write = %d, ctx->append = %d\n", msg->write, ctx->append));
     return -1;
   }
 
@@ -1364,8 +1357,7 @@ int mx_close_message (MESSAGE ** msg)
     (*msg)->fp = NULL;
 
   if ((*msg)->path) {
-    dprint (1, (debugfile, "mx_close_message (): unlinking %s\n",
-                (*msg)->path));
+    debug_print (1, ("unlinking %s\n", (*msg)->path));
     unlink ((*msg)->path);
     FREE (&(*msg)->path);
   }

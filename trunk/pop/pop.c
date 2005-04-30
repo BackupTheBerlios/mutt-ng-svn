@@ -19,6 +19,7 @@
 #include "lib/mem.h"
 #include "lib/str.h"
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <unistd.h>
@@ -71,13 +72,13 @@ static pop_query_status pop_read_header (POP_DATA * pop_data, HEADER * h)
       if (ret == PQ_OK) {
         pop_data->cmd_top = CMD_AVAILABLE;
 
-        dprint (1, (debugfile, "pop_read_header: set TOP capability\n"));
+        debug_print (1, ("set TOP capability\n"));
       }
 
       if (ret == PQ_ERR) {
         pop_data->cmd_top = CMD_NOT_AVAILABLE;
 
-        dprint (1, (debugfile, "pop_read_header: unset TOP capability\n"));
+        debug_print (1, ("unset TOP capability\n"));
         snprintf (pop_data->err_msg, sizeof (pop_data->err_msg),
                   _("Command TOP is not supported by server."));
       }
@@ -128,9 +129,7 @@ static int fetch_uidl (char *line, void *data)
       break;
 
   if (i == ctx->msgcount) {
-    dprint (1,
-            (debugfile, "pop_fetch_headers: new header %d %s\n", index,
-             line));
+    debug_print (1, ("new header %d %s\n", index, line));
 
     if (i >= ctx->hdrmax)
       mx_alloc_memory (ctx);
@@ -177,13 +176,13 @@ static int pop_fetch_headers (CONTEXT * ctx)
     if (ret == PQ_OK) {
       pop_data->cmd_uidl = CMD_AVAILABLE;
 
-      dprint (1, (debugfile, "pop_fetch_headers: set UIDL capability\n"));
+      debug_print (1, ("set UIDL capability\n"));
     }
 
     if (ret == PQ_ERR && pop_data->cmd_uidl == CMD_UNKNOWN) {
       pop_data->cmd_uidl = CMD_NOT_AVAILABLE;
 
-      dprint (1, (debugfile, "pop_fetch_headers: unset UIDL capability\n"));
+      debug_print (1, ("unset UIDL capability\n"));
       snprintf (pop_data->err_msg, sizeof (pop_data->err_msg),
                 _("Command UIDL is not supported by server."));
     }
@@ -282,7 +281,7 @@ static void pop_clear_cache (POP_DATA * pop_data)
   if (!pop_data->clear_cache)
     return;
 
-  dprint (1, (debugfile, "pop_clear_cache: delete cached messages\n"));
+  debug_print (1, ("delete cached messages\n"));
 
   for (i = 0; i < POP_CACHE_LEN; i++) {
     if (pop_data->cache[i].path) {

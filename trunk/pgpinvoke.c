@@ -34,6 +34,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 /*
  * The actual command line formatter.
@@ -139,7 +140,7 @@ void mutt_pgp_command (char *d, size_t dlen, struct pgp_command_context *cctx,
 {
   mutt_FormatString (d, dlen, NONULL (fmt), _mutt_fmt_pgp_command,
                      (unsigned long) cctx, 0);
-  dprint (2, (debugfile, "mutt_pgp_command: %s\n", d));
+  debug_print (2, ("%s\n", d));
 }
 
 /*

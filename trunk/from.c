@@ -16,6 +16,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <ctype.h>
 #include <string.h>
@@ -71,7 +72,7 @@ int is_from (const char *s, char *path, size_t pathlen, time_t * tp)
   if (!*s)
     return 0;
 
-  dprint (3, (debugfile, "\nis_from(): parsing: %s", s));
+  debug_print (3, ("parsing: %s\n", s));
 
   if (!is_day_name (s)) {
     const char *p;
@@ -97,7 +98,7 @@ int is_from (const char *s, char *path, size_t pathlen, time_t * tp)
         len = pathlen - 1;
       memcpy (path, s, len);
       path[len] = 0;
-      dprint (3, (debugfile, "is_from(): got return path: %s\n", path));
+      debug_print (3, ("got return path: %s\n", path));
     }
 
     s = p + 1;
@@ -106,7 +107,7 @@ int is_from (const char *s, char *path, size_t pathlen, time_t * tp)
       return 0;
 
     if (!is_day_name (s)) {
-      dprint (1, (debugfile, "is_from():  expected weekday, got: %s\n", s));
+      debug_print (1, ("expected weekday, got: %s\n", s));
       return 0;
     }
   }
@@ -174,9 +175,7 @@ int is_from (const char *s, char *path, size_t pathlen, time_t * tp)
     return 0;
   tm.tm_year = yr > 1900 ? yr - 1900 : (yr < 70 ? yr + 100 : yr);
 
-  dprint (3,
-          (debugfile,
-           "is_from(): month=%d, day=%d, hr=%d, min=%d, sec=%d, yr=%d.\n",
+  debug_print (3, ("month=%d, day=%d, hr=%d, min=%d, sec=%d, yr=%d.\n",
            tm.tm_mon, tm.tm_mday, tm.tm_hour, tm.tm_min, tm.tm_sec,
            tm.tm_year));
 

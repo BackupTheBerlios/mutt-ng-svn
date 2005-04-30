@@ -18,6 +18,7 @@
 #include "auth.h"
 
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 /* this is basically a stripped-down version of the cram-md5 method. */
 imap_auth_res_t imap_auth_anon (IMAP_DATA * idata, const char *method)
@@ -42,7 +43,7 @@ imap_auth_res_t imap_auth_anon (IMAP_DATA * idata, const char *method)
   while (rc == IMAP_CMD_CONTINUE);
 
   if (rc != IMAP_CMD_RESPOND) {
-    dprint (1, (debugfile, "Invalid response from server.\n"));
+    debug_print (1, ("Invalid response from server.\n"));
     goto bail;
   }
 
@@ -53,7 +54,7 @@ imap_auth_res_t imap_auth_anon (IMAP_DATA * idata, const char *method)
   while (rc == IMAP_CMD_CONTINUE);
 
   if (rc != IMAP_CMD_OK) {
-    dprint (1, (debugfile, "Error receiving server response.\n"));
+    debug_print (1, ("Error receiving server response.\n"));
     goto bail;
   }
 

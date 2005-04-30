@@ -38,6 +38,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <errno.h>
 #include <unistd.h>
@@ -810,7 +811,7 @@ int mutt_update_list_file (char *filename, char *section, char *key,
   int ext = 0, done = 0, r = 0;
 
   snprintf (oldfile, sizeof (oldfile), "%s.bak", filename);
-  dprint (1, (debugfile, "Renaming %s to %s\n", filename, oldfile));
+  debug_print (1, ("Renaming %s to %s\n", filename, oldfile));
 
   /* if file not exist, create it */
   if ((ifp = safe_fopen (filename, "a")))
@@ -820,13 +821,13 @@ int mutt_update_list_file (char *filename, char *section, char *key,
 
     return (-1);
   }
-  dprint (1, (debugfile, "Opening %s\n", oldfile));
+  debug_print (1, ("Opening %s\n", oldfile));
   if (!(ifp = safe_fopen (oldfile, "r"))) {
     mutt_perror (_("Unable to open backup file for reading"));
 
     return (-1);
   }
-  dprint (1, (debugfile, "Opening %s\n", filename));
+  debug_print (1, ("Opening %s\n", filename));
   if (!(ofp = safe_fopen (filename, "w"))) {
     fclose (ifp);
     mutt_perror (_("Unable to open new file for writing"));

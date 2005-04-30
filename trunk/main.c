@@ -29,6 +29,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -588,9 +589,9 @@ int main (int argc, char **argv)
       break;
 
     case 'd':
+      debug_setlevel(atoi(optarg));
 #ifdef DEBUG
-      debuglevel = atoi (optarg);
-      printf (_("Debugging at level %d.\n"), debuglevel);
+      printf (_("Debugging at level %d.\n"), atoi(optarg));
 #else
       printf _("DEBUG was not defined during compilation.  Ignored.\n");
 #endif

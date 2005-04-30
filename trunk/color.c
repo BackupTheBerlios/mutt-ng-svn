@@ -18,6 +18,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <stdlib.h>
@@ -245,8 +246,7 @@ int mutt_alloc_color (int fg, int bg)
 
   init_pair (i, fg, bg);
 
-  dprint (1, (debugfile, "mutt_alloc_color(): Color pairs used so far: %d\n",
-              UserColors));
+  debug_print (1, ("Color pairs used so far: %d\n", UserColors));
 
   return (COLOR_PAIR (p->index));
 }
@@ -263,9 +263,7 @@ void mutt_free_color (int fg, int bg)
         return;
 
       UserColors--;
-      dprint (1,
-              (debugfile, "mutt_free_color(): Color pairs used so far: %d\n",
-               UserColors));
+      debug_print (1, ("Color pairs used so far: %d\n", UserColors));
 
       if (p == ColorList) {
         ColorList = ColorList->next;
@@ -417,9 +415,7 @@ _mutt_parse_uncolor (BUFFER * buf, BUFFER * s, unsigned long data,
         if (!safe_strcmp (buf->data, tmp->pattern)) {
           if (!do_cache)
             do_cache = 1;
-          dprint (1,
-                  (debugfile, "Freeing pattern \"%s\" from ColorIndexList\n",
-                   tmp->pattern));
+          debug_print (1, ("Freeing pattern \"%s\" from ColorIndexList\n", tmp->pattern));
           if (last)
             last->next = tmp->next;
           else

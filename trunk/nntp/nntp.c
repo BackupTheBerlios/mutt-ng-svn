@@ -34,6 +34,7 @@
 #include "lib/mem.h"
 #include "lib/str.h"
 #include "lib/intl.h"
+#include "lib/debug.h"
 
 #include <unistd.h>
 #include <string.h>
@@ -42,14 +43,9 @@
 
 static unsigned int _checked = 0;
 
-#ifdef DEBUG
-static void nntp_error (const char *where, const char *msg)
-{
-  dprint (1,
-          (debugfile, "nntp_error(): unexpected response in %s: %s\n", where,
-           msg));
+static void nntp_error (const char *where, const char *msg) {
+  debug_print (1, ("unexpected response in %s: %s\n", where, msg));
 }
-#endif /* DEBUG */
 
 static int nntp_auth (NNTP_SERVER * serv)
 {
@@ -74,8 +70,8 @@ static int nntp_auth (NNTP_SERVER * serv)
 
 #ifdef DEBUG
   /* don't print the password unless we're at the ungodly debugging level */
-  if (debuglevel < M_SOCK_LOG_FULL)
-    dprint (M_SOCK_LOG_CMD, (debugfile, "> AUTHINFO PASS *\n"));
+  if (DebugLevel < M_SOCK_LOG_FULL)
+    debug_print (M_SOCK_LOG_CMD, ("> AUTHINFO PASS *\n"));
 #endif
   snprintf (buf, sizeof (buf), "AUTHINFO PASS %s\r\n", conn->account.pass);
   mutt_socket_write_d (conn, buf, M_SOCK_LOG_FULL);
@@ -431,10 +427,8 @@ static int nntp_read_header (CONTEXT * ctx, const char *msgid,
 
   ret = mutt_nntp_fetch (nntp_data, buf, NULL, nntp_read_tempfile, f, 0);
   if (ret) {
-#ifdef DEBUG
     if (ret != -1)
-      dprint (1, (debugfile, "nntp_read_header: %s\n", buf));
-#endif
+      debug_print (1, ("%s\n", buf));
     fclose (f);
     unlink (tempfile);
     return (ret == -1 ? -1 : 1);
@@ -470,7 +464,7 @@ static int parse_description (char *line, void *n)
   d++;
   while (*d && (*d == '\t' || *d == ' '))
     d++;
-  dprint (2, (debugfile, "group: %s, desc: %s\n", line, d));
+  debug_print (2, ("group: %s, desc: %s\n", line, d));
   if ((data = (NNTP_DATA *) hash_find (news->newsgroups, line)) != NULL &&
       safe_strcmp (d, data->desc)) {
     FREE (&data->desc);
@@ -937,7 +931,7 @@ int nntp_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
   if (ret == 1) {
     mutt_error (_("Article %d not found on server"),
                 ctx->hdrs[msgno]->article_num);
-    dprint (1, (debugfile, "nntp_fetch_message: %s\n", buf));
+    debug_print (1, ("%s\n", buf));
   }
 
   if (ret) {

@@ -30,6 +30,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <string.h>
 #include <ctype.h>
@@ -170,13 +171,11 @@ void mutt_free_body (BODY ** p)
     if (b->parameter)
       mutt_free_parameter (&b->parameter);
     if (b->unlink && b->filename) {
-      dprint (1, (debugfile, "mutt_free_body: Unlinking %s.\n", b->filename));
+      debug_print (1, ("unlinking %s.\n", b->filename));
       unlink (b->filename);
     }
     else if (b->filename)
-      dprint (1,
-              (debugfile, "mutt_free_body: Not unlinking %s.\n",
-               b->filename));
+      debug_print (1, ("not unlinking %s.\n", b->filename));
 
     FREE (&b->filename);
     FREE (&b->content);
@@ -650,8 +649,7 @@ void _mutt_mktemp (char *s, const char *src, int line)
 {
   snprintf (s, _POSIX_PATH_MAX, "%s/muttng-%s-%d-%d-%d", NONULL (Tempdir),
             NONULL (Hostname), (int) getuid (), (int) getpid (), Counter++);
-  dprint (1,
-          (debugfile, "%s:%d: mutt_mktemp returns \"%s\".\n", src, line, s));
+  debug_print (1, ("%s:%d: mutt_mktemp returns \"%s\".\n", src, line, s));
   unlink (s);
 }
 
@@ -1475,12 +1473,7 @@ int mutt_match_spam_list (const char *s, SPAM_LIST * l, char *text, int x)
     if (regexec
         (l->rx->rx, s, (size_t) l->nmatch, (regmatch_t *) pmatch,
          (int) 0) == 0) {
-      dprint (5,
-              (debugfile, "mutt_match_spam_list: %s matches %s\n", s,
-               l->rx->pattern));
-      dprint (5,
-              (debugfile, "mutt_match_spam_list: %d subs\n",
-               l->rx->rx->re_nsub));
+      debug_print (5, ("%s matches %s\n%d subst", s, l->rx->pattern, l->rx->rx->re_nsub));
 
       /* Copy template into text, with substitutions. */
       for (p = l->template; *p;) {
@@ -1496,7 +1489,7 @@ int mutt_match_spam_list (const char *s, SPAM_LIST * l, char *text, int x)
         }
       }
       text[tlen] = '\0';
-      dprint (5, (debugfile, "mutt_match_spam_list: \"%s\"\n", text));
+      debug_print (5, ("\"%s\"\n", text));
       return 1;
     }
   }

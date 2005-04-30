@@ -41,6 +41,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -597,8 +598,7 @@ int mutt_index_menu (void)
 
       op = km_dokey (MENU_MAIN);
 
-      dprint (4,
-              (debugfile, "mutt_index_menu[%d]: Got op %d\n", __LINE__, op));
+      debug_print (4, ("Got op %d\n", op));
 
 #if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
       if (SigWinch) {

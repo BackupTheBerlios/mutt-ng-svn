@@ -283,13 +283,6 @@ WHERE char *SmimeGetCertCommand;
 WHERE char *SmimeImportCertCommand;
 WHERE char *SmimeGetCertEmailCommand;
 
-
-
-#ifdef DEBUG
-WHERE FILE *debugfile INITVAL (0);
-WHERE int debuglevel INITVAL (0);
-#endif
-
 #ifdef MAIN_C
 const char *Weekdays[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 const char *Months[] =

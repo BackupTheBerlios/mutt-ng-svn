@@ -21,6 +21,7 @@
 #endif
 
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <dirent.h>
 #include <string.h>
@@ -47,7 +48,7 @@ int mutt_complete (char *s, size_t slen)
   char imap_path[LONG_STRING];
 #endif
 
-  dprint (2, (debugfile, "mutt_complete: completing %s\n", s));
+  debug_print (2, ("completing %s\n", s));
 
 #ifdef USE_NNTP
   if (option (OPTNEWS)) {
@@ -167,9 +168,7 @@ int mutt_complete (char *s, size_t slen)
   }
 
   if (dirp == NULL) {
-    dprint (1,
-            (debugfile, "mutt_complete(): %s: %s (errno %d).\n", exp_dirpart,
-             strerror (errno), errno));
+    debug_print (1, ("%s: %s (errno %d).\n", exp_dirpart, strerror (errno), errno));
     return (-1);
   }
 

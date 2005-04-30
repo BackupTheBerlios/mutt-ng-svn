@@ -23,6 +23,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <sys/wait.h>
 #include <string.h>
@@ -249,11 +250,8 @@ static void mutt_smime_command (char *d, size_t dlen,
 {
   mutt_FormatString (d, dlen, NONULL (fmt), _mutt_fmt_smime_command,
                      (unsigned long) cctx, 0);
-  dprint (2, (debugfile, "mutt_smime_command: %s\n", d));
+  debug_print (2, ("%s\n", d));
 }
-
-
-
 
 static pid_t smime_invoke (FILE ** smimein, FILE ** smimeout,
                            FILE ** smimeerr, int smimeinfd, int smimeoutfd,

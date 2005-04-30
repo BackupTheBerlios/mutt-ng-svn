@@ -30,6 +30,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #if HAVE_STDINT_H
 #include <stdint.h>
@@ -161,9 +162,7 @@ int imap_read_headers (IMAP_DATA * idata, int msgbegin, int msgend)
           mutt_hcache_restore ((unsigned char *) uid_validity, 0);
         ctx->hdrs[msgno]->index = h.sid - 1;
         if (h.sid != ctx->msgcount + 1)
-          dprint (1,
-                  (debugfile,
-                   "imap_read_headers: msgcount and sequence ID are inconsistent!"));
+          debug_print (1, ("msgcount and sequence ID are inconsistent!\n"));
         /* messages which have not been expunged are ACTIVE (borrowed from mh 
          * folders) */
         ctx->hdrs[msgno]->active = 1;
@@ -254,9 +253,7 @@ int imap_read_headers (IMAP_DATA * idata, int msgbegin, int msgend)
 
       ctx->hdrs[msgno]->index = h.sid - 1;
       if (h.sid != ctx->msgcount + 1)
-        dprint (1,
-                (debugfile,
-                 "imap_read_headers: msgcount and sequence ID are inconsistent!"));
+        debug_print (1, ("msgcount and sequence ID are inconsistent!\n"));
       /* messages which have not been expunged are ACTIVE (borrowed from mh 
        * folders) */
       ctx->hdrs[msgno]->active = 1;
@@ -557,8 +554,7 @@ int imap_append_message (CONTEXT * ctx, MESSAGE * msg)
   if (rc != IMAP_CMD_RESPOND) {
     char *pc;
 
-    dprint (1, (debugfile, "imap_append_message(): command failed: %s\n",
-                idata->cmd.buf));
+    debug_print (1, ("command failed: %s\n", idata->cmd.buf));
 
     pc = idata->cmd.buf + SEQLEN;
     SKIPWS (pc);
@@ -594,8 +590,7 @@ int imap_append_message (CONTEXT * ctx, MESSAGE * msg)
   if (!imap_code (idata->cmd.buf)) {
     char *pc;
 
-    dprint (1, (debugfile, "imap_append_message(): command failed: %s\n",
-                idata->cmd.buf));
+    debug_print (1, ("command failed: %s\n", idata->cmd.buf));
     pc = idata->cmd.buf + SEQLEN;
     SKIPWS (pc);
     pc = imap_next_word (pc);
@@ -633,21 +628,18 @@ int imap_copy_messages (CONTEXT * ctx, HEADER * h, char *dest, int delete)
   idata = (IMAP_DATA *) ctx->data;
 
   if (imap_parse_path (dest, &mx)) {
-    dprint (1, (debugfile, "imap_copy_messages: bad destination %s\n", dest));
+    debug_print (1, ("bad destination %s\n", dest));
     return -1;
   }
 
   /* check that the save-to folder is in the same account */
   if (!mutt_account_match (&(CTX_DATA->conn->account), &(mx.account))) {
-    dprint (3, (debugfile, "imap_copy_messages: %s not same server as %s\n",
-                dest, ctx->path));
+    debug_print (3, ("%s not same server as %s\n", dest, ctx->path));
     return 1;
   }
 
   if (h && h->attach_del) {
-    dprint (3,
-            (debugfile,
-             "imap_copy_messages: Message contains attachments to be deleted\n"));
+    debug_print (3, ("Message contains attachments to be deleted\n"));
     return 1;
   }
 
@@ -664,9 +656,7 @@ int imap_copy_messages (CONTEXT * ctx, HEADER * h, char *dest, int delete)
      * remainder. */
     for (n = 0; n < ctx->msgcount; n++) {
       if (ctx->hdrs[n]->tagged && ctx->hdrs[n]->attach_del) {
-        dprint (3,
-                (debugfile,
-                 "imap_copy_messages: Message contains attachments to be deleted\n"));
+        debug_print (3, ("Message contains attachments to be deleted\n"));
         return 1;
       }
 
@@ -676,7 +666,7 @@ int imap_copy_messages (CONTEXT * ctx, HEADER * h, char *dest, int delete)
 	rc = imap_sync_message (idata, ctx->hdrs[n], &sync_cmd, &err_continue);
 	if (rc < 0)
 	{
-	  dprint (1, (debugfile, "imap_copy_messages: could not sync\n"));
+	  debug_print (1, ("could not sync\n"));
 	  goto fail;
 	}
       }
@@ -684,7 +674,7 @@ int imap_copy_messages (CONTEXT * ctx, HEADER * h, char *dest, int delete)
 
     rc = imap_make_msg_set (idata, &cmd, M_TAG, 0);
     if (!rc) {
-      dprint (1, (debugfile, "imap_copy_messages: No messages tagged\n"));
+      debug_print (1, ("No messages tagged\n"));
       goto fail;
     }
     mutt_message (_("Copying %d messages to %s..."), rc, mbox);
@@ -699,7 +689,7 @@ int imap_copy_messages (CONTEXT * ctx, HEADER * h, char *dest, int delete)
       rc = imap_sync_message (idata, h, &sync_cmd, &err_continue);
       if (rc < 0)
       {
-	dprint (1, (debugfile, "imap_copy_messages: could not sync\n"));
+	debug_print (1, ("could not sync\n"));
 	goto fail;
       }
     }
@@ -718,8 +708,7 @@ int imap_copy_messages (CONTEXT * ctx, HEADER * h, char *dest, int delete)
       imap_error ("imap_copy_messages", idata->cmd.buf);
       goto fail;
     }
-    dprint (2,
-            (debugfile, "imap_copy_messages: server suggests TRYCREATE\n"));
+    debug_print (2, ("server suggests TRYCREATE\n"));
     snprintf (mmbox, sizeof (mmbox), _("Create %s?"), mbox);
     if (option (OPTCONFIRMCREATE) && mutt_yesorno (mmbox, 1) < 1) {
       mutt_clear_error ();
@@ -812,7 +801,7 @@ char *imap_set_flags (IMAP_DATA * idata, HEADER * h, char *s)
   memset (&newh, 0, sizeof (newh));
   newh.data = safe_calloc (1, sizeof (IMAP_HEADER_DATA));
 
-  dprint (2, (debugfile, "imap_fetch_message: parsing FLAGS\n"));
+  debug_print (2, ("parsing FLAGS\n"));
   if ((s = msg_parse_flags (&newh, s)) == NULL) {
     FREE (&newh.data);
     return NULL;
@@ -1001,9 +990,7 @@ static int msg_parse_fetch (IMAP_HEADER * h, char *s)
       s += 12;
       SKIPWS (s);
       if (*s != '\"') {
-        dprint (1,
-                (debugfile,
-                 "msg_parse_fetch(): bogus INTERNALDATE entry: %s\n", s));
+        debug_print (1, ("bogus INTERNALDATE entry: %s\n", s));
         return -1;
       }
       s++;
@@ -1049,13 +1036,13 @@ static char *msg_parse_flags (IMAP_HEADER * h, char *s)
 
   /* sanity-check string */
   if (ascii_strncasecmp ("FLAGS", s, 5) != 0) {
-    dprint (1, (debugfile, "msg_parse_flags: not a FLAGS response: %s\n", s));
+    debug_print (1, ("not a FLAGS response: %s\n", s));
     return NULL;
   }
   s += 5;
   SKIPWS (s);
   if (*s != '(') {
-    dprint (1, (debugfile, "msg_parse_flags: bogus FLAGS response: %s\n", s));
+    debug_print (1, ("bogus FLAGS response: %s\n", s));
     return NULL;
   }
   s++;
@@ -1108,8 +1095,7 @@ static char *msg_parse_flags (IMAP_HEADER * h, char *s)
     s++;
   }
   else {
-    dprint (1, (debugfile,
-                "msg_parse_flags: Unterminated FLAGS response: %s\n", s));
+    debug_print (1, ("Unterminated FLAGS response: %s\n", s));
     return NULL;
   }
 

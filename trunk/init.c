@@ -32,6 +32,7 @@
 #include "lib/intl.h"
 #include "lib/str.h"
 #include "lib/rx.h"
+#include "lib/debug.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -41,7 +42,36 @@
 #include <errno.h>
 #include <sys/wait.h>
 
+/* for synonym warning reports: synonym found during parsing */
+typedef struct {
+  char* f;      /* file */
+  int l;        /* line */
+  int n;        /* new name (index) */
+  int o;        /* old name (index) */
+} syn_t;
+
+/* for synonym warning reports: list of synonyms found */
 list2_t* Synonyms;
+/* for synonym warning reports: current rc file */
+char* CurRCFile = NULL;
+/* for synonym warning reports: current rc line */
+int CurRCLine = 0;
+
+/* for synonym warning reports: adds synonym to end of list */
+static void syn_add (int n, int o) {
+  syn_t* tmp = safe_malloc (sizeof (syn_t));
+  tmp->f = safe_strdup (CurRCFile);
+  tmp->l = CurRCLine;
+  tmp->n = n;
+  tmp->o = o;
+  list_push_back (&Synonyms, tmp);
+}
+
+/* for synonym warning reports: free single item (for list_del()) */
+static void syn_del (void** p) {
+  FREE(&(*(syn_t**) p)->f);
+  FREE(p);
+}
 
 void toggle_quadoption (int opt)
 {
@@ -95,7 +125,7 @@ int mutt_option_index (char *s)
   for (i = 0; MuttVars[i].option; i++)
     if (safe_strcmp (s, MuttVars[i].option) == 0) {
       if (MuttVars[i].type == DT_SYN)
-        list_push_back (&Synonyms, &MuttVars[i]);
+        syn_add (mutt_option_index ((char *) MuttVars[i].data), i);
       return (MuttVars[i].type ==
               DT_SYN ? mutt_option_index ((char *) MuttVars[i].data) : i);
     }
@@ -201,14 +231,12 @@ int mutt_extract_token (BUFFER * dest, BUFFER * tok, int flags)
         }
       } while (pc && *pc != '`');
       if (!pc) {
-        dprint (1, (debugfile, "mutt_get_token: mismatched backtics\n"));
+        debug_print (1, ("mismatched backtics\n"));
         return (-1);
       }
       cmd = str_substrdup (tok->dptr, pc);
       if ((pid = mutt_create_filter (cmd, NULL, &fp, NULL)) < 0) {
-        dprint (1,
-                (debugfile, "mutt_get_token: unable to fork command: %s",
-                 cmd));
+        debug_print (1, ("unable to fork command: %s\n", cmd));
         FREE (&cmd);
         return (-1);
       }
@@ -831,7 +859,7 @@ static int parse_alias (BUFFER * buf, BUFFER * s, unsigned long data,
 
   mutt_extract_token (buf, s, 0);
 
-  dprint (2, (debugfile, "parse_alias: First token is '%s'.\n", buf->data));
+  debug_print (2, ("first token is '%s'.\n", buf->data));
 
   /* check to see if an alias with this name already exists */
   for (; tmp; tmp = tmp->next) {
@@ -858,7 +886,7 @@ static int parse_alias (BUFFER * buf, BUFFER * s, unsigned long data,
 
   mutt_extract_token (buf, s,
                       M_TOKEN_QUOTE | M_TOKEN_SPACE | M_TOKEN_SEMICOLON);
-  dprint (2, (debugfile, "parse_alias: Second token is '%s'.\n", buf->data));
+  debug_print (2, ("second token is '%s'.\n", buf->data));
   tmp->addr = mutt_parse_adrlist (tmp->addr, buf->data);
   if (last)
     last->next = tmp;
@@ -870,14 +898,14 @@ static int parse_alias (BUFFER * buf, BUFFER * s, unsigned long data,
     return -1;
   }
 #ifdef DEBUG
-  if (debuglevel >= 2) {
+  if (DebugLevel >= 2) {
     ADDRESS *a;
 
     for (a = tmp->addr; a; a = a->next) {
       if (!a->group)
-        dprint (2, (debugfile, "parse_alias:   %s\n", a->mailbox));
+        debug_print (2, ("%s\n", a->mailbox));
       else
-        dprint (2, (debugfile, "parse_alias:   Group %s\n", a->mailbox));
+        debug_print (2, ("group %s\n", a->mailbox));
     }
   }
 #endif
@@ -1527,7 +1555,9 @@ static int source_rc (const char *rcfile, BUFFER * err)
   size_t buflen;
   pid_t pid;
 
-  dprint (2, (debugfile, "Reading configuration file '%s'.\n", rcfile));
+  debug_print (2, ("reading configuration file '%s'.\n", rcfile));
+  str_replace (&CurRCFile, rcfile);
+  CurRCLine = 0;
 
   if ((f = mutt_open_read (rcfile, &pid)) == NULL) {
     snprintf (err->data, err->dsize, "%s: %s", rcfile, strerror (errno));
@@ -1536,6 +1566,7 @@ static int source_rc (const char *rcfile, BUFFER * err)
 
   memset (&token, 0, sizeof (token));
   while ((linebuf = mutt_read_line (linebuf, &buflen, f, &line)) != NULL) {
+    CurRCLine++;
     conv = ConfigCharset && (*ConfigCharset) && Charset;
     if (conv) {
       currentline = safe_strdup (linebuf);
@@ -1979,31 +2010,6 @@ int mutt_getvaluebyname (const char *name, const struct mapping_t *map)
   return (-1);
 }
 
-#ifdef DEBUG
-static void start_debug (void)
-{
-  time_t t;
-  int i;
-  char buf[_POSIX_PATH_MAX];
-  char buf2[_POSIX_PATH_MAX];
-
-  /* rotate the old debug logs */
-  for (i = 3; i >= 0; i--) {
-    snprintf (buf, sizeof (buf), "%s/.muttdebug%d", NONULL (Homedir), i);
-    snprintf (buf2, sizeof (buf2), "%s/.muttdebug%d", NONULL (Homedir),
-              i + 1);
-    rename (buf, buf2);
-  }
-  if ((debugfile = safe_fopen (buf, "w")) != NULL) {
-    t = time (0);
-    setbuf (debugfile, NULL);   /* don't buffer the debugging output! */
-    fprintf (debugfile,
-             "Mutt-ng %s started at %s.\nDebugging at level %d.\n\n",
-             MUTT_VERSION, asctime (localtime (&t)), debuglevel);
-  }
-}
-#endif
-
 static int mutt_execute_commands (LIST * p)
 {
   BUFFER err, token;
@@ -2074,11 +2080,7 @@ void mutt_init (int skip_sys_rc, LIST * commands)
     Shell = safe_strdup ((p = getenv ("SHELL")) ? p : "/bin/sh");
   }
 
-#ifdef DEBUG
-  /* Start up debugging mode if requested */
-  if (debuglevel > 0)
-    start_debug ();
-#endif
+  debug_start(Homedir);
 
   /* And about the host... */
   uname (&utsname);
@@ -2292,13 +2294,17 @@ void mutt_init (int skip_sys_rc, LIST * commands)
     int i = 0;
     fprintf (stderr, _("Warning: the following synonym variables were found:\n"));
     for (i = 0; i < Synonyms->length; i++)
-      fprintf (stderr, "$%s ($%s should be used)\n",
-               ((struct option_t*) Synonyms->data[i])->option,
-               (char*) ((struct option_t*) Synonyms->data[i])->data);
+      fprintf (stderr, "$%s ($%s should be used) (%s:%d)\n",
+               MuttVars[((syn_t*) Synonyms->data[i])->o].option,
+               MuttVars[((syn_t*) Synonyms->data[i])->n].option,
+               NONULL(((syn_t*) Synonyms->data[i])->f),
+               ((syn_t*) Synonyms->data[i])->l);
     fprintf (stderr, _("Warning: Synonym variables are scheduled for removal.\n"));
-    list_del (&Synonyms, NULL);
+    list_del (&Synonyms, syn_del);
     need_pause = 1;
   }
+  /* this is not needed during runtime */
+  FREE(&CurRCFile);
 
   if (need_pause && !option (OPTNOCURSES)) {
     if (mutt_any_key_to_continue (NULL) == -1)

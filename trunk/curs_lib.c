@@ -24,6 +24,7 @@
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
+#include "lib/debug.h"
 
 #include <termios.h>
 #include <sys/types.h>
@@ -293,7 +294,7 @@ void mutt_curses_error (const char *fmt, ...)
   vsnprintf (Errorbuf, sizeof (Errorbuf), fmt, ap);
   va_end (ap);
 
-  dprint (1, (debugfile, "%s\n", Errorbuf));
+  debug_print (1, ("%s\n", Errorbuf));
   mutt_format_string (TmpErrorbuf, sizeof (TmpErrorbuf),
                       0, COLS - 2, 0, 0, Errorbuf, sizeof (Errorbuf), 0);
   snprintf (Errorbuf, sizeof (Errorbuf), "%s", TmpErrorbuf);    /* overkill */
@@ -365,8 +366,7 @@ void _mutt_perror (const char *s, const char* filename, int line)
 {
   char *p = strerror (errno);
 
-  dprint (1, (debugfile, "%s: %s (errno = %d)\n", s,
-              p ? p : "unknown error", errno));
+  debug_print (1, ("%s: %s (errno = %d)\n", s, p ? p : "unknown error", errno));
   mutt_error ("%s: %s (errno = %d) from %s:%i", s, p ? p : _("unknown error"), errno, filename, line);
 }
 

@@ -19,6 +19,7 @@
 #include "mutt_socket.h"
 
 #include "lib/mem.h"
+#include "lib/debug.h"
 
 #ifdef USE_SASL2
 #include <errno.h>
@@ -35,47 +36,38 @@ static int getnameinfo_err (int ret)
 {
   int err;
 
-  dprint (1, (debugfile, "getnameinfo: "));
   switch (ret) {
   case EAI_AGAIN:
-    dprint (1,
-            (debugfile,
-             "The name could not be resolved at this time.  Future attempts may succeed.\n"));
+    debug_print (1, ("The name could not be resolved at this time. Future attempts may succeed.\n"));
     err = SASL_TRYAGAIN;
     break;
   case EAI_BADFLAGS:
-    dprint (1, (debugfile, "The flags had an invalid value.\n"));
+    debug_print (1, ("The flags had an invalid value.\n"));
     err = SASL_BADPARAM;
     break;
   case EAI_FAIL:
-    dprint (1, (debugfile, "A non-recoverable error occurred.\n"));
+    debug_print (1, ("A non-recoverable error occurred.\n"));
     err = SASL_FAIL;
     break;
   case EAI_FAMILY:
-    dprint (1,
-            (debugfile,
-             "The address family was not recognized or the address length was invalid for the specified family.\n"));
+    debug_print (1, ("The address family was not recognized or the address length was invalid for the specified family.\n"));
     err = SASL_BADPROT;
     break;
   case EAI_MEMORY:
-    dprint (1, (debugfile, "There was a memory allocation failure.\n"));
+    debug_print (1, ("There was a memory allocation failure.\n"));
     err = SASL_NOMEM;
     break;
   case EAI_NONAME:
-    dprint (1,
-            (debugfile,
-             "The name does not resolve for the supplied parameters.  NI_NAMEREQD is set and the host's name cannot be located, or both nodename and servname were null.\n"));
+    debug_print (1, ("The name does not resolve for the supplied parameters. NI_NAMEREQD is set and the host's name cannot be located, or both nodename and servname were null.\n"));
     err = SASL_FAIL;            /* no real equivalent */
     break;
   case EAI_SYSTEM:
-    dprint (1,
-            (debugfile,
-             "A system error occurred.  The error code can be found in errno(%d,%s)).\n",
-             errno, strerror (errno)));
+    debug_print (1, ("A system error occurred.  The error code can be found in errno(%d,%s)).\n", 
+                errno, strerror (errno)));
     err = SASL_FAIL;            /* no real equivalent */
     break;
   default:
-    dprint (1, (debugfile, "Unknown error %d\n", ret));
+    debug_print (1, ("Unknown error %d\n", ret));
     err = SASL_FAIL;            /* no real equivalent */
     break;
   }
@@ -164,8 +156,7 @@ int mutt_sasl_start (void)
   rc = sasl_client_init (callbacks);
 
   if (rc != SASL_OK) {
-    dprint (1,
-            (debugfile, "mutt_sasl_start: libsasl initialisation failed.\n"));
+    debug_print (1, ("libsasl initialisation failed.\n"));
     return SASL_FAIL;
   }
 
@@ -202,48 +193,38 @@ int mutt_sasl_client_new (CONNECTION * conn, sasl_conn_t ** saslconn)
     service = "pop";
     break;
   default:
-    dprint (1, (debugfile, "mutt_sasl_client_new: account type unset\n"));
+    debug_print (1, ("account type unset\n"));
     return -1;
   }
 
 #ifdef USE_SASL2
   size = sizeof (local);
   if (getsockname (conn->fd, (struct sockaddr *) &local, &size)) {
-    dprint (1,
-            (debugfile,
-             "mutt_sasl_client_new: getsockname for local failed\n"));
+    debug_print (1, ("getsockname for local failed\n"));
     return -1;
   }
   else
     if (iptostring
         ((struct sockaddr *) &local, size, iplocalport,
          IP_PORT_BUFLEN) != SASL_OK) {
-    dprint (1,
-            (debugfile,
-             "mutt_sasl_client_new: iptostring for local failed\n"));
+    debug_print (1, ("iptostring for local failed\n"));
     return -1;
   }
 
   size = sizeof (remote);
   if (getpeername (conn->fd, (struct sockaddr *) &remote, &size)) {
-    dprint (1,
-            (debugfile,
-             "mutt_sasl_client_new: getsockname for remote failed\n"));
+    debug_print (1, ("getsockname for remote failed\n"));
     return -1;
   }
   else
     if (iptostring
         ((struct sockaddr *) &remote, size, ipremoteport,
          IP_PORT_BUFLEN) != SASL_OK) {
-    dprint (1,
-            (debugfile,
-             "mutt_sasl_client_new: iptostring for remote failed\n"));
+    debug_print (1, ("iptostring for remote failed\n"));
     return -1;
   }
 
-  dprint (1,
-          (debugfile, "local ip: %s, remote ip:%s\n", iplocalport,
-           ipremoteport));
+  debug_print (1, ("local ip: %s, remote ip:%s\n", iplocalport, ipremoteport));
 
   rc =
     sasl_client_new (service, conn->account.host, iplocalport, ipremoteport,
@@ -256,8 +237,7 @@ int mutt_sasl_client_new (CONNECTION * conn, sasl_conn_t ** saslconn)
 #endif
 
   if (rc != SASL_OK) {
-    dprint (1, (debugfile,
-                "mutt_sasl_client_new: Error allocating SASL connection\n"));
+    debug_print (1, ("Error allocating SASL connection\n"));
     return -1;
   }
 
@@ -280,16 +260,14 @@ int mutt_sasl_client_new (CONNECTION * conn, sasl_conn_t ** saslconn)
 
 #ifdef SASL_IP_LOCAL
     if (sasl_setprop (*saslconn, SASL_IP_LOCAL, &local) != SASL_OK) {
-      dprint (1, (debugfile,
-                  "mutt_sasl_client_new: Error setting local IP address\n"));
+      debug_print (1, ("Error setting local IP address\n"));
       return -1;
     }
 #endif
 
 #ifdef SASL_IP_REMOTE
     if (sasl_setprop (*saslconn, SASL_IP_REMOTE, &remote) != SASL_OK) {
-      dprint (1, (debugfile,
-                  "mutt_sasl_client_new: Error setting remote IP address\n"));
+      debug_print (1, ("Error setting remote IP address\n"));
       return -1;
     }
 #endif
@@ -306,8 +284,7 @@ int mutt_sasl_client_new (CONNECTION * conn, sasl_conn_t ** saslconn)
   secprops.maxbufsize = M_SASL_MAXBUF;
   secprops.security_flags |= SASL_SEC_NOPLAINTEXT;
   if (sasl_setprop (*saslconn, SASL_SEC_PROPS, &secprops) != SASL_OK) {
-    dprint (1, (debugfile,
-                "mutt_sasl_client_new: Error setting security properties\n"));
+    debug_print (1, ("Error setting security properties\n"));
     return -1;
   }
 
@@ -318,29 +295,23 @@ int mutt_sasl_client_new (CONNECTION * conn, sasl_conn_t ** saslconn)
 #if (defined(USE_SSL) || defined(USE_GNUTLS) && !defined(USE_NSS))
   if (conn->account.flags & M_ACCT_SSL) {
 #ifdef USE_SASL2                /* I'm not sure this actually has an effect, at least with SASLv2 */
-    dprint (2, (debugfile, "External SSF: %d\n", conn->ssf));
+    debug_print (2, ("External SSF: %d\n", conn->ssf));
     if (sasl_setprop (*saslconn, SASL_SSF_EXTERNAL, &(conn->ssf)) != SASL_OK)
 #else
     memset (&extprops, 0, sizeof (extprops));
     extprops.ssf = conn->ssf;
-    dprint (2, (debugfile, "External SSF: %d\n", extprops.ssf));
+    debug_print (2, ("External SSF: %d\n", extprops.ssf));
     if (sasl_setprop (*saslconn, SASL_SSF_EXTERNAL, &extprops) != SASL_OK)
 #endif
     {
-      dprint (1,
-              (debugfile,
-               "mutt_sasl_client_new: Error setting external properties\n"));
+      debug_print (1, ("Error setting external properties\n"));
       return -1;
     }
 #ifdef USE_SASL2
-    dprint (2,
-            (debugfile, "External authentication name: %s\n",
-             conn->account.user));
+    debug_print (2, ("External authentication name: %s\n", conn->account.user));
     if (sasl_setprop (*saslconn, SASL_AUTH_EXTERNAL, conn->account.user) !=
         SASL_OK) {
-      dprint (1,
-              (debugfile,
-               "mutt_sasl_client_new: Error setting external properties\n"));
+      debug_print (1, ("Error setting external properties\n"));
       return -1;
     }
 #endif
@@ -389,10 +360,7 @@ int mutt_sasl_interact (sasl_interact_t * interaction)
   char resp[SHORT_STRING];
 
   while (interaction->id != SASL_CB_LIST_END) {
-    dprint (2,
-            (debugfile,
-             "mutt_sasl_interact: filling in SASL interaction %ld.\n",
-             interaction->id));
+    debug_print (2, ("filling in SASL interaction %ld.\n", interaction->id));
 
     snprintf (prompt, sizeof (prompt), "%s: ", interaction->prompt);
     resp[0] = '\0';
@@ -436,7 +404,7 @@ void mutt_sasl_setup_conn (CONNECTION * conn, sasl_conn_t * saslconn)
 #else
   sasl_getprop (saslconn, SASL_SSF, (void **) &sasldata->ssf);
 #endif
-  dprint (3, (debugfile, "SASL protection strength: %u\n", *sasldata->ssf));
+  debug_print (3, ("SASL protection strength: %u\n", *sasldata->ssf));
   /* Add SASL SSF to transport SSF */
   conn->ssf += *sasldata->ssf;
 #ifdef USE_SASL2
@@ -445,9 +413,7 @@ void mutt_sasl_setup_conn (CONNECTION * conn, sasl_conn_t * saslconn)
 #else
   sasl_getprop (saslconn, SASL_MAXOUTBUF, (void **) &sasldata->pbufsize);
 #endif
-  dprint (3,
-          (debugfile, "SASL protection buffer size: %u\n",
-           *sasldata->pbufsize));
+  debug_print (3, ("SASL protection buffer size: %u\n", *sasldata->pbufsize));
 
   /* clear input buffer */
   sasldata->buf = NULL;
@@ -472,7 +438,7 @@ void mutt_sasl_setup_conn (CONNECTION * conn, sasl_conn_t * saslconn)
 /* mutt_sasl_cb_log: callback to log SASL messages */
 static int mutt_sasl_cb_log (void *context, int priority, const char *message)
 {
-  dprint (priority, (debugfile, "SASL: %s\n", message));
+  debug_print (priority, ("SASL: %s\n", message));
 
   return SASL_OK;
 }
@@ -491,7 +457,7 @@ static int mutt_sasl_cb_authname (void *context, int id, const char **result,
   if (!account)
     return SASL_BADPARAM;
 
-  dprint (2, (debugfile, "mutt_sasl_cb_authname: getting %s for %s:%u\n",
+  debug_print (2, ("getting %s for %s:%u\n",
               id == SASL_CB_AUTHNAME ? "authname" : "user",
               account->host, account->port));
 
@@ -515,8 +481,7 @@ static int mutt_sasl_cb_pass (sasl_conn_t * conn, void *context, int id,
   if (!account || !psecret)
     return SASL_BADPARAM;
 
-  dprint (2, (debugfile,
-              "mutt_sasl_cb_pass: getting password for %s@%s:%u\n",
+  debug_print (2, ("getting password for %s@%s:%u\n",
               account->user, account->host, account->port));
 
   if (mutt_account_getpass (account))
@@ -616,7 +581,7 @@ static int mutt_sasl_conn_read (CONNECTION * conn, char *buf, size_t len)
       rc = sasl_decode (sasldata->saslconn, buf, rc, &sasldata->buf,
                         &sasldata->blen);
       if (rc != SASL_OK) {
-        dprint (1, (debugfile, "SASL decode failed: %s\n",
+        debug_print (1, ("SASL decode failed: %s\n",
                     sasl_errstring (rc, NULL, NULL)));
         goto out;
       }
@@ -664,7 +629,7 @@ static int mutt_sasl_conn_write (CONNECTION * conn, const char *buf,
 
       rc = sasl_encode (sasldata->saslconn, buf, olen, &pbuf, &plen);
       if (rc != SASL_OK) {
-        dprint (1, (debugfile, "SASL encoding failed: %s\n",
+        debug_print (1, ("SASL encoding failed: %s\n",
                     sasl_errstring (rc, NULL, NULL)));
         goto fail;
       }
