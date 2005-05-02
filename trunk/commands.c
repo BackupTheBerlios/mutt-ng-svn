@@ -778,7 +778,7 @@ int mutt_save_message (HEADER * h, int delete,
 
     if (need_buffy_cleanup) {
 #ifdef BUFFY_SIZE
-      tmp = mutt_find_mailbox (buf);
+      tmp = buffy_find_mailbox (buf);
       if (tmp && tmp->new <= 0)
         buffy_update_mailbox (tmp);
 #else
