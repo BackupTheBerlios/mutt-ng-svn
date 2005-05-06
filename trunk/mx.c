@@ -21,6 +21,7 @@
 #include "copy.h"
 #include "keymap.h"
 #include "url.h"
+#include "sidebar.h"
 
 #ifdef USE_COMPRESSED
 #include "compress.h"
@@ -973,6 +974,9 @@ void mx_update_tables (CONTEXT * ctx, int committing)
   }
 #undef this_body
   ctx->msgcount = j;
+
+  /* update sidebar count */
+  sidebar_set_buffystats (ctx);
 }
 
 
@@ -1072,6 +1076,9 @@ int mx_sync_mailbox (CONTEXT * ctx, int *index_hint)
       mx_fastclose_mailbox (ctx);
       return 0;
     }
+
+    /* update sidebar counts */
+    sidebar_set_buffystats (ctx);
 
     /* if we haven't deleted any messages, we don't need to resort */
     /* ... except for certain folder formats which need "unsorted" 
@@ -1455,6 +1462,8 @@ void mx_update_context (CONTEXT * ctx, int new_messages)
         ctx->new++;
     }
   }
+  /* update sidebar count */
+  sidebar_set_buffystats (ctx);
 }
 
 /*
