@@ -1840,12 +1840,8 @@ char *mutt_gen_msgid (void)
   char buf[SHORT_STRING];
   char localpart[SHORT_STRING];
   unsigned int localpart_length;
-  time_t now;
-  struct tm *tm;
   const char *fqdn;
 
-  now = time (NULL);
-  tm = gmtime (&now);
   if (!(fqdn = mutt_fqdn (0)))
     fqdn = NONULL (Hostname);
 
@@ -2246,7 +2242,7 @@ void mutt_prepare_envelope (ENVELOPE * env, int final)
 
     mutt_set_followup_to (env);
 
-    if (!env->message_id)
+    if (!env->message_id && MsgIdFormat && *MsgIdFormat)
       env->message_id = mutt_gen_msgid ();
   }
 
@@ -2321,7 +2317,8 @@ static int _mutt_bounce_message (FILE * fp, HEADER * h, ADDRESS * to,
     fseek (fp, h->offset, 0);
     fprintf (f, "Resent-From: %s", resent_from);
     fprintf (f, "\nResent-%s", mutt_make_date (date, sizeof (date)));
-    fprintf (f, "Resent-Message-ID: %s\n", mutt_gen_msgid ());
+    if (MsgIdFormat && *MsgIdFormat)
+      fprintf (f, "Resent-Message-ID: %s\n", mutt_gen_msgid ());
     fputs ("Resent-To: ", f);
     mutt_write_address_list (to, f, 11, 0);
     mutt_copy_header (fp, h, f, ch_flags, NULL);

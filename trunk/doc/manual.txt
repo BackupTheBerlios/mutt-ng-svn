@@ -4665,8 +4665,11 @@
 
        Default: ''
 
-       Specifies the hostname to use after the ``@'' in local e-mail addresses.  This
-       overrides the compile time definition obtained from /etc/resolv.conf.
+       Specifies the hostname to use after the ``@'' in local e-mail addresses and
+       during generation of Message-Id: headers.
+
+       Please be sure to really know what you are doing when changing this variable to
+       configure a custom domain part of Message-IDs.
 
        _6_._3_._9_3  _i_g_n_o_r_e___l_i_s_t___r_e_p_l_y___t_o
 
@@ -4678,11 +4681,12 @@
        mailing lists.  When _s_e_t, if the ``Reply-To:'' header field is set to the same
        value as the ``To:'' header field, Mutt-ng assumes that the ``Reply-To:''
        header field was set by the mailing list to automate responses to the list, and
+
+       The Mutt-ng E-Mail Client                                                    87
+
        will ignore this field.  To direct a response to the mailing list when this
        option is set, use the _l_i_s_t_-_r_e_p_l_y function; _g_r_o_u_p_-_r_e_p_l_y will reply to both the
        sender and the list.
-
-       The Mutt-ng E-Mail Client                                                    87
 
        _6_._3_._9_4  _i_m_a_p___a_u_t_h_e_n_t_i_c_a_t_o_r_s
 
@@ -4734,11 +4738,11 @@
 
        Type: string
 
+       The Mutt-ng E-Mail Client                                                    88
+
        Default: ''
 
        Availability: IMAP
-
-       The Mutt-ng E-Mail Client                                                    88
 
        Mutt-ng requests these header fields in addition to the default headers (``DATE
        FROM SUBJECT TO CC MESSAGE-ID REFERENCES CONTENT-TYPE CONTENT-DESCRIPTION IN-
@@ -4790,11 +4794,11 @@
        scribed folders or all folders.  This can be toggled in the IMAP browser with
        the _t_o_g_g_l_e_-_s_u_b_s_c_r_i_b_e_d function.
 
+       The Mutt-ng E-Mail Client                                                    89
+
        _6_._3_._1_0_1  _i_m_a_p___m_a_i_l___c_h_e_c_k
 
        Type: number
-
-       The Mutt-ng E-Mail Client                                                    89
 
        Default: 5
 
@@ -4847,11 +4851,11 @@
        closing an IMAP folder somewhat slower. This option exists to appease speed
        freaks.
 
+       The Mutt-ng E-Mail Client                                                    90
+
        _6_._3_._1_0_5  _i_m_a_p___r_e_c_o_n_n_e_c_t
 
        Type: quadoption
-
-       The Mutt-ng E-Mail Client                                                    90
 
        Default: ask-yes
 
@@ -4903,11 +4907,12 @@
        Default: ask-yes
 
        Controls whether or not a copy of the message(s) you are replying to is
+
+       The Mutt-ng E-Mail Client                                                    91
+
        included in your reply.
 
        _6_._3_._1_1_0  _i_n_c_l_u_d_e___o_n_l_y_f_i_r_s_t
-
-       The Mutt-ng E-Mail Client                                                    91
 
        Type: boolean
 
@@ -4958,11 +4963,11 @@
              %C
                    current message number
 
+       The Mutt-ng E-Mail Client                                                    92
+
              %d
                    date and time of the message in the format specified by ``date_for-
                    mat'' converted to sender's time zone
-
-       The Mutt-ng E-Mail Client                                                    92
 
              %D
                    date and time of the message in the format specified by ``date_for-
@@ -5014,10 +5019,10 @@
                    (_O_riginal save folder)  Where Mutt-ng would formerly have stashed
                    the message: list name or recipient name if no list
 
+       The Mutt-ng E-Mail Client                                                    93
+
              %s
                    subject of the message
-
-       The Mutt-ng E-Mail Client                                                    93
 
              %S
                    status of the message (N/D/d/!/r/*)
@@ -5069,10 +5074,10 @@
                    the current local time. ``fmt'' is expanded by the library function
                    ``strftime''; a leading bang disables locales.
 
+       The Mutt-ng E-Mail Client                                                    94
+
              %>X
                    right justify the rest of the string and pad with character 'X'
-
-       The Mutt-ng E-Mail Client                                                    94
 
              %|X
                    pad to the end of the line with character 'X'
@@ -5123,11 +5128,11 @@
        (instead to the author only). Setting this option to ``_a_s_k_-_y_e_s'' or ``_a_s_k_-_n_o''
        will ask if you really intended to reply to the author only.
 
+       The Mutt-ng E-Mail Client                                                    95
+
        _6_._3_._1_1_7  _l_o_c_a_l_e
 
        Type: string
-
-       The Mutt-ng E-Mail Client                                                    95
 
        Default: 'C'
 
@@ -5179,11 +5184,11 @@
        files when the header cache is in use. This incurs one stat(2) per message
        every time the folder is opened.
 
+       The Mutt-ng E-Mail Client                                                    96
+
        _6_._3_._1_2_2  _m_a_i_l_d_i_r___t_r_a_s_h
 
        Type: boolean
-
-       The Mutt-ng E-Mail Client                                                    96
 
        Default: no
 
@@ -5235,11 +5240,12 @@
        Default: 0
 
        When _s_e_t, the maximum line length for displaying ``format = flowed'' messages
+
+       The Mutt-ng E-Mail Client                                                    97
+
        is limited to this length. A value of 0 (which is also the default) means that
        the maximum line length is determined by the terminal width and _$_w_r_a_p_m_a_r_g_i_n
        (section 6.3.328  , page 145).
-
-       The Mutt-ng E-Mail Client                                                    97
 
        _6_._3_._1_2_7  _m_b_o_x
 
@@ -5290,13 +5296,13 @@
        vious page of the menu is displayed (useful for slow links to avoid many
        redraws).
 
+       The Mutt-ng E-Mail Client                                                    98
+
        _6_._3_._1_3_2  _m_e_s_s_a_g_e___f_o_r_m_a_t
 
        Type: string
 
        Default: '%s'
-
-       The Mutt-ng E-Mail Client                                                    98
 
        This is the string displayed in the ``attachment'' menu for attachments of type
        message/rfc822.  For a full listing of defined printf(3)-like sequences see the
@@ -5346,13 +5352,13 @@
 
        Type: string
 
+       The Mutt-ng E-Mail Client                                                    99
+
        Default: 'replied'
 
        The name of the MH sequence used to tag replied messages.
 
        _6_._3_._1_3_8  _m_h___s_e_q___u_n_s_e_e_n
-
-       The Mutt-ng E-Mail Client                                                    99
 
        Type: string
 
@@ -5402,14 +5408,14 @@
 
        Default: yes
 
+       The Mutt-ng E-Mail Client                                                   100
+
        Availability: NNTP
 
        If _u_n_s_e_t, an 8-bit ``Subject:'' header field in a news article will not be
        encoded according to RFC2047.
 
        NNoottee:: Only change this setting if you know what you are doing.
-
-       The Mutt-ng E-Mail Client                                                   100
 
        _6_._3_._1_4_3  _m_i_x___e_n_t_r_y___f_o_r_m_a_t
 
@@ -5458,6 +5464,8 @@
 
        _6_._3_._1_4_6  _m_s_g_i_d___f_o_r_m_a_t
 
+       The Mutt-ng E-Mail Client                                                   101
+
        Type: string
 
        Default: '%Y%m%d%h%M%s.G%P%p'
@@ -5465,9 +5473,6 @@
        This is the format for the ``local part'' of the Message-Id: header field gen-
        erated by Mutt-ng. The format string contains of one or more characters. The
        '%' character marks that certain data will be added to the string, similar to
-
-       The Mutt-ng E-Mail Client                                                   101
-
        printf(3). The following characters are allowed:
 
              %d
@@ -5516,13 +5521,13 @@
        NNoottee:: Please only change this setting if you know what you are doing.  Also
        make sure to consult RFC2822 to produce technically _v_a_l_i_d strings.
 
+       The Mutt-ng E-Mail Client                                                   102
+
        _6_._3_._1_4_7  _n_a_r_r_o_w___t_r_e_e
 
        Type: boolean
 
        Default: no
-
-       The Mutt-ng E-Mail Client                                                   102
 
        This variable, when _s_e_t, makes the thread tree narrower, allowing deeper
        threads to fit on the screen.
@@ -5572,13 +5577,13 @@
 
        Availability: NNTP
 
+       The Mutt-ng E-Mail Client                                                   103
+
        This file contains information about subscribed newsgroup and articles read so
        far.
 
        To ease the use of multiple news servers, the following printf(3)-style
        sequence is understood:
-
-       The Mutt-ng E-Mail Client                                                   103
 
             %s      newsserver name
 
@@ -5627,13 +5632,13 @@
 
        Default: 60
 
+       The Mutt-ng E-Mail Client                                                   104
+
        Availability: NNTP
 
        The time in seconds until any operations on a newsgroup except posting a new
        article will cause a recheck for new news. If set to 0, Mutt-ng will recheck on
        each operation in index (stepping, read article, etc.).
-
-       The Mutt-ng E-Mail Client                                                   104
 
        _6_._3_._1_5_5  _n_n_t_p___r_e_c_o_n_n_e_c_t
 
@@ -5684,13 +5689,13 @@
        screen resizes cause lines longer than the screen width to be badly formatted
        in the help menu.
 
+       The Mutt-ng E-Mail Client                                                   105
+
        _6_._3_._1_5_9  _p_a_g_e_r___c_o_n_t_e_x_t
 
        Type: number
 
        Default: 0
-
-       The Mutt-ng E-Mail Client                                                   105
 
        This variable controls the number of lines of context that are given when dis-
        playing the next or previous page in the internal pager.  By default, Mutt-ng
@@ -5740,14 +5745,14 @@
 
        Default: no
 
+       The Mutt-ng E-Mail Client                                                   106
+
        If _s_e_t, Mutt-ng will automatically attempt to decrypt traditional PGP messages
        whenever the user performs an operation which ordinarily would result in the
        contents of the message being operated on.  For example, if the user displays a
        pgp-traditional message which has not been manually checked with the check-tra-
        ditional-pgp function, Mutt-ng will automatically check the message for tradi-
        tional pgp.
-
-       The Mutt-ng E-Mail Client                                                   106
 
        _6_._3_._1_6_4  _p_g_p___a_u_t_o_i_n_l_i_n_e
 
@@ -5797,14 +5802,14 @@
 
        The PGP command formats have their own set of printf(3)-like sequences:
 
+       The Mutt-ng E-Mail Client                                                   107
+
              %p
                    Expands to PGPPASSFD=0 when a pass phrase is needed, to an empty
                    string otherwise. Note: This may be used with a %? construct.
 
              %f
                    Expands to the name of a file containing a message.
-
-       The Mutt-ng E-Mail Client                                                   107
 
              %s
                    Expands to the name of a file containing the signature part of a
@@ -5853,6 +5858,9 @@
 
        This variable allows you to customize the PGP key selection menu to your per-
        sonal taste. This string is similar to ``_$_i_n_d_e_x___f_o_r_m_a_t (section 6.3.112  , page
+
+       The Mutt-ng E-Mail Client                                                   108
+
        91)'', but has its own set of printf(3)-like sequences:
 
              %n
@@ -5860,8 +5868,6 @@
 
              %k
                    key id
-
-       The Mutt-ng E-Mail Client                                                   108
 
              %u
                    user id
@@ -5910,14 +5916,14 @@
 
        Default: ''
 
+       The Mutt-ng E-Mail Client                                                   109
+
        If you assign a text to this variable, then a PGP signature is only considered
        verified if the output from _$_p_g_p___v_e_r_i_f_y___c_o_m_m_a_n_d (section 6.3.190  , page 112)
        contains the text. Use this variable if the exit code from the command is 0
        even for bad signatures.  (PGP only)
 
        _6_._3_._1_7_5  _p_g_p___i_g_n_o_r_e___s_u_b_k_e_y_s
-
-       The Mutt-ng E-Mail Client                                                   109
 
        Type: boolean
 
@@ -5966,14 +5972,14 @@
 
        Default: no
 
+       The Mutt-ng E-Mail Client                                                   110
+
        If _s_e_t, use 64 bit PGP key IDs. _U_n_s_e_t uses the normal 32 bit Key IDs.  (PGP
        only)
 
        _6_._3_._1_8_0  _p_g_p___m_i_m_e___a_u_t_o
 
        Type: quadoption
-
-       The Mutt-ng E-Mail Client                                                   110
 
        Default: ask-yes
 
@@ -6022,13 +6028,13 @@
 
        Type: boolean
 
+       The Mutt-ng E-Mail Client                                                   111
+
        Default: yes
 
        If _s_e_t, Mutt-ng will display non-usable keys on the PGP key selection menu.
        This includes keys which have been revoked, have expired, or have been marked
        as ``disabled'' by the user.  (PGP only)
-
-       The Mutt-ng E-Mail Client                                                   111
 
        _6_._3_._1_8_4  _p_g_p___s_i_g_n___a_s
 
@@ -6079,12 +6085,12 @@
 
        Default: yes
 
+       The Mutt-ng E-Mail Client                                                   112
+
        If _s_e_t, Mutt-ng will automatically encode PGP/MIME signed messages as quoted-
        printable.  Please note that unsetting this variable may lead to problems with
        non-verifyable PGP signatures, so only change this if you know what you are
        doing.  (PGP only)
-
-       The Mutt-ng E-Mail Client                                                   112
 
        _6_._3_._1_8_8  _p_g_p___t_i_m_e_o_u_t
 
@@ -6136,10 +6142,10 @@
 
        Default: '\n'
 
+       The Mutt-ng E-Mail Client                                                   113
+
        The separator to add between messages when piping a list of tagged messages to
        an external Unix command.
-
-       The Mutt-ng E-Mail Client                                                   113
 
        _6_._3_._1_9_4  _p_i_p_e___s_p_l_i_t
 
@@ -6192,11 +6198,11 @@
 
        Default: 60
 
+       The Mutt-ng E-Mail Client                                                   114
+
        Availability: POP
 
        This variable configures how often (in seconds) POP should look for new mail.
-
-       The Mutt-ng E-Mail Client                                                   114
 
        _6_._3_._1_9_8  _p_o_p___d_e_l_e_t_e
 
@@ -6249,10 +6255,10 @@
        Specifies the password for your POP account.  If _u_n_s_e_t, Mutt-ng will prompt you
        for your password when you open POP mailbox.
 
+       The Mutt-ng E-Mail Client                                                   115
+
        NNoottee:: Storing passwords in a configuration file presents a security risk since
        the superuser of your machine may read it regardless of the file's permissions.
-
-       The Mutt-ng E-Mail Client                                                   115
 
        _6_._3_._2_0_2  _p_o_p___r_e_c_o_n_n_e_c_t
 
@@ -6305,12 +6311,11 @@
 
        Type: quadoption
 
+       The Mutt-ng E-Mail Client                                                   116
+
        Default: ask-yes
 
        Controls whether or not messages are saved in the ``_$_p_o_s_t_p_o_n_e_d (section
-
-       The Mutt-ng E-Mail Client                                                   116
-
        6.3.207  , page 115)'' mailbox when you elect not to send immediately.
 
        _6_._3_._2_0_7  _p_o_s_t_p_o_n_e_d
@@ -6362,11 +6367,11 @@
 
        _6_._3_._2_1_1  _p_r_i_n_t___d_e_c_o_d_e
 
+       The Mutt-ng E-Mail Client                                                   117
+
        Type: boolean
 
        Default: yes
-
-       The Mutt-ng E-Mail Client                                                   117
 
        Used in connection with the print-message command.  If this option is _s_e_t, the
        message is decoded before it is passed to the external command specified by
@@ -6419,12 +6424,11 @@
 
        Default: yes
 
+       The Mutt-ng E-Mail Client                                                   118
+
        This variable controls whether ``quit'' and ``exit'' actually quit from Mutt-
        ng.  If it set to _y_e_s, they do quit, if it is set to _n_o, they have no effect,
        and if it is set to _a_s_k_-_y_e_s or _a_s_k_-_n_o, you are prompted for confirmation when
-
-       The Mutt-ng E-Mail Client                                                   118
-
        you try to quit.
 
        _6_._3_._2_1_6  _q_u_o_t_e___e_m_p_t_y
@@ -6475,11 +6479,11 @@
 
        Also see the ``_$_w_r_i_t_e___i_n_c (section 6.3.330  , page 145)'' variable.
 
+       The Mutt-ng E-Mail Client                                                   119
+
        _6_._3_._2_2_0  _r_e_a_d___o_n_l_y
 
        Type: boolean
-
-       The Mutt-ng E-Mail Client                                                   119
 
        Default: no
 
@@ -6532,11 +6536,11 @@
 
        Default: '^(re([\[0-9\]+])*|aw):[ \t]*'
 
+       The Mutt-ng E-Mail Client                                                   120
+
        A regular expression used to recognize reply messages when threading and reply-
        ing. The default value corresponds to the English ``Re:'' and the German
        ``Aw:''.
-
-       The Mutt-ng E-Mail Client                                                   120
 
        _6_._3_._2_2_5  _r_e_p_l_y___s_e_l_f
 
@@ -6588,11 +6592,11 @@
 
        From: abd30425@somewhere.net
 
+       The Mutt-ng E-Mail Client                                                   121
+
        It would be displayed in the index menu as ``Joe User'' instead of
        ``abd30425@somewhere.net.''  This is useful when the person's e-mail address is
        not human friendly (like CompuServe addresses).
-
-       The Mutt-ng E-Mail Client                                                   121
 
        _6_._3_._2_2_9  _r_e_v_e_r_s_e___n_a_m_e
 
@@ -6644,11 +6648,11 @@
 
        _6_._3_._2_3_2  _s_a_v_e___a_d_d_r_e_s_s
 
+       The Mutt-ng E-Mail Client                                                   122
+
        Type: boolean
 
        Default: no
-
-       The Mutt-ng E-Mail Client                                                   122
 
        If _s_e_t, Mutt-ng will take the sender's full address when choosing a default
        folder for saving a mail. If ``_$_s_a_v_e___n_a_m_e (section 6.3.234  , page 122)'' or
@@ -6700,11 +6704,11 @@
 
        Default: yes
 
+       The Mutt-ng E-Mail Client                                                   123
+
        When this variable is _u_n_s_e_t, scoring is turned off.  This can be useful to
        selectively disable scoring for certain folders when the ``_$_s_c_o_r_e___t_h_r_e_s_h_-
        _o_l_d___d_e_l_e_t_e (section 6.3.237  , page 122)'' variable and friends are used.
-
-       The Mutt-ng E-Mail Client                                                   123
 
        _6_._3_._2_3_7  _s_c_o_r_e___t_h_r_e_s_h_o_l_d___d_e_l_e_t_e
 
@@ -6756,11 +6760,11 @@
 
        Default: '/usr/sbin/sendmail -oem -oi'
 
+       The Mutt-ng E-Mail Client                                                   124
+
        Specifies the program and arguments used to deliver mail sent by Mutt-ng.
        Mutt-ng expects that the specified program interprets additional arguments as
        recipient addresses.
-
-       The Mutt-ng E-Mail Client                                                   124
 
        _6_._3_._2_4_2  _s_e_n_d_m_a_i_l___w_a_i_t
 
@@ -6813,11 +6817,11 @@
 
        Type: boolean
 
+       The Mutt-ng E-Mail Client                                                   125
+
        Default: no
 
        Availability: NNTP
-
-       The Mutt-ng E-Mail Client                                                   125
 
        If _s_e_t, only subscribed newsgroups that contain unread articles will be dis-
        played in the newsgroup browser.
@@ -6868,12 +6872,12 @@
              %f
                    Number of flagged messages.
 
+       The Mutt-ng E-Mail Client                                                   126
+
              %n
                    Number of new messages.
 
        The %f and %n expandos may optionally be printed non-zero.
-
-       The Mutt-ng E-Mail Client                                                   126
 
        _6_._3_._2_5_0  _s_i_d_e_b_a_r___s_h_o_r_t_e_n___h_i_e_r_a_r_c_h_y
 
@@ -6923,13 +6927,13 @@
        For example, Mutt-ng has the ability to highlight the signature in a different
        color in the builtin pager.
 
+       The Mutt-ng E-Mail Client                                                   127
+
        _6_._3_._2_5_4  _s_i_g___o_n___t_o_p
 
        Type: boolean
 
        Default: no
-
-       The Mutt-ng E-Mail Client                                                   127
 
        If _s_e_t, the signature will be included before any quoted or forwarded text.  It
        is ssttrroonnggllyy recommended that you do not set this variable unless you really
@@ -6979,14 +6983,14 @@
 
        Type: number
 
+       The Mutt-ng E-Mail Client                                                   128
+
        Default: 1
 
        Specifies time, in seconds, to pause while displaying certain informational
        messages, while moving from folder to folder and after expunging messages from
        the current folder.  The default is to pause one second, so a value of zero for
        this option suppresses the pause.
-
-       The Mutt-ng E-Mail Client                                                   128
 
        _6_._3_._2_5_9  _s_m_a_r_t___w_r_a_p
 
@@ -7035,13 +7039,14 @@
        Default: ''
 
        Since there is no pubring/secring as with PGP, Mutt-ng has to handle storage
+
+       The Mutt-ng E-Mail Client                                                   129
+
        and retrieval of keys by itself. This is very basic right now, and keys and
        certificates are stored in two different directories, both named as the hash-
        value retrieved from OpenSSL. There is an index file which contains mailbox-
        address keyid pairs, and which can be manually edited. This one points to the
        location of the certificates.  (S/MIME only)
-
-       The Mutt-ng E-Mail Client                                                   129
 
        _6_._3_._2_6_4  _s_m_i_m_e___d_e_c_r_y_p_t___c_o_m_m_a_n_d
 
@@ -7091,13 +7096,14 @@
        If _s_e_t (default) this tells Mutt-ng to use the default key for decryption. Oth-
        erwise, if manage multiple certificate-key-pairs, Mutt-ng will try to use the
        mailbox-address to determine the key to use. It will ask you to supply a key,
+
+       The Mutt-ng E-Mail Client                                                   130
+
        if it can't find one.  (S/MIME only)
 
        _6_._3_._2_6_6  _s_m_i_m_e___d_e_f_a_u_l_t___k_e_y
 
        Type: string
-
-       The Mutt-ng E-Mail Client                                                   130
 
        Default: ''
 
@@ -7148,11 +7154,11 @@
 
        Default: ''
 
+       The Mutt-ng E-Mail Client                                                   131
+
        This command is used to extract only the signers X509 certificate from a S/MIME
        signature, so that the certificate's owner may get compared to the email's
        ``From:'' header field.  (S/MIME only)
-
-       The Mutt-ng E-Mail Client                                                   131
 
        _6_._3_._2_7_2  _s_m_i_m_e___i_m_p_o_r_t___c_e_r_t___c_o_m_m_a_n_d
 
@@ -7205,10 +7211,10 @@
 
        Default: ''
 
+       The Mutt-ng E-Mail Client                                                   132
+
        This command is used to created S/MIME signatures of type multipart/signed,
        which can be read by all mail clients.  (S/MIME only)
-
-       The Mutt-ng E-Mail Client                                                   132
 
        _6_._3_._2_7_7  _s_m_i_m_e___s_i_g_n___o_p_a_q_u_e___c_o_m_m_a_n_d
 
@@ -7262,9 +7268,9 @@
        NNoottee:: Storing passwords in a configuration file presents a security risk since
        the superuser of your machine may read it regardless of the file's permissions.
 
-       _6_._3_._2_8_2  _s_m_t_p___a_u_t_h___u_s_e_r_n_a_m_e
-
        The Mutt-ng E-Mail Client                                                   133
+
+       _6_._3_._2_8_2  _s_m_t_p___a_u_t_h___u_s_e_r_n_a_m_e
 
        Type: string
 
@@ -7309,6 +7315,8 @@
 
        Specifies how to sort messages in the _i_n_d_e_x menu.  Valid values are:
 
+       The Mutt-ng E-Mail Client                                                   134
+
                date or date-sent
                date-received
                from
@@ -7319,8 +7327,6 @@
                subject
                threads
                to
-
-       The Mutt-ng E-Mail Client                                                   134
 
        You may optionally use the ``reverse-'' prefix to specify reverse sorting order
        (example: set sort=reverse-date-sent).
@@ -7361,6 +7367,8 @@
        (section 6.3.287  , page 134) is reversed again (which is not the right thing
        to do, but kept to not break any existing configuration setting).
 
+       The Mutt-ng E-Mail Client                                                   135
+
        _6_._3_._2_8_8  _s_o_r_t___b_r_o_w_s_e_r
 
        Type: sort order
@@ -7373,9 +7381,6 @@
                alpha (alphabetically)
                date
                size
-
-       The Mutt-ng E-Mail Client                                                   135
-
                unsorted
 
        You may optionally use the ``reverse-'' prefix to specify reverse sorting order
@@ -7416,6 +7421,9 @@
        Default: ''
 
        If your spool mailbox is in a non-default place where Mutt-ng cannot find it,
+
+       The Mutt-ng E-Mail Client                                                   136
+
        you can specify its location with this variable.  Mutt-ng will automatically
        set this variable to the value of the environment variable $MAIL if it is not
        set.
@@ -7429,8 +7437,6 @@
        This variable specifies a file containing trusted CA certificates.  Any server
        certificate that is signed with one of these CA certificates are also automati-
        cally accepted.
-
-       The Mutt-ng E-Mail Client                                                   136
 
        Example: set ssl_ca_certificates_file=/etc/ssl/certs/ca-certificates.crt
 
@@ -7472,6 +7478,8 @@
 
        Type: boolean
 
+       The Mutt-ng E-Mail Client                                                   137
+
        Default: yes
 
        Availability: SSL or NSS or GNUTLS
@@ -7486,8 +7494,6 @@
        Default: yes
 
        Availability: SSL or NSS or GNUTLS
-
-       The Mutt-ng E-Mail Client                                                   137
 
        This variables specifies whether to attempt to use TLSv1 in the SSL authentica-
        tion process.
@@ -7529,6 +7535,8 @@
              %d
                    number of deleted messages *
 
+       The Mutt-ng E-Mail Client                                                   138
+
              %f
                    the full pathname of the current mailbox
 
@@ -7542,11 +7550,8 @@
                    size (in bytes) of the current mailbox *
 
              %L
-                   size (in bytes) of the messages shown (i.e., which match the
-
-       The Mutt-ng E-Mail Client                                                   138
-
-                   current limit) *
+                   size (in bytes) of the messages shown (i.e., which match the cur-
+                   rent limit) *
 
              %m
                    the number of messages in the mailbox *
@@ -7587,6 +7592,8 @@
              %v
                    Mutt-ng version string
 
+       The Mutt-ng E-Mail Client                                                   139
+
              %V
                    currently active limit pattern, if any *
 
@@ -7600,9 +7607,6 @@
 
        Some of the above sequences can be used to optionally print a string if their
        value is nonzero.  For example, you may only want to see the number of flagged
-
-       The Mutt-ng E-Mail Client                                                   139
-
        messages if such messages exist, since zero is not particularly meaningful.  To
        optionally print a string based upon one of the above sequences, the following
        construct is used
@@ -7644,6 +7648,8 @@
        Setting this variable causes the ``status bar'' to be displayed on the first
        line of the screen rather than near the bottom.
 
+       The Mutt-ng E-Mail Client                                                   140
+
        _6_._3_._3_0_1  _s_t_r_i_c_t___m_i_m_e
 
        Type: boolean
@@ -7657,9 +7663,6 @@
 
        This option also replaces linear-white-space between encoded-word and *text to
        a single space to prevent the display of MIME-encoded ``Subject:'' header field
-
-       The Mutt-ng E-Mail Client                                                   140
-
        from being devided into multiple lines.
 
        _6_._3_._3_0_2  _s_t_r_i_c_t___t_h_r_e_a_d_s
@@ -7702,6 +7705,8 @@
 
        Default: no
 
+       The Mutt-ng E-Mail Client                                                   141
+
        If _s_e_t, attachments with flowed format will have their quoting ``stuffed'',
        i.e. a space will be inserted between the quote characters and the actual text.
 
@@ -7714,8 +7719,6 @@
        When _u_n_s_e_t, Mutt-ng won't stop when the user presses the terminal's _s_u_s_p key,
        usually CTRL+Z. This is useful if you run Mutt-ng inside an xterm using a com-
        mand like ``xterm -e muttng.''
-
-       The Mutt-ng E-Mail Client                                                   141
 
        _6_._3_._3_0_7  _t_e_x_t___f_l_o_w_e_d
 
@@ -7758,6 +7761,9 @@
        Default: no
 
        When _s_e_t, the internal-pager will pad blank lines to the bottom of the screen
+
+       The Mutt-ng E-Mail Client                                                   142
+
        with a tilde (~).
 
        _6_._3_._3_1_1  _t_i_m_e_o_u_t
@@ -7769,8 +7775,6 @@
        This variable controls the _n_u_m_b_e_r _o_f _s_e_c_o_n_d_s Mutt-ng will wait for a key to be
        pressed in the main menu before timing out and checking for new mail.  A value
        of zero or less will cause Mutt-ng to never time out.
-
-       The Mutt-ng E-Mail Client                                                   142
 
        _6_._3_._3_1_2  _t_m_p_d_i_r
 
@@ -7815,6 +7819,8 @@
 
        Type: string
 
+       The Mutt-ng E-Mail Client                                                   143
+
        Default: ''
 
        Setting this variable will cause Mutt-ng to open a pipe to a command instead of
@@ -7825,8 +7831,6 @@
 
        NNoottee:: For this example to work you must be able to log in to the remote machine
        without having to enter a password.
-
-       The Mutt-ng E-Mail Client                                                   143
 
        _6_._3_._3_1_6  _u_m_a_s_k
 
@@ -7871,6 +7875,8 @@
 
        _6_._3_._3_2_0  _u_s_e___f_r_o_m
 
+       The Mutt-ng E-Mail Client                                                   144
+
        Type: boolean
 
        Default: yes
@@ -7882,8 +7888,6 @@
        _6_._3_._3_2_1  _u_s_e___i_d_n
 
        Type: boolean
-
-       The Mutt-ng E-Mail Client                                                   144
 
        Default: yes
 
@@ -7928,6 +7932,8 @@
 
        Default: yes
 
+       The Mutt-ng E-Mail Client                                                   145
+
        Controls whether Mutt-ng will ask you to press a key after _s_h_e_l_l_- _e_s_c_a_p_e, _p_i_p_e_-
        _m_e_s_s_a_g_e, _p_i_p_e_-_e_n_t_r_y, _p_r_i_n_t_-_m_e_s_s_a_g_e, and _p_r_i_n_t_-_e_n_t_r_y commands.
 
@@ -7937,8 +7943,6 @@
 
        When _s_e_t, Mutt-ng will always ask for a key. When _u_n_s_e_t, Mutt-ng will wait for
        a key only if the external command returned a non-zero status.
-
-       The Mutt-ng E-Mail Client                                                   145
 
        _6_._3_._3_2_6  _w_e_e_d
 
@@ -7984,6 +7988,8 @@
 
        Default: 10
 
+       The Mutt-ng E-Mail Client                                                   146
+
        When writing a mailbox, a message will be printed every _w_r_i_t_e___i_n_c messages to
        indicate progress.  If set to 0, only a single message will be displayed before
        writing a mailbox.
@@ -7993,8 +7999,6 @@
        _6_._3_._3_3_1  _x___c_o_m_m_e_n_t___t_o
 
        Type: boolean
-
-       The Mutt-ng E-Mail Client                                                   146
 
        Default: no
 
@@ -8041,14 +8045,14 @@
        what the function does.  The key bindings of these functions can be changed
        with the _b_i_n_d (section 3.3  , page 17) command.
 
+       The Mutt-ng E-Mail Client                                                   147
+
        _6_._4_._1  _g_e_n_e_r_i_c
 
        The _g_e_n_e_r_i_c menu is not a real menu, but specifies common functions (such as
        movement) available in all menus except for _p_a_g_e_r and _e_d_i_t_o_r.  Changing set-
        tings for this menu will affect the default bindings for all menus (except as
        noted).
-
-       The Mutt-ng E-Mail Client                                                   147
 
             bottom-page                L   move to the bottom of the page
             current-bottom     not bound   move current entry to bottom of page
