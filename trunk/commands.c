@@ -61,46 +61,15 @@ int mutt_display_message (HEADER * cur)
   int cmflags = M_CM_DECODE | M_CM_DISPLAY | M_CM_CHARCONV;
   FILE *fpout = NULL;
   FILE *fpfilterout = NULL;
+  MESSAGE *msg = NULL;
   pid_t filterpid = -1;
-  int res;
+  int res = 0;
 
   snprintf (buf, sizeof (buf), "%s/%s", TYPE (cur->content),
             cur->content->subtype);
 
   mutt_parse_mime_message (Context, cur);
   mutt_message_hook (Context, cur, M_MESSAGEHOOK);
-
-  /* see if crytpo is needed for this message.  if so, we should exit curses */
-  if (WithCrypto && cur->security) {
-    if (cur->security & ENCRYPT) {
-      if (cur->security & APPLICATION_SMIME)
-        crypt_smime_getkeys (cur->env);
-      if (!crypt_valid_passphrase (cur->security))
-        return 0;
-
-      cmflags |= M_CM_VERIFY;
-    }
-    else if (cur->security & SIGN) {
-      /* find out whether or not the verify signature */
-      if (query_quadoption (OPT_VERIFYSIG, _("Verify PGP signature?")) ==
-          M_YES) {
-        cmflags |= M_CM_VERIFY;
-      }
-    }
-  }
-
-  if (cmflags & M_CM_VERIFY || cur->security & ENCRYPT) {
-    if (cur->security & APPLICATION_PGP) {
-      if (cur->env->from)
-        crypt_pgp_invoke_getkeys (cur->env->from);
-
-      crypt_invoke_message (APPLICATION_PGP);
-    }
-
-    if (cur->security & APPLICATION_SMIME)
-      crypt_invoke_message (APPLICATION_SMIME);
-  }
-
 
   mutt_mktemp (tempfile);
   if ((fpout = safe_fopen (tempfile, "w")) == NULL) {
@@ -131,9 +100,52 @@ int mutt_display_message (HEADER * cur)
     fputs ("\n\n", fpout);
   }
 
-  res = mutt_copy_message (fpout, Context, cur, cmflags,
-                           (option (OPTWEED) ? (CH_WEED | CH_REORDER) : 0) |
-                           CH_DECODE | CH_FROM);
+  msg = mx_open_message (Context, cur->msgno);
+  if (msg == NULL) res = -1;
+
+  if (res != -1) {
+    /* see if crytpo is needed for this message.  if so, we should exit curses */
+    if (WithCrypto && cur->security) {
+      if (cur->security & ENCRYPT) {
+        if (cur->security & APPLICATION_SMIME)
+          crypt_smime_getkeys (cur->env);
+        if (!crypt_valid_passphrase (cur->security))
+          return 0;
+
+        cmflags |= M_CM_VERIFY;
+      }
+      else if (cur->security & SIGN) {
+        /* find out whether or not the verify signature */
+        if (query_quadoption (OPT_VERIFYSIG, _("Verify PGP signature?")) ==
+            M_YES) {
+          cmflags |= M_CM_VERIFY;
+        }
+      }
+    }
+
+    if (cmflags & M_CM_VERIFY || cur->security & ENCRYPT) {
+      if (cur->security & APPLICATION_PGP) {
+        if (cur->env->from)
+          crypt_pgp_invoke_getkeys (cur->env->from);
+
+        crypt_invoke_message (APPLICATION_PGP);
+      }
+
+      if (cur->security & APPLICATION_SMIME)
+        crypt_invoke_message (APPLICATION_SMIME);
+    }
+
+    res = _mutt_copy_message (fpout, msg->fp, cur, cur->content, cmflags,
+                             (option (OPTWEED) ? (CH_WEED | CH_REORDER) : 0) |
+                             CH_DECODE | CH_FROM);
+    if (res == 0 && (ferror(fpout) || feof(fpout))) {
+      debug_print (1, ("_mutt_copy_message failed to detect EOF!\n"));
+      res = -1;
+    }
+
+    mx_close_message (&msg);
+  }
+
   if ((safe_fclose (&fpout) != 0 && errno != EPIPE) || res == -1) {
     mutt_error (_("Could not copy message"));
     if (fpfilterout != NULL) {

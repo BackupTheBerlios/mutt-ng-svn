@@ -23,13 +23,7 @@
 #include "rfc2047.h"
 #include "nntp.h"
 
-#ifdef HAVE_PGP
-#include "pgp.h"
-#endif
-
-#ifdef HAVE_SMIME
-#include "smime.h"
-#endif
+#include "mutt_crypt.h"
 
 #include "lib/mem.h"
 #include "lib/str.h"
@@ -959,9 +953,7 @@ int nntp_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
    * full headers aren't parsed with XOVER, so the information wasn't
    * available then.
    */
-#if defined(HAVE_PGP) || defined(HAVE_SMIME)
   ctx->hdrs[msgno]->security = crypt_query (ctx->hdrs[msgno]->content);
-#endif /* HAVE_PGP || HAVE_SMIME */
 
   mutt_clear_error ();
   rewind (msg->fp);
