@@ -10,7 +10,7 @@
 
 #
 #     Copyright (c) 2000 Thomas Roessler <roessler@guug.de>
-#
+#     Parts were written/modified by Nico Golde <nion@muttng.org>
 #
 #     This program is free software; you can redistribute it and/or modify
 #     it under the terms of the GNU General Public License as published by
@@ -98,7 +98,7 @@ trap "rm -r -f ${SCRATCH} ; trap '' 0 ; exit" 0 1 2
 TEMPLATE=${SCRATCH}/template.txt
 
 if test -z "$EMAIL" ; then
-	EMAIL="`mutt -Q from 2> /dev/null | sed -e 's/^from=.\(.*\).$/\1/'`"
+	EMAIL="`muttng -Q from 2> /dev/null | sed -e 's/^from=.\(.*\).$/\1/'`"
 fi
 
 echo "Please enter your e-mail address [$EMAIL]:"
@@ -176,7 +176,7 @@ esac
 
 if test -f /etc/debian_version ; then
 	DEBIAN=yes
-	echo $n "Checking whether Mutt-ng has been installed as a package... $c"
+	echo $n "Checking whether Mutt-ng has been installed as a Debian package... $c"
 	DEBIANVERSION="`dpkg -l muttng | grep '^[ih]' | awk '{print $3}'`" 2> /dev/null
 	if test "$DEBIANVERSION" ; then
 		DPKG=yes
@@ -202,10 +202,10 @@ if [ "$DPKG" == "yes" ] ; then
     echo "Use reportbug muttng to report the bug to the debian bug tracking system..."
     exit
 fi
-if rpm -q mutt > /dev/null 2> /dev/null ; then
-	echo "Mutt seems to come from an RPM package."
-	RPMVERSION="`rpm -q mutt`"
-	RPMPACKAGER="`rpm -q -i muttng | sed -n -e 's/^Packager *: *//p'`"
+if rpm -q mutt-ng > /dev/null 2> /dev/null ; then
+	echo "Mutt-ng seems to come from an RPM package."
+	RPMVERSION="`rpm -q mutt-ng`"
+	RPMPACKAGER="`rpm -q -i mutt-ng | sed -n -e 's/^Packager *: *//p'`"
 fi
 
 MUTTVERSION="`muttng -v | awk '{print $2 $3; exit; }'`"
@@ -217,11 +217,11 @@ test "$EMAIL"        && echo "From: $EMAIL"
 test "$REPLYTO"      && echo "Reply-To: $REPLYTO"
 test "$ORGANIZATION" && echo "Organization: $ORGANIZATION"
 
-echo "Subject: Mutt-ng-$MUTTVERSION: $SUBJECT"
+echo "Subject: Mutt-ng $MUTTVERSION: $SUBJECT"
 echo "To: $SUBMIT"
 test "$EMAIL" 	     && echo "Bcc: ${EMAIL}"
 echo
-echo "Package: muttng"
+echo "Package: mutt-ng"
 echo "Version: ${DEBIANVERSION-${RPMVERSION-$MUTTVERSION}}"
 echo "Severity: $severity"
 echo 
