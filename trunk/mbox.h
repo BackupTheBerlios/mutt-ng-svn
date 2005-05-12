@@ -23,11 +23,10 @@
 
 #define MMDF_SEP "\001\001\001\001\n"
 
-int mbox_check_mailbox (CONTEXT *, int *);
 int mbox_close_mailbox (CONTEXT *);
 int mbox_lock_mailbox (CONTEXT *, int, int);
 void mbox_unlock_mailbox (CONTEXT *);
-int mbox_check_empty (const char *);
+int mbox_check_empty (const char*);
 int mbox_is_magic (const char*, struct stat*);
 int mbox_strict_cmp_headers (const HEADER *, const HEADER *);
 

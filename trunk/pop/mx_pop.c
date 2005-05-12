@@ -48,5 +48,6 @@ mx_t* pop_reg_mx (void) {
   fmt->mx_acl_check = acl_check_pop;
   fmt->mx_fastclose_mailbox = pop_close_mailbox;
   fmt->mx_sync_mailbox = pop_sync_mailbox;
+  fmt->mx_check_mailbox = pop_check_mailbox;
   return (fmt);
 }

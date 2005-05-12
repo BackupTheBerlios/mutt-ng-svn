@@ -102,7 +102,7 @@ void pop_logout (CONTEXT *);
 void pop_error (POP_DATA *, char *);
 
 /* pop.c */
-int pop_check_mailbox (CONTEXT *, int *);
+int pop_check_mailbox (CONTEXT *, int *, int);
 int pop_open_mailbox (CONTEXT *);
 pop_query_status pop_sync_mailbox (CONTEXT *, int, int *);
 int pop_fetch_message (MESSAGE *, CONTEXT *, int);

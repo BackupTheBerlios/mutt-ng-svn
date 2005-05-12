@@ -104,7 +104,7 @@ void nntp_clear_cacheindex (NNTP_SERVER *);
 int mutt_newsrc_update (NNTP_SERVER *);
 int nntp_open_mailbox (CONTEXT *);
 int nntp_sync_mailbox (CONTEXT *, int, int*);
-int nntp_check_mailbox (CONTEXT *);
+int nntp_check_mailbox (CONTEXT *, int*, int);
 int nntp_close_mailbox (CONTEXT *);
 void nntp_fastclose_mailbox (CONTEXT *);
 int nntp_fetch_message (MESSAGE *, CONTEXT *, int);

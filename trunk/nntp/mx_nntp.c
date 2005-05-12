@@ -49,5 +49,6 @@ mx_t* nntp_reg_mx (void) {
   fmt->mx_acl_check = acl_check_nntp;
   fmt->mx_fastclose_mailbox = nntp_fastclose_mailbox;
   fmt->mx_sync_mailbox = nntp_sync_mailbox;
+  fmt->mx_check_mailbox = nntp_check_mailbox;
   return (fmt);
 }

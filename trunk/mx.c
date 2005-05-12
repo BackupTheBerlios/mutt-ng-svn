@@ -1156,10 +1156,7 @@ MESSAGE *mx_open_new_message (CONTEXT * dest, HEADER * hdr, int flags)
 }
 
 /* check for new mail */
-int mx_check_mailbox (CONTEXT * ctx, int *index_hint, int lock)
-{
-  int rc;
-
+int mx_check_mailbox (CONTEXT * ctx, int *index_hint, int lock) {
 #ifdef USE_COMPRESSED
   if (ctx->compressinfo)
     return mutt_check_mailbox_compressed (ctx);
@@ -1168,53 +1165,13 @@ int mx_check_mailbox (CONTEXT * ctx, int *index_hint, int lock)
   if (ctx) {
     if (ctx->locked)
       lock = 0;
-
-    switch (ctx->magic) {
-    case M_MBOX:
-    case M_MMDF:
-
-      if (lock) {
-        mutt_block_signals ();
-        if (mbox_lock_mailbox (ctx, 0, 0) == -1) {
-          mutt_unblock_signals ();
-          return M_LOCKED;
-        }
-      }
-
-      rc = mbox_check_mailbox (ctx, index_hint);
-
-      if (lock) {
-        mutt_unblock_signals ();
-        mbox_unlock_mailbox (ctx);
-      }
-
-      return rc;
-
-
-    case M_MH:
-      return (mh_check_mailbox (ctx, index_hint));
-    case M_MAILDIR:
-      return (maildir_check_mailbox (ctx, index_hint));
-
-#ifdef USE_IMAP
-    case M_IMAP:
-      return (imap_check_mailbox (ctx, index_hint, 0));
-#endif /* USE_IMAP */
-
-#ifdef USE_POP
-    case M_POP:
-      return (pop_check_mailbox (ctx, index_hint));
-#endif /* USE_POP */
-
-#ifdef USE_NNTP
-    case M_NNTP:
-      return (nntp_check_mailbox (ctx));
-#endif /* USE_NNTP */
-    }
+    if (MX_COMMAND(ctx->magic-1,mx_check_mailbox))
+      return (MX_COMMAND(ctx->magic-1,mx_check_mailbox)(ctx, index_hint, lock));
   }
 
   debug_print (1, ("null or invalid context.\n"));
   return (-1);
+
 }
 
 /* return a stream pointer for a message */

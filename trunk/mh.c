@@ -71,6 +71,8 @@ struct mh_sequences {
 
 /* prototypes */
 static int maildir_check_empty (const char*);
+static int maildir_check_mailbox (CONTEXT*, int*, int);
+static int mh_check_mailbox (CONTEXT*, int*, int);
 
 static void mhs_alloc (struct mh_sequences *mhs, int i)
 {
@@ -1381,9 +1383,9 @@ static int mh_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
 #endif /* USE_HCACHE */
 
   if (ctx->magic == M_MH)
-    i = mh_check_mailbox (ctx, index_hint);
+    i = mh_check_mailbox (ctx, index_hint, 0);
   else
-    i = maildir_check_mailbox (ctx, index_hint);
+    i = maildir_check_mailbox (ctx, index_hint, 0);
 
   if (i != 0)
     return i;
@@ -1546,7 +1548,7 @@ static void maildir_update_flags (CONTEXT * ctx, HEADER * o, HEADER * n)
  * either subdirectory differently, as mail could be copied directly into
  * the cur directory from another agent.
  */
-int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
+static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint, int unused)
 {
   struct stat st_new;           /* status of the "new" subdirectory */
   struct stat st_cur;           /* status of the "cur" subdirectory */
@@ -1561,9 +1563,6 @@ int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
   HASH *fnames;                 /* hash table for quickly looking up the base filename
                                    for a maildir message */
 
-  /* XXX seems like this check belongs in mx_check_mailbox()
-   * rather than here.
-   */
   if (!option (OPTCHECKNEW))
     return 0;
 
@@ -1686,7 +1685,7 @@ int maildir_check_mailbox (CONTEXT * ctx, int *index_hint)
  *
  */
 
-int mh_check_mailbox (CONTEXT * ctx, int *index_hint)
+static int mh_check_mailbox (CONTEXT * ctx, int *index_hint, int unused)
 {
   char buf[_POSIX_PATH_MAX];
   struct stat st, st_cur;
@@ -1984,6 +1983,7 @@ mx_t* mh_reg_mx (void) {
   fmt->mx_is_magic = mh_is_magic;
   fmt->mx_open_mailbox = mh_read_dir;
   fmt->mx_open_new_message = mh_open_new_message;
+  fmt->mx_check_mailbox = mh_check_mailbox;
   return (fmt);
 }
 
@@ -1994,5 +1994,6 @@ mx_t* maildir_reg_mx (void) {
   fmt->mx_is_magic = maildir_is_magic;
   fmt->mx_open_mailbox = maildir_read_dir;
   fmt->mx_open_new_message = maildir_open_new_message;
+  fmt->mx_check_mailbox = maildir_check_mailbox;
   return (fmt);
 }

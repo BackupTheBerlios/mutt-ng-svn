@@ -21,11 +21,9 @@
 
 /* TODO all of these must disappear to achieve good information hiding */
 
-int mh_check_mailbox (CONTEXT *, int *);
 int mh_buffy (const char *);
 int mh_commit_message (CONTEXT *, MESSAGE *, HEADER *);
 
-int maildir_check_mailbox (CONTEXT *, int *);
 int maildir_commit_message (CONTEXT *, MESSAGE *, HEADER *);
 FILE *maildir_open_find_message (const char *, const char *);
 

@@ -466,7 +466,7 @@ pop_query_status pop_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
 }
 
 /* Check for new messages and fetch headers */
-int pop_check_mailbox (CONTEXT * ctx, int *index_hint)
+int pop_check_mailbox (CONTEXT * ctx, int *index_hint, int unused)
 {
   int ret;
   POP_DATA *pop_data = (POP_DATA *) ctx->data;

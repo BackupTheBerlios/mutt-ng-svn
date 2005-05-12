@@ -1198,7 +1198,7 @@ static int _nntp_check_mailbox (CONTEXT * ctx, NNTP_DATA * nntp_data)
   return 0;
 }
 
-int nntp_check_mailbox (CONTEXT * ctx)
+int nntp_check_mailbox (CONTEXT * ctx, int* unused1, int unused2)
 {
   return _nntp_check_mailbox (ctx, (NNTP_DATA *) ctx->data);
 }

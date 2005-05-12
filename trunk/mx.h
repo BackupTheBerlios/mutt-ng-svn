@@ -96,6 +96,8 @@ typedef struct {
   /* check ACL flags; if not implemented, always assume granted
    * permissions */
   int (*mx_acl_check) (CONTEXT*, int);
+  /* check for new mail; see mx_check_mailbox() below for return vals */
+  int (*mx_check_mailbox) (CONTEXT*, int*, int);
   /* fast closing */
   void (*mx_fastclose_mailbox) (CONTEXT*);
   /* write out changes */
@@ -106,27 +108,19 @@ typedef struct {
 void mx_init (void);
 
 /* flags for mx_open_mailbox() */
-#define M_NOSORT	(1<<0)  /* do not sort the mailbox after opening it */
-#define M_APPEND	(1<<1)  /* open mailbox for appending messages */
-#define M_READONLY	(1<<2)  /* open in read-only mode */
-#define M_QUIET		(1<<3)  /* do not print any messages */
-#define M_NEWFOLDER	(1<<4)  /* create a new folder - same as M_APPEND, but uses
+#define M_NOSORT        (1<<0)  /* do not sort the mailbox after opening it */
+#define M_APPEND        (1<<1)  /* open mailbox for appending messages */
+#define M_READONLY      (1<<2)  /* open in read-only mode */
+#define M_QUIET         (1<<3)  /* do not print any messages */
+#define M_NEWFOLDER     (1<<4)  /* create a new folder - same as M_APPEND, but uses
                                  * safe_fopen() for mbox-style folders. */
 #define M_COUNT         (1<<5)  /* just do counting? needed to do speed optimizations
                                    for sidebar */
 
 /* mx_open_new_message() */
-#define M_ADD_FROM	1       /* add a From_ line */
+#define M_ADD_FROM      1       /* add a From_ line */
 
 #define MAXLOCKATTEMPT 5
-
-/* return values from mx_check_mailbox() */
-enum {
-  M_NEW_MAIL = 1,               /* new mail received in mailbox */
-  M_LOCKED,                     /* couldn't lock the mailbox */
-  M_REOPENED,                   /* mailbox was reopened */
-  M_FLAGS                       /* nondestructive flags change (IMAP) */
-};
 
 WHERE short DefaultMagic INITVAL (M_MBOX);
 
@@ -154,6 +148,13 @@ int mx_set_magic (const char *);
 /* tests whether given folder magic is (valid and) local */
 int mx_is_local (int);
 
+/* return values from mx_check_mailbox() */
+enum {
+  M_NEW_MAIL = 1,               /* new mail received in mailbox */
+  M_LOCKED,                     /* couldn't lock the mailbox */
+  M_REOPENED,                   /* mailbox was reopened */
+  M_FLAGS                       /* nondestructive flags change (IMAP) */
+};
 int mx_check_mailbox (CONTEXT *, int *, int);
 
 int mx_access (const char *, int);

@@ -536,7 +536,7 @@ int mbox_strict_cmp_headers (const HEADER * h1, const HEADER * h2)
  *	0		no change
  *	-1		error
  */
-int mbox_check_mailbox (CONTEXT * ctx, int *index_hint)
+static int _mbox_check_mailbox (CONTEXT * ctx, int *index_hint)
 {
   struct stat st;
   char buffer[LONG_STRING];
@@ -630,6 +630,26 @@ int mbox_check_mailbox (CONTEXT * ctx, int *index_hint)
   return (-1);
 }
 
+static int mbox_check_mailbox (CONTEXT* ctx, int* index_hint, int lock) {
+  int rc = 0;
+
+  if (lock) {
+    mutt_block_signals ();
+    if (mbox_lock_mailbox (ctx, 0, 0) == -1) {
+      mutt_unblock_signals ();
+      return M_LOCKED;
+    }
+  }
+
+  rc = _mbox_check_mailbox (ctx, index_hint);
+
+  if (lock) {
+    mutt_unblock_signals ();
+    mbox_unlock_mailbox (ctx);
+  }
+  return rc;
+}
+
 /* return values:
  *	0	success
  *	-1	failure
@@ -676,7 +696,7 @@ static int _mbox_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
   }
 
   /* Check to make sure that the file hasn't changed on disk */
-  if ((i = mbox_check_mailbox (ctx, index_hint)) == M_NEW_MAIL
+  if ((i = _mbox_check_mailbox (ctx, index_hint)) == M_NEW_MAIL
       || i == M_REOPENED) {
     /* new mail arrived, or mailbox reopened */
     need_sort = i;
@@ -1221,6 +1241,7 @@ static mx_t* reg_mx (void) {
   fmt->mx_open_mailbox = mbox_open_mailbox;
   fmt->mx_open_new_message = mbox_open_new_message;
   fmt->mx_sync_mailbox = mbox_sync_mailbox;
+  fmt->mx_check_mailbox = mbox_check_mailbox;
   return (fmt);
 }
 

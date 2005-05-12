@@ -46,6 +46,12 @@ static int imap_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
   return 0;
 }
 
+/* this ugly kludge is required since the last int to
+ * imap_check_mailbox() doesn't mean 'lock' but 'force'... */
+static int _imap_check_mailbox (CONTEXT* ctx, int* index_hint, int lock) {
+  return (imap_check_mailbox (ctx, index_hint, 0));
+}
+
 mx_t* imap_reg_mx (void) {
   mx_t* fmt = safe_calloc (1, sizeof (mx_t));
 
@@ -58,5 +64,6 @@ mx_t* imap_reg_mx (void) {
   fmt->mx_acl_check = acl_check_imap;
   fmt->mx_fastclose_mailbox = imap_close_mailbox;
   fmt->mx_sync_mailbox = imap_sync_mailbox;
+  fmt->mx_check_mailbox = _imap_check_mailbox;
   return (fmt);
 }
