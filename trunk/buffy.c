@@ -570,7 +570,7 @@ int buffy_notify (void)
  */
 void buffy_next (char *s, size_t slen)
 {
-  int i = 0, c = 0;
+  int i = 0, c = 0, l = 0;
 
   if (list_empty(Incoming))
     return;
@@ -581,14 +581,19 @@ void buffy_next (char *s, size_t slen)
     return;
   }
 
-  i = buffy_lookup (s);
-  c = i == Incoming->length-1 ? 0 : i+1;
-  while (((BUFFY*) Incoming->data[c])->new <= 0) {
-    c = (c+1) % Incoming->length;
-    if (c == i)
-      break;    /* tried all once */
+  /*
+   * If buffy_lookup returns the index,
+   * or -1 if not found (-1..Incoming->length-1);
+   * plus one --> (0..Incoming->length).
+   * Modulo mapps it into the correct range.
+   */
+  i = 1 + buffy_lookup (s);
+  for (l=0; l < Incoming->length; l++) {
+    c = (l+i) % Incoming->length;
+    if (((BUFFY*) Incoming->data[c])->new > 0)
+      break;
   }
-  if (c == i) {
+  if (l >= Incoming->length) {
     *s = '\0';
     /* something went wrong since we're here when buffy_check
      * reported new mail */
