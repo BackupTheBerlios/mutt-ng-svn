@@ -10,6 +10,14 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-05-14:
+
+  New Configuration Variables:
+    - $header_cache_compress - compress header cache database with qdbm
+      when switching to qdbm, please make sure to _first_ _completely_
+      remove the old header cache (files) as you need to start off from
+      scratch; compressed qdbm require much less space (only ~1/5)
+
 2005-04-18:
 
   New Configuration Variables:

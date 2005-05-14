@@ -1261,8 +1261,8 @@ struct option_t MuttVars[] = {
    ** .pp
    ** If $$header_cache points to a directory it will contain a header cache
    ** database  per folder. If $$header_cache points to a file that file will
-   ** be a single global header cache. By default it is \fIunset\fP and so no
-   ** header caching will be done.
+   ** be a single global header cache. By default it is \fIunset\fP so no
+   ** header caching will be used.
    */
   {"maildir_header_cache_verify", DT_BOOL, R_NONE, OPTHCACHEVERIFY, 1},
   /*
@@ -1285,9 +1285,18 @@ struct option_t MuttVars[] = {
    ** Too large
    ** or too small of a page size for the common header can waste
    ** space, memory effectiveness, or CPU time. The default should be more or
-   ** less the best you can get. For details google after Mutt-ng maildir header
+   ** less the best you can get. For details google for mutt header
    ** cache (first hit).
    */
+#if HAVE_QDBM
+  { "header_cache_compress", DT_BOOL, R_NONE, OPTHCACHECOMPRESS, 0 },
+  /*
+  ** .pp
+  ** If enabled the header cache will be compressed. So only one fifth of the usual
+  ** diskspace is used, but the uncompression can result in a slower open of the
+  ** cached folder.
+  */
+#endif /* HAVE_QDBM */
 #endif /* USE_HCACHE */
   {"maildir_trash", DT_BOOL, R_NONE, OPTMAILDIRTRASH, 0},
   /*

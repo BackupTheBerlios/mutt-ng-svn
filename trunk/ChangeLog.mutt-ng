@@ -1,5 +1,9 @@
 Changes specific to mutt-ng:
 
+2005-05-14:
+  * header caching update: support for qdbm (which supports compressed
+    database files) has been added
+
 2005-04-18:
   * sidebar updates: eventually counting can be disabled and
     $sidebar_newmail_only works way better
