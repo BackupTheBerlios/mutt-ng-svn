@@ -1274,6 +1274,7 @@ struct option_t MuttVars[] = {
    ** files when the header cache is in use. This incurs one \fTstat(2)\fP per
    ** message every time the folder is opened.
    */
+#if HAVE_GDBM || HAVE_DB4
   {"header_cache_pagesize", DT_STR, R_NONE, UL &HeaderCachePageSize, UL "16384"},
   /*
    ** .pp
@@ -1288,6 +1289,7 @@ struct option_t MuttVars[] = {
    ** less the best you can get. For details google for mutt header
    ** cache (first hit).
    */
+#endif /* HAVE_GDBM || HAVE_DB 4 */
 #if HAVE_QDBM
   { "header_cache_compress", DT_BOOL, R_NONE, OPTHCACHECOMPRESS, 0 },
   /*
@@ -3606,120 +3608,137 @@ const struct feature_t Features[] = {
 #endif
    }, {"slang",
 #ifdef USE_SLANG_CURSES
-       1
+   1
 #else
-       0
+   0
 #endif
-       }, {"iconv",
+   }, {"iconv",
 #ifdef _LIBICONV_VERSION
-           1
+   1
 #else
-           0
+   0
 #endif
-           }, {"idn",
+   }, {"idn",
 #ifdef HAVE_LIBIDN
-               1
+   1
 #else
-               0
+   0
 #endif
-               }, {"dotlock",
+   }, {"dotlock",
 #ifdef USE_DOTLOCK
-                   1
+   1
 #else
-                   0
+   0
 #endif
-                   }, {"standalone",
+   }, {"standalone",
 #ifdef DL_STANDALONE
-                       1
+   1
 #else
-                       0
+   0
 #endif
-                       }, {"pop",
+   }, {"pop",
 #ifdef USE_POP
-                           1
+   1
 #else
-                           0
+   0
 #endif
-                           }, {"nntp",
+   }, {"nntp",
 #ifdef USE_NNTP
-                               1
+   1
 #else
-                               0
+   0
 #endif
-                               }, {"imap",
+   }, {"imap",
 #ifdef USE_IMAP
-                                   1
+   1
 #else
-                                   0
+   0
 #endif
-                                   }, {"ssl",
+   }, {"ssl",
 #ifdef USE_SSL
-                                       1
+   1
 #else
-                                       0
+   0
 #endif
-                                       }, {"gnutls",
+   }, {"gnutls",
 #ifdef USE_GNUTLS
-                                           1
+   1
 #else
-                                           0
+   0
 #endif
-                                           }, {"sasl",
+   }, {"sasl",
 #ifdef USE_SASL
-                                               1
+   1
 #else
-                                               0
+   0
 #endif
-                                               }, {"sasl2",
+   }, {"sasl2",
 #ifdef USE_SASL2
-                                                   1
+   1
 #else
-                                                   0
+   0
 #endif
-                                                   }, {"libesmtp",
+   }, {"libesmtp",
 #ifdef USE_LIBESMTP
-                                                       1
+   1
 #else
-                                                       0
+   0
 #endif
-                                                       }, {"compressed",
+   }, {"compressed",
 #ifdef USE_COMPRESSED
-                                                           1
+   1
 #else
-                                                           0
+   0
 #endif
-                                                           }, {"color",
+   }, {"color",
 #ifdef HAVE_COLOR
-                                                               1
+   1
 #else
-                                                               0
+   0
 #endif
-                                                               },
-    {"classic_pgp",
+   }, {"classic_pgp",
 #ifdef CRYPT_BACKEND_CLASSIC_PGP
-     1
+   1
 #else
-     0
+   0
 #endif
-     }, {"classic_smime",
+   }, {"classic_smime",
 #ifdef CRYPT_BACKEND_CLASSIC_SMIME
-         1
+   1
 #else
-         0
+   0
 #endif
-         }, {"gpgme",
+   }, {"gpgme",
 #ifdef CRYPT_BACKEND_GPGME
-             1
+   1
 #else
-             0
+   0
 #endif
-             }, {"header_cache",
+   }, {"header_cache",
 #ifdef USE_HCACHE
-                 1
+   1
 #else
-                 0
+   0
 #endif
-                 },
+   }, {"qdbm",
+#ifdef HAVE_QDBM
+   1
+#else
+   0
+#endif
+   }, {"gdbm",
+#ifdef HAVE_GDBM
+   1
+#else
+   0
+#endif
+   }, {"db4",
+#ifdef HAVE_DB4
+   1
+#else
+   0
+#endif
+   },
   /* last */
   {NULL, 0}
 };

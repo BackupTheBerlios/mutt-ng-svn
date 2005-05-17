@@ -20,4 +20,5 @@ Here's a list of all mutt-ng specific TODOs (not in priority order):
   functions should only be called directly in the right abstraction
   layer's implementation. And so forth.
 
-- Convert all the names in manual.sgml.head/tail
+- Improve documentation, update/rewrite/remove legacy docs (such as
+  INSTALL and friends)

@@ -10,6 +10,15 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-05-17:
+
+  Changes due to better integration of qdbm support w/ header caching:
+  
+    - the $header_cache_pagesize variable is not available with as it's 
+      not used
+    - the following feature tests were added: feature_qdbm, feature_gdbm,
+      feature_db4 (for ifdef/ifndef)
+
 2005-05-14:
 
   New Configuration Variables:
