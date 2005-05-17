@@ -514,6 +514,9 @@ void rfc822_write_address_single (char *buf, size_t buflen, ADDRESS * addr,
       goto done;
     strfcpy (pbuf, addr->val, buflen);
     len = safe_strlen (pbuf);
+    /* dirty fix to un-break EXACT_ADDRESS */
+    if (pbuf[len-1] == '\n')
+      pbuf[--len] = '\0';
     pbuf += len;
     buflen -= len;
     if (addr->group) {
