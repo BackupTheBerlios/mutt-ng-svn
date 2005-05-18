@@ -238,7 +238,7 @@ int mutt_yesorno (const char *msg, int def)
 #else
     if (
 #endif
-         (tolower (ch.ch) == 'y')) {
+         (tolower (ch.ch) == *yes)) {
       def = M_YES;
       break;
     }
@@ -246,7 +246,7 @@ int mutt_yesorno (const char *msg, int def)
 #ifdef HAVE_LANGINFO_YESEXPR
               reno_ok ? (regexec (&reno, answer, 0, 0, 0) == 0) :
 #endif
-              (tolower (ch.ch) == 'n')) {
+              (tolower (ch.ch) == *no)) {
       def = M_NO;
       break;
     }
