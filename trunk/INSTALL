@@ -181,14 +181,6 @@ to ``configure'' to help it out, or change the default behavior:
 	so a short note on this topic can be added to the Platform notes
 	section below.)
 
---enable-exact-address
-	By default, Mutt-ng will rewrite all addresses in the form
-		Personal Name <user@host.domain>
-	regardless of the input.  By enabling this option, Mutt-ng will write
-	addresses in the same form they are parsed.  NOTE: this requires
-	significantly more memory.
-
-
 Once ``configure'' has completed, simply type ``make install.''
 
 Mutt-ng should compile cleanly (without errors) and you should end up with a

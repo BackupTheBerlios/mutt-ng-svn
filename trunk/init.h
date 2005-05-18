@@ -2788,7 +2788,6 @@ struct option_t MuttVars[] = {
    ** .pp
    ** If set, all folders are opened in read-only mode.
    */
-#ifndef EXACT_ADDRESS
   {"realname", DT_STR, R_BOTH, UL &Realname, 0},
   /*
    ** .pp
@@ -2801,7 +2800,6 @@ struct option_t MuttVars[] = {
    ** variable will \fInot\fP be used when the user has set a real name
    ** in the $$from variable.
    */
-#endif
   {"recall", DT_QUAD, R_NONE, OPT_RECALL, M_ASKYES},
   /*
    ** .pp

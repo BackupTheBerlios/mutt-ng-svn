@@ -177,9 +177,6 @@ static unsigned char *dump_address (ADDRESS * a, unsigned char *d, int *off)
   d = dump_int (0xdeadbeef, d, off);
 
   while (a) {
-#ifdef EXACT_ADDRESS
-    d = dump_char (a->val, d, off);
-#endif
     d = dump_char (a->personal, d, off);
     d = dump_char (a->mailbox, d, off);
     d = dump_int (a->group, d, off);
@@ -200,9 +197,6 @@ static void restore_address (ADDRESS ** a, const unsigned char *d, int *off)
 
   while (counter) {
     *a = safe_malloc (sizeof (ADDRESS));
-#ifdef EXACT_ADDRESS
-    restore_char (&(*a)->val, d, off);
-#endif
     restore_char (&(*a)->personal, d, off);
     restore_char (&(*a)->mailbox, d, off);
     restore_int ((unsigned int *) &(*a)->group, d, off);
@@ -461,12 +455,6 @@ static int generate_crc32 ()
   crc =
     crc32 (crc, (unsigned char const *) "HAVE_LANGINFO_CODESET",
            safe_strlen ("HAVE_LANGINFO_CODESET"));
-#endif
-
-#if EXACT_ADDRESS
-  crc =
-    crc32 (crc, (unsigned char const *) "EXACT_ADDRESS",
-           safe_strlen ("EXACT_ADDRESS"));
 #endif
 
 #ifdef USE_POP

@@ -70,9 +70,6 @@ void rfc822_free_address (ADDRESS ** p)
   while (*p) {
     t = *p;
     *p = (*p)->next;
-#ifdef EXACT_ADDRESS
-    FREE (&t->val);
-#endif
     FREE (&t->personal);
     FREE (&t->mailbox);
     FREE (&t);
@@ -328,10 +325,6 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS * top, const char *s)
         last->personal = safe_strdup (comment);
       }
 
-#ifdef EXACT_ADDRESS
-      if (last && !last->val)
-        last->val = str_substrdup (begin, s);
-#endif
       commentlen = 0;
       phraselen = 0;
       s++;
@@ -361,10 +354,6 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS * top, const char *s)
         top = cur;
       last = cur;
 
-#ifdef EXACT_ADDRESS
-      last->val = str_substrdup (begin, s);
-#endif
-
       phraselen = 0;
       commentlen = 0;
       s++;
@@ -381,10 +370,6 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS * top, const char *s)
         terminate_buffer (comment, commentlen);
         last->personal = safe_strdup (comment);
       }
-#ifdef EXACT_ADDRESS
-      if (last && !last->val)
-        last->val = str_substrdup (begin, s);
-#endif
 
       /* add group terminator */
       cur = rfc822_new_address ();
@@ -451,10 +436,6 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS * top, const char *s)
     terminate_buffer (comment, commentlen);
     last->personal = safe_strdup (comment);
   }
-#ifdef EXACT_ADDRESS
-  if (last)
-    last->val = str_substrdup (begin, s);
-#endif
 
   return top;
 }
@@ -507,28 +488,6 @@ void rfc822_write_address_single (char *buf, size_t buflen, ADDRESS * addr,
     return;
 
   buflen--;                     /* save room for the terminal nul */
-
-#ifdef EXACT_ADDRESS
-  if (addr->val) {
-    if (!buflen)
-      goto done;
-    strfcpy (pbuf, addr->val, buflen);
-    len = safe_strlen (pbuf);
-    /* dirty fix to un-break EXACT_ADDRESS */
-    if (pbuf[len-1] == '\n')
-      pbuf[--len] = '\0';
-    pbuf += len;
-    buflen -= len;
-    if (addr->group) {
-      if (!buflen)
-        goto done;
-      *pbuf++ = ':';
-      buflen--;
-      *pbuf = 0;
-    }
-    return;
-  }
-#endif
 
   if (addr->personal) {
     if (strpbrk (addr->personal, RFC822Specials)) {
@@ -681,9 +640,6 @@ ADDRESS *rfc822_cpy_adr_real (ADDRESS * addr)
 {
   ADDRESS *p = rfc822_new_address ();
 
-#ifdef EXACT_ADDRESS
-  p->val = safe_strdup (addr->val);
-#endif
   p->personal = safe_strdup (addr->personal);
   p->mailbox = safe_strdup (addr->mailbox);
   p->group = addr->group;

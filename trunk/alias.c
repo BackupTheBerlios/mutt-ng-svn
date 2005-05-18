@@ -84,10 +84,6 @@ static ADDRESS *mutt_expand_aliases_r (ADDRESS * a, LIST ** expn)
 
           mutt_gecos_name (namebuf, sizeof (namebuf), pw);
           str_replace (&a->personal, namebuf);
-
-#ifdef EXACT_ADDRESS
-          FREE (&a->val);
-#endif
         }
       }
     }

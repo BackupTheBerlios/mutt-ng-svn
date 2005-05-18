@@ -21,9 +21,6 @@ enum {
 };
 
 typedef struct address_t {
-#ifdef EXACT_ADDRESS
-  char *val;                    /* value of address as parsed */
-#endif
   char *personal;               /* real name of address */
   char *mailbox;                /* mailbox and host address */
   int group;                    /* group mailbox? */

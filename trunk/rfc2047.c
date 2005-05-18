@@ -543,10 +543,6 @@ void rfc2047_encode_adrlist (ADDRESS * addr, const char *tag)
   while (ptr) {
     if (ptr->personal)
       _rfc2047_encode_string (&ptr->personal, 1, col);
-#ifdef EXACT_ADDRESS
-    if (ptr->val)
-      _rfc2047_encode_string (&ptr->val, 1, col);
-#endif
     ptr = ptr->next;
   }
 }
@@ -801,10 +797,6 @@ void rfc2047_decode_adrlist (ADDRESS * a)
   while (a) {
     if (a->personal)
       rfc2047_decode (&a->personal);
-#ifdef EXACT_ADDRESS
-    if (a->val && strstr (a->val, "=?") != NULL)
-      rfc2047_decode (&a->val);
-#endif
     a = a->next;
   }
 }

@@ -356,11 +356,6 @@ static void show_version (void)
 #else
          "-BUFFY_SIZE "
 #endif
-#ifdef EXACT_ADDRESS
-         "+EXACT_ADDRESS  "
-#else
-         "-EXACT_ADDRESS  "
-#endif
 #ifdef SUN_ATTACHMENT
          "+SUN_ATTACHMENT  "
 #else

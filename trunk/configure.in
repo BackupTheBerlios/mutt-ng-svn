@@ -808,14 +808,6 @@ AC_ARG_WITH(exec-shell, AC_HELP_STRING([--with-exec-shell=SHELL], [Specify alter
         fi],
         [AC_DEFINE_UNQUOTED(EXECSHELL, "/bin/sh")])
 
-AC_ARG_ENABLE(exact-address, AC_HELP_STRING([--enable-exact-address], [Enable regeneration of email addresses]),
-        [if test $enableval = yes; then
-                AC_DEFINE(EXACT_ADDRESS,1,
-                  [Enable exact regeneration of email addresses as parsed?
-                   NOTE: this requires significant more memory when defined.])
-
-        fi])
-
 dnl -- start cache --
 AC_ARG_ENABLE(hcache, AC_HELP_STRING([--enable-hcache], [Enable header caching]),
 [if test x$enableval = xyes; then
