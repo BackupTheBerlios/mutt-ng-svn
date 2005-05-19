@@ -668,9 +668,7 @@ mutt_hcache_fetch(void *db, const char *filename,
 
   if (! crc32_matches(data, h->crc))
   {
-    if (data) { 
-      FREE(&data);
-    }
+    FREE(&data);
     return NULL;
   }
 
