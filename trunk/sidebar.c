@@ -60,38 +60,35 @@ void calc_boundaries (int menu)
     TopBuffy = 0;
 }
 
-static char *shortened_hierarchy (char *box)
+static char *shortened_hierarchy (char *box, int maxlen)
 {
   int dots = 0;
   char *last_dot = NULL;
-  int i, j;
+  int i, j, len = safe_strlen (box);
   char *new_box;
 
   if (!SidebarBoundary || !*SidebarBoundary)
     return (safe_strdup (box));
 
-  for (i = 0; i < safe_strlen (box); ++i) {
-    if (strchr (SidebarBoundary, box[i]))
-      ++dots;
-  }
-  for (i = safe_strlen (box)-1; i >= 0; i--)
+  for (i = 0; i < len; ++i) {
     if (strchr (SidebarBoundary, box[i])) {
+      ++dots;
       last_dot = &box[i];
-      break;
     }
+  }
+
   if (last_dot) {
     ++last_dot;
-    new_box = safe_malloc (safe_strlen (last_dot) + 2 * dots + 1);
+    new_box = safe_malloc (maxlen + 1);
     new_box[0] = box[0];
-    for (i = 1, j = 1; i < safe_strlen (box); ++i) {
+    for (i = 1, j = 1; j < maxlen && i < len; ++i) {
       if (strchr (SidebarBoundary, box[i])) {
         new_box[j++] = box[i];
         new_box[j] = 0;
-        if (&box[i + 1] != last_dot) {
+        if (&box[i + 1] != last_dot || j + safe_strlen (last_dot) > maxlen) {
           new_box[j++] = box[i + 1];
           new_box[j] = 0;
-        }
-        else {
+        } else {
           strcat (&new_box[j], last_dot);
           break;
         }
@@ -186,7 +183,7 @@ int make_sidebar_entry (char* box, int idx, size_t len)
     box = basename (box);
 
   if (option (OPTSHORTENHIERARCHY) && safe_strlen (box) > len-lencnt-1) {
-    box = shortened_hierarchy (box);
+    box = shortened_hierarchy (box, len-lencnt-1);
     shortened = 1;
   }
 
