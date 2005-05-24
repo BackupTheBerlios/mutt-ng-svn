@@ -23,7 +23,11 @@
 
 #ifdef USE_HCACHE
 
-#if HAVE_GDBM
+#if HAVE_QDBM
+#include <depot.h>
+#include <cabin.h>
+#include <villa.h>
+#elif HAVE_GDBM
 #include <gdbm.h>
 #elif HAVE_DB4
 #include <db.h>
@@ -44,8 +48,16 @@
 #include "md5.h"
 
 #include "lib/mem.h"
+#include "lib/debug.h"
 
-#if HAVE_GDBM
+#if HAVE_QDBM
+static struct
+  header_cache {
+  VILLA *db;
+  char *folder;
+  unsigned int crc;
+} HEADER_CACHE;
+#elif HAVE_GDBM
 static struct
   header_cache {
   GDBM_FILE db;
@@ -165,9 +177,6 @@ static unsigned char *dump_address (ADDRESS * a, unsigned char *d, int *off)
   d = dump_int (0xdeadbeef, d, off);
 
   while (a) {
-#ifdef EXACT_ADDRESS
-    d = dump_char (a->val, d, off);
-#endif
     d = dump_char (a->personal, d, off);
     d = dump_char (a->mailbox, d, off);
     d = dump_int (a->group, d, off);
@@ -188,9 +197,6 @@ static void restore_address (ADDRESS ** a, const unsigned char *d, int *off)
 
   while (counter) {
     *a = safe_malloc (sizeof (ADDRESS));
-#ifdef EXACT_ADDRESS
-    restore_char (&(*a)->val, d, off);
-#endif
     restore_char (&(*a)->personal, d, off);
     restore_char (&(*a)->mailbox, d, off);
     restore_int ((unsigned int *) &(*a)->group, d, off);
@@ -451,12 +457,6 @@ static int generate_crc32 ()
            safe_strlen ("HAVE_LANGINFO_CODESET"));
 #endif
 
-#if EXACT_ADDRESS
-  crc =
-    crc32 (crc, (unsigned char const *) "EXACT_ADDRESS",
-           safe_strlen ("EXACT_ADDRESS"));
-#endif
-
 #ifdef USE_POP
   crc =
     crc32 (crc, (unsigned char const *) "USE_POP", safe_strlen ("USE_POP"));
@@ -600,7 +600,129 @@ HEADER *mutt_hcache_restore (const unsigned char *d, HEADER ** oh)
   return h;
 }
 
-#if HAVE_GDBM
+#if HAVE_QDBM
+void *
+mutt_hcache_open(const char *path, const char *folder)
+{
+  struct header_cache *h = safe_calloc(1, sizeof (HEADER_CACHE));
+  int    flags = VL_OWRITER | VL_OCREAT;
+  h->db = NULL;
+  h->folder = safe_strdup(folder);
+  h->crc = generate_crc32();
+
+  if (!path || path[0] == '\0')
+  {
+    FREE(&h->folder);
+    FREE(&h);
+    return NULL;
+  }
+
+  path = mutt_hcache_per_folder(path, folder);
+
+  if (option(OPTHCACHECOMPRESS))
+    flags |= VL_OZCOMP;
+
+  h->db = vlopen(path, flags, VL_CMPLEX);
+  if (h->db)
+    return h;
+  else
+  {
+    FREE(&h->folder);
+    FREE(&h);
+
+    return NULL;
+  }
+}
+
+void
+mutt_hcache_close(void *db)
+{
+  struct header_cache *h = db;
+
+  if (!h)
+    return;
+
+  vlclose(h->db);
+  FREE(&h->folder);
+  FREE(&h);
+}
+
+void *
+mutt_hcache_fetch(void *db, const char *filename,
+		  size_t(*keylen) (const char *fn))
+{
+  struct header_cache *h = db;
+  char path[_POSIX_PATH_MAX];
+  int ksize;
+  char *data = NULL;
+
+  if (!h)
+    return NULL;
+
+  strncpy(path, h->folder, sizeof (path));
+  safe_strcat(path, sizeof (path), filename);
+
+  ksize = strlen(h->folder) + keylen(path + strlen(h->folder));
+
+  data = vlget(h->db, path, ksize, NULL);
+
+  if (! crc32_matches(data, h->crc))
+  {
+    FREE(&data);
+    return NULL;
+  }
+
+  return data;
+}
+
+int
+mutt_hcache_store(void *db, const char *filename, HEADER * header,
+		  unsigned long uid_validity,
+		  size_t(*keylen) (const char *fn))
+{
+  struct header_cache *h = db;
+  char path[_POSIX_PATH_MAX];
+  int ret;
+  int ksize, dsize;
+  char *data = NULL;
+
+  if (!h)
+    return -1;
+
+  strncpy(path, h->folder, sizeof (path));
+  safe_strcat(path, sizeof (path), filename);
+
+  ksize = strlen(h->folder) + keylen(path + strlen(h->folder));
+
+  data  = mutt_hcache_dump(db, header, &dsize, uid_validity);
+
+  ret = vlput(h->db, path, ksize, data, dsize, VL_DOVER);
+
+  FREE(&data);
+
+  return ret;
+}
+
+int
+mutt_hcache_delete(void *db, const char *filename,
+		   size_t(*keylen) (const char *fn))
+{
+  struct header_cache *h = db;
+  char path[_POSIX_PATH_MAX];
+  int ksize;
+
+  if (!h)
+    return -1;
+
+  strncpy(path, h->folder, sizeof (path));
+  safe_strcat(path, sizeof (path), filename);
+
+  ksize = strlen(h->folder) + keylen(path + strlen(h->folder));
+
+  return vlout(h->db, path, ksize);
+}
+
+#elif HAVE_GDBM
 
 void *mutt_hcache_open (const char *path, const char *folder)
 {
@@ -671,7 +793,7 @@ void *mutt_hcache_fetch (void *db, const char *filename,
   data = gdbm_fetch (h->db, key);
 
   if (!crc32_matches (data.dptr, h->crc)) {
-    FREE(data.dptr);
+    FREE(&data.dptr);
     return NULL;
   }
 
@@ -851,7 +973,7 @@ void *mutt_hcache_fetch (void *db, const char *filename,
   h->db->get (h->db, NULL, &key, &data, 0);
 
   if (!crc32_matches (data.data, h->crc)) {
-    FREE(data.data);
+    FREE(&data.data);
     return NULL;
   }
 
