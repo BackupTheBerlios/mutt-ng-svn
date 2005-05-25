@@ -70,10 +70,11 @@ Copyright (C) 1998-2002 Werner Koch <wk@isil.d.shuttle.de>\n\
 Copyright (C) 1999-2002 Brendan Cully <brendan@kublai.com>\n\
 Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n\
 Copyright (C) 2000-2002 Edmund Grimley Evans <edmundo@rano.org>\n\n\
-Parts were written/modified by:\n\
-Andreas Krennmair <ak@synflood.at>\n\
-Nico Golde <nico@ngolde.de>\n\
-Rocco Rutte <pdmef@cs.tu-berlin.de>\n\
+Copyright (C) 2005:\n\
+  Parts were written/modified by:\n\
+     Andreas Krennmair <ak@synflood.at>\n\
+     Nico Golde <nico@ngolde.de>\n\
+     Rocco Rutte <pdmef@cs.tu-berlin.de>\n\
 \n\
 Lots of others not mentioned here contributed lots of code,\n\
 fixes, and suggestions.\n\

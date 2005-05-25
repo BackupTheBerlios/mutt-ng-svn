@@ -934,7 +934,7 @@ int mutt_update_list_file (char *filename, char *section, char *key,
 
 void mutt_version (void)
 {
-  mutt_message ("Mutt-ng %s (%s)", MUTT_VERSION, ReleaseDate);
+  mutt_message ("Mutt-ng %s (%s) based on Mutt 1.5.9", MUTT_VERSION, ReleaseDate);
 }
 
 void mutt_edit_content_type (HEADER * h, BODY * b, FILE * fp)
