@@ -4,7 +4,7 @@ if aclocal -I m4 && autoheader && (cd m4 && make -f Makefile.am.in ) \
   && automake --include-deps && autoconf
 then
   echo
-  echo "The configure script for mutt-ng was successfully prepared."
+  echo "The configure script for Mutt-ng was successfully prepared."
   echo "Continue with \"./configure [your options]\"."
   echo
 else
