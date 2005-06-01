@@ -6,7 +6,7 @@
 #
 # Usage: muttng-rpmbuild.sh
 #
-# Copyright (C) 2005  muttng-rpmbuild.sh 1.10  Iain Lea  iain@bricbrac.de
+# Copyright (c) 2005  muttng-rpmbuild.sh 1.20  Iain Lea  iain@bricbrac.de
 #
 #   This program is free software; you can redistribute it and/or 
 #   modify it under the terms of the GNU General Public License as
@@ -29,6 +29,8 @@
 #   ...
 #
 # Changelog:
+#   1.20
+#   - changed website to download from to www.muttng.org
 #   1.10
 #   - added cosmetic changes concerning sent mail
 #   - added rm -rf $SRCDIR/muttng-*  and more cleanup on exit
@@ -39,7 +41,7 @@
 #   - add section of Changelog/SVN to sent mail if successful
 
 # Local site specific variables. Change to suit your site!
-ADDR=root
+ADDR=iain@bricbrac.de
 MAIL=mutt
 ARCH=i386
 TMPDIR=/tmp
@@ -47,7 +49,7 @@ DSTDIR=/var/www/iainlea.dyndns.org/software/muttng
 BLDDIR=/usr/src/redhat
 #
 # Remote site specific variables. Should not need changing!
-SITE=http://mutt-ng.berlios.de/snapshots
+SITE=http://nion.modprobe.de/mutt-ng/snapshots/
 FILE=muttng-latest.tar.gz
 #
 # You should not need to change anything below this line!

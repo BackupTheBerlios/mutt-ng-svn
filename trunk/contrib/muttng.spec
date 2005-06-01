@@ -1,12 +1,12 @@
 Summary: A text mode mail user agent.
 Name: muttng
-Version: 20050314
+Version: 20050530
 Release: 2
 Serial: 1
 License: GPL
 Group: Applications/Internet
-Source: http://mutt-ng.berlios.de/snapshots/%{name}-%{version}.tar.gz
-Url: http://mutt-ng.berlios.de/
+Source: http://nion.modprobe.de/mutt-ng/snapshots/%{name}-%{version}.tar.gz
+Url: http://www.muttng.org/
 Requires: slang >= 0.99.38, smtpdaemon, webclient, mailcap, gettext
 Buildroot: %{_tmppath}/%{name}-%{version}-%{release}-root
 %{!?nossl:BuildPrereq: openssl-devel}
@@ -73,7 +73,7 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(-,root,root)
 %config /etc/Muttngrc
 %config /etc/muttng-mime.types
-%doc ABOUT-NLS BEWARE ChangeLog* COPYRIGHT GPL INSTALL NEWS README* TODO* UPGRADING 
+%doc ABOUT-NLS ChangeLog* COPYRIGHT GPL INSTALL NEWS README* TODO* UPGRADING 
 %doc doc/applying-patches.txt doc/*-notes.txt doc/PGP-Notes.txt doc/manual* contrib/* 
 %{_bindir}/muttng
 %{_bindir}/muttngbug
