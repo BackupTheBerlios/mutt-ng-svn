@@ -321,6 +321,15 @@ struct option_t MuttVars[] = {
    ** \fTDelivered-To:\fP header fields when bouncing messages.
    ** Postfix users may wish to \fIunset\fP this variable.
    */
+  { "braille_friendly", DT_BOOL, R_NONE, OPTBRAILLEFRIENDLY, 0 },
+  /*
+   ** .pp
+   ** When this variable is set, mutt will place the cursor at the beginning
+   ** of the current line in menus, even when the arrow_cursor variable
+   ** is unset, making it easier for blind persons using Braille displays to 
+   ** follow these menus.  The option is disabled by default because many 
+   ** visual terminals don't permit making the cursor invisible.
+   */
 #ifdef USE_NNTP
   {"catchup_newsgroup", DT_QUAD, R_NONE, OPT_CATCHUP, M_ASKYES},
   /*

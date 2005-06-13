@@ -220,8 +220,11 @@ void menu_redraw_index (MUTTMENU * menu)
           attrset (menu->color (i));
           addch (' ');
         }
-        else
-          move (i - menu->top + menu->offset, SidebarWidth + 3);
+        else {
+          attrset (menu->color (i));
+          move (i - menu->top + menu->offset, SidebarWidth);
+          addstr ("   ");
+        }
 
         print_enriched_string (menu->color (i), (unsigned char *) buf, 1);
         SETCOLOR (MT_COLOR_NORMAL);
@@ -828,12 +831,15 @@ int mutt_menuLoop (MUTTMENU * menu)
 
     menu->oldcurrent = menu->current;
 
-
-    /* move the cursor out of the way */
-    move (menu->current - menu->top + menu->offset,
-          (option (OPTARROWCURSOR) ? 2 : COLS - 1));
+    if (option (OPTARROWCURSOR))
+      move (menu->current - menu->top + menu->offset, 2);
+    else if (option (OPTBRAILLEFRIENDLY))
+      move (menu->current - menu->top + menu->offset, 0);
+    else
+      move (menu->current - menu->top + menu->offset, COLS - 1);
 
     mutt_refresh ();
+
 
     /* try to catch dialog keys before ops */
     if (menu->dialog && menu_dialog_dokey (menu, &i) == 0)

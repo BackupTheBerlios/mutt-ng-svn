@@ -1,3 +1,13 @@
+2005-06-12 18:28:29  Tamotsu Takahashi  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* menu.c: Fix background colors for $arrow_cursor.
+
+2005-06-12 18:24:31  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* curs_main.c, init.h, menu.c, mutt.h: Add $braille_friendly.
+	Behavior originally suggested by Sébastien Hinderer
+	<Sebastien.Hinderer@libertysurf.fr>.
+
 2005-04-10 09:37:51  Johan Svedberg  <johan@svedberg.pp.se>  (roessler)
 
 	* po/sv.po: update
@@ -409,7 +419,7 @@
 2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
                                  
      * hcache.c: - make hcache.c conform to mutt codingstyle
-     - use $Id: ChangeLog,v 3.421 2005/04/10 09:38:17 roessler Exp $ CVS keyword instead of %K% BitKeeper keyword
+     - use $Id: ChangeLog,v 3.423 2005/06/12 18:29:03 roessler Exp $ CVS keyword instead of %K% BitKeeper keyword
                                  
 2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
 
