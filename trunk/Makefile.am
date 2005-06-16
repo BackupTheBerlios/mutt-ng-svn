@@ -88,7 +88,7 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	mbyte.h	lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h Muttngrc.head Muttngrc \
 	makedoc.c stamp-doc-rc README.SSL smime.h\
 	muttngbug pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh	\
-	ChangeLog.old mkchangelog.sh cvslog2changelog.pl mutt_idna.h \
+	mkchangelog.sh cvslog2changelog.pl mutt_idna.h \
 	snprintf.c regex.c mutt_libesmtp.h crypt-gpgme.h
 
 muttng_dotlock_SOURCES = mutt_dotlock.c

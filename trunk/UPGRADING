@@ -10,6 +10,11 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-06-16:
+
+  Pine compatibility for naming IMAP mailboxes has been removed, only
+  the common imap[s]:// syntax remains.
+
 2005-05-17:
 
   Changes due to better integration of qdbm support w/ header caching:

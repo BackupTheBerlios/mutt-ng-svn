@@ -69,10 +69,8 @@ int imap_parse_path (const char *path, IMAP_MBOX * mx)
   static unsigned short ImapPort = 0;
   static unsigned short ImapsPort = 0;
   struct servent *service;
-  char tmp[128];
   ciss_url_t url;
   char *c;
-  int n;
 
   if (!ImapPort) {
     service = getservbyname ("imap", "tcp");
@@ -98,59 +96,19 @@ int imap_parse_path (const char *path, IMAP_MBOX * mx)
 
   c = safe_strdup (path);
   url_parse_ciss (&url, c);
-  if (url.scheme == U_IMAP || url.scheme == U_IMAPS) {
-    if (mutt_account_fromurl (&mx->account, &url) < 0) {
-      FREE (&c);
-      return -1;
-    }
 
-    mx->mbox = safe_strdup (url.path);
-
-    if (url.scheme == U_IMAPS)
-      mx->account.flags |= M_ACCT_SSL;
-
+  if (!(url.scheme == U_IMAP || url.scheme == U_IMAPS) ||
+      mutt_account_fromurl (&mx->account, &url) < 0) {
     FREE (&c);
+    return -1;
   }
-  /* old PINE-compatibility code */
-  else {
-    FREE (&c);
-    if (sscanf (path, "{%127[^}]}", tmp) != 1)
-      return -1;
 
-    c = strchr (path, '}');
-    if (!c)
-      return -1;
-    else
-      /* walk past closing '}' */
-      mx->mbox = safe_strdup (c + 1);
+  mx->mbox = safe_strdup (url.path);
 
-    if ((c = strrchr (tmp, '@'))) {
-      *c = '\0';
-      strfcpy (mx->account.user, tmp, sizeof (mx->account.user));
-      strfcpy (tmp, c + 1, sizeof (tmp));
-      mx->account.flags |= M_ACCT_USER;
-    }
+  if (url.scheme == U_IMAPS)
+    mx->account.flags |= M_ACCT_SSL;
 
-    if ((n = sscanf (tmp, "%127[^:/]%127s", mx->account.host, tmp)) < 1) {
-      debug_print (1, ("NULL host in %s\n", path));
-      FREE (&mx->mbox);
-      return -1;
-    }
-
-    if (n > 1) {
-      if (sscanf (tmp, ":%hu%127s", &(mx->account.port), tmp) >= 1)
-        mx->account.flags |= M_ACCT_PORT;
-      if (sscanf (tmp, "/%s", tmp) == 1) {
-        if (!ascii_strncmp (tmp, "ssl", 3))
-          mx->account.flags |= M_ACCT_SSL;
-        else {
-          debug_print (1, ("Unknown connection type in %s\n", path));
-          FREE (&mx->mbox);
-          return -1;
-        }
-      }
-    }
-  }
+  FREE (&c);
 
 #if defined(USE_SSL) || defined(USE_GNUTLS)
   if (option (OPTIMAPFORCESSL))

@@ -24,8 +24,6 @@ int imap_is_magic (const char* path, struct stat* st) {
   url_scheme_t s;
   if (!path || !*path)
     return (-1);
-  if (*path == '{')     /* painpine compatibility */
-    return (M_IMAP);
   s = url_check_scheme (NONULL (path));
   return ((s == U_IMAP || s == U_IMAPS) ? M_IMAP : -1);
 }
