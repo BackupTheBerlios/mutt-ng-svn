@@ -106,7 +106,7 @@ static const char* sidebar_number_format (char* dest, size_t destlen, char op,
   char tmp[SHORT_STRING];
   BUFFY* b = (BUFFY*) Incoming->data[data];
   int opt = flags & M_FORMAT_OPTIONAL;
-  int c = Context && safe_strcmp (Context->path, b->path) == 0;
+  int c = Context && str_eq (Context->path, b->path);
 
   switch (op) {
     case 'c':
@@ -162,8 +162,7 @@ int make_sidebar_entry (char* box, int idx, size_t len)
     SidebarWidth = COLS;
 
   if (option (OPTSIDEBARNEWMAILONLY) && box && Context && Context->path && 
-      safe_strcmp (Context->path, box) != 0 && 
-      ((BUFFY*) Incoming->data[idx])->new == 0)
+      !str_eq (Context->path, box) && ((BUFFY*) Incoming->data[idx])->new == 0)
     /* if $sidebar_newmail_only is set, don't display the
      * box only if it's not the currently opened
      * (i.e. always display the currently opened) */

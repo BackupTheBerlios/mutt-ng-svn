@@ -128,18 +128,18 @@ static char *get_field (char *s)
       break;
     }
   }
-  mutt_remove_trailing_ws (s);
+  str_skip_trailws (s);
   return ch;
 }
 
 static int get_field_text (char *field, char **entry,
                            char *type, char *filename, int line)
 {
-  field = mutt_skip_whitespace (field);
+  field = str_skip_initws (field);
   if (*field == '=') {
     if (entry) {
       field++;
-      field = mutt_skip_whitespace (field);
+      field = str_skip_initws (field);
       str_replace (entry, field);
     }
     return 1;

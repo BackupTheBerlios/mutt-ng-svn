@@ -618,8 +618,8 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
         if (mutt_get_field ("Newsgroups: ", buf, sizeof (buf), 0) == 0
             && buf[0]) {
           FREE (&msg->env->newsgroups);
-          mutt_remove_trailing_ws (buf);
-          msg->env->newsgroups = safe_strdup (mutt_skip_whitespace (buf));
+          str_skip_trailws (buf);
+          msg->env->newsgroups = safe_strdup (str_skip_initws (buf));
           move (HDR_TO, HDR_XOFFSET);
           clrtoeol ();
           if (msg->env->newsgroups)
@@ -636,8 +636,8 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
         if (mutt_get_field ("Followup-To: ", buf, sizeof (buf), 0) == 0
             && buf[0]) {
           FREE (&msg->env->followup_to);
-          mutt_remove_trailing_ws (buf);
-          msg->env->followup_to = safe_strdup (mutt_skip_whitespace (buf));
+          str_skip_trailws (buf);
+          msg->env->followup_to = safe_strdup (str_skip_initws (buf));
           move (HDR_CC, HDR_XOFFSET);
           clrtoeol ();
           if (msg->env->followup_to)

@@ -199,7 +199,7 @@ static void pgp_copy_clearsigned (FILE * fpin, STATE * s, char *charset)
       break;
 
     if (armor_header) {
-      char *p = mutt_skip_whitespace (buf);
+      char *p = str_skip_initws (buf);
 
       if (*p == '\0')
         armor_header = 0;

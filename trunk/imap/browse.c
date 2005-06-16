@@ -55,7 +55,7 @@ int imap_browse (char *path, struct browser_state *state)
   int i;
   int nsup;
   char ctmp;
-  int nns;
+  int nns = 0;
   char *cur_folder;
   short showparents = 0;
   int noselect;

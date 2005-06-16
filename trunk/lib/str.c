@@ -175,14 +175,20 @@ const char *str_isstr (const char *haystack, const char *needle)
   return NULL;
 }
 
-char *mutt_skip_whitespace (char *p)
-{
-  SKIPWS (p);
-  return p;
+int str_eq (const char* s1, const char* s2) {
+  int l = safe_strlen (s1);
+
+  if (l != safe_strlen (s2))
+    return (0);
+  return (safe_strncmp (s1, s2, l) == 0);
 }
 
-void mutt_remove_trailing_ws (char *s)
-{
+char* str_skip_initws (char* s) {
+  SKIPWS (s);
+  return (s);
+}
+
+void str_skip_trailws (char *s) {
   char *p;
 
   for (p = s + safe_strlen (s) - 1; p >= s && ISSPACE (*p); p--)

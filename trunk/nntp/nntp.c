@@ -115,7 +115,7 @@ static int nntp_connect_and_auth (NNTP_SERVER * serv)
     mutt_message (_("Connected to %s. Posting NOT ok."), conn->account.host);
   else {
     mutt_socket_close (conn);
-    mutt_remove_trailing_ws (buf);
+    str_skip_trailws (buf);
     mutt_error ("%s", buf);
     sleep (2);
     return -1;

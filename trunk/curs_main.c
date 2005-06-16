@@ -1227,7 +1227,6 @@ int mutt_index_menu (void)
       else
 #endif
         mutt_expand_path (buf, sizeof (buf));
-      sidebar_set_current (buf);
       if (mx_get_magic (buf) <= 0) {
         mutt_error (_("%s is not a mailbox."), buf);
         break;
@@ -1272,6 +1271,7 @@ int mutt_index_menu (void)
       }
       else
         menu->current = 0;
+      sidebar_set_current (buf);
 
 #ifdef USE_NNTP
       /* buffy_check() must be done with mail-reader mode! */

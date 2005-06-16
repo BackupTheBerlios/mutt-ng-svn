@@ -178,7 +178,7 @@ int buffy_lookup (const char* path) {
   if (list_empty(Incoming) || !path || !*path)
     return (-1);
   for (i = 0; i < Incoming->length; i++) {
-    if (safe_strcmp (((BUFFY*) Incoming->data[i])->path, path) == 0)
+    if (str_eq (((BUFFY*) Incoming->data[i])->path, path) )
       return (i);
   }
   return (-1);
@@ -198,7 +198,7 @@ int buffy_parse_mailboxes (BUFFER * path, BUFFER * s, unsigned long data,
     mutt_extract_token (path, s, 0);
     strfcpy (buf, path->data, sizeof (buf));
 
-    if (data == M_UNMAILBOXES && safe_strcmp (buf, "*") == 0) {
+    if (data == M_UNMAILBOXES && str_eq (buf, "*") == 0) {
       list_del (&Incoming, buffy_free);
       return 0;
     }
@@ -330,8 +330,8 @@ int buffy_check (int force)
     /* check to see if the folder is the currently selected folder
      * before polling */
     if (!Context || !Context->path || (local ? (sb.st_dev != contex_sb.st_dev ||
-                                                sb.st_ino != contex_sb.st_ino) :
-                                       safe_strcmp (tmp->path, Context->path))) {
+                                                sb.st_ino != contex_sb.st_ino) : 
+                                       !str_eq (tmp->path, Context->path))) {
       switch (tmp->magic) {
       case M_MBOX:
       case M_MMDF:
@@ -590,7 +590,8 @@ void buffy_next (char *s, size_t slen)
   i = 1 + buffy_lookup (s);
   for (l=0; l < Incoming->length; l++) {
     c = (l+i) % Incoming->length;
-    if (((BUFFY*) Incoming->data[c])->new > 0)
+    if ((!Context || !Context->path || !str_eq (((BUFFY*) Incoming->data[c])->path, Context->path)) &&
+        ((BUFFY*) Incoming->data[c])->new > 0)
       break;
   }
   if (l >= Incoming->length) {

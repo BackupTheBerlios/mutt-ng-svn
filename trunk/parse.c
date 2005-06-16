@@ -1037,8 +1037,8 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
 #ifdef USE_NNTP
     else if (!safe_strcasecmp (line + 1, "ollowup-to")) {
       if (!e->followup_to) {
-        mutt_remove_trailing_ws (p);
-        e->followup_to = safe_strdup (mutt_skip_whitespace (p));
+        str_skip_trailws (p);
+        e->followup_to = safe_strdup (str_skip_initws (p));
       }
       matched = 1;
     }
@@ -1120,8 +1120,8 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
   case 'n':
     if (!safe_strcasecmp (line + 1, "ewsgroups")) {
       FREE (&e->newsgroups);
-      mutt_remove_trailing_ws (p);
-      e->newsgroups = safe_strdup (mutt_skip_whitespace (p));
+      str_skip_trailws (p);
+      e->newsgroups = safe_strdup (str_skip_initws (p));
       matched = 1;
     }
     break;

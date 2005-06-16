@@ -60,6 +60,9 @@ char *str_substrcpy (char*, const char*, const char*, size_t);
 char *str_substrdup (const char*, const char*);
 void str_replace (char**, const char*);
 void str_adjust (char**);
+int str_eq (const char*, const char*);
 const char *str_isstr (const char*, const char*);
+char* str_skip_initws (char*);
+void str_skip_trailws (char*);
 
 #endif /* !_LIB_STR_H */

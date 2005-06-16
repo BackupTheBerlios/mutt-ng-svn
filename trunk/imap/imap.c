@@ -905,7 +905,7 @@ int imap_sync_message (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
   if (mutt_bit_isset (idata->rights, ACL_WRITE))
     imap_add_keywords (flags, hdr, idata->flags, sizeof (flags));
 
-  mutt_remove_trailing_ws (flags);
+  str_skip_trailws (flags);
 
   /* UW-IMAP is OK with null flags, Cyrus isn't. The only solution is to
    * explicitly revoke all system flags (if we have permission) */
@@ -916,7 +916,7 @@ int imap_sync_message (IMAP_DATA *idata, HEADER *hdr, BUFFER *cmd,
     imap_set_flag (idata, ACL_WRITE, 1, "\\Answered ", flags, sizeof (flags));
     imap_set_flag (idata, ACL_DELETE, 1, "\\Deleted ", flags, sizeof (flags));
 
-    mutt_remove_trailing_ws (flags);
+    str_skip_trailws (flags);
 
     mutt_buffer_addstr (cmd, " -FLAGS.SILENT (");
   } else

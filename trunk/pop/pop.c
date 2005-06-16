@@ -49,7 +49,6 @@ static pop_query_status pop_read_header (POP_DATA * pop_data, HEADER * h)
   FILE *f;
   int index;
   pop_query_status ret;
-  cmd_status status;
   long length;
   char buf[LONG_STRING];
   char tempfile[_POSIX_PATH_MAX];
