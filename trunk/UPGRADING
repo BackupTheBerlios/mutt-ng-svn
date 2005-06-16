@@ -15,6 +15,23 @@ sources of information.
   Pine compatibility for naming IMAP mailboxes has been removed, only
   the common imap[s]:// syntax remains.
 
+  The first "round" of removing synonym variables is completed. The
+  replacements for the next round are: ask_followup_to ->
+  nntp_ask_followup_to, ask_x_comment_to -> nntp_ask_x_comment_to,
+  catchup_newsgroup -> nntp_catchup, followup_to_poster ->
+  nntp_followup_to_poster, group_index_format ->
+  nntp_group_index_format, inews -> nntp_inews, mime_subject ->
+  nntp_mime_subject, news_cache_dir -> nntp_cache_dir, news_server ->
+  nntp_host, newsrc -> nntp_newsrc, nntp_poll -> nntp_mail_check,
+  pop_checkinterval -> pop_mail_check, post_moderated ->
+  nntp_post_moderated, save_unsubscribed -> nntp_save_unsubscribed,
+  show_new_news -> nntp_show_new_news, show_only_unread ->
+  nntp_show_only_unread, x_comment_to -> nntp_x_comment_to. Please use
+  the contrib/update-config.pl script to update.
+
+  Due to frequent trouble, $imap_mail_check now defaults to 300 seconds
+  (5 minutes) rather than 5 seconds.
+
 2005-05-17:
 
   Changes due to better integration of qdbm support w/ header caching:

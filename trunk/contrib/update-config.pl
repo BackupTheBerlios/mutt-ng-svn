@@ -8,6 +8,7 @@
 use strict;
 
 my %opts = (
+  # left from the first run of cleanup+removal
   " edit_hdrs"                   => " edit_headers",
   " forw_decode"                 => " forward_decode",
   " forw_format"                 => " forward_format",
@@ -28,7 +29,25 @@ my %opts = (
   " smime_sign_as"               => " smime_default_key",
   " post_indent_str"             => " post_indent_string",
   " print_cmd"                   => " print_command",
-  " shorten_hierarchy"           => " sidebar_shorten_hierarchy"
+  " shorten_hierarchy"           => " sidebar_shorten_hierarchy",
+  # current run
+  "ask_followup_to"              => "nntp_ask_followup_to", 
+  "ask_x_comment_to"             => "nntp_ask_x_comment_to", 
+  "catchup_newsgroup"            => "nntp_catchup", 
+  "followup_to_poster"           => "nntp_followup_to_poster", 
+  "group_index_format"           => "nntp_group_index_format", 
+  "inews"                        => "nntp_inews", 
+  "mime_subject"                 => "nntp_mime_subject", 
+  "news_cache_dir"               => "nntp_cache_dir", 
+  "news_server"                  => "nntp_host", 
+  "newsrc"                       => "nntp_newsrc", 
+  "nntp_poll"                    => "nntp_mail_check", 
+  "pop_checkinterval"            => "pop_mail_check", 
+  "post_moderated"               => "nntp_post_moderated", 
+  "save_unsubscribed"            => "nntp_save_unsubscribed", 
+  "show_new_news"                => "nntp_show_new_news", 
+  "show_only_unread"             => "nntp_show_only_unread", 
+  "x_comment_to"                 => "nntp_x_comment_to"
 );
 
 if (@ARGV == 0) {

@@ -210,7 +210,8 @@ struct option_t MuttVars[] = {
    ** This variable is valid only if $$strict_mime is unset.
    */
 #ifdef USE_NNTP
-  {"ask_follow_up", DT_BOOL, R_NONE, OPTASKFOLLOWUP, 0},
+  {"ask_followup_to", DT_SYN, R_NONE, UL "nntp_ask_followup_to", 0},
+  {"nntp_ask_follow_up", DT_BOOL, R_NONE, OPTASKFOLLOWUP, 0},
   /*
    ** .pp
    ** Availability: NNTP
@@ -219,7 +220,8 @@ struct option_t MuttVars[] = {
    ** If \fIset\fP, Mutt-ng will prompt you for the \fTFollowup-To:\fP header
    ** field before editing the body of an outgoing news article.
    */
-  {"ask_x_comment_to", DT_BOOL, R_NONE, OPTASKXCOMMENTTO, 0},
+  {"ask_x_comment_to", DT_SYN, R_NONE, UL "nntp_ask_x_comment_to", 0},
+  {"nntp_ask_x_comment_to", DT_BOOL, R_NONE, OPTASKXCOMMENTTO, 0},
   /*
    ** .pp
    ** Availability: NNTP
@@ -331,7 +333,8 @@ struct option_t MuttVars[] = {
    ** visual terminals don't permit making the cursor invisible.
    */
 #ifdef USE_NNTP
-  {"catchup_newsgroup", DT_QUAD, R_NONE, OPT_CATCHUP, M_ASKYES},
+  {"catchup_newsgroup", DT_SYN, R_NONE, UL "nntp_catchup", 0},
+  {"nntp_catchup", DT_QUAD, R_NONE, OPT_CATCHUP, M_ASKYES},
   /*
    ** .pp
    ** Availability: NNTP
@@ -561,9 +564,6 @@ struct option_t MuttVars[] = {
    ** This option allows you to edit the header of your outgoing messages
    ** along with the body of your message.
    */
-  {"edit_hdrs", DT_SYN, R_NONE, UL "edit_headers", 0},
-  /*
-   */
   {"editor", DT_PATH, R_NONE, UL &Editor, 0},
   /*
    ** .pp
@@ -685,7 +685,8 @@ struct option_t MuttVars[] = {
    ** of the same email for you.
    */
 #ifdef USE_NNTP
-  {"followup_to_poster", DT_QUAD, R_NONE, OPT_FOLLOWUPTOPOSTER, M_ASKYES},
+  {"followup_to_poster", DT_SYN, R_NONE, UL "nntp_followup_to_poster", 0},
+  {"nntp_followup_to_poster", DT_QUAD, R_NONE, OPT_FOLLOWUPTOPOSTER, M_ASKYES},
   /*
    ** .pp
    ** Availability: NNTP
@@ -724,9 +725,6 @@ struct option_t MuttVars[] = {
    ** This variable is only used, if ``$$mime_forward'' is \fIunset\fP,
    ** otherwise ``$$mime_forward_decode'' is used instead.
    */
-  {"forw_decode", DT_SYN, R_NONE, UL "forward_decode", 0},
-  /*
-   */
   {"forward_edit", DT_QUAD, R_NONE, OPT_FORWEDIT, M_YES},
   /*
    ** .pp
@@ -740,18 +738,12 @@ struct option_t MuttVars[] = {
    ** This variable controls the default subject when forwarding a message.
    ** It uses the same format sequences as the ``$$index_format'' variable.
    */
-  {"forw_format", DT_SYN, R_NONE, UL "forward_format", 0},
-  /*
-   */
   {"forward_quote", DT_BOOL, R_NONE, OPTFORWQUOTE, 0},
   /*
    ** .pp
    ** When \fIset\fP forwarded messages included in the main body of the
    ** message (when ``$$mime_forward'' is \fIunset\fP) will be quoted using
    ** ``$$indent_string''.
-   */
-  {"forw_quote", DT_SYN, R_NONE, UL "forward_quote", 0},
-  /*
    */
   {"from", DT_ADDR, R_NONE, UL &From, UL 0},
   /*
@@ -783,7 +775,8 @@ struct option_t MuttVars[] = {
    ** ``Franklin'' to ``Franklin, Steve''.
    */
 #ifdef USE_NNTP
-  {"group_index_format", DT_STR, R_BOTH, UL &GroupFormat, UL "%4C %M%N %5s  %-45.45f %d"},
+  {"group_index_format", DT_SYN, R_NONE, UL "nntp_group_index_format", 0},
+  {"nntp_group_index_format", DT_STR, R_BOTH, UL &GroupFormat, UL "%4C %M%N %5s  %-45.45f %d"},
   /*
    ** .pp
    ** Availability: NNTP
@@ -806,9 +799,6 @@ struct option_t MuttVars[] = {
    ** .te
    */
 #endif
-  {"hdr_format", DT_SYN, R_NONE, UL "index_format", 0},
-  /*
-   */
   {"hdrs", DT_BOOL, R_NONE, OPTHDRS, 1},
   /*
    ** .pp
@@ -1007,15 +997,12 @@ struct option_t MuttVars[] = {
    ** only subscribed folders or all folders.  This can be toggled in the
    ** IMAP browser with the \fItoggle-subscribed\fP function.
    */
-  {"imap_mail_check", DT_NUM, R_NONE, UL &ImapBuffyTimeout, 5},
+  {"imap_mail_check", DT_NUM, R_NONE, UL &ImapBuffyTimeout, 300},
   /*
    ** .pp
    ** This variable configures how often (in seconds) Mutt-ng should look for
    ** new mail in IMAP folders. This is split from the ``$mail_check'' variable
    ** to generate less traffic and get more accurate information for local folders.
-   ** .pp
-   ** It defaults to the default value of ``$mail_check'' which is 5 seconds. But
-   ** you may want to increase it.
    */
   {"imap_pass", DT_STR, R_NONE, UL &ImapPass, UL 0},
   /*
@@ -1113,9 +1100,6 @@ struct option_t MuttVars[] = {
    ** message to which you are replying.  You are strongly encouraged not to
    ** change this value, as it tends to agitate the more fanatical netizens.
    */
-  {"indent_str", DT_SYN, R_NONE, UL "indent_string", 0},
-  /*
-   */
   {"index_format", DT_STR, R_BOTH, UL &HdrFmt, UL "%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"},
   /*
    ** .pp
@@ -1185,7 +1169,8 @@ struct option_t MuttVars[] = {
    ** See also: ``$$to_chars''.
    */
 #ifdef USE_NNTP
-  {"inews", DT_PATH, R_NONE, UL &Inews, UL ""},
+  {"inews", DT_SYN, R_NONE, UL "nntp_inews", 0},
+  {"nntp_inews", DT_PATH, R_NONE, UL &Inews, UL ""},
   /*
    ** .pp
    ** Availability: NNTP
@@ -1508,10 +1493,6 @@ struct option_t MuttVars[] = {
    ** forwarding a message while ``$$mime_forward'' is \fIset\fP. Otherwise
    ** ``$$forward_decode'' is used instead.
    */
-  {"mime_fwd", DT_SYN, R_NONE, UL "mime_forward", 0},
-  /*
-   */
-
   {"mime_forward_rest", DT_QUAD, R_NONE, OPT_MIMEFWDREST, M_YES},
   /*
    ** .pp
@@ -1521,7 +1502,8 @@ struct option_t MuttVars[] = {
    */
 
 #ifdef USE_NNTP
-  {"mime_subject", DT_BOOL, R_NONE, OPTMIMESUBJECT, 1},
+  {"mime_subject", DT_SYN, R_NONE, UL "nntp_mime_subject", 0},
+  {"nntp_mime_subject", DT_BOOL, R_NONE, OPTMIMESUBJECT, 1},
   /*
    ** .pp
    ** Availability: NNTP
@@ -1578,9 +1560,6 @@ struct option_t MuttVars[] = {
    ** attachments of type \fTmessage/rfc822\fP.  For a full listing of defined
    ** \fTprintf(3)\fP-like sequences see the section on ``$$index_format''.
    */
-  {"msg_format", DT_SYN, R_NONE, UL "message_format", 0},
-  /*
-   */
   {"msgid_format", DT_STR, R_NONE, UL &MsgIdFormat, UL "%Y%m%d%h%M%s.G%P%p"},
   /*
    ** .pp
@@ -1618,7 +1597,8 @@ struct option_t MuttVars[] = {
    ** deeper threads to fit on the screen.
    */
 #ifdef USE_NNTP
-  {"news_cache_dir", DT_PATH, R_NONE, UL &NewsCacheDir, UL "~/.muttng"},
+  {"news_cache_dir", DT_SYN, R_NONE, UL "nntp_cache_dir", 0},
+  {"nntp_cache_dir", DT_PATH, R_NONE, UL &NewsCacheDir, UL "~/.muttng"},
   /*
    ** .pp
    ** Availability: NNTP
@@ -1631,7 +1611,8 @@ struct option_t MuttVars[] = {
    ** As for the header caching in connection with IMAP and/or Maildir,
    ** this drastically increases speed and lowers traffic.
    */
-  {"news_server", DT_STR, R_NONE, UL &NewsServer, 0},
+  {"news_server", DT_SYN, R_NONE, UL "nntp_host", 0},
+  {"nntp_host", DT_STR, R_NONE, UL &NewsServer, 0},
   /*
    ** .pp
    ** Availability: NNTP
@@ -1652,7 +1633,8 @@ struct option_t MuttVars[] = {
    ** presents a security risk since the superuser of your machine may read it
    ** regardless of the file's permissions.
    */
-  {"newsrc", DT_PATH, R_NONE, UL &NewsRc, UL "~/.newsrc"},
+  {"newsrc", DT_SYN, R_NONE, UL "nntp_newsrc", 0},
+  {"nntp_newsrc", DT_PATH, R_NONE, UL &NewsRc, UL "~/.newsrc"},
   /*
    ** .pp
    ** Availability: NNTP
@@ -1711,7 +1693,8 @@ struct option_t MuttVars[] = {
    ** presents a security risk since the superuser of your machine may read it
    ** regardless of the file's permissions.
    */
-  {"nntp_poll", DT_NUM, R_NONE, UL &NewsPollTimeout, 60},
+  {"nntp_poll", DT_SYN, R_NONE, UL "nntp_mail_check", 0},
+  {"nntp_mail_check", DT_NUM, R_NONE, UL &NewsPollTimeout, 60},
   /*
    ** .pp
    ** Availability: NNTP
@@ -1782,7 +1765,6 @@ struct option_t MuttVars[] = {
    ** when you are at the end of a message and invoke the \fInext-page\fP
    ** function.
    */
-  {"pgp_autosign", DT_SYN, R_NONE, UL "crypt_autosign", 0},
   {"crypt_autosign", DT_BOOL, R_NONE, OPTCRYPTAUTOSIGN, 0},
   /*
    ** .pp
@@ -1794,7 +1776,6 @@ struct option_t MuttVars[] = {
    ** be overridden by use of the \fIsmime-menu\fP.
    ** (Crypto only)
    */
-  {"pgp_autoencrypt", DT_SYN, R_NONE, UL "crypt_autoencrypt", 0},
   {"crypt_autoencrypt", DT_BOOL, R_NONE, OPTCRYPTAUTOENCRYPT, 0},
   /*
    ** .pp
@@ -1815,7 +1796,6 @@ struct option_t MuttVars[] = {
    ** if you want to play interesting key selection games.
    ** (PGP only)
    */
-  {"pgp_replyencrypt", DT_SYN, R_NONE, UL "crypt_replyencrypt", 1},
   {"crypt_replyencrypt", DT_BOOL, R_NONE, OPTCRYPTREPLYENCRYPT, 1},
   /*
    ** .pp
@@ -1823,7 +1803,6 @@ struct option_t MuttVars[] = {
    ** encrypted.
    ** (Crypto only)
    */
-  {"pgp_replysign", DT_SYN, R_NONE, UL "crypt_replysign", 0},
   {"crypt_replysign", DT_BOOL, R_NONE, OPTCRYPTREPLYSIGN, 0},
   /*
    ** .pp
@@ -1833,7 +1812,6 @@ struct option_t MuttVars[] = {
    ** \fBNote:\fP this does not work on messages that are encrypted \fBand\fP signed!
    ** (Crypto only)
    */
-  {"pgp_replysignencrypted", DT_SYN, R_NONE, UL "crypt_replysignencrypted", 0},
   {"crypt_replysignencrypted", DT_BOOL, R_NONE, OPTCRYPTREPLYSIGNENCRYPTED, 0},
   /*
    ** .pp
@@ -1860,7 +1838,6 @@ struct option_t MuttVars[] = {
    ** If \fIset\fP, Mutt-ng will use a possibly-running gpg-agent process.
    ** (PGP only)
    */
-  {"pgp_verify_sig", DT_SYN, R_NONE, UL "crypt_verify_sig", 0},
   {"crypt_verify_sig", DT_QUAD, R_NONE, OPT_VERIFYSIG, M_YES},
   /*
    ** .pp
@@ -1953,7 +1930,6 @@ struct option_t MuttVars[] = {
    ** removed, while the inner multipart/signed part is retained.
    ** (PGP only)
    */
-  {"pgp_create_traditional", DT_SYN, R_NONE, UL "pgp_autoinline", 0},
   {"pgp_autoinline", DT_BOOL, R_NONE, OPTPGPAUTOINLINE, 0},
   /*
    ** .pp
@@ -1972,7 +1948,6 @@ struct option_t MuttVars[] = {
    ** \fBdeprecated\fP.
    ** (PGP only)
    */
-  {"pgp_auto_traditional", DT_SYN, R_NONE, UL "pgp_replyinline", 0},
   {"pgp_replyinline", DT_BOOL, R_NONE, OPTPGPREPLYINLINE, 0},
   /*
    ** .pp
@@ -2190,10 +2165,6 @@ struct option_t MuttVars[] = {
    ** ``$$mime_forward_decode'' is \fIunset\fP.
    ** (PGP only)
    */
-  {"forw_decrypt", DT_SYN, R_NONE, UL "forward_decrypt", 0},
-  /*
-   */
-
   {"smime_timeout", DT_NUM, R_NONE, UL &SmimeTimeout, 300},
   /*
    ** .pp
@@ -2336,7 +2307,6 @@ struct option_t MuttVars[] = {
    ** certificate was issued for the sender's mailbox).
    ** (S/MIME only)
    */
-  {"smime_sign_as", DT_SYN, R_NONE, UL "smime_default_key", 0},
   {"smime_default_key", DT_STR, R_NONE, UL &SmimeDefaultKey, 0},
   /*
    ** .pp
@@ -2557,7 +2527,8 @@ struct option_t MuttVars[] = {
    ** methods are unavailable. If a method is available but authentication
    ** fails, Mutt-ng will not connect to the POP server.
    */
-  {"pop_checkinterval", DT_NUM, R_NONE, UL &PopCheckTimeout, 60},
+  {"pop_checkinterval", DT_SYN, R_NONE, UL "pop_mail_check", 0},
+  {"pop_mail_check", DT_NUM, R_NONE, UL &PopCheckTimeout, 60},
   /*
    ** .pp
    ** Availability: POP
@@ -2640,11 +2611,9 @@ struct option_t MuttVars[] = {
    ** Similar to the ``$$attribution'' variable, Mutt-ng will append this
    ** string after the inclusion of a message which is being replied to.
    */
-  {"post_indent_str", DT_SYN, R_NONE, UL "post_indent_string", 0},
-  /*
-   */
 #ifdef USE_NNTP
-  {"post_moderated", DT_QUAD, R_NONE, OPT_TOMODERATED, M_ASKYES},
+  {"post_moderated", DT_SYN, R_NONE, UL "nntp_post_moderated", 0 },
+  {"nntp_post_moderated", DT_QUAD, R_NONE, OPT_TOMODERATED, M_ASKYES},
   /*
    ** .pp
    ** Availability: NNTP
@@ -2702,9 +2671,6 @@ struct option_t MuttVars[] = {
   /*
    ** .pp
    ** This specifies the command pipe that should be used to print messages.
-   */
-  {"print_cmd", DT_SYN, R_NONE, UL "print_command", 0},
-  /*
    */
   {"print_decode", DT_BOOL, R_NONE, OPTPRINTDECODE, 1},
   /*
@@ -3022,7 +2988,8 @@ struct option_t MuttVars[] = {
    ** shell from \fT/etc/passwd\fP is used.
    */
 #ifdef USE_NNTP
-  {"save_unsubscribed", DT_BOOL, R_NONE, OPTSAVEUNSUB, 0},
+  {"save_unsubscribed", DT_SYN, R_NONE, UL "nntp_save_unsubscribed", 0 },
+  {"nntp_save_unsubscribed", DT_BOOL, R_NONE, OPTSAVEUNSUB, 0},
   /*
    ** .pp
    ** Availability: NNTP
@@ -3032,9 +2999,9 @@ struct option_t MuttVars[] = {
    ** ``newsrc'' file and into the news cache.
    */
 #endif
-  {"shorten_hierarchy", DT_SYN, R_NONE, UL "sidebar_shorten_hierarchy", 0 },
 #ifdef USE_NNTP
-  {"show_new_news", DT_BOOL, R_NONE, OPTSHOWNEWNEWS, 1},
+  {"show_new_news", DT_SYN, R_NONE, UL "nntp_show_new_news", 0 },
+  {"nntp_show_new_news", DT_BOOL, R_NONE, OPTSHOWNEWNEWS, 1},
   /*
    ** .pp
    ** Availability: NNTP
@@ -3045,7 +3012,8 @@ struct option_t MuttVars[] = {
    ** Also controls whether or not the number of new articles of subscribed
    ** newsgroups will be checked.
    */
-  {"show_only_unread", DT_BOOL, R_NONE, OPTSHOWONLYUNREAD, 0},
+  {"show_only_unread", DT_SYN, R_NONE, UL "nntp_show_only_unread", 0 },
+  {"nntp_show_only_unread", DT_BOOL, R_NONE, OPTSHOWONLYUNREAD, 0},
   /*
    ** .pp
    ** Availability: NNTP
@@ -3593,7 +3561,8 @@ struct option_t MuttVars[] = {
    ** to the one used by ``$$status_format''.
    */
 #ifdef USE_NNTP
-  {"x_comment_to", DT_BOOL, R_NONE, OPTXCOMMENTTO, 0},
+  {"x_comment_to", DT_SYN, R_NONE, UL "nntp_x_comment_to", 0},
+  {"nntp_x_comment_to", DT_BOOL, R_NONE, OPTXCOMMENTTO, 0},
   /*
    ** .pp
    ** Availability: NNTP
