@@ -3289,6 +3289,20 @@ struct option_t MuttVars[] = {
    ** Setting this variable causes the ``status bar'' to be displayed on
    ** the first line of the screen rather than near the bottom.
    */
+  {"strict_mailto", DT_BOOL, R_NONE, OPTSTRICTMAILTO, 1},
+  /*
+   **
+   ** .pp
+   ** With mailto: style links, a body as well as arbitrary header information
+   ** may be embedded. This may lead to (user) headers being overwriten without note
+   ** if ``$$edit_headers'' is unset.
+   **
+   ** .pp
+   ** If this variable is \fIset\fP, mutt-ng is strict and allows anything to be
+   ** changed. If it's \fIunset\fP, all headers given will be prefixed with
+   ** ``X-Mailto-'' and the message including headers will be shown in the editor
+   ** regardless of what ``$$edit_headers'' is set to.
+   **/
   {"strict_mime", DT_BOOL, R_NONE, OPTSTRICTMIME, 1},
   /*
    ** .pp

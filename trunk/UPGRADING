@@ -32,6 +32,8 @@ sources of information.
   Due to frequent trouble, $imap_mail_check now defaults to 300 seconds
   (5 minutes) rather than 5 seconds.
 
+  The configuration variable $strict_mailto has been added.
+
 2005-05-17:
 
   Changes due to better integration of qdbm support w/ header caching:
