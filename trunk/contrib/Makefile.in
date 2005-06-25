@@ -43,6 +43,7 @@ install:
 	for f in $(SAMPLES) ; do \
 		$(INSTALL) -m 644 $(srcdir)/$$f $(DESTDIR)$(docdir)/samples ;	\
 	done
+	chmod 755 $(DESTDIR)$(docdir)/samples/update-config.pl
 	for f in $(srcdir)/iconv/*.rc ; do					\
 		$(INSTALL) -m 644 $$f $(DESTDIR)$(docdir)/samples/iconv	  ;	\
 	done
