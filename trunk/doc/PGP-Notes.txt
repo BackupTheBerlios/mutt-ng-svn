@@ -1,15 +1,5 @@
-$Id: PGP-Notes.txt,v 3.0 2002/01/24 13:35:07 roessler Exp $
-
-		     USING PGP FROM WITHIN MUTT
-
-
-WARNING: The configuration interface has completely changed as of
-         0.96.3!
-
-
-
-			    USERS' GUIDE
-
+User's guide - Using PGP/GnuPG with Mutt-ng
+===========================================
 
 How do I use mutt with PGP, PGP5, or GnuPG?
 -------------------------------------------
@@ -19,8 +9,8 @@ three files there, pgp2.rc, pgp5.rc, and gpg.rc.  These files
 contain ready-to-use configurations for using mutt with pgp2, pgp5,
 and gpg.
 
-Include one of these files with your ~/.muttrc, and things should
-work out fine.
+Include one of these files with your Mutt-ng config file (e.g. ~/.muttngrc), 
+and things should work out fine.
 
 You may wish to verify that all paths and  the language parameters
 given to the PGP binaries match your needs.
@@ -30,17 +20,17 @@ given to the PGP binaries match your needs.
 Frequently Asked Questions and Tips
 -----------------------------------
 
-Q: "People are sending PGP messages which mutt doesn't
+Q: "People are sending PGP messages which Mutt-ng doesn't
     recognize.  What can I do?"
 
-The new way is to leave headers alone and use mutt's
-check-traditional-pgp function, which can detect PGP messages at
-run-time, and adjust content-types.
+A: The new way is to leave headers alone and use mutt's
+   check-traditional-pgp function, which can detect PGP messages at
+   runtime, and adjust content-types.
 
-The old way is to configure your mail filter so it fixes headers:
+    The old way is to configure your mail filter so it fixes headers:
 
-Add the following lines to your ~/.procmailrc (you are
-using procmail, aren't you?):
+    Add the following lines to your ~/.procmailrc (you are
+    using procmail, aren't you?):
 
 		   ------------------------------
 
@@ -98,24 +88,22 @@ if (/^$BPGPS/:b && /^$EPGPS/:b)
 
 Q: "I don't like that PGP/MIME stuff, but want to use the
     old way of PGP-signing my mails.  Can't you include
-    that with mutt?"
+    that with Mutt-ng?"
 
-The old answer to this question used to be this:
-
-  No.  Application/pgp is not really suited to a world with MIME,
-  non-textual body parts and similar things.  Anyway, if you really
-  want to generate these old-style attachments, include the
-  following macro in your ~/.muttrc (line breaks for readability,
-  this is actually one line):
+A: No.  Application/pgp is not really suited to a world with MIME,
+   non-textual body parts and similar things.  Anyway, if you really
+   want to generate these old-style attachments, include the
+   following macro in your ~/.muttngrc (line breaks for readability,
+   this is actually one line):
 
   macro compose S "Fpgp +verbose=0 -fast
   	+clearsig=on\ny^T^Uapplication/pgp; format=text;
 	x-action=sign\n"
 
 
-There's a new answer, though: Set the $pgp_create_traditional
+There's a new answer, though: Set the pgp_autoinline
 configuration variable (it's a quad-option) to something different
-from "no" (that's the default).  Mutt will then try to use
+from "no" (that's the default).  Mutt-ng will then try to use
 application/pgp whereever it makes sense.  In particular, it does
 not make any sense with multiparts, or non-ASCII or non-text bodies.
 In all other cases, PGP/MIME is used unconditionally.
@@ -127,15 +115,15 @@ Note that application/pgp is still strongly deprecated.
 Q: "I don't like all the ^Gs and various other verbosity
     PGP is presenting me with."
 
-Roland Rosenfeld <roland@spinnaker.rhein.de> has found a quite
-elegant solution to this problem: PGP has some pretty good foreign
-language support.  So we just introduce a language called "mutt"
-which contains empty strings for the messages we don't want to see.
-To use this, copy either language.txt or language50.txt (depending
-on what PGP version you are using) to your $PGPPATH.  Make sure the
-PGP command formats pass "+language=pgp" to all the PGP binaries
-(but not to pgpring!).
-
+A: Roland Rosenfeld <roland@spinnaker.rhein.de> has found a quite
+   elegant solution to this problem: PGP has some pretty good foreign
+   language support.  So we just introduce a language called "mutt"
+   which contains empty strings for the messages we don't want to see.
+   To use this, copy either language.txt or language50.txt (depending
+   on what PGP version you are using) to your $PGPPATH.  Make sure the
+   PGP command formats pass "+language=pgp" to all the PGP binaries
+   (but not to pgpringng!).
+ 
 For PGP 2.6, a German version called "muttde" is available
 as well.
 
@@ -143,29 +131,29 @@ as well.
 Q: "My PGP signatures are being invalidated.  BTW, I'm using Courier
     MTA."
 
-The author of the Courier MTA believes that the standard specifying
-multipart/signed is broken.  For that reason, he has choosen to
-implement his MTA in a way which does not assure that
-multipart/signed body parts are left untouched.
+A: The author of the Courier MTA believes that the standard specifying
+   multipart/signed is broken.  For that reason, he has choosen to
+   implement his MTA in a way which does not assure that
+   multipart/signed body parts are left untouched.
 
-We suggest that you abandon courier and change to sendmail, postfix,
-or exim.
+   We suggest that you abandon courier and change to qmail, postfix,
+   or exim.
 
 
 
-			     BACKGROUND
-
+BACKGROUND
+==========
 
 Auxiliary Programs
 ------------------
 
-Mutt needs two auxiliary programs for its PGP support: pgpewrap and
-pgpring.
+Mutt-ng needs two auxiliary programs for its PGP support: pgpewrapng and
+pgpringng.
 
 
-1. pgpring
+1. pgpringng
 
-pgpring is a key ring dumper.  It extracts information from PGP's
+pgpringng is a key ring dumper.  It extracts information from PGP's
 binary key ring and emits it in an (almost) readable output format
 understood by mutt's key selection routines.  This output format
 mimics the one used by the GNU Privacy Guard (GPG).
@@ -184,17 +172,17 @@ Command line options:
 
 
 
-2. pgpewrap
+2. pgpewrapng
 
 This is a little C program which does some command line munging: The
-first argument is a command to be executed.  When pgpewrap
+first argument is a command to be executed.  When pgpewrapng
 encounters a "--" (dash-dash) argument, it will interpret the next
 argument as a prefix which is put in front of all following
 arguments.
 
 Example:
 
-	pgpewrap pgpe file -- -r a b c
+	pgpewrapng pgpe file -- -r a b c
 
 will execute:
 
@@ -208,7 +196,7 @@ line interfaces can't be properly served by mutt's format mechanism.
 The Configuration Interface
 ---------------------------
 
-As usual within mutt, the configuration interface for the PGP
+As usual within Mutt-ng, the configuration interface for the PGP
 commands relies on printf-like formats.  For all PGP commands, the
 following %-sequences are defined.
 

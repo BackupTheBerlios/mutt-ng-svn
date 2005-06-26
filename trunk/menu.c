@@ -1,7 +1,9 @@
 /*
  * Copyright notice from original mutt:
  * Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
- *
+ * * Parts of it were written/modified by:
+ *   Nico Golde <nico@ngolde.de>
+ * 
  * This file is part of mutt-ng, see http://www.muttng.org/.
  * It's licensed under the GNU General Public License,
  * please see the file GPL in the top level source directory.
@@ -167,6 +169,8 @@ void menu_redraw_full (MUTTMENU * menu)
   /* clear() doesn't optimize screen redraws */
   move (0, 0);
   clrtobot ();
+  
+  if (!option(OPTMBOXPANE)) SidebarWidth=0;
 
   if (option (OPTHELP)) {
     SETCOLOR (MT_COLOR_STATUS);
@@ -203,6 +207,7 @@ void menu_redraw_index (MUTTMENU * menu)
   char buf[STRING];
   int i;
 
+  if (!option(OPTMBOXPANE)) SidebarWidth=0;
   sidebar_draw (1);
   for (i = menu->top; i < menu->top + menu->pagelen; i++) {
     if (i < menu->max) {
@@ -316,6 +321,8 @@ void menu_redraw_current (MUTTMENU * menu)
   move (menu->current + menu->offset - menu->top, SidebarWidth);
   menu_make_entry (buf, sizeof (buf), menu, menu->current);
   menu_pad_string (buf, sizeof (buf));
+
+  if (!option(OPTMBOXPANE)) SidebarWidth=0;
 
   if (option (OPTARROWCURSOR)) {
     int attr = menu->color (menu->current);
