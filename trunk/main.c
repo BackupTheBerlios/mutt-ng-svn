@@ -501,11 +501,16 @@ int main (int argc, char **argv)
   int version = 0;
   int i;
   int explicit_folder = 0;
+  long sek;
   extern char *optarg;
   extern int optind;
 
+  /* initialize random number for tmp file creation */ 
+  time (&sek);
+  srand (sek);
+  
   /* sanity check against stupid administrators */
-
+  
   if (getegid () != getgid ()) {
     fprintf (stderr, "%s: I don't want to run with privileges!\n", argv[0]);
     exit (1);

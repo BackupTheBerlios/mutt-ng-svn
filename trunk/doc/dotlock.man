@@ -145,6 +145,6 @@ comments in dotlock.c.
 .PP
 .B muttng_dotlock
 is part of the Mutt-ng mail user agent package.  It has been
-created to avoid running mutt with group mail privileges.
+created to avoid running Mutt-ng with group mail privileges.
 .SH AUTHOR
-Thomas Roessler <roessler@guug.de>
+Thomas Roessler <roessler@guug.de>, Nico Golde <nion@muttng.or>>
