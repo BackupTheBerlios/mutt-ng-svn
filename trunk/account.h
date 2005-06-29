@@ -1,6 +1,6 @@
 /*
  * Copyright notice from original mutt:
- * Copyright (C) 2000-3 Brendan Cully <brendan@kublai.com>
+ * Copyright (C) 2000-5 Brendan Cully <brendan@kublai.com>
  *
  * This file is part of mutt-ng, see http://www.muttng.org/.
  * It's licensed under the GNU General Public License,
@@ -23,13 +23,15 @@ enum {
 };
 
 /* account flags */
-#define M_ACCT_PORT (1<<0)
-#define M_ACCT_USER (1<<1)
-#define M_ACCT_PASS (1<<2)
-#define M_ACCT_SSL  (1<<3)
+#define M_ACCT_PORT     (1<<0)
+#define M_ACCT_USER     (1<<1)
+#define M_ACCT_LOGIN    (1<<1)
+#define M_ACCT_PASS     (1<<2)
+#define M_ACCT_SSL      (1<<3)
 
 typedef struct {
   char user[64];
+  char login[64];
   char pass[64];
   char host[128];
   unsigned short port;
@@ -41,6 +43,7 @@ int mutt_account_match (const ACCOUNT * a1, const ACCOUNT * m2);
 int mutt_account_fromurl (ACCOUNT * account, ciss_url_t * url);
 void mutt_account_tourl (ACCOUNT * account, ciss_url_t * url);
 int mutt_account_getuser (ACCOUNT * account);
+int mutt_account_getlogin (ACCOUNT * account);
 int mutt_account_getpass (ACCOUNT * account);
 void mutt_account_unsetpass (ACCOUNT * account);
 

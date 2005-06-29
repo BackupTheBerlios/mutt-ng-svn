@@ -1,5 +1,13 @@
 Changes specific to mutt-ng:
 
+2005-06-29:
+  * merge in latest mutt changes so that now it's possible to have a
+    different login name for IMAP than local user name
+
+2005-06-16:
+  * many consistency changes (which may also complicate migration) (see
+    UPGRADING and update-config.pl in contrib/)
+
 2005-05-25:
   * dropped version number and changed to devel
 

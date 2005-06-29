@@ -1,3 +1,27 @@
+2005-06-28 19:26:54  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* account.c, account.h, globals.h, init.h, mutt_sasl.c: Add
+	$imap_login variable to specify which user to authenticate as
+	($imap_user controls which user's mail gets accessed). Currently
+	this can't be specified interactively, since I can't think of
+	a way to do it that wouldn't annoy users where login == user
+	(the default value of $imap_login).
+
+2005-06-24 22:32:38  Sébastien Hinderer <Sebastien.Hinderer@libertysurf.fr>  (brendan)
+
+	* crypt.c: Remove a warning about unused variable 'now' in
+	crypt_valid_passphrase
+
+2005-06-22 01:46:49  Sébastien Hinderer <Sebastien.Hinderer@libertysurf.fr>  (brendan)
+
+	* doc/devel-notes.txt: This patch fixes two small typos in
+	dev notes.
+
+2005-06-18 04:54:39  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* main.c: Update copyright dates according to latest activity in
+	ChangeLog.
+
 2005-06-12 18:28:29  Tamotsu Takahashi  <ttakah@lapis.plala.or.jp>  (roessler)
 
 	* menu.c: Fix background colors for $arrow_cursor.
@@ -419,7 +443,7 @@
 2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
                                  
      * hcache.c: - make hcache.c conform to mutt codingstyle
-     - use $Id: ChangeLog,v 3.423 2005/06/12 18:29:03 roessler Exp $ CVS keyword instead of %K% BitKeeper keyword
+     - use $Id: ChangeLog,v 3.428 2005/06/28 19:34:07 brendan Exp $ CVS keyword instead of %K% BitKeeper keyword
                                  
 2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
 

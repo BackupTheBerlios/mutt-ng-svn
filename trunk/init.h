@@ -987,6 +987,16 @@ struct option_t MuttVars[] = {
    ** Reduce this number if you find yourself
    ** getting disconnected from your IMAP server due to inactivity.
    */
+  {"imap_login", DT_STR, R_NONE, UL &ImapLogin, 0 },
+  /*
+   ** .pp
+   ** Availability: IMAP
+   **
+   ** .pp
+   ** Your login name on the IMAP server.
+   ** .pp
+   ** This variable defaults to the value of ``$$imap_user.''
+   */
   {"imap_list_subscribed", DT_BOOL, R_NONE, OPTIMAPLSUB, 0},
   /*
    ** .pp
@@ -1067,7 +1077,8 @@ struct option_t MuttVars[] = {
    ** Availability: IMAP
    **
    ** .pp
-   ** Your login name on the IMAP server.
+   ** The name of the user whose mail you intend to access on the IMAP
+   ** server.
    ** .pp
    ** This variable defaults to your user name on the local machine.
    */
