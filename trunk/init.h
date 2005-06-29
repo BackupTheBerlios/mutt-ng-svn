@@ -211,7 +211,7 @@ struct option_t MuttVars[] = {
    */
 #ifdef USE_NNTP
   {"ask_followup_to", DT_SYN, R_NONE, UL "nntp_ask_followup_to", 0},
-  {"nntp_ask_follow_up", DT_BOOL, R_NONE, OPTASKFOLLOWUP, 0},
+  {"nntp_ask_followup_to", DT_BOOL, R_NONE, OPTASKFOLLOWUP, 0},
   /*
    ** .pp
    ** Availability: NNTP
