@@ -307,10 +307,10 @@ int sidebar_draw (int menu)
 
     if (i == CurBuffy)
       SETCOLOR (MT_COLOR_INDICATOR);
-    else if (tmp->msg_flagged > 0)
-      SETCOLOR (MT_COLOR_FLAGGED);
     else if (tmp->new > 0)
       SETCOLOR (MT_COLOR_NEW);
+    else if (tmp->msg_flagged > 0)
+      SETCOLOR (MT_COLOR_FLAGGED);
     else
       SETCOLOR (MT_COLOR_NORMAL);
 
