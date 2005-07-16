@@ -1205,7 +1205,8 @@ int mutt_index_menu (void)
       {
         if (Context && Context->path)
           strncpy (buf, Context->path, sizeof (buf));
-        buffy_next (buf, sizeof (buf));
+	if (op != OP_SIDEBAR_OPEN)
+	  buffy_next (buf, sizeof (buf));
       }
 
       if (op == OP_SIDEBAR_OPEN) {
