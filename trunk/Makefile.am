@@ -83,7 +83,7 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	mapping.h md5.h mime.h mutt.h mutt_curses.h mutt_menu.h \
 	mutt_sasl.h mutt_socket.h mutt_ssl.h mutt_tunnel.h \
 	mbox.h mh.h mx.h pager.h pgp.h protos.h reldate.h rfc1524.h rfc2047.h \
-	rfc2231.h rfc822.h sha1.h sort.h mime.types VERSION prepare \
+	rfc2231.h rfc822.h sha1.h sort.h mime.types VERSION autogen.sh \
 	_regex.h OPS.MIX remailer.c remailer.h browser.h \
 	mbyte.h	lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h Muttngrc.head Muttngrc \
 	makedoc.c stamp-doc-rc README.SSL smime.h\

@@ -1,5 +1,8 @@
 Changes specific to mutt-ng:
 
+2005-07-16:
+  * the 'prepare' script has been renamed to 'autogen.sh'
+
 2005-06-29:
   * merge in latest mutt changes so that now it's possible to have a
     different login name for IMAP than local user name

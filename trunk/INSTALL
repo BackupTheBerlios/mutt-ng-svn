@@ -34,7 +34,7 @@ Installation:
 1. Installing Mutt-ng is very easy. Just use tar and gzip/bzip2.
    For example type: `tar xvfz mutt-ng-20050515.tar.gz'.
    If you have obtained the distribution from
-   the SVN (subversion)  repository, run the `prepare' script with the 
+   the SVN (subversion)  repository, run the `autogen.sh' script with the 
    same command line parameters like it is described in doc/devel-notes.txt
    
 2. The next step is to call `configure' to configure your installation

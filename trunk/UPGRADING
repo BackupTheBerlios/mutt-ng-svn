@@ -10,6 +10,11 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-07-16:
+
+  The 'prepare' script has been renamed to 'autogen.sh' as this name
+  seems to be used in many projects using the autotools too.
+
 2005-06-16:
 
   Pine compatibility for naming IMAP mailboxes has been removed, only

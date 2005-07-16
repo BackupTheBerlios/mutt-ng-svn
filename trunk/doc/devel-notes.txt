@@ -57,7 +57,7 @@ Getting started from SVN
 
 Once you've checked out a copy of the source from SVN from
 svn.berlios.de/svnroot/repos/mutt-ng , you'll need to run the script
-called 'prepare' that is in the root directory.  The script does all the
+called 'autogen.sh' that is in the root directory.  The script does all the
 automake/autoconf magic that needs to be done with a fresh checkout. If
 all steps succeed, you'll have a configure script to start off with.
 
