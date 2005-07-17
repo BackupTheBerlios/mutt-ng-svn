@@ -587,7 +587,7 @@ static const char *hdr_format_str (char *dest,
     snprintf (dest, destlen, fmt,
               (Tochars
                && ((i = mutt_user_is_recipient (hdr))) <
-               safe_strlen (Tochars)) ? Tochars[i] : ' ');
+               mutt_strlen (Tochars)) ? Tochars[i] : ' ');
     break;
 
   case 'u':
@@ -659,7 +659,7 @@ static const char *hdr_format_str (char *dest,
                                                     ((i =
                                                       mutt_user_is_recipient
                                                       (hdr)) <
-                                                     safe_strlen (Tochars)) ?
+                                                     mutt_strlen (Tochars)) ?
                                                     Tochars[i] : ' ')));
     mutt_format_s (dest, destlen, prefix, buf2);
     break;

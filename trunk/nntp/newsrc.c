@@ -74,7 +74,7 @@ static int nntp_parse_newsrc_line (NNTP_SERVER * news, char *line)
   strfcpy (group, line, len);
   if ((data = (NNTP_DATA *) hash_find (news->newsgroups, group)) == NULL) {
     data =
-      (NNTP_DATA *) safe_calloc (1, sizeof (NNTP_DATA) + safe_strlen (group) + 1);
+      (NNTP_DATA *) safe_calloc (1, sizeof (NNTP_DATA) + mutt_strlen (group) + 1);
     data->group = (char *) data + sizeof (NNTP_DATA);
     strcpy (data->group, group);
     data->nserv = news;
@@ -205,7 +205,7 @@ static int nntp_parse_cacheindex (NNTP_SERVER * news)
     return 0;
   rewind (index);
   while (fgets (buf, sizeof (buf), index)) {
-    buf[safe_strlen (buf) - 1] = 0;  /* strip ending '\n' */
+    buf[mutt_strlen (buf) - 1] = 0;  /* strip ending '\n' */
     if (!safe_strncmp (buf, "#: ", 3) &&
         !safe_strcasecmp (buf + 3, news->conn->account.host))
       break;
@@ -217,10 +217,10 @@ static int nntp_parse_cacheindex (NNTP_SERVER * news)
     if (!*cp)
       continue;
     cp[0] = 0;
-    if (!safe_strcmp (buf, "#:"))
+    if (!mutt_strcmp (buf, "#:"))
       break;
     sscanf (cp + 1, "%s %d %d", file, &l, &m);
-    if (!safe_strcmp (buf, "ALL")) {
+    if (!mutt_strcmp (buf, "ALL")) {
       news->cache = safe_strdup (file);
       news->newgroups_time = m;
     }
@@ -228,7 +228,7 @@ static int nntp_parse_cacheindex (NNTP_SERVER * news)
       if ((data = (NNTP_DATA *) hash_find (news->newsgroups, buf)) == NULL) {
         data =
           (NNTP_DATA *) safe_calloc (1,
-                                     sizeof (NNTP_DATA) + safe_strlen (buf) + 1);
+                                     sizeof (NNTP_DATA) + mutt_strlen (buf) + 1);
         data->group = (char *) data + sizeof (NNTP_DATA);
         strcpy (data->group, buf);
         data->nserv = news;
@@ -343,7 +343,7 @@ NNTP_SERVER *mutt_select_newsserver (char *server)
     return NULL;
   }
 
-  buf = p = safe_calloc (safe_strlen (server) + 10, sizeof (char));
+  buf = p = safe_calloc (mutt_strlen (server) + 10, sizeof (char));
   if (url_check_scheme (server) == U_UNKNOWN) {
     strcpy (buf, "nntp://");
     p = strchr (buf, '\0');
@@ -512,8 +512,8 @@ static void nntp_create_newsrc_line (NNTP_DATA * data, char **buf,
     line = *buf + (*pline - line);
   }
   strcpy (line, data->group);
-  len -= safe_strlen (line) + 1;
-  line += safe_strlen (line);
+  len -= mutt_strlen (line) + 1;
+  line += mutt_strlen (line);
   *line++ = data->subscribed ? ':' : '!';
   *line++ = ' ';
   *line = '\0';
@@ -646,7 +646,7 @@ int mutt_newsrc_update (NNTP_SERVER * news)
       continue;
     nntp_create_newsrc_line (data, &buf, &line, &llen);
     debug_print (2, ("Added to newsrc: %s\n", line));
-    line += safe_strlen (line);
+    line += mutt_strlen (line);
   }
   /* newrc being fully rewritten */
   if (news->newsrc &&
@@ -672,7 +672,7 @@ static FILE *mutt_mkname (char *s)
     return fp;
 
   nntp_cache_expand (buf, "cache-XXXXXX");
-  pc = buf + safe_strlen (buf) - 12; /* positioning to "cache-XXXXXX" */
+  pc = buf + mutt_strlen (buf) - 12; /* positioning to "cache-XXXXXX" */
   if ((fd = mkstemp (buf)) == -1)
     return NULL;
   strcpy (s, pc);               /* generated name */
@@ -879,7 +879,7 @@ NNTP_DATA *mutt_newsgroup_subscribe (NNTP_SERVER * news, char *group)
     return NULL;
   if (!(data = (NNTP_DATA *) hash_find (news->newsgroups, group))) {
     data =
-      (NNTP_DATA *) safe_calloc (1, sizeof (NNTP_DATA) + safe_strlen (group) + 1);
+      (NNTP_DATA *) safe_calloc (1, sizeof (NNTP_DATA) + mutt_strlen (group) + 1);
     data->group = (char *) data + sizeof (NNTP_DATA);
     strcpy (data->group, group);
     data->nserv = news;
@@ -972,7 +972,7 @@ void nntp_buffy (char *s)
 
     if (data && data->subscribed && data->unread) {
       if (Context && Context->magic == M_NNTP &&
-          !safe_strcmp (data->group, ((NNTP_DATA *) Context->data)->group)) {
+          !mutt_strcmp (data->group, ((NNTP_DATA *) Context->data)->group)) {
         unsigned int i, unread = 0;
 
         for (i = 0; i < Context->msgcount; i++)

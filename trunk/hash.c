@@ -97,7 +97,7 @@ int hash_insert (HASH * table, const char *key, void *data, int allow_dup)
     int r;
 
     for (tmp = table->table[h], last = NULL; tmp; last = tmp, tmp = tmp->next) {
-      r = safe_strcmp (tmp->key, key);
+      r = mutt_strcmp (tmp->key, key);
       if (r == 0) {
         FREE (&ptr);
         return (-1);
@@ -120,7 +120,7 @@ void *hash_find_hash (const HASH * table, int hash, const char *key)
   struct hash_elem *ptr = table->table[hash];
 
   for (; ptr; ptr = ptr->next) {
-    if (safe_strcmp (key, ptr->key) == 0)
+    if (mutt_strcmp (key, ptr->key) == 0)
       return (ptr->data);
   }
   return NULL;
@@ -137,7 +137,7 @@ void hash_delete_hash (HASH * table, int hash, const char *key,
      * required for the case where we have multiple entries with the same
      * key
      */
-    if ((data == ptr->data) || (!data && safe_strcmp (ptr->key, key) == 0)) {
+    if ((data == ptr->data) || (!data && mutt_strcmp (ptr->key, key) == 0)) {
       *last = ptr->next;
       if (destroy)
         destroy (ptr->data);

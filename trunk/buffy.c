@@ -71,13 +71,13 @@ static int fseek_last_message (FILE * f)
    * reads will be on block boundaries, which might increase efficiency.  */
   while ((pos -= bytes_read) >= 0) {
     /* we save in the buffer at the end the first 7 chars from the last read */
-    strncpy (buffer + BUFSIZ, buffer, 5 + 2);   /* 2 == 2 * safe_strlen(CRLF) */
+    strncpy (buffer + BUFSIZ, buffer, 5 + 2);   /* 2 == 2 * mutt_strlen(CRLF) */
     fseek (f, pos, SEEK_SET);
     bytes_read = fread (buffer, sizeof (char), bytes_read, f);
     if (bytes_read == -1)
       return -1;
     for (i = bytes_read; --i >= 0;)
-      if (!safe_strncmp (buffer + i, "\n\nFrom ", safe_strlen ("\n\nFrom "))) { /* found it - go to the beginning of the From */
+      if (!safe_strncmp (buffer + i, "\n\nFrom ", mutt_strlen ("\n\nFrom "))) { /* found it - go to the beginning of the From */
         fseek (f, pos + i + 2, SEEK_SET);
         return 0;
       }
@@ -511,7 +511,7 @@ int buffy_list (void)
   pos = 0;
   first = 1;
   buffylist[0] = 0;
-  pos += safe_strlen (strncat (buffylist, _("New mail in "), sizeof (buffylist) - 1 - pos)); /* __STRNCAT_CHECKED__ */
+  pos += mutt_strlen (strncat (buffylist, _("New mail in "), sizeof (buffylist) - 1 - pos)); /* __STRNCAT_CHECKED__ */
   if (Incoming) {
     for (i = 0; i < Incoming->length; i++) {
       tmp = (BUFFY*) Incoming->data[i];
@@ -522,19 +522,19 @@ int buffy_list (void)
       strfcpy (path, tmp->path, sizeof (path));
       mutt_pretty_mailbox (path);
 
-      if (!first && pos + safe_strlen (path) >= COLS - 7)
+      if (!first && pos + mutt_strlen (path) >= COLS - 7)
         break;
 
       if (!first)
-        pos += safe_strlen (strncat (buffylist + pos, ", ", sizeof (buffylist) - 1 - pos));    /* __STRNCAT_CHECKED__ */
+        pos += mutt_strlen (strncat (buffylist + pos, ", ", sizeof (buffylist) - 1 - pos));    /* __STRNCAT_CHECKED__ */
 
       /* Prepend an asterisk to mailboxes not already notified */
       if (!tmp->notified) {
-        /* pos += safe_strlen (strncat(buffylist + pos, "*", sizeof(buffylist)-1-pos));  __STRNCAT_CHECKED__ */
+        /* pos += mutt_strlen (strncat(buffylist + pos, "*", sizeof(buffylist)-1-pos));  __STRNCAT_CHECKED__ */
         tmp->notified = 1;
         BuffyNotify--;
       }
-      pos += safe_strlen (strncat (buffylist + pos, path, sizeof (buffylist) - 1 - pos));      /* __STRNCAT_CHECKED__ */
+      pos += mutt_strlen (strncat (buffylist + pos, path, sizeof (buffylist) - 1 - pos));      /* __STRNCAT_CHECKED__ */
       first = 0;
     }
   }

@@ -157,11 +157,11 @@ static void mh_read_sequences (struct mh_sequences *mhs, const char *path)
     if (!(t = strtok (buff, " \t:")))
       continue;
 
-    if (!safe_strcmp (t, MhUnseen))
+    if (!mutt_strcmp (t, MhUnseen))
       f = MH_SEQ_UNSEEN;
-    else if (!safe_strcmp (t, MhFlagged))
+    else if (!mutt_strcmp (t, MhFlagged))
       f = MH_SEQ_FLAGGED;
-    else if (!safe_strcmp (t, MhReplied))
+    else if (!mutt_strcmp (t, MhReplied))
       f = MH_SEQ_REPLIED;
     else                        /* unknown sequence */
       continue;
@@ -304,11 +304,11 @@ void mh_update_sequences (CONTEXT * ctx)
   /* first, copy unknown sequences */
   if ((ofp = fopen (sequences, "r"))) {
     while ((buff = mutt_read_line (buff, &s, ofp, &l))) {
-      if (!safe_strncmp (buff, seq_unseen, safe_strlen (seq_unseen)))
+      if (!safe_strncmp (buff, seq_unseen, mutt_strlen (seq_unseen)))
         continue;
-      if (!safe_strncmp (buff, seq_flagged, safe_strlen (seq_flagged)))
+      if (!safe_strncmp (buff, seq_flagged, mutt_strlen (seq_flagged)))
         continue;
-      if (!safe_strncmp (buff, seq_replied, safe_strlen (seq_replied)))
+      if (!safe_strncmp (buff, seq_replied, mutt_strlen (seq_replied)))
         continue;
 
       fprintf (nfp, "%s\n", buff);
@@ -395,17 +395,17 @@ static void mh_sequences_add_one (CONTEXT * ctx, int n, short unseen,
   snprintf (sequences, sizeof (sequences), "%s/.mh_sequences", ctx->path);
   if ((ofp = fopen (sequences, "r"))) {
     while ((buff = mutt_read_line (buff, &sz, ofp, &line))) {
-      if (unseen && !strncmp (buff, seq_unseen, safe_strlen (seq_unseen))) {
+      if (unseen && !strncmp (buff, seq_unseen, mutt_strlen (seq_unseen))) {
         fprintf (nfp, "%s %d\n", buff, n);
         unseen_done = 1;
       }
       else if (flagged
-               && !strncmp (buff, seq_flagged, safe_strlen (seq_flagged))) {
+               && !strncmp (buff, seq_flagged, mutt_strlen (seq_flagged))) {
         fprintf (nfp, "%s %d\n", buff, n);
         flagged_done = 1;
       }
       else if (replied
-               && !strncmp (buff, seq_replied, safe_strlen (seq_replied))) {
+               && !strncmp (buff, seq_replied, mutt_strlen (seq_replied))) {
         fprintf (nfp, "%s %d\n", buff, n);
         replied_done = 1;
       }
@@ -683,7 +683,7 @@ static int maildir_parse_dir (CONTEXT * ctx, struct maildir ***last,
 
   if (subdir) {
     snprintf (buf, sizeof (buf), "%s/%s", ctx->path, subdir);
-    is_old = (safe_strcmp ("cur", subdir) == 0);
+    is_old = (mutt_strcmp ("cur", subdir) == 0);
   }
   else
     strfcpy (buf, ctx->path, sizeof (buf));
@@ -835,7 +835,7 @@ static size_t maildir_hcache_keylen (const char *fn)
 {
   const char *p = strchr (fn, ':');
 
-  return p ? (size_t) (p - fn) : safe_strlen (fn);
+  return p ? (size_t) (p - fn) : mutt_strlen (fn);
 }
 #endif
 
@@ -1001,7 +1001,7 @@ static void maildir_flags (char *dest, size_t destlen, HEADER * hdr)
               hdr->read ? "S" : "", hdr->deleted ? "T" : "",
               NONULL (hdr->maildir_flags));
     if (hdr->maildir_flags)
-      qsort (tmp, safe_strlen (tmp), 1, ch_compar);
+      qsort (tmp, mutt_strlen (tmp), 1, ch_compar);
     snprintf (dest, destlen, ":2,%s", tmp);
   }
 }
@@ -1356,7 +1356,7 @@ static int maildir_sync_message (CONTEXT * ctx, int msgno)
     snprintf (fullpath, sizeof (fullpath), "%s/%s", ctx->path, partpath);
     snprintf (oldpath, sizeof (oldpath), "%s/%s", ctx->path, h->path);
 
-    if (safe_strcmp (fullpath, oldpath) == 0) {
+    if (mutt_strcmp (fullpath, oldpath) == 0) {
       /* message hasn't really changed */
       return 0;
     }
@@ -1621,7 +1621,7 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint, int unused)
       /* check to see if the message has moved to a different
        * subdirectory.  If so, update the associated filename.
        */
-      if (safe_strcmp (ctx->hdrs[i]->path, p->h->path))
+      if (mutt_strcmp (ctx->hdrs[i]->path, p->h->path))
         str_replace (&ctx->hdrs[i]->path, p->h->path);
 
       /* if the user hasn't modified the flags on this message, update
@@ -1806,7 +1806,7 @@ FILE *_maildir_open_find_message (const char *folder, const char *unique,
   while ((de = readdir (dp))) {
     maildir_canon_filename (tunique, de->d_name, sizeof (tunique));
 
-    if (!safe_strcmp (tunique, unique)) {
+    if (!mutt_strcmp (tunique, unique)) {
       snprintf (fname, sizeof (fname), "%s/%s/%s", folder, subfolder,
                 de->d_name);
       fp = fopen (fname, "r");  /* __FOPEN_CHECKED__ */

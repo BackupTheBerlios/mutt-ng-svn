@@ -23,7 +23,7 @@ char *safe_strdup (const char *s)
 
   if (!s || !*s)
     return 0;
-  l = safe_strlen (s) + 1;
+  l = mutt_strlen (s) + 1;
   p = (char *) safe_malloc (l);
   memcpy (p, s, l);
   return (p);
@@ -67,7 +67,7 @@ char *safe_strncat (char *d, size_t l, const char *s, size_t sl)
   return p;
 }
 
-int safe_strcmp (const char *a, const char *b)
+int mutt_strcmp (const char *a, const char *b)
 {
   return strcmp (NONULL (a), NONULL (b));
 }
@@ -87,7 +87,7 @@ int safe_strncasecmp (const char *a, const char *b, size_t l)
   return strncasecmp (NONULL (a), NONULL (b), l);
 }
 
-size_t safe_strlen (const char *a)
+size_t mutt_strlen (const char *a)
 {
   return a ? strlen (a) : 0;
 }
@@ -107,7 +107,7 @@ void str_adjust (char **p)
 {
   if (!p || !*p)
     return;
-  safe_realloc (p, safe_strlen (*p) + 1);
+  safe_realloc (p, mutt_strlen (*p) + 1);
 }
 
 /* convert all characters in the string to lowercase */
@@ -146,7 +146,7 @@ char *str_substrdup (const char *begin, const char *end)
   if (end)
     len = end - begin;
   else
-    len = safe_strlen (begin);
+    len = mutt_strlen (begin);
 
   p = safe_malloc (len + 1);
   memcpy (p, begin, len);
@@ -176,9 +176,9 @@ const char *str_isstr (const char *haystack, const char *needle)
 }
 
 int str_eq (const char* s1, const char* s2) {
-  int l = safe_strlen (s1);
+  int l = mutt_strlen (s1);
 
-  if (l != safe_strlen (s2))
+  if (l != mutt_strlen (s2))
     return (0);
   return (safe_strncmp (s1, s2, l) == 0);
 }
@@ -191,6 +191,6 @@ char* str_skip_initws (char* s) {
 void str_skip_trailws (char *s) {
   char *p;
 
-  for (p = s + safe_strlen (s) - 1; p >= s && ISSPACE (*p); p--)
+  for (p = s + mutt_strlen (s) - 1; p >= s && ISSPACE (*p); p--)
     *p = 0;
 }

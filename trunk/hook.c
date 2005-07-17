@@ -121,14 +121,14 @@ int mutt_parse_hook (BUFFER * buf, BUFFER * s, unsigned long data,
   /* check to make sure that a matching hook doesn't already exist */
   for (ptr = Hooks; ptr; ptr = ptr->next) {
     if (ptr->type == data &&
-        ptr->rx.not == not && !safe_strcmp (pattern.data, ptr->rx.pattern)) {
+        ptr->rx.not == not && !mutt_strcmp (pattern.data, ptr->rx.pattern)) {
       if (data &
           (M_FOLDERHOOK | M_SENDHOOK | M_SEND2HOOK | M_MESSAGEHOOK |
            M_ACCOUNTHOOK | M_REPLYHOOK)) {
         /* these hooks allow multiple commands with the same
          * pattern, so if we've already seen this pattern/command pair, just
          * ignore it instead of creating a duplicate */
-        if (!safe_strcmp (ptr->command, command.data)) {
+        if (!mutt_strcmp (ptr->command, command.data)) {
           FREE (&command.data);
           FREE (&pattern.data);
           return 0;
@@ -240,7 +240,7 @@ int mutt_parse_unhook (BUFFER * buf, BUFFER * s, unsigned long data,
 {
   while (MoreArgs (s)) {
     mutt_extract_token (buf, s, 0);
-    if (safe_strcmp ("*", buf->data) == 0) {
+    if (mutt_strcmp ("*", buf->data) == 0) {
       if (current_hook_type) {
         snprintf (err->data, err->dsize,
                   _("unhook: Can't do unhook * from within a hook."));

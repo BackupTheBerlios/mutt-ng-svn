@@ -185,7 +185,7 @@ static void query_entry (char *s, size_t slen, MUTTMENU * m, int num)
   mutt_format_string (buf2, sizeof (buf2),
                       FirstColumn + 2, FirstColumn + 2,
                       0, ' ', table[num].data->name,
-                      safe_strlen (table[num].data->name), 0);
+                      mutt_strlen (table[num].data->name), 0);
 
   snprintf (s, slen, " %c %3d %s %-*.*s %s",
             table[num].tagged ? '*' : ' ',
@@ -444,7 +444,7 @@ static void query_menu (char *buf, size_t buflen, QUERY * results, int retbuf)
             mutt_addrlist_to_local (tmpa);
             tagged = 1;
             rfc822_write_address (buf, buflen, tmpa, 0);
-            curpos = safe_strlen (buf);
+            curpos = mutt_strlen (buf);
             rfc822_free_address (&tmpa);
           }
           else if (curpos + 2 < buflen) {
@@ -454,7 +454,7 @@ static void query_menu (char *buf, size_t buflen, QUERY * results, int retbuf)
             strcat (buf, ", "); /* __STRCAT_CHECKED__ */
             rfc822_write_address ((char *) buf + curpos + 1,
                                   buflen - curpos - 1, tmpa, 0);
-            curpos = safe_strlen (buf);
+            curpos = mutt_strlen (buf);
             rfc822_free_address (&tmpa);
           }
         }

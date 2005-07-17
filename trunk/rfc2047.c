@@ -36,7 +36,7 @@
 #endif
 
 #define ENCWORD_LEN_MAX 75
-#define ENCWORD_LEN_MIN 9       /* safe_strlen ("=?.?.?.?=") */
+#define ENCWORD_LEN_MIN 9       /* mutt_strlen ("=?.?.?.?=") */
 
 #define HSPACE(x) ((x) == '\0' || (x) == ' ' || (x) == '\t')
 
@@ -94,7 +94,7 @@ char *mutt_choose_charset (const char *fromcode, const char *charsets,
 
     q = strchr (p, ':');
 
-    n = q ? q - p : safe_strlen (p);
+    n = q ? q - p : mutt_strlen (p);
 
     if (!n ||
         /* Assume that we never need more than 12 characters of
@@ -147,7 +147,7 @@ static size_t b_encoder (char *s, ICONV_CONST char *d, size_t dlen,
   char *s0 = s;
 
   memcpy (s, "=?", 2), s += 2;
-  memcpy (s, tocode, safe_strlen (tocode)), s += safe_strlen (tocode);
+  memcpy (s, tocode, mutt_strlen (tocode)), s += mutt_strlen (tocode);
   memcpy (s, "?B?", 3), s += 3;
   for (;;) {
     if (!dlen)
@@ -185,7 +185,7 @@ static size_t q_encoder (char *s, ICONV_CONST char *d, size_t dlen,
   char *s0 = s;
 
   memcpy (s, "=?", 2), s += 2;
-  memcpy (s, tocode, safe_strlen (tocode)), s += safe_strlen (tocode);
+  memcpy (s, tocode, mutt_strlen (tocode)), s += mutt_strlen (tocode);
   memcpy (s, "?Q?", 3), s += 3;
   while (dlen--) {
     unsigned char c = *d++;
@@ -227,7 +227,7 @@ static size_t try_block (ICONV_CONST char *d, size_t dlen,
   if (fromcode) {
     cd = mutt_iconv_open (tocode, fromcode, 0);
     assert (cd != (iconv_t) (-1));
-    ib = d, ibl = dlen, ob = buf1, obl = sizeof (buf1) - safe_strlen (tocode);
+    ib = d, ibl = dlen, ob = buf1, obl = sizeof (buf1) - mutt_strlen (tocode);
     if (iconv (cd, &ib, &ibl, &ob, &obl) == (size_t) (-1) ||
         iconv (cd, 0, 0, &ob, &obl) == (size_t) (-1)) {
       assert (errno == E2BIG);
@@ -238,8 +238,8 @@ static size_t try_block (ICONV_CONST char *d, size_t dlen,
     iconv_close (cd);
   }
   else {
-    if (dlen > sizeof (buf1) - safe_strlen (tocode))
-      return sizeof (buf1) - safe_strlen (tocode) + 1;
+    if (dlen > sizeof (buf1) - mutt_strlen (tocode))
+      return sizeof (buf1) - mutt_strlen (tocode) + 1;
     memcpy (buf1, d, dlen);
     ob = buf1 + dlen;
   }
@@ -254,7 +254,7 @@ static size_t try_block (ICONV_CONST char *d, size_t dlen,
       ++count;
   }
 
-  len = ENCWORD_LEN_MIN - 2 + safe_strlen (tocode);
+  len = ENCWORD_LEN_MIN - 2 + mutt_strlen (tocode);
   len_b = len + (((ob - buf1) + 2) / 3) * 4;
   len_q = len + (ob - buf1) + 2 * count;
 
@@ -293,7 +293,7 @@ static size_t encode_block (char *s, char *d, size_t dlen,
   if (fromcode) {
     cd = mutt_iconv_open (tocode, fromcode, 0);
     assert (cd != (iconv_t) (-1));
-    ib = d, ibl = dlen, ob = buf1, obl = sizeof (buf1) - safe_strlen (tocode);
+    ib = d, ibl = dlen, ob = buf1, obl = sizeof (buf1) - mutt_strlen (tocode);
     n1 = iconv (cd, &ib, &ibl, &ob, &obl);
     n2 = iconv (cd, 0, 0, &ob, &obl);
     assert (n1 != (size_t) (-1) && n2 != (size_t) (-1));
@@ -480,15 +480,15 @@ static int rfc2047_encode (ICONV_CONST char *d, size_t dlen, int col,
 
     /* Add to output buffer. */
 #define LINEBREAK "\n\t"
-    if (bufpos + wlen + safe_strlen (LINEBREAK) > buflen) {
-      buflen = bufpos + wlen + safe_strlen (LINEBREAK);
+    if (bufpos + wlen + mutt_strlen (LINEBREAK) > buflen) {
+      buflen = bufpos + wlen + mutt_strlen (LINEBREAK);
       safe_realloc (&buf, buflen);
     }
     r = encode_block (buf + bufpos, t, n, icode, tocode, encoder);
     assert (r == wlen);
     bufpos += wlen;
-    memcpy (buf + bufpos, LINEBREAK, safe_strlen (LINEBREAK));
-    bufpos += safe_strlen (LINEBREAK);
+    memcpy (buf + bufpos, LINEBREAK, mutt_strlen (LINEBREAK));
+    bufpos += mutt_strlen (LINEBREAK);
 #undef LINEBREAK
 
     col = 1;
@@ -527,7 +527,7 @@ void _rfc2047_encode_string (char **pd, int encode_specials, int col)
   if (!charsets || !*charsets)
     charsets = "UTF-8";
 
-  rfc2047_encode (*pd, safe_strlen (*pd), col,
+  rfc2047_encode (*pd, mutt_strlen (*pd), col,
                   Charset, charsets, &e, &elen,
                   encode_specials ? RFC822Specials : NULL);
 
@@ -538,7 +538,7 @@ void _rfc2047_encode_string (char **pd, int encode_specials, int col)
 void rfc2047_encode_adrlist (ADDRESS * addr, const char *tag)
 {
   ADDRESS *ptr = addr;
-  int col = tag ? safe_strlen (tag) + 2 : 32;
+  int col = tag ? mutt_strlen (tag) + 2 : 32;
 
   while (ptr) {
     if (ptr->personal)
@@ -555,7 +555,7 @@ static int rfc2047_decode_word (char *d, const char *s, size_t len)
   int enc = 0, count = 0;
   char *charset = NULL;
 
-  pd = d0 = safe_malloc (safe_strlen (s));
+  pd = d0 = safe_malloc (mutt_strlen (s));
 
   for (pp = s; (pp1 = strchr (pp, '?')); pp = pp1 + 1) {
     count++;
@@ -711,14 +711,14 @@ void rfc2047_decode (char **pd)
   if (!s || !*s)
     return;
 
-  dlen = 4 * safe_strlen (s);        /* should be enough */
+  dlen = 4 * mutt_strlen (s);        /* should be enough */
   d = d0 = safe_malloc (dlen + 1);
 
   while (*s && dlen > 0) {
     if (!(p = find_encoded_word (s, &q))) {
       /* no encoded words */
       if (!option (OPTSTRICTMIME)) {
-        n = safe_strlen (s);
+        n = mutt_strlen (s);
         if (found_encoded && (m = lwslen (s, n)) != 0) {
           if (m != n)
             *d = ' ', d++, dlen--;
@@ -731,7 +731,7 @@ void rfc2047_decode (char **pd)
           t = safe_malloc (n + 1);
           strfcpy (t, s, n + 1);
           if (mutt_convert_nonmime_string (&t) == 0) {
-            tlen = safe_strlen (t);
+            tlen = mutt_strlen (t);
             strncpy (d, t, tlen);
             d += tlen;
           }
@@ -781,7 +781,7 @@ void rfc2047_decode (char **pd)
     rfc2047_decode_word (d, p, dlen);
     found_encoded = 1;
     s = q;
-    n = safe_strlen (d);
+    n = mutt_strlen (d);
     dlen -= n;
     d += n;
   }

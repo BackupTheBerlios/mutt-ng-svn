@@ -485,7 +485,7 @@ static int examine_directory (MUTTMENU * menu, struct browser_state *state,
       if (!(data = (NNTP_DATA *) tmp->data))
         continue;
       if (prefix && *prefix && strncmp (prefix, data->group,
-                                        safe_strlen (prefix)) != 0)
+                                        mutt_strlen (prefix)) != 0)
         continue;
       if (!((regexec (Mask.rx, data->group, 0, NULL, 0) == 0) ^ Mask.not))
         continue;
@@ -530,11 +530,11 @@ static int examine_directory (MUTTMENU * menu, struct browser_state *state,
     init_state (state, menu);
 
     while ((de = readdir (dp)) != NULL) {
-      if (safe_strcmp (de->d_name, ".") == 0)
+      if (mutt_strcmp (de->d_name, ".") == 0)
         continue;               /* we don't need . */
 
       if (prefix && *prefix
-          && safe_strncmp (prefix, de->d_name, safe_strlen (prefix)) != 0)
+          && safe_strncmp (prefix, de->d_name, mutt_strlen (prefix)) != 0)
         continue;
       if (!((regexec (Mask.rx, de->d_name, 0, NULL, 0) == 0) ^ Mask.not))
         continue;
@@ -775,7 +775,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
     }
     else {
 #endif
-      for (i = safe_strlen (f) - 1; i > 0 && f[i] != '/'; i--);
+      for (i = mutt_strlen (f) - 1; i > 0 && f[i] != '/'; i--);
       if (i > 0) {
         if (f[0] == '/') {
           if (i > sizeof (LastDir) - 1)
@@ -891,8 +891,8 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
           /* save the old directory */
           strfcpy (OldLastDir, LastDir, sizeof (OldLastDir));
 
-          if (safe_strcmp (state.entry[menu->current].name, "..") == 0) {
-            if (safe_strcmp ("..", LastDir + safe_strlen (LastDir) - 2) == 0)
+          if (mutt_strcmp (state.entry[menu->current].name, "..") == 0) {
+            if (mutt_strcmp ("..", LastDir + mutt_strlen (LastDir) - 2) == 0)
               strcat (LastDir, "/..");  /* __STRCAT_CHECKED__ */
             else {
               char *p = strrchr (LastDir + 1, '/');
@@ -920,7 +920,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
             strfcpy (LastDir, state.entry[menu->current].name,
                      sizeof (LastDir));
             /* tack on delimiter here */
-            n = safe_strlen (LastDir) + 1;
+            n = mutt_strlen (LastDir) + 1;
 
             /* special case "" needs no delimiter */
             url_parse_ciss (&url, state.entry[menu->current].name);
@@ -1125,7 +1125,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
 #endif
       {
         /* add '/' at the end of the directory name if not already there */
-        int len = safe_strlen (LastDir);
+        int len = mutt_strlen (LastDir);
 
         if (len && LastDir[len - 1] != '/' && sizeof (buf) > len)
           buf[len] = '/';

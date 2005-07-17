@@ -155,7 +155,7 @@ int mutt_addrlist_to_idna (ADDRESS * a, char **err)
         *err = safe_strdup (domain);
     }
     else {
-      safe_realloc (&a->mailbox, safe_strlen (user) + safe_strlen (tmp) + 2);
+      safe_realloc (&a->mailbox, mutt_strlen (user) + mutt_strlen (tmp) + 2);
       sprintf (a->mailbox, "%s@%s", NONULL (user), NONULL (tmp));       /* __SPRINTF_CHECKED__ */
     }
 
@@ -182,7 +182,7 @@ int mutt_addrlist_to_local (ADDRESS * a)
       continue;
 
     if (mutt_idna_to_local (domain, &tmp, 0) == 0) {
-      safe_realloc (&a->mailbox, safe_strlen (user) + safe_strlen (tmp) + 2);
+      safe_realloc (&a->mailbox, mutt_strlen (user) + mutt_strlen (tmp) + 2);
       sprintf (a->mailbox, "%s@%s", NONULL (user), NONULL (tmp));       /* __SPRINTF_CHECKED__ */
     }
 
@@ -216,7 +216,7 @@ const char *mutt_addr_for_display (ADDRESS * a)
     return a->mailbox;
   }
 
-  safe_realloc (&buff, safe_strlen (tmp) + safe_strlen (user) + 2);
+  safe_realloc (&buff, mutt_strlen (tmp) + mutt_strlen (user) + 2);
   sprintf (buff, "%s@%s", NONULL (user), NONULL (tmp)); /* __SPRINTF_CHECKED__ */
   FREE (&tmp);
   FREE (&user);

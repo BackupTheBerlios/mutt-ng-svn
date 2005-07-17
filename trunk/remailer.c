@@ -234,7 +234,7 @@ static void mix_screen_coordinates (REMAILER ** type2_list,
 
   if (i) {
     c =
-      coords[i - 1].c + safe_strlen (type2_list[chain->ch[i - 1]]->shortname) + 2;
+      coords[i - 1].c + mutt_strlen (type2_list[chain->ch[i - 1]]->shortname) + 2;
     r = coords[i - 1].r;
   }
   else {
@@ -245,7 +245,7 @@ static void mix_screen_coordinates (REMAILER ** type2_list,
 
   for (; i < chain->cl; i++) {
     oc = c;
-    c += safe_strlen (type2_list[chain->ch[i]]->shortname) + 2;
+    c += mutt_strlen (type2_list[chain->ch[i]]->shortname) + 2;
 
     if (c >= COLS) {
       oc = c = MIX_HOFFSET;
@@ -431,7 +431,7 @@ static int mix_chain_add (MIXCHAIN * chain, const char *s,
   if (chain->cl >= MAXMIXES)
     return -1;
 
-  if (!safe_strcmp (s, "0") || !ascii_strcasecmp (s, "<random>")) {
+  if (!mutt_strcmp (s, "0") || !ascii_strcasecmp (s, "<random>")) {
     chain->ch[chain->cl++] = 0;
     return 0;
   }

@@ -64,7 +64,7 @@ static char *shortened_hierarchy (char *box, int maxlen)
 {
   int dots = 0;
   char *last_dot = NULL;
-  int i, j, len = safe_strlen (box);
+  int i, j, len = mutt_strlen (box);
   char *new_box;
 
   if (!SidebarBoundary || !*SidebarBoundary)
@@ -85,7 +85,7 @@ static char *shortened_hierarchy (char *box, int maxlen)
       if (strchr (SidebarBoundary, box[i])) {
         new_box[j++] = box[i];
         new_box[j] = 0;
-        if (&box[i + 1] != last_dot || j + safe_strlen (last_dot) > maxlen) {
+        if (&box[i + 1] != last_dot || j + mutt_strlen (last_dot) > maxlen) {
           new_box[j++] = box[i + 1];
           new_box[j] = 0;
         } else {
@@ -155,7 +155,7 @@ int make_sidebar_entry (char* box, int idx, size_t len)
   int shortened = 0, lencnt = 0;
   char no[SHORT_STRING], entry[SHORT_STRING];
 #if USE_IMAP
-  int l = safe_strlen (ImapHomeNamespace);
+  int l = mutt_strlen (ImapHomeNamespace);
 #endif
 
   if (SidebarWidth > COLS)
@@ -170,24 +170,24 @@ int make_sidebar_entry (char* box, int idx, size_t len)
 
   mutt_FormatString (no, len, NONULL (SidebarNumberFormat),
                      sidebar_number_format, idx, M_FORMAT_OPTIONAL);
-  lencnt = safe_strlen (no);
+  lencnt = mutt_strlen (no);
   memset (&entry, ' ', sizeof (entry));
 
 #if USE_IMAP
   if (l > 0 && safe_strncmp (box, ImapHomeNamespace, l) == 0 && 
-      safe_strlen (box) > l)
+      mutt_strlen (box) > l)
     box += l + 1;
   else
 #endif
     box = basename (box);
 
-  if (option (OPTSHORTENHIERARCHY) && safe_strlen (box) > len-lencnt-1) {
+  if (option (OPTSHORTENHIERARCHY) && mutt_strlen (box) > len-lencnt-1) {
     box = shortened_hierarchy (box, len-lencnt-1);
     shortened = 1;
   }
 
   snprintf (entry, len-lencnt, "%s", box);
-  entry[safe_strlen (entry)] = ' ';
+  entry[mutt_strlen (entry)] = ' ';
   strncpy (entry + (len - lencnt), no, lencnt);
 
   addnstr (entry, len);
@@ -237,7 +237,7 @@ int sidebar_draw (int menu)
 
   int lines = option (OPTHELP) ? 1 : 0, draw_devider = 1, i = 0;
   BUFFY *tmp;
-  short delim_len = safe_strlen (SidebarDelim);
+  short delim_len = mutt_strlen (SidebarDelim);
   char blank[SHORT_STRING];
 
   /* initialize first time */
@@ -266,7 +266,7 @@ int sidebar_draw (int menu)
   }
 
   if (SidebarWidth > 0 && option (OPTMBOXPANE)
-      && safe_strlen (SidebarDelim) >= SidebarWidth) {
+      && mutt_strlen (SidebarDelim) >= SidebarWidth) {
     mutt_error (_("Value for sidebar_delim is too long. Disabling sidebar."));
     sleep (2);
     unset_option (OPTMBOXPANE);
@@ -285,9 +285,9 @@ int sidebar_draw (int menu)
       move (lines, SidebarWidth - delim_len);
       if (option (OPTASCIICHARS))
         addstr (NONULL (SidebarDelim));
-      else if (!option (OPTASCIICHARS) && !safe_strcmp (SidebarDelim, "|"))
+      else if (!option (OPTASCIICHARS) && !mutt_strcmp (SidebarDelim, "|"))
         addch (ACS_VLINE);
-      else if ((Charset_is_utf8) && !safe_strcmp (SidebarDelim, "|"))
+      else if ((Charset_is_utf8) && !mutt_strcmp (SidebarDelim, "|"))
         addstr ("\342\224\202");
       else
         addstr (NONULL (SidebarDelim));

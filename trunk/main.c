@@ -792,7 +792,7 @@ int main (int argc, char **argv)
 
     if (infile || bodytext) {
       if (infile) {
-        if (safe_strcmp ("-", infile) == 0)
+        if (mutt_strcmp ("-", infile) == 0)
           fin = stdin;
         else {
           char path[_POSIX_PATH_MAX];

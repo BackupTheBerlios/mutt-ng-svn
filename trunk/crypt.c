@@ -386,7 +386,7 @@ int mutt_is_application_smime (BODY * m)
 
     /* no .p7c, .p10 support yet. */
 
-    len = safe_strlen (t) - 4;
+    len = mutt_strlen (t) - 4;
     if (len > 0 && *(t + len) == '.') {
       len++;
       if (!ascii_strcasecmp ((t + len), "p7m"))

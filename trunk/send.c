@@ -660,7 +660,7 @@ void mutt_make_misc_reply_headers (ENVELOPE * env, CONTEXT * ctx,
    */
   if (curenv->real_subj) {
     FREE (&env->subject);
-    env->subject = safe_malloc (safe_strlen (curenv->real_subj) + 5);
+    env->subject = safe_malloc (mutt_strlen (curenv->real_subj) + 5);
     sprintf (env->subject, "Re: %s", curenv->real_subj);        /* __SPRINTF_CHECKED__ */
   }
   else if (!env->subject)
@@ -996,7 +996,7 @@ ADDRESS *mutt_default_from (void)
   else if (option (OPTUSEDOMAIN)) {
     adr = rfc822_new_address ();
     adr->mailbox =
-      safe_malloc (safe_strlen (Username) + safe_strlen (fqdn) + 2);
+      safe_malloc (mutt_strlen (Username) + mutt_strlen (fqdn) + 2);
     sprintf (adr->mailbox, "%s@%s", NONULL (Username), NONULL (fqdn));  /* __SPRINTF_CHECKED__ */
   }
   else {
@@ -1314,7 +1314,7 @@ int ci_send_message (int flags, /* send mode */
 
     if (option (OPTSIGONTOP)
         && (!(flags & (SENDMAILX | SENDKEY)) && Editor
-            && safe_strcmp (Editor, "builtin") != 0))
+            && mutt_strcmp (Editor, "builtin") != 0))
       append_signature (tempfp);
 
     /* include replies/forwarded messages, unless we are given a template */
@@ -1324,7 +1324,7 @@ int ci_send_message (int flags, /* send mode */
 
     if (!option (OPTSIGONTOP)
         && (!(flags & (SENDMAILX | SENDKEY)) && Editor
-            && safe_strcmp (Editor, "builtin") != 0))
+            && mutt_strcmp (Editor, "builtin") != 0))
       append_signature (tempfp);
 
     /* 
@@ -1437,7 +1437,7 @@ int ci_send_message (int flags, /* send mode */
       /* If the this isn't a text message, look for a mailcap edit command */
       if (mutt_needs_mailcap (msg->content))
         mutt_edit_attachment (msg->content);
-      else if (!Editor || safe_strcmp ("builtin", Editor) == 0)
+      else if (!Editor || mutt_strcmp ("builtin", Editor) == 0)
         mutt_builtin_editor (msg->content->filename, msg, cur);
       else if (option (OPTEDITHDRS)) {
         mutt_env_to_local (msg->env);
@@ -1665,7 +1665,7 @@ int ci_send_message (int flags, /* send mode */
     fcc[0] = '\0';
 #endif
 
-  if (*fcc && safe_strcmp ("/dev/null", fcc) != 0) {
+  if (*fcc && mutt_strcmp ("/dev/null", fcc) != 0) {
     BODY *tmpbody = msg->content;
     BODY *save_sig = NULL;
     BODY *save_parts = NULL;
@@ -1676,8 +1676,8 @@ int ci_send_message (int flags, /* send mode */
     /* check to see if the user wants copies of all attachments */
     if (!option (OPTFCCATTACH) && msg->content->type == TYPEMULTIPART) {
       if (WithCrypto
-          && (safe_strcmp (msg->content->subtype, "encrypted") == 0 ||
-              safe_strcmp (msg->content->subtype, "signed") == 0)) {
+          && (mutt_strcmp (msg->content->subtype, "encrypted") == 0 ||
+              mutt_strcmp (msg->content->subtype, "signed") == 0)) {
         if (clear_content->type == TYPEMULTIPART) {
           if (!(msg->security & ENCRYPT) && (msg->security & SIGN)) {
             /* save initial signature and attachments */

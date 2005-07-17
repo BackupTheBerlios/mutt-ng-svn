@@ -204,7 +204,7 @@ msg_search (CONTEXT * ctx, regex_t * rx, char *buf, size_t blen, int op,
         match = 1;
         break;
       }
-      lng -= safe_strlen (buf);
+      lng -= mutt_strlen (buf);
     }
 
     mx_close_message (&msg);
@@ -667,7 +667,7 @@ pattern_t *mutt_pattern_comp ( /* const */ char *s, int flags, BUFFER * err)
 
   memset (&ps, 0, sizeof (ps));
   ps.dptr = s;
-  ps.dsize = safe_strlen (s);
+  ps.dsize = mutt_strlen (s);
 
   while (*ps.dptr) {
     SKIPWS (ps.dptr);
@@ -1098,7 +1098,7 @@ void mutt_check_simple (char *s, size_t len, const char *simple)
 
   if (!strchr (s, '~')) {       /* yup, so spoof a real request */
     /* convert old tokens into the new format */
-    if (ascii_strcasecmp ("all", s) == 0 || !safe_strcmp ("^", s) || !safe_strcmp (".", s))     /* ~A is more efficient */
+    if (ascii_strcasecmp ("all", s) == 0 || !mutt_strcmp ("^", s) || !mutt_strcmp (".", s))     /* ~A is more efficient */
       strfcpy (s, "~A", len);
     else if (ascii_strcasecmp ("del", s) == 0)
       strfcpy (s, "~D", len);
@@ -1256,7 +1256,7 @@ int mutt_search_command (int cur, int op)
     strfcpy (temp, buf, sizeof (temp));
     mutt_check_simple (temp, sizeof (temp), NONULL (SimpleSearch));
 
-    if (!SearchPattern || safe_strcmp (temp, LastSearchExpn)) {
+    if (!SearchPattern || mutt_strcmp (temp, LastSearchExpn)) {
       set_option (OPTSEARCHINVALID);
       strfcpy (LastSearch, buf, sizeof (LastSearch));
       mutt_message _("Compiling search pattern...");

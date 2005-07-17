@@ -135,10 +135,10 @@ void imap_pretty_mailbox (char *path)
   if (imap_parse_path (path, &target) < 0)
     return;
 
-  tlen = safe_strlen (target.mbox);
+  tlen = mutt_strlen (target.mbox);
   /* check whether we can do '=' substitution */
   if (mx_get_magic (Maildir) == M_IMAP && !imap_parse_path (Maildir, &home)) {
-    hlen = safe_strlen (home.mbox);
+    hlen = mutt_strlen (home.mbox);
     if (tlen && mutt_account_match (&home.account, &target.account) &&
         !safe_strncmp (home.mbox, target.mbox, hlen)) {
       if (!hlen)
@@ -446,7 +446,7 @@ void imap_unmunge_mbox_name (char *s)
   buf = safe_strdup (s);
   if (buf) {
     imap_utf7_decode (&buf);
-    strncpy (s, buf, safe_strlen (s));
+    strncpy (s, buf, mutt_strlen (s));
   }
 
   FREE (&buf);

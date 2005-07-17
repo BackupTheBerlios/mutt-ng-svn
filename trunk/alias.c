@@ -49,7 +49,7 @@ static ADDRESS *mutt_expand_aliases_r (ADDRESS * a, LIST ** expn)
       if (t) {
         i = 0;
         for (u = *expn; u; u = u->next) {
-          if (safe_strcmp (a->mailbox, u->data) == 0) { /* alias already found */
+          if (mutt_strcmp (a->mailbox, u->data) == 0) { /* alias already found */
             debug_print(1, ("loop in alias found for '%s'\n", a->mailbox));
             i = 1;
             break;
@@ -392,7 +392,7 @@ int mutt_alias_complete (char *s, size_t buflen)
       if (a->name && strstr (a->name, s) == a->name) {
         if (!bestname[0])       /* init */
           strfcpy (bestname, a->name,
-                   min (safe_strlen (a->name) + 1, sizeof (bestname)));
+                   min (mutt_strlen (a->name) + 1, sizeof (bestname)));
         else {
           for (i = 0; a->name[i] && a->name[i] == bestname[i]; i++);
           bestname[i] = 0;
@@ -402,9 +402,9 @@ int mutt_alias_complete (char *s, size_t buflen)
     }
 
     if (bestname[0] != 0) {
-      if (safe_strcmp (bestname, s) != 0) {
+      if (mutt_strcmp (bestname, s) != 0) {
         /* we are adding something to the completion */
-        strfcpy (s, bestname, safe_strlen (bestname) + 1);
+        strfcpy (s, bestname, mutt_strlen (bestname) + 1);
         return 1;
       }
 

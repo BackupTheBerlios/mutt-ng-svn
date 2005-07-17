@@ -43,7 +43,7 @@ static int is_day_name (const char *s)
 {
   int i;
 
-  if ((safe_strlen (s) < 3) || !*(s + 3) || !ISSPACE (*(s + 3)))
+  if ((mutt_strlen (s) < 3) || !*(s + 3) || !ISSPACE (*(s + 3)))
     return 0;
   for (i = 0; i < 7; i++)
     if (safe_strncasecmp (s, Weekdays[i], 3) == 0)

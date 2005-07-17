@@ -399,7 +399,7 @@ _mutt_parse_uncolor (BUFFER * buf, BUFFER * s, unsigned long data,
 
   do {
     mutt_extract_token (buf, s, 0);
-    if (!safe_strcmp ("*", buf->data)) {
+    if (!mutt_strcmp ("*", buf->data)) {
       for (tmp = ColorIndexList; tmp;) {
         if (!do_cache)
           do_cache = 1;
@@ -412,7 +412,7 @@ _mutt_parse_uncolor (BUFFER * buf, BUFFER * s, unsigned long data,
     else {
       for (last = NULL, tmp = ColorIndexList; tmp;
            last = tmp, tmp = tmp->next) {
-        if (!safe_strcmp (buf->data, tmp->pattern)) {
+        if (!mutt_strcmp (buf->data, tmp->pattern)) {
           if (!do_cache)
             do_cache = 1;
           debug_print (1, ("Freeing pattern \"%s\" from ColorIndexList\n", tmp->pattern));
@@ -454,7 +454,7 @@ add_pattern (COLOR_LINE ** top, const char *s, int sensitive,
 
   while (tmp) {
     if (sensitive) {
-      if (safe_strcmp (s, tmp->pattern) == 0)
+      if (mutt_strcmp (s, tmp->pattern) == 0)
         break;
     }
     else {

@@ -47,7 +47,7 @@ static char *read_rfc822_line (FILE * f, char *line, size_t * linelen)
       return (line);
     }
 
-    buf += safe_strlen (buf) - 1;
+    buf += mutt_strlen (buf) - 1;
     if (*buf == '\n') {
       /* we did get a full line. remove trailing space */
       while (ISSPACE (*buf))
@@ -96,7 +96,7 @@ LIST *mutt_parse_references (char *s, int in_reply_to)
     new = NULL;
 
     if (*s == '<') {
-      n = safe_strlen (s);
+      n = mutt_strlen (s);
       if (s[n - 1] != '>') {
         o = s;
         s = NULL;
@@ -106,7 +106,7 @@ LIST *mutt_parse_references (char *s, int in_reply_to)
       new = safe_strdup (s);
     }
     else if (o) {
-      m = safe_strlen (s);
+      m = mutt_strlen (s);
       if (s[m - 1] == '>') {
         new = safe_malloc (sizeof (char) * (n + m + 1));
         strcpy (new, o);        /* __STRCPY_CHECKED__ */
@@ -582,9 +582,9 @@ BODY *mutt_parse_multipart (FILE * fp, const char *boundary, long end_off,
     return (NULL);
   }
 
-  blen = safe_strlen (boundary);
+  blen = mutt_strlen (boundary);
   while (ftell (fp) < end_off && fgets (buffer, LONG_STRING, fp) != NULL) {
-    len = safe_strlen (buffer);
+    len = mutt_strlen (buffer);
 
     crlf = (len > 1 && buffer[len - 2] == '\r') ? 1 : 0;
 
@@ -605,7 +605,7 @@ BODY *mutt_parse_multipart (FILE * fp, const char *boundary, long end_off,
         buffer[i] = 0;
 
       /* Check for the end boundary */
-      if (safe_strcmp (buffer + blen + 2, "--") == 0) {
+      if (mutt_strcmp (buffer + blen + 2, "--") == 0) {
         final = 1;
         break;                  /* done parsing */
       }
@@ -1246,7 +1246,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
   /* Keep track of the user-defined headers */
   if (!matched && user_hdrs) {
     /* restore the original line */
-    line[safe_strlen (line)] = ':';
+    line[mutt_strlen (line)] = ':';
 
     if (weed && option (OPTWEED) && mutt_matches_ignore (line, Ignore)
         && !mutt_matches_ignore (line, UnIgnore))

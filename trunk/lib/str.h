@@ -45,12 +45,12 @@
 char *safe_strdup (const char*);
 char *safe_strcat (char*, size_t, const char*);
 char *safe_strncat (char*, size_t, const char*, size_t);
-int safe_strcmp (const char*, const char*);
+int mutt_strcmp (const char*, const char*);
 int safe_strcasecmp (const char*, const char*);
 int safe_strncmp (const char*, const char*, size_t);
 int safe_strncasecmp (const char*, const char*, size_t);
 int safe_strcoll (const char*, const char*);
-size_t safe_strlen (const char*);
+size_t mutt_strlen (const char*);
 
 /*
  * tools

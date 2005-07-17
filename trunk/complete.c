@@ -60,7 +60,7 @@ int mutt_complete (char *s, size_t slen)
      * special case to handle when there is no filepart yet.
      * find the first subscribed newsgroup
      */
-    if ((len = safe_strlen (filepart)) == 0) {
+    if ((len = mutt_strlen (filepart)) == 0) {
       for (; l; l = l->next) {
         NNTP_DATA *data = (NNTP_DATA *) l->data;
 
@@ -176,10 +176,10 @@ int mutt_complete (char *s, size_t slen)
    * special case to handle when there is no filepart yet.  find the first
    * file/directory which is not ``.'' or ``..''
    */
-  if ((len = safe_strlen (filepart)) == 0) {
+  if ((len = mutt_strlen (filepart)) == 0) {
     while ((de = readdir (dirp)) != NULL) {
-      if (safe_strcmp (".", de->d_name) != 0
-          && safe_strcmp ("..", de->d_name) != 0) {
+      if (mutt_strcmp (".", de->d_name) != 0
+          && mutt_strcmp ("..", de->d_name) != 0) {
         strfcpy (filepart, de->d_name, sizeof (filepart));
         init++;
         break;
@@ -207,14 +207,14 @@ int mutt_complete (char *s, size_t slen)
         /* check to see if it is a directory */
         if (dirpart[0]) {
           strfcpy (buf, exp_dirpart, sizeof (buf));
-          strfcpy (buf + safe_strlen (buf), "/", sizeof (buf) - safe_strlen (buf));
+          strfcpy (buf + mutt_strlen (buf), "/", sizeof (buf) - mutt_strlen (buf));
         }
         else
           buf[0] = 0;
-        strfcpy (buf + safe_strlen (buf), filepart, sizeof (buf) - safe_strlen (buf));
+        strfcpy (buf + mutt_strlen (buf), filepart, sizeof (buf) - mutt_strlen (buf));
         if (stat (buf, &st) != -1 && (st.st_mode & S_IFDIR))
-          strfcpy (filepart + safe_strlen (filepart), "/",
-                   sizeof (filepart) - safe_strlen (filepart));
+          strfcpy (filepart + mutt_strlen (filepart), "/",
+                   sizeof (filepart) - mutt_strlen (filepart));
         init = 1;
       }
     }
@@ -223,10 +223,10 @@ int mutt_complete (char *s, size_t slen)
 
   if (dirpart[0]) {
     strfcpy (s, dirpart, slen);
-    if (safe_strcmp ("/", dirpart) != 0 && dirpart[0] != '='
+    if (mutt_strcmp ("/", dirpart) != 0 && dirpart[0] != '='
         && dirpart[0] != '+')
-      strfcpy (s + safe_strlen (s), "/", slen - safe_strlen (s));
-    strfcpy (s + safe_strlen (s), filepart, slen - safe_strlen (s));
+      strfcpy (s + mutt_strlen (s), "/", slen - mutt_strlen (s));
+    strfcpy (s + mutt_strlen (s), filepart, slen - mutt_strlen (s));
   }
   else
     strfcpy (s, filepart, slen);

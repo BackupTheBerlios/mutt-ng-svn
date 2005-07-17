@@ -144,7 +144,7 @@ int mutt_get_password (char *msg, char *buf, size_t buflen)
   CLEARLINE (LINES - 1);
   addstr (msg);
   set_option (OPTUNBUFFEREDINPUT);
-  rc = mutt_enter_string (buf, buflen, LINES - 1, safe_strlen (msg), M_PASS);
+  rc = mutt_enter_string (buf, buflen, LINES - 1, mutt_strlen (msg), M_PASS);
   unset_option (OPTUNBUFFEREDINPUT);
   CLEARLINE (LINES - 1);
   return (rc);
@@ -218,7 +218,7 @@ int mutt_yesorno (const char *msg, int def)
   answer_string = safe_malloc (COLS + 1);
   snprintf (answer_string, COLS + 1, " ([%s]/%s): ", def == M_YES ? yes : no,
             def == M_YES ? no : yes);
-  answer_string_len = safe_strlen (answer_string);
+  answer_string_len = mutt_strlen (answer_string);
   printw ("%.*s%s", COLS - answer_string_len, msg, answer_string);
   FREE (&answer_string);
 
@@ -403,7 +403,7 @@ int mutt_do_pager (const char *banner,
 {
   int rc;
 
-  if (!Pager || safe_strcmp (Pager, "builtin") == 0)
+  if (!Pager || mutt_strcmp (Pager, "builtin") == 0)
     rc = mutt_pager (banner, tempfile, do_color, info);
   else {
     char cmd[STRING];
@@ -448,7 +448,7 @@ int _mutt_enter_fname (const char *prompt, char *buf, size_t blen,
     *redraw = REDRAW_FULL;
   }
   else {
-    char *pc = safe_malloc (safe_strlen (prompt) + 3);
+    char *pc = safe_malloc (mutt_strlen (prompt) + 3);
 
     sprintf (pc, "%s: ", prompt);       /* __SPRINTF_CHECKED__ */
     mutt_ungetch (ch.op ? 0 : ch.ch, ch.op ? ch.op : 0);
@@ -528,7 +528,7 @@ int mutt_multi_choice (char *prompt, char *letters)
       }
       else if (ch.ch <= '9' && ch.ch > '0') {
         choice = ch.ch - '0';
-        if (choice <= safe_strlen (letters))
+        if (choice <= mutt_strlen (letters))
           break;
       }
     }
@@ -648,7 +648,7 @@ static void mutt_format_s_x (char *dest,
   }
 
   mutt_format_string (dest, destlen, min_width, max_width,
-                      right_justify, ' ', s, safe_strlen (s), arboreal);
+                      right_justify, ' ', s, mutt_strlen (s), arboreal);
 }
 
 void mutt_format_s (char *dest,
@@ -673,7 +673,7 @@ void mutt_paddstr (int n, const char *s)
   wchar_t wc;
   int w;
   size_t k;
-  size_t len = safe_strlen (s);
+  size_t len = mutt_strlen (s);
   mbstate_t mbstate;
 
   memset (&mbstate, 0, sizeof (mbstate));
@@ -697,7 +697,7 @@ void mutt_paddstr (int n, const char *s)
 }
 
 /*
- * mutt_strwidth is like safe_strlen except that it returns the width
+ * mutt_strwidth is like mutt_strlen except that it returns the width
  * refering to the number of characters cells.
  */
 
@@ -711,7 +711,7 @@ int mutt_strwidth (const char *s)
   if (!s)
     return 0;
 
-  n = safe_strlen (s);
+  n = mutt_strlen (s);
 
   memset (&mbstate, 0, sizeof (mbstate));
   for (w = 0; n && (k = mbrtowc (&wc, s, n, &mbstate)); s += k, n -= k) {

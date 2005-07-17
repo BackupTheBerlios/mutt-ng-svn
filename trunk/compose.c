@@ -221,14 +221,14 @@ static void redraw_mix_line (LIST * chain)
     if (t && t[0] == '0' && t[1] == '\0')
       t = "<random>";
 
-    if (c + safe_strlen (t) + 2 >= COLS - SidebarWidth)
+    if (c + mutt_strlen (t) + 2 >= COLS - SidebarWidth)
       break;
 
     addstr (NONULL (t));
     if (chain->next)
       addstr (", ");
 
-    c += safe_strlen (t) + 2;
+    c += mutt_strlen (t) + 2;
   }
 }
 #endif /* MIXMASTER */
@@ -694,7 +694,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
       mutt_message_hook (NULL, msg, M_SEND2HOOK);
       break;
     case OP_COMPOSE_EDIT_MESSAGE:
-      if (Editor && (safe_strcmp ("builtin", Editor) != 0)
+      if (Editor && (mutt_strcmp ("builtin", Editor) != 0)
           && !option (OPTEDITHDRS)) {
         mutt_edit_file (Editor, msg->content->filename);
         mutt_update_encoding (msg->content);
@@ -704,7 +704,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
       }
       /* fall through */
     case OP_COMPOSE_EDIT_HEADERS:
-      if (safe_strcmp ("builtin", Editor) != 0 &&
+      if (mutt_strcmp ("builtin", Editor) != 0 &&
           (op == OP_COMPOSE_EDIT_HEADERS ||
            (op == OP_COMPOSE_EDIT_MESSAGE && option (OPTEDITHDRS)))) {
         char *tag = NULL, *err = NULL;

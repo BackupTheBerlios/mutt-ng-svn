@@ -172,7 +172,7 @@ int url_ciss_tostring (ciss_url_t * ciss, char *dest, size_t len, int flags)
 
   if (ciss->host) {
     safe_strcat (dest, len, "//");
-    len -= (l = safe_strlen (dest));
+    len -= (l = mutt_strlen (dest));
     dest += l;
 
     if (ciss->user) {
@@ -181,7 +181,7 @@ int url_ciss_tostring (ciss_url_t * ciss, char *dest, size_t len, int flags)
       else
         snprintf (dest, len, "%s@", ciss->user);
 
-      len -= (l = safe_strlen (dest));
+      len -= (l = mutt_strlen (dest));
       dest += l;
     }
 
@@ -238,7 +238,7 @@ int url_parse_mailto (ENVELOPE * e, char **body, const char *src)
     }
     else {
 #define SAFEPFX (option (OPTSTRICTMAILTO) ? "" : "X-Mailto-")
-      taglen = safe_strlen (tag) + safe_strlen (SAFEPFX);
+      taglen = mutt_strlen (tag) + mutt_strlen (SAFEPFX);
       /* mutt_parse_rfc822_line makes some assumptions */
       snprintf (scratch, sizeof (scratch), "%s%s: %s", SAFEPFX, tag, value);
 #undef SAVEPFX

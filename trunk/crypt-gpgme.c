@@ -149,7 +149,7 @@ static const char *crypt_keyid (crypt_key_t * k)
 
   if (k->kobj && k->kobj->subkeys) {
     s = k->kobj->subkeys->keyid;
-    if ((!option (OPTPGPLONGIDS)) && (safe_strlen (s) == 16))
+    if ((!option (OPTPGPLONGIDS)) && (mutt_strlen (s) == 16))
       /* Return only the short keyID.  */
       s += 8;
   }
@@ -1003,7 +1003,7 @@ static int show_sig_summary (unsigned long sum,
       state_attach_puts (": ", s);
       if (t0)
         state_attach_puts (t0, s);
-      if (t1 && !(t0 && !safe_strcmp (t0, t1))) {
+      if (t1 && !(t0 && !mutt_strcmp (t0, t1))) {
         if (t0)
           state_attach_puts (",", s);
         state_attach_puts (t1, s);
@@ -1030,10 +1030,10 @@ static void show_fingerprint (gpgme_key_t key, STATE * state)
     return;
   is_pgp = (key->protocol == GPGME_PROTOCOL_OpenPGP);
 
-  buf = safe_malloc (safe_strlen (prefix) + safe_strlen (s) * 4 + 2);
+  buf = safe_malloc (mutt_strlen (prefix) + mutt_strlen (s) * 4 + 2);
   strcpy (buf, prefix);         /* __STRCPY_CHECKED__ */
-  p = buf + safe_strlen (buf);
-  if (is_pgp && safe_strlen (s) == 40) {     /* PGP v4 style formatted. */
+  p = buf + mutt_strlen (buf);
+  if (is_pgp && mutt_strlen (s) == 40) {     /* PGP v4 style formatted. */
     for (i = 0; *s && s[1] && s[2] && s[3] && s[4]; s += 4, i++) {
       *p++ = s[0];
       *p++ = s[1];
@@ -1298,7 +1298,7 @@ static int verify_one (BODY * sigbdy, STATE * s,
             if (notation->value) {
               state_attach_puts (notation->value, s);
               if (!(*notation->value
-                    && (notation->value[safe_strlen (notation->value) - 1] ==
+                    && (notation->value[mutt_strlen (notation->value) - 1] ==
                         '\n')))
                 state_attach_puts ("\n", s);
             }
@@ -1657,9 +1657,9 @@ static int pgp_check_traditional_one_body (FILE * fp, BODY * b,
 
   while (fgets (buf, sizeof (buf), tfp)) {
     if (!safe_strncmp ("-----BEGIN PGP ", buf, 15)) {
-      if (!safe_strcmp ("MESSAGE-----\n", buf + 15))
+      if (!mutt_strcmp ("MESSAGE-----\n", buf + 15))
         enc = 1;
-      else if (!safe_strcmp ("SIGNED MESSAGE-----\n", buf + 15))
+      else if (!mutt_strcmp ("SIGNED MESSAGE-----\n", buf + 15))
         sgn = 1;
     }
   }
@@ -1738,7 +1738,7 @@ static void copy_clearsigned (gpgme_data_t data, STATE * s, char *charset)
       continue;
     }
 
-    if (!safe_strcmp (buf, "-----BEGIN PGP SIGNATURE-----\n"))
+    if (!mutt_strcmp (buf, "-----BEGIN PGP SIGNATURE-----\n"))
       break;
 
     if (armor_header) {
@@ -1795,21 +1795,21 @@ void pgp_gpgme_application_handler (BODY * m, STATE * s)
       break;
 
     offset = ftell (s->fpin);
-    bytes -= (offset - last_pos);       /* don't rely on safe_strlen(buf) */
+    bytes -= (offset - last_pos);       /* don't rely on mutt_strlen(buf) */
     last_pos = offset;
 
     if (!safe_strncmp ("-----BEGIN PGP ", buf, 15)) {
       clearsign = 0;
       start_pos = last_pos;
 
-      if (!safe_strcmp ("MESSAGE-----\n", buf + 15))
+      if (!mutt_strcmp ("MESSAGE-----\n", buf + 15))
         needpass = 1;
-      else if (!safe_strcmp ("SIGNED MESSAGE-----\n", buf + 15)) {
+      else if (!mutt_strcmp ("SIGNED MESSAGE-----\n", buf + 15)) {
         clearsign = 1;
         needpass = 0;
       }
       else if (!option (OPTDONTHANDLEPGPKEYS) &&
-               !safe_strcmp ("PUBLIC KEY BLOCK-----\n", buf + 15)) {
+               !mutt_strcmp ("PUBLIC KEY BLOCK-----\n", buf + 15)) {
         needpass = 0;
         pgp_keyblock = 1;
       }
@@ -1825,18 +1825,18 @@ void pgp_gpgme_application_handler (BODY * m, STATE * s)
 
       /* Copy PGP material to an data container */
       armored_data = create_gpgme_data ();
-      gpgme_data_write (armored_data, buf, safe_strlen (buf));
+      gpgme_data_write (armored_data, buf, mutt_strlen (buf));
       while (bytes > 0 && fgets (buf, sizeof (buf) - 1, s->fpin) != NULL) {
         offset = ftell (s->fpin);
-        bytes -= (offset - last_pos);   /* don't rely on safe_strlen(buf) */
+        bytes -= (offset - last_pos);   /* don't rely on mutt_strlen(buf) */
         last_pos = offset;
 
-        gpgme_data_write (armored_data, buf, safe_strlen (buf));
+        gpgme_data_write (armored_data, buf, mutt_strlen (buf));
 
-        if ((needpass && !safe_strcmp ("-----END PGP MESSAGE-----\n", buf))
+        if ((needpass && !mutt_strcmp ("-----END PGP MESSAGE-----\n", buf))
             || (!needpass
-                && (!safe_strcmp ("-----END PGP SIGNATURE-----\n", buf)
-                    || !safe_strcmp ("-----END PGP PUBLIC KEY BLOCK-----\n",
+                && (!mutt_strcmp ("-----END PGP SIGNATURE-----\n", buf)
+                    || !mutt_strcmp ("-----END PGP PUBLIC KEY BLOCK-----\n",
                                      buf))))
           break;
       }
@@ -2480,10 +2480,10 @@ static int print_dn_part (FILE * fp, struct dn_array_s *dn, const char *key)
   int any = 0;
 
   for (; dn->key; dn++) {
-    if (!safe_strcmp (dn->key, key)) {
+    if (!mutt_strcmp (dn->key, key)) {
       if (any)
         fputs (" + ", fp);
-      print_utf8 (fp, dn->value, safe_strlen (dn->value));
+      print_utf8 (fp, dn->value, mutt_strlen (dn->value));
       any = 1;
     }
   }
@@ -2506,7 +2506,7 @@ static void print_dn_parts (FILE * fp, struct dn_array_s *dn)
   /* now print the rest without any specific ordering */
   for (; dn->key; dn++) {
     for (i = 0; stdpart[i]; i++) {
-      if (!safe_strcmp (dn->key, stdpart[i]))
+      if (!mutt_strcmp (dn->key, stdpart[i]))
         break;
     }
     if (!stdpart[i]) {
@@ -2759,7 +2759,7 @@ static void print_key_info (gpgme_key_t key, FILE * fp)
       putc (' ', fp);
     }
     if (is_pgp)
-      print_utf8 (fp, s, safe_strlen (s));
+      print_utf8 (fp, s, mutt_strlen (s));
     else
       parse_and_print_user_id (fp, s);
     putc ('\n', fp);
@@ -2821,7 +2821,7 @@ static void print_key_info (gpgme_key_t key, FILE * fp)
   if (key->subkeys) {
     s = key->subkeys->fpr;
     fputs (_("Fingerprint: "), fp);
-    if (is_pgp && safe_strlen (s) == 40) {
+    if (is_pgp && mutt_strlen (s) == 40) {
       for (i = 0; *s && s[1] && s[2] && s[3] && s[4]; s += 4, i++) {
         putc (*s, fp);
         putc (s[1], fp);
@@ -2867,7 +2867,7 @@ static void print_key_info (gpgme_key_t key, FILE * fp)
       s = subkey->keyid;
 
       putc ('\n', fp);
-      if (safe_strlen (s) == 16)
+      if (mutt_strlen (s) == 16)
         s += 8;                 /* display only the short keyID */
       fprintf (fp, "Subkey ....: 0x%s", s);
       if (subkey->revoked) {
@@ -2980,7 +2980,7 @@ static void verify_key (crypt_key_t * key)
 
   k = key->kobj;
   gpgme_key_ref (k);
-  while ((s = k->chain_id) && k->subkeys && safe_strcmp (s, k->subkeys->fpr)) {
+  while ((s = k->chain_id) && k->subkeys && mutt_strcmp (s, k->subkeys->fpr)) {
     putc ('\n', fp);
     err = gpgme_op_keylist_start (listctx, s, 0);
     gpgme_key_release (k);
@@ -3219,7 +3219,7 @@ static LIST *crypt_add_string_to_hints (LIST * hints, const char *str)
 
   for (t = strtok (scratch, " ,.:\"()<>\n"); t;
        t = strtok (NULL, " ,.:\"()<>\n")) {
-    if (safe_strlen (t) > 3)
+    if (mutt_strlen (t) > 3)
       hints = mutt_add_list (hints, t);
   }
 
@@ -3765,12 +3765,12 @@ static char *find_keys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc,
         *r_application &= ~APPLICATION_SMIME;
 #endif
 
-      keylist_size += safe_strlen (s) + 4 + 1;
+      keylist_size += mutt_strlen (s) + 4 + 1;
       safe_realloc (&keylist, keylist_size);
       sprintf (keylist + keylist_used, "%s0x%s%s",      /* __SPRINTF_CHECKED__ */
                keylist_used ? " " : "", s, forced_valid ? "!" : "");
     }
-    keylist_used = safe_strlen (keylist);
+    keylist_used = mutt_strlen (keylist);
 
     crypt_free_key (&key);
     rfc822_free_address (&addr);
@@ -3920,9 +3920,9 @@ static int verify_sender (HEADER * h, gpgme_protocol_t protocol)
       int sender_length = 0;
       int uid_length = 0;
 
-      sender_length = safe_strlen (sender->mailbox);
+      sender_length = mutt_strlen (sender->mailbox);
       for (uid = key->uids; uid && ret; uid = uid->next) {
-        uid_length = safe_strlen (uid->email);
+        uid_length = mutt_strlen (uid->email);
         if (1 && (uid->email[0] == '<')
             && (uid->email[uid_length - 1] == '>')
             && (uid_length == sender_length + 2)

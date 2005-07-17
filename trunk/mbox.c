@@ -126,7 +126,7 @@ static int mmdf_parse_mailbox (CONTEXT * ctx)
     if (fgets (buf, sizeof (buf) - 1, ctx->fp) == NULL)
       break;
 
-    if (safe_strcmp (buf, MMDF_SEP) == 0) {
+    if (mutt_strcmp (buf, MMDF_SEP) == 0) {
       loc = ftell (ctx->fp);
 
       count++;
@@ -170,7 +170,7 @@ static int mmdf_parse_mailbox (CONTEXT * ctx)
         if (0 < tmploc && tmploc < ctx->size) {
           if (fseek (ctx->fp, tmploc, SEEK_SET) != 0 ||
               fgets (buf, sizeof (buf) - 1, ctx->fp) == NULL ||
-              safe_strcmp (MMDF_SEP, buf) != 0) {
+              mutt_strcmp (MMDF_SEP, buf) != 0) {
             if (fseek (ctx->fp, loc, SEEK_SET) != 0)
               debug_print (1, ("fseek() failed\n"));
             hdr->content->length = -1;
@@ -189,7 +189,7 @@ static int mmdf_parse_mailbox (CONTEXT * ctx)
           if (fgets (buf, sizeof (buf) - 1, ctx->fp) == NULL)
             break;
           lines++;
-        } while (safe_strcmp (buf, MMDF_SEP) != 0);
+        } while (mutt_strcmp (buf, MMDF_SEP) != 0);
 
         hdr->lines = lines;
         hdr->content->length = loc - hdr->content->offset;
@@ -421,8 +421,8 @@ static int mbox_open_mailbox (CONTEXT * ctx)
 static int strict_addrcmp (const ADDRESS * a, const ADDRESS * b)
 {
   while (a && b) {
-    if (safe_strcmp (a->mailbox, b->mailbox) ||
-        safe_strcmp (a->personal, b->personal))
+    if (mutt_strcmp (a->mailbox, b->mailbox) ||
+        mutt_strcmp (a->personal, b->personal))
       return (0);
 
     a = a->next;
@@ -437,7 +437,7 @@ static int strict_addrcmp (const ADDRESS * a, const ADDRESS * b)
 static int strict_cmp_lists (const LIST * a, const LIST * b)
 {
   while (a && b) {
-    if (safe_strcmp (a->data, b->data))
+    if (mutt_strcmp (a->data, b->data))
       return (0);
 
     a = a->next;
@@ -452,8 +452,8 @@ static int strict_cmp_lists (const LIST * a, const LIST * b)
 static int strict_cmp_envelopes (const ENVELOPE * e1, const ENVELOPE * e2)
 {
   if (e1 && e2) {
-    if (safe_strcmp (e1->message_id, e2->message_id) ||
-        safe_strcmp (e1->subject, e2->subject) ||
+    if (mutt_strcmp (e1->message_id, e2->message_id) ||
+        mutt_strcmp (e1->subject, e2->subject) ||
         !strict_cmp_lists (e1->references, e2->references) ||
         !strict_addrcmp (e1->from, e2->from) ||
         !strict_addrcmp (e1->sender, e2->sender) ||
@@ -476,8 +476,8 @@ static int strict_cmp_envelopes (const ENVELOPE * e1, const ENVELOPE * e2)
 static int strict_cmp_parameters (const PARAMETER * p1, const PARAMETER * p2)
 {
   while (p1 && p2) {
-    if (safe_strcmp (p1->attribute, p2->attribute) ||
-        safe_strcmp (p1->value, p2->value))
+    if (mutt_strcmp (p1->attribute, p2->attribute) ||
+        mutt_strcmp (p1->value, p2->value))
       return (0);
 
     p1 = p1->next;
@@ -493,8 +493,8 @@ static int strict_cmp_bodies (const BODY * b1, const BODY * b2)
 {
   if (b1->type != b2->type ||
       b1->encoding != b2->encoding ||
-      safe_strcmp (b1->subtype, b2->subtype) ||
-      safe_strcmp (b1->description, b2->description) ||
+      mutt_strcmp (b1->subtype, b2->subtype) ||
+      mutt_strcmp (b1->description, b2->description) ||
       !strict_cmp_parameters (b1->parameter, b2->parameter) ||
       b1->length != b2->length)
     return (0);
@@ -578,7 +578,7 @@ static int _mbox_check_mailbox (CONTEXT * ctx, int *index_hint)
         debug_print (1, ("fseek() failed\n"));
       if (fgets (buffer, sizeof (buffer), ctx->fp) != NULL) {
         if ((ctx->magic == M_MBOX && safe_strncmp ("From ", buffer, 5) == 0)
-            || (ctx->magic == M_MMDF && safe_strcmp (MMDF_SEP, buffer) == 0)) {
+            || (ctx->magic == M_MMDF && mutt_strcmp (MMDF_SEP, buffer) == 0)) {
           if (fseek (ctx->fp, ctx->size, SEEK_SET) != 0)
             debug_print (1, ("fseek() failed\n"));
           if (ctx->magic == M_MBOX)
@@ -860,7 +860,7 @@ static int _mbox_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
       /* do a sanity check to make sure the mailbox looks ok */
       fgets (buf, sizeof (buf), ctx->fp) == NULL ||
       (ctx->magic == M_MBOX && safe_strncmp ("From ", buf, 5) != 0) ||
-      (ctx->magic == M_MMDF && safe_strcmp (MMDF_SEP, buf) != 0)) {
+      (ctx->magic == M_MMDF && mutt_strcmp (MMDF_SEP, buf) != 0)) {
     debug_print (1, ("message not in expected position.\n"));
     debug_print (1, ("LINE: %s\n", buf));
     i = -1;
@@ -1208,7 +1208,7 @@ int mbox_is_magic (const char* path, struct stat* st) {
     fgets (tmp, sizeof (tmp), f);
     if (safe_strncmp ("From ", tmp, 5) == 0)
       magic = M_MBOX;
-    else if (safe_strcmp (MMDF_SEP, tmp) == 0)
+    else if (mutt_strcmp (MMDF_SEP, tmp) == 0)
       magic = M_MMDF;
     safe_fclose (&f);
 #ifndef BUFFY_SIZE

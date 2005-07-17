@@ -335,7 +335,7 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t * inbytesleft,
 
         for (t = inrepls; *t; t++) {
           ICONV_CONST char *ib1 = *t;
-          size_t ibl1 = safe_strlen (*t);
+          size_t ibl1 = mutt_strlen (*t);
           char *ob1 = ob;
           size_t obl1 = obl;
 
@@ -355,7 +355,7 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t * inbytesleft,
         outrepl = "?";
       iconv (cd, 0, 0, &ob, &obl);
       if (obl) {
-        int n = safe_strlen (outrepl);
+        int n = mutt_strlen (outrepl);
 
         if (n > obl) {
           outrepl = "?";
@@ -406,7 +406,7 @@ int mutt_convert_string (char **ps, const char *from, const char *to,
     else
       outrepl = "?";
 
-    len = safe_strlen (s);
+    len = mutt_strlen (s);
     ib = s, ibl = len + 1;
     obl = MB_LEN_MAX * ibl;
     ob = buf = safe_malloc (obl + 1);
@@ -561,7 +561,7 @@ char *mutt_get_first_charset (const char *charset)
   const char *c, *c1;
 
   c = charset;
-  if (!safe_strlen (c))
+  if (!mutt_strlen (c))
     return "us-ascii";
   if (!(c1 = strchr (c, ':')))
     return charset;
@@ -611,14 +611,14 @@ int mutt_convert_nonmime_string (char **ps)
     char *s;
     char *fromcode;
     size_t m, n;
-    size_t ulen = safe_strlen (*ps);
+    size_t ulen = mutt_strlen (*ps);
     size_t slen;
 
     if (!u || !*u)
       return 0;
 
     c1 = strchr (c, ':');
-    n = c1 ? c1 - c : safe_strlen (c);
+    n = c1 ? c1 - c : mutt_strlen (c);
     if (!n)
       continue;
     fromcode = safe_malloc (n + 1);

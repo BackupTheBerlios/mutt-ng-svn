@@ -247,7 +247,7 @@ static int get_op (struct binding_t *bindings, const char *start, size_t len)
 
   for (i = 0; bindings[i].name; i++) {
     if (!ascii_strncasecmp (start, bindings[i].name, len) &&
-        safe_strlen (bindings[i].name) == len)
+        mutt_strlen (bindings[i].name) == len)
       return bindings[i].op;
   }
 
@@ -269,7 +269,7 @@ static char *get_func (struct binding_t *bindings, int op)
 
 static void push_string (char *s)
 {
-  char *pp, *p = s + safe_strlen (s) - 1;
+  char *pp, *p = s + mutt_strlen (s) - 1;
   size_t l;
   int i, op = OP_NULL;
 
@@ -488,7 +488,7 @@ int km_expand_key (char *s, size_t len, struct keymap_t *map)
 
   FOREVER {
     strfcpy (s, km_keyname (map->keys[p]), len);
-    len -= (l = safe_strlen (s));
+    len -= (l = mutt_strlen (s));
 
     if (++p >= map->len || !len)
       return (1);
@@ -717,7 +717,7 @@ try_bind (char *key, int menu, char *func, struct binding_t *bindings)
   int i;
 
   for (i = 0; bindings[i].name; i++)
-    if (safe_strcmp (func, bindings[i].name) == 0) {
+    if (mutt_strcmp (func, bindings[i].name) == 0) {
       km_bindkey (key, menu, bindings[i].op);
       return (0);
     }
@@ -880,9 +880,9 @@ int mutt_parse_exec (BUFFER * buf, BUFFER * s, unsigned long data,
         && CurrentMenu != MENU_PAGER)
       bindings = OpGeneric;
 
-    ops[nops] = get_op (bindings, function, safe_strlen (function));
+    ops[nops] = get_op (bindings, function, mutt_strlen (function));
     if (ops[nops] == OP_NULL && CurrentMenu != MENU_PAGER)
-      ops[nops] = get_op (OpGeneric, function, safe_strlen (function));
+      ops[nops] = get_op (OpGeneric, function, mutt_strlen (function));
 
     if (ops[nops] == OP_NULL) {
       mutt_flushinp ();
