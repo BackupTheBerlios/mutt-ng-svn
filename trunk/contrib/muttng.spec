@@ -1,7 +1,7 @@
 Summary: A text mode mail user agent.
 Name: muttng
-Version: 20050530
-Release: 2
+Version: 20050718
+Release: 3
 Serial: 1
 License: GPL
 Group: Applications/Internet
@@ -26,7 +26,7 @@ you are going to use.
 
 %build
 rm -rf autom4te.cache
-./prepare
+./autogen.sh
 chmod 700 ./configure
 export -n LINGUAS
 CFLAGS="$RPM_OPT_FLAGS" ./configure --prefix=%{_prefix} \
@@ -91,6 +91,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man5/muttng-mbox.*
 
 %changelog
+* Mon Jul 18 2005 Iain Lea <iain@bricbrac.de>  1:20050718-3
+- fixed to use ./autogen.sh instead of ./prepare script
 * Mon Mar 14 2005 Iain Lea <iain@bricbrac.de>  1:20050314-2
 - fixed aclocal/automake/autoconf/prepare weirdness (rm -rf autom4te.cache)
 * Sun Mar 06 2005 Iain Lea <iain@bricbrac.de>  1:20050306-1
