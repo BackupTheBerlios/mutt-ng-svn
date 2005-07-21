@@ -1046,7 +1046,7 @@ int imap_sync_mailbox (CONTEXT * ctx, int expunge, int *index_hint)
     idata->reopen |= IMAP_EXPUNGE_EXPECTED;
     if (imap_exec (idata, "EXPUNGE", 0) != 0) {
       imap_error (_("imap_sync_mailbox: EXPUNGE failed"), idata->cmd.buf);
-      rc = -1;
+      rc = imap_reconnect (ctx);
       goto out;
     }
   }

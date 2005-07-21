@@ -1165,7 +1165,7 @@ int mx_check_mailbox (CONTEXT * ctx, int *index_hint, int lock) {
   if (ctx) {
     if (ctx->locked)
       lock = 0;
-    if (MX_COMMAND(ctx->magic-1,mx_check_mailbox))
+    if (MX_IDX(ctx->magic-1) && MX_COMMAND(ctx->magic-1,mx_check_mailbox))
       return (MX_COMMAND(ctx->magic-1,mx_check_mailbox)(ctx, index_hint, lock));
   }
 

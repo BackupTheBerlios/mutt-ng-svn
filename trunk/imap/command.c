@@ -168,6 +168,12 @@ int imap_exec (IMAP_DATA * idata, const char *cmd, int flags)
   int outlen;
   int rc;
 
+  if (!idata) {
+    mutt_error (_("No mailbox is open."));
+    mutt_sleep (1);
+    return (-1);
+  }
+
   if (idata->status == IMAP_FATAL) {
     cmd_handle_fatal (idata);
     return -1;
