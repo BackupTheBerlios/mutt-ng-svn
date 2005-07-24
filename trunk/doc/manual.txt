@@ -721,9 +721,9 @@
        newsserver via NNTP.  You can open a newsgroup with function ``change-news-
        group'' (default: i).  Default newsserver can be obtained from _N_N_T_P_S_E_R_V_E_R envi-
        ronment variable.  Like other news readers, info about subscribed newsgroups is
-       saved in file by _$_n_e_w_s_r_c (section , page ) variable.  Article headers are
-       cached and can be loaded from file when newsgroup entered instead loading from
-       newsserver.
+       saved in file by _$_n_n_t_p___n_e_w_s_r_c (section 6.3.155  , page 103) variable. Article
+       headers are cached and can be loaded from file when newsgroup entered instead
+       loading from newsserver.
 
        _3_.  _C_o_n_f_i_g_u_r_a_t_i_o_n
 
@@ -1712,26 +1712,30 @@
 
        _3_._2_7  _C_o_n_f_i_g_u_r_i_n_g _f_e_a_t_u_r_e_s _c_o_n_d_i_t_i_o_n_a_l_l_y
 
-       Usage: ifdef _i_t_e_m _c_o_m_m_a_n_d Usage: ifndef _i_t_e_m _c_o_m_m_a_n_d
+       Usage: ifdef _i_t_e_m _c_o_m_m_a_n_d
 
-       These command allows to test if a variable, function or certain feature is
-       available or not respectively, before actually executing the command.  ifdef
-       (short for ``if defined) handles commands if upon availability while ifndef
+       Usage: ifndef _i_t_e_m _c_o_m_m_a_n_d
+
+       These commands allow testing for a variable, function or certain feature being
 
        The Mutt-ng E-Mail Client                                                    33
 
-       (short for ``if not defined'') does if not. The _c_o_m_m_a_n_d may be any valid frac-
-       tion of a configuration file.
+       available or not respectively, before actually executing the command given.
 
-       All names of variables and functions may be tested. Additionally, the following
-       compile-features may be tested when prefixed with 'feature_': ncurses, slang,
-       iconv, idn, dotlock, standalone, pop, nntp, imap, ssl, gnutls, sasl, sasl2,
-       libesmtp, compressed, color, classic_pgp, classic_smime, gpgme, header_cache.
+       ifdef (short for ``if defined'') only executes the command upon availability
+       while ifndef (short for ``if not defined'') does if not. The _c_o_m_m_a_n_d may be any
+       valid fraction of a configuration file.
+
+       All names of variables, functions and menus may be tested. Additionally, the
+       following compile-features may be tested when prefixed with 'feature_':
+       ncurses, slang, iconv, idn, dotlock, standalone, pop, nntp, imap, ssl, gnutls,
+       sasl, sasl2, libesmtp, compressed, color, classic_pgp, classic_smime, gpgme,
+       header_cache, gdbm, qdbm and db4.
 
        Examples follow.
 
-       To only source a file with IMAP related settings only if IMAP support is com-
-       piled in, use:
+       To only source a file with IMAP related settings if IMAP support is compiled
+       in, use:
 
             ifdef feature_imap 'source ~/.mutt-ng/imap_setup'
             # or
@@ -1747,10 +1751,10 @@
             # or
             # ...
 
-       To only set the _<_$_i_m_a_p___m_a_i_l___c_h_e_c_k (section 6.3.98  , page 87) when the system's
-       SVN is recent enough to have it:
+       To only set the _$_i_m_a_p___m_a_i_l___c_h_e_c_k (section 6.3.98  , page 87) variable if the
+       system's mutt-ng is aware of it, use:
 
-            ifdef imap_mail_check 'set imap_mail_check=300'
+            ifdef imap_mail_check 'set imap_mail_check=500'
 
        _3_._2_8  _R_e_m_o_v_i_n_g _h_o_o_k_s
 
@@ -1765,13 +1769,14 @@
 
        _4_._1  _R_e_g_u_l_a_r _E_x_p_r_e_s_s_i_o_n_s
 
-       All string patterns in Mutt-ng including those in more complex _p_a_t_t_e_r_n_s (sec-
-       tion 4.2  , page 36) must be specified using regular expressions (regexp) in
-       the ``POSIX extended'' syntax (which is more or less the syntax used by egrep
-       and GNU awk).  For your convenience, we have included below a brief description
-       of this syntax.
+       All string patterns in Mutt-ng including those in more complex _p_a_t_t_e_r_n_s
 
        The Mutt-ng E-Mail Client                                                    34
+
+       (section 4.2  , page 36) must be specified using regular expressions (regexp)
+       in the ``POSIX extended'' syntax (which is more or less the syntax used by
+       egrep and GNU awk).  For your convenience, we have included below a brief
+       description of this syntax.
 
        The search is case sensitive if the pattern contains at least one upper case
        letter, and case insensitive otherwise. Note that ``\'' must be quoted if used
@@ -1822,15 +1827,14 @@
              [:cntrl:]
                    Control characters.
 
+       The Mutt-ng E-Mail Client                                                    35
+
              [:digit:]
                    Numeric characters.
 
              [:graph:]
-                   Characters that are both printable and visible.  (A space is
-
-       The Mutt-ng E-Mail Client                                                    35
-
-                   printable, but not visible, while an ``a'' is both.)
+                   Characters that are both printable and visible.  (A space is print-
+                   able, but not visible, while an ``a'' is both.)
 
              [:lower:]
                    Lower-case alphabetic characters.
@@ -1880,10 +1884,10 @@
              ?
                    The preceding item is optional and matched at most once.
 
+       The Mutt-ng E-Mail Client                                                    36
+
              *
                    The preceding item will be matched zero or more times.
-
-       The Mutt-ng E-Mail Client                                                    36
 
              +
                    The preceding item will be matched one or more times.
@@ -1935,10 +1939,10 @@
              \\W
                    Matches any character that is not word-constituent.
 
+       The Mutt-ng E-Mail Client                                                    37
+
              \\`
                    Matches the empty string at the beginning of a buffer (string).
-
-       The Mutt-ng E-Mail Client                                                    37
 
              \\'
                    Matches the empty string at the end of a buffer.
@@ -2497,8 +2501,8 @@
 
        Polling for new mail is more expensive over POP3 than locally. For this reason
        the frequency at which Mutt-ng will check for mail remotely can be controlled
-       by the _$_p_o_p___c_h_e_c_k_i_n_t_e_r_v_a_l (section , page ) variable, which defaults to every
-       60 seconds.
+       by the _$_p_o_p___m_a_i_l___c_h_e_c_k (section 6.3.207  , page 115) variable, which defaults
+       to every 60 seconds.
 
        If Mutt-ng was compiled with SSL support (by running the _c_o_n_f_i_g_u_r_e script with
        the _-_-_w_i_t_h_-_s_s_l flag), connections to POP3 servers can be encrypted. This natu-
@@ -5517,8 +5521,8 @@
        Availability: NNTP
 
        This variable controls how many news articles to cache per newsgroup (if
-       caching is enabled, see _$_n_e_w_s___c_a_c_h_e___d_i_r (section , page )) and how many news
-       articles to show in the ``index'' menu.
+       caching is enabled, see _$_n_n_t_p___c_a_c_h_e___d_i_r (section 6.3.145  , page 100)) and how
+       many news articles to show in the ``index'' menu.
 
        If there're more articles than defined with _$_n_n_t_p___c_o_n_t_e_x_t (section 6.3.147  ,
        page 101), all older ones will be removed/not shown in the index.
@@ -8446,7 +8450,7 @@
        Kari Hurtta <kari.hurtta@fmi.fi> co-developed the original MIME parsing code
        back in the ELM-ME days.
 
-       The following people have been very helpful to the development of Mutt-ng:
+       The following people have been very helpful to the development of Mutt:
 
        Vikas Agnihotri <vikasa@writeme.com>,
 
@@ -8530,8 +8534,21 @@
 
        Vsevolod Volkov <vvv@lucky.net>,
 
-       Ken Weinert <kenw@ihs.com> Andreas Krennmair <ak@synflood.at> Nico Golde
-       <nico@ngolde.de> Rocco Rutte <pdmef@cs.tu-berlin.de>
+       Ken Weinert <kenw@ihs.com>
+
+       Mutt-ng is developed by the following people:
+
+       Andreas Krennmair <ak@synflood.at>
+
+       Nico Golde <nico@ngolde.de>
+
+       Rocco Rutte <pdmef@cs.tu-berlin.de>
+
+       The following people have been very helpful to the development of  Mutt-ng:
+
+       Iain Lea <iain@bricbrac.de>
+
+       Andreas Kneib <akneib@gmx.net>
 
        _7_._2  _A_b_o_u_t _t_h_i_s _d_o_c_u_m_e_n_t
 

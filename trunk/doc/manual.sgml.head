@@ -739,12 +739,13 @@ See also the <ref id="postpone" name="&dollar;postpone"> quad-option.
 <sect1>Reading news via NNTP<label id="reading_news">
 <p>
 
-If compiled with ``--enable-nntp'' option, Mutt-ng can read news from newsserver
-via NNTP.  You can open a newsgroup with function ``change-newsgroup''
-(default: i).  Default newsserver can be obtained from <em/NNTPSERVER/
-environment variable.  Like other news readers, info about subscribed
-newsgroups is saved in file by <ref id="newsrc" name="&dollar;newsrc">
-variable.  Article headers are cached and can be loaded from file when
+If compiled with ``--enable-nntp'' option, Mutt-ng can read news from 
+newsserver via NNTP.  You can open a newsgroup with function 
+``change-newsgroup'' (default: i).  Default newsserver can be obtained 
+from <em/NNTPSERVER/ environment variable.  Like other news readers, 
+info about subscribed newsgroups is saved in file by <ref 
+id="nntp_newsrc" name="&dollar;nntp&lowbar;newsrc"> variable. Article 
+headers are cached and can be loaded from file when
 newsgroup entered instead loading from newsserver.
 
 <sect>Configuration
@@ -1747,24 +1748,34 @@ considered to be an executable program from which to read input (eg.
 
 <sect1>Configuring features conditionally<label id="ifdef">
 <p>
-Usage: <tt/ifdef/ <em/item/ <em/command/
+Usage: <tt/ifdef/ <em/item/ <em/command/<newline>
 Usage: <tt/ifndef/ <em/item/ <em/command/
 
-These command allows to test if a variable, function or certain feature
-is available or not respectively, before actually executing the command.
-<tt/ifdef/ (short for ``if defined) handles commands if upon
+<p>
+These commands allow testing for a variable, function or certain feature
+being available or not respectively, before actually executing the 
+command given.
+
+<p>
+<tt/ifdef/ (short for ``if defined'') only executes the command upon
 availability while <tt/ifndef/ (short for ``if not defined'') does if
 not. The <em/command/ may be any valid fraction of a configuration file.
 
-All names of variables and functions may be tested. Additionally, the
-following compile-features may be tested when prefixed with 'feature_':
-ncurses, slang, iconv, idn, dotlock, standalone, pop, nntp, imap, ssl,
-gnutls, sasl, sasl2, libesmtp, compressed, color, classic_pgp,
-classic_smime, gpgme, header_cache.
+<p>
+All names of variables, functions and menus may be tested. Additionally, the
+following compile-features may be tested when prefixed with 
+'<tt/feature_/':
+<tt/ncurses/, <tt/slang/, <tt/iconv/, <tt/idn/, <tt/dotlock/, 
+<tt/standalone/, <tt/pop/, <tt/nntp/, <tt/imap/, <tt/ssl/, <tt/gnutls/, 
+<tt/sasl/, <tt/sasl2/, <tt/libesmtp/, <tt/compressed/, <tt/color/,
+<tt/classic_pgp/, <tt/classic_smime/, <tt/gpgme/, <tt/header_cache/,
+<tt/gdbm/, <tt/qdbm/ and <tt/db4/.
 
+<p>
 Examples follow.
 
-To only source a file with IMAP related settings only if IMAP support is
+<p>
+To only source a file with IMAP related settings if IMAP support is
 compiled in, use:
 <tscreen><verb>
 ifdef feature_imap 'source ~/.mutt-ng/imap_setup'
@@ -1774,6 +1785,7 @@ ifdef feature_imap 'source ~/.mutt-ng/imap_setup'
 # ...
 </verb></tscreen>
 
+<p>
 To exit mutt-ng directly if no NNTP support is compiled in:
 <tscreen><verb>
 ifndef feature_nntp 'push q'
@@ -1783,11 +1795,12 @@ ifndef feature_nntp 'push q'
 # ...
 </verb></tscreen>
 
-To only set the <ref id="imap_mail_check"
-name="&lt;&dollar;imap&lowbar;mail&lowbar;check"> when the system's SVN
-is recent enough to have it:
+<p>
+To only set the <ref id="imap_mail_check" 
+name="&dollar;imap&lowbar;mail&lowbar;check"> variable if
+the system's mutt-ng is aware of it, use:
 <tscreen><verb>
-ifdef imap_mail_check 'set imap_mail_check=300'
+ifdef imap_mail_check 'set imap_mail_check=500'
 </verb></tscreen>
 
 <sect1>Removing hooks<label id="unhook">
@@ -2559,7 +2572,7 @@ You can also specify different username for each folder, i.e.:
 Polling for new mail is more expensive over POP3 than locally. For this
 reason the frequency at which Mutt-ng will check for mail remotely can be
 controlled by the
-<ref id="pop_checkinterval" name="&dollar;pop&lowbar;checkinterval">
+<ref id="pop_mail_check" name="&dollar;pop&lowbar;mail&lowbar;check">
 variable, which defaults to every 60 seconds.
 
 If Mutt-ng was compiled with SSL support (by running the <em/configure/

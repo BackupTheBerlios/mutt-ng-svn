@@ -338,7 +338,7 @@ Kari Hurtta
 <htmlurl url="mailto:kari.hurtta@fmi.fi" name="&lt;kari.hurtta@fmi.fi&gt;">
 co-developed the original MIME parsing code back in the ELM-ME days.
 
-The following people have been very helpful to the development of Mutt-ng:
+The following people have been very helpful to the development of Mutt:
 
 Vikas Agnihotri <htmlurl url="mailto:vikasa@writeme.com" name="&lt;vikasa@writeme.com&gt;">,<newline>
 Francois Berjon <htmlurl url="mailto:Francois.Berjon@aar.alcatel-alsthom.fr" name="&lt;Francois.Berjon@aar.alcatel-alsthom.fr&gt;">,<newline>
@@ -381,11 +381,17 @@ Allain Thivillon <htmlurl url="mailto:Allain.Thivillon@alma.fr" name="&lt;Allain
 Gero Treuner <htmlurl url="mailto:gero@faveve.uni-stuttgart.de" name="&lt;gero@faveve.uni-stuttgart.de&gt;">,<newline>
 Vsevolod Volkov <htmlurl url="mailto:vvv@lucky.net" name="&lt;vvv@lucky.net&gt;">,<newline>
 Ken Weinert <htmlurl url="mailto:kenw@ihs.com" name="&lt;kenw@ihs.com&gt;">
-Andreas Krennmair <htmlurl url="mailto:ak@synflood.at" name="&lt;ak@synflood.at&gt;">
-Nico Golde <htmlurl url="mailto:nico@ngolde.de" name="&lt;nico@ngolde.de&gt;">
+
+Mutt-ng is developed by the following people:
+
+Andreas Krennmair <htmlurl url="mailto:ak@synflood.at" name="&lt;ak@synflood.at&gt;"><newline>
+Nico Golde <htmlurl url="mailto:nico@ngolde.de" name="&lt;nico@ngolde.de&gt;"<newline>
 Rocco Rutte <htmlurl url="mailto:pdmef@cs.tu-berlin.de" name="&lt;pdmef@cs.tu-berlin.de&gt;">
 
+The following people have been very helpful to the development of  Mutt-ng:
 
+Iain Lea <htmlurl url="mailto:iain@bricbrac.de" name="&lt;iain@bricbrac.de&gt;"><newline>
+Andreas Kneib <htmlurl url="mailto:akneib@gmx.net" name="&lt;akneib@gmx.net&gt;">
 
 <sect1>About this document
 <p>
