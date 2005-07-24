@@ -1683,7 +1683,7 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
       }
     }
     /* Add a vanity header */
-    fprintf (fp, "User-Agent: mutt-ng %s (%s)\n", MUTT_VERSION, os);
+    fprintf (fp, "User-Agent: mutt-ng/%s (%s)\n", MUTT_VERSION, os);
   }
 
   return (ferror (fp) == 0 ? 0 : -1);
