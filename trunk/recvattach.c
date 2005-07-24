@@ -886,7 +886,7 @@ void mutt_view_attachments (HEADER * hdr)
 
   char helpstr[SHORT_STRING];
   MUTTMENU *menu;
-  BODY *cur;
+  BODY *cur = NULL;
   MESSAGE *msg;
   FILE *fp;
   ATTACHPTR **idx = NULL;

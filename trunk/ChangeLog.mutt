@@ -1,3 +1,14 @@
+2005-07-24 14:23:25  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* recvattach.c, smime.c: Fix S/MIME segmentation fault.  Bug
+	reported by Mads Martin Joergensen; part fixed by Brendan Cully.
+
+2005-07-24 08:59:44  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* copy.c: Don't assume messages in MMDF mailboxes have From
+	separators when copying them. Spotted by William Lovas. Initial
+	patch by TAKAHASHI Tamotsu.
+
 2005-07-23 23:35:17  Byrial Jensen  <byrial@image.dk>  (brendan)
 
 	* curs_main.c, doc/manual.sgml.head, globals.h, main.c, muttlib.c:
@@ -467,7 +478,7 @@
 2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
                                  
      * hcache.c: - make hcache.c conform to mutt codingstyle
-     - use $Id: ChangeLog,v 3.433 2005/07/23 23:37:05 brendan Exp $ CVS keyword instead of %K% BitKeeper keyword
+     - use $Id: ChangeLog,v 3.435 2005/07/24 14:24:00 roessler Exp $ CVS keyword instead of %K% BitKeeper keyword
                                  
 2005-01-29 19:15:07  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
 
