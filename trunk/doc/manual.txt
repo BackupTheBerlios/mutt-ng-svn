@@ -8074,12 +8074,12 @@
        there's no easy and portable way to read the current title so mutt-ng cannot
        read it upon startup and restore it when exiting.
 
-       Based on the xterm FAQ, the following might work: set xterm_leave = '`test
+       Based on the xterm FAQ, the following might work:
 
        The Mutt-ng E-Mail Client                                                   148
 
-       x_D_I_S_P_L_A_Y (section , page ) != x && xprop -id _W_I_N_D_O_W_I_D (section , page ) | grep
-       WM_NAME | cut -d ''' -f 2`'
+       set xterm_leave = '`test x$DISPLAY != x && xprop -id $WINDOWID | grep WM_NAME |
+       cut -d ''' -f 2`'
 
        _6_._3_._3_3_7  _x_t_e_r_m___s_e_t___t_i_t_l_e_s
 

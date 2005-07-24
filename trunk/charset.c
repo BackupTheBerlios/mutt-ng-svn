@@ -564,7 +564,7 @@ char *mutt_get_first_charset (const char *charset)
   if (!mutt_strlen (c))
     return "us-ascii";
   if (!(c1 = strchr (c, ':')))
-    return charset;
+    return ((char*) charset);
   strfcpy (fcharset, c, c1 - c + 1);
   return fcharset;
 }

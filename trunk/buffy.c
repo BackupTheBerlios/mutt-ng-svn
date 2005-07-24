@@ -168,8 +168,8 @@ void buffy_update_mailbox (BUFFY * b)
 #endif
 
 /* func to free buffy for list_del() */
-static void buffy_free (void** p) {
-  FREE(&(*((BUFFY**) p))->path);
+static void buffy_free (BUFFY** p) {
+  FREE(&(*p)->path);
   FREE(p);
 }
 
@@ -199,7 +199,7 @@ int buffy_parse_mailboxes (BUFFER * path, BUFFER * s, unsigned long data,
     strfcpy (buf, path->data, sizeof (buf));
 
     if (data == M_UNMAILBOXES && str_eq (buf, "*") == 0) {
-      list_del (&Incoming, buffy_free);
+      list_del (&Incoming, (list_del_t*) buffy_free);
       return 0;
     }
 

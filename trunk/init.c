@@ -485,7 +485,7 @@ static int remove_from_rx_list (list2_t** l, const char *str)
   int i = 0;
 
   if (mutt_strcmp ("*", str) == 0) {
-    list_del (l, rx_free);
+    list_del (l, (list_del_t*) rx_free);
     return (0);
   }
   else {
@@ -698,7 +698,7 @@ static int parse_spam_list (BUFFER * buf, BUFFER * s, unsigned long data,
     /* "*" is a special case. */
     if (!mutt_strcmp (buf->data, "*")) {
       mutt_free_spam_list (&SpamList);
-      list_del (&NoSpamList, rx_free);
+      list_del (&NoSpamList, (list_del_t*) rx_free);
       return 0;
     }
 

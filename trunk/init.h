@@ -3590,7 +3590,7 @@ struct option_t MuttVars[] = {
    ** Based on the xterm FAQ, the following might work:
    **
    ** .pp
-   ** \fTset xterm_leave = "`test x$DISPLAY != x && xprop -id $WINDOWID | grep WM_NAME | cut -d '"' -f 2`"\fT
+   ** \fTset xterm_leave = "`test x$$$DISPLAY != x && xprop -id $$$WINDOWID | grep WM_NAME | cut -d '"' -f 2`"\fP
    */
   {"xterm_title", DT_STR, R_BOTH, UL &XtermTitle, UL "Mutt-ng with %?m?%m messages&no messages?%?n? [%n New]?"},
   /*

@@ -18,13 +18,13 @@ list2_t* list_new (void) {
   return (safe_calloc (1, sizeof (list2_t)));
 }
 
-void list_del (list2_t** l, void (*edel) (void**)) {
+void list_del (list2_t** l, list_del_t* del) {
   size_t i = 0;
   if (!l || !*l)
     return;
-  if (*edel)
+  if (del)
     for (i = 0; i < (*l)->length; i++)
-      edel (&(*l)->data[i]);
+      del (&(*l)->data[i]);
   FREE(&(*l)->data);
   FREE(l);
 }

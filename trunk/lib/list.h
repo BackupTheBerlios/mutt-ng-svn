@@ -28,9 +28,12 @@ typedef struct list2_t {
  */
 
 list2_t* list_new (void);
-/* frees all memory used by list and optionally used edel func
- * ptr to free items */
-void list_del (list2_t**, void (*edel) (void**));
+
+typedef void list_del_t (void**);
+
+/* free() all memory used by list and optionally
+ * use del function to free() items as well */
+void list_del (list2_t**, list_del_t* del);
 
 #define list_empty(l) (!l || l->length == 0 || !l->data)
 
