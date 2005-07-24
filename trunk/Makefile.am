@@ -38,7 +38,8 @@ muttng_SOURCES = $(BUILT_SOURCES) \
 	score.c send.c sendlib.c signal.c sort.c \
 	status.c system.c thread.c charset.c history.c lib.c \
 	muttlib.c editmsg.c utf8.c mbyte.c wcwidth.c md5c.c \
-	url.c ascii.c mutt_idna.c sidebar.c hcache.c crypt-mod.c crypt-mod.h
+	url.c ascii.c mutt_idna.c sidebar.c hcache.c crypt-mod.c crypt-mod.h \
+	xterm.c
 
 muttng_LDADD = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(LIBPOP) $(LIBNNTP) \
 	-Llib -lsane $(MUTTLIBS) $(INTLLIBS) $(LIBICONV)

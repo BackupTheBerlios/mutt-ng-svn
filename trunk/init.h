@@ -3578,6 +3578,20 @@ struct option_t MuttVars[] = {
    ** (as long as you're in an appropriate terminal). The default must
    ** be \fIunset\fP to force in the validity checking.
    */
+  {"xterm_leave", DT_STR, R_BOTH, UL &XtermLeave, UL "" },
+  /*
+   ** .pp
+   ** If $$xterm_set_titles is \fIset\fP, this string will be used to
+   ** set the title when leaving mutt-ng. For terminal-based programs,
+   ** there's no easy and portable way to read the current title so mutt-ng
+   ** cannot read it upon startup and restore it when exiting.
+   **
+   ** .pp
+   ** Based on the xterm FAQ, the following might work:
+   **
+   ** .pp
+   ** \fTset xterm_leave = "`test x$DISPLAY != x && xprop -id $WINDOWID | grep WM_NAME | cut -d '"' -f 2`"\fT
+   */
   {"xterm_title", DT_STR, R_BOTH, UL &XtermTitle, UL "Mutt-ng with %?m?%m messages&no messages?%?n? [%n New]?"},
   /*
    ** .pp

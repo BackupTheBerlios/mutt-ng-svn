@@ -5458,7 +5458,7 @@
        This variable, when _s_e_t, makes the thread tree narrower, allowing deeper
        threads to fit on the screen.
 
-       _6_._3_._1_4_3  _n_n_t_p___a_s_k___f_o_l_l_o_w___u_p
+       _6_._3_._1_4_3  _n_n_t_p___a_s_k___f_o_l_l_o_w_u_p___t_o
 
        Type: boolean
 
@@ -8060,10 +8060,28 @@
        Default: 'M%?n?AIL&ail?'
 
        Controls the format of the X11 icon title, as long as _$_x_t_e_r_m___s_e_t___t_i_t_l_e_s (sec-
-       tion 6.3.336  , page 146) is _s_e_t. This string is identical in formatting to the
+       tion 6.3.337  , page 146) is _s_e_t. This string is identical in formatting to the
        one used by ``_$_s_t_a_t_u_s___f_o_r_m_a_t (section 6.3.302  , page 137)''.
 
-       _6_._3_._3_3_6  _x_t_e_r_m___s_e_t___t_i_t_l_e_s
+       _6_._3_._3_3_6  _x_t_e_r_m___l_e_a_v_e
+
+       Type: string
+
+       Default: ''
+
+       If _$_x_t_e_r_m___s_e_t___t_i_t_l_e_s (section 6.3.337  , page 146) is _s_e_t, this string will be
+       used to set the title when leaving mutt-ng. For terminal-based programs,
+       there's no easy and portable way to read the current title so mutt-ng cannot
+       read it upon startup and restore it when exiting.
+
+       Based on the xterm FAQ, the following might work: set xterm_leave = '`test
+
+       The Mutt-ng E-Mail Client                                                   148
+
+       x_D_I_S_P_L_A_Y (section , page ) != x && xprop -id _W_I_N_D_O_W_I_D (section , page ) | grep
+       WM_NAME | cut -d ''' -f 2`'
+
+       _6_._3_._3_3_7  _x_t_e_r_m___s_e_t___t_i_t_l_e_s
 
        Type: boolean
 
@@ -8073,16 +8091,14 @@
        you're in an appropriate terminal). The default must be _u_n_s_e_t to force in the
        validity checking.
 
-       _6_._3_._3_3_7  _x_t_e_r_m___t_i_t_l_e
-
-       The Mutt-ng E-Mail Client                                                   148
+       _6_._3_._3_3_8  _x_t_e_r_m___t_i_t_l_e
 
        Type: string
 
        Default: 'Mutt-ng with %?m?%m messages&no messages?%?n? [%n New]?'
 
        Controls the format of the title bar of the xterm provided that
-       _$_x_t_e_r_m___s_e_t___t_i_t_l_e_s (section 6.3.336  , page 146) has been _s_e_t. This string is
+       _$_x_t_e_r_m___s_e_t___t_i_t_l_e_s (section 6.3.337  , page 146) has been _s_e_t. This string is
        identical in formatting to the one used by ``_$_s_t_a_t_u_s___f_o_r_m_a_t (section 6.3.302  ,
        page 137)''.
 
@@ -8099,6 +8115,8 @@
        movement) available in all menus except for _p_a_g_e_r and _e_d_i_t_o_r.  Changing set-
        tings for this menu will affect the default bindings for all menus (except as
        noted).
+
+       The Mutt-ng E-Mail Client                                                   149
 
             bottom-page                L   move to the bottom of the page
             current-bottom     not bound   move current entry to bottom of page
@@ -8130,9 +8148,6 @@
             tag-prefix                 ;   apply next command to tagged entries
             tag-prefix-cond    not bound   apply next function ONLY to tagged messages
             top-page                   H   move to the top of the page
-
-       The Mutt-ng E-Mail Client                                                   149
-
             what-key           not bound   display the keycode for a key press
 
        _6_._4_._2  _i_n_d_e_x

@@ -169,6 +169,7 @@ WHERE char *TrashPath;
 WHERE char *Username;
 WHERE char *Visual;
 WHERE char *XtermTitle;
+WHERE char *XtermLeave;
 WHERE char *XtermIcon;
 
 WHERE char *CurrentFolder;

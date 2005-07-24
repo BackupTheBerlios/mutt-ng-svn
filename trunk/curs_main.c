@@ -23,6 +23,7 @@
 #include "buffy.h"
 #include "mx.h"
 #include "sidebar.h"
+#include "xterm.h"
 
 #ifdef USE_POP
 #include "pop.h"
@@ -99,22 +100,6 @@ static const char *No_visible = N_("No visible messages.");
 
 extern const char *ReleaseDate;
 extern size_t UngetCount;
-
-static void set_xterm_title_bar (char *title)
-{
-  fputs ("\033]2;", stdout);
-  fputs (title, stdout);
-  fputs ("\007", stdout);
-  fflush (stdout);
-}
-
-static void set_xterm_icon_name (char *name)
-{
-  fputs ("\033]1;", stdout);
-  fputs (name, stdout);
-  fputs ("\007", stdout);
-  fflush (stdout);
-}
 
 void index_make_entry (char *s, size_t l, MUTTMENU * menu, int num)
 {
@@ -578,9 +563,9 @@ int mutt_index_menu (void)
         menu->redraw &= ~REDRAW_STATUS;
         if (option (OPTXTERMSETTITLES)) {
           menu_status_line (buf, sizeof (buf), menu, NONULL (XtermTitle));
-          set_xterm_title_bar (buf);
+          mutt_xterm_set_title (buf);
           menu_status_line (buf, sizeof (buf), menu, NONULL (XtermIcon));
-          set_xterm_icon_name (buf);
+          mutt_xterm_set_icon (buf);
         }
       }
 

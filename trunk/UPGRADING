@@ -12,6 +12,8 @@ sources of information.
 
 2005-24-07:
 
+  The $xterm_leave option has been added.
+
   The '^' shortcut pointing to the current folder is no longer
   only available in muttng as it has been integrated into mutt, too.
 

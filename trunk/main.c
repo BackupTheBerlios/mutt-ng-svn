@@ -25,6 +25,7 @@
 #include "url.h"
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
+#include "xterm.h"
 
 #include "lib/mem.h"
 #include "lib/intl.h"
@@ -501,13 +502,11 @@ int main (int argc, char **argv)
   int version = 0;
   int i;
   int explicit_folder = 0;
-  long sek;
   extern char *optarg;
   extern int optind;
 
   /* initialize random number for tmp file creation */ 
-  time (&sek);
-  srand (sek);
+  srand ((unsigned int) time (NULL));
   
   /* sanity check against stupid administrators */
   
@@ -938,6 +937,8 @@ int main (int argc, char **argv)
                                     M_READONLY : 0, NULL))
         || !explicit_folder) {
       mutt_index_menu ();
+      if (option (OPTXTERMSETTITLES))
+        mutt_xterm_set_title (NONULL (XtermLeave));
       if (Context)
         FREE (&Context);
     }
