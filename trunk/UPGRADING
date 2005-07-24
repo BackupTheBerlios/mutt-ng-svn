@@ -10,6 +10,11 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-24-07:
+
+  The '^' shortcut pointing to the current folder is no longer
+  only available in muttng as it has been integrated into mutt, too.
+
 2005-07-16:
 
   The 'prepare' script has been renamed to 'autogen.sh' as this name
