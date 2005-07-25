@@ -12,6 +12,9 @@ sources of information.
 
 2005-07-25:
 
+  Due to changes to internal structures introduced in SVN revision 344,
+  all header caches must be removed and rebuild.
+
   The '-D' command line option has been added.
 
   Editing threads functionality is no longer only available
