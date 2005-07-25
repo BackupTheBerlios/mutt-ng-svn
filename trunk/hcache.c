@@ -387,12 +387,15 @@ static unsigned char *dump_envelope (ENVELOPE * e, unsigned char *d, int *off)
   d = dump_list (e->in_reply_to, d, off);
   d = dump_list (e->userhdrs, d, off);
 
+  d = dump_int (e->irt_changed, d, off);
+  d = dump_int (e->refs_changed, d, off);
+
   return d;
 }
 
 static void restore_envelope (ENVELOPE * e, const unsigned char *d, int *off)
 {
-  int real_subj_off;
+  int tmp = 0;
 
   restore_address (&e->return_path, d, off);
   restore_address (&e->from, d, off);
@@ -404,9 +407,9 @@ static void restore_envelope (ENVELOPE * e, const unsigned char *d, int *off)
   restore_address (&e->mail_followup_to, d, off);
 
   restore_char (&e->subject, d, off);
-  restore_int ((unsigned int *) (&real_subj_off), d, off);
-  if (0 <= real_subj_off) {
-    e->real_subj = e->subject + real_subj_off;
+  restore_int ((unsigned int *) (&tmp), d, off);
+  if (0 <= tmp) {
+    e->real_subj = e->subject + tmp;
   }
   else {
     e->real_subj = NULL;
@@ -426,6 +429,11 @@ static void restore_envelope (ENVELOPE * e, const unsigned char *d, int *off)
   restore_list (&e->references, d, off);
   restore_list (&e->in_reply_to, d, off);
   restore_list (&e->userhdrs, d, off);
+
+  restore_int ((unsigned int *) &tmp, d, off);
+  e->irt_changed = tmp;
+  restore_int ((unsigned int *) &tmp, d, off);
+  e->refs_changed = tmp;
 }
 
 static

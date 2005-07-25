@@ -324,8 +324,9 @@ mutt_copy_header (FILE * in, HEADER * h, FILE * out, int flags,
 {
   char buffer[SHORT_STRING];
 
-  flags |= (h->irt_changed ? CH_UPDATE_IRT : 0)
-    | (h->refs_changed ? CH_UPDATE_REFS : 0);
+  if (h->env)
+    flags |= (h->env->irt_changed ? CH_UPDATE_IRT : 0) |
+      (h->env->refs_changed ? CH_UPDATE_REFS : 0);
 
   if (mutt_copy_hdr (in, out, h->offset, h->content->offset, flags, prefix) ==
       -1)
@@ -350,8 +351,8 @@ mutt_copy_header (FILE * in, HEADER * h, FILE * out, int flags,
 
   if (flags & CH_UPDATE) {
     if ((flags & CH_NOSTATUS) == 0) {
-      if (h->irt_changed && h->new_env->in_reply_to) {
-        LIST *listp = h->new_env->in_reply_to;
+      if (h->env->irt_changed && h->env->in_reply_to) {
+        LIST *listp = h->env->in_reply_to;
 
         if (fputs ("In-Reply-To: ", out) == EOF)
           return (-1);
@@ -364,8 +365,8 @@ mutt_copy_header (FILE * in, HEADER * h, FILE * out, int flags,
           return (-1);
       }
 
-      if (h->refs_changed && h->new_env->references) {
-        LIST *listp = h->new_env->references, *refs = NULL, *t;
+      if (h->env->refs_changed && h->env->references) {
+        LIST *listp = h->env->references, *refs = NULL, *t;
 
         if (fputs ("References: ", out) == EOF)
           return (-1);
