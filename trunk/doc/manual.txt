@@ -317,7 +317,7 @@
 
        _2_._3_._3  _T_h_r_e_a_d_e_d _M_o_d_e
 
-       When the mailbox is _s_o_r_t_e_d (section 6.3.288  , page 133) by _t_h_r_e_a_d_s, there are
+       When the mailbox is _s_o_r_t_e_d (section 6.3.288  , page 134) by _t_h_r_e_a_d_s, there are
        a few additional functions available in the _i_n_d_e_x and _p_a_g_e_r modes.
 
             ^D      delete-thread           delete all messages in the current thread
@@ -425,7 +425,7 @@
 
        match the regular expressions given by the _l_i_s_t_s _o_r _s_u_b_s_c_r_i_b_e (section 3.10  ,
        page 24) commands, but also honor any Mail-Followup-To header(s) if the
-       _$_h_o_n_o_r___f_o_l_l_o_w_u_p___t_o (section 6.3.87  , page 84) configuration variable is set.
+       _$_h_o_n_o_r___f_o_l_l_o_w_u_p___t_o (section 6.3.87  , page 85) configuration variable is set.
        Using this when replying to messages posted to mailing lists helps avoid dupli-
        cate copies being sent to the author of the message you are replying to.
 
@@ -434,7 +434,7 @@
 
        Asks for an external Unix command and pipes the current or tagged message(s) to
        it.  The variables _$_p_i_p_e___d_e_c_o_d_e (section 6.3.199  , page 113), _$_p_i_p_e___s_p_l_i_t
-       (section 6.3.201  , page 114), _$_p_i_p_e___s_e_p (section 6.3.200  , page 113) and
+       (section 6.3.201  , page 114), _$_p_i_p_e___s_e_p (section 6.3.200  , page 114) and
        _$_w_a_i_t___k_e_y (section 6.3.329  , page 145) control the exact behavior of this
        function.
 
@@ -496,7 +496,7 @@
        Mutt-ng will then enter the _c_o_m_p_o_s_e menu and prompt you for the recipients to
        place on the ``To:'' header field.  Next, it will ask you for the ``Subject:''
        field for the message, providing a default if you are replying to or forwarding
-       a message.  See also _$_a_s_k_c_c (section 6.3.10  , page 66), _$_a_s_k_b_c_c (section
+       a message.  See also _$_a_s_k_c_c (section 6.3.10  , page 67), _$_a_s_k_b_c_c (section
        6.3.9  , page 66), _$_a_u_t_o_e_d_i_t (section 6.3.17  , page 69), _$_b_o_u_n_c_e (section
        6.3.20  , page 69), and _$_f_a_s_t___r_e_p_l_y (section 6.3.59  , page 78) for changing
        how Mutt-ng asks these questions.
@@ -506,7 +506,7 @@
        is set, the headers will be at the top of the message in your editor.  Any mes-
        sages you are replying to will be added in sort order to the message, with
        appropriate _$_a_t_t_r_i_b_u_t_i_o_n (section 6.3.15  , page 68), _$_i_n_d_e_n_t___s_t_r_i_n_g (section
-       6.3.108  , page 89) and _$_p_o_s_t___i_n_d_e_n_t___s_t_r_i_n_g (section 6.3.211  , page 116).
+       6.3.108  , page 90) and _$_p_o_s_t___i_n_d_e_n_t___s_t_r_i_n_g (section 6.3.211  , page 116).
        When forwarding a message, if the _$_m_i_m_e___f_o_r_w_a_r_d (section 6.3.135  , page 97)
        variable is unset, a copy of the forwarded message will be included.  If you
        have specified a _$_s_i_g_n_a_t_u_r_e (section 6.3.258  , page 127), it will be appended
@@ -597,7 +597,7 @@
        encrypted using the selected public keys, and sent out.
 
        Most fields of the entries in the key selection menu (see also _$_p_g_p___e_n_t_r_y___f_o_r_-
-       _m_a_t (section 6.3.178  , page 108)) have obvious meanings.  But some explana-
+       _m_a_t (section 6.3.178  , page 109)) have obvious meanings.  But some explana-
        tions on the capabilities, flags, and validity fields are in order.
 
        The flags sequence (%f) will expand to one of the following flags:
@@ -698,7 +698,7 @@
        At times it is desirable to delay sending a message that you have already begun
        to compose.  When the _p_o_s_t_p_o_n_e_-_m_e_s_s_a_g_e function is used in the _c_o_m_p_o_s_e menu,
        the body of your message and attachments are stored in the mailbox specified by
-       the _$_p_o_s_t_p_o_n_e_d (section 6.3.213  , page 116) variable.  This means that you can
+       the _$_p_o_s_t_p_o_n_e_d (section 6.3.213  , page 117) variable.  This means that you can
        recall the message even if you exit Mutt-ng and then restart it at a later
        time.
 
@@ -1010,7 +1010,7 @@
        folder-hook's, they are executed in the order given in the muttrc.
 
        NNoottee:: if you use the ``!'' shortcut for _$_s_p_o_o_l_f_i_l_e (section 6.3.294  , page
-       135) at the beginning of the pattern, you must place it inside of double or
+       136) at the beginning of the pattern, you must place it inside of double or
        single quotes in order to distinguish it from the logical _n_o_t operator for the
        expression.
 
@@ -1337,7 +1337,7 @@
 
        The Mutt-ng E-Mail Client                                                    26
 
-       6.3.294  , page 135)) should be executed before the mailboxes command.
+       6.3.294  , page 136)) should be executed before the mailboxes command.
 
        _3_._1_3  _U_s_e_r _d_e_f_i_n_e_d _h_e_a_d_e_r_s
 
@@ -1651,7 +1651,7 @@
        Usage: reset _v_a_r_i_a_b_l_e [_v_a_r_i_a_b_l_e ... ]
 
        This command is used to set (and unset) _c_o_n_f_i_g_u_r_a_t_i_o_n _v_a_r_i_a_b_l_e_s (section 6.3  ,
-       page 64).  There are four basic types of variables: boolean, number, string and
+       page 65).  There are four basic types of variables: boolean, number, string and
        quadoption.  _b_o_o_l_e_a_n variables can be _s_e_t (true) or _u_n_s_e_t (false).  _n_u_m_b_e_r
        variables can be assigned a positive integer value.
 
@@ -2345,7 +2345,7 @@
        These shortcuts can be used anywhere you are prompted for a file or mailbox
        path.
 
-          +o ! -- refers to your _$_s_p_o_o_l_f_i_l_e (section 6.3.294  , page 135) (incoming)
+          +o ! -- refers to your _$_s_p_o_o_l_f_i_l_e (section 6.3.294  , page 136) (incoming)
             mailbox
 
           +o > -- refers to your _$_m_b_o_x (section 6.3.123  , page 95) file
@@ -2404,7 +2404,7 @@
 
        Conversely, when group-replying or list-replying to a message which has a Mail-
        Followup-To header, mutt will respect this header if the _$_h_o_n_o_r___f_o_l_l_o_w_u_p___t_o
-       (section 6.3.87  , page 84) configuration variable is set.  Using list-reply
+       (section 6.3.87  , page 85) configuration variable is set.  Using list-reply
        will in this case also make sure that the reply goes to the mailing list, even
        if it's not specified in the list of recipients in the Mail-Followup-To.
 
@@ -2433,7 +2433,7 @@
 
        The Mutt-ng E-Mail Client                                                    47
 
-       Lastly, Mutt-ng has the ability to _s_o_r_t (section 6.3.288  , page 133) the mail-
+       Lastly, Mutt-ng has the ability to _s_o_r_t (section 6.3.288  , page 134) the mail-
        box into _t_h_r_e_a_d_s (section 2.3.3  , page 7).  A thread is a group of messages
        which all relate to the same subject.  This is usually organized into a tree-
        like structure where a message and all of its replies are represented graphi-
@@ -2512,7 +2512,7 @@
 
        Another way to access your POP3 mail is the _f_e_t_c_h_-_m_a_i_l function (default: G).
        It allows to connect to _p_o_p___h_o_s_t (section 6.3.205  , page 115), fetch all your
-       new mail and place it in the local _s_p_o_o_l_f_i_l_e (section 6.3.294  , page 135).
+       new mail and place it in the local _s_p_o_o_l_f_i_l_e (section 6.3.294  , page 136).
        After this point, Mutt-ng runs exactly as if the mail had always been local.
 
        NNoottee:: If you only need to fetch all messages to local mailbox you should con-
@@ -2616,7 +2616,7 @@
             tors. This is overridden by an explicit username in the mailbox path (i.e.
             by using a mailbox name of the form {user@host}).
 
-          +o _$_i_m_a_p___p_a_s_s (section 6.3.99  , page 87) - a password which you may preset,
+          +o _$_i_m_a_p___p_a_s_s (section 6.3.99  , page 88) - a password which you may preset,
             used by all authentication methods where a password is needed.
 
           +o _$_i_m_a_p___a_u_t_h_e_n_t_i_c_a_t_o_r_s (section 6.3.90  , page 85) - a colon-delimited list
@@ -2687,7 +2687,7 @@
        compressed. This is important because it allows the use of programs that do not
        have well defined extensions. Just use '.' as a regexp. But this may be sur-
        prising if your compressing script produces empty files. In this situation,
-       unset _$_s_a_v_e___e_m_p_t_y (section 6.3.239  , page 122), so that the compressed file
+       unset _$_s_a_v_e___e_m_p_t_y (section 6.3.239  , page 123), so that the compressed file
        will be removed if you delete all of the messages.
 
        _4_._1_6_._1  _O_p_e_n _a _c_o_m_p_r_e_s_s_e_d _m_a_i_l_b_o_x _f_o_r _r_e_a_d_i_n_g
@@ -2998,7 +2998,7 @@
        The interpretation of shell meta-characters embedded in MIME parameters can
        lead to security problems in general.  Mutt-ng tries to quote parameters in
        expansion of %s syntaxes properly, and avoids risky characters by substituting
-       them, see the _m_a_i_l_c_a_p___s_a_n_i_t_i_z_e (section 6.3.116  , page 93) variable.
+       them, see the _m_a_i_l_c_a_p___s_a_n_i_t_i_z_e (section 6.3.116  , page 94) variable.
 
        Although mutt's procedures to invoke programs with mailcap seem to be safe,
        there are other applications parsing mailcap, maybe taking less care of it.
@@ -3310,6 +3310,7 @@
             -a      attach a file to a message
             -b      specify a blind carbon-copy (BCC) address
             -c      specify a carbon-copy (Cc) address
+            -D      print the value of all variables on stdout
             -e      specify a config command to be run after initialization files are read
             -f      specify a mailbox to load
             -F      specify an alternate file to read initialization commands
@@ -3352,9 +3353,9 @@
 
           +o _a_c_c_o_u_n_t_-_h_o_o_k (section 4.14  , page 49) _p_a_t_t_e_r_n _c_o_m_m_a_n_d
 
-          +o _a_l_i_a_s (section 3.2  , page 16) _k_e_y _a_d_d_r_e_s_s [ , _a_d_d_r_e_s_s, ... ]
-
        The Mutt-ng E-Mail Client                                                    64
+
+          +o _a_l_i_a_s (section 3.2  , page 16) _k_e_y _a_d_d_r_e_s_s [ , _a_d_d_r_e_s_s, ... ]
 
           +o _u_n_a_l_i_a_s (section 3.2  , page 16) [ * | _k_e_y ... ]
 
@@ -3408,9 +3409,9 @@
 
           +o _m_a_i_l_b_o_x_e_s (section 3.12  , page 25) _f_i_l_e_n_a_m_e [ _f_i_l_e_n_a_m_e ... ]
 
-          +o _m_b_o_x_-_h_o_o_k (section 3.11  , page 25) _p_a_t_t_e_r_n _m_a_i_l_b_o_x
-
        The Mutt-ng E-Mail Client                                                    65
+
+          +o _m_b_o_x_-_h_o_o_k (section 3.11  , page 25) _p_a_t_t_e_r_n _m_a_i_l_b_o_x
 
           +o _m_e_s_s_a_g_e_-_h_o_o_k (section 3.19  , page 28) _p_a_t_t_e_r_n _c_o_m_m_a_n_d
 
@@ -3464,9 +3465,9 @@
 
        _6_._3  _C_o_n_f_i_g_u_r_a_t_i_o_n _v_a_r_i_a_b_l_e_s
 
-       _6_._3_._1  _a_b_o_r_t___n_o_s_u_b_j_e_c_t
-
        The Mutt-ng E-Mail Client                                                    66
+
+       _6_._3_._1  _a_b_o_r_t___n_o_s_u_b_j_e_c_t
 
        Type: quadoption
 
@@ -3519,10 +3520,10 @@
              %r
                    address which alias expands to
 
+       The Mutt-ng E-Mail Client                                                    67
+
              %t
                    character which indicates if the alias is tagged for inclusion
-
-       The Mutt-ng E-Mail Client                                                    67
 
        _6_._3_._5  _a_l_l_o_w___8_b_i_t
 
@@ -3575,11 +3576,11 @@
        If _s_e_t, Mutt-ng will prompt you for blind-carbon-copy (Bcc) recipients before
        editing an outgoing message.
 
+       The Mutt-ng E-Mail Client                                                    68
+
        _6_._3_._1_0  _a_s_k_c_c
 
        Type: boolean
-
-       The Mutt-ng E-Mail Client                                                    68
 
        Default: no
 
@@ -3632,10 +3633,10 @@
              %f
                    filename
 
+       The Mutt-ng E-Mail Client                                                    69
+
              %I
                    MIME Content-Disposition: header field (I=inline, A=attachment)
-
-       The Mutt-ng E-Mail Client                                                    69
 
              %m
                    major MIME type
@@ -3689,9 +3690,9 @@
 
        Type: string
 
-       Default: 'On %d, %n wrote:'
-
        The Mutt-ng E-Mail Client                                                    70
+
+       Default: 'On %d, %n wrote:'
 
        This is the string that will precede a message which has been included in a
        reply.  For a full listing of defined printf(3)-like sequences see the section
@@ -3745,11 +3746,10 @@
 
        Default: ask-yes
 
-       Controls whether you will be asked to confirm bouncing messages.  If set to _y_e_s
-       you don't get asked if you want to bounce a message. Setting this variable to
-
        The Mutt-ng E-Mail Client                                                    71
 
+       Controls whether you will be asked to confirm bouncing messages.  If set to _y_e_s
+       you don't get asked if you want to bounce a message. Setting this variable to
        _n_o is not generally useful, and thus not recommended, because you are unable to
        bounce messages.
 
@@ -3801,11 +3801,11 @@
 
        Character set your terminal uses to display and enter textual data.
 
+       The Mutt-ng E-Mail Client                                                    72
+
        _6_._3_._2_5  _c_h_e_c_k___n_e_w
 
        Type: boolean
-
-       The Mutt-ng E-Mail Client                                                    72
 
        Default: yes
 
@@ -3858,9 +3858,9 @@
 
        Default: ''
 
-       When defined, Mutt-ng will recode commands in rc files from this encoding.
-
        The Mutt-ng E-Mail Client                                                    73
+
+       When defined, Mutt-ng will recode commands in rc files from this encoding.
 
        _6_._3_._2_9  _c_o_n_f_i_r_m_a_p_p_e_n_d
 
@@ -3914,9 +3914,9 @@
 
        Type: boolean
 
-       Default: no
-
        The Mutt-ng E-Mail Client                                                    74
+
+       Default: no
 
        Setting this variable will cause Mutt-ng to always attempt to PGP encrypt out-
        going messages.  This is probably only useful in connection to the _s_e_n_d_-_h_o_o_k
@@ -3936,7 +3936,7 @@
        encryption/signing for messages.  See also ``_$_c_r_y_p_t___a_u_t_o_e_n_c_r_y_p_t (section
        6.3.34  , page 72)'', ``_$_c_r_y_p_t___r_e_p_l_y_e_n_c_r_y_p_t (section 6.3.38  , page 73)'',
        ``_$_c_r_y_p_t___a_u_t_o_s_i_g_n (section 6.3.36  , page 73)'', ``_$_c_r_y_p_t___r_e_p_l_y_s_i_g_n (section
-       6.3.39  , page 73)'' and ``_$_s_m_i_m_e___i_s___d_e_f_a_u_l_t (section 6.3.276  , page 131)''.
+       6.3.39  , page 74)'' and ``_$_s_m_i_m_e___i_s___d_e_f_a_u_l_t (section 6.3.276  , page 131)''.
 
        _6_._3_._3_6  _c_r_y_p_t___a_u_t_o_s_i_g_n
 
@@ -3961,7 +3961,7 @@
        encryption/signing for messages. See also ``_$_c_r_y_p_t___a_u_t_o_e_n_c_r_y_p_t (section
        6.3.34  , page 72)'', ``_$_c_r_y_p_t___r_e_p_l_y_e_n_c_r_y_p_t (section 6.3.38  , page 73)'',
        ``_$_c_r_y_p_t___a_u_t_o_s_i_g_n (section 6.3.36  , page 73)'', ``_$_c_r_y_p_t___r_e_p_l_y_s_i_g_n (section
-       6.3.39  , page 73)'' and ``_$_s_m_i_m_e___i_s___d_e_f_a_u_l_t (section 6.3.276  , page 131)''.
+       6.3.39  , page 74)'' and ``_$_s_m_i_m_e___i_s___d_e_f_a_u_l_t (section 6.3.276  , page 131)''.
 
        _6_._3_._3_8  _c_r_y_p_t___r_e_p_l_y_e_n_c_r_y_p_t
 
@@ -3970,9 +3970,10 @@
        Default: yes
 
        If _s_e_t, automatically PGP or OpenSSL encrypt replies to messages which are
-       encrypted.  (Crypto only)
 
        The Mutt-ng E-Mail Client                                                    75
+
+       encrypted.  (Crypto only)
 
        _6_._3_._3_9  _c_r_y_p_t___r_e_p_l_y_s_i_g_n
 
@@ -3995,7 +3996,7 @@
        encrypted. This makes sense in combination with ``_$_c_r_y_p_t___r_e_p_l_y_e_n_c_r_y_p_t (section
        6.3.38  , page 73)'', because it allows you to sign all messages which are
        automatically encrypted.  This works around the problem noted in
-       ``_$_c_r_y_p_t___r_e_p_l_y_s_i_g_n (section 6.3.39  , page 73)'', that Mutt-ng is not able to
+       ``_$_c_r_y_p_t___r_e_p_l_y_s_i_g_n (section 6.3.39  , page 74)'', that Mutt-ng is not able to
        find out whether an encrypted message is also signed.  (Crypto only)
 
        _6_._3_._4_1  _c_r_y_p_t___t_i_m_e_s_t_a_m_p
@@ -4026,9 +4027,9 @@
 
        Type: quadoption
 
-       Default: yes
-
        The Mutt-ng E-Mail Client                                                    76
+
+       Default: yes
 
        If ``_y_e_s'', always attempt to verify PGP or S/MIME signatures.  If ``_a_s_k'', ask
        whether or not to verify the signature.  If ``_n_o'', never attempt to verify
@@ -4082,11 +4083,10 @@
 
        Default: yes
 
-       If this option is _s_e_t, Mutt-ng will untag messages when marking them for dele-
-       tion.  This applies when you either explicitly delete a message, or when you
-
        The Mutt-ng E-Mail Client                                                    77
 
+       If this option is _s_e_t, Mutt-ng will untag messages when marking them for dele-
+       tion.  This applies when you either explicitly delete a message, or when you
        save it to another folder.
 
        _6_._3_._4_8  _d_i_g_e_s_t___c_o_l_l_a_p_s_e
@@ -4140,9 +4140,9 @@
 
        Type: string
 
-       Default: ''
-
        The Mutt-ng E-Mail Client                                                    78
+
+       Default: ''
 
        NNoottee:: you should not enable this unless you are using Sendmail 8.8.x or
        greater.
@@ -4196,9 +4196,9 @@
 
        _6_._3_._5_7  _e_n_v_e_l_o_p_e___f_r_o_m
 
-       Type: boolean
-
        The Mutt-ng E-Mail Client                                                    79
+
+       Type: boolean
 
        Default: no
 
@@ -4253,10 +4253,9 @@
 
        Default: ''
 
-       This variable is a colon-separated list of character encoding schemes for text
-
        The Mutt-ng E-Mail Client                                                    80
 
+       This variable is a colon-separated list of character encoding schemes for text
        file attatchments.  If _u_n_s_e_t, _$_c_h_a_r_s_e_t (section 6.3.24  , page 70) value will
        be used instead.  For example, the following configuration would work for
        Japanese text handling:
@@ -4309,10 +4308,10 @@
              %N
                    N if folder has new mail, blank otherwise
 
+       The Mutt-ng E-Mail Client                                                    81
+
              %s
                    size in bytes
-
-       The Mutt-ng E-Mail Client                                                    81
 
              %t
                    * if the file is tagged, blank otherwise
@@ -4366,11 +4365,10 @@
 
        Default: no
 
-       This variable is similar to ``_$_s_a_v_e___n_a_m_e (section 6.3.240  , page 123)'',
-       except that Mutt-ng will store a copy of your outgoing message by the username
-
        The Mutt-ng E-Mail Client                                                    82
 
+       This variable is similar to ``_$_s_a_v_e___n_a_m_e (section 6.3.240  , page 123)'',
+       except that Mutt-ng will store a copy of your outgoing message by the username
        of the address you are sending to even if that mailbox does not exist.
 
        Also see the ``_$_r_e_c_o_r_d (section 6.3.229  , page 120)'' variable.
@@ -4423,12 +4421,11 @@
 
        Default: no
 
-       When _s_e_t forwarded messages included in the main body of the message (when
-       ``_$_m_i_m_e___f_o_r_w_a_r_d (section 6.3.135  , page 97)'' is _u_n_s_e_t) will be quoted using
-
        The Mutt-ng E-Mail Client                                                    83
 
-       ``_$_i_n_d_e_n_t___s_t_r_i_n_g (section 6.3.108  , page 89)''.
+       When _s_e_t forwarded messages included in the main body of the message (when
+       ``_$_m_i_m_e___f_o_r_w_a_r_d (section 6.3.135  , page 97)'' is _u_n_s_e_t) will be quoted using
+       ``_$_i_n_d_e_n_t___s_t_r_i_n_g (section 6.3.108  , page 90)''.
 
        _6_._3_._7_3  _f_r_o_m
 
@@ -4438,7 +4435,7 @@
 
        This variable contains a default from address.  It can be overridden using
        my_hdr (including from send-hooks) and ``_$_r_e_v_e_r_s_e___n_a_m_e (section 6.3.235  , page
-       121)''.  This variable is ignored if ``_$_u_s_e___f_r_o_m (section 6.3.324  , page
+       122)''.  This variable is ignored if ``_$_u_s_e___f_r_o_m (section 6.3.324  , page
        144)'' is unset.
 
        E.g. you can use send-hook Mutt-ng-devel@lists.berlios.de 'my_hdr From: Foo Bar
@@ -4480,9 +4477,9 @@
 
        Type: boolean
 
-       Default: no
-
        The Mutt-ng E-Mail Client                                                    84
+
+       Default: no
 
        When _s_e_t, this variable causes Mutt-ng to include the header of the message you
        are replying to into the edit buffer.  The ``_$_w_e_e_d (section 6.3.330  , page
@@ -4496,12 +4493,12 @@
 
        Availability: Header Cache
 
-       The _$_h_e_a_d_e_r___c_a_c_h_e (section 6.3.77  , page 82) variable points to the header
+       The _$_h_e_a_d_e_r___c_a_c_h_e (section 6.3.77  , page 83) variable points to the header
        cache database.
 
-       If _$_h_e_a_d_e_r___c_a_c_h_e (section 6.3.77  , page 82) points to a directory it will con-
+       If _$_h_e_a_d_e_r___c_a_c_h_e (section 6.3.77  , page 83) points to a directory it will con-
        tain a header cache database  per folder. If _$_h_e_a_d_e_r___c_a_c_h_e (section 6.3.77  ,
-       page 82) points to a file that file will be a single global header cache. By
+       page 83) points to a file that file will be a single global header cache. By
        default it is _u_n_s_e_t so no header caching will be used.
 
        _6_._3_._7_8  _h_e_a_d_e_r___c_a_c_h_e___c_o_m_p_r_e_s_s
@@ -4536,11 +4533,11 @@
        Default: no
 
        When _s_e_t, Mutt-ng will skip the host name part of ``_$_h_o_s_t_n_a_m_e (section
-       6.3.88  , page 85)'' variable when adding the domain part to addresses.  This
-       variable does not affect the generation of Message-ID: header fields, and it
 
        The Mutt-ng E-Mail Client                                                    85
 
+       6.3.88  , page 85)'' variable when adding the domain part to addresses.  This
+       variable does not affect the generation of Message-ID: header fields, and it
        will not lead to the cut-off of first-level domains.
 
        _6_._3_._8_1  _h_i_d_e___l_i_m_i_t_e_d
@@ -4588,15 +4585,15 @@
 
        When _s_e_t, Mutt-ng will not show the presence of missing messages at the top of
        threads in the thread tree.  Note that when _$_h_i_d_e___l_i_m_i_t_e_d (section 6.3.81  ,
-       page 83) is _s_e_t, this option will have no effect.
+       page 84) is _s_e_t, this option will have no effect.
 
        _6_._3_._8_6  _h_i_s_t_o_r_y
 
        Type: number
 
-       Default: 10
-
        The Mutt-ng E-Mail Client                                                    86
+
+       Default: 10
 
        This variable controls the size (in number of strings remembered) of the string
        history buffer. The buffer is cleared each time the variable is changed.
@@ -4650,10 +4647,10 @@
        capability string, e.g. ``digest-md5'', ``gssapi'' or ``cram-md5''. This param-
        eter is case-insensitive.
 
+       The Mutt-ng E-Mail Client                                                    87
+
        If this parameter is _u_n_s_e_t (the default) Mutt-ng will try all available meth-
        ods, in order from most-secure to least-secure.
-
-       The Mutt-ng E-Mail Client                                                    87
 
        Example: set imap_authenticators='gssapi:cram-md5:login'
 
@@ -4707,11 +4704,10 @@
 
        Availability: IMAP
 
-       You normally want to see your personal folders alongside your INBOX in the IMAP
-       browser. If you see something else, you may set this variable to the IMAP path
-
        The Mutt-ng E-Mail Client                                                    88
 
+       You normally want to see your personal folders alongside your INBOX in the IMAP
+       browser. If you see something else, you may set this variable to the IMAP path
        to your folders.
 
        _6_._3_._9_5  _i_m_a_p___k_e_e_p_a_l_i_v_e
@@ -4764,11 +4760,10 @@
 
        Default: 300
 
-       This variable configures how often (in seconds) Mutt-ng should look for new
-       mail in IMAP folders. This is split from the ``_m_a_i_l___c_h_e_c_k (section 6.3.114  ,
-
        The Mutt-ng E-Mail Client                                                    89
 
+       This variable configures how often (in seconds) Mutt-ng should look for new
+       mail in IMAP folders. This is split from the ``_m_a_i_l___c_h_e_c_k (section 6.3.114  ,
        page 93)'' variable to generate less traffic and get more accurate information
        for local folders.
 
@@ -4821,10 +4816,10 @@
 
        Availability: IMAP
 
+       The Mutt-ng E-Mail Client                                                    90
+
        Controls whether or not Mutt-ng will try to reconnect to IMAP server when the
        connection is lost.
-
-       The Mutt-ng E-Mail Client                                                    90
 
        _6_._3_._1_0_3  _i_m_a_p___s_e_r_v_e_r_n_o_i_s_e
 
@@ -4877,10 +4872,10 @@
 
        Default: no
 
+       The Mutt-ng E-Mail Client                                                    91
+
        Controls whether or not Mutt-ng includes only the first attachment of the mes-
        sage you are replying.
-
-       The Mutt-ng E-Mail Client                                                    91
 
        _6_._3_._1_0_8  _i_n_d_e_n_t___s_t_r_i_n_g
 
@@ -4932,10 +4927,10 @@
                    date and time of the message in the format specified by ``date_for-
                    mat'' converted to the local time zone
 
+       The Mutt-ng E-Mail Client                                                    92
+
              %e
                    current message number in thread
-
-       The Mutt-ng E-Mail Client                                                    92
 
              %E
                    number of messages in current thread
@@ -4989,11 +4984,10 @@
              %t
                    `to:' field (recipients)
 
-             %T
-                   the appropriate character from the _$_t_o___c_h_a_r_s (section 6.3.317  ,
-
        The Mutt-ng E-Mail Client                                                    93
 
+             %T
+                   the appropriate character from the _$_t_o___c_h_a_r_s (section 6.3.317  ,
                    page 142) string
 
              %u
@@ -5046,9 +5040,9 @@
 
        _6_._3_._1_1_0  _i_s_p_e_l_l
 
-       Type: path
-
        The Mutt-ng E-Mail Client                                                    94
+
+       Type: path
 
        Default: 'ispell'
 
@@ -5102,9 +5096,10 @@
        Default: ''
 
        This variable specifies which files to consult when attempting to display MIME
-       bodies not directly supported by Mutt-ng.
 
        The Mutt-ng E-Mail Client                                                    95
+
+       bodies not directly supported by Mutt-ng.
 
        _6_._3_._1_1_6  _m_a_i_l_c_a_p___s_a_n_i_t_i_z_e
 
@@ -5157,11 +5152,11 @@
        up with an 'O' next to them in the ``index'' menu, indicating that they are
        old.
 
+       The Mutt-ng E-Mail Client                                                    96
+
        _6_._3_._1_2_0  _m_a_r_k_e_r_s
 
        Type: boolean
-
-       The Mutt-ng E-Mail Client                                                    96
 
        Default: yes
 
@@ -5188,7 +5183,7 @@
        When _s_e_t, the maximum line length for displaying ``format = flowed'' messages
        is limited to this length. A value of 0 (which is also the default) means that
        the maximum line length is determined by the terminal width and _$_w_r_a_p_m_a_r_g_i_n
-       (section 6.3.332  , page 145).
+       (section 6.3.332  , page 146).
 
        _6_._3_._1_2_3  _m_b_o_x
 
@@ -5197,7 +5192,7 @@
        Default: '~/mbox'
 
        This specifies the folder into which read mail in your ``_$_s_p_o_o_l_f_i_l_e (section
-       6.3.294  , page 135)'' folder will be appended.
+       6.3.294  , page 136)'' folder will be appended.
 
        _6_._3_._1_2_4  _m_b_o_x___t_y_p_e
 
@@ -5214,11 +5209,11 @@
 
        Default: 0
 
+       The Mutt-ng E-Mail Client                                                    97
+
        This variable controls the number of lines of context that are given when
        scrolling through menus. (Similar to ``_$_p_a_g_e_r___c_o_n_t_e_x_t (section 6.3.166  , page
        106)''.)
-
-       The Mutt-ng E-Mail Client                                                    97
 
        _6_._3_._1_2_6  _m_e_n_u___m_o_v_e___o_f_f
 
@@ -5270,10 +5265,10 @@
 
        Default: no
 
+       The Mutt-ng E-Mail Client                                                    98
+
        If _u_n_s_e_t, Mutt-ng will remove your address (see the ``alternates'' command)
        from the list of recipients when replying to a message.
-
-       The Mutt-ng E-Mail Client                                                    98
 
        _6_._3_._1_3_1  _m_h___p_u_r_g_e
 
@@ -5325,11 +5320,11 @@
        Also see ``_$_f_o_r_w_a_r_d___d_e_c_o_d_e (section 6.3.68  , page 81)'' and ``_$_m_i_m_e___f_o_r_-
        _w_a_r_d___d_e_c_o_d_e (section 6.3.136  , page 97)''.
 
+       The Mutt-ng E-Mail Client                                                    99
+
        _6_._3_._1_3_6  _m_i_m_e___f_o_r_w_a_r_d___d_e_c_o_d_e
 
        Type: boolean
-
-       The Mutt-ng E-Mail Client                                                    99
 
        Default: no
 
@@ -5382,11 +5377,11 @@
        used with various sets of parameters to gather the list of known remailers, and
        to finally send a message through the mixmaster chain.
 
+       The Mutt-ng E-Mail Client                                                   100
+
        _6_._3_._1_4_0  _m_o_v_e
 
        Type: quadoption
-
-       The Mutt-ng E-Mail Client                                                   100
 
        Default: ask-no
 
@@ -5439,10 +5434,10 @@
              %T
                    the current UNIX timestamp (decimal)
 
+       The Mutt-ng E-Mail Client                                                   101
+
              %X
                    the current UNIX timestamp (hexadecimal)
-
-       The Mutt-ng E-Mail Client                                                   101
 
              %Y
                    the current year (Y2K compliant)
@@ -5496,10 +5491,10 @@
        ers. If _u_n_s_e_t, headers will not be saved at all and will be reloaded each time
        when you enter a newsgroup.
 
+       The Mutt-ng E-Mail Client                                                   102
+
        As for the header caching in connection with IMAP and/or Maildir, this drasti-
        cally increases speed and lowers traffic.
-
-       The Mutt-ng E-Mail Client                                                   102
 
        _6_._3_._1_4_6  _n_n_t_p___c_a_t_c_h_u_p
 
@@ -6251,7 +6246,7 @@
        of tagged messages Mutt-ng will concatenate the messages and will pipe them as
        a single folder.  When _s_e_t, Mutt-ng will pipe the messages one by one.  In both
        cases the messages are piped in the current sorted order, and the ``_$_p_i_p_e___s_e_p
-       (section 6.3.200  , page 113)'' separator is added after each message.
+       (section 6.3.200  , page 114)'' separator is added after each message.
 
        _6_._3_._2_0_2  _p_o_p___a_u_t_h___t_r_y___a_l_l
 
@@ -6395,7 +6390,7 @@
        The Mutt-ng E-Mail Client                                                   118
 
        Controls whether or not messages are saved in the ``_$_p_o_s_t_p_o_n_e_d (section
-       6.3.213  , page 116)'' mailbox when you elect not to send immediately.
+       6.3.213  , page 117)'' mailbox when you elect not to send immediately.
 
        _6_._3_._2_1_3  _p_o_s_t_p_o_n_e_d
 
@@ -6518,7 +6513,7 @@
        Default: yes
 
        Controls whether or not empty lines will be quoted using ``_i_n_d_e_n_t___s_t_r_i_n_g (sec-
-       tion 6.3.108  , page 89)''.
+       tion 6.3.108  , page 90)''.
 
        _6_._3_._2_2_3  _q_u_o_t_e___q_u_o_t_e_d
 
@@ -6528,7 +6523,7 @@
 
        Controls how quoted lines will be quoted. If _s_e_t, one quote character will be
        added to the end of existing prefix.  Otherwise, quoted lines will be prepended
-       by ``_i_n_d_e_n_t___s_t_r_i_n_g (section 6.3.108  , page 89)''.
+       by ``_i_n_d_e_n_t___s_t_r_i_n_g (section 6.3.108  , page 90)''.
 
        _6_._3_._2_2_4  _q_u_o_t_e___r_e_g_e_x_p
 
@@ -6581,7 +6576,7 @@
        By default, this is the GECOS field from /etc/passwd.
 
        _N_o_t_e_: This variable will _n_o_t be used when the user has set a real name in the
-       _$_f_r_o_m (section 6.3.73  , page 81) variable.
+       _$_f_r_o_m (section 6.3.73  , page 82) variable.
 
        _6_._3_._2_2_8  _r_e_c_a_l_l
 
@@ -6590,7 +6585,7 @@
        Default: ask-yes
 
        Controls whether or not Mutt-ng recalls postponed messages when composing a new
-       message.  Also see ``_$_p_o_s_t_p_o_n_e_d (section 6.3.213  , page 116)''.
+       message.  Also see ``_$_p_o_s_t_p_o_n_e_d (section 6.3.213  , page 117)''.
 
        Setting this variable to _y_e_s is not generally useful, and thus not recommended.
 
@@ -6701,10 +6696,10 @@
        Default: yes
 
        This variable fine-tunes the behaviour of the _r_e_v_e_r_s_e___n_a_m_e (section 6.3.235  ,
-       page 121) feature.  When it is _s_e_t, Mutt-ng will use the address from incoming
+       page 122) feature.  When it is _s_e_t, Mutt-ng will use the address from incoming
        messages as-is, possibly including eventual real names.  When it is _u_n_s_e_t,
        Mutt-ng will override any such real names with the setting of the _r_e_a_l_n_a_m_e
-       (section 6.3.227  , page 119) variable.
+       (section 6.3.227  , page 120) variable.
 
        _6_._3_._2_3_7  _r_f_c_2_0_4_7___p_a_r_a_m_e_t_e_r_s
 
@@ -6748,7 +6743,7 @@
        Default: yes
 
        When _u_n_s_e_t, mailboxes which contain no saved messages will be removed when
-       closed (the exception is ``_$_s_p_o_o_l_f_i_l_e (section 6.3.294  , page 135)'' which is
+       closed (the exception is ``_$_s_p_o_o_l_f_i_l_e (section 6.3.294  , page 136)'' which is
        never removed).  If _s_e_t, mailboxes are never removed.
 
        NNoottee:: This only applies to mbox and MMDF folders, Mutt-ng does not delete MH
@@ -7124,9 +7119,9 @@
 
              %C
                    CA location:  Depending on whether _$_s_m_i_m_e___c_a___l_o_c_a_t_i_o_n (section
-                   6.3.265  , page 128) points to a directory or file, this expands to
-                   '-CApath _$_s_m_i_m_e___c_a___l_o_c_a_t_i_o_n (section 6.3.265  , page 128)' or
-                   '-CAfile _$_s_m_i_m_e___c_a___l_o_c_a_t_i_o_n (section 6.3.265  , page 128)'.
+                   6.3.265  , page 129) points to a directory or file, this expands to
+                   '-CApath _$_s_m_i_m_e___c_a___l_o_c_a_t_i_o_n (section 6.3.265  , page 129)' or
+                   '-CAfile _$_s_m_i_m_e___c_a___l_o_c_a_t_i_o_n (section 6.3.265  , page 129)'.
 
        The Mutt-ng E-Mail Client                                                   131
 
@@ -7396,7 +7391,7 @@
 
        When sorting by threads, this variable controls how threads are sorted in rela-
        tion to other threads, and how the branches of the thread trees are sorted.
-       This can be set to any value that ``_$_s_o_r_t (section 6.3.288  , page 133)'' can,
+       This can be set to any value that ``_$_s_o_r_t (section 6.3.288  , page 134)'' can,
        except threads (in that case, Mutt-ng will just use date-sent).  You can also
        specify the ``last-'' prefix in addition to ``reverse-'' prefix, but last- must
        come after reverse-.  The last- prefix causes messages to be sorted against its
@@ -7410,7 +7405,7 @@
 
        first, if you have set sort=reverse-threads.)
 
-       NNoottee:: For reversed ``_$_s_o_r_t (section 6.3.288  , page 133)'' order _$_s_o_r_t___a_u_x
+       NNoottee:: For reversed ``_$_s_o_r_t (section 6.3.288  , page 134)'' order _$_s_o_r_t___a_u_x
        (section 6.3.290  , page 134) is reversed again (which is not the right thing
        to do, but kept to not break any existing configuration setting).
 
@@ -7622,7 +7617,7 @@
                    to _$_s_t_a_t_u_s___c_h_a_r_s (section 6.3.301  , page 137)
 
              %s
-                   current sorting mode (_$_s_o_r_t (section 6.3.288  , page 133))
+                   current sorting mode (_$_s_o_r_t (section 6.3.288  , page 134))
 
              %S
                    current aux sorting method (_$_s_o_r_t___a_u_x (section 6.3.290  , page
@@ -7732,7 +7727,7 @@
        Default: no
 
        If _s_e_t, threading will only make use of the ``In-Reply-To:'' and ``Refer-
-       ences:'' header fields when you ``_$_s_o_r_t (section 6.3.288  , page 133)'' by mes-
+       ences:'' header fields when you ``_$_s_o_r_t (section 6.3.288  , page 134)'' by mes-
        sage threads.  By default, messages with the same subject are grouped together
        in ``pseudo threads.''  This may not always be desirable, such as in a personal
        mailbox where you might have several unrelated messages with the subject ``hi''
@@ -7757,7 +7752,7 @@
 
        Default: '\([Ww][Aa][RrSs]: .*\)[ ]*$'
 
-       When non-empty and _$_s_t_r_i_p___w_a_s (section 6.3.307  , page 140) is _s_e_t, mutt-ng
+       When non-empty and _$_s_t_r_i_p___w_a_s (section 6.3.307  , page 141) is _s_e_t, mutt-ng
        will remove this trailing part of the ``Subject'' line when replying if it
        won't be empty afterwards.
 
@@ -7791,7 +7786,7 @@
        like ordinary text.  To actually make use of this format's features, you'll
        need support in your editor.
 
-       Note that _$_i_n_d_e_n_t___s_t_r_i_n_g (section 6.3.108  , page 89) is ignored when this
+       Note that _$_i_n_d_e_n_t___s_t_r_i_n_g (section 6.3.108  , page 90) is ignored when this
        option is set.
 
        _6_._3_._3_1_2  _t_h_o_r_o_u_g_h___s_e_a_r_c_h
@@ -8064,7 +8059,7 @@
        Default: 'M%?n?AIL&ail?'
 
        Controls the format of the X11 icon title, as long as _$_x_t_e_r_m___s_e_t___t_i_t_l_e_s (sec-
-       tion 6.3.337  , page 146) is _s_e_t. This string is identical in formatting to the
+       tion 6.3.337  , page 147) is _s_e_t. This string is identical in formatting to the
        one used by ``_$_s_t_a_t_u_s___f_o_r_m_a_t (section 6.3.302  , page 137)''.
 
        _6_._3_._3_3_6  _x_t_e_r_m___l_e_a_v_e
@@ -8073,7 +8068,7 @@
 
        Default: ''
 
-       If _$_x_t_e_r_m___s_e_t___t_i_t_l_e_s (section 6.3.337  , page 146) is _s_e_t, this string will be
+       If _$_x_t_e_r_m___s_e_t___t_i_t_l_e_s (section 6.3.337  , page 147) is _s_e_t, this string will be
        used to set the title when leaving mutt-ng. For terminal-based programs,
        there's no easy and portable way to read the current title so mutt-ng cannot
        read it upon startup and restore it when exiting.
@@ -8102,7 +8097,7 @@
        Default: 'Mutt-ng with %?m?%m messages&no messages?%?n? [%n New]?'
 
        Controls the format of the title bar of the xterm provided that
-       _$_x_t_e_r_m___s_e_t___t_i_t_l_e_s (section 6.3.337  , page 146) has been _s_e_t. This string is
+       _$_x_t_e_r_m___s_e_t___t_i_t_l_e_s (section 6.3.337  , page 147) has been _s_e_t. This string is
        identical in formatting to the one used by ``_$_s_t_a_t_u_s___f_o_r_m_a_t (section 6.3.302  ,
        page 137)''.
 
@@ -8550,12 +8545,18 @@
 
        Andreas Kneib <akneib@gmx.net>
 
+       Carsten Schoelzki <cjs@weisshuhn.de>
+
+       Elimar Riesebieter <riesebie@lxtec.de>
+
        _7_._2  _A_b_o_u_t _t_h_i_s _d_o_c_u_m_e_n_t
+
+       The Mutt-ng E-Mail Client                                                   159
 
        This document was written in SGML, and then rendered using the sgml-tools pack-
        age.
 
-       The Mutt-ng E-Mail Client                                                   159
+       The Mutt-ng E-Mail Client                                                   160
 
                                           CONTENTS
 

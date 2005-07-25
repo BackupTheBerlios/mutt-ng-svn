@@ -204,6 +204,7 @@ void mutt_make_help (char *, size_t, char *, int, int);
 void mutt_make_misc_reply_headers (ENVELOPE * env, CONTEXT * ctx,
                                    HEADER * cur, ENVELOPE * curenv);
 void mutt_make_post_indent (CONTEXT * ctx, HEADER * cur, FILE * out);
+void mutt_merge_envelopes (ENVELOPE* base, ENVELOPE** extra);
 void mutt_message_to_7bit (BODY *, FILE *);
 
 #define mutt_mktemp(a) _mutt_mktemp (a, __FILE__, __LINE__)
@@ -276,6 +277,7 @@ int mutt_compose_attachment (BODY * a);
 int mutt_copy_body (FILE *, BODY **, BODY *);
 int mutt_decode_save_attachment (FILE *, BODY *, char *, int, int);
 int mutt_display_message (HEADER * h);
+int mutt_dump_variables (void);
 int mutt_edit_attachment (BODY *);
 int mutt_edit_message (CONTEXT *, HEADER *);
 int mutt_fetch_recips (ENVELOPE * out, ENVELOPE * in, int flags);

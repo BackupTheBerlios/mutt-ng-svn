@@ -10,7 +10,14 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
-2005-24-07:
+2005-07-25:
+
+  The '-D' command line option has been added.
+
+  Editing threads functionality is no longer only available
+  in muttng as it has been integrated into mutt, too.
+
+2005-07-24:
 
   The $xterm_leave option has been added.
 

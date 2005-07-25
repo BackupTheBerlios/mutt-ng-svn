@@ -1668,7 +1668,7 @@ struct option_t MuttVars[] = {
    **
    ** .pp
    ** This variable controls how many news articles to cache per newsgroup
-   ** (if caching is enabled, see $$news_cache_dir) and how many news articles
+   ** (if caching is enabled, see $$nntp_cache_dir) and how many news articles
    ** to show in the ``index'' menu.
    ** .pp
    ** If there're more articles than defined with $$nntp_context, all older ones

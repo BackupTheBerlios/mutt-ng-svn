@@ -78,10 +78,6 @@ int imap_read_headers (IMAP_DATA * idata, int msgbegin, int msgend)
 
   ctx = idata->ctx;
 
-#if USE_HCACHE
-  hc = mutt_hcache_open (HeaderCache, ctx->path);
-#endif /* USE_HCACHE */
-
   if (mutt_bit_isset (idata->capabilities, IMAP4REV1)) {
     snprintf (hdrreq, sizeof (hdrreq), "BODY.PEEK[HEADER.FIELDS (%s%s%s)]",
               want_headers, ImapHeaders ? " " : "",
@@ -96,9 +92,6 @@ int imap_read_headers (IMAP_DATA * idata, int msgbegin, int msgend)
     mutt_error _("Unable to fetch headers from this IMAP server version.");
 
     mutt_sleep (2);             /* pause a moment to let the user see the error */
-#if USE_HCACHE
-    mutt_hcache_close (hc);
-#endif /* USE_HCACHE */
     return -1;
   }
 
@@ -108,9 +101,6 @@ int imap_read_headers (IMAP_DATA * idata, int msgbegin, int msgend)
   if (!(fp = safe_fopen (tempfile, "w+"))) {
     mutt_error (_("Could not create temporary file %s"), tempfile);
     mutt_sleep (2);
-#if USE_HCACHE
-    mutt_hcache_close (hc);
-#endif /* USE_HCACHE */
     return -1;
   }
   unlink (tempfile);
@@ -124,6 +114,8 @@ int imap_read_headers (IMAP_DATA * idata, int msgbegin, int msgend)
   idata->newMailCount = 0;
 
 #if USE_HCACHE
+  hc = mutt_hcache_open (HeaderCache, ctx->path);
+
   snprintf (buf, sizeof (buf),
             "FETCH %d:%d (UID FLAGS)", msgbegin + 1, msgend + 1);
   fetchlast = msgend + 1;
@@ -158,11 +150,10 @@ int imap_read_headers (IMAP_DATA * idata, int msgbegin, int msgend)
         (unsigned long *) mutt_hcache_fetch (hc, uid_buf, &imap_hcache_keylen);
 
       if (uid_validity != NULL && *uid_validity == idata->uid_validity) {
-        ctx->hdrs[msgno] =
-          mutt_hcache_restore ((unsigned char *) uid_validity, 0);
+        ctx->hdrs[msgno] = mutt_hcache_restore((unsigned char *) uid_validity, 0);
         ctx->hdrs[msgno]->index = h.sid - 1;
         if (h.sid != ctx->msgcount + 1)
-          debug_print (1, ("msgcount and sequence ID are inconsistent!\n"));
+          debug_print (1, ("imap_read_headers: msgcount and sequence ID are inconsistent!"));
         /* messages which have not been expunged are ACTIVE (borrowed from mh 
          * folders) */
         ctx->hdrs[msgno]->active = 1;
@@ -177,6 +168,7 @@ int imap_read_headers (IMAP_DATA * idata, int msgbegin, int msgend)
 
         ctx->msgcount++;
       }
+
       rewind (fp);
 
       FREE (&uid_validity);
@@ -320,6 +312,7 @@ int imap_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
 {
   IMAP_DATA *idata;
   HEADER *h;
+  ENVELOPE* newenv;
   char buf[LONG_STRING];
   char path[_POSIX_PATH_MAX];
   char *pc;
@@ -446,21 +439,8 @@ int imap_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
    * picked up in mutt_read_rfc822_header, we mark the message (and context
    * changed). Another possiblity: ignore Status on IMAP?*/
   read = h->read;
-  /* I hate do this here, since it's so low-level, but I'm not sure where
-   * I can abstract it. Problem: the id and subj hashes lose their keys when
-   * mutt_free_envelope gets called, but keep their spots in the hash. This
-   * confuses threading. Alternatively we could try to merge the new
-   * envelope into the old one. Also messy and lowlevel. */
-  if (ctx->id_hash && h->env->message_id)
-    hash_delete (ctx->id_hash, h->env->message_id, h, NULL);
-  if (ctx->subj_hash && h->env->real_subj)
-    hash_delete (ctx->subj_hash, h->env->real_subj, h, NULL);
-  mutt_free_envelope (&h->env);
-  h->env = mutt_read_rfc822_header (msg->fp, h, 0, 0);
-  if (ctx->id_hash && h->env->message_id)
-    hash_insert (ctx->id_hash, h->env->message_id, h, 0);
-  if (ctx->subj_hash && h->env->real_subj)
-    hash_insert (ctx->subj_hash, h->env->real_subj, h, 1);
+  newenv = mutt_read_rfc822_header (msg->fp, h, 0, 0);
+  mutt_merge_envelopes(h->env, &newenv);
 
   /* see above. We want the new status in h->read, so we unset it manually
    * and let mutt_set_flag set it correctly, updating context. */

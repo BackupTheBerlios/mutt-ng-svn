@@ -110,6 +110,7 @@ static void mutt_usage (void)
     ("usage: muttng [ -nRyzZ ] [ -e <cmd> ] [ -F <file> ] [ -m <type> ] [ -f <file> ]\n\
        muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -Q <query> [ -Q <query> ] [...]\n\
        muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -A <alias> [ -A <alias> ] [...]\n\
+       muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -D\n\
        muttng [ -nx ] [ -e <cmd> ] [ -a <file> ] [ -F <file> ] [ -H <file> ] [ -i <file> ] [ -s <subj> ] [ -b <addr> ] [ -c <addr> ] <addr> [ ... ]\n\
        muttng [ -n ] [ -e <cmd> ] [ -F <file> ] -p\n\
        muttng -v[v]\n\
@@ -119,6 +120,7 @@ options:\n\
   -a <file>\tattach a file to the message\n\
   -b <address>\tspecify a blind carbon-copy (BCC) address\n\
   -c <address>\tspecify a carbon-copy (CC) address\n\
+  -D\t\tprint the value of all variables to stdout\n\
   -e <command>\tspecify a command to be executed after initialization\n\
   -f <file>\tspecify which mailbox to read\n\
   -F <file>\tspecify an alternate muttrc file\n\
@@ -502,6 +504,7 @@ int main (int argc, char **argv)
   int version = 0;
   int i;
   int explicit_folder = 0;
+  int dump_variables = 0;
   extern char *optarg;
   extern int optind;
 
@@ -535,10 +538,10 @@ int main (int argc, char **argv)
 #ifdef USE_NNTP
   while ((i =
           getopt (argc, argv,
-                  "A:a:b:F:f:c:d:e:g:GH:s:i:hm:npQ:RvxyzZ")) != EOF)
+                  "A:a:b:F:f:c:Dd:e:g:GH:s:i:hm:npQ:RvxyzZ")) != EOF)
 #else
   while ((i =
-          getopt (argc, argv, "A:a:b:F:f:c:d:e:H:s:i:hm:npQ:RvxyzZ")) != EOF)
+          getopt (argc, argv, "A:a:b:F:f:c:Dd:e:H:s:i:hm:npQ:RvxyzZ")) != EOF)
 #endif
     switch (i) {
     case 'A':
@@ -581,6 +584,10 @@ int main (int argc, char **argv)
 #else
       printf _("DEBUG was not defined during compilation.  Ignored.\n");
 #endif
+      break;
+
+    case 'D':
+      dump_variables = 1;
       break;
 
     case 'e':
@@ -672,7 +679,7 @@ int main (int argc, char **argv)
   }
 
   /* Check for a batch send. */
-  if (!isatty (0) || queries || alias_queries) {
+  if (!isatty (0) || queries || alias_queries || dump_variables) {
     set_option (OPTNOCURSES);
     sendflags = SENDBATCH;
   }
@@ -692,6 +699,8 @@ int main (int argc, char **argv)
 
   if (queries)
     return mutt_query_variables (queries);
+  if (dump_variables)
+    return (mutt_dump_variables ());
 
   if (alias_queries) {
     int rv = 0;

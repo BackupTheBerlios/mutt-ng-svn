@@ -32,6 +32,7 @@
 #include "lib/intl.h"
 #include "lib/str.h"
 #include "lib/rx.h"
+#include "lib/list.h"
 #include "lib/debug.h"
 
 #include <ctype.h>
@@ -2323,5 +2324,52 @@ int mutt_get_hook_type (const char *name)
   for (c = Commands; c->name; c++)
     if (c->func == mutt_parse_hook && ascii_strcasecmp (c->name, name) == 0)
       return c->data;
+  return 0;
+}
+
+static int opt_cmp (const void* a, const void* b) {
+  return (mutt_strcmp ((*(struct option_t**) a)->option,
+                       (*(struct option_t**) b)->option));
+}
+
+/* dump out the value of all the variables we have */
+int mutt_dump_variables (void) {
+  int i;
+
+  char errbuff[STRING];
+  char command[STRING];
+  list2_t* tmp = NULL;
+
+  BUFFER err, token;
+
+  memset (&err, 0, sizeof (err));
+  memset (&token, 0, sizeof (token));
+
+  err.data = errbuff;
+  err.dsize = sizeof (errbuff);
+
+  /* get all non-synonyms into list... */
+  for (i = 0; MuttVars[i].option; i++) {
+    if (MuttVars[i].type == DT_SYN)
+      continue;
+    list_push_back (&tmp, &MuttVars[i]);
+  }
+  if (!list_empty(tmp)) {
+    /* ...and dump list sorted */
+    qsort (tmp->data, tmp->length, sizeof (void*), opt_cmp);
+    for (i = 0; i < tmp->length; i++) {
+      snprintf (command, sizeof (command), "set ?%s\n",
+                ((struct option_t*) tmp->data[i])->option);
+      if (mutt_parse_rc_line (command, &token, &err) == -1) {
+        fprintf (stderr, "%s\n", err.data);
+        FREE (&token.data);
+        list_del (&tmp, NULL);
+        return 1;
+      }
+      printf("%s\n", err.data);
+    }
+  }
+  FREE (&token.data);
+  list_del (&tmp, NULL);
   return 0;
 }
