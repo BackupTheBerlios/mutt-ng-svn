@@ -268,7 +268,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
 
     if (ch != OP_NULL) {
       first = 0;
-      if (ch != OP_EDITOR_COMPLETE)
+      if (ch != OP_EDITOR_COMPLETE && ch != OP_EDITOR_COMPLETE_QUERY)
         state->tabs = 0;
       redraw = M_REDRAW_LINE;
       switch (ch) {
@@ -450,6 +450,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
         /* fall through to completion routine (M_FILE) */
 
       case OP_EDITOR_COMPLETE:
+      case OP_EDITOR_COMPLETE_QUERY:
         state->tabs++;
         if (flags & M_CMD) {
           for (i = state->curpos; i && state->wbuf[i - 1] != ' '; i--);
@@ -474,7 +475,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
 
           replace_part (state, i, buf);
         }
-        else if (flags & M_ALIAS) {
+        else if (flags & M_ALIAS && ch == OP_EDITOR_COMPLETE) {
           /* invoke the alias-menu to get more addresses */
           for (i = state->curpos; i && state->wbuf[i - 1] != ',' &&
                state->wbuf[i - 1] != ':'; i--);
@@ -487,8 +488,18 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
             goto bye;
           }
           break;
-        }
-        else if (flags & M_COMMAND) {
+        } else if (flags & M_ALIAS && ch == OP_EDITOR_COMPLETE_QUERY) {
+          /* invoke the query-menu to get more addresses */
+          if ((i = state->curpos)) {
+            for (; i && state->wbuf[i - 1] != ','; i--);
+            for (; i < state->curpos && state->wbuf[i] == ' '; i++);
+          }
+          my_wcstombs (buf, buflen, state->wbuf + i, state->curpos - i);
+          mutt_query_complete (buf, buflen);
+          replace_part (state, i, buf);
+          rv = 1;
+          goto bye;
+        } else if (flags & M_COMMAND) {
           my_wcstombs (buf, buflen, state->wbuf, state->curpos);
           i = mutt_strlen (buf);
           if (i && buf[i - 1] == '=' &&
@@ -535,24 +546,6 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
         else
           goto self_insert;
         break;
-
-      case OP_EDITOR_COMPLETE_QUERY:
-        if (flags & M_ALIAS) {
-          /* invoke the query-menu to get more addresses */
-          if ((i = state->curpos)) {
-            for (; i && state->wbuf[i - 1] != ','; i--);
-            for (; i < state->curpos && state->wbuf[i] == ' '; i++);
-          }
-
-          my_wcstombs (buf, buflen, state->wbuf + i, state->curpos - i);
-          mutt_query_complete (buf, buflen);
-          replace_part (state, i, buf);
-
-          rv = 1;
-          goto bye;
-        }
-        else
-          goto self_insert;
 
       case OP_EDITOR_QUOTE_CHAR:
         {

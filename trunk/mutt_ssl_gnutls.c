@@ -56,7 +56,7 @@ static int tls_init (void)
 
   err = gnutls_global_init ();
   if (err < 0) {
-    mutt_error ("gnutls_global_init: %s", gnutls_strerror (err));
+    mutt_error (_("gnutls_global_init: %s"), gnutls_strerror (err));
     mutt_sleep (2);
     return -1;
   }
@@ -84,14 +84,14 @@ static int tls_socket_read (CONNECTION * conn, char *buf, size_t len)
   int ret;
 
   if (!data) {
-    mutt_error ("Error: no TLS socket open");
+    mutt_error (_("Error: no TLS socket open"));
     mutt_sleep (2);
     return -1;
   }
 
   ret = gnutls_record_recv (data->state, buf, len);
   if (gnutls_error_is_fatal (ret) == 1) {
-    mutt_error ("tls_socket_read (%s)", gnutls_strerror (ret));
+    mutt_error (_("tls_socket_read (%s)"), gnutls_strerror (ret));
     mutt_sleep (4);
     return -1;
   }
@@ -104,14 +104,14 @@ static int tls_socket_write (CONNECTION * conn, const char *buf, size_t len)
   int ret;
 
   if (!data) {
-    mutt_error ("Error: no TLS socket open");
+    mutt_error (_("Error: no TLS socket open"));
     mutt_sleep (2);
     return -1;
   }
 
   ret = gnutls_record_send (data->state, buf, len);
   if (gnutls_error_is_fatal (ret) == 1) {
-    mutt_error ("tls_socket_write (%s)", gnutls_strerror (ret));
+    mutt_error (_("tls_socket_write (%s)"), gnutls_strerror (ret));
     mutt_sleep (4);
     return -1;
   }
@@ -160,7 +160,7 @@ static int tls_negotiate (CONNECTION * conn)
   err = gnutls_certificate_allocate_credentials (&data->xcred);
   if (err < 0) {
     FREE (&conn->sockdata);
-    mutt_error ("gnutls_certificate_allocate_credentials: %s",
+    mutt_error (_("gnutls_certificate_allocate_credentials: %s"),
                 gnutls_strerror (err));
     mutt_sleep (2);
     return -1;
@@ -225,11 +225,11 @@ static int tls_negotiate (CONNECTION * conn)
   }
   if (err < 0) {
     if (err == GNUTLS_E_FATAL_ALERT_RECEIVED) {
-      mutt_error ("gnutls_handshake: %s(%s)", gnutls_strerror (err),
+      mutt_error (_("gnutls_handshake: %s(%s)"), gnutls_strerror (err),
                   gnutls_alert_get_name (gnutls_alert_get (data->state)));
     }
     else {
-      mutt_error ("gnutls_handshake: %s", gnutls_strerror (err));
+      mutt_error (_("gnutls_handshake: %s"), gnutls_strerror (err));
     }
     mutt_sleep (2);
     goto fail;

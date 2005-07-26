@@ -716,6 +716,12 @@ int imap_open_mailbox_append (CONTEXT * ctx)
 
   imap_fix_path (idata, mx.mbox, mailbox, sizeof (mailbox));
 
+  /* We may be appending to the same folder we've selected. */
+  if (!ascii_strcmp(idata->mailbox, mx.mbox)) {
+    FREE (&mx.mbox);
+    return 0;
+  }
+
   imap_munge_mbox_name (mbox, sizeof (mbox), mailbox);
 
   if (mutt_bit_isset (idata->capabilities, IMAP4REV1))

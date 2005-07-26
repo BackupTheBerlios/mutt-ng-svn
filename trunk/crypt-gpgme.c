@@ -319,7 +319,7 @@ static gpgme_ctx_t create_gpgme_context (int for_smime)
 
   err = gpgme_new (&ctx);
   if (err) {
-    mutt_error ("error creating gpgme context: %s\n", gpgme_strerror (err));
+    mutt_error (_("error creating gpgme context: %s\n"), gpgme_strerror (err));
     sleep (2);
     mutt_exit (1);
   }
@@ -327,7 +327,7 @@ static gpgme_ctx_t create_gpgme_context (int for_smime)
   if (for_smime) {
     err = gpgme_set_protocol (ctx, GPGME_PROTOCOL_CMS);
     if (err) {
-      mutt_error ("error enabling CMS protocol: %s\n", gpgme_strerror (err));
+      mutt_error (_("error enabling CMS protocol: %s\n"), gpgme_strerror (err));
       sleep (2);
       mutt_exit (1);
     }
@@ -345,7 +345,7 @@ static gpgme_data_t create_gpgme_data (void)
 
   err = gpgme_data_new (&data);
   if (err) {
-    mutt_error ("error creating gpgme data object: %s\n",
+    mutt_error (_("error creating gpgme data object: %s\n"),
                 gpgme_strerror (err));
     sleep (2);
     mutt_exit (1);
@@ -404,7 +404,7 @@ static gpgme_data_t body_to_data_object (BODY * a, int convert)
   }
   unlink (tempfile);
   if (err) {
-    mutt_error ("error allocating data object: %s\n", gpgme_strerror (err));
+    mutt_error (_("error allocating data object: %s\n"), gpgme_strerror (err));
     return NULL;
   }
 
@@ -421,7 +421,7 @@ static gpgme_data_t file_to_data_object (FILE * fp, long offset, long length)
 
   err = gpgme_data_new_from_filepart (&data, NULL, fp, offset, length);
   if (err) {
-    mutt_error ("error allocating data object: %s\n", gpgme_strerror (err));
+    mutt_error (_("error allocating data object: %s\n"), gpgme_strerror (err));
     return NULL;
   }
 
@@ -438,7 +438,7 @@ static int data_object_to_stream (gpgme_data_t data, FILE * fp)
   err = ((gpgme_data_seek (data, 0, SEEK_SET) == -1)
          ? gpgme_error_from_errno (errno) : 0);
   if (err) {
-    mutt_error ("error rewinding data object: %s\n", gpgme_strerror (err));
+    mutt_error (_("error rewinding data object: %s\n"), gpgme_strerror (err));
     return -1;
   }
 
@@ -456,7 +456,7 @@ static int data_object_to_stream (gpgme_data_t data, FILE * fp)
     }
   }
   if (nread == -1) {
-    mutt_error ("error reading data object: %s\n", strerror (errno));
+    mutt_error (_("error reading data object: %s\n"), strerror (errno));
     return -1;
   }
   return 0;
@@ -498,7 +498,7 @@ static char *data_object_to_tempfile (gpgme_data_t data, FILE ** ret_fp)
   else
     fclose (fp);
   if (nread == -1) {
-    mutt_error ("error reading data object: %s\n", gpgme_strerror (err));
+    mutt_error (_("error reading data object: %s\n"), gpgme_strerror (err));
     unlink (tempfile);
     fclose (fp);
     return NULL;
@@ -554,7 +554,7 @@ static gpgme_key_t *create_recipient_set (const char *keylist,
           rset[rset_n++] = key;
         }
         else {
-          mutt_error ("error adding recipient `%s': %s\n",
+          mutt_error (_("error adding recipient `%s': %s\n"),
                       buf, gpgme_strerror (err));
           FREE (&rset);
           return NULL;
@@ -651,7 +651,7 @@ static char *encrypt_gpgme_object (gpgme_data_t plaintext, gpgme_key_t * rset,
                             plaintext, ciphertext);
   mutt_need_hard_redraw ();
   if (err) {
-    mutt_error ("error encrypting data: %s\n", gpgme_strerror (err));
+    mutt_error (_("error encrypting data: %s\n"), gpgme_strerror (err));
     gpgme_data_release (ciphertext);
     gpgme_release (ctx);
     return NULL;
@@ -744,7 +744,7 @@ static BODY *sign_message (BODY * a, int use_smime)
   if (err) {
     gpgme_data_release (signature);
     gpgme_release (ctx);
-    mutt_error ("error signing data: %s\n", gpgme_strerror (err));
+    mutt_error (_("error signing data: %s\n"), gpgme_strerror (err));
     return NULL;
   }
 
@@ -1238,7 +1238,7 @@ static int verify_one (BODY * sigbdy, STATE * s,
   err = gpgme_data_new_from_file (&message, tempfile, 1);
   if (err) {
     gpgme_data_release (signature);
-    mutt_error ("error allocating data object: %s\n", gpgme_strerror (err));
+    mutt_error (_("error allocating data object: %s\n"), gpgme_strerror (err));
     return -1;
   }
   ctx = create_gpgme_context (is_smime);
@@ -3082,7 +3082,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app,
 
   err = gpgme_new (&ctx);
   if (err) {
-    mutt_error ("gpgme_new failed: %s", gpgme_strerror (err));
+    mutt_error (_("gpgme_new failed: %s"), gpgme_strerror (err));
     FREE (&pattern);
     return NULL;
   }
@@ -3117,7 +3117,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app,
       FREE (&patarr[n]);
     FREE (&patarr);
     if (err) {
-      mutt_error ("gpgme_op_keylist_start failed: %s", gpgme_strerror (err));
+      mutt_error (_("gpgme_op_keylist_start failed: %s"), gpgme_strerror (err));
       gpgme_release (ctx);
       FREE (&pattern);
       return NULL;
@@ -3162,7 +3162,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app,
       }
     }
     if (gpg_err_code (err) != GPG_ERR_EOF)
-      mutt_error ("gpgme_op_keylist_next failed: %s", gpgme_strerror (err));
+      mutt_error (_("gpgme_op_keylist_next failed: %s"), gpgme_strerror (err));
     gpgme_op_keylist_end (ctx);
   no_pgphints:
     ;
@@ -3173,7 +3173,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app,
     gpgme_set_protocol (ctx, GPGME_PROTOCOL_CMS);
     err = gpgme_op_keylist_start (ctx, pattern, 0);
     if (err) {
-      mutt_error ("gpgme_op_keylist_start failed: %s", gpgme_strerror (err));
+      mutt_error (_("gpgme_op_keylist_start failed: %s"), gpgme_strerror (err));
       gpgme_release (ctx);
       FREE (&pattern);
       return NULL;
@@ -3198,7 +3198,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app,
       }
     }
     if (gpg_err_code (err) != GPG_ERR_EOF)
-      mutt_error ("gpgme_op_keylist_next failed: %s", gpgme_strerror (err));
+      mutt_error (_("gpgme_op_keylist_next failed: %s"), gpgme_strerror (err));
     gpgme_op_keylist_end (ctx);
   }
 
