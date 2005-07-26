@@ -105,6 +105,21 @@ struct feature_t {
 # ifndef USE_GNUTLS
 #  define USE_GNUTLS
 # endif
+# ifndef USE_DOTLOCK
+#  define USE_DOTLOCK
+# endif
+# ifndef DL_STANDALONE
+#  define DL_STANDALONE
+# endif
+# ifndef USE_HCACHE
+#  define USE_HCACHE
+# endif
+# ifndef HAVE_LIBIDN
+#  define HAVE_LIBIDN
+# endif
+# ifndef HAVE_GETADDRINFO
+#  define HAVE_GETADDRINFO
+# endif
 #endif
 
 struct option_t MuttVars[] = {
@@ -2414,7 +2429,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** Example: \fTset certificate_file=~/.muttng/certificates\fP
    */
-# ifndef USE_GNUTLS
+# if defined(_MAKEDOC) || !defined (USE_GNUTLS)
   {"ssl_usesystemcerts", DT_BOOL, R_NONE, OPTSSLSYSTEMCERTS, 1},
   /*
    ** .pp
