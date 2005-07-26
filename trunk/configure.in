@@ -7,7 +7,13 @@ AC_PREREQ([2.50])
 AC_INIT([mutt.h])
 AM_CONFIG_HEADER(config.h)
 
-mutt_cv_version=`cat $srcdir/VERSION`
+if test -f "$srcdir./.svn/entries" ; then
+  echo "`cat $srcdir/VERSION.in`-r`grep revision $srcdir/.svn/entries | cut -d '"' -f 2`" > "$srcdir/VERSION"
+else
+  cp "$srcdir/VERSION.in" "$srcdir/VERSION"
+fi
+
+mutt_cv_version=`cat "$srcdir/VERSION"`
 
 AM_INIT_AUTOMAKE(muttng, $mutt_cv_version)
 dnl AC_GNU_SOURCE
