@@ -1748,7 +1748,7 @@ static int mh_check_mailbox (CONTEXT * ctx, int *index_hint, int unused)
     ctx->hdrs[i]->active = 0;
 
     if ((p = hash_find (fnames, ctx->hdrs[i]->path)) && p->h &&
-        (mbox_strict_cmp_headers (ctx->hdrs[i], p->h))) {
+        (mutt_cmp_header (ctx->hdrs[i], p->h))) {
       ctx->hdrs[i]->active = 1;
       /* found the right message */
       if (!ctx->hdrs[i]->changed)

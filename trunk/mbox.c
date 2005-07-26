@@ -417,116 +417,6 @@ static int mbox_open_mailbox (CONTEXT * ctx)
   return (rc);
 }
 
-/* return 1 if address lists are strictly identical */
-static int strict_addrcmp (const ADDRESS * a, const ADDRESS * b)
-{
-  while (a && b) {
-    if (mutt_strcmp (a->mailbox, b->mailbox) ||
-        mutt_strcmp (a->personal, b->personal))
-      return (0);
-
-    a = a->next;
-    b = b->next;
-  }
-  if (a || b)
-    return (0);
-
-  return (1);
-}
-
-static int strict_cmp_lists (const LIST * a, const LIST * b)
-{
-  while (a && b) {
-    if (mutt_strcmp (a->data, b->data))
-      return (0);
-
-    a = a->next;
-    b = b->next;
-  }
-  if (a || b)
-    return (0);
-
-  return (1);
-}
-
-static int strict_cmp_envelopes (const ENVELOPE * e1, const ENVELOPE * e2)
-{
-  if (e1 && e2) {
-    if (mutt_strcmp (e1->message_id, e2->message_id) ||
-        mutt_strcmp (e1->subject, e2->subject) ||
-        !strict_cmp_lists (e1->references, e2->references) ||
-        !strict_addrcmp (e1->from, e2->from) ||
-        !strict_addrcmp (e1->sender, e2->sender) ||
-        !strict_addrcmp (e1->reply_to, e2->reply_to) ||
-        !strict_addrcmp (e1->to, e2->to) ||
-        !strict_addrcmp (e1->cc, e2->cc) ||
-        !strict_addrcmp (e1->return_path, e2->return_path))
-      return (0);
-    else
-      return (1);
-  }
-  else {
-    if (e1 == NULL && e2 == NULL)
-      return (1);
-    else
-      return (0);
-  }
-}
-
-static int strict_cmp_parameters (const PARAMETER * p1, const PARAMETER * p2)
-{
-  while (p1 && p2) {
-    if (mutt_strcmp (p1->attribute, p2->attribute) ||
-        mutt_strcmp (p1->value, p2->value))
-      return (0);
-
-    p1 = p1->next;
-    p2 = p2->next;
-  }
-  if (p1 || p2)
-    return (0);
-
-  return (1);
-}
-
-static int strict_cmp_bodies (const BODY * b1, const BODY * b2)
-{
-  if (b1->type != b2->type ||
-      b1->encoding != b2->encoding ||
-      mutt_strcmp (b1->subtype, b2->subtype) ||
-      mutt_strcmp (b1->description, b2->description) ||
-      !strict_cmp_parameters (b1->parameter, b2->parameter) ||
-      b1->length != b2->length)
-    return (0);
-  return (1);
-}
-
-/* return 1 if headers are strictly identical */
-int mbox_strict_cmp_headers (const HEADER * h1, const HEADER * h2)
-{
-  if (h1 && h2) {
-    if (h1->received != h2->received ||
-        h1->date_sent != h2->date_sent ||
-        h1->content->length != h2->content->length ||
-        h1->lines != h2->lines ||
-        h1->zhours != h2->zhours ||
-        h1->zminutes != h2->zminutes ||
-        h1->zoccident != h2->zoccident ||
-        h1->mime != h2->mime ||
-        !strict_cmp_envelopes (h1->env, h2->env) ||
-        !strict_cmp_bodies (h1->content, h2->content))
-      return (0);
-    else
-      return (1);
-  }
-  else {
-    if (h1 == NULL && h2 == NULL)
-      return (1);
-    else
-      return (0);
-  }
-}
-
 /* check to see if the mailbox has changed on disk.
  *
  * return values:
@@ -1077,7 +967,7 @@ static int mbox_reopen_mailbox (CONTEXT * ctx, int *index_hint)
       rc = -1;
     }
     else {
-      cmp_headers = mbox_strict_cmp_headers;
+      cmp_headers = mutt_cmp_header;
       if (ctx->magic == M_MBOX)
         rc = mbox_parse_mailbox (ctx);
       else

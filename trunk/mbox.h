@@ -28,7 +28,6 @@ int mbox_lock_mailbox (CONTEXT *, int, int);
 void mbox_unlock_mailbox (CONTEXT *);
 int mbox_check_empty (const char*);
 int mbox_is_magic (const char*, struct stat*);
-int mbox_strict_cmp_headers (const HEADER *, const HEADER *);
 
 mx_t* mbox_reg_mx (void);
 mx_t* mmdf_reg_mx (void);

@@ -99,6 +99,13 @@ LIST *mutt_parse_references (char *, int);
 ENVELOPE *mutt_read_rfc822_header (FILE *, HEADER *, short, short);
 HEADER *mutt_dup_header (HEADER *);
 
+int mutt_cmp_header (const HEADER*, const HEADER*);
+int mutt_cmp_addr (const ADDRESS * a, const ADDRESS * b);
+int mutt_cmp_list (const LIST * a, const LIST * b);
+int mutt_cmp_env (const ENVELOPE * e1, const ENVELOPE * e2);
+int mutt_cmp_param (const PARAMETER * p1, const PARAMETER * p2);
+int mutt_cmp_body (const BODY * b1, const BODY * b2);
+
 #if USE_HCACHE
 void *mutt_hcache_open (const char *path, const char *folder);
 void mutt_hcache_close (void *db);

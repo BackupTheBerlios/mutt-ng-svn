@@ -1534,3 +1534,111 @@ int mutt_match_spam_list (const char *s, SPAM_LIST * l, char *text, int x)
 
   return 0;
 }
+
+int mutt_cmp_header (const HEADER * h1, const HEADER * h2) {
+  if (h1 && h2) {
+    if (h1->received != h2->received ||
+        h1->date_sent != h2->date_sent ||
+        h1->content->length != h2->content->length ||
+        h1->lines != h2->lines ||
+        h1->zhours != h2->zhours ||
+        h1->zminutes != h2->zminutes ||
+        h1->zoccident != h2->zoccident ||
+        h1->mime != h2->mime ||
+        !mutt_cmp_env (h1->env, h2->env) ||
+        !mutt_cmp_body (h1->content, h2->content))
+      return (0);
+    else
+      return (1);
+  }
+  else {
+    if (h1 == NULL && h2 == NULL)
+      return (1);
+    else
+      return (0);
+  }
+}
+
+/* return 1 if address lists are strictly identical */
+int mutt_cmp_addr (const ADDRESS * a, const ADDRESS * b)
+{
+  while (a && b) {
+    if (mutt_strcmp (a->mailbox, b->mailbox) ||
+        mutt_strcmp (a->personal, b->personal))
+      return (0);
+
+    a = a->next;
+    b = b->next;
+  }
+  if (a || b)
+    return (0);
+
+  return (1);
+}
+
+int mutt_cmp_list (const LIST * a, const LIST * b)
+{
+  while (a && b) {
+    if (mutt_strcmp (a->data, b->data))
+      return (0);
+
+    a = a->next;
+    b = b->next;
+  }
+  if (a || b)
+    return (0);
+
+  return (1);
+}
+
+int mutt_cmp_env (const ENVELOPE * e1, const ENVELOPE * e2)
+{
+  if (e1 && e2) {
+    if (mutt_strcmp (e1->message_id, e2->message_id) ||
+        mutt_strcmp (e1->subject, e2->subject) ||
+        !mutt_cmp_list (e1->references, e2->references) ||
+        !mutt_cmp_addr (e1->from, e2->from) ||
+        !mutt_cmp_addr (e1->sender, e2->sender) ||
+        !mutt_cmp_addr (e1->reply_to, e2->reply_to) ||
+        !mutt_cmp_addr (e1->to, e2->to) ||
+        !mutt_cmp_addr (e1->cc, e2->cc) ||
+        !mutt_cmp_addr (e1->return_path, e2->return_path))
+      return (0);
+    else
+      return (1);
+  }
+  else {
+    if (e1 == NULL && e2 == NULL)
+      return (1);
+    else
+      return (0);
+  }
+}
+
+int mutt_cmp_param (const PARAMETER * p1, const PARAMETER * p2)
+{
+  while (p1 && p2) {
+    if (mutt_strcmp (p1->attribute, p2->attribute) ||
+        mutt_strcmp (p1->value, p2->value))
+      return (0);
+
+    p1 = p1->next;
+    p2 = p2->next;
+  }
+  if (p1 || p2)
+    return (0);
+
+  return (1);
+}
+
+int mutt_cmp_body (const BODY * b1, const BODY * b2)
+{
+  if (b1->type != b2->type ||
+      b1->encoding != b2->encoding ||
+      mutt_strcmp (b1->subtype, b2->subtype) ||
+      mutt_strcmp (b1->description, b2->description) ||
+      !mutt_cmp_param (b1->parameter, b2->parameter) ||
+      b1->length != b2->length)
+    return (0);
+  return (1);
+}
