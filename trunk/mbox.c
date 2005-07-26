@@ -1232,6 +1232,25 @@ int mbox_is_magic (const char* path, struct stat* st) {
   return (magic);
 }
 
+static int commit_message (MESSAGE* msg, CONTEXT* ctx, int mbox) {
+  if ((mbox && fputc ('\n', msg->fp) == EOF) ||
+      (!mbox && fputs (MMDF_SEP, msg->fp) == EOF))
+    return (-1);
+  if ((fflush (msg->fp) == EOF || fsync (fileno (msg->fp)) == -1)) {
+    mutt_perror (_("Can't write message"));
+    return (-1);
+  }
+  return (0);
+}
+
+static int mbox_commit_message (MESSAGE* msg, CONTEXT* ctx) {
+  return (commit_message (msg, ctx, 1));
+}
+
+static int mmdf_commit_message (MESSAGE* msg, CONTEXT* ctx) {
+  return (commit_message (msg, ctx, 0));
+}
+
 static mx_t* reg_mx (void) {
   mx_t* fmt = safe_calloc (1, sizeof (mx_t));
   fmt->local = 1;
@@ -1248,10 +1267,12 @@ static mx_t* reg_mx (void) {
 mx_t* mbox_reg_mx (void) {
   mx_t* fmt = reg_mx ();
   fmt->type = M_MBOX;
+  fmt->mx_commit_message = mbox_commit_message;
   return (fmt);
 }
 mx_t* mmdf_reg_mx (void) {
   mx_t* fmt = reg_mx ();
   fmt->type = M_MMDF;
+  fmt->mx_commit_message = mmdf_commit_message;
   return (fmt);
 }

@@ -22,10 +22,9 @@
 /* TODO all of these must disappear to achieve good information hiding */
 
 int mh_buffy (const char *);
-int mh_commit_message (CONTEXT *, MESSAGE *, HEADER *);
-
-int maildir_commit_message (CONTEXT *, MESSAGE *, HEADER *);
 FILE *maildir_open_find_message (const char *, const char *);
+
+/* these are the only publicly visible for usage */
 
 mx_t* maildir_reg_mx (void);
 mx_t* mh_reg_mx (void);

@@ -1093,7 +1093,7 @@ static int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr
  * 
  */
 
-int maildir_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr)
+static int maildir_commit_message (MESSAGE * msg, CONTEXT * ctx, HEADER * hdr)
 {
   char subdir[4];
   char suffix[16];
@@ -1161,7 +1161,7 @@ int maildir_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr)
  */
 
 
-static int _mh_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr,
+static int _mh_commit_message (MESSAGE * msg, CONTEXT * ctx, HEADER * hdr,
                                short updseq)
 {
   DIR *dirp;
@@ -1226,11 +1226,9 @@ static int _mh_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr,
   return 0;
 }
 
-int mh_commit_message (CONTEXT * ctx, MESSAGE * msg, HEADER * hdr)
-{
-  return _mh_commit_message (ctx, msg, hdr, 1);
+static int mh_commit_message (MESSAGE * msg, CONTEXT * ctx, HEADER * hdr) {
+  return _mh_commit_message (msg, ctx, hdr, 1);
 }
-
 
 /* Sync a message in an MH folder.
  * 
@@ -1263,9 +1261,9 @@ static int mh_rewrite_message (CONTEXT * ctx, int msgno)
     strfcpy (partpath, h->path, _POSIX_PATH_MAX);
 
     if (ctx->magic == M_MAILDIR)
-      rc = maildir_commit_message (ctx, dest, h);
+      rc = maildir_commit_message (dest, ctx, h);
     else
-      rc = _mh_commit_message (ctx, dest, h, 0);
+      rc = _mh_commit_message (dest, ctx, h, 0);
 
     mx_close_message (&dest);
 
@@ -1978,6 +1976,14 @@ static mx_t* reg_mx (void) {
   return (fmt);
 }
 
+static int mh_commit (MESSAGE* msg, CONTEXT* ctx) {
+  return (mh_commit_message (msg, ctx, NULL));
+}
+
+static int maildir_commit (MESSAGE* msg, CONTEXT* ctx) {
+  return (maildir_commit_message (msg, ctx, NULL));
+}
+
 mx_t* mh_reg_mx (void) {
   mx_t* fmt = reg_mx ();
   fmt->type = M_MH;
@@ -1986,6 +1992,7 @@ mx_t* mh_reg_mx (void) {
   fmt->mx_open_mailbox = mh_read_dir;
   fmt->mx_open_new_message = mh_open_new_message;
   fmt->mx_check_mailbox = mh_check_mailbox;
+  fmt->mx_commit_message = mh_commit;
   return (fmt);
 }
 
@@ -1997,5 +2004,6 @@ mx_t* maildir_reg_mx (void) {
   fmt->mx_open_mailbox = maildir_read_dir;
   fmt->mx_open_new_message = maildir_open_new_message;
   fmt->mx_check_mailbox = maildir_check_mailbox;
+  fmt->mx_commit_message = maildir_commit;
   return (fmt);
 }

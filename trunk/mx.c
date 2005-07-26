@@ -1243,60 +1243,14 @@ MESSAGE *mx_open_message (CONTEXT * ctx, int msgno)
 
 /* commit a message to a folder */
 
-int mx_commit_message (MESSAGE * msg, CONTEXT * ctx)
-{
-  int r = 0;
-
+int mx_commit_message (MESSAGE * msg, CONTEXT * ctx) {
   if (!(msg->write && ctx->append)) {
     debug_print (1, ("msg->write = %d, ctx->append = %d\n", msg->write, ctx->append));
     return -1;
   }
-
-  switch (msg->magic) {
-  case M_MMDF:
-    {
-      if (fputs (MMDF_SEP, msg->fp) == EOF)
-        r = -1;
-      break;
-    }
-
-  case M_MBOX:
-    {
-      if (fputc ('\n', msg->fp) == EOF)
-        r = -1;
-      break;
-    }
-
-#ifdef USE_IMAP
-  case M_IMAP:
-    {
-      if ((r = safe_fclose (&msg->fp)) == 0)
-        r = imap_append_message (ctx, msg);
-      break;
-    }
-#endif
-
-  case M_MAILDIR:
-    {
-      r = maildir_commit_message (ctx, msg, NULL);
-      break;
-    }
-
-  case M_MH:
-    {
-      r = mh_commit_message (ctx, msg, NULL);
-      break;
-    }
-  }
-
-  if (r == 0 && (ctx->magic == M_MBOX || ctx->magic == M_MMDF)
-      && (fflush (msg->fp) == EOF || fsync (fileno (msg->fp)) == -1)) {
-    mutt_perror (_("Can't write message"));
-
-    r = -1;
-  }
-
-  return r;
+  if (!ctx || !MX_IDX(ctx->magic-1) || !MX_COMMAND(ctx->magic-1,mx_commit_message))
+    return (-1);
+  return (MX_COMMAND(ctx->magic-1,mx_commit_message) (msg, ctx));
 }
 
 /* close a pointer to a message */

@@ -102,6 +102,8 @@ typedef struct {
   void (*mx_fastclose_mailbox) (CONTEXT*);
   /* write out changes */
   int (*mx_sync_mailbox) (CONTEXT*, int, int*);
+  /* commit a message to a folder */
+  int (*mx_commit_message) (MESSAGE*, CONTEXT*);
 } mx_t;
 
 /* called from main: init all folder types */

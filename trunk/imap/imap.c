@@ -1079,7 +1079,7 @@ void imap_close_mailbox (CONTEXT * ctx)
     return;
 
   if (ctx == idata->ctx) {
-    if (idata->state = IMAP_SELECTED) {
+    if (idata->state == IMAP_SELECTED) {
       /* mx_close_mailbox won't sync if there are no deleted messages
       * and the mailbox is unchanged, so we may have to close here */
       if (idata->status != IMAP_FATAL && !ctx->deleted && 

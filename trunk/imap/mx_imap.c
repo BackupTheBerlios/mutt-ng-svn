@@ -50,6 +50,14 @@ static int _imap_check_mailbox (CONTEXT* ctx, int* index_hint, int lock) {
   return (imap_check_mailbox (ctx, index_hint, 0));
 }
 
+static int imap_commit_message (MESSAGE* msg, CONTEXT* ctx) {
+  int r = 0;
+
+  if ((r = safe_fclose (&msg->fp)) == 0)
+    r = imap_append_message (ctx, msg);
+  return (r);
+}
+
 mx_t* imap_reg_mx (void) {
   mx_t* fmt = safe_calloc (1, sizeof (mx_t));
 
@@ -63,5 +71,6 @@ mx_t* imap_reg_mx (void) {
   fmt->mx_fastclose_mailbox = imap_close_mailbox;
   fmt->mx_sync_mailbox = imap_sync_mailbox;
   fmt->mx_check_mailbox = _imap_check_mailbox;
+  fmt->mx_commit_message = imap_commit_message;
   return (fmt);
 }
