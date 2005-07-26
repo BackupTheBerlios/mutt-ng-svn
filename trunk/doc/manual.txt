@@ -123,7 +123,7 @@
             <Tab>           complete        complete filename or alias
             ^T              complete-query  complete address with query
             ^K              kill-eol        delete to the end of the line
-            ESC d          kill-eow  delete to the end ot the word
+            ESC d          kill-eow  delete to the end of the word
             ^W              kill-word       kill the word in front of the cursor
             ^U              kill-line       delete entire line
             ^V              quote-char      quote the next typed key
@@ -2054,7 +2054,7 @@
 
              '~s "^Junk +From +Me$" ~f ("Jim +Somebody"|"Ed +SomeoneElse")'
 
-       Note that if a regular expression contains parenthesis, or a veritical bar
+       Note that if a regular expression contains parenthesis, or a vertical bar
        ("|"), you mmuusstt enclose the expression in double or single quotes since those
        characters are also used to separate different parts of Mutt-ng's pattern lan-
        guage.  For example,
