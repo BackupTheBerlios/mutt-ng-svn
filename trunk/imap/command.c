@@ -279,8 +279,8 @@ static void cmd_handle_fatal (IMAP_DATA * idata)
   idata->status = IMAP_FATAL;
 
   if ((idata->state == IMAP_SELECTED) &&
-      (idata->reopen & IMAP_REOPEN_ALLOW) && !idata->ctx->closing) {
-    /*mx_fastclose_mailbox (idata->ctx); */
+      (idata->reopen & IMAP_REOPEN_ALLOW)) {
+    /* mx_fastclose_mailbox (idata->ctx); */
     mutt_error (_("Mailbox closed"));
     mutt_sleep (1);
     idata->state = IMAP_DISCONNECTED;
@@ -290,6 +290,7 @@ static void cmd_handle_fatal (IMAP_DATA * idata)
 
   if (idata->state != IMAP_SELECTED) {
     idata->state = IMAP_DISCONNECTED;
+    mutt_socket_close (idata->conn);
     idata->status = 0;
   }
 }
@@ -359,17 +360,9 @@ static int cmd_handle_untagged (IMAP_DATA * idata)
     s += 3;
     SKIPWS (s);
     mutt_error ("%s", s);
-    idata->status = IMAP_BYE;
-
-    /*if (imap_reconnect(idata->ctx)!=0) {
-       if (idata->state == IMAP_SELECTED)
-       mx_fastclose_mailbox (idata->ctx); *//* XXX memleak? */
-    mutt_socket_close (idata->conn);
-    idata->state = IMAP_DISCONNECTED;
+    mutt_sleep (2);
+    cmd_handle_fatal (idata);
     return -1;
-    /*} else {
-       return 0;
-       } */
   }
   else if (option (OPTIMAPSERVERNOISE)
            && (ascii_strncasecmp ("NO", s, 2) == 0)) {
