@@ -3546,7 +3546,7 @@ msgid ""
 "    Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.\n"
 msgstr ""
 "Copyright (C) 1996-8 Michael R. Elkins <me@cs.hmc.edu>\n"
-"Copyright (C) 1997-8 Thomas Roessler <roessler@guug.de>\n"
+"Copyright (C) 1997-8 Thomas Roessler <roessler@does-not-exist.org>\n"
 "Copyright (C) 1998   Werner Koch <wk@isil.d.shuttle.de>\n"
 "Copyright (C) 1998   Ruslan Ermilov <ru@ucb.crimea.ua>\n"
 "\n"
@@ -4593,7 +4593,7 @@ msgstr ""
 #: pgp.c:665
 #, fuzzy
 msgid "Internal error. Inform <roessler@does-not-exist.org>."
-msgstr "Interná chyba. Informujte <roessler@guug.de>"
+msgstr "Interná chyba. Informujte <roessler@does-not-exist.org>"
 
 #: pgp.c:723
 msgid ""

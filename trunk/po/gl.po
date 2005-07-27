@@ -3526,7 +3526,7 @@ msgid ""
 msgstr ""
 "Copyright (C) 1996-2001 Michael R. Elkins <me@cs.hmc.edu>\n"
 "Copyright (C) 1996-2001 Brandon Long <blong@fiction.net>\n"
-"Copyright (C) 1997-2001 Thomas Roessler <roessler@guug.de>\n"
+"Copyright (C) 1997-2001 Thomas Roessler <roessler@does-not-exist.org>\n"
 "Copyright (C) 1998-2001 Werner Koch <wk@isil.d.shuttle.de>\n"
 "Copyright (C) 1999-2001 Brendan Cully <brendan@kublai.com>\n"
 "Copyright (C) 1999-2001 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n"
@@ -4572,7 +4572,7 @@ msgstr "[-- Fin da saída PGP --]\n"
 #: pgp.c:665
 #, fuzzy
 msgid "Internal error. Inform <roessler@does-not-exist.org>."
-msgstr "Erro interno. Informe a <roessler@guug.de>."
+msgstr "Erro interno. Informe a <roessler@does-not-exist.org>."
 
 #: pgp.c:723
 msgid ""

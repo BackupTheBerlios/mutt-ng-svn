@@ -4484,7 +4484,7 @@ msgstr ""
 #: pgp.c:665
 #, fuzzy
 msgid "Internal error. Inform <roessler@does-not-exist.org>."
-msgstr "Внутр╕шня помилка. Пов╕домьте <roessler@guug.de>."
+msgstr "Внутр╕шня помилка. Пов╕домьте <roessler@does-not-exist.org>."
 
 #: pgp.c:723
 msgid ""
