@@ -38,6 +38,9 @@ mutt-ng \- The Mutt-ng Mail User Agent
 [-c \fIaddr\fP] \fIaddr\fP [...]
 .PP
 .B muttng
+[-n] [-e \fIcmd\fP] [-F \fIfile\fP] -D
+.PP
+.B muttng
 [-n] [-e \fIcmd\fP] [-F \fIfile\fP] -p
 .PP
 .B muttng
@@ -63,6 +66,8 @@ Attach a file to your message using MIME.
 Specify a blind-carbon-copy (BCC) recipient
 .IP "-c \fIaddress\fP"
 Specify a carbon-copy (CC) recipient
+.IP "-D"
+Print the value of all variables to stdout.
 .IP "-e \fIcommand\fP"
 Specify a configuration command to be run after processing of initialization
 files.
@@ -197,10 +202,13 @@ GNU General Public License for more details.
 .PP
 Mutt-ng Home Page: http://www.muttng.org
 .PP
-The Mutt-ng manual
+The Mutt-ng manual: http://www.mutt-ng.org/manual
 .PP
 The GNU General Public License.
 .SH AUTHOR
 .PP
-Michael Elkins, and others.  Use <mutt-ng-devel@lists.berlios.de> to contact
-the developers.
+Original mutt was/is written Michael Elkins, and others.
+.PP
+Mutt-ng is written by Andreas Krennmair <ak@synflood.at> and others.
+.PP
+Use <mutt-ng-devel@lists.berlios.de> to contact the developers.
