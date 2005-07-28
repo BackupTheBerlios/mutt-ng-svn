@@ -292,8 +292,8 @@ int mutt_sasl_client_new (CONNECTION * conn, sasl_conn_t ** saslconn)
    * If someone does it'd probably be trivial to write mutt_nss_get_ssf().
    * I have a feeling more SSL code could be shared between those two files,
    * but I haven't looked into it yet, since I still don't know the APIs. */
-#if (defined(USE_SSL) || defined(USE_GNUTLS) && !defined(USE_NSS))
-  if (conn->account.flags & M_ACCT_SSL) {
+#if defined(USE_SSL) || defined(USE_GNUTLS)
+  if (conn->ssf) {
 #ifdef USE_SASL2                /* I'm not sure this actually has an effect, at least with SASLv2 */
     debug_print (2, ("External SSF: %d\n", conn->ssf));
     if (sasl_setprop (*saslconn, SASL_SSF_EXTERNAL, &(conn->ssf)) != SASL_OK)
@@ -369,7 +369,7 @@ int mutt_sasl_interact (sasl_interact_t * interaction)
 
     interaction->len = mutt_strlen (resp) + 1;
     interaction->result = safe_malloc (interaction->len);
-    memcpy (interaction->result, resp, interaction->len);
+    memcpy ((char*) interaction->result, resp, interaction->len);
 
     interaction++;
   }
@@ -495,7 +495,7 @@ static int mutt_sasl_cb_pass (sasl_conn_t * conn, void *context, int id,
 
   *psecret = (sasl_secret_t *) safe_malloc (sizeof (sasl_secret_t) + len);
   (*psecret)->len = len;
-  strcpy ((*psecret)->data, account->pass);     /* __STRCPY_CHECKED__ */
+  strcpy ((char*) (*psecret)->data, account->pass);     /* __STRCPY_CHECKED__ */
 
   return SASL_OK;
 }

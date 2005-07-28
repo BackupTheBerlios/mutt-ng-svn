@@ -25,9 +25,9 @@ enum {
 /* account flags */
 #define M_ACCT_PORT     (1<<0)
 #define M_ACCT_USER     (1<<1)
-#define M_ACCT_LOGIN    (1<<1)
-#define M_ACCT_PASS     (1<<2)
-#define M_ACCT_SSL      (1<<3)
+#define M_ACCT_LOGIN    (1<<2)
+#define M_ACCT_PASS     (1<<3)
+#define M_ACCT_SSL      (1<<4)
 
 typedef struct {
   char user[64];
