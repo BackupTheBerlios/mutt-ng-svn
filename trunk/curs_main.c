@@ -1295,6 +1295,14 @@ int mutt_index_menu (void)
           menu->current = mutt_thread_next_unread (Context, CURHDR);
       }
 
+      if (option (OPTPGPAUTODEC) && 
+          (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED)))
+        mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
+      if ((op = mutt_display_message (CURHDR)) == -1) {
+        unset_option (OPTNEEDRESORT);
+        break;
+      }
+
       if ((op = mutt_display_message (CURHDR)) == -1) {
         unset_option (OPTNEEDRESORT);
         break;
@@ -2000,6 +2008,10 @@ int mutt_index_menu (void)
       CHECK_MSGCOUNT;
       CHECK_VISIBLE;
       CHECK_ATTACH;
+
+      if (option (OPTPGPAUTODEC) &&
+          (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED))) 
+        mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
       ci_send_message (SENDFORWARD, NULL, NULL, Context, tag ? NULL : CURHDR);
       menu->redraw = REDRAW_FULL;
       break;
@@ -2014,6 +2026,11 @@ int mutt_index_menu (void)
       CHECK_MSGCOUNT;
       CHECK_VISIBLE;
       CHECK_ATTACH;
+
+      if (option (OPTPGPAUTODEC) &&
+          (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED))) 
+        mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
+
       ci_send_message (SENDREPLY | SENDGROUPREPLY, NULL, NULL, Context,
                        tag ? NULL : CURHDR);
       menu->redraw = REDRAW_FULL;
@@ -2024,6 +2041,11 @@ int mutt_index_menu (void)
       CHECK_ATTACH;
       CHECK_MSGCOUNT;
       CHECK_VISIBLE;
+
+      if (option (OPTPGPAUTODEC) &&
+          (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED))) 
+        mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
+
       ci_send_message (SENDREPLY | SENDLISTREPLY, NULL, NULL, Context,
                        tag ? NULL : CURHDR);
       menu->redraw = REDRAW_FULL;
@@ -2177,6 +2199,11 @@ int mutt_index_menu (void)
       CHECK_ATTACH;
       CHECK_MSGCOUNT;
       CHECK_VISIBLE;
+
+      if (option (OPTPGPAUTODEC) &&
+          (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED))) 
+        mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
+
       ci_send_message (SENDREPLY, NULL, NULL, Context, tag ? NULL : CURHDR);
       menu->redraw = REDRAW_FULL;
       break;
