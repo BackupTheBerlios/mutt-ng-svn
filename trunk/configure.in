@@ -7,7 +7,7 @@ AC_PREREQ([2.50])
 AC_INIT([mutt.h])
 AM_CONFIG_HEADER(config.h)
 
-if test -f "$srcdir./.svn/entries" ; then
+if test -f "$srcdir/.svn/entries" ; then
   echo "`cat $srcdir/VERSION.in`-r`grep revision $srcdir/.svn/entries | sort -r | uniq | head -n 1 | cut -d '"' -f 2`" > "$srcdir/VERSION"
 else
   cp "$srcdir/VERSION.in" "$srcdir/VERSION"
