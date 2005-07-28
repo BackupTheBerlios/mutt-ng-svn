@@ -1298,10 +1298,6 @@ int mutt_index_menu (void)
       if (option (OPTPGPAUTODEC) && 
           (tag || !(CURHDR->security & PGP_TRADITIONAL_CHECKED)))
         mutt_check_traditional_pgp (tag ? NULL : CURHDR, &menu->redraw);
-      if ((op = mutt_display_message (CURHDR)) == -1) {
-        unset_option (OPTNEEDRESORT);
-        break;
-      }
 
       if ((op = mutt_display_message (CURHDR)) == -1) {
         unset_option (OPTNEEDRESORT);

@@ -10,6 +10,12 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-07-28:
+
+  Because of reverting a (overly eager) mutt-ng-specific issue with
+  header caching, starting with revision 362, all caches must be removed
+  and rebuild again. Sorry for that.
+
 2005-07-25:
 
   Due to changes to internal structures introduced in SVN revision 344,
