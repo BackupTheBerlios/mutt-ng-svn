@@ -79,6 +79,9 @@ Specify an initialization file to read instead of ~/.muttngrc
 Start Mutt-ng with a listing of subscribed newsgroups at specified newsserver.
 .IP "-G"
 Start Mutt-ng with a listing of subscribed newsgroups.
+.IP "-d"
+Specify a debugging level. This will cause muttng to create .muttngdebug<level> files which include
+debugging information.
 .IP "-h"
 Display help.
 .IP "-H \fIdraft\fP"
