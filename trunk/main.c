@@ -128,6 +128,7 @@ options:\n\
   -G\t\tselect a newsgroup (if compiled with NNTP)\n\
   -H <file>\tspecify a draft file to read header and body from\n\
   -i <file>\tspecify a file which Mutt-ng should include in the body\n\
+  -d <level>\t specify debugging level of Mutt-ng\n\
   -m <type>\tspecify a default mailbox type\n\
   -n\t\tcauses Mutt-ng not to read the system Muttngrc\n\
   -p\t\trecall a postponed message\n\
@@ -580,7 +581,12 @@ int main (int argc, char **argv)
     case 'd':
       debug_setlevel(atoi(optarg));
 #ifdef DEBUG
-      printf (_("Debugging at level %d.\n"), atoi(optarg));
+      if (atoi(optarg)<=3 && atoi(optoarg)>=0)
+        printf (_("Debugging at level %d.\n"), atoi(optarg));
+      else {
+        printf(_("Please specify a valid debugging level (0-3)\n"))
+        return 1;
+      }
 #else
       printf _("DEBUG was not defined during compilation.  Ignored.\n");
 #endif
