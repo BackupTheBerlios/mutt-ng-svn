@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2005-07-27 03:09+0000\n"
 "PO-Revision-Date: 2005-03-20 14:03+0100\n"
-"Last-Translator: Rocco Rutte <pdmef@cs.tu-berlin.de>\n"
+"Last-Translator: Nico Golde <nico@ngolde.de>\n"
 "Language-Team: German <mutt-po@mutt.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=iso-8859-1\n"
@@ -796,7 +796,7 @@ msgstr "Mailbox wurde zerstört!"
 #: compress.c:229
 #, c-format
 msgid "Decompressing %s..."
-msgstr "Wähle %s aus..."
+msgstr "Dekomprimiere %s..."
 
 #: compress.c:245 compress.c:363 compress.c:438 mbox.c:583
 msgid "Unable to lock mailbox!"
@@ -805,7 +805,7 @@ msgstr "Kann Mailbox nicht für exklusiven Zugriff sperren!"
 #: compress.c:253
 #, c-format
 msgid "echo Decompressing %s..."
-msgstr "Wähle %s aus..."
+msgstr "Dekomprimiere %s ..."
 
 #: compress.c:264
 #, c-format
@@ -815,20 +815,20 @@ msgstr ""
 #: compress.c:348 compress.c:420
 #, c-format
 msgid "Compressing %s..."
-msgstr "Kopiere nach %s..."
+msgstr "Komprimiere %s..."
 
 #: compress.c:375 compress.c:450
 #, c-format
 msgid "echo Compressing %s..."
-msgstr "Kopiere nach %s..."
+msgstr "Komprimiere %s..."
 
 #: compress.c:380
 #, c-format
 msgid ""
 "%s: Error compressing mailbox! Original mailbox deleted, uncompressed one "
 "kept!\n"
-msgstr "%s: Fehler beim Entpacken der Mailbox! Original wurde gelöscht und "
-"entpackte beibehalten!\n"
+msgstr "%s: Fehler beim Komprimieren der Mailbox! Original wurde gelöscht und "
+"Entpackte beibehalten!\n"
 
 #: compress.c:422
 #, c-format
@@ -838,7 +838,7 @@ msgstr "Kopiere nach %s..."
 #: compress.c:452
 #, c-format
 msgid "echo Compressed-appending to %s..."
-msgstr "echo Anhängen an gepackte Mailbox %s..."
+msgstr "echo Anhängen an komprimierte Mailbox %s..."
 
 #: compress.c:459
 #, c-format
