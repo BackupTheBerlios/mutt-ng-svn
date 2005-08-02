@@ -581,10 +581,10 @@ int main (int argc, char **argv)
     case 'd':
       debug_setlevel(atoi(optarg));
 #ifdef DEBUG
-      if (atoi(optarg)<=3 && atoi(optoarg)>=0)
+      if (atoi(optarg)<=3 && atoi(optarg)>=0)
         printf (_("Debugging at level %d.\n"), atoi(optarg));
       else {
-        printf(_("Please specify a valid debugging level (0-3)\n"))
+        printf(_("Please specify a valid debugging level (0-3).\n"));
         return 1;
       }
 #else
