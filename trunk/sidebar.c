@@ -111,7 +111,7 @@ static const char* sidebar_number_format (char* dest, size_t destlen, char op,
   switch (op) {
     case 'c':
       snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
-      snprintf (dest, destlen, tmp, c ? Context->msgcount : b->msgcount);
+      snprintf (dest, destlen, tmp, c ? (Context->msgcount - Context->deleted) : b->msgcount);
       break;
     case 'n':
       if (!opt) {
