@@ -986,11 +986,18 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
         quotelevel = newql;
       }
     }
-    else {
-      /* in case there's no [\r\n], we only have a single line
-       * -> display it (fixes #4709) */
-      print_flowed_line (buf, s, quotelevel);
-      /* TODO add handling of very long lines */
+    else if (bytes == 0) {
+      /* in case there's no line end it's likely the last line
+       * so append to current (if any) */
+      if (buf[newql] == ' ')
+        curline[mutt_strlen (curline) - 1] = '\0';
+      curline = realloc (curline, curline_len + mutt_strlen (buf));
+      if (curline_len == 1)
+        *curline = '\0';
+      curline_len += mutt_strlen (buf);
+      safe_strncat (curline, curline_len, buf + newql,
+                    mutt_strlen (buf + newql));
+      break;
     }
   }
   if (curline) {
