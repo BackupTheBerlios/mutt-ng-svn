@@ -21,7 +21,7 @@
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
 
-#if defined(USE_SSL) || defined(USE_NSS) || defined(USE_GNUTLS)
+#if defined(USE_SSL) || defined(USE_GNUTLS)
 #include "mutt_ssl.h"
 #endif
 
@@ -429,6 +429,8 @@ static int remove_from_spam_list (SPAM_LIST ** list, const char *pat)
 
   /* Being first is a special case. */
   spam = *list;
+  if (!spam)
+    return 0;
   if (spam->rx && !mutt_strcmp (spam->rx->pattern, pat)) {
     *list = spam->next;
     rx_free (&spam->rx);
@@ -1938,6 +1940,26 @@ int mutt_var_value_complete (char *buffer, size_t len, int pos)
                   "reverse-" : "",
                   (*((short *) MuttVars[idx].data) & SORT_LAST) ? "last-" :
                   "", p);
+      } 
+      else if (DTYPE (MuttVars[idx].type) == DT_MAGIC) {
+        char *p;
+        switch (DefaultMagic) {
+          case M_MBOX:
+            p = "mbox";
+            break;
+          case M_MMDF:
+            p = "MMDF";
+            break;
+          case M_MH:
+            p = "MH";
+          break;
+          case M_MAILDIR:
+            p = "Maildir";
+            break;
+          default:
+            p = "unknown";
+        }
+        strfcpy (tmp, p, sizeof (tmp));
       }
       else if (DTYPE (MuttVars[idx].type) == DT_BOOL)
         strfcpy (tmp, option (MuttVars[idx].data) ? "yes" : "no",

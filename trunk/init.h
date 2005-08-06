@@ -2387,7 +2387,7 @@ struct option_t MuttVars[] = {
    ** servers will probably desire 587, the mail submission port.
    */
 #endif
-#if defined(USE_SSL)||defined(USE_NSS)||defined(USE_GNUTLS)
+#if defined(USE_SSL) || defined(USE_GNUTLS)
 #ifdef USE_SSL
   {"ssl_client_cert", DT_PATH, R_NONE, UL &SslClientCert, 0},
   /*
@@ -2414,7 +2414,7 @@ struct option_t MuttVars[] = {
   {"certificate_file", DT_PATH, R_NONE, UL &SslCertFile, UL "~/.mutt_certificates"},
   /*
    ** .pp
-   ** Availability: SSL or NSS or GNUTLS
+   ** Availability: SSL or GNUTLS
    **
    ** .pp
    ** This variable specifies the file where the certificates you trust
@@ -2433,7 +2433,7 @@ struct option_t MuttVars[] = {
   {"ssl_usesystemcerts", DT_BOOL, R_NONE, OPTSSLSYSTEMCERTS, 1},
   /*
    ** .pp
-   ** Availability: SSL or NSS
+   ** Availability: SSL
    **
    ** .pp
    ** If set to \fIyes\fP, Mutt-ng will use CA certificates in the
@@ -2443,7 +2443,7 @@ struct option_t MuttVars[] = {
   {"entropy_file", DT_PATH, R_NONE, UL &SslEntropyFile, 0},
   /*
    ** .pp
-   ** Availability: SSL or NSS
+   ** Availability: SSL
    **
    ** .pp
    ** The file which includes random data that is used to initialize SSL
@@ -2452,7 +2452,7 @@ struct option_t MuttVars[] = {
   {"ssl_use_sslv2", DT_BOOL, R_NONE, OPTSSLV2, 1},
   /*
    ** .pp
-   ** Availability: SSL or NSS
+   ** Availability: SSL
    **
    ** .pp
    ** This variables specifies whether to attempt to use SSLv2 in the
@@ -2462,7 +2462,7 @@ struct option_t MuttVars[] = {
   {"ssl_use_sslv3", DT_BOOL, R_NONE, OPTSSLV3, 1},
   /*
    ** .pp
-   ** Availability: SSL or NSS or GNUTLS
+   ** Availability: SSL or GNUTLS
    **
    ** .pp
    ** This variables specifies whether to attempt to use SSLv3 in the
@@ -2471,7 +2471,7 @@ struct option_t MuttVars[] = {
   {"ssl_use_tlsv1", DT_BOOL, R_NONE, OPTTLSV1, 1},
   /*
    ** .pp
-   ** Availability: SSL or NSS or GNUTLS
+   ** Availability: SSL or GNUTLS
    **
    ** .pp
    ** This variables specifies whether to attempt to use TLSv1 in the

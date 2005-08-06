@@ -1,5 +1,3 @@
-# $Id: Makefile.in,v 3.3 2003/04/02 08:47:28 roessler Exp $
-
 SHELL = /bin/sh
 
 PACKAGE = @PACKAGE@
@@ -51,6 +49,12 @@ install:
 # Nothing needs to be done - uninstall in doc removes samples as well.
 # This is just so make uninstall doesn't fail.
 uninstall:
+	for f in $(SAMPLES) ; do \
+	  rm -f $(DESTDIR)$(docdir)/samples/$$f ; \
+	done
+	-rm -rf $(DESTDIR)$(docdir)/samples/iconv
+	-rmdir $(DESTDIR)$(docdir)/samples
+	-rmdir $(DESTDIR)$(docdir)
 
 maintainer-clean: distclean
 

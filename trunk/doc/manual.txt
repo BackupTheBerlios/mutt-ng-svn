@@ -3,7 +3,7 @@
 
                         by Michael Elkins <me@cs.hmc.edu> and others.
 
-                                     version devel-r353
+                                     version devel-r371
 
                                           AAbbssttrraacctt
 
@@ -956,6 +956,7 @@
 
             \t              tab
             <tab>           tab
+            <backtab>       backtab / shift-tab
             \r              carriage return
             \n              newline
             \e              escape
@@ -999,9 +1000,9 @@
 
        _3_._5  _S_e_t_t_i_n_g _v_a_r_i_a_b_l_e_s _b_a_s_e_d _u_p_o_n _m_a_i_l_b_o_x
 
-       Usage: folder-hook [!]_r_e_g_e_x_p _c_o_m_m_a_n_d
-
        The Mutt-ng E-Mail Client                                                    20
+
+       Usage: folder-hook [!]_r_e_g_e_x_p _c_o_m_m_a_n_d
 
        It is often desirable to change settings based on which mailbox you are read-
        ing.  The folder-hook command provides a method by which you can execute any
@@ -1051,10 +1052,11 @@
        The advantage with using function names directly is that the macros will work
        regardless of the current key bindings, so they are not dependent on the user
        having particular key definitions.  This makes them more robust and portable,
-       and also facilitates defining of macros in files used by more than one user
-       (eg. the system Muttngrc).
 
        The Mutt-ng E-Mail Client                                                    21
+
+       and also facilitates defining of macros in files used by more than one user
+       (eg. the system Muttngrc).
 
        Optionally you can specify a descriptive text after _s_e_q_u_e_n_c_e, which is shown in
        the help screens.
@@ -1106,11 +1108,11 @@
 
           +o search (highlighting of words in the pager)
 
+       The Mutt-ng E-Mail Client                                                    22
+
           +o signature
 
           +o status (mode lines used to display info about the mailbox or message)
-
-       The Mutt-ng E-Mail Client                                                    22
 
           +o tilde (the ``~'' used to pad blank lines in the pager)
 
@@ -1160,12 +1162,12 @@
        command for it to be removed.  The pattern ``*'' is a special token which means
        to clear the color index list of all entries.
 
+       The Mutt-ng E-Mail Client                                                    23
+
        Mutt-ng also recognizes the keywords _c_o_l_o_r_0, _c_o_l_o_r_1, ..., _c_o_l_o_rNN--11 (NN being the
        number of colors supported by your terminal).  This is useful when you remap
        the colors for your display (for example by changing the color associated with
        _c_o_l_o_r_2 for your xterm), since color names may then lose their normal meaning.
-
-       The Mutt-ng E-Mail Client                                                    23
 
        If your terminal does not support color, it is still possible change the video
        attributes through the use of the ``mono'' command:
@@ -1215,14 +1217,13 @@
             unignore organization organisation x-mailer: x-newsreader: x-mailing-list:
             unignore posted-to:
 
+       The Mutt-ng E-Mail Client                                                    24
+
        _3_._9  _A_l_t_e_r_n_a_t_i_v_e _a_d_d_r_e_s_s_e_s
 
        Usage: [un]alternates _r_e_g_e_x_p [ _r_e_g_e_x_p ... ]
 
        With various functions, mutt will treat messages differently, depending on
-
-       The Mutt-ng E-Mail Client                                                    24
-
        whether you sent them or whether you received them from someone else.  For
        instance, when replying to a message that you sent to a different party, mutt
        will automatically suggest to send the response to the original message's
@@ -1272,14 +1273,14 @@
 
        You can use regular expressions with both commands.  To mark all messages sent
        to a specific bug report's address on mutt's bug tracking system as list mail,
+
+       The Mutt-ng E-Mail Client                                                    25
+
        for instance, you could say ``subscribe [0-9]*@bugs.guug.de''.  Often, it's
        sufficient to just give a portion of the list's e-mail address.
 
        Specify as much of the address as you need to to remove ambiguity.  For exam-
        ple, if you've subscribed to the Mutt-ng mailing list, you will receive mail
-
-       The Mutt-ng E-Mail Client                                                    25
-
        addressed to _m_u_t_t_-_u_s_e_r_s_@_m_u_t_t_._o_r_g.  So, to tell Mutt-ng that this is a mailing
        list, you could add ``lists mutt-users'' to your initialization file.  To tell
        mutt that you are subscribed to it, add ``subscribe mutt-users'' to your ini-
@@ -1330,13 +1331,12 @@
        they do not properly reset the access time.  Backup tools are another common
        reason for updated access times.
 
+       The Mutt-ng E-Mail Client                                                    26
+
        NNoottee:: the filenames in the mailboxes command are resolved when the command is
        executed, so if these names contain _s_h_o_r_t_c_u_t _c_h_a_r_a_c_t_e_r_s (section 4.8  , page
        44) (such as ``='' and ``!''), any variable definition that affect these char-
        acters (like _$_f_o_l_d_e_r (section 6.3.64  , page 79) and _$_s_p_o_o_l_f_i_l_e (section
-
-       The Mutt-ng E-Mail Client                                                    26
-
        6.3.295  , page 136)) should be executed before the mailboxes command.
 
        _3_._1_3  _U_s_e_r _d_e_f_i_n_e_d _h_e_a_d_e_r_s
@@ -1383,9 +1383,9 @@
        ``unhdr_order *'' will clear all previous headers from the order list, thus
        removing the header order effects set by the system-wide startup file.
 
-            hdr_order From Date: From: To: Cc: Subject:
-
        The Mutt-ng E-Mail Client                                                    27
+
+            hdr_order From Date: From: To: Cc: Subject:
 
        _3_._1_5  _S_p_e_c_i_f_y _d_e_f_a_u_l_t _s_a_v_e _f_i_l_e_n_a_m_e
 
@@ -1436,11 +1436,11 @@
 
        Usage: reply-hook [!]_p_a_t_t_e_r_n _c_o_m_m_a_n_d
 
+       The Mutt-ng E-Mail Client                                                    28
+
        Usage: send-hook [!]_p_a_t_t_e_r_n _c_o_m_m_a_n_d
 
        Usage: send2-hook [!]_p_a_t_t_e_r_n _c_o_m_m_a_n_d
-
-       The Mutt-ng E-Mail Client                                                    28
 
        These commands can be used to execute arbitrary configuration commands based
        upon recipients of the message.  _p_a_t_t_e_r_n is a regular expression matching the
@@ -1493,10 +1493,10 @@
 
        Example:
 
+       The Mutt-ng E-Mail Client                                                    29
+
             message-hook ~A 'set pager=builtin'
             message-hook '~f freshmeat-news' 'set pager="less \"+/^  subject: .*\""'
-
-       The Mutt-ng E-Mail Client                                                    29
 
        _3_._2_0  _C_h_o_o_s_i_n_g _t_h_e _c_r_y_p_t_o_g_r_a_p_h_i_c _k_e_y _o_f _t_h_e _r_e_c_i_p_i_e_n_t
 
@@ -1548,11 +1548,11 @@
        same pattern specified in the score command for it to be removed.  The pattern
        ``*'' is a special token which means to clear the list of all score entries.
 
+       The Mutt-ng E-Mail Client                                                    30
+
        _3_._2_4  _S_p_a_m _d_e_t_e_c_t_i_o_n
 
        Usage: spam _p_a_t_t_e_r_n _f_o_r_m_a_t
-
-       The Mutt-ng E-Mail Client                                                    30
 
        Usage: nospam _p_a_t_t_e_r_n
 
@@ -1604,11 +1604,11 @@
        expression matches against for _s_e_a_r_c_h and _l_i_m_i_t functions. And it's what sort-
        ing by spam attribute will use as a sort key.
 
+       The Mutt-ng E-Mail Client                                                    31
+
        That's a pretty complicated example, and most people's actual environments will
        have only one spam filter. The simpler your configuration, the more effective
        mutt can be, especially when it comes to sorting.
-
-       The Mutt-ng E-Mail Client                                                    31
 
        Generally, when you sort by spam tag, mutt will sort _l_e_x_i_c_a_l_l_y -- that is, by
        ordering strings alphnumerically. However, if a spam tag begins with a number,
@@ -1659,14 +1659,13 @@
        be enclosed in quotes if they contain spaces or tabs.  You may also use the
        ``C'' escape sequences \\nn and \\tt for newline and tab, respectively.
 
-       _q_u_a_d_o_p_t_i_o_n variables are used to control whether or not to be prompted for cer-
-       tain actions, or to specify a default action.  A value of _y_e_s will cause the
-       action to be carried out automatically as if you had answered yes to the
-
        The Mutt-ng E-Mail Client                                                    32
 
-       question.  Similarly, a value of _n_o will cause the the action to be carried out
-       as if you had answered ``no.''  A value of _a_s_k_-_y_e_s will cause a prompt with a
+       _q_u_a_d_o_p_t_i_o_n variables are used to control whether or not to be prompted for cer-
+       tain actions, or to specify a default action.  A value of _y_e_s will cause the
+       action to be carried out automatically as if you had answered yes to the ques-
+       tion.  Similarly, a value of _n_o will cause the the action to be carried out as
+       if you had answered ``no.''  A value of _a_s_k_-_y_e_s will cause a prompt with a
        default answer of ``yes'' and _a_s_k_-_n_o will provide a default answer of ``no.''
 
        Prefixing a variable with ``no'' will unset it.  Example: set noaskbcc.
@@ -1714,12 +1713,11 @@
 
        Usage: ifdef _i_t_e_m _c_o_m_m_a_n_d
 
+       The Mutt-ng E-Mail Client                                                    33
+
        Usage: ifndef _i_t_e_m _c_o_m_m_a_n_d
 
        These commands allow testing for a variable, function or certain feature being
-
-       The Mutt-ng E-Mail Client                                                    33
-
        available or not respectively, before actually executing the command given.
 
        ifdef (short for ``if defined'') only executes the command upon availability
@@ -1767,16 +1765,15 @@
 
        _4_.  _A_d_v_a_n_c_e_d _U_s_a_g_e
 
-       _4_._1  _R_e_g_u_l_a_r _E_x_p_r_e_s_s_i_o_n_s
-
-       All string patterns in Mutt-ng including those in more complex _p_a_t_t_e_r_n_s
-
        The Mutt-ng E-Mail Client                                                    34
 
-       (section 4.2  , page 36) must be specified using regular expressions (regexp)
-       in the ``POSIX extended'' syntax (which is more or less the syntax used by
-       egrep and GNU awk).  For your convenience, we have included below a brief
-       description of this syntax.
+       _4_._1  _R_e_g_u_l_a_r _E_x_p_r_e_s_s_i_o_n_s
+
+       All string patterns in Mutt-ng including those in more complex _p_a_t_t_e_r_n_s (sec-
+       tion 4.2  , page 36) must be specified using regular expressions (regexp) in
+       the ``POSIX extended'' syntax (which is more or less the syntax used by egrep
+       and GNU awk).  For your convenience, we have included below a brief description
+       of this syntax.
 
        The search is case sensitive if the pattern contains at least one upper case
        letter, and case insensitive otherwise. Note that ``\'' must be quoted if used
@@ -1824,10 +1821,10 @@
              [:blank:]
                    Space or tab characters.
 
+       The Mutt-ng E-Mail Client                                                    35
+
              [:cntrl:]
                    Control characters.
-
-       The Mutt-ng E-Mail Client                                                    35
 
              [:digit:]
                    Numeric characters.
@@ -1881,10 +1878,10 @@
        A regular expression matching a single character may be followed by one of sev-
        eral repetition operators:
 
+       The Mutt-ng E-Mail Client                                                    36
+
              ?
                    The preceding item is optional and matched at most once.
-
-       The Mutt-ng E-Mail Client                                                    36
 
              *
                    The preceding item will be matched zero or more times.
@@ -1936,10 +1933,10 @@
                    Matches any word-constituent character (letter, digit, or under-
                    score).
 
+       The Mutt-ng E-Mail Client                                                    37
+
              \\W
                    Matches any character that is not word-constituent.
-
-       The Mutt-ng E-Mail Client                                                    37
 
              \\`
                    Matches the empty string at the beginning of a buffer (string).
@@ -3780,7 +3777,7 @@
 
        Default: '~/.mutt_certificates'
 
-       Availability: SSL or NSS or GNUTLS
+       Availability: SSL or GNUTLS
 
        This variable specifies the file where the certificates you trust are saved.
        When an unknown certificate is encountered, you are asked if you accept it or
@@ -4202,7 +4199,7 @@
 
        Default: ''
 
-       Availability: SSL or NSS
+       Availability: SSL
 
        The file which includes random data that is used to initialize SSL library
        functions.
@@ -7531,7 +7528,7 @@
 
        Default: yes
 
-       Availability: SSL or NSS
+       Availability: SSL
 
        This variables specifies whether to attempt to use SSLv2 in the SSL authentica-
        tion process.
@@ -7542,7 +7539,7 @@
 
        Default: yes
 
-       Availability: SSL or NSS or GNUTLS
+       Availability: SSL or GNUTLS
 
        This variables specifies whether to attempt to use SSLv3 in the SSL authentica-
        tion process.
@@ -7553,7 +7550,7 @@
 
        Default: yes
 
-       Availability: SSL or NSS or GNUTLS
+       Availability: SSL or GNUTLS
 
        This variables specifies whether to attempt to use TLSv1 in the SSL authentica-
        tion process.
@@ -7564,7 +7561,7 @@
 
        Default: yes
 
-       Availability: SSL or NSS
+       Availability: SSL
 
        If set to _y_e_s, Mutt-ng will use CA certificates in the system-wide certificate
 
@@ -8618,7 +8615,7 @@
            3.6   Keyboard macros .................................................. 20
            3.7   Using color and mono video attributes ............................ 21
            3.8   Ignoring (weeding) unwanted message headers ...................... 23
-           3.9   Alternative addresses ............................................ 23
+           3.9   Alternative addresses ............................................ 24
            3.10  Mailing lists .................................................... 24
            3.11  Using Multiple spool mailboxes ................................... 25
            3.12  Defining mailboxes which receive mail ............................ 25
@@ -8633,14 +8630,14 @@
            3.21  Adding key sequences to the keyboard buffer ...................... 29
            3.22  Executing functions .............................................. 29
            3.23  Message Scoring .................................................. 29
-           3.24  Spam detection ................................................... 29
+           3.24  Spam detection ................................................... 30
            3.25  Setting variables ................................................ 31
            3.26  Reading initialization commands from another file ................ 32
            3.27  Configuring features conditionally ............................... 32
            3.28  Removing hooks ................................................... 33
 
        4.  Advanced Usage ......................................................... 33
-           4.1   Regular Expressions .............................................. 33
+           4.1   Regular Expressions .............................................. 34
 
                                               i
 

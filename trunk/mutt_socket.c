@@ -17,7 +17,7 @@
 #include "globals.h"
 #include "mutt_socket.h"
 #include "mutt_tunnel.h"
-#if defined(USE_SSL) || defined(USE_GNUTLS) || defined(USE_NSS)
+#if defined(USE_SSL) || defined(USE_GNUTLS)
 # include "mutt_ssl.h"
 #endif
 
@@ -239,8 +239,6 @@ CONNECTION *mutt_conn_find (const CONNECTION * start, const ACCOUNT * account)
   else if (account->flags & M_ACCT_SSL) {
 #ifdef USE_SSL
     ssl_socket_setup (conn);
-#elif USE_NSS
-    mutt_nss_socket_setup (conn);
 #elif USE_GNUTLS
     if (mutt_gnutls_socket_setup (conn) < 0) {
       mutt_socket_free (conn);

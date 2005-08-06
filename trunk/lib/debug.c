@@ -35,7 +35,8 @@ void debug_start (const char* basedir) {
   char buf[_POSIX_PATH_MAX];
   char buf2[_POSIX_PATH_MAX];
 
-  if (DebugLevel < 0 || !basedir || !*basedir)
+  if (DebugLevel < DEBUG_MIN_LEVEL || DebugLevel > DEBUG_MAX_LEVEL
+      || !basedir || !*basedir)
     return;
   /* rotate the old debug logs */
   for (i = 3; i >= 0; i--) {
@@ -53,7 +54,7 @@ void debug_start (const char* basedir) {
 }
 
 void _debug_print_intro (const char* file, int line, const char* function, int level) {
-  if (!DebugFile || DebugLevel < 0)
+  if (!DebugFile || DebugLevel < DEBUG_MIN_LEVEL || DebugLevel > DEBUG_MAX_LEVEL)
     return;
   fprintf (DebugFile, "[%d:%s:%d", level, NONULL(file), line);
   if (function && *function)

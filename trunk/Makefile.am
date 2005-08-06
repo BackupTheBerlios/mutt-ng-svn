@@ -72,7 +72,7 @@ CPPFLAGS=@CPPFLAGS@ -I$(includedir)
 EXTRA_muttng_SOURCES = account.c md5c.c mutt_sasl.c mutt_socket.c mutt_ssl.c \
 	mutt_tunnel.c smime.c pgp.c pgpinvoke.c pgpkey.c \
 	pgplib.c sha1.c pgpmicalg.c gnupgparse.c resize.c dotlock.c remailer.c \
-	browser.h mbyte.h remailer.h url.h mutt_ssl_nss.c \
+	browser.h mbyte.h remailer.h url.h \
 	pgppacket.c mutt_idna.h mutt_libesmtp.c \
 	sidebar.h crypt-mod-pgp-classic.c crypt-mod-smime-classic.c
 
@@ -158,7 +158,7 @@ install-data-local: Muttngrc
 	elif [ -f $(DESTDIR)$(pkgdatadir)/../Muttngrc ] ; then \
 	 	mv $(DESTDIR)$(pkgdatadir)/../Muttngrc* $(DESTDIR)$(sysconfdir) ; \
 	elif [ ! -f $(DESTDIR)$(sysconfdir)/Muttngrc ] ; then \
-		$(INSTALL) -m 644 $(srcdir)/Muttngrc $(DESTDIR)$(sysconfdir) ; \
+		$(INSTALL) -m 644 Muttngrc $(DESTDIR)$(sysconfdir) ; \
 	fi
 	-if [ ! -f $(DESTDIR)$(sysconfdir)/muttng-mime.types ]; then \
 		$(INSTALL) -m 644 $(srcdir)/mime.types $(DESTDIR)$(sysconfdir)/muttng-mime.types; \

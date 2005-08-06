@@ -10,6 +10,11 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-08-06:
+
+  Due to merging in changes made to mutt where NSS support was dropped,
+  it's dropped in mutt-ng too.
+
 2005-07-28:
 
   Because of reverting a (overly eager) mutt-ng-specific issue with

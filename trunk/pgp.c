@@ -58,7 +58,7 @@
 #include "mutt_menu.h"
 
 
-char PgpPass[STRING];
+char PgpPass[LONG_STRING];
 time_t PgpExptime = 0;          /* when does the cached passphrase expire? */
 
 void pgp_void_passphrase (void)
@@ -358,12 +358,16 @@ void pgp_application_pgp_handler (BODY * m, STATE * s)
             if (rc == -1 || rv)
               maybe_goodsig = 0;
 
-            state_putc ('\n', s);
             state_attach_puts (_("[-- End of PGP output --]\n\n"), s);
           }
         }
       }
 
+      /* treat empty result as sign of failure */
+      if (! ftell(pgpout)) {
+        mutt_error _("Could not decrypt PGP message");
+        goto out;
+      }
 
       /*
        * Now, copy cleartext to the screen.  NOTE - we expect that PGP
@@ -399,22 +403,16 @@ void pgp_application_pgp_handler (BODY * m, STATE * s)
 
       if (s->flags & M_DISPLAY) {
         state_putc ('\n', s);
-        if (needpass)
+        if (needpass) {
           state_attach_puts (_("[-- END PGP MESSAGE --]\n"), s);
+          mutt_message _("PGP message successfully decrypted.");
+        }
         else if (pgp_keyblock)
           state_attach_puts (_("[-- END PGP PUBLIC KEY BLOCK --]\n"), s);
         else
           state_attach_puts (_("[-- END PGP SIGNED MESSAGE --]\n"), s);
       }
 
-      if (tmpfp) {
-        safe_fclose (&tmpfp);
-        mutt_unlink (tmpfname);
-      }
-      if (pgpout) {
-        safe_fclose (&pgpout);
-        mutt_unlink (outfile);
-      }
     }
     else {
       /* XXX - we may wish to recode here */
@@ -424,7 +422,17 @@ void pgp_application_pgp_handler (BODY * m, STATE * s)
     }
   }
 
+out:
   m->goodsig = (maybe_goodsig && have_any_sigs);
+
+  if (tmpfp) {
+    safe_fclose (&tmpfp);
+    mutt_unlink (tmpfname);
+  }
+  if (pgpout) {
+    safe_fclose (&pgpout);
+    mutt_unlink (outfile);
+  }
 
   if (needpass == -1) {
     state_attach_puts (_
@@ -691,6 +699,7 @@ BODY *pgp_decrypt_part (BODY * a, STATE * s, FILE * fpout, BODY * p)
   char pgperrfile[_POSIX_PATH_MAX];
   char pgptmpfile[_POSIX_PATH_MAX];
   pid_t thepid;
+  int rv;
 
   mutt_mktemp (pgperrfile);
   if ((pgperr = safe_fopen (pgperrfile, "w+")) == NULL) {
@@ -744,14 +753,16 @@ BODY *pgp_decrypt_part (BODY * a, STATE * s, FILE * fpout, BODY * p)
   }
 
   fclose (pgpout);
-  mutt_wait_filter (thepid);
+  rv = mutt_wait_filter (thepid);
   mutt_unlink (pgptmpfile);
 
   if (s->flags & M_DISPLAY) {
     fflush (pgperr);
     rewind (pgperr);
-    if (pgp_copy_checksig (pgperr, s->fpout) == 0 && p)
+    if (pgp_copy_checksig (pgperr, s->fpout) == 0 && !rv && p)
       p->goodsig = 1;
+    else
+      p->goodsig = 0;
     state_attach_puts (_("[-- End of PGP output --]\n\n"), s);
   }
   fclose (pgperr);
@@ -874,7 +885,10 @@ void pgp_encrypted_handler (BODY * a, STATE * s)
     }
 
     mutt_free_body (&tattach);
-  }
+    /* clear 'Invoking...' message, since there's no error */
+    mutt_message _("PGP message successfully decrypted.");
+  } else
+    mutt_error _("Could not decrypt PGP message");
 
   fclose (fpout);
   mutt_unlink (tempfile);
@@ -1214,6 +1228,8 @@ BODY *pgp_encrypt_message (BODY * a, char *keylist, int sign)
 
   if (empty) {
     /* fatal error while trying to encrypt message */
+    if (sign)
+      pgp_void_passphrase (); /* just in case */
     unlink (tempfile);
     return (NULL);
   }
@@ -1380,6 +1396,8 @@ BODY *pgp_traditional_encryptsign (BODY * a, int flags, char *keylist)
     mutt_any_key_to_continue (NULL);
 
   if (empty) {
+    if (flags & SIGN)
+      pgp_void_passphrase (); /* just in case */
     unlink (pgpoutfile);
     return NULL;
   }

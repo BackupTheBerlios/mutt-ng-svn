@@ -164,6 +164,7 @@ int mutt_display_message (HEADER * cur)
 
   if (WithCrypto) {
     /* update crypto information for this message */
+    cur->security &= ~(GOODSIGN|BADSIGN);
     cur->security |= crypt_query (cur->content);
 
     /* Remove color cache for this message, in case there
@@ -196,7 +197,7 @@ int mutt_display_message (HEADER * cur)
       else if (cur->security & PARTSIGN)
         mutt_message (_
                       ("Warning: Part of this message has not been signed."));
-      else
+      else if (cur->security & SIGN)
         mutt_message (_("PGP signature could NOT be verified."));
     }
 
@@ -641,30 +642,31 @@ static void set_copy_flags (HEADER * hdr, int decode, int decrypt,
   }
 }
 
-void _mutt_save_message (HEADER * h, CONTEXT * ctx, int delete, int decode,
-                         int decrypt)
-{
+int _mutt_save_message (HEADER * h, CONTEXT * ctx, int delete, int decode,
+                         int decrypt) {
   int cmflags, chflags;
+  int rc;
 
   set_copy_flags (h, decode, decrypt, &cmflags, &chflags);
 
   if (decode || decrypt)
     mutt_parse_mime_message (Context, h);
 
-  if (mutt_append_message (ctx, Context, h, cmflags, chflags) == 0) {
-    if (delete) {
-      mutt_set_flag (Context, h, M_DELETE, 1);
-      if (option (OPTDELETEUNTAG))
-        mutt_set_flag (Context, h, M_TAG, 0);
-    }
+  if ((rc = mutt_append_message (ctx, Context, h, cmflags, chflags)) != 0)
+    return rc;
+
+  if (delete) {
+    mutt_set_flag (Context, h, M_DELETE, 1);
+    if (option (OPTDELETEUNTAG))
+      mutt_set_flag (Context, h, M_TAG, 0);
     mutt_set_flag (Context, h, M_APPENDED, 1);
   }
+  return (0);
 }
 
 /* returns 0 if the copy/save was successful, or -1 on error/abort */
 int mutt_save_message (HEADER * h, int delete,
-                       int decode, int decrypt, int *redraw)
-{
+                       int decode, int decrypt, int *redraw) {
   int i, need_buffy_cleanup;
   int need_passphrase = 0, app = 0;
   char prompt[SHORT_STRING], buf[_POSIX_PATH_MAX];
@@ -771,15 +773,21 @@ int mutt_save_message (HEADER * h, int delete,
 #endif
 
   if (mx_open_mailbox (buf, M_APPEND, &ctx) != NULL) {
-    if (h)
-      _mutt_save_message (h, &ctx, delete, decode, decrypt);
-    else {
+    if (h) {
+      if (_mutt_save_message (h, &ctx, delete, decode, decrypt) != 0) {
+        mx_close_mailbox (&ctx, NULL);
+        return (-1);
+      }
+    } else {
       for (i = 0; i < Context->vcount; i++) {
         if (Context->hdrs[Context->v2r[i]]->tagged) {
           mutt_message_hook (Context, Context->hdrs[Context->v2r[i]],
                              M_MESSAGEHOOK);
-          _mutt_save_message (Context->hdrs[Context->v2r[i]], &ctx, delete,
-                              decode, decrypt);
+          if (_mutt_save_message (Context->hdrs[Context->v2r[i]], &ctx, delete,
+                                  decode, decrypt) != 0) {
+            mx_close_mailbox (&ctx, NULL);
+            return (-1);
+          }
         }
       }
     }

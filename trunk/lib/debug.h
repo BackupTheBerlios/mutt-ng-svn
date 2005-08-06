@@ -14,6 +14,11 @@
 
 #include <stdio.h>
 
+#define DEBUG_MIN_LEVEL         1
+#define DEBUG_MIN_LEVEL_S       "1"
+#define DEBUG_MAX_LEVEL         5
+#define DEBUG_MAX_LEVEL_S       "5"
+
 #ifdef DEBUG
 
 extern short DebugLevel;

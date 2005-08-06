@@ -557,8 +557,10 @@ int mutt_index_menu (void)
         DrawFullLine = 0;
         CLEARLINE (option (OPTSTATUSONTOP) ? 0 : LINES - 2);
         SETCOLOR (MT_COLOR_STATUS);
+        BKGDSET (MT_COLOR_STATUS);
         mutt_paddstr (COLS, buf);
         SETCOLOR (MT_COLOR_NORMAL);
+        BKGDSET (MT_COLOR_NORMAL);
         sidebar_set_buffystats (Context);
         menu->redraw &= ~REDRAW_STATUS;
         if (option (OPTXTERMSETTITLES)) {

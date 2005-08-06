@@ -44,7 +44,6 @@ muttlib.c
 mutt_socket.c
 mutt_ssl.c
 mutt_ssl_gnutls.c
-mutt_ssl_nss.c
 mutt_tunnel.c
 mx.c
 nntp/newsrc.c

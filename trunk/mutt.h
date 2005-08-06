@@ -386,7 +386,7 @@ enum {
   OPTIMAPFORCESSL,
 # endif
 #endif
-#if defined(USE_SSL) || defined(USE_NSS) || defined(USE_GNUTLS)
+#if defined(USE_SSL) || defined(USE_GNUTLS)
 # ifndef USE_GNUTLS
   OPTSSLV2,
 # endif
@@ -587,7 +587,8 @@ LIST *mutt_copy_list (LIST *);
 int mutt_matches_ignore (const char *, LIST *);
 
 /* add an element to a list */
-LIST *mutt_add_list (LIST *, const char *);
+LIST *mutt_add_list (LIST*, const char*);
+LIST *mutt_add_list_n (LIST*, const void*, size_t len);
 
 void mutt_init (int, LIST *);
 
@@ -893,6 +894,7 @@ typedef struct attachptr {
   char *tree;
   int level;
   int num;
+  unsigned int unowned:1;       /* don't unlink on detach */
 } ATTACHPTR;
 
 typedef struct {

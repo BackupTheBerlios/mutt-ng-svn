@@ -535,9 +535,6 @@
 /* Define to enable the use of libesmtp */
 #undef USE_LIBESMTP
 
-/* Define if you want support for SSL via the NSS library. */
-#undef USE_NSS
-
 /* Define if you want support for the POP3 protocol. */
 #undef USE_POP
 

@@ -176,14 +176,17 @@ int mutt_account_getlogin (ACCOUNT* account)
 #ifdef USE_IMAP
   else if (account->type == M_ACCT_TYPE_IMAP)
   {
-    if (ImapLogin)
+    if (ImapLogin) {
       strfcpy (account->login, ImapLogin, sizeof (account->login));
-    else {
-      mutt_account_getuser (account);
-      strfcpy (account->login, account->user, sizeof (account->login));
+      account->flags |= M_ACCT_LOGIN;
     }
   }
 #endif
+
+  if (!(account->flags & M_ACCT_LOGIN)) {
+    mutt_account_getuser (account);
+    strfcpy (account->login, account->user, sizeof (account->login));
+  }
 
   account->flags |= M_ACCT_LOGIN;
 
@@ -211,7 +214,8 @@ int mutt_account_getpass (ACCOUNT * account)
 #endif
   else {
     snprintf (prompt, sizeof (prompt), _("Password for %s@%s: "),
-              account->login, account->host);
+              account->flags & M_ACCT_LOGIN ? account->login : account->user,
+              account->host);
     account->pass[0] = '\0';
     if (mutt_get_password (prompt, account->pass, sizeof (account->pass)))
       return -1;

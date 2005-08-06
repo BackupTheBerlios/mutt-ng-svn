@@ -1245,7 +1245,11 @@ display_line (FILE * f, long *last_pos, struct line_t **lineInfo, int n,
         /* skip trailing blanks */
         while (ch && (buf[ch] == ' ' || buf[ch] == '\t' || buf[ch] == '\r'))
           ch--;
-        cnt = ch + 1;
+        /* a very long word with leading spaces causes infinite wrapping */
+        if ((!ch) && (flags & M_PAGER_NSKIP))
+          buf_ptr = buf + cnt;
+        else
+          cnt = ch + 1;
       }
       else
         buf_ptr = buf + cnt;    /* a very long word... */
@@ -1650,9 +1654,11 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       move (indexoffset + (option (OPTSTATUSONTOP) ? 0 : (indexlen - 1)),
             option (OPTSTATUSONTOP) ? 0 : SidebarWidth);
       SETCOLOR (MT_COLOR_STATUS);
+      BKGDSET (MT_COLOR_STATUS);
       mutt_paddstr (COLS - (option (OPTSTATUSONTOP) ? 0 : SidebarWidth),
                     buffer);
       SETCOLOR (MT_COLOR_NORMAL);
+      BKGDSET (MT_COLOR_NORMAL);
     }
     /* if we're not using the index, update every time */
     if (index == 0)

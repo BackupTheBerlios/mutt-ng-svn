@@ -260,7 +260,7 @@ pop_query_status pop_open_connection (POP_DATA * pop_data)
     return PQ_ERR;
   }
 
-#if (defined(USE_SSL) || defined(USE_GNUTLS)) && !defined(USE_NSS)
+#if (defined(USE_SSL) || defined(USE_GNUTLS))
   /* Attempt STLS if available and desired. */
   if (pop_data->cmd_stls && !pop_data->conn->ssf) {
     if (pop_data->use_stls == 0) {
