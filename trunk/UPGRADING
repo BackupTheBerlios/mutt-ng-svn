@@ -10,6 +10,12 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-08-07:
+
+  For $sidebar_number_format, the expandos %c and %f are replaced with
+  their $status_format pendants %m and %F respectively. Use of %c and
+  %f is deprecated but still kept for compatibility.
+
 2005-08-06:
 
   Due to merging in changes made to mutt where NSS support was dropped,

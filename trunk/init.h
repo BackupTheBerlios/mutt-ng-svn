@@ -1400,7 +1400,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** If \fIset\fP, only folders with new mail will be shown in the sidebar.
    */
-  {"sidebar_number_format", DT_STR, R_BOTH, UL &SidebarNumberFormat, UL "%c%?n?(%n)?%?f?[%f]?"},
+  {"sidebar_number_format", DT_STR, R_BOTH, UL &SidebarNumberFormat, UL "%m%?n?(%n)?%?f?[%f]?"},
   /*
    ** .pp
    ** This variable controls how message counts are printed when the sidebar
@@ -1408,15 +1408,20 @@ struct option_t MuttVars[] = {
    ** will be printed \fIand\fP mutt-ng won't frequently count mail (which
    ** may be a great speedup esp. with mbox-style mailboxes.)
    ** .pp
-   ** The following \fTprintf(3)\fP-like sequences are supported:
+   ** The following \fTprintf(3)\fP-like sequences are supported all of which
+   ** may be printed non-zero:
    ** .pp
    ** .dl
-   ** .dt %c .dd Total number of messages.
-   ** .dt %f .dd Number of flagged messages.
+   ** .dt %d .dd Number of deleted messages. 1)
+   ** .dt %F .dd Number of flagged messages.
+   ** .dt %m .dd Total number of messages.
+   ** .dt %M .dd Total number of messages shown, i.e. not hidden by a limit. 1)
    ** .dt %n .dd Number of new messages.
+   ** .dt %t .dd Number of tagged messages. 1)
    ** .de
    ** .pp
-   ** The \fT%f\fP and \fT%n\fP expandos may optionally be printed non-zero.
+   ** 1) These expandos only have a non-zero value for the current mailbox and
+   ** will always be zero otherwise.
    */
   {"sidebar_shorten_hierarchy", DT_BOOL, R_NONE, OPTSHORTENHIERARCHY, 0},
   /*

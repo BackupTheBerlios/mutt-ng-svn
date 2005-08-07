@@ -109,10 +109,41 @@ static const char* sidebar_number_format (char* dest, size_t destlen, char op,
   int c = Context && str_eq (Context->path, b->path);
 
   switch (op) {
-    case 'c':
-      snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
-      snprintf (dest, destlen, tmp, c ? (Context->msgcount - Context->deleted) : b->msgcount);
+    /* deleted */
+    case 'd':
+      if (!opt) {
+        snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
+        snprintf (dest, destlen, tmp, c ? Context->deleted : 0);
+      } else if ((c && Context->deleted == 0) || !c)
+        opt = 0;
       break;
+    /* flagged */
+    case 'F':
+    case 'f':                   /* for compatibility */
+      if (!opt) {
+        snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
+        snprintf (dest, destlen, tmp, c ? Context->flagged : b->msg_flagged);
+      } else if ((c && Context->flagged == 0) || (!c && b->msg_flagged == 0))
+        opt = 0;
+      break;
+    /* total */
+    case 'c':                   /* for compatibility */
+    case 'm':
+      if (!opt) {
+        snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
+        snprintf (dest, destlen, tmp, c ? Context->msgcount : b->msgcount);
+      } else if ((c && Context->msgcount == 0) || (!c && b->msgcount == 0))
+        opt = 0;
+      break;
+    /* total shown, i.e. not hidden by limit */
+    case 'M':
+      if (!opt) {
+        snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
+        snprintf (dest, destlen, tmp, c ? Context->vcount : 0);
+      } else if ((c && Context->vcount == 0) || !c)
+        opt = 0;
+      break;
+    /* new */
     case 'n':
       if (!opt) {
         snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
@@ -120,11 +151,12 @@ static const char* sidebar_number_format (char* dest, size_t destlen, char op,
       } else if ((c && Context->unread == 0) || (!c && b->msg_unread == 0))
         opt = 0;
       break;
-    case 'f':
+    /* tagged */
+    case 't':
       if (!opt) {
         snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
-        snprintf (dest, destlen, tmp, c ? Context->flagged : b->msg_flagged);
-      } else if ((c && Context->flagged == 0) || (!c && b->msg_flagged == 0))
+        snprintf (dest, destlen, tmp, c ? Context->tagged : 0);
+      } else if ((c && Context->tagged == 0) || !c)
         opt = 0;
       break;
   }
