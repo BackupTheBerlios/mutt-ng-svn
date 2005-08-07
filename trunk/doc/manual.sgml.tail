@@ -1,4 +1,5 @@
-<sect1>Functions<label id="functions">
+<!-- vim:ft=sgml -->
+<sect>Functions<label id="functions">
 <p>
 The following is the list of available functions listed by the mapping
 in which they are available.  The default key setting is given, and an
@@ -6,7 +7,7 @@ explanation of what the function does.  The key bindings of these
 functions can be changed with the <ref name="bind" id="bind">
 command.
 
-<sect2>generic
+<sect1>generic
 <p>
 
 The <em/generic/ menu is not a real menu, but specifies common functions
@@ -47,7 +48,7 @@ tag-prefix-cond    not bound   apply next function ONLY to tagged messages
 top-page                   H   move to the top of the page
 what-key           not bound   display the keycode for a key press
 </verb>
-<sect2>index
+<sect1>index
 <p>
 <verb>
 bounce-message             b   remail a message to another user
@@ -118,7 +119,7 @@ undelete-thread           ^U   undelete all messages in thread
 untag-pattern             ^T   untag messages matching a pattern
 view-attachments           v   show MIME attachments
 </verb>
-<sect2>pager
+<sect1>pager
 <p>
 <verb>
 bottom             not bound   jump to the bottom of the message
@@ -194,14 +195,14 @@ undelete-subthread     ESC u   undelete all messages in subthread
 undelete-thread           ^U   undelete all messages in thread
 view-attachments           v   show MIME attachments
 </verb>
-<sect2>alias
+<sect1>alias
 <p>
 <verb>
 search                     /   search for a regular expression
 search-next                n   search for next match
 search-reverse         ESC /   search backwards for a regular expression
 </verb>
-<sect2>query
+<sect1>query
 <p>
 <verb>
 create-alias               a   create an alias from a message sender
@@ -213,7 +214,7 @@ search-next                n   search for next match
 search-opposite    not bound   search for next match in opposite direction
 search-reverse         ESC /   search backwards for a regular expression
 </verb>
-<sect2>attach
+<sect1>attach
 <p>
 <verb>
 bounce-message             b   remail a message to another user
@@ -235,7 +236,7 @@ view-attach              RET   view attachment using mailcap entry if necessary
 view-mailcap               m   force viewing of attachment using mailcap
 view-text                  T   view attachment as text
 </verb>
-<sect2>compose
+<sect1>compose
 <p>
 <verb>
 attach-file                a   attach a file(s) to this message
@@ -272,13 +273,13 @@ toggle-unlink              u   toggle whether to delete file after sending it
 view-attach              RET   view attachment using mailcap entry if necessary
 write-fcc		   w   write the message to a folder
 </verb>
-<sect2>postpone
+<sect1>postpone
 <p>
 <verb>
 delete-entry               d   delete the current entry
 undelete-entry             u   undelete the current entry
 </verb>
-<sect2>browser
+<sect1>browser
 <p>
 <verb>
 change-dir                 c   change directories
@@ -296,13 +297,13 @@ subscribe                  s   subscribe to current mailbox (IMAP Only)
 unsubscribe                u   unsubscribe to current mailbox (IMAP Only)
 toggle-subscribed          T   toggle view all/subscribed mailboxes (IMAP Only)
 </verb>
-<sect2>pgp
+<sect1>pgp
 <p>
 <verb>
 view-name                  %   view the key's user id
 verify-key                 c   verify a PGP public key
 </verb>
-<sect2>editor
+<sect1>editor
 <p>
 <verb>
 backspace          BackSpace   delete the char in front of the cursor
@@ -329,10 +330,10 @@ transpose-chars    not bound   transpose character under cursor with previous
 upcase-word            ESC u   uppercase all characters in current word
 </verb>
 
-<sect>Miscellany
+<chapt>Miscellany
 <p>
 
-<sect1>Acknowledgments
+<sect>Acknowledgments
 <p>
 Kari Hurtta
 <htmlurl url="mailto:kari.hurtta@fmi.fi" name="&lt;kari.hurtta@fmi.fi&gt;">
@@ -395,9 +396,9 @@ Andreas Kneib <htmlurl url="mailto:akneib@gmx.net" name="&lt;akneib@gmx.net&gt;"
 Carsten Schoelzki <htmlurl url="mailto:cjs@weisshuhn.de" name="&lt;cjs@weisshuhn.de&gt;"><newline>
 Elimar Riesebieter <htmlurl url="mailto:riesebie@lxtec.de" name="&lt;riesebie@lxtec.de&gt;">
 
-<sect1>About this document
+<sect>About this document
 <p>
 This document was written in SGML, and then rendered using the
 <htmlurl url="http://www.sgmltools.org/" name="sgml-tools"> package.
 
-</article>
+</book>

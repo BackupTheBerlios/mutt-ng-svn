@@ -765,7 +765,7 @@ static void print_confline (const char *varname, int type, const char *val)
     /* SGML based manual */
   case F_SGML:
     {
-      add_s ("\n<sect2>");
+      add_s ("\n<sect1>");
       sgml_fputs (varname);
       add_s ("<label id=\"");
       add_s (varname);

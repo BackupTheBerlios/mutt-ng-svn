@@ -1,17 +1,22 @@
+<!-- vim:ft=sgml --> 
 <!doctype linuxdoc system>
 
-<article>
+<book>
 
-<title>The Mutt-ng E-Mail Client
-<author>by Michael Elkins <htmlurl url="mailto:me@cs.hmc.edu" name="&lt;me@cs.hmc.edu&gt;"> and others.
+<title>The Mutt Next Generation E-Mail Client
+<author>by Andreas Krennmair <htmlurl url="mailto:ak@synflood.at" name="&lt;ak@synflood.at&gt;"> and others
+        originally based on <em>mutt</em> by Michael Elkins <htmlurl url="mailto:me@cs.hmc.edu" name="&lt;me@cs.hmc.edu&gt;"> and others
 <date>version @VERSION@
 <abstract>
-``All mail clients suck.  This one just sucks less.'' -me, circa 1995
+Michael Elinks on mutt, circa 1995: ``All mail clients suck. 
+This one just sucks less.'' - Sven Guckes on mutt, ca. 2003: ``But it still sucks!''
 </abstract>
 
 <toc>
 
-<sect>Introduction
+<chapt>Introduction <!--{{{--> 
+
+<sect>Overview <!--{{{--> 
 <p>
 <bf/Mutt-ng/ is a small but very powerful text-based MIME mail client.  Mutt-ng is
 highly configurable, and is well suited to the mail power user with advanced
@@ -26,13 +31,16 @@ add other new features. Features specific to Mutt-ng will be discussed in
 an extra section. Don't be confused when most of the documentation talk about
 Mutt and not Mutt-ng, Mutt-ng contains all Mutt features, plus many more.
 
+<!--}}}--> 
 
-<sect1>Mutt-ng Home Page
+<sect>Mutt-ng Home Page <!--{{{--> 
 <p>
 <htmlurl url="http://www.muttng.org/"
 name="http://www.muttng.org">
 
-<sect1>Mailing Lists
+<!--}}}--> 
+
+<sect>Mailing Lists <!--{{{--> 
 <p>
 
 <itemize>
@@ -41,37 +49,33 @@ name="mutt-ng-users@lists.berlios.de"> -- This is where the mutt-ng user support
 <item><htmlurl url="https://lists.berlios.de/mailman/listinfo/mutt-ng-devel" name="mutt-ng-devel@lists.berlios.de"> -- The development mailing list for mutt-ng
 </itemize>
 
-<sect1>Software Distribution Sites
+<!--}}}--> 
+
+<sect>Software Distribution Sites <!--{{{--> 
 <p>
 So far, there are no official releases of Mutt-ng, but you can download
 daily snapshots from <htmlurl url="http://mutt-ng.berlios.de/snapshots/" name="http://mutt-ng.berlios.de/snapshots/">
-<!-- 
-<itemize>
-<item><htmlurl url="ftp://ftp.mutt.org/mutt/"
-name="ftp://ftp.mutt.org/mutt/">
-</itemize>
-<p>
-For a list of mirror sites, please refer to <htmlurl
-url="http://www.mutt.org/download.html"
-name="http://www.mutt.org/download.html">.
--->
 
+<!--}}}--> 
 
-<sect1>IRC
+<sect>IRC <!--{{{--> 
 <p>
 Visit channel <em/#muttng/ on <htmlurl
 url="http://www.freenode.net/" name="irc.freenode.net
 (www.freenode.net)"> to chat with other people interested in Mutt-ng.
 
+<!--}}}--> 
 
-<sect1>Weblog
+<sect>Weblog <!--{{{--> 
 <p>
 If you want to read fresh news about the latest development in Mutt-ng, and get informed
 about stuff like interesting, Mutt-ng-related articles and packages for your favorite
 distribution, you can read and/or subscribe to our 
 <htmlurl url="http://mutt-ng.supersized.org/" name="Mutt-ng development weblog">.
 
-<sect1>Copyright
+<!--}}}--> 
+
+<sect>Copyright <!--{{{--> 
 <p>
 Mutt is Copyright (C) 1996-2000 Michael R. Elkins
 &lt;me@cs.hmc.edu&gt; and others
@@ -90,30 +94,262 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111, USA.
 
-<sect>Getting Started
-<p>
+<!--}}}--> 
 
-This section is intended as a brief overview of how to use Mutt-ng.  There are
-many other features which are described elsewhere in the manual.  
-<--
-There
-is even more information available in the Mutt FAQ and various web
-pages.  See the <htmlurl url="http://www.mutt.org/mutt/"
-name="Mutt Page"> for more details.
--->
+<!--}}}--> 
 
-The key bindings described in this section are the defaults as distributed.
-Your local system administrator may have altered the defaults for your site.
-You can always type ``?'' in any menu to display the current bindings.
+<chapt>Getting Started <!--{{{--> 
 
-The first thing you need to do is invoke mutt-ng simply by typing muttng
-at the command line.  There are various command-line options, see 
-either the muttng man page or the <ref id="commandline" name="reference">.
+  <sect>Basic Concepts <!--{{{--> 
 
-If you have used mutt in the past the easiest thing to have a proper
-configuration file is to source ~/.muttrc in ~/.muttngrc.
+    <sect1>Screens and Menus <!--{{{--> 
 
-<sect1>Moving Around in Menus
+      <p>mutt-ng offers different screens of which every has its special
+      purpose:
+
+      <itemize>
+
+        <item>The <em/index/ displays the contents of the currently opened
+        mailbox.
+
+        <item>The <em/pager/ is responsible for displaying messages, that
+        is, the header, the body and all attached parts.
+
+        <item>The <em/file browser/ offers operations on and displays
+        information of all folders mutt-ng should watch for mail.
+
+        <item>The <em/sidebar/ offers a permanent view of which mailboxes
+        contain how many total, new and/or flagged mails.
+
+        <item>The <em/help screen/ lists for all currently available
+        commands how to invoke them as well as a short description.
+
+        <item>The <em/compose/ menu is a comfortable interface take last
+        actions before sending mail: change subjects, attach files, remove
+        attachements, etc.
+
+        <item>The <em/attachement/ menu gives a summary and the tree
+        structure of the attachements of the current message.
+
+        <item>The <em/alias/ menu lists all or a fraction of the aliases
+        a user has defined.
+
+        <item>The <em/key/ menu used in connection with encryption lets
+        users choose the right key to encrypt with.
+
+      </itemize>
+
+      <p>When mutt-ng is started without any further options, it'll open
+      the users default mailbox and display the index.
+
+    <!--}}}--> 
+
+    <sect1>Configuration <!--{{{--> 
+
+      <p>Mutt-ng does <em/not/ feature an internal configuration
+      interface or menu due to the simple fact that this would be too
+      complex to handle (currently there are several <em/hundred/
+      variables which fine-tune the behaviour.)
+
+      <p>Mutt-ng is configured using configuration files which allow
+      users to add comments or manage them via version control systems
+      to ease maintenance.
+
+      <p>Also, mutt-ng comes with a shell script named <tt/grml-muttng/
+      kindly contributed by users which really helps and eases the
+      creation of a user's configuration file. When downloading the
+      source code via a snapshot or via subversion, it can be found in
+      the <tt/contrib/ directory.
+
+    <!--}}}--> 
+
+    <sect1>Functions <!--{{{--> 
+
+      <p>Mutt-ng offers great flexibility due to the use of functions:
+      internally, every action a user can make mutt-ng perform is named
+      ``function.'' Those functions are assigned to keys (or even key
+      sequences) and may be completely adjusted to user's needs. The
+      basic idea is that the impatient users get a very intuitive
+      interface to start off with and advanced users virtually get no
+      limits to adjustments.
+
+    <!--}}}--> 
+
+    <sect1>Interaction <!--{{{--> 
+
+      <p>Mutt-ng has two basic concepts of user interaction:
+
+        <enum>
+
+          <item>There is one dedicated line on the screen used to query
+          the user for input, issue any command, query variables and
+          display error and informational messages. As for every type of
+          user input, this requires manual action leading to the need of
+          input.
+
+          <item>The automatized interface for interaction are the so
+          called <em/hooks/. Hooks specify actions the user wants to be
+          performed at well-defined situations: what to do when entering
+          which folder, what to do when displaying or replying to what
+          kind of message, etc. These are optional, i.e. a user doesn't
+          need to specify them but can do so.
+
+        </enum>
+
+    <!--}}}--> 
+
+    <sect1>Modularization <!--{{{--> 
+
+      <p>Although mutt-ng has many functionality built-in, many
+      features can be delegated to external tools to increase
+      flexibility: users can define programs to filter a message through
+      before displaying, users can use any program they want for
+      displaying a message, message types (such as PDF or PostScript)
+      for which mutt-ng doesn't have a built-in filter can be rendered
+      by arbitrary tools and so forth. Although mutt-ng has an alias
+      mechanism built-in, it features using external tools to query for
+      nearly every type of addresses from sources like LDAP, databases
+      or just the list of locally known users.
+
+    <!--}}}--> 
+
+    <sect1>Patterns <!--{{{--> 
+
+      <p>Mutt-ng has a built-in pattern matching ``language'' which is
+      as widely used as possible to present a consistent interface to
+      users. The same ``pattern terms'' can be used for searching,
+      scoring, message selection and much more.
+
+    <!--}}}--> 
+
+  <!--}}}--> 
+
+  <sect>Screens and Menus <!--{{{--> 
+
+    <sect1>Index <!--{{{--> 
+
+     <p>The index is the screen that you usually see first when you
+     start mutt-ng. It gives an overview over your emails in the
+     currently opened mailbox. By default, this is your system mailbox.
+     The information you see in the index is a list of emails, each with
+     its number on the left, its flags (new email, important email,
+     email that has been forwarded or replied to, tagged email, ...),
+     the date when email was sent, its sender, the email size, and the
+     subject. Additionally, the index also shows thread hierarchies:
+     when you reply to an email, and the other person replies back, you
+     can see the other's person email in a "sub-tree" below.  This is
+     especially useful for personal email between a group of people or
+     when you've subscribed to mailing lists.
+
+    <!--}}}--> 
+
+    <sect1>Pager <!--{{{--> 
+
+     <p>The pager is responsible for showing the email content. On the
+     top of the pager you have an overview over the most important email
+     headers like the sender, the recipient, the subject, and much more
+     information. How much information you actually see depends on your
+     configuration, which we'll describe below.
+
+     <p>Below the headers, you see the email body which usually contains
+     the message. If the email contains any attachments, you will see
+     more information about them below the email body, or, if the
+     attachments are text files, you can view them directly in the
+     pager.
+
+     <p>To give the user a good overview, it is possible to configure
+     mutt-ng to show different things in the pager with different
+     colors. Virtually everything that can be described with a regular
+     expression can be colored, e.g. URLs, email addresses or smileys.
+
+     <!--}}}--> 
+
+    <sect1>File Browser <!--{{{--> 
+
+      <p>The file browser is the interface to the local or remote
+      file system. When selecting a mailbox to open, the browser allows
+      custom sorting of items, limiting the items shown by a regular
+      expression and a freely adjustable format of what to display in
+      which way. It also allows for easy navigation through the
+      file system when selecting file(s) to attach to a message, select
+      multiple files to attach and many more.
+
+    <!--}}}--> 
+
+    <sect1>Sidebar <!--{{{--> 
+
+      <p>The sidebar comes in handy to manage mails which are spread
+      over different folders. All folders users setup mutt-ng to watch
+      for new mail will be listed. The listing includes not only the
+      name but also the number of total messages, the number of new and
+      flagged messages. Items with new mail may be colored different
+      from those with flagged mail, items may be shortened or compress
+      if they're they to long to be printed in full form so that by
+      abbreviated names, user still now what the name stands for.
+
+    <!--}}}--> 
+
+    <sect1>Help <!--{{{--> 
+
+      <p>The help screen is meant to offer a quick help to the user. It
+      lists the current configuration of key bindings and their
+      associated commands including a short description, and currently
+      unbound functions that still need to be associated with a key
+      binding (or alternatively, they can be called via the mutt-ng
+      command prompt).
+
+    <!--}}}--> 
+
+      <sect1>Compose Menu <!--{{{--> 
+
+        <p>The compose menu features a split screen containing the
+        information which really matter before actually sending a
+        message by mail or posting an article to a newsgroup: who gets
+        the message as what (recipient, newsgroup, who gets what kind of
+        copy). Additionally, users may set security options like
+        deciding whether to sign, encrypt or sign and encrypt a message
+        with/for what keys.
+
+        <p>Also, it's used to attach messages, news articles or files to
+        a message, to re-edit any attachment including the message
+        itself.
+
+      <!--}}}--> 
+
+      <sect1>Alias Menu <!--{{{--> 
+
+        <p>The alias menu is used to help users finding the recipients
+        of messages. For users who need to contact many people, there's
+        no need to remember addresses or names completely because it
+        allows for searching, too. The alias mechanism and thus the
+        alias menu also features grouping several addresses by a shorter
+        nickname, the actual alias, so that users don't have to select
+        each single recipient manually.
+
+      <!--}}}--> 
+
+      <sect1>Attachment Menu <!--{{{--> 
+
+        <p>As will be later discussed in detail, mutt-ng features a good
+        and stable MIME implementation, that is, is greatly supports
+        sending and receiving messages of arbitrary type. The
+        attachment menu displays a message's structure in detail: what
+        content parts are attached to which parent part (which gives a
+        true tree structure), which type is of what type and what size.
+        Single parts may saved, deleted or modified to offer great and
+        easy access to message's internals.
+
+      <!--}}}--> 
+
+      <sect1>Key Menu <!--{{{--> 
+
+        <p><tt/FIXME/
+
+      <!--}}}--> 
+
+  <!--}}}--> 
+
+<sect>Moving Around in Menus <!--{{{--> 
 <p>
 
 Information is presented in menus, very similar to ELM.  Here is a table
@@ -130,7 +366,9 @@ q               quit            exit the current menu
 ?               help            list all key bindings for the current menu
 </verb></tscreen>
 
-<sect1>Editing Input Fields<label id="editing">
+<!--}}}--> 
+
+<sect>Editing Input Fields<label id="editing"> <!--{{{--> 
 <p>
 Mutt-ng has a builtin line editor which is used as the primary way to input
 textual data such as email addresses or filenames.  The keys used to move
@@ -167,7 +405,9 @@ front of the cursor rather than under, you could use
 
 <tt/bind editor &lt;delete&gt; backspace/
 
-<sect1>Reading Mail - The Index and Pager
+<!--}}}--> 
+
+<sect>Reading Mail - The Index and Pager <!--{{{--> 
 <p>
 
 Similar to many other mail clients, there are two modes in which mail is
@@ -178,7 +418,7 @@ message contents.  This is called the ``pager.''
 The next few sections describe the functions provided in each of these
 modes.
 
-<sect2>The Message Index
+<sect1>The Message Index
 <p>
 
 <tscreen><verb>
@@ -213,7 +453,7 @@ ESC /           search-reverse
 ^T              untag messages matching a pattern
 </verb></tscreen>
 
-<sect3>Status Flags
+<sect2>Status Flags
 <p>
 
 In addition to who sent the message and the subject, a short summary of
@@ -255,7 +495,7 @@ to.  They can be customized with the
 <tag/L/ message is sent to a subscribed mailing list
 </descrip>
 
-<sect2>The Pager
+<sect1>The Pager
 <p>
 
 By default, Mutt-ng uses its builtin pager to display the body of messages.
@@ -322,7 +562,7 @@ script for highlighting purposes.  <bf/Note:/ If you change the colors for your
 display, for example by changing the color associated with color2 for
 your xterm, then that color will be used instead of green.
 
-<sect2>Threaded Mode<label id="threads">
+<sect1>Threaded Mode<label id="threads">
 <p>
 When the mailbox is <ref id="sort" name="sorted"> by <em/threads/, there are
 a few additional functions available in the <em/index/ and <em/pager/ modes.
@@ -354,7 +594,7 @@ display the number of hidden messages if the thread is collapsed.
 
 See also: <ref id="strict_threads" name="&dollar;strict&lowbar;threads">.
 
-<sect2>Miscellaneous Functions
+<sect1>Miscellaneous Functions
 <p><bf/create-alias/<label id="create-alias"> (default: a)<newline>
 
 Creates a new alias based upon the current message (or prompts for a
@@ -477,7 +717,9 @@ quoted text in the way.
 This function will go to the next line of non-quoted text which come
 after a line of quoted text in the internal pager.
 
-<sect1>Sending Mail
+<!--}}}--> 
+
+<sect>Sending Mail <!--{{{--> 
 <p>
 
 The following bindings are available in the <em/index/ for sending
@@ -499,30 +741,70 @@ modify the message you are forwarding.  These items are discussed
 in greater detail in the next chapter <ref id="forwarding_mail"
 name="``Forwarding and Bouncing Mail''">.
 
-Mutt-ng will then enter the <em/compose/ menu and prompt you for the
-recipients to place on the ``To:'' header field.  Next, it will ask
-you for the ``Subject:'' field for the message, providing a default if
-you are replying to or forwarding a message.  See also <ref id="askcc"
-name="&dollar;askcc">, <ref id="askbcc" name="&dollar;askbcc">, <ref
-id="autoedit" name="&dollar;autoedit">, <ref id="bounce"
-name="&dollar;bounce">, and <ref id="fast_reply"
-name="&dollar;fast&lowbar;reply"> for changing how Mutt-ng asks these
-questions.
+<sect1>Composing new messages <!--{{{--> 
 
-Mutt-ng will then automatically start your <ref id="editor"
-name="&dollar;editor"> on the message body.  If the <ref id="edit_headers"
-name="&dollar;edit&lowbar;headers"> variable is set, the headers will be at
-the top of the message in your editor.  Any messages you are replying
-to will be added in sort order to the message, with appropriate <ref
-id="attribution" name="&dollar;attribution">, <ref id="indent_string"
-name="&dollar;indent&lowbar;string"> and <ref id="post_indent_string"
-name="&dollar;post&lowbar;indent&lowbar;string">.  When forwarding a
-message, if the <ref id="mime_forward" name="&dollar;mime&lowbar;forward">
-variable is unset, a copy of the forwarded message will be included.  If
-you have specified a <ref id="signature" name="&dollar;signature">, it
-will be appended to the message.
+<p>When you want to send an email using mutt-ng, simply press <tt/m/ on
+your keyboard. Then, mutt-ng asks for the recipient via a prompt in
+the last line:
 
-Once you have finished editing the body of your mail message, you are
+<verb>
+To: 
+</verb>
+
+<p>After you've finished entering the recipient(s), press return. If you
+want to send an email to more than one recipient, separate the email
+addresses using the comma "<tt/,/". Mutt-ng then asks you for the email
+subject. Again, press return after you've entered it. After that, mutt-ng
+got the most important information from you, and starts up an editor
+where you can then enter your email.
+
+<p>The editor that is called is selected in the following way: you
+can e.g. set it in the mutt-ng configuration:
+
+<verb>
+set editor = "vim +/^$/ -c ':set tw=72'"
+set editor = "nano"
+set editor = "emacs"
+</verb>
+
+<p>If you don't set your preferred editor in your configuration, mutt-ng
+first looks whether the environment variable <tt/$VISUAL/ is set, and if
+so, it takes its value as editor command. Otherwise, it has a look
+at <tt/$EDITOR/ and takes its value if it is set. If no editor command
+can be found, mutt-ng simply assumes <tt/vi/ to be the default editor,
+since it's the most widespread editor in the Unix world and it's pretty
+safe to assume that it is installed and available.
+
+<p>When you've finished entering your message, save it and quit your 
+editor. Mutt-ng will then present you with a summary screen, the compose menu. 
+On the top, you see a summary of the most important available key commands.
+Below that, you see the sender, the recipient(s), Cc and/or Bcc 
+recipient(s), the subject, the reply-to address, and optionally
+information where the sent email will be stored and whether it should
+be digitally signed and/or encrypted.
+
+<p>Below that, you see a list of "attachments". The mail you've just
+entered before is also an attachment, but due to its special type
+(it's plain text), it will be displayed as the normal message on
+the receiver's side.
+
+<p>At this point, you can add more attachments, pressing <tt/a/, you
+can edit the recipient addresses, pressing <tt/t/ for the "To:" field,
+<tt/c/ for the "Cc:" field, and <tt/b/ for the "Bcc: field. You can
+also edit the subject the subject by simply pressing <tt/s/ or the
+email message that you've entered before by pressing <tt/e/. You will
+then again return to the editor. You can even edit the sender, by pressing
+<tt/&lt;esc&gt;f/, but this shall only be used with caution.
+
+<p>Alternatively, you can configure mutt-ng in a way that most of the
+above settings can be edited using the editor. Therefore, you only
+need to add the following to your configuration:
+
+<verb>
+set edit_headers
+</verb>
+
+<p>Once you have finished editing the body of your mail message, you are
 returned to the <em/compose/ menu.  The following options are available:
 
 <tscreen><verb>
@@ -556,7 +838,105 @@ not permitted when you are in that folder. The %r in <ref
 id="status_format" name="&dollar;status&lowbar;format"> will change to
 a 'A' to indicate that you are in attach-message mode.
 
-<sect2>Editing the message header
+<!--}}}--> 
+
+<sect1>Replying <!--{{{--> 
+
+    <sect2>Simple Replies  <!--{{{--> 
+
+    <p>When you want to reply to an email message, select it in the index
+    menu and then press <tt/r/. Mutt-ng's behaviour is then similar to the 
+    behaviour when you compose a message: first, you will be asked for
+    the recipient, then for the subject, and then, mutt-ng will start
+    the editor with the quote attribution and the quoted message. This
+    can e.g. look like the example below.
+
+    <verb>
+On Mon, Mar 07, 2005 at 05:02:12PM +0100, Michael Svensson wrote:
+&gt; Bill, can you please send last month's progress report to Mr. 
+&gt; Morgan? We also urgently need the cost estimation for the new 
+&gt; production server that we want to set up before our customer's 
+&gt; project will go live.
+    </verb>
+
+    <p>You can start editing the email message. It is strongly
+    recommended to put your answer <em/below/ the quoted text and to
+    only quote what is really necessary and that you refer to. Putting
+    your answer on top of the quoted message, is, although very
+    widespread, very often not considered to be a polite way to answer
+    emails.
+
+    <p>The quote attribution is configurable, by default it is set to
+    <verb>
+set attribution = "On %d, %n wrote:"
+    </verb>
+
+    <p>It can also be set to something more compact, e.g.
+    <verb>
+set attribution = "attribution="* %n &lt;%a&gt; [%(%y-%m-%d %H:%M)]:"
+    </verb>
+
+    <p>The example above results in the following attribution:
+    <verb>
+* Michael Svensson &lt;svensson@foobar.com&gt; [05-03-06 17:02]:
+&gt; Bill, can you please send last month's progress report to Mr. 
+&gt; Morgan? We also urgently need the cost estimation for the new 
+&gt; production server that we want to set up before our customer's 
+&gt; project will go live.
+    </verb>
+
+    <p>Generally, try to keep your attribution short yet
+    information-rich. It is <em/not/ the right place for witty quotes,
+    long "attribution" novels or anything like that: the right place
+    for such things is - if at all - the email signature at the very
+    bottom of the message.
+
+    <p>When you're done with writing your message, save and quit the
+    editor. As before, you will return to the compose menu, which is
+    used in the same way as before.
+
+    <!--}}}--> 
+
+    <sect2>Group Replies <!--{{{--> 
+
+    <p>In the situation where a group of people uses email as a
+    discussion, most of the emails will have one or more recipients,
+    and probably several "Cc:" recipients. The group reply functionality
+    ensures that when you press <tt/g/ instead of <tt/r/ to do a reply,
+    each and every recipient that is contained in the original message
+    will receive a copy of the message, either as normal recipient or
+    as "Cc:" recipient.
+
+    <!--}}}--> 
+
+    <sect2>List Replies <!--{{{--> 
+
+    <p>When you use mailing lists, it's generally better to send your
+    reply to a message only to the list instead of the list and the
+    original author. To make this easy to use, mutt-ng features list
+    replies.
+
+    <p>To do a list reply, simply press <tt/L/. If the email contains
+    a <tt/Mail-Followup-To:/ header, its value will be used as reply
+    address. Otherwise, mutt-ng searches through all mail addresses in
+    the original message and tries to match them a list of regular
+    expressions which can be specified using the <tt/lists/ command. 
+    If any of the regular expression matches, a mailing
+    list address has been found, and it will be used as reply address.
+
+    <verb>
+lists linuxevent@luga\.at vuln-dev@ mutt-ng-users@
+    </verb>
+
+    <p>Nowadays, most mailing list software like GNU Mailman adds a
+    <tt/Mail-Followup-To:/ header to their emails anyway, so setting
+    <tt/lists/ is hardly ever necessary in practice.
+
+    <!--}}}--> 
+
+<!--}}}--> 
+
+<sect1>Editing the message header <!--{{{--> 
 <p>
 When editing the header of your outgoing message, there are a couple of
 special features available.
@@ -577,7 +957,9 @@ allows you to create a new message thread.
 
 Also see <ref id="edit_headers" name="edit&lowbar;headers">.
 
-<sect2>Using Mutt-ng with PGP
+<!--}}}--> 
+
+<sect1>Using Mutt-ng with PGP <!--{{{--> 
 
 <p>
 If you want to use PGP, you can specify 
@@ -638,7 +1020,9 @@ character (<bf/-/) marks an untrusted association, a space character
 means a partially trusted association, and a plus character (<bf/+/) 
 indicates complete validity.
 
-<sect2>Sending anonymous messages via mixmaster.
+<!--}}}--> 
+
+<sect1>Sending anonymous messages via mixmaster <!--{{{--> 
 
 <p>
 You may also have configured mutt to co-operate with Mixmaster, an
@@ -677,42 +1061,59 @@ element of a chain, but will only forward messages to other
 mixmaster remailers.  For details on the other capabilities, please
 have a look at the mixmaster documentation.
 
-<sect1>Forwarding and Bouncing Mail<label id="forwarding_mail">
-<p>
+<!--}}}--> 
 
-Bouncing and forwarding let you send an existing message to recipients
-that you specify.  Bouncing a message uses the <ref id="sendmail"
-name="sendmail"> command to send a copy to alternative addresses as if
-they were the message's original recipients.  Forwarding a message, on
-the other hand, allows you to modify the message before it is resent
-(for example, by adding your own comments).
+<!--}}}--> 
 
-The following keys are bound by default:
+<sect>Forwarding and Bouncing Mail<label id="forwarding_mail"> <!--{{{--> 
 
-<tscreen><verb>
-f       forward         forward message
-b       bounce          bounce (remail) message
-</verb></tscreen>
+<p>Often, it is necessary to forward mails to other people.
+Therefore, mutt-ng supports forwarding messages in two different
+ways.
 
-Forwarding can be done by including the original message in the new
-message's body (surrounded by indicating lines) or including it as a MIME
-attachment, depending on the value of the <ref id="mime_forward"
-name="&dollar;mime&lowbar;forward"> variable.  Decoding of attachments,
-like in the pager, can be controlled by the <ref id="forward_decode"
-name="&dollar;forward&lowbar;decode"> and <ref id="mime_forward_decode"
-name="&dollar;mime&lowbar;forward&lowbar;decode"> variables,
-respectively.  The desired forwarding format may depend on the content,
-therefore <em/&dollar;mime&lowbar;forward/ is a quadoption which, for
-example, can be set to ``ask-no''.
+<p>The first one is regular forwarding, as you probably know it from
+other mail clients. You simply press <tt/f/, enter the recipient
+email address, the subject of the forwarded email, and then you can
+edit the message to be forwarded in the editor. The forwarded
+message is separated from the rest of the message via the two
+following markers:
 
-The inclusion of headers is controlled by the current setting of the
-<ref id="weed" name="&dollar;weed"> variable, unless <ref
-id="mime_forward" name="mime&lowbar;forward"> is set.
+<verb>
+----- Forwarded message from Lucas User <luser@example.com> -----
 
-Editing the message to forward follows the same procedure as sending or
-replying to a message does.
+From: Lucas User <luser@example.com>
+Date: Thu, 02 Dec 2004 03:08:34 +0100
+To: Michael Random <mrandom@example.com>
+Subject: Re: blackmail
 
-<sect1>Postponing Mail<label id="postponing_mail">
+Pay me EUR 50,000.- cash or your favorite stuffed animal will die
+a horrible death.
+
+
+----- End forwarded message -----</verb>
+
+<p>When you're done with editing the mail, save and quit the editor,
+and you will return to the compose menu, the same menu you also
+encounter when composing or replying to mails.
+
+<p>The second mode of forwarding emails with mutt-ng is the
+so-called <em/bouncing/: when you bounce an email to another
+address, it will be sent in practically the same format you send it
+(except for headers that are created during transporting the
+message). To bounce a message, press <tt/b/ and enter the recipient
+email address. By default, you are then asked whether you really
+want to bounce the message to the specified recipient. If you answer
+with yes, the message will then be bounced.
+
+<p>To the recipient, the bounced email will look as if he got it
+like a regular email where he was <tt/Bcc:/ recipient. The only
+possibility to find out whether it was a bounced email is to
+carefully study the email headers and to find out which host really
+sent the email.
+
+<!--}}}--> 
+
+<sect>Postponing Mail<label id="postponing_mail"> <!--{{{--> 
 <p>
 
 At times it is desirable to delay sending a message that you have
@@ -736,22 +1137,14 @@ replied to for the status of the message to be updated.
 
 See also the <ref id="postpone" name="&dollar;postpone"> quad-option.
 
-<sect1>Reading news via NNTP<label id="reading_news">
-<p>
+<!--}}}--> 
 
-If compiled with ``--enable-nntp'' option, Mutt-ng can read news from 
-newsserver via NNTP.  You can open a newsgroup with function 
-``change-newsgroup'' (default: i).  Default newsserver can be obtained 
-from <em/NNTPSERVER/ environment variable.  Like other news readers, 
-info about subscribed newsgroups is saved in file by <ref 
-id="nntp_newsrc" name="&dollar;nntp&lowbar;newsrc"> variable. Article 
-headers are cached and can be loaded from file when
-newsgroup entered instead loading from newsserver.
+<!--}}}--> 
 
-<sect>Configuration
-<p>
+<chapt>Configuration <!--{{{--> 
 
-While the default configuration (or ``preferences'') make Mutt-ng usable right out
+<sect>Locations of Configuration Files <!--{{{--> 
+<p>While the default configuration (or ``preferences'') make Mutt-ng usable right out
 of the box, it is often desirable to tailor Mutt-ng to suit your own tastes. When
 Mutt-ng is first invoked, it will attempt to read the ``system'' configuration
 file (defaults set by your local system administrator), unless the ``-n'' <ref
@@ -766,19 +1159,9 @@ mutt try to load a file named <tt>.muttng/muttngrc</tt>.
 <tt>.muttrc</tt> (or <tt>.muttngrc</tt> for Mutt-ng) is the file where you will
 usually place your <ref id="commands" name="commands"> to configure Mutt-ng.
 
-In addition, mutt supports version specific configuration files that are
-parsed instead of the default files as explained above.  For instance, if
-your system has a <tt/Muttrc-0.88/ file in the system configuration
-directory, and you are running version 0.88 of mutt, this file will be
-sourced instead of the <tt/Muttngrc/ file.  The same is true of the user
-configuration file, if you have a file <tt/.muttrc-0.88.6/ in your home
-directory, when you run mutt version 0.88.6, it will source this file
-instead of the default <tt/.muttrc/ file.  The version number is the
-same which is visible using the ``-v'' <ref id="commandline"
-name="command line"> switch or using the <tt/show-version/ key (default:
-V) from the index menu.
+<!--}}}--> 
 
-<sect1>Syntax of Initialization Files<label id="muttrc-syntax">
+<sect>Syntax of Initialization Files<label id="muttrc-syntax"> <!--{{{--> 
 <p>
 
 An initialization file consists of a series of <ref id="commands"
@@ -871,7 +1254,9 @@ set record=+sent_on_$HOSTNAME
 The commands understood by mutt are explained in the next paragraphs.
 For a complete list, see the <ref id="commands" name="command reference">.
 
-<sect1>Defining/Using aliases<label id="alias">
+<!--}}}--> 
+
+<sect>Defining/Using aliases<label id="alias"> <!--{{{--> 
 <p>
 
 Usage: <tt/alias/ <em/key/ <em/address/ &lsqb; , <em/address/, ... &rsqb;
@@ -930,7 +1315,9 @@ In the alias menu, you can select as many aliases as you want with the
 <em/select-entry/ key (default: RET), and use the <em/exit/ key
 (default: q) to return to the address prompt.
 
-<sect1>Changing the default key bindings<label id="bind">
+<!--}}}--> 
+
+<sect>Changing the default key bindings<label id="bind"> <!--{{{--> 
 <p>
 Usage: <tt/bind/ <em/map/ <em/key/ <em/function/
 
@@ -1020,7 +1407,9 @@ For a complete list of functions, see the <ref id="functions"
 name="reference">.  The special function <tt/noop/ unbinds the specified key
 sequence.
 
-<sect1>Defining aliases for character sets <label id="charset-hook">
+<!--}}}--> 
+
+<sect>Defining aliases for character sets <label id="charset-hook"> <!--{{{--> 
 <p>
 Usage: <tt/charset-hook/ <em/alias/ <em/charset/<newline>
 Usage: <tt/iconv-hook/ <em/charset/ <em/local-charset/
@@ -1034,8 +1423,9 @@ character set.  This is helpful when your systems character
 conversion library insists on using strange, system-specific names
 for character sets.
 
+<!--}}}--> 
 
-<sect1>Setting variables based upon mailbox<label id="folder-hook">
+<sect>Setting variables based upon mailbox<label id="folder-hook"> <!--{{{--> 
 <p>
 Usage: <tt/folder-hook/ &lsqb;!&rsqb;<em/regexp/ <em/command/
 
@@ -1068,7 +1458,9 @@ pattern ``.'':
 folder-hook . set sort=date-sent
 </verb></tscreen>
 
-<sect1>Keyboard macros<label id="macro">
+<!--}}}--> 
+
+<sect>Keyboard macros<label id="macro"> <!--{{{--> 
 <p>
 Usage: <tt/macro/ <em/menu/ <em/key/ <em/sequence/ &lsqb; <em/description/ &rsqb;
 
@@ -1105,7 +1497,9 @@ which is shown in the help screens.
 <bf/Note:/ Macro definitions (if any) listed in the help screen(s), are
 silently truncated at the screen width, and are not wrapped.   
 
-<sect1>Using color and mono video attributes<label id="color">
+<!--}}}--> 
+
+<sect>Using color and mono video attributes<label id="color"> <!--{{{--> 
 <p>
 Usage: <tt/color/ <em/object/ <em/foreground/ <em/background/ &lsqb; <em/regexp/ &rsqb;<newline>
 Usage: <tt/color/ index <em/foreground/ <em/background/ <em/pattern/<newline>
@@ -1202,7 +1596,9 @@ where <em/attribute/ is one of the following:
 <item>standout
 </itemize>
 
-<sect1>Ignoring (weeding) unwanted message headers<label id="ignore">
+<!--}}}--> 
+
+<sect>Ignoring (weeding) unwanted message headers<label id="ignore"> <!--{{{--> 
 <p>
 Usage: <tt/&lsqb;un&rsqb;ignore/ <em/pattern/ &lsqb; <em/pattern/ ... &rsqb;
 
@@ -1229,7 +1625,9 @@ unignore organization organisation x-mailer: x-newsreader: x-mailing-list:
 unignore posted-to:
 </verb></tscreen>
 
-<sect1>Alternative addresses<label id="alternates">
+<!--}}}--> 
+
+<sect>Alternative addresses<label id="alternates"> <!--{{{--> 
 <p>
 Usage: <tt/&lsqb;un&rsqb;alternates/ <em/regexp/ &lsqb; <em/regexp/ ... &rsqb;<newline>
 
@@ -1261,7 +1659,90 @@ an entry on the <tt/unalternates/ list, that <tt/unalternates/
 entry will be removed. If the <em/regexp/ for <tt/unalternates/
 is ``*'', <em/all entries/ on <tt/alternates/ will be removed.
 
-<sect1>Mailing lists<label id="lists">
+<!--}}}--> 
+
+<sect>Format = Flowed <!--{{{--> 
+
+<p>Mutt-ng contains support for so-called <tt/format=flowed/ messages.
+In the beginning of email, each message had a fixed line width, and
+it was enough for displaying them on fixed-size terminals. But times
+changed, and nowadays hardly anybody still uses fixed-size terminals:
+more people nowaydays use graphical user interfaces, with dynamically
+resizable windows. This led to the demand of a new email format that
+makes it possible for the email client to make the email look nice
+in a resizable window without breaking quoting levels and creating
+an incompatible email format that can also be displayed nicely on
+old fixed-size terminals.
+
+<p>For introductory information on <tt/format=flowed/ messages, see
+<htmlurl url="http://www.joeclark.org/ffaq.html"
+name="&lt;http://www.joeclark.org/ffaq.html&gt;">.
+
+<p>When you receive emails that are marked as <tt/format=flowed/
+messages, and is formatted correctly, mutt-ng will try to reformat
+the message to optimally fit on your terminal. If you want a fixed
+margin on the right side of your terminal, you can set the
+following:
+
+<verb>
+set wrapmargin = 10
+</verb>
+
+<p>The code above makes the line break 10 columns before the right
+side of the terminal.
+
+<p>If your terminal is so wide that the lines are embarrassingly long,
+you can also set a maximum line length:
+
+<verb>
+set max_line_length = 120
+</verb>
+
+<p>The example above will give you lines not longer than 120
+characters.
+
+<p>When you view at <tt/format=flowed/ messages, you will often see
+the quoting hierarchy like in the following example:
+
+<verb>
+&gt;Bill, can you please send last month's progress report to Mr. 
+&gt;Morgan? We also urgently need the cost estimation for the new 
+&gt;production server that we want to set up before our customer's 
+&gt;project will go live.
+</verb>
+
+<p>This obviously doesn't look very nice, and it makes it very
+hard to differentiate between text and quoting character. The
+solution is to configure mutt-ng to "stuff" the quoting:
+
+<verb>
+set stuff_quoted
+</verb>
+
+<p>This will lead to a nicer result that is easier to read:
+
+<verb>
+&gt; Bill, can you please send last month's progress report to Mr. 
+&gt; Morgan? We also urgently need the cost estimation for the new 
+&gt; production server that we want to set up before our customer's 
+&gt; project will go live.
+</verb>
+
+<p>If you want mutt-ng to send emails with <tt/format=flowed/ set, you
+need to explicitly set it:
+
+<verb>
+set text_flowed
+</verb>
+
+<p>Additionally, you have to use an editor which supports writing
+<tt/format=flowed/-conforming emails. For vim, this is done by
+adding <tt/w/ to the formatoptions (see <tt/:h formatoptions/ and
+<tt/:h fo-table/) when writing emails.
+
+<!--}}}--> 
+
+<sect>Mailing lists<label id="lists"> <!--{{{--> 
 <p>
 Usage: <tt/&lsqb;un&rsqb;lists/ <em/regexp/ &lsqb; <em/regexp/ ... &rsqb;<newline>
 Usage: <tt/&lsqb;un&rsqb;subscribe/ <em/regexp/ &lsqb; <em/regexp/ ... &rsqb;
@@ -1309,7 +1790,9 @@ tokens.
 To remove a mailing list from the list of subscribed mailing lists,
 but keep it on the list of known mailing lists, use ``unsubscribe''.
 
-<sect1>Using Multiple spool mailboxes<label id="mbox-hook">
+<!--}}}--> 
+
+<sect>Using Multiple spool mailboxes<label id="mbox-hook"> <!--{{{--> 
 <p>
 Usage: <tt/mbox-hook/ &lsqb;!&rsqb;<em/pattern/ <em/mailbox/
 
@@ -1323,7 +1806,9 @@ Unlike some of the other <em/hook/ commands, only the <em/first/ matching
 pattern is used (it is not possible to save read mail in more than a single
 mailbox).
 
-<sect1>Defining mailboxes which receive mail<label id="mailboxes">
+<!--}}}--> 
+
+<sect>Defining mailboxes which receive mail<label id="mailboxes"> <!--{{{--> 
 <p>
 Usage: <tt/&lsqb;un&rsqb;mailboxes/ &lsqb;!&rsqb;<em/filename/ &lsqb; <em/filename/ ... &rsqb;
 
@@ -1359,7 +1844,9 @@ definition that affect these characters (like <ref id="folder"
 name="&dollar;folder"> and <ref id="spoolfile" name="&dollar;spoolfile">)
 should be executed before the <tt/mailboxes/ command.
 
-<sect1>User defined headers<label id="my_hdr">
+<!--}}}--> 
+
+<sect>User defined headers<label id="my_hdr"> <!--{{{--> 
 <p>
 Usage:<newline>
 <tt/my_hdr/ <em/string/<newline>
@@ -1395,7 +1882,9 @@ fields, or the fields to remove.  For example, to remove all ``To'' and
 unmy_hdr to cc
 </quote>
 
-<sect1>Defining the order of headers when viewing messages<label id="hdr_order">
+<!--}}}--> 
+
+<sect>Defining the order of headers when viewing messages<label id="hdr_order"> <!--{{{--> 
 <p>
 Usage: <tt/hdr&lowbar;order/ <em/header1/ <em/header2/ <em/header3/
 
@@ -1410,7 +1899,9 @@ file.
 hdr&lowbar;order From Date: From: To: Cc: Subject:
 </verb></tscreen>
 
-<sect1>Specify default save filename<label id="save-hook">
+<!--}}}--> 
+
+<sect>Specify default save filename<label id="save-hook"> <!--{{{--> 
 <p>
 Usage: <tt/save-hook/ &lsqb;!&rsqb;<em/pattern/ <em/filename/
 
@@ -1430,7 +1921,9 @@ save-hook aol\\.com$ +spam
 
 Also see the <ref id="fcc-save-hook" name="fcc-save-hook"> command.
 
-<sect1>Specify default Fcc: mailbox when composing<label id="fcc-hook">
+<!--}}}--> 
+
+<sect>Specify default Fcc: mailbox when composing<label id="fcc-hook"> <!--{{{--> 
 <p>
 Usage: <tt/fcc-hook/ &lsqb;!&rsqb;<em/pattern/ <em/mailbox/
 
@@ -1448,15 +1941,18 @@ The above will save a copy of all messages going to the aol.com domain to
 the `+spammers' mailbox by default.  Also see the <ref id="fcc-save-hook" 
 name="fcc-save-hook"> command.
 
-<sect1>Specify default save filename and default Fcc: mailbox at once<label
-id="fcc-save-hook">
+<!--}}}--> 
+
+<sect>Specify default save filename and default Fcc: mailbox at once<label id="fcc-save-hook"> <!--{{{--> 
 <p>
 Usage: <tt/fcc-save-hook/ &lsqb;!&rsqb;<em/pattern/ <em/mailbox/
 
 This command is a shortcut, equivalent to doing both a <ref id="fcc-hook" name="fcc-hook">
 and a <ref id="save-hook" name="save-hook"> with its arguments.
 
-<sect1>Change settings based upon message recipients<label id="send-hook"><label id="reply-hook"><label id="send2-hook">
+<!--}}}--> 
+
+<sect>Change settings based upon message recipients<label id="send-hook"><label id="reply-hook"><label id="send2-hook"> <!--{{{--> 
 <p>
 Usage: <tt/reply-hook/ &lsqb;!&rsqb;<em/pattern/ <em/command/<newline>
 Usage: <tt/send-hook/ &lsqb;!&rsqb;<em/pattern/ <em/command/<newline>
@@ -1501,7 +1997,9 @@ my_hdr commands which modify recipient headers, or the message's
 subject, don't have any effect on the current message when executed
 from a send-hook.
 
-<sect1>Change settings before formatting a message<label id="message-hook">
+<!--}}}--> 
+
+<sect>Change settings before formatting a message<label id="message-hook"> <!--{{{--> 
 <p>
 Usage: <tt/message-hook/ &lsqb;!&rsqb;<em/pattern/ <em/command/
 
@@ -1520,7 +2018,9 @@ message-hook ~A 'set pager=builtin'
 message-hook '~f freshmeat-news' 'set pager="less \"+/^  subject: .*\""'
 </verb></tscreen>
 
-<sect1>Choosing the cryptographic key of the recipient<label id="crypt-hook">
+<!--}}}--> 
+
+<sect>Choosing the cryptographic key of the recipient<label id="crypt-hook"> <!--{{{--> 
 <p>
 Usage: <tt/crypt-hook/ <em/pattern/ <em/keyid/
 
@@ -1536,7 +2036,9 @@ The meaning of "key id" is to be taken broadly in this context:  You
 can either put a numerical key ID here, an e-mail address, or even
 just a real name.
 
-<sect1>Adding key sequences to the keyboard buffer<label id="push">
+<!--}}}--> 
+
+<sect>Adding key sequences to the keyboard buffer<label id="push"> <!--{{{--> 
 <p>
 Usage: <tt/push/ <em/string/
 
@@ -1546,7 +2048,9 @@ string in the <ref id="macro" name="macro"> command. You may use it to
 automatically run a sequence of commands at startup, or when entering
 certain folders.
 
-<sect1>Executing functions<label id="exec">
+<!--}}}--> 
+
+<sect>Executing functions<label id="exec"> <!--{{{--> 
 <p>
 Usage: <tt/exec/ <em/function/ &lsqb; <em/function/ ... &rsqb;
 
@@ -1554,27 +2058,90 @@ This command can be used to execute any function. Functions are
 listed in the <ref id="functions" name="function reference">.
 ``exec function'' is equivalent to ``push &lt;function&gt;''.
 
-<sect1>Message Scoring<label id="score-command">
+<!--}}}--> 
+
+<sect>Message Scoring<label id="score-command"> <!--{{{--> 
+
 <p>
 Usage: <tt/score/ <em/pattern/ <em/value/<newline>
 Usage: <tt/unscore/ <em/pattern/ &lsqb; <em/pattern/ ... &rsqb;
 
-The <tt/score/ commands adds <em/value/ to a message's score if <em/pattern/
-matches it.  <em/pattern/ is a string in the format described in the <ref
-id="patterns" name="patterns"> section (note: For efficiency reasons, patterns
-which scan information not available in the index, such as <tt>&tilde;b</tt>,
-<tt>&tilde;B</tt> or <tt>&tilde;h</tt>, may not be used).  <em/value/ is a
-positive or negative integer.  A message's final score is the sum total of all
-matching <tt/score/ entries.  However, you may optionally prefix <em/value/ with
-an equal sign (=) to cause evaluation to stop at a particular entry if there is
-a match.  Negative final scores are rounded up to 0.
+<p>
+In situations where you have to cope with a lot of emails, e.g.
+when you read many different mailing lists, and take part in
+discussions, it is always useful to have the important messages
+marked and the annoying messages or the ones that you aren't
+interested in deleted. For this purpose, mutt-ng features a
+mechanism called ``scoring''.
 
-The <tt/unscore/ command removes score entries from the list.  You <bf/must/
-specify the same pattern specified in the <tt/score/ command for it to be
-removed.  The pattern ``*'' is a special token which means to clear the list
-of all score entries.
+<p>
+When you use scoring, every message has a base score of 0. You
+can then use the <tt/score/ command to define patterns and a
+positive or negative value associated with it. When a pattern
+matches a message, the message's score will be raised or lowered by
+the amount of the value associated with the pattern.
 
-<sect1>Spam detection<label id="spam">
+<verb>
+score "~f nion@muttng\.org" 50
+score "~f @sco\.com" -100</verb>
+
+<p>If the pattern matches, it is also possible to set the score
+value of the current message to a certain value and then stop
+evaluation:
+
+<verb>
+score "~f santaclaus@northpole\.int" =666</verb>
+
+<p>What is important to note is that negative score values will be
+rounded up to 0.
+
+<p>To make scoring actually useful, the score must be applied in
+some way.  That's what the <em/score thresholds/ are for. Currently,
+there are three score thresholds:
+
+<itemize>
+
+  <item>flag threshold: when a message has a score value equal or higher
+  than the flag threshold, it will be flagged.
+
+  <item>read threshold: when a message has a score value equal or lower
+  than the read threshold, it will be marked as read.
+
+  <item>delete threshold: when a message has a score value equal or
+  lower than the delete threshold, it will be marked as deleted.
+
+</itemize>
+
+<p>These three thresholds can be set via the variables <ref
+id="score_threshold_flag"
+name="&dollar;score&lowbar;threshold&lowbar;flag">, <ref
+id="score_threshold_read"
+name="&dollar;score&lowbar;threshold&lowbar;read">, <ref
+id="score_threshold_delete"
+name="&dollar;score&lowbar;threshold&lowbar;delete"> and.  By
+default, <ref id="score_threshold_read"
+name="&dollar;score&lowbar;threshold&lowbar;read"> and <ref
+id="score_threshold_delete"
+name="&dollar;score&lowbar;threshold&lowbar;delete"> are set to
+<tt/-1/, which means that in the default threshold configuration no
+message will ever get marked as read or deleted.
+
+<p>Scoring gets especially interesting when combined with the <tt/color/ command
+and the <tt>&tilde;n</tt> pattern:
+
+<verb>
+color   black   yellow  "~n 10-"
+color   red     yellow  "~n 100-"</verb>
+
+<p>The rules above mark all messages with a score between 10 and 99
+with black and yellow, and messages with a score greater or equal
+100 with red and yellow. This might be unusual to you if you're used
+to e.g. slrn's scoring mechanism, but it is more flexible, as it
+visually marks different scores.
+
+<!--}}}--> 
+
+<sect>Spam detection<label id="spam"> <!--{{{--> 
 <p>
 Usage: <tt/spam/ <em/pattern/ <em/format/<newline>
 Usage: <tt/nospam/ <em/pattern/
@@ -1673,8 +2240,9 @@ you can use a <tt/spam/ command like this:
 spam "^From: .*MAILER-DAEMON"       "999"
 </verb></tscreen>
 
+<!--}}}--> 
 
-<sect1>Setting variables<label id="set">
+<sect>Setting variables<label id="set"> <!--{{{--> 
 <p>
 Usage: <tt/set/ &lsqb;no|inv&rsqb;<em/variable/&lsqb;=<em/value/&rsqb; &lsqb; <em/variable/ ... &rsqb;<newline>
 Usage: <tt/toggle/ <em/variable/ &lsqb;<em/variable/ ... &rsqb;<newline>
@@ -1731,7 +2299,9 @@ behavior as the reset command.
 With the <tt/reset/ command there exists the special variable ``all'',
 which allows you to reset all variables to their system defaults.
 
-<sect1>Reading initialization commands from another file<label id="source">
+<!--}}}--> 
+
+<sect>Reading initialization commands from another file<label id="source"> <!--{{{--> 
 <p>
 Usage: <tt/source/ <em/filename/ &lsqb; <em/filename/ ... &rsqb;
 
@@ -1747,64 +2317,9 @@ If the filename ends with a vertical bar (|), then <em/filename/ is
 considered to be an executable program from which to read input (eg.
 <tt>source ~/bin/myscript|</tt>).
 
-<sect1>Configuring features conditionally<label id="ifdef">
-<p>
-Usage: <tt/ifdef/ <em/item/ <em/command/<newline>
-Usage: <tt/ifndef/ <em/item/ <em/command/
+<!--}}}--> 
 
-<p>
-These commands allow testing for a variable, function or certain feature
-being available or not respectively, before actually executing the 
-command given.
-
-<p>
-<tt/ifdef/ (short for ``if defined'') only executes the command upon
-availability while <tt/ifndef/ (short for ``if not defined'') does if
-not. The <em/command/ may be any valid fraction of a configuration file.
-
-<p>
-All names of variables, functions and menus may be tested. Additionally, the
-following compile-features may be tested when prefixed with 
-'<tt/feature_/':
-<tt/ncurses/, <tt/slang/, <tt/iconv/, <tt/idn/, <tt/dotlock/, 
-<tt/standalone/, <tt/pop/, <tt/nntp/, <tt/imap/, <tt/ssl/, <tt/gnutls/, 
-<tt/sasl/, <tt/sasl2/, <tt/libesmtp/, <tt/compressed/, <tt/color/,
-<tt/classic_pgp/, <tt/classic_smime/, <tt/gpgme/, <tt/header_cache/,
-<tt/gdbm/, <tt/qdbm/ and <tt/db4/.
-
-<p>
-Examples follow.
-
-<p>
-To only source a file with IMAP related settings if IMAP support is
-compiled in, use:
-<tscreen><verb>
-ifdef feature_imap 'source ~/.mutt-ng/imap_setup'
-# or
-# ifdef imap_user 'source ~/.mutt-ng/imap_setup'
-# or
-# ...
-</verb></tscreen>
-
-<p>
-To exit mutt-ng directly if no NNTP support is compiled in:
-<tscreen><verb>
-ifndef feature_nntp 'push q'
-# or
-# ifndef newsrc 'push q'
-# or
-# ...
-</verb></tscreen>
-
-<p>
-To only set the <ref id="imap_mail_check" 
-name="&dollar;imap&lowbar;mail&lowbar;check"> variable if
-the system's mutt-ng is aware of it, use:
-<tscreen><verb>
-ifdef imap_mail_check 'set imap_mail_check=500'
-</verb></tscreen>
-
-<sect1>Removing hooks<label id="unhook">
+<sect>Removing hooks<label id="unhook"> <!--{{{--> 
 <p>
 Usage: <tt/unhook/ &lsqb; * | <em/hook-type/ &rsqb;
 
@@ -1813,9 +2328,142 @@ You can either remove all hooks by giving the ``*'' character as an
 argument, or you can remove all hooks of a specific type by saying
 something like <tt/unhook send-hook/.
 
-<sect>Advanced Usage
+<!--}}}--> 
 
-<sect1>Regular Expressions<label id="regexp">
+  <sect>Sharing Setups<label id="sect:sharingsetups"> <!--{{{--> 
+
+    <sect1>Character Sets <!--{{{--> 
+
+    <p>As users may run mutt-ng on different systems, the configuration
+    must be maintained because it's likely that people want to use the
+    setup everywhere they use mutt-ng. And mutt-ng tries to help where it
+    can.
+
+    <p>To not produce conflicts with different character sets, mutt-ng
+    allows users to specify in which character set their configuration
+    files are encoded. Please note that while reading the configuration
+    files, this is only respected after the corresponding declaration
+    appears. It's advised to put the following at the very beginning of a
+    users muttngrc:
+
+    <verb>
+set config_charset = "..."</verb>
+
+    <p>and replacing the dots with the actual character set. To avoid
+    problems while maintaining the setup, vim user's may want to use
+    modelines as show in:
+
+    <verb>
+# vim:fileencoding=...:</verb>
+
+    <p>while, again, replacing the dots with the appropriate name. This
+    tells vim as which character set to read and save the file.
+
+    <!--}}}--> 
+
+    <sect1>Modularization <!--{{{--> 
+
+      <p>``Modularization'' means to divide the setup into several files
+      while sorting the options or commands by topic. Especially for
+      longer setups (e.g. with many hooks), this helps maintaining it
+      and solving trouble.
+
+      <p>When using separation, setups may be, as a whole or in
+      fractions, shared over different systems.
+
+    <!--}}}--> 
+
+    <sect1>Conditional parts <!--{{{--> 
+
+    <p>When using a configuration on different systems, the user may not
+    always have influence on how mutt-ng is installed and which features
+    it includes.
+
+    <p>To solve this, mutt-ng contain a feature based on the ``ifdef''
+    patch written for mutt. Its basic syntax is:
+
+    <verb>
+ifdef &lt;item&gt; &lt;command&gt;
+ifndef &lt;item&gt; &lt;command&gt;</verb>
+
+    <p>...whereby <tt/&lt;item&gt;/ can be one of:
+
+    <itemize>
+
+      <item>a function name
+
+      <item>a variable name
+
+      <item>a menu name
+
+      <item>a feature name
+
+    </itemize>
+
+    <p>All available functions, variables and menus are documented
+    elsewhere in this manual but ``features'' is specific to these two
+    commands. To test for one, prefix one of the following keywords with
+    <tt/feature&lowbar;/:
+
+    <verb>
+ncurses, slang, iconv, idn, dotlock, standalone, pop, nntp, imap, ssl,
+gnutls, sasl, sasl2, libesmtp, compressed, color, classic_pgp,
+classic_smime, gpgme, header_cache</verb>
+
+    <p>As an example, one can use the following in
+    <tt>&tilde;/.muttngrc</tt>:
+
+    <verb>
+ifdef feature_imap 'source ~/.mutt-ng/setup-imap'
+ifdef feature_pop  'source ~/.mutt-ng/setup-pop'
+ifdef feature_nntp 'source ~/.mutt-ng/setup-nntp'</verb>
+
+    <p>...to only source <tt>&tilde;/.mutt-ng/setup-imap</tt> if IMAP
+    support is built in, only source <tt>&tilde;/.mutt-ng/setup-pop</tt>
+    if POP support is built in and only source
+    <tt>&tilde;/.mutt-ng/setup-nntp</tt> if NNTP support is built in.
+
+    <p>An example for testing for variable names can be used if users
+    use different revisions of mutt-ng whereby the older one may not
+    have a certain variable. To test for the availability of <ref
+    id="imap_mail_check" name="&dollar;imap&lowbar;mail&lowbar;check">,
+    use:
+
+    <verb>
+ifdef imap_mail_check 'set imap_mail_check = 300'</verb>
+
+    <p>Provided for completeness is the test for menu names. To set <ref
+    id="pager_index_lines"
+    name="&dollar;pager&lowbar;index&lowbar;lines"> only if the pager
+    menu is available, use:
+
+    <verb>
+ifdef pager 'set pager_index_lines = 10'</verb>
+
+    <p>For completeness, too, the opposite of <tt/ifdef/ is provided:
+    <tt/ifndef/ which only executes the command if the test fails. For
+    example, the following two examples are equivalent:
+
+    <verb>
+ifdef feature_ncurses 'source ~/.mutt-ng/setup-ncurses'
+ifndef feature_ncurses 'source ~/.mutt-ng/setup-slang'</verb>
+
+    <p>...and...
+
+    <verb>
+ifdef feature_slang 'source ~/.mutt-ng/setup-slang'
+ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</verb>
+
+  <!--}}}--> 
+
+
+  <!--}}}--> 
+
+<!--}}}--> 
+
+<chapt>Advanced Usage <!--{{{--> 
+
+<sect>Regular Expressions<label id="regexp"> <!--{{{--> 
 <p>
 All string patterns in Mutt-ng including those in more complex
 <ref id="patterns" name="patterns"> must be specified
@@ -1978,206 +2626,273 @@ Matches the empty string at the end of a buffer.
 Please note however that these operators are not defined by POSIX, so
 they may or may not be available in stock libraries on various systems.
 
-<sect1>Patterns<label id="patterns">
-<p>
-Many of Mutt-ng's commands allow you to specify a pattern to match
-(limit, tag-pattern, delete-pattern, etc.).  There are several ways to select
-messages:
+<!--}}}--> 
 
-<tscreen><verb>
-~A              all messages
-~b EXPR         messages which contain EXPR in the message body
-~B EXPR         messages which contain EXPR in the whole message
-~c USER         messages carbon-copied to USER
-~C EXPR         message is either to: or cc: EXPR
-~D              deleted messages
-~d [MIN]-[MAX]  messages with ``date-sent'' in a Date range
-~E              expired messages
-~e EXPR         message which contains EXPR in the ``Sender'' field
-~F              flagged messages
-~f USER         messages originating from USER
-~g              cryptographically signed messages
-~G              cryptographically encrypted messages
-~H EXPR         messages with a spam attribute matching EXPR
-~h EXPR         messages which contain EXPR in the message header
-~k              message contains PGP key material
-~i ID           message which match ID in the ``Message-ID'' field
-~L EXPR         message is either originated or received by EXPR
-~l              message is addressed to a known mailing list
-~m [MIN]-[MAX]  message in the range MIN to MAX *)
-~n [MIN]-[MAX]  messages with a score in the range MIN to MAX *)
-~N              new messages
-~O              old messages
-~p              message is addressed to you (consults alternates)
-~P              message is from you (consults alternates)
-~Q              messages which have been replied to
-~R              read messages
-~r [MIN]-[MAX]  messages with ``date-received'' in a Date range
-~S              superseded messages
-~s SUBJECT      messages having SUBJECT in the ``Subject'' field.
-~T              tagged messages
-~t USER         messages addressed to USER
-~U              unread messages
-~v              message is part of a collapsed thread.
-~V              cryptographically verified messages
-~w EXPR         messages which contain EXPR in the `Newsgroups' field
-                (if compiled with NNTP support)
-~x EXPR         messages which contain EXPR in the `References' field
-~y EXPR         messages which contain EXPR in the `X-Label' field
-~z [MIN]-[MAX]  messages with a size in the range MIN to MAX *)
-~=              duplicated messages (see $duplicate_threads)
-~$              unreferenced messages (requires threaded view)
-~*              ``From'' contains realname and (syntactically) valid
-                address (excluded are addresses matching against
-                alternates or any alias)
-</verb></tscreen>
+<sect>Patterns <!--{{{--> 
 
-Where EXPR, USER, ID, and SUBJECT are 
-<ref id="regexp" name="regular expressions">.  Special attention has to be
-made when using regular expressions inside of patterns.  Specifically,
-Mutt-ng's parser for these patterns will strip one level of backslash (\),
-which is normally used for quoting.  If it is your intention to use a
-backslash in the regular expression, you will need to use two backslashes
-instead (\\).
+<p>Mutt-ng's pattern language provides a simple yet effective way to
+set up rules to match messages, e.g. for operations like tagging and
+scoring. A pattern consists of one or more sub-pattern, which can be
+logically grouped, ORed, and negated. For a complete listing of
+these patterns, please refer to table <ref id="patterns"
+name="Patterns"> in the Reference chapter.
 
-*) The forms <tt/&lt;&lsqb;MAX&rsqb;/, <tt/&gt;&lsqb;MIN&rsqb;/,
-<tt/&lsqb;MIN&rsqb;-/ and <tt/-&lsqb;MAX&rsqb;/
-are allowed, too.
+<p>It must be noted that in this table, <tt/EXPR/, <tt/USER/,
+<tt/ID/ and <tt/SUBJECT/ are regular expressions. For ranges, the
+forms <tt/&lt;[MAX]/, <tt/&gt;>[MIN]/, <tt/[MIN]-/ and <tt/-[MAX]/
+are also possible.
 
-<sect2>Pattern Modifier
-<p>
+<sect1>Complex Patterns 
 
-Note that patterns matching 'lists' of addresses (notably c,C,p,P and t)
-match if there is at least one match in the whole list. If you want to
-make sure that all elements of that list match, you need to prefix your
-pattern with ^.
-This example matches all mails which only has recipients from Germany.
+<p>It is possible to combine several sub-patterns to a more complex
+pattern. The most simple possibility is to logically AND several
+patterns by stringing them together:
 
-<tscreen><verb>
-^~C \.de$
-</verb></tscreen>
-
-<sect2>Complex Patterns
-<p>
-
-Logical AND is performed by specifying more than one criterion.  For
-example:
-
-<tscreen><verb>
-~t mutt ~f elkins
-</verb></tscreen>
-
-would select messages which contain the word ``mutt'' in the list of
-recipients <bf/and/ that have the word ``elkins'' in the ``From'' header
-field.
-
-Mutt-ng also recognizes the following operators to create more complex search
-patterns:
-
-<itemize>
-<item>! -- logical NOT operator
-<item>| -- logical OR operator
-<item>() -- logical grouping operator
-</itemize>
-
-Here is an example illustrating a complex search pattern.  This pattern will
-select all messages which do not contain ``mutt'' in the ``To'' or ``Cc''
-field and which are from ``elkins''.
-
-<tscreen><verb>
-!(~t mutt|~c mutt) ~f elkins
-</verb></tscreen>
-
-Here is an example using white space in the regular expression (note
-the ' and &dquot; delimiters).  For this to match, the mail's subject must
-match the ``^Junk +From +Me$'' and it must be from either ``Jim +Somebody''
-or ``Ed +SomeoneElse'':
-
-<tscreen><verb>
- '~s "^Junk +From +Me$" ~f ("Jim +Somebody"|"Ed +SomeoneElse")'
-</verb></tscreen>
-
-Note that if a regular expression contains parenthesis, or a vertical bar
-("|"), you <bf/must/ enclose the expression in double or single quotes since
-those characters are also used to separate different parts of Mutt-ng's
-pattern language.  For example,
-
-<tscreen><verb>
-~f "me@(mutt\.org|cs\.hmc\.edu)"
-</verb></tscreen>
-
-Without the quotes, the parenthesis wouldn't end.
-This would be separated to two OR'd patterns: <em/&tilde;f me@(mutt\.org/
-and <em/cs\.hmc\.edu)/. They are never what you want.
-
-<sect2>Searching by Date
-<p>
-Mutt-ng supports two types of dates, <em/absolute/ and <em/relative/.
-
-<bf/Absolute/.  Dates <bf/must/ be in DD/MM/YY format (month and year are
-optional, defaulting to the current month and year).  An example of a valid
-range of dates is:
-
-<tscreen><verb>
-Limit to messages matching: ~d 20/1/95-31/10
-</verb></tscreen>
-
-If you omit the minimum (first) date, and just specify ``-DD/MM/YY'', all
-messages <em/before/ the given date will be selected.  If you omit the maximum
-(second) date, and specify ``DD/MM/YY-'', all messages <em/after/ the given
-date will be selected.  If you specify a single date with no dash (``-''),
-only messages sent on the given date will be selected. 
-
-<bf/Error Margins/.  You can add error margins to absolute dates.
-An error margin is a sign (+ or -), followed by a digit, followed by
-one of the following units:
 <verb>
-y	years
-m	months
-w	weeks
-d	days
-</verb>
-As a special case, you can replace the sign by a ``*'' character,
-which is equivalent to giving identical plus and minus error margins.
+~s 'SPAM' ~U</verb>
 
-Example: To select any messages two weeks around January 15, 2001,
-you'd use the following pattern: 
-<tscreen><verb> 
-Limit to messages matching: ~d 15/1/2001*2w
-</verb></tscreen>
+<p>The pattern above matches all messages that contain ``SPAM'' in
+the subject and are unread.
 
+<p>To logical OR patterns, simply use the <tt/|/ operator. This one
+especially useful when using local groups:
 
-<bf/Relative/.  This type of date is relative to the current date, and may
-be specified as:
-<itemize>
-<item>&gt;<em/offset/ (messages older than <em/offset/ units)
-<item>&lt;<em/offset/ (messages newer than <em/offset/ units)
-<item>=<em/offset/ (messages exactly <em/offset/ units old)
-</itemize>
-
-<em/offset/ is specified as a positive number with one of the following
-units:
 <verb>
-y       years
-m       months
-w       weeks
-d       days
-</verb>
+~f ("nion@muttng\.org"|"ak@muttng\.org"|"pdmef@muttng\.org")
+(~b mutt-ng|~s Mutt-ng)
+!~x '@synflood\.at'</verb>
 
-Example: to select messages less than 1 month old, you would use
-<tscreen><verb>
-Limit to messages matching: ~d <1m
-</verb></tscreen>
+<p>The first pattern matches all messages that were sent by one of
+the mutt-ng maintainers, while the seconds pattern matches all
+messages that contain ``mutt-ng'' in the message body or ``Mutt-ng''
+in the subject. The third pattern matches all messages that do not
+contain ``@synflood\.at'' in the <tt/References:/ header, i.e.
+messages that are not an (indirect) reply to one of my messages. A
+pattern can be logicall negated using the <tt/!/ operator.
 
+<sect1>Patterns and Dates 
 
+<p>When using dates in patterns, the dates must be specified in a
+special format, i.e.  <tt>DD/MM/YYYY</tt>. If you don't specify
+month or year, they default to the current month or year. When using
+date ranges, and you specify only the minimum or the maximum, the
+specified date will be excluded, e.g. <tt>01/06/2005-</tt> matches
+against all messages <em/after/ Juni 1st, 2005.
 
-<bf/Note:/ all dates used when searching are relative to the
-<bf/local/ time zone, so unless you change the setting of your <ref
-id="index_format" name="&dollar;index&lowbar;format"> to include a
-<tt/&percnt;&lsqb;...&rsqb;/ format, these are <bf/not/ the dates shown
-in the main index.
+<p>It is also possible to use so-called ``error margins'' when
+specifying date ranges.  You simply specify a date, and then the
+error margin. This margin needs to contain the information whether
+it goes ``forth'' or ``back'' in time, by using <tt/+/ and <tt/-/.
+Then follows a number and a unit, i.e. <tt/y/ for years, <tt/m/ for
+months, <tt/w/ for weeks and <tt/d/ for days. If you use the special
+<tt/*/ sign, it means that the error margin goes to both
+``directions'' in time.
 
-<sect1>Using Tags
+<verb>
+~d 01/01/2005+1y
+~d 18/10/2004-2w
+~d 28/12/2004*1d</verb>
+
+<p>The first pattern matches all dates between January 1st, 2005 and
+January 1st 2006.  The second pattern matches all dates between
+October 18th, 2004 and October 4th 2004 (2 weeks before 18/10/2004),
+while the third pattern matches all dates 1 day around December
+28th, 2004 (i.e. Dec 27th, 28th and 29th).
+
+<p>Relative dates are also very important, as they make it possible
+to specify date ranges between a fixed number of units and the
+current date. How this works can be seen in the following example:
+
+<verb>
+~d &gt;2w # messages older than two weeks
+~d &lt;3d # messages newer than 3 days
+~d =1m # messages that are exactly one month old</verb>
+
+<!--}}}--> 
+
+  <sect>Format Strings <!--{{{--> 
+
+    <sect1>Introduction <!--{{{--> 
+  
+      <p>The so called <em/Format Strings/ offer great flexibility when
+      configuring mutt-ng. In short, they describe what items to print
+      out how in menus and status messages.
+
+      <p>Basically, they work as this: for different menus and bars,
+      there's a variable specifying the layout. For every item
+      available, there is a so called <em/expando/.
+      
+      <p>For example, when running mutt-ng on different machines or
+      different versions for testing purposes, it may be interesting to
+      have the following information always printed on screen when one
+      is in the index:
+
+      <itemize>
+
+        <item>the current hostname
+
+        <item>the current mutt-ng version number
+
+      </itemize>
+
+      <p>The setting for the status bar of the index is controlled via the
+      <ref id="status_format" name="&dollar;status&lowbar;format">
+      variable. For the hostname and version string, there's an expando
+      for <tt>&dollar;status&lowbar;format</tt>: <tt/%h/ expands to the
+      hostname and <tt/%v/ to the version string. When just configuring:
+
+      <verb>
+set status_format = "%v on %h: ..."</verb>
+
+      <p>mutt-ng will replace the sequence <tt/%v/ with the version string
+      and <tt/%h/ with the host's name. When you are, for example, running
+      mutt-ng version <tt/1.5.9i/ on host <tt/mailhost/, you'll see the
+      following when you're in the index:
+
+      <verb>
+Mutt-ng 1.5.9i on mailhost: ...</verb>
+
+      <p>In the index, there're more useful information one could want to 
+      see:
+
+      <itemize>
+
+        <item>which mailbox is open
+
+        <item>how man new, flagged or postponed messages
+
+        <item>...
+
+      </itemize>
+
+      <p>To include the mailbox' name is as easy as:
+
+      <verb>
+set status_format = "%v on %h: %B: ...</verb>
+
+      <p>When the currently opened mailbox is <tt/Inbox/, this will be expanded
+      to:
+
+      <verb>
+Mutt-ng 1.5.9i on mailhost: Inbox: ...</verb>
+      
+      <p>For the number of certain types of messages, one more feature of the format
+      strings is extremely useful. If there aren't messages of a certain type, it
+      may not be desired to print just that there aren't any but instead only
+      print something if there are any.
+
+    <!--}}}--> 
+
+    <sect1>Conditional Expansion <!--{{{--> 
+      
+      <p>To only print the number of messages if there are new messages in
+      the current mailbox, further extend
+      <tt/&dollar;status&lowbar;format/ to:
+
+      <verb>
+set status_format = "%v on %h: %B %?n?%n new? ...</verb>
+
+      <p>This feature is called <em/nonzero-printing/ and works as this:
+      some expandos may be optionally printed nonzero, i.e.  a portion
+      of the format string is only evaluated if the value of the expando
+      is different from zero. The basic syntax is:
+
+      <verb>
+%?<item>?<string if nonzero>?</verb>
+
+      <p>which tells mutt-ng to only look at <tt>&lt;string if
+      nonzero&gt;</tt> if the value of the <tt>%&lt;item%gt;</tt>
+      expando is different from zero. In our example, we used <tt/n/ as
+      the expando to check for and <tt/%n new/ as the optional nonzero
+      string.
+
+      <p>But this is not all: this feature only offers one alternative: 
+      ``print something if not zero.'' Mutt-ng does, as you might guess, 
+      also provide a logically complete version: ``if zero, print 
+      something and else print something else.'' This is achieved by the 
+      following syntax for those expandos which may be printed nonzero:
+
+      <verb>
+%?<item>?<string if nonzero>&<string if zero>?</verb>
+
+      <p>Using this we can make mutt-ng to do the following:
+
+      <itemize>
+
+        <item> make it print ``<em/n/ new messages'' whereby <em/n/ is the
+          count but only if there new ones
+
+        <item> and make it print ``no new messages'' if there aren't any
+
+      </itemize>
+
+      <p>The corresponding configuration is:
+
+      <verb>
+set status_format = "%v on %h: %B: %?n?%n new messages&amp;no new messages? ...</verb>
+
+      <p>This doubles the use of the ``new messages'' string because it'll get
+      always printed. Thus, it can be shortened to:
+
+      <verb>
+set status_format = "%v on %h: %B: %?n?%n&amp;no? new messages ...</verb>
+
+      <p>As you might see from this rather simple example, one can create
+      very complex but fancy status messages. Please see the reference
+      chapter for expandos and those which may be printed nonzero.
+
+    <!--}}}--> 
+ 
+    <sect1>Modifications and Padding <!--{{{--> 
+
+      <p>Besides the information given so far, there're even more features of
+      format strings:
+
+      <itemize>
+
+        <item>When specifying <tt>%&lowbar;&lt;item&gt;</tt> instead of
+          just <tt>%&lt;item&gt;</tt>, mutt-ng will convert all
+          characters in the expansion of <tt>&lt;item&gt;</tt> to
+          lowercase.
+
+        <item>When specifying <tt>%:&lt;item&gt;</tt> instead of just
+          <tt>%&lt;item&gt;</tt>, mutt-ng will convert all dots in the
+          expansion of <tt>&lt;item&gt;</tt> to underscores
+          (<tt>&lowbar;</tt>).
+
+      </itemize>
+    
+      <p>Also, there's a feature called <em/Padding/ supplied by the
+      following two expandos: <tt/%|X/ and <tt/%&gt;X/.
+
+      <descrip>
+
+        <tag><tt>%|X</tt></tag> When this occurs, mutt-ng will fill the
+          rest of the line with the character <tt/X/. In our example,
+          filling the rest of the line with dashes is done by setting:
+
+          <verb>
+set status_format = "%v on %h: %B: %?n?%n&amp;no? new messages %|-"</verb>
+
+        <tag><tt>%&gt;X</tt></tag> Since the previous expando stops at
+          the end of line, there must be a way to fill the gap between
+          two items via the <tt>%&gt;X</tt> expando: it puts as many
+          characters <tt>X</tt> in between two items so that the rest of
+          the line will be right-justified. For example, to not put the
+          version string and hostname of our example on the left but on
+          the right and fill the gap with spaces, one might use (note
+          the space after <tt>%&gt;</tt>):
+
+          <verb>
+set status_format = "%B: %?n?%n&amp;no? new messages %> (%v on %h)"</verb>
+
+      </descrip>
+
+    <!--}}}--> 
+ 
+  <!--}}}--> 
+ 
+<sect>Using Tags <!--{{{--> 
 <p>
 
 Sometimes it is desirable to perform an operation on a group of
@@ -2205,7 +2920,9 @@ Mutt-ng will stop "eating" the macro when it encounters the ``end-cond''
 operator;  after this operator the rest of the macro will be executed as
 normal.
 
-<sect1>Using Hooks<label id="hooks">
+<!--}}}--> 
+
+<sect>Using Hooks<label id="hooks"> <!--{{{--> 
 <p>
 A <em/hook/ is a concept borrowed from the EMACS editor which allows you to
 execute arbitrary commands before performing some operation.  For example,
@@ -2236,7 +2953,7 @@ send-hook . 'unmy_hdr From:'
 send-hook ~C'^b@b\.b$' my_hdr from: c@c.c
 </verb></tscreen>
 
-<sect2>Message Matching in Hooks<label id="pattern_hook">
+<sect1>Message Matching in Hooks<label id="pattern_hook">
 <p>
 Hooks that act upon messages (<tt/send-hook, save-hook, fcc-hook,
 message-hook/) are evaluated in a slightly different manner.  For the other
@@ -2269,7 +2986,9 @@ pattern is translated at the time the hook is declared, so the value of
 <ref id="default_hook" name="&dollar;default&lowbar;hook"> that is in effect
 at that time will be used.
 
-<sect1>Using the sidebar<label id="sidebar">
+<!--}}}--> 
+
+<sect>Using the sidebar<label id="sidebar"> <!--{{{--> 
 <p>
 The sidebar, a feature specific to Mutt-ng, allows you to use a mailbox listing 
 which looks very similar to the ones you probably know from GUI mail clients.
@@ -2322,7 +3041,9 @@ macro pager B ':toggle sidebar_visible^M'
 You can then go up and down by pressing Ctrl-P and Ctrl-N, and 
 switch on and off the sidebar simply by pressing 'B'.
 
-<sect1>External Address Queries<label id="query">
+<!--}}}--> 
+
+<sect>External Address Queries<label id="query"> <!--{{{--> 
 <p>
 Mutt-ng supports connecting to external directory databases such as LDAP,
 ph/qi, bbdb, or NIS through a wrapper script which connects to mutt
@@ -2366,7 +3087,9 @@ in place.  If there are multiple responses, mutt will activate the query
 menu.  At the query menu, you can select one or more addresses to be
 added to the prompt.
 
-<sect1>Mailbox Formats
+<!--}}}--> 
+
+<sect>Mailbox Formats <!--{{{--> 
 <p>
 Mutt-ng supports reading and writing of four different mailbox formats:
 mbox, MMDF, MH and Maildir.  The mailbox type is autodetected, so there
@@ -2403,7 +3126,9 @@ for the messages are chosen in such a way they are unique, even when two
 programs are writing the mailbox over NFS, which means that no file locking
 is needed.
 
-<sect1>Mailbox Shortcuts<label id="shortcuts">
+<!--}}}--> 
+
+<sect>Mailbox Shortcuts<label id="shortcuts"> <!--{{{--> 
 <p>
 There are a number of built in shortcuts which refer to specific mailboxes.
 These shortcuts can be used anywhere you are prompted for a file or mailbox
@@ -2421,7 +3146,9 @@ path.
 name="default save folder"> as determined by the address of the alias
 </itemize>
 
-<sect1>Handling Mailing Lists<label id="using_lists">
+<!--}}}--> 
+
+<sect>Handling Mailing Lists<label id="using_lists"> <!--{{{--> 
 <p>
 
 Mutt-ng has a few configuration options that make dealing with large
@@ -2506,14 +3233,16 @@ used a threaded news client, this is the same concept.  It makes dealing
 with large volume mailing lists easier because you can easily delete
 uninteresting threads and quickly find topics of value.
 
-<sect1>Editing threads
+<!--}}}--> 
+
+<sect>Editing threads <!--{{{--> 
 <p>
 Mutt-ng has the ability to dynamically restructure threads that are broken
 either by misconfigured software or bad behavior from some
 correspondents. This allows to clean your mailboxes formats) from these
 annoyances which make it hard to follow a discussion.
 
-<sect2>Linking threads
+<sect1>Linking threads
 <p>
 
 Some mailers tend to "forget" to correctly set the "In-Reply-To:" and
@@ -2527,7 +3256,7 @@ reply will then be connected to this "parent" message.
 You can also connect multiple children at once, tagging them and using the
 tag-prefix command (';') or the auto_tag option.
 
-<sect2>Breaking threads
+<sect1>Breaking threads
 <p>
 
 On mailing lists, some people are in the bad habit of starting a new
@@ -2537,7 +3266,9 @@ You can fix such threads by using the ``break-thread'' function (bound
 by default to #), which will turn the subthread starting from the
 current message into a whole different thread.
 
-<sect1>Delivery Status Notification (DSN) Support
+<!--}}}--> 
+
+<sect>Delivery Status Notification (DSN) Support <!--{{{--> 
 <p>
 
 RFC1894 defines a set of MIME content types for relaying information
@@ -2553,7 +3284,9 @@ different results (such as failed message, message delivered, etc.).
 of your message should be returned with the receipt (headers or full
 message).  Refer to the man page on sendmail for more details on DSN.
 
-<sect1>POP3 Support (OPTIONAL)
+<!--}}}--> 
+
+<sect>POP3 Support (OPTIONAL) <!--{{{--> 
 <p>
 
 If Mutt-ng was compiled with POP3 support (by running the <em/configure/
@@ -2593,7 +3326,9 @@ point, Mutt-ng runs exactly as if the mail had always been local.
 you should consider using a specialized program, such as <htmlurl
 url="http://www.ccil.org/~esr/fetchmail" name="fetchmail">
 
-<sect1>IMAP Support (OPTIONAL)
+<!--}}}--> 
+
+<sect>IMAP Support (OPTIONAL) <!--{{{--> 
 <p>
 
 If Mutt-ng was compiled with IMAP support (by running the <em/configure/
@@ -2644,7 +3379,7 @@ Note that if you are using mbox as the mail store on UW servers prior to
 v12.250, the server has been reported to disconnect a client if another client
 selects the same folder.
 
-<sect2>The Folder Browser
+<sect1>The Folder Browser
 <p>
 
 As of version 1.2, mutt supports browsing mailboxes on an IMAP
@@ -2669,7 +3404,7 @@ following differences:
   these are bound to <tt>s</tt> and <tt>u</tt>, respectively).
 </itemize>
 
-<sect2>Authentication
+<sect1>Authentication
 <p>
 
 Mutt-ng supports four authentication methods with IMAP servers: SASL,
@@ -2708,7 +3443,75 @@ There are a few variables which control authentication:
   listed above).
 </itemize>
 
-<sect1>Managing multiple IMAP/POP accounts (OPTIONAL)<label id="account-hook">
+<!--}}}--> 
+
+<sect>NNTP Support (OPTIONAL)<label id="reading_news"> <!--{{{--> 
+
+<p>If compiled with ``--enable-nntp'' option, Mutt-ng can read news from
+a newsserver via NNTP.  You can open a newsgroup with the
+``change-newsgroup'' function from the index/pager which is by default
+bound to <tt/i/.
+
+<p>The Default newsserver can be obtained from the
+<tt/&dollar;NNTPSERVER/ environment variable. Like other news readers,
+info about subscribed newsgroups is saved in a file as specified by the
+<ref id="nntp_newsrc" name="&dollar;nntp&lowbar;newsrc"> variable.
+Article headers are cached and can be loaded from a file when a
+newsgroup is entered instead loading from newsserver; currently, this
+caching mechanism still is different from the header caching for
+maildir/IMAP.
+
+<sect1>Again: Scoring <!--{{{--> 
+
+  <p>Especially for Usenet, people often ask for advanced filtering
+  and scoring functionality. Of course, mutt-ng has scoring and
+  allows a killfile, too. How to use a killfile has been discussed
+  in <ref id="score-command" name="Message scoring">.
+
+  <p>What has not been discusses in detail is mutt-ng's built-in
+  realname filter. For may newsreaders including those for
+  ``advanced users'' like <em/slrn/ or <em/tin/, there are frequent
+  request for such functionality. The solutions offered often are
+  complicated regular expressions.
+
+  <p>In mutt-ng this is as easy as
+
+  <verb>
+score ~* =42
+  </verb>
+
+  <p>This tells mutt-ng to apply a score of 42 to all messages whose
+  sender specified a valid realname and a valid email address. Using
+
+  <verb>
+score !~* =42
+  </verb>
+
+  <p>on the contrary applies a score of 42 to all messages <em/not/
+  matching those criteria which are very strict:
+
+  <itemize>
+
+    <item>Email addresses must be valid according to RFC 2822, see
+    <htmlurl url="ftp://ftp.rfc-editor.org/in-notes/rfc2822.txt"
+    name="&lt;ftp://ftp.rfc-editor.org/in-notes/rfc2822.txt&gt;">
+
+    <item>the name must consist of at least 2 fields whereby a field
+    must not end in a dot. This means that ``Joe User'' and ``Joe A.
+    User'' are valid while ``J. User'' and ``J. A. User'' aren't.
+
+    <item>it's assumed that users are interested in reading their
+    own mail and mail from people who they have defined an alias for
+    so that those 2 groups of messages are excluded from the strict
+    rules.
+
+  </itemize>
+
+  <!--}}}--> 
+
+<!--}}}--> 
+
+<sect>Managing multiple IMAP/POP/NNTP accounts (OPTIONAL)<label id="account-hook"> <!--{{{--> 
 <p>
 
 If you happen to have accounts on multiple IMAP and/or POP servers,
@@ -2726,7 +3529,9 @@ account-hook imap://host1/ 'set imap_user=me1 imap_pass=foo'
 account-hook imap://host2/ 'set tunnel="ssh host2 /usr/libexec/imapd"'
 </verb></tscreen>
 
-<sect1>Start a WWW Browser on URLs (EXTERNAL)<label id="urlview">
+<!--}}}--> 
+
+<sect>Start a WWW Browser on URLs (EXTERNAL)<label id="urlview"> <!--{{{--> 
 <p>
 If a message contains URLs (<em/unified resource locator/ = address in the
 WWW space like <em>http://www.mutt.org/</em>), it is efficient to get
@@ -2739,7 +3544,9 @@ macro index \cb |urlview\n
 macro pager \cb |urlview\n
 </verb></tscreen>
 
-<sect1>Compressed folders Support (OPTIONAL)
+<!--}}}--> 
+
+<sect>Compressed folders Support (OPTIONAL) <!--{{{--> 
 <p>
 
 If Mutt-ng was compiled with compressed folders support (by running the
@@ -2787,7 +3594,7 @@ compressing script produces empty files. In this situation, unset <ref
 id="save_empty" name="&dollar;save&lowbar;empty">, so that the compressed file
 will be removed if you delete all of the messages.
 
-<sect2>Open a compressed mailbox for reading<label id="open-hook">
+<sect1>Open a compressed mailbox for reading<label id="open-hook">
 <p>
 Usage: <tt/open-hook/ <em/regexp/ &dquot;<em/command/&dquot;
 
@@ -2817,7 +3624,7 @@ open-hook \\.gz$ "gzip -cd %f > %t"
 If the <em/command/ is empty, this operation is disabled for this file
 type.
 
-<sect2>Write a compressed mailbox<label id="close-hook">
+<sect1>Write a compressed mailbox<label id="close-hook">
 <p>
 Usage: <tt/close-hook/ <em/regexp/ &dquot;<em/command/&dquot;
 
@@ -2846,7 +3653,7 @@ type, and the file can only be open in the readonly mode.
 <ref id="close-hook" name ="close-hook"> is not called when you exit
 from the folder if the folder was not changed.
 
-<sect2>Append a message to a compressed mailbox<label id="append-hook">
+<sect1>Append a message to a compressed mailbox<label id="append-hook">
 <p>
 Usage: <tt/append-hook/ <em/regexp/ &dquot;<em/command/&dquot;
 
@@ -2883,7 +3690,7 @@ type. In this case, the folder will be open and closed again (using
 <ref id="open-hook" name="open-hook"> and <ref id="close-hook" 
 name="close-hook">respectively) each time you will add to it.
 
-<sect2>Encrypted folders
+<sect1>Encrypted folders
 <p>
 The compressed folders support can also be used to handle encrypted
 folders. If you want to encrypt a folder with PGP, you may want to use
@@ -2901,7 +3708,11 @@ folder, so there is no append-hook defined.
 directory, where it can be read by your system administrator. So think
 about the security aspects of this.
 
-<sect>Mutt-ng's MIME Support
+<!--}}}--> 
+
+<!--}}}--> 
+
+<chapt>Mutt-ng's MIME Support <!--{{{--> 
 <p>
 Quite a bit of effort has been made to make Mutt-ng the premier text-mode
 MIME MUA.  Every effort has been made to provide the functionality that
@@ -2912,13 +3723,13 @@ types of configuration files which Mutt-ng uses.  One is the
 IANA MIME types.  The other is the <tt/mailcap/ file, which specifies
 the external commands to use for handling specific MIME types.
 
-<sect1>Using MIME in Mutt
+<sect>Using MIME in Mutt <!--{{{--> 
 <p>
 There are three areas/menus in Mutt-ng which deal with MIME, they are the
 pager (while viewing a message), the attachment menu and the compose
 menu.
 
-<sect2>Viewing MIME messages in the pager
+<sect1>Viewing MIME messages in the pager
 <p>
 When you select a message from the index and view it in the pager, Mutt
 decodes the message to a text representation.  Mutt-ng internally supports
@@ -2942,7 +3753,7 @@ If Mutt-ng cannot deal with a MIME type, it will display a message like:
 [-- image/gif is unsupported (use 'v' to view this part) --]
 </verb></tscreen>
 
-<sect2>The Attachment Menu<label id="attach_menu">
+<sect1>The Attachment Menu<label id="attach_menu">
 <p>
 The default binding for <tt/view-attachments/ is `v', which displays the
 attachment menu for a message.  The attachment menu displays a list of
@@ -2960,7 +3771,7 @@ and forward functions) to attachments of type <tt>message/rfc822</tt>.
 
 See the help on the attachment menu for more information.
 
-<sect2>The Compose Menu<label id="compose_menu">
+<sect1>The Compose Menu<label id="compose_menu">
 <p>
 The compose menu is the menu you see before you send a message.  It
 allows you to edit the recipient list, the subject, and other aspects
@@ -2989,7 +3800,9 @@ which can be changed with the <tt/rename-file/ command (default: R).
 The final field is the description of the attachment, and can be
 changed with the <tt/edit-description/ command (default: d).
 
-<sect1>MIME Type configuration with <tt/mime.types/
+<!--}}}--> 
+
+<sect>MIME Type configuration with <tt/mime.types/ <!--{{{--> 
 <p>
 When you add an attachment to your mail message, Mutt-ng searches your
 personal mime.types file at <tt>&dollar;{HOME}/.mime.types</tt>, and then
@@ -3022,7 +3835,9 @@ molecular modelling community to pass molecular data in various forms to
 various molecular viewers. Non-recognised mime types should only be used 
 if the recipient of the message is likely to be expecting such attachments.
 
-<sect1>MIME Viewer configuration with <tt/mailcap/
+<!--}}}--> 
+
+<sect>MIME Viewer configuration with <tt/mailcap/ <!--{{{--> 
 <p>
 Mutt-ng supports RFC 1524 MIME Configuration, in particular the Unix
 specific format specified in Appendix A of RFC 1524.  This file format
@@ -3044,7 +3859,7 @@ In particular, the metamail distribution will install a mailcap file,
 usually as <tt>/usr/local/etc/mailcap</tt>, which contains some baseline
 entries.
 
-<sect2>The Basics of the mailcap file
+<sect1>The Basics of the mailcap file
 <p>
 A mailcap file consists of a series of lines which are comments, blank,
 or definitions.
@@ -3112,7 +3927,7 @@ text/*; more
 </verb></tscreen>
 This is the simplest form of a mailcap file.
 
-<sect2>Secure use of mailcap
+<sect1>Secure use of mailcap
 <p>
 The interpretation of shell meta-characters embedded in MIME parameters
 can lead to security problems in general.  Mutt-ng tries to quote parameters
@@ -3143,10 +3958,10 @@ text/test-mailcap-bug; cat %s; copiousoutput; test=charset=%{charset} \
         && test "`echo $charset | tr '[A-Z]' '[a-z]'`" != iso-8859-1
 </verb></tscreen>
 
-<sect2>Advanced mailcap Usage
+<sect1>Advanced mailcap Usage
 <p>
 
-<sect3>Optional Fields
+<sect2>Optional Fields
 <p>
 In addition to the required content-type and view command fields, you
 can add semi-colon ';' separated fields to set flags and other options.
@@ -3220,7 +4035,7 @@ text/html object.  If RunningX doesn't return 0, then Mutt-ng will go on
 to the next entry and use lynx to display the text/html object.
 </descrip>
 
-<sect3>Search Order
+<sect2>Search Order
 <p>
 When searching for an entry in the mailcap file, Mutt-ng will search for
 the most useful entry for its purpose.  For instance, if you are
@@ -3251,7 +4066,7 @@ will run the program RunningX to determine if it should use the first
 entry.  If the program returns non-zero, Mutt-ng will use the second entry
 for interactive viewing.
 
-<sect3>Command Expansion
+<sect2>Command Expansion
 <p>
 The various commands defined in the mailcap files are passed to the
 <tt>/bin/sh</tt> shell using the system() function.  Before the
@@ -3288,7 +4103,7 @@ Mutt-ng does not currently support the &percnt;F and &percnt;n keywords
 specified in RFC 1524.  The main purpose of these parameters is for
 multipart messages, which is handled internally by Mutt-ng.
 
-<sect2>Example mailcap files
+<sect1>Example mailcap files
 <p>
 This mailcap file is fairly simple and standard:
 <code>
@@ -3340,7 +4155,9 @@ pbmtoascii -1x2 ) 2>&1 ; copiousoutput
 application/ms-excel; open.pl %s
 </code>
 
-<sect1>MIME Autoview<label id="auto_view">
+<!--}}}--> 
+
+<sect>MIME Autoview<label id="auto_view"> <!--{{{--> 
 <p>
 In addition to explicitly telling Mutt-ng to view an attachment with the
 MIME viewer defined in the mailcap file, Mutt-ng has support for
@@ -3373,7 +4190,9 @@ application/postscript; ps2ascii %s; copiousoutput
 This can be used with message-hook to autoview messages based on size, etc.
 ``unauto_view *'' will remove all previous entries.
 
-<sect1>MIME Multipart/Alternative<label id="alternative_order">
+<!--}}}--> 
+
+<sect>MIME Multipart/Alternative<label id="alternative_order"> <!--{{{--> 
 <p>
 Mutt-ng has some heuristics for determining which attachment of a
 multipart/alternative type to display.  First, mutt will check the 
@@ -3393,7 +4212,9 @@ look for any type it knows how to handle.
 To remove a MIME type from the <tt/alternative_order/ list, use the
 <tt/unalternative_order/ command.
 
-<sect1>MIME Lookup<label id="mime_lookup">
+<!--}}}--> 
+
+<sect>MIME Lookup<label id="mime_lookup"> <!--{{{--> 
 <p>
 Mutt-ng's mime&lowbar;lookup list specifies a list of mime-types that should not
 be treated according to their mailcap entry.  This option is designed to
@@ -3411,8 +4232,13 @@ In addition, the unmime&lowbar;lookup command may be used to disable this featur
 for any particular mime-type if it had been set, for example, in a global
 muttrc.
 
-<sect>Reference
-<sect1>Command line options<label id="commandline">
+<!--}}}--> 
+
+<!--}}}--> 
+
+<chapt>Reference <!--{{{--> 
+
+<sect>Command line options<label id="commandline"> <!--{{{--> 
 <p>
 Running <tt/mutt/ with no arguments will make Mutt-ng attempt to read your spool
 mailbox.  However, it is possible to read other mailboxes and
@@ -3461,7 +4287,74 @@ This command will send a message to ``professor@bigschool.edu'' with a subject
 of ``data set for run &num;2''.  In the body of the message will be the contents
 of the file ``&tilde;/run2.dat''.
 
-<sect1>Configuration Commands<label id="commands">
+<!--}}}--> 
+
+<sect>Patterns<label id="patterns"> <!--{{{--> 
+
+<p>
+<tscreen><verb>
+~A              all messages
+~b EXPR         messages which contain EXPR in the message body
+~B EXPR         messages which contain EXPR in the whole message
+~c USER         messages carbon-copied to USER
+~C EXPR         message is either to: or cc: EXPR
+~D              deleted messages
+~d [MIN]-[MAX]  messages with ``date-sent'' in a Date range
+~E              expired messages
+~e EXPR         message which contains EXPR in the ``Sender'' field
+~F              flagged messages
+~f USER         messages originating from USER
+~g              cryptographically signed messages
+~G              cryptographically encrypted messages
+~H EXPR         messages with a spam attribute matching EXPR
+~h EXPR         messages which contain EXPR in the message header
+~k              message contains PGP key material
+~i ID           message which match ID in the ``Message-ID'' field
+~L EXPR         message is either originated or received by EXPR
+~l              message is addressed to a known mailing list
+~m [MIN]-[MAX]  message in the range MIN to MAX *)
+~n [MIN]-[MAX]  messages with a score in the range MIN to MAX *)
+~N              new messages
+~O              old messages
+~p              message is addressed to you (consults alternates)
+~P              message is from you (consults alternates)
+~Q              messages which have been replied to
+~R              read messages
+~r [MIN]-[MAX]  messages with ``date-received'' in a Date range
+~S              superseded messages
+~s SUBJECT      messages having SUBJECT in the ``Subject'' field.
+~T              tagged messages
+~t USER         messages addressed to USER
+~U              unread messages
+~v              message is part of a collapsed thread.
+~V              cryptographically verified messages
+~w EXPR         messages which contain EXPR in the `Newsgroups' field
+                (if compiled with NNTP support)
+~x EXPR         messages which contain EXPR in the `References' field
+~y EXPR         messages which contain EXPR in the `X-Label' field
+~z [MIN]-[MAX]  messages with a size in the range MIN to MAX *)
+~=              duplicated messages (see $duplicate_threads)
+~$              unreferenced messages (requires threaded view)
+~*              ``From'' contains realname and (syntactically) valid
+                address (excluded are addresses matching against
+                alternates or any alias)
+</verb></tscreen>
+
+Where EXPR, USER, ID, and SUBJECT are 
+<ref id="regexp" name="regular expressions">.  Special attention has to be
+made when using regular expressions inside of patterns.  Specifically,
+Mutt-ng's parser for these patterns will strip one level of backslash (\),
+which is normally used for quoting.  If it is your intention to use a
+backslash in the regular expression, you will need to use two backslashes
+instead (\\).
+
+*) The forms <tt/&lt;&lsqb;MAX&rsqb;/, <tt/&gt;&lsqb;MIN&rsqb;/,
+<tt/&lsqb;MIN&rsqb;-/ and <tt/-&lsqb;MAX&rsqb;/
+are allowed, too.
+
+<!--}}}--> 
+
+<sect>Configuration Commands<label id="commands"> <!--{{{--> 
 <p>
 The following are the commands understood by mutt.
 
@@ -3576,6 +4469,6 @@ The following are the commands understood by mutt.
 <tt><ref id="unhook" name="unhook"></tt> <em/hook-type/
 </itemize>
 
-<sect1>Configuration variables<label id="variables">
+<sect>Configuration variables<label id="variables">
 <p>
 
