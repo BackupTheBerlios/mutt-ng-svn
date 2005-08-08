@@ -29,8 +29,8 @@ bin_PROGRAMS = muttng @DOTLOCK_TARGET@ @PGPAUX_TARGET@ @SMIMEAUX_TARGET@
 muttng_SOURCES = $(BUILT_SOURCES) \
 	alias.c ascii.c attach.c \
 	base64.c buffer.c browser.c buffy.c \
-	charset.c color.c compress.c crypt.c cryptglue.c commands.c complete.c compose.c \
-	copy.c curs_lib.c curs_main.c crypt-mod.c crypt-mod.h \
+	charset.c color.c compress.c crypt.c cryptglue.c commands.c complete.c \
+	compose.c copy.c curs_lib.c curs_main.c crypt-mod.c crypt-mod.h \
 	date.c \
 	edit.c editmsg.c enter.c \
 	flags.c filter.c from.c \
@@ -43,7 +43,7 @@ muttng_SOURCES = $(BUILT_SOURCES) \
 	pager.c parse.c pattern.c postpone.c \
 	query.c \
 	recvattach.c recvcmd.c rfc822.c rfc1524.c rfc2047.c rfc2231.c \
-	score.c send.c sendlib.c sidebar.c signal.c sort.c status.c system.c \
+	score.c send.c sendlib.c sidebar.c signal.c sort.c state.c status.c system.c \
 	thread.c \
 	url.c utf8.c \
 	wcwidth.c \
@@ -82,9 +82,11 @@ EXTRA_muttng_SOURCES = \
 	pgplib.c sha1.c pgpmicalg.c gnupgparse.c resize.c dotlock.c remailer.c \
 	alias.h \
 	buffer.h browser.h \
-	mbyte.h remailer.h url.h \
+	enter.h \
+	mbyte.h remailer.h url.h state.h \
 	pgppacket.c mutt_idna.h mutt_libesmtp.c \
-	sidebar.h crypt-mod-pgp-classic.c crypt-mod-smime-classic.c
+	crypt-mod-pgp-classic.c crypt-mod-smime-classic.c \
+	sidebar.h state.h
 
 EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	configure acconfig.h \
@@ -92,12 +94,13 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	buffer.h buffy.h \
 	charset.h compress.h copy.h crypthash.h \
 	dotlock.h functions.h gen_defs \
+	enter.h \
 	globals.h hash.h history.h init.h keymap.h mutt_crypt.h \
 	mapping.h md5.h mime.h mutt.h mutt_curses.h mutt_menu.h \
 	mutt_sasl.h mutt_socket.h mutt_ssl.h mutt_tunnel.h \
 	mbox.h mh.h mx.h pager.h pgp.h protos.h reldate.h rfc1524.h rfc2047.h \
 	rfc2231.h rfc822.h sha1.h sort.h mime.types VERSION autogen.sh \
-	_regex.h OPS.MIX remailer.c remailer.h browser.h \
+	_regex.h OPS.MIX remailer.c remailer.h browser.h state.h \
 	mbyte.h lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h Muttngrc.head Muttngrc \
 	makedoc.c stamp-doc-rc README.SSL smime.h\
 	muttngbug pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh	\

@@ -26,16 +26,13 @@
 #include "copy.h"
 #include "charset.h"
 #include "mutt_crypt.h"
+#include "state.h"
 #include "lib.h"
 
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
 #include "lib/debug.h"
-
-#define BUFI_SIZE 1000
-#define BUFO_SIZE 2000
-
 
 typedef void handler_f (BODY *, STATE *);
 typedef handler_f *handler_t;
@@ -61,52 +58,6 @@ int Index_64[128] = {
   -1, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40,
   41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, -1, -1, -1, -1, -1
 };
-
-static void state_prefix_put (const char *d, size_t dlen, STATE * s)
-{
-  if (s->prefix)
-    while (dlen--)
-      state_prefix_putc (*d++, s);
-  else
-    fwrite (d, dlen, 1, s->fpout);
-}
-
-void mutt_convert_to_state (iconv_t cd, char *bufi, size_t * l, STATE * s)
-{
-  char bufo[BUFO_SIZE];
-  ICONV_CONST char *ib;
-  char *ob;
-  size_t ibl, obl;
-
-  if (!bufi) {
-    if (cd != (iconv_t) (-1)) {
-      ob = bufo, obl = sizeof (bufo);
-      iconv (cd, 0, 0, &ob, &obl);
-      if (ob != bufo)
-        state_prefix_put (bufo, ob - bufo, s);
-    }
-    if (Quotebuf[0] != '\0')
-      state_prefix_putc ('\n', s);
-    return;
-  }
-
-  if (cd == (iconv_t) (-1)) {
-    state_prefix_put (bufi, *l, s);
-    *l = 0;
-    return;
-  }
-
-  ib = bufi, ibl = *l;
-  for (;;) {
-    ob = bufo, obl = sizeof (bufo);
-    mutt_iconv (cd, &ib, &ibl, &ob, &obl, 0, "?");
-    if (ob == bufo)
-      break;
-    state_prefix_put (bufo, ob - bufo, s);
-  }
-  memmove (bufi, ib, ibl);
-  *l = ibl;
-}
 
 void mutt_decode_xbit (STATE * s, long len, int istext, iconv_t cd)
 {
