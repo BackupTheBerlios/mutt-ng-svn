@@ -81,7 +81,7 @@ static void mhs_alloc (struct mh_sequences *mhs, int i)
 
   if (i > mhs->max || !mhs->flags) {
     newmax = i + 128;
-    safe_realloc (&mhs->flags, sizeof (mhs->flags[0]) * (newmax + 1));
+    mem_realloc (&mhs->flags, sizeof (mhs->flags[0]) * (newmax + 1));
     for (j = mhs->max + 1; j <= newmax; j++)
       mhs->flags[j] = 0;
 
@@ -91,7 +91,7 @@ static void mhs_alloc (struct mh_sequences *mhs, int i)
 
 static void mhs_free_sequences (struct mh_sequences *mhs)
 {
-  FREE (&mhs->flags);
+  mem_free (&mhs->flags);
 }
 
 static short mhs_check (struct mh_sequences *mhs, int i)
@@ -173,7 +173,7 @@ static void mh_read_sequences (struct mh_sequences *mhs, const char *path)
     }
   }
 
-  FREE (&buff);
+  mem_free (&buff);
   safe_fclose (&fp);
 }
 
@@ -214,7 +214,7 @@ static int mh_mkstemp (CONTEXT * dest, FILE ** fp, char **tgt)
   }
 
   if ((*fp = fdopen (fd, "w")) == NULL) {
-    FREE (tgt);
+    mem_free (tgt);
     close (fd);
     unlink (path);
     return (-1);
@@ -362,7 +362,7 @@ void mh_update_sequences (CONTEXT * ctx)
     unlink (tmpfname);
   }
 
-  FREE (&tmpfname);
+  mem_free (&tmpfname);
 }
 
 static void mh_sequences_add_one (CONTEXT * ctx, int n, short unseen,
@@ -414,7 +414,7 @@ static void mh_sequences_add_one (CONTEXT * ctx, int n, short unseen,
     }
   }
   safe_fclose (&ofp);
-  FREE (&buff);
+  mem_free (&buff);
 
   if (!unseen_done && unseen)
     fprintf (nfp, "%s: %d\n", NONULL (MhUnseen), n);
@@ -429,7 +429,7 @@ static void mh_sequences_add_one (CONTEXT * ctx, int n, short unseen,
   if (safe_rename (tmpfname, sequences) != 0)
     unlink (tmpfname);
 
-  FREE (&tmpfname);
+  mem_free (&tmpfname);
 }
 
 static void mh_update_maildir (struct maildir *md, struct mh_sequences *mhs)
@@ -460,11 +460,11 @@ static void maildir_free_entry (struct maildir **md)
   if (!md || !*md)
     return;
 
-  FREE (&(*md)->canon_fname);
+  mem_free (&(*md)->canon_fname);
   if ((*md)->h)
     mutt_free_header (&(*md)->h);
 
-  FREE (md);
+  mem_free (md);
 }
 
 static void maildir_free_maildir (struct maildir **md)
@@ -525,7 +525,7 @@ static void maildir_parse_flags (HEADER * h, const char *path)
   }
 
   if (q == h->maildir_flags)
-    FREE (&h->maildir_flags);
+    mem_free (&h->maildir_flags);
   else if (q)
     *q = '\0';
 }
@@ -642,7 +642,7 @@ static int maildir_parse_entry (CONTEXT * ctx, struct maildir ***last,
     else
       h->path = str_dup (fname);
 
-    entry = safe_calloc (sizeof (struct maildir), 1);
+    entry = mem_calloc (sizeof (struct maildir), 1);
     entry->h = h;
     entry->header_parsed = (ctx->magic == M_MH);
 #ifdef USE_INODESORT
@@ -897,7 +897,7 @@ void maildir_delayed_parsing (CONTEXT * ctx, struct maildir *md)
     else
       mutt_free_header (&p->h);
 #if USE_HCACHE
-    FREE (&data);
+    mem_free (&data);
 #endif
   }
 #if USE_HCACHE
@@ -1061,7 +1061,7 @@ static int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr
   }
 
   if ((msg->fp = fdopen (fd, "w")) == NULL) {
-    FREE (&msg->path);
+    mem_free (&msg->path);
     close (fd);
     unlink (path);
     return (-1);
@@ -1126,7 +1126,7 @@ static int maildir_commit_message (MESSAGE * msg, CONTEXT * ctx, HEADER * hdr)
     if (safe_rename (msg->path, full) == 0) {
       if (hdr)
         str_replace (&hdr->path, path);
-      FREE (&msg->path);
+      mem_free (&msg->path);
 
       /*
        * Adjust the mtime on the file to match the time at which this
@@ -1212,7 +1212,7 @@ static int _mh_commit_message (MESSAGE * msg, CONTEXT * ctx, HEADER * hdr,
     if (safe_rename (msg->path, path) == 0) {
       if (hdr)
         str_replace (&hdr->path, tmp);
-      FREE (&msg->path);
+      mem_free (&msg->path);
       break;
     }
     else if (errno != EEXIST) {
@@ -1713,7 +1713,7 @@ static int mh_check_mailbox (CONTEXT * ctx, int *index_hint, int unused)
       safe_fclose (&fp);
       if (safe_rename (tmp, buf) == -1)
         unlink (tmp);
-      FREE (&tmp);
+      mem_free (&tmp);
     }
   }
 
@@ -1969,7 +1969,7 @@ static int maildir_is_magic (const char* path, struct stat* st) {
 
 /* routines common to maildir and mh */
 static mx_t* reg_mx (void) {
-  mx_t* fmt = safe_calloc (1, sizeof (mx_t));
+  mx_t* fmt = mem_calloc (1, sizeof (mx_t));
   fmt->local = 1;
   fmt->mx_access = access;
   fmt->mx_sync_mailbox = mh_sync_mailbox;

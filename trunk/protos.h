@@ -49,10 +49,10 @@ int _mutt_aside_thread (HEADER *, short, short);
 int _mutt_traverse_thread (CONTEXT * ctx, HEADER * hdr, int flag);
 
 
-#define mutt_new_parameter() safe_calloc (1, sizeof (PARAMETER))
-#define mutt_new_header() safe_calloc (1, sizeof (HEADER))
-#define mutt_new_envelope() safe_calloc (1, sizeof (ENVELOPE))
-#define mutt_new_enter_state() safe_calloc (1, sizeof (ENTER_STATE))
+#define mutt_new_parameter() mem_calloc (1, sizeof (PARAMETER))
+#define mutt_new_header() mem_calloc (1, sizeof (HEADER))
+#define mutt_new_envelope() mem_calloc (1, sizeof (ENVELOPE))
+#define mutt_new_enter_state() mem_calloc (1, sizeof (ENTER_STATE))
 
 typedef const char *format_t (char *, size_t, char, const char *,
                               const char *, const char *, const char *,
@@ -398,7 +398,7 @@ int mutt_wctoutf8 (char *s, unsigned int c);
 	(option (OPTLOCALES) ? 0 : (wc >= 0xa0)))
 #endif
 
-#define new_pattern() safe_calloc(1, sizeof (pattern_t))
+#define new_pattern() mem_calloc(1, sizeof (pattern_t))
 
 int mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags,
                        CONTEXT * ctx, HEADER * h);

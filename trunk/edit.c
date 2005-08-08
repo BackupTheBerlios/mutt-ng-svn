@@ -74,11 +74,11 @@ static char **be_snarf_data (FILE * f, char **buf, int *bufmax, int *buflen,
       break;
     bytes -= str_len (p);
     if (*bufmax == *buflen)
-      safe_realloc (&buf, sizeof (char *) * (*bufmax += 25));
+      mem_realloc (&buf, sizeof (char *) * (*bufmax += 25));
     buf[(*buflen)++] = str_dup (tmp);
   }
   if (buf && *bufmax == *buflen) {      /* Do not smash memory past buf */
-    safe_realloc (&buf, sizeof (char *) * (++*bufmax));
+    mem_realloc (&buf, sizeof (char *) * (++*bufmax));
   }
   if (buf)
     buf[*buflen] = NULL;
@@ -130,9 +130,9 @@ static int be_barf_file (const char *path, char **buf, int buflen)
 static void be_free_memory (char **buf, int buflen)
 {
   while (buflen-- > 0)
-    FREE (&buf[buflen]);
+    mem_free (&buf[buflen]);
   if (buf)
-    FREE (&buf);
+    mem_free (&buf);
 }
 
 static char **be_include_messages (char *msg, char **buf, int *bufmax,
@@ -154,7 +154,7 @@ static char **be_include_messages (char *msg, char **buf, int *bufmax,
       }
 
       if (*bufmax == *buflen)
-        safe_realloc (&buf, sizeof (char *) * (*bufmax += 25));
+        mem_realloc (&buf, sizeof (char *) * (*bufmax += 25));
       buf[(*buflen)++] = str_dup (tmp);
 
       bytes = Context->hdrs[n]->content->length;
@@ -168,7 +168,7 @@ static char **be_include_messages (char *msg, char **buf, int *bufmax,
                            pfx);
 
       if (*bufmax == *buflen)
-        safe_realloc (&buf, sizeof (char *) * (*bufmax += 25));
+        mem_realloc (&buf, sizeof (char *) * (*bufmax += 25));
       buf[(*buflen)++] = str_dup ("\n");
     }
     else
@@ -390,7 +390,7 @@ int mutt_builtin_editor (const char *path, HEADER * msg, HEADER * cur)
           buflen--;
           strfcpy (tmp, buf[buflen], sizeof (tmp));
           tmp[str_len (tmp) - 1] = 0;
-          FREE (&buf[buflen]);
+          mem_free (&buf[buflen]);
           buf[buflen] = NULL;
           continue;
         }
@@ -438,7 +438,7 @@ int mutt_builtin_editor (const char *path, HEADER * msg, HEADER * cur)
     else {
       str_cat (tmp, sizeof (tmp), "\n");
       if (buflen == bufmax)
-        safe_realloc (&buf, sizeof (char *) * (bufmax += 25));
+        mem_realloc (&buf, sizeof (char *) * (bufmax += 25));
       buf[buflen++] = str_dup (tmp[1] == '~' ? tmp + 1 : tmp);
     }
 

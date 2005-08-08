@@ -86,7 +86,7 @@ int mutt_parse_hook (BUFFER * buf, BUFFER * s, unsigned long data,
   if (data & (M_FOLDERHOOK | M_MBOXHOOK)) {
     strfcpy (path, pattern.data, sizeof (path));
     _mutt_expand_path (path, sizeof (path), 1);
-    FREE (&pattern.data);
+    mem_free (&pattern.data);
     memset (&pattern, 0, sizeof (pattern));
     pattern.data = str_dup (path);
   }
@@ -105,7 +105,7 @@ int mutt_parse_hook (BUFFER * buf, BUFFER * s, unsigned long data,
 
     strfcpy (tmp, pattern.data, sizeof (tmp));
     mutt_check_simple (tmp, sizeof (tmp), DefaultHook);
-    FREE (&pattern.data);
+    mem_free (&pattern.data);
     memset (&pattern, 0, sizeof (pattern));
     pattern.data = str_dup (tmp);
   }
@@ -113,7 +113,7 @@ int mutt_parse_hook (BUFFER * buf, BUFFER * s, unsigned long data,
   if (data & (M_MBOXHOOK | M_SAVEHOOK | M_FCCHOOK)) {
     strfcpy (path, command.data, sizeof (path));
     mutt_expand_path (path, sizeof (path));
-    FREE (&command.data);
+    mem_free (&command.data);
     memset (&command, 0, sizeof (command));
     command.data = str_dup (path);
   }
@@ -129,8 +129,8 @@ int mutt_parse_hook (BUFFER * buf, BUFFER * s, unsigned long data,
          * pattern, so if we've already seen this pattern/command pair, just
          * ignore it instead of creating a duplicate */
         if (!str_cmp (ptr->command, command.data)) {
-          FREE (&command.data);
-          FREE (&pattern.data);
+          mem_free (&command.data);
+          mem_free (&pattern.data);
           return 0;
         }
       }
@@ -140,9 +140,9 @@ int mutt_parse_hook (BUFFER * buf, BUFFER * s, unsigned long data,
          * order of execution of the hooks, which i think is desirable since
          * a common action to perform is to change the default (.) entry
          * based upon some other information. */
-        FREE (&ptr->command);
+        mem_free (&ptr->command);
         ptr->command = command.data;
-        FREE (&pattern.data);
+        mem_free (&pattern.data);
         return 0;
       }
     }
@@ -160,7 +160,7 @@ int mutt_parse_hook (BUFFER * buf, BUFFER * s, unsigned long data,
       goto error;
   }
   else {
-    rx = safe_malloc (sizeof (regex_t));
+    rx = mem_malloc (sizeof (regex_t));
 #ifdef M_CRYPTHOOK
     if ((rc =
          REGCOMP (rx, NONULL (pattern.data),
@@ -175,17 +175,17 @@ int mutt_parse_hook (BUFFER * buf, BUFFER * s, unsigned long data,
     {
       regerror (rc, rx, err->data, err->dsize);
       regfree (rx);
-      FREE (&rx);
+      mem_free (&rx);
       goto error;
     }
   }
 
   if (ptr) {
-    ptr->next = safe_calloc (1, sizeof (HOOK));
+    ptr->next = mem_calloc (1, sizeof (HOOK));
     ptr = ptr->next;
   }
   else
-    Hooks = ptr = safe_calloc (1, sizeof (HOOK));
+    Hooks = ptr = mem_calloc (1, sizeof (HOOK));
   ptr->type = data;
   ptr->command = command.data;
   ptr->pattern = pat;
@@ -195,20 +195,20 @@ int mutt_parse_hook (BUFFER * buf, BUFFER * s, unsigned long data,
   return 0;
 
 error:
-  FREE (&pattern.data);
-  FREE (&command.data);
+  mem_free (&pattern.data);
+  mem_free (&command.data);
   return (-1);
 }
 
 static void delete_hook (HOOK * h)
 {
-  FREE (&h->command);
-  FREE (&h->rx.pattern);
+  mem_free (&h->command);
+  mem_free (&h->rx.pattern);
   if (h->rx.rx) {
     regfree (h->rx.rx);
   }
   mutt_pattern_free (&h->pattern);
-  FREE (&h);
+  mem_free (&h);
 }
 
 /* Deletes all hooks of type ``type'', or all defined hooks if ``type'' is 0 */
@@ -287,7 +287,7 @@ void mutt_folder_hook (char *path)
       if ((regexec (tmp->rx.rx, path, 0, NULL, 0) == 0) ^ tmp->rx.not) {
         if (mutt_parse_rc_line (tmp->command, &token, &err) == -1) {
           mutt_error ("%s", err.data);
-          FREE (&token.data);
+          mem_free (&token.data);
           mutt_sleep (1);       /* pause a moment to let the user see the error */
           current_hook_type = 0;
           return;
@@ -295,7 +295,7 @@ void mutt_folder_hook (char *path)
       }
     }
   }
-  FREE (&token.data);
+  mem_free (&token.data);
 
   current_hook_type = 0;
 }
@@ -330,14 +330,14 @@ void mutt_message_hook (CONTEXT * ctx, HEADER * hdr, int type)
     if (hook->type & type)
       if ((mutt_pattern_exec (hook->pattern, 0, ctx, hdr) > 0) ^ hook->rx.not)
         if (mutt_parse_rc_line (hook->command, &token, &err) != 0) {
-          FREE (&token.data);
+          mem_free (&token.data);
           mutt_error ("%s", err.data);
           mutt_sleep (1);
           current_hook_type = 0;
           return;
         }
   }
-  FREE (&token.data);
+  mem_free (&token.data);
   current_hook_type = 0;
 }
 
@@ -455,7 +455,7 @@ void mutt_account_hook (const char *url)
 
     if ((regexec (hook->rx.rx, url, 0, NULL, 0) == 0) ^ hook->rx.not) {
       if (mutt_parse_rc_line (hook->command, &token, &err) == -1) {
-        FREE (&token.data);
+        mem_free (&token.data);
         mutt_error ("%s", err.data);
         mutt_sleep (1);
 
@@ -464,6 +464,6 @@ void mutt_account_hook (const char *url)
     }
   }
 
-  FREE (&token.data);
+  mem_free (&token.data);
 }
 #endif

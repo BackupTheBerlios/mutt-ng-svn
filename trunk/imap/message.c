@@ -128,7 +128,7 @@ int imap_read_headers (IMAP_DATA * idata, int msgbegin, int msgend)
 
     rewind (fp);
     memset (&h, 0, sizeof (h));
-    h.data = safe_calloc (1, sizeof (IMAP_HEADER_DATA));
+    h.data = mem_calloc (1, sizeof (IMAP_HEADER_DATA));
     do {
       mfhrc = 0;
 
@@ -171,7 +171,7 @@ int imap_read_headers (IMAP_DATA * idata, int msgbegin, int msgend)
 
       rewind (fp);
 
-      FREE (&uid_validity);
+      mem_free (&uid_validity);
 
     }
     while ((rc != IMAP_CMD_OK) && ((mfhrc == -1) ||
@@ -218,7 +218,7 @@ int imap_read_headers (IMAP_DATA * idata, int msgbegin, int msgend)
     /* freshen fp, h */
     rewind (fp);
     memset (&h, 0, sizeof (h));
-    h.data = safe_calloc (1, sizeof (IMAP_HEADER_DATA));
+    h.data = mem_calloc (1, sizeof (IMAP_HEADER_DATA));
 
     /* this DO loop does two things:
      * 1. handles untagged messages, so we can try again on the same msg
@@ -340,7 +340,7 @@ int imap_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
       return 0;
     else {
       unlink (cache->path);
-      FREE (&cache->path);
+      mem_free (&cache->path);
     }
   }
 
@@ -351,7 +351,7 @@ int imap_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
   mutt_mktemp (path);
   cache->path = str_dup (path);
   if (!(msg->fp = safe_fopen (path, "w+"))) {
-    FREE (&cache->path);
+    mem_free (&cache->path);
     return -1;
   }
 
@@ -472,7 +472,7 @@ bail:
   safe_fclose (&msg->fp);
   if (cache->path) {
     unlink (cache->path);
-    FREE (&cache->path);
+    mem_free (&cache->path);
   }
 
   return -1;
@@ -579,11 +579,11 @@ int imap_append_message (CONTEXT * ctx, MESSAGE * msg)
     goto fail;
   }
 
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return 0;
 
 fail:
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return -1;
 }
 
@@ -725,18 +725,18 @@ int imap_copy_messages (CONTEXT * ctx, HEADER * h, char *dest, int delete)
   }
 
   if (cmd.data)
-    FREE (&cmd.data);
+    mem_free (&cmd.data);
   if (sync_cmd.data)
-    FREE (&sync_cmd.data);
-  FREE (&mx.mbox);
+    mem_free (&sync_cmd.data);
+  mem_free (&mx.mbox);
   return 0;
 
 fail:
   if (cmd.data)
-    FREE (&cmd.data);
+    mem_free (&cmd.data);
   if (sync_cmd.data)
-    FREE (&sync_cmd.data);
-  FREE (&mx.mbox);
+    mem_free (&sync_cmd.data);
+  mem_free (&mx.mbox);
   return -1;
 }
 
@@ -767,7 +767,7 @@ void imap_free_header_data (void **data)
   /* this should be safe even if the list wasn't used */
   mutt_free_list (&(((IMAP_HEADER_DATA *) * data)->keywords));
 
-  FREE (data);
+  mem_free (data);
 }
 
 /* imap_set_flags: fill out the message header according to the flags from
@@ -779,11 +779,11 @@ char *imap_set_flags (IMAP_DATA * idata, HEADER * h, char *s)
   unsigned char readonly;
 
   memset (&newh, 0, sizeof (newh));
-  newh.data = safe_calloc (1, sizeof (IMAP_HEADER_DATA));
+  newh.data = mem_calloc (1, sizeof (IMAP_HEADER_DATA));
 
   debug_print (2, ("parsing FLAGS\n"));
   if ((s = msg_parse_flags (&newh, s)) == NULL) {
-    FREE (&newh.data);
+    mem_free (&newh.data);
     return NULL;
   }
 
@@ -809,7 +809,7 @@ char *imap_set_flags (IMAP_DATA * idata, HEADER * h, char *s)
 
   mutt_free_list (&(HEADER_DATA (h)->keywords));
   HEADER_DATA (h)->keywords = newh.data->keywords;
-  FREE (&newh.data);
+  mem_free (&newh.data);
 
   return s;
 }

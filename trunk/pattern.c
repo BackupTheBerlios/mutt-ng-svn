@@ -229,15 +229,15 @@ int eat_regexp (pattern_t * pat, BUFFER * s, BUFFER * err)
     snprintf (err->data, err->dsize, _("Error in expression: %s"), s->dptr);
     return (-1);
   }
-  pat->rx = safe_malloc (sizeof (regex_t));
+  pat->rx = mem_malloc (sizeof (regex_t));
   r =
     REGCOMP (pat->rx, buf.data,
              REG_NEWLINE | REG_NOSUB | mutt_which_case (buf.data));
-  FREE (&buf.data);
+  mem_free (&buf.data);
   if (r) {
     regerror (r, pat->rx, err->data, err->dsize);
     regfree (pat->rx);
-    FREE (&pat->rx);
+    mem_free (&pat->rx);
     return (-1);
   }
   return 0;
@@ -557,7 +557,7 @@ static int eat_date (pattern_t * pat, BUFFER * s, BUFFER * err)
     if (isdigit ((unsigned char) *pc)) {
       /* mininum date specified */
       if ((pc = getDate (pc, &min, err)) == NULL) {
-        FREE (&buffer.data);
+        mem_free (&buffer.data);
         return (-1);
       }
       haveMin = TRUE;
@@ -590,7 +590,7 @@ static int eat_date (pattern_t * pat, BUFFER * s, BUFFER * err)
       max.tm_mday = min.tm_mday;
 
       if (!parse_date_range (pc, &min, &max, haveMin, &baseMin, err)) { /* bail out on any parsing error */
-        FREE (&buffer.data);
+        mem_free (&buffer.data);
         return (-1);
       }
     }
@@ -602,7 +602,7 @@ static int eat_date (pattern_t * pat, BUFFER * s, BUFFER * err)
   pat->min = mutt_mktime (&min, 1);
   pat->max = mutt_mktime (&max, 1);
 
-  FREE (&buffer.data);
+  mem_free (&buffer.data);
 
   return 0;
 }
@@ -643,11 +643,11 @@ void mutt_pattern_free (pattern_t ** pat)
 
     if (tmp->rx) {
       regfree (tmp->rx);
-      FREE (&tmp->rx);
+      mem_free (&tmp->rx);
     }
     if (tmp->child)
       mutt_pattern_free (&tmp->child);
-    FREE (&tmp);
+    mem_free (&tmp);
   }
 }
 
@@ -768,11 +768,11 @@ pattern_t *mutt_pattern_comp ( /* const */ char *s, int flags, BUFFER * err)
       /* compile the sub-expression */
       buf = str_substrdup (ps.dptr + 1, p);
       if ((tmp = mutt_pattern_comp (buf, flags, err)) == NULL) {
-        FREE (&buf);
+        mem_free (&buf);
         mutt_pattern_free (&curlist);
         return NULL;
       }
-      FREE (&buf);
+      mem_free (&buf);
       if (last)
         last->next = tmp;
       else
@@ -1149,7 +1149,7 @@ int mutt_pattern_func (int op, char *prompt)
   err.data = error;
   err.dsize = sizeof (error);
   if ((pat = mutt_pattern_comp (buf, M_FULL_MSG, &err)) == NULL) {
-    FREE (&simple);
+    mem_free (&simple);
     mutt_error ("%s", err.data);
     return (-1);
   }
@@ -1208,7 +1208,7 @@ int mutt_pattern_func (int op, char *prompt)
   mutt_clear_error ();
 
   if (op == M_LIMIT) {
-    FREE (&Context->pattern);
+    mem_free (&Context->pattern);
     if (Context->limit_pattern)
       mutt_pattern_free (&Context->limit_pattern);
     if (!Context->vcount) {
@@ -1229,7 +1229,7 @@ int mutt_pattern_func (int op, char *prompt)
       Context->limit_pattern = mutt_pattern_comp (buf, M_FULL_MSG, &err);
     }
   }
-  FREE (&simple);
+  mem_free (&simple);
   mutt_pattern_free (&pat);
   return 0;
 }

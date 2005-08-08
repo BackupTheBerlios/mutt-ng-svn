@@ -223,11 +223,11 @@ int imap_browse (char *path, struct browser_state *state)
       }
   }
 
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return 0;
 
 fail:
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return -1;
 }
 
@@ -274,11 +274,11 @@ int imap_mailbox_create (const char *folder)
 
   mutt_sleep (0);
 
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return 0;
 
 fail:
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return -1;
 }
 
@@ -319,11 +319,11 @@ int imap_mailbox_rename (const char *mailbox)
   mutt_message (_("Mailbox renamed."));
   mutt_sleep (0);
 
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return 0;
 
 fail:
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return -1;
 }
 
@@ -346,7 +346,7 @@ static int browse_add_list_result (IMAP_DATA * idata, const char *cmd,
   do {
     if (imap_parse_list_response (idata, &name, &noselect, &noinferiors,
                                   &idata->delim) != 0) {
-      FREE (&mx.mbox);
+      mem_free (&mx.mbox);
       return -1;
     }
 
@@ -362,7 +362,7 @@ static int browse_add_list_result (IMAP_DATA * idata, const char *cmd,
   }
   while ((ascii_strncmp (idata->cmd.buf, idata->cmd.seq, SEQLEN) != 0));
 
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return 0;
 }
 
@@ -382,7 +382,7 @@ static void imap_add_folder (char delim, char *folder, int noselect,
   imap_unmunge_mbox_name (folder);
 
   if (state->entrylen + 1 == state->entrymax) {
-    safe_realloc (&state->entry,
+    mem_realloc (&state->entry,
                   sizeof (struct folder_file) * (state->entrymax += 256));
     memset (state->entry + state->entrylen, 0,
             (sizeof (struct folder_file) *
@@ -402,7 +402,7 @@ static void imap_add_folder (char delim, char *folder, int noselect,
    * than at scan, since it's so expensive to scan. But that's big changes
    * to browser.c */
   if (!((regexec (Mask.rx, relpath, 0, NULL, 0) == 0) ^ Mask.not)) {
-    FREE (&mx.mbox);
+    mem_free (&mx.mbox);
     return;
   }
 
@@ -426,7 +426,7 @@ static void imap_add_folder (char delim, char *folder, int noselect,
   (state->entry)[state->entrylen].inferiors = !noinferiors;
   (state->entrylen)++;
 
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
 }
 
 static int compare_names (struct folder_file *a, struct folder_file *b)

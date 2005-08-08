@@ -65,7 +65,7 @@ int imap_access (const char *path, int flags)
   if (!(idata = imap_conn_find (&mx.account,
                                 option (OPTIMAPPASSIVE) ? M_IMAP_CONN_NONEW :
                                 0))) {
-    FREE (&mx.mbox);
+    mem_free (&mx.mbox);
     return -1;
   }
 
@@ -73,11 +73,11 @@ int imap_access (const char *path, int flags)
 
   /* we may already be in the folder we're checking */
   if (!ascii_strcmp(idata->mailbox, mx.mbox)) {
-    FREE (&mx.mbox);
+    mem_free (&mx.mbox);
     return 0;
   }
 
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   imap_munge_mbox_name (mbox, sizeof (mbox), mailbox);
 
   if (mutt_bit_isset (idata->capabilities, IMAP4REV1))
@@ -137,7 +137,7 @@ int imap_delete_mailbox (CONTEXT * ctx, IMAP_MBOX mx)
     if (!(idata = imap_conn_find (&mx.account,
                                   option (OPTIMAPPASSIVE) ? M_IMAP_CONN_NONEW
                                   : 0))) {
-      FREE (&mx.mbox);
+      mem_free (&mx.mbox);
       return -1;
     }
   }
@@ -240,7 +240,7 @@ void imap_expunge_mailbox (IMAP_DATA * idata)
       if (idata->cache[cacheno].uid == HEADER_DATA (h)->uid &&
           idata->cache[cacheno].path) {
         unlink (idata->cache[cacheno].path);
-        FREE (&idata->cache[cacheno].path);
+        mem_free (&idata->cache[cacheno].path);
       }
 
       imap_free_header_data (&h->data);
@@ -382,7 +382,7 @@ IMAP_DATA *imap_conn_find (const ACCOUNT * account, int flags)
     else
       mutt_account_unsetpass (&idata->conn->account);
 
-    FREE (&idata->capstr);
+    mem_free (&idata->capstr);
   }
   if (idata->state == IMAP_AUTHENTICATED)
     imap_get_delim (idata);
@@ -454,7 +454,7 @@ int imap_open_connection (IMAP_DATA * idata)
     idata->state = IMAP_AUTHENTICATED;
     if (imap_check_capabilities (idata) != 0)
       goto bail;
-    FREE (&idata->capstr);
+    mem_free (&idata->capstr);
   }
   else {
     imap_error ("imap_open_connection()", buf);
@@ -467,7 +467,7 @@ err_close_conn:
   mutt_socket_close (idata->conn);
   idata->state = IMAP_DISCONNECTED;
 bail:
-  FREE (&idata->capstr);
+  mem_free (&idata->capstr);
   return -1;
 }
 
@@ -549,11 +549,11 @@ int imap_open_mailbox (CONTEXT * ctx)
 
   /* Clean up path and replace the one in the ctx */
   imap_fix_path (idata, mx.mbox, buf, sizeof (buf));
-  FREE (&(idata->mailbox));
+  mem_free (&(idata->mailbox));
   idata->mailbox = str_dup (buf);
   imap_qualify_path (buf, sizeof (buf), &mx, idata->mailbox);
 
-  FREE (&(ctx->path));
+  mem_free (&(ctx->path));
   ctx->path = str_dup (buf);
 
   idata->ctx = ctx;
@@ -682,8 +682,8 @@ int imap_open_mailbox (CONTEXT * ctx)
   }
 
   ctx->hdrmax = count;
-  ctx->hdrs = safe_calloc (count, sizeof (HEADER *));
-  ctx->v2r = safe_calloc (count, sizeof (int));
+  ctx->hdrs = mem_calloc (count, sizeof (HEADER *));
+  ctx->v2r = mem_calloc (count, sizeof (int));
   ctx->msgcount = 0;
   if (count && (imap_read_headers (idata, 0, count - 1) < 0)) {
     mutt_error _("Error opening mailbox");
@@ -693,14 +693,14 @@ int imap_open_mailbox (CONTEXT * ctx)
   }
 
   debug_print (2, ("msgcount is %d\n", ctx->msgcount));
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return 0;
 
 fail:
   if (idata->state == IMAP_SELECTED)
     idata->state = IMAP_AUTHENTICATED;
 fail_noidata:
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return -1;
 }
 
@@ -719,7 +719,7 @@ int imap_open_mailbox_append (CONTEXT * ctx)
    * ctx is brand new and mostly empty */
 
   if (!(idata = imap_conn_find (&(mx.account), 0))) {
-    FREE(&mx.mbox);
+    mem_free(&mx.mbox);
     return (-1);
   }
   conn = idata->conn;
@@ -729,7 +729,7 @@ int imap_open_mailbox_append (CONTEXT * ctx)
 
   imap_fix_path (idata, mx.mbox, mailbox, sizeof (mailbox));
 
-  FREE(&mx.mbox);
+  mem_free(&mx.mbox);
 
   /* really we should also check for W_OK */
   if (!imap_access (ctx->path, F_OK))
@@ -753,8 +753,8 @@ void imap_logout (IMAP_DATA * idata)
   idata->status = IMAP_BYE;
   imap_cmd_start (idata, "LOGOUT");
   while (imap_cmd_step (idata) == IMAP_CMD_CONTINUE);
-  FREE (&idata->cmd.buf);
-  FREE (&idata);
+  mem_free (&idata->cmd.buf);
+  mem_free (&idata);
 }
 
 /*
@@ -806,7 +806,7 @@ int imap_make_msg_set (IMAP_DATA * idata, BUFFER * buf, int flag, int changed)
   int started = 0;
 
   /* make copy of header pointers to sort in natural order */
-  hdrs = safe_calloc (idata->ctx->msgcount, sizeof (HEADER *));
+  hdrs = mem_calloc (idata->ctx->msgcount, sizeof (HEADER *));
   memcpy (hdrs, idata->ctx->hdrs, idata->ctx->msgcount * sizeof (HEADER *));
 
   if (Sort != SORT_ORDER) {
@@ -862,7 +862,7 @@ int imap_make_msg_set (IMAP_DATA * idata, BUFFER * buf, int flag, int changed)
     }
   }
 
-  FREE (&hdrs);
+  mem_free (&hdrs);
 
   return count;
 }
@@ -1045,10 +1045,10 @@ int imap_sync_mailbox (CONTEXT * ctx, int expunge, int *index_hint)
   rc = 0;
 out:
   if (cmd.data)
-    FREE (&cmd.data);
+    mem_free (&cmd.data);
   if (appendctx) {
     mx_fastclose_mailbox (appendctx);
-    FREE (&appendctx);
+    mem_free (&appendctx);
   }
   return rc;
 }
@@ -1074,7 +1074,7 @@ void imap_close_mailbox (CONTEXT * ctx)
     }
 
     idata->reopen &= IMAP_REOPEN_ALLOW;
-    FREE (&(idata->mailbox));
+    mem_free (&(idata->mailbox));
     mutt_free_list (&idata->flags);
     idata->ctx = NULL;
   }
@@ -1086,7 +1086,7 @@ void imap_close_mailbox (CONTEXT * ctx)
   for (i = 0; i < IMAP_CACHE_LEN; i++) {
     if (idata->cache[i].path) {
       unlink (idata->cache[i].path);
-      FREE (&idata->cache[i].path);
+      mem_free (&idata->cache[i].path);
     }
   }
 }
@@ -1155,13 +1155,13 @@ int imap_mailbox_check (char *path, int new)
     connflags = M_IMAP_CONN_NONEW;
 
   if (!(idata = imap_conn_find (&(mx.account), connflags))) {
-    FREE (&mx.mbox);
+    mem_free (&mx.mbox);
     return -1;
   }
   conn = idata->conn;
 
   imap_fix_path (idata, mx.mbox, buf, sizeof (buf));
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
 
   imap_munge_mbox_name (mbox, sizeof (mbox), buf);
   strfcpy (mbox_unquoted, buf, sizeof (mbox_unquoted));
@@ -1323,11 +1323,11 @@ int imap_subscribe (char *path, int subscribe)
   if (imap_exec (idata, buf, 0) < 0)
     goto fail;
 
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return 0;
 
 fail:
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
   return -1;
 }
 
@@ -1414,7 +1414,7 @@ int imap_complete (char *dest, size_t dlen, char *path) {
   /* don't open a new socket just for completion. Instead complete over
    * known mailboxes/hooks/etc */
   if (!(idata = imap_conn_find (&(mx.account), M_IMAP_CONN_NONEW))) {
-    FREE (&mx.mbox);
+    mem_free (&mx.mbox);
     strfcpy (dest, path, dlen);
     return imap_complete_hosts (dest, dlen);
   }
@@ -1470,7 +1470,7 @@ int imap_complete (char *dest, size_t dlen, char *path) {
     imap_qualify_path (dest, dlen, &mx, completion);
     mutt_pretty_mailbox (dest);
 
-    FREE (&mx.mbox);
+    mem_free (&mx.mbox);
     return 0;
   }
 

@@ -100,7 +100,7 @@ static void mix_add_entry (REMAILER *** type2_list, REMAILER * entry,
 {
   if (*used == *slots) {
     *slots += 5;
-    safe_realloc (type2_list, sizeof (REMAILER *) * (*slots));
+    mem_realloc (type2_list, sizeof (REMAILER *) * (*slots));
   }
 
   (*type2_list)[(*used)++] = entry;
@@ -110,16 +110,16 @@ static void mix_add_entry (REMAILER *** type2_list, REMAILER * entry,
 
 static REMAILER *mix_new_remailer (void)
 {
-  return safe_calloc (1, sizeof (REMAILER));
+  return mem_calloc (1, sizeof (REMAILER));
 }
 
 static void mix_free_remailer (REMAILER ** r)
 {
-  FREE (&(*r)->shortname);
-  FREE (&(*r)->addr);
-  FREE (&(*r)->ver);
+  mem_free (&(*r)->shortname);
+  mem_free (&(*r)->addr);
+  mem_free (&(*r)->ver);
 
-  FREE (r);
+  mem_free (r);
 }
 
 /* parse the type2.list as given by mixmaster -T */
@@ -209,7 +209,7 @@ static void mix_free_type2_list (REMAILER *** ttlp)
   for (i = 0; type2_list[i]; i++)
     mix_free_remailer (&type2_list[i]);
 
-  FREE (type2_list);
+  mem_free (type2_list);
 }
 
 
@@ -228,7 +228,7 @@ static void mix_screen_coordinates (REMAILER ** type2_list,
   if (!chain->cl)
     return;
 
-  safe_realloc (coordsp, sizeof (struct coord) * chain->cl);
+  mem_realloc (coordsp, sizeof (struct coord) * chain->cl);
 
   coords = *coordsp;
 
@@ -490,7 +490,7 @@ void mix_make_chain (LIST ** chainp, int *redraw)
 
   *redraw = REDRAW_FULL;
 
-  chain = safe_calloc (sizeof (MIXCHAIN), 1);
+  chain = mem_calloc (sizeof (MIXCHAIN), 1);
   for (p = *chainp; p; p = p->next)
     mix_chain_add (chain, (char *) p->data, type2_list);
 
@@ -657,8 +657,8 @@ void mix_make_chain (LIST ** chainp, int *redraw)
   }
 
   mix_free_type2_list (&type2_list);
-  FREE (&coords);
-  FREE (&chain);
+  mem_free (&coords);
+  mem_free (&chain);
 }
 
 /* some safety checks before piping the message to mixmaster */

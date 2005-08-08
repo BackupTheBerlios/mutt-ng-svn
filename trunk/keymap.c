@@ -92,9 +92,9 @@ static struct keymap_t *allocKeys (int len, keycode_t * keys)
 {
   struct keymap_t *p;
 
-  p = safe_calloc (1, sizeof (struct keymap_t));
+  p = mem_calloc (1, sizeof (struct keymap_t));
   p->len = len;
-  p->keys = safe_malloc (len * sizeof (keycode_t));
+  p->keys = mem_malloc (len * sizeof (keycode_t));
   memcpy (p->keys, keys, len * sizeof (keycode_t));
   return (p);
 }
@@ -200,10 +200,10 @@ void km_bind (char *s, int menu, int op, char *macro, char *descr)
       do {
         len = tmp->eq;
         next = tmp->next;
-        FREE (&tmp->macro);
-        FREE (&tmp->keys);
-        FREE (&tmp->descr);
-        FREE (&tmp);
+        mem_free (&tmp->macro);
+        mem_free (&tmp->keys);
+        mem_free (&tmp->descr);
+        mem_free (&tmp);
         tmp = next;
       }
       while (tmp && len >= pos);
@@ -707,7 +707,7 @@ static char *parse_keymap (int *menu, BUFFER * s, int maxmenus, int *nummenus,
     strfcpy (err->data, _("too few arguments"), err->dsize);
   }
 error:
-  FREE (&buf.data);
+  mem_free (&buf.data);
   return (NULL);
 }
 
@@ -807,7 +807,7 @@ int mutt_parse_bind (BUFFER * buf, BUFFER * s, unsigned long data,
       }
     }
   }
-  FREE (&key);
+  mem_free (&key);
   return (r);
 }
 
@@ -845,7 +845,7 @@ int mutt_parse_macro (BUFFER * buf, BUFFER * s, unsigned long data,
         }
       }
 
-      FREE (&seq);
+      mem_free (&seq);
     }
     else {
       for (i = 0; i < nummenus; ++i) {
@@ -854,7 +854,7 @@ int mutt_parse_macro (BUFFER * buf, BUFFER * s, unsigned long data,
       }
     }
   }
-  FREE (&key);
+  mem_free (&key);
   return (r);
 }
 

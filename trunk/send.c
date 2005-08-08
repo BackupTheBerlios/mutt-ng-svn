@@ -192,7 +192,7 @@ static int edit_address (ADDRESS ** a, /* const */ char *field)
       mutt_error (_("Error: '%s' is a bad IDN."), err);
       mutt_refresh ();
       mutt_sleep (2);
-      FREE (&err);
+      mem_free (&err);
     }
   }
   while (idna_ok != 0);
@@ -213,7 +213,7 @@ static int edit_envelope (ENVELOPE * en, int flags)
       buf[0] = 0;
     if (mutt_get_field ("Newsgroups: ", buf, sizeof (buf), 0) != 0)
       return (-1);
-    FREE (&en->newsgroups);
+    mem_free (&en->newsgroups);
     en->newsgroups = str_dup (buf);
 
     if (en->followup_to)
@@ -223,7 +223,7 @@ static int edit_envelope (ENVELOPE * en, int flags)
     if (option (OPTASKFOLLOWUP)
         && mutt_get_field ("Followup-To: ", buf, sizeof (buf), 0) != 0)
       return (-1);
-    FREE (&en->followup_to);
+    mem_free (&en->followup_to);
     en->followup_to = str_dup (buf);
 
     if (en->x_comment_to)
@@ -233,7 +233,7 @@ static int edit_envelope (ENVELOPE * en, int flags)
     if (option (OPTXCOMMENTTO) && option (OPTASKXCOMMENTTO)
         && mutt_get_field ("X-Comment-To: ", buf, sizeof (buf), 0) != 0)
       return (-1);
-    FREE (&en->x_comment_to);
+    mem_free (&en->x_comment_to);
     en->x_comment_to = str_dup (buf);
   }
   else
@@ -373,7 +373,7 @@ LIST *mutt_copy_list (LIST * p)
   LIST *t, *r = NULL, *l = NULL;
 
   for (; p; p = p->next) {
-    t = (LIST *) safe_malloc (sizeof (LIST));
+    t = (LIST *) mem_malloc (sizeof (LIST));
     t->data = str_dup (p->data);
     t->next = NULL;
     if (l) {
@@ -659,8 +659,8 @@ void mutt_make_misc_reply_headers (ENVELOPE * env, CONTEXT * ctx,
    * been taken from a List-Post header.  Is that correct?
    */
   if (curenv->real_subj) {
-    FREE (&env->subject);
-    env->subject = safe_malloc (str_len (curenv->real_subj) + 5);
+    mem_free (&env->subject);
+    env->subject = mem_malloc (str_len (curenv->real_subj) + 5);
     sprintf (env->subject, "Re: %s", curenv->real_subj);        /* __SPRINTF_CHECKED__ */
   }
   else if (!env->subject)
@@ -974,7 +974,7 @@ static ADDRESS *set_reverse_name (ENVELOPE * env)
   if (tmp) {
     tmp = rfc822_cpy_adr_real (tmp);
     if (!option (OPTREVREAL))
-      FREE (&tmp->personal);
+      mem_free (&tmp->personal);
     if (!tmp->personal)
       tmp->personal = str_dup (Realname);
   }
@@ -996,7 +996,7 @@ ADDRESS *mutt_default_from (void)
   else if (option (OPTUSEDOMAIN)) {
     adr = rfc822_new_address ();
     adr->mailbox =
-      safe_malloc (str_len (Username) + str_len (fqdn) + 2);
+      mem_malloc (str_len (Username) + str_len (fqdn) + 2);
     sprintf (adr->mailbox, "%s@%s", NONULL (Username), NONULL (fqdn));  /* __SPRINTF_CHECKED__ */
   }
   else {
@@ -1556,7 +1556,7 @@ int ci_send_message (int flags, /* send mode */
 
   if (mutt_env_to_idna (msg->env, &tag, &err)) {
     mutt_error (_("Bad IDN in \"%s\": '%s'"), tag, err);
-    FREE (&err);
+    mem_free (&err);
     if (!(flags & SENDBATCH))
       goto main_loop;
     else
@@ -1617,7 +1617,7 @@ int ci_send_message (int flags, /* send mode */
           mutt_protect (msg, pgpkeylist) == -1) {
         msg->content = mutt_remove_multipart (msg->content);
 
-        FREE (&pgpkeylist);
+        mem_free (&pgpkeylist);
 
         decode_descriptions (msg->content);
         goto main_loop;
@@ -1781,7 +1781,7 @@ int ci_send_message (int flags, /* send mode */
 #endif
 
   if (WithCrypto && (msg->security & ENCRYPT))
-    FREE (&pgpkeylist);
+    mem_free (&pgpkeylist);
 
   if (WithCrypto && free_clear_content)
     mutt_free_body (&clear_content);
@@ -1803,7 +1803,7 @@ cleanup:
 
   if ((WithCrypto & APPLICATION_PGP) && (flags & SENDPOSTPONED)) {
     if (signas) {
-      FREE (&PgpSignAs);
+      mem_free (&PgpSignAs);
       PgpSignAs = signas;
     }
   }

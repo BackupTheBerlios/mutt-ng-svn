@@ -57,7 +57,7 @@ static ADDRESS *mutt_expand_aliases_r (ADDRESS * a, LIST ** expn)
         }
 
         if (!i) {
-          u = safe_malloc (sizeof (LIST));
+          u = mem_malloc (sizeof (LIST));
           u->data = str_dup (a->mailbox);
           u->next = *expn;
           *expn = u;
@@ -238,7 +238,7 @@ retry_name:
     }
   }
 
-  new = safe_calloc (1, sizeof (ALIAS));
+  new = mem_calloc (1, sizeof (ALIAS));
   new->self = new;
   new->name = str_dup (buf);
 
@@ -414,9 +414,9 @@ int mutt_alias_complete (char *s, size_t buflen)
       while (a) {
         if (a->name && (strstr (a->name, s) == a->name)) {
           if (!a_list)          /* init */
-            a_cur = a_list = (ALIAS *) safe_malloc (sizeof (ALIAS));
+            a_cur = a_list = (ALIAS *) mem_malloc (sizeof (ALIAS));
           else {
-            a_cur->next = (ALIAS *) safe_malloc (sizeof (ALIAS));
+            a_cur->next = (ALIAS *) mem_malloc (sizeof (ALIAS));
             a_cur = a_cur->next;
           }
           memcpy (a_cur, a, sizeof (ALIAS));
@@ -436,7 +436,7 @@ int mutt_alias_complete (char *s, size_t buflen)
   while (a_list) {
     a_cur = a_list;
     a_list = a_list->next;
-    FREE (&a_cur);
+    mem_free (&a_cur);
   }
 
   /* remove any aliases marked for deletion */

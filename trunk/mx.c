@@ -518,7 +518,7 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT * pctx)
   int rc;
 
   if (!ctx)
-    ctx = safe_malloc (sizeof (CONTEXT));
+    ctx = mem_malloc (sizeof (CONTEXT));
   memset (ctx, 0, sizeof (CONTEXT));
   ctx->path = str_dup (path);
 
@@ -536,7 +536,7 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT * pctx)
     if (mx_open_mailbox_append (ctx, flags) != 0) {
       mx_fastclose_mailbox (ctx);
       if (!pctx)
-        FREE (&ctx);
+        mem_free (&ctx);
       return NULL;
     }
     return ctx;
@@ -559,7 +559,7 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT * pctx)
   if (ctx->magic <= 0) {
     mx_fastclose_mailbox (ctx);
     if (!pctx)
-      FREE (&ctx);
+      mem_free (&ctx);
     return (NULL);
   }
 
@@ -589,7 +589,7 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT * pctx)
   else {
     mx_fastclose_mailbox (ctx);
     if (!pctx)
-      FREE (&ctx);
+      mem_free (&ctx);
   }
 
   unset_option (OPTFORCEREFRESH);
@@ -613,14 +613,14 @@ void mx_fastclose_mailbox (CONTEXT * ctx)
   mutt_clear_threads (ctx);
   for (i = 0; i < ctx->msgcount; i++)
     mutt_free_header (&ctx->hdrs[i]);
-  FREE (&ctx->hdrs);
-  FREE (&ctx->v2r);
+  mem_free (&ctx->hdrs);
+  mem_free (&ctx->v2r);
 #ifdef USE_COMPRESSED
   if (ctx->compressinfo)
     mutt_fast_close_compressed (ctx);
 #endif
-  FREE (&ctx->path);
-  FREE (&ctx->pattern);
+  mem_free (&ctx->path);
+  mem_free (&ctx->pattern);
   if (ctx->limit_pattern)
     mutt_pattern_free (&ctx->limit_pattern);
   safe_fclose (&ctx->fp);
@@ -1117,7 +1117,7 @@ MESSAGE *mx_open_new_message (CONTEXT * dest, HEADER * hdr, int flags)
     return (NULL);
   }
 
-  msg = safe_calloc (1, sizeof (MESSAGE));
+  msg = mem_calloc (1, sizeof (MESSAGE));
   msg->magic = dest->magic;
   msg->write = 1;
 
@@ -1150,7 +1150,7 @@ MESSAGE *mx_open_new_message (CONTEXT * dest, HEADER * hdr, int flags)
     }
   }
   else
-    FREE (&msg);
+    mem_free (&msg);
 
   return msg;
 }
@@ -1179,7 +1179,7 @@ MESSAGE *mx_open_message (CONTEXT * ctx, int msgno)
 {
   MESSAGE *msg;
 
-  msg = safe_calloc (1, sizeof (MESSAGE));
+  msg = mem_calloc (1, sizeof (MESSAGE));
   switch (msg->magic = ctx->magic) {
   case M_MBOX:
   case M_MMDF:
@@ -1201,7 +1201,7 @@ MESSAGE *mx_open_message (CONTEXT * ctx, int msgno)
       if (msg->fp == NULL) {
         mutt_perror (path);
         debug_print (1, ("fopen: %s: %s (errno %d).\n", path, strerror (errno), errno));
-        FREE (&msg);
+        mem_free (&msg);
       }
     }
     break;
@@ -1210,7 +1210,7 @@ MESSAGE *mx_open_message (CONTEXT * ctx, int msgno)
   case M_IMAP:
     {
       if (imap_fetch_message (msg, ctx, msgno) != 0)
-        FREE (&msg);
+        mem_free (&msg);
       break;
     }
 #endif /* USE_IMAP */
@@ -1219,7 +1219,7 @@ MESSAGE *mx_open_message (CONTEXT * ctx, int msgno)
   case M_POP:
     {
       if (pop_fetch_message (msg, ctx, msgno) != 0)
-        FREE (&msg);
+        mem_free (&msg);
       break;
     }
 #endif /* USE_POP */
@@ -1228,14 +1228,14 @@ MESSAGE *mx_open_message (CONTEXT * ctx, int msgno)
   case M_NNTP:
     {
       if (nntp_fetch_message (msg, ctx, msgno) != 0)
-        FREE (&msg);
+        mem_free (&msg);
       break;
     }
 #endif /* USE_NNTP */
 
   default:
     debug_print (1, ("function not implemented for mailbox type %d.\n", ctx->magic));
-    FREE (&msg);
+    mem_free (&msg);
     break;
   }
   return (msg);
@@ -1277,10 +1277,10 @@ int mx_close_message (MESSAGE ** msg)
   if ((*msg)->path) {
     debug_print (1, ("unlinking %s\n", (*msg)->path));
     unlink ((*msg)->path);
-    FREE (&(*msg)->path);
+    mem_free (&(*msg)->path);
   }
 
-  FREE (msg);
+  mem_free (msg);
   return (r);
 }
 
@@ -1297,12 +1297,12 @@ void mx_alloc_memory (CONTEXT * ctx)
   }
 
   if (ctx->hdrs) {
-    safe_realloc (&ctx->hdrs, sizeof (HEADER *) * (ctx->hdrmax += 25));
-    safe_realloc (&ctx->v2r, sizeof (int) * ctx->hdrmax);
+    mem_realloc (&ctx->hdrs, sizeof (HEADER *) * (ctx->hdrmax += 25));
+    mem_realloc (&ctx->v2r, sizeof (int) * ctx->hdrmax);
   }
   else {
-    ctx->hdrs = safe_calloc ((ctx->hdrmax += 25), sizeof (HEADER *));
-    ctx->v2r = safe_calloc (ctx->hdrmax, sizeof (int));
+    ctx->hdrs = mem_calloc ((ctx->hdrmax += 25), sizeof (HEADER *));
+    ctx->v2r = mem_calloc (ctx->hdrmax, sizeof (int));
   }
   for (i = ctx->msgcount; i < ctx->hdrmax; i++) {
     ctx->hdrs[i] = NULL;
@@ -1342,7 +1342,7 @@ void mx_update_context (CONTEXT * ctx, int new_messages)
 
       h2 = hash_find (ctx->id_hash, h->env->supersedes);
 
-      /* FREE (&h->env->supersedes); should I ? */
+      /* mem_free (&h->env->supersedes); should I ? */
       if (h2) {
         h2->superseded = 1;
         if (!ctx->counting && option (OPTSCORE))

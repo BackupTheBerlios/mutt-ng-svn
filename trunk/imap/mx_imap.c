@@ -61,7 +61,7 @@ static int imap_commit_message (MESSAGE* msg, CONTEXT* ctx) {
 }
 
 mx_t* imap_reg_mx (void) {
-  mx_t* fmt = safe_calloc (1, sizeof (mx_t));
+  mx_t* fmt = mem_calloc (1, sizeof (mx_t));
 
   /* make up mx_t record... */
   fmt->type = M_IMAP;

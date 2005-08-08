@@ -364,7 +364,7 @@ int mutt_sasl_interact (sasl_interact_t * interaction)
       return SASL_FAIL;
 
     interaction->len = str_len (resp) + 1;
-    interaction->result = safe_malloc (interaction->len);
+    interaction->result = mem_malloc (interaction->len);
     memcpy ((char*) interaction->result, resp, interaction->len);
 
     interaction++;
@@ -391,7 +391,7 @@ int mutt_sasl_interact (sasl_interact_t * interaction)
  *   for the read/write methods. */
 void mutt_sasl_setup_conn (CONNECTION * conn, sasl_conn_t * saslconn)
 {
-  SASL_DATA *sasldata = (SASL_DATA *) safe_malloc (sizeof (SASL_DATA));
+  SASL_DATA *sasldata = (SASL_DATA *) mem_malloc (sizeof (SASL_DATA));
 
   sasldata->saslconn = saslconn;
   /* get ssf so we know whether we have to (en|de)code read/write */
@@ -489,7 +489,7 @@ static int mutt_sasl_cb_pass (sasl_conn_t * conn, void *context, int id,
 
   len = str_len (account->pass);
 
-  *psecret = (sasl_secret_t *) safe_malloc (sizeof (sasl_secret_t) + len);
+  *psecret = (sasl_secret_t *) mem_malloc (sizeof (sasl_secret_t) + len);
   (*psecret)->len = len;
   strcpy ((char*) (*psecret)->data, account->pass);     /* __STRCPY_CHECKED__ */
 
@@ -532,9 +532,9 @@ static int mutt_sasl_conn_close (CONNECTION * conn)
   /* release sasl resources */
   sasl_dispose (&sasldata->saslconn);
 #ifndef USE_SASL2
-  FREE (&sasldata->buf);
+  mem_free (&sasldata->buf);
 #endif
-  FREE (&sasldata);
+  mem_free (&sasldata);
 
   /* call underlying close */
   rc = (conn->conn_close) (conn);
@@ -565,7 +565,7 @@ static int mutt_sasl_conn_read (CONNECTION * conn, char *buf, size_t len)
   conn->sockdata = sasldata->sockdata;
 
 #ifndef USE_SASL2
-  FREE (&sasldata->buf);
+  mem_free (&sasldata->buf);
 #endif
   sasldata->bpos = 0;
   sasldata->blen = 0;
@@ -636,7 +636,7 @@ static int mutt_sasl_conn_write (CONNECTION * conn, const char *buf,
 
       rc = (sasldata->msasl_write) (conn, pbuf, plen);
 #ifndef USE_SASL2
-      FREE (&pbuf);
+      mem_free (&pbuf);
 #endif
       if (rc != plen)
         goto fail;

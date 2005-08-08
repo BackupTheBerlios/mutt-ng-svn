@@ -705,7 +705,7 @@ static void crypt_fetch_signatures (BODY *** signatures, BODY * a, int *n)
       crypt_fetch_signatures (signatures, a->parts, n);
     else {
       if ((*n % 5) == 0)
-        safe_realloc (signatures, (*n + 6) * sizeof (BODY **));
+        mem_realloc (signatures, (*n + 6) * sizeof (BODY **));
 
       (*signatures)[(*n)++] = a;
     }
@@ -825,7 +825,7 @@ void mutt_signed_handler (BODY * a, STATE * s)
       state_attach_puts (_("[-- The following data is signed --]\n\n"), s);
 
 
-      FREE (&signatures);
+      mem_free (&signatures);
     }
     else
       state_attach_puts (_("[-- Warning: Can't find any signatures. --]\n\n"),

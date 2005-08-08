@@ -40,13 +40,13 @@ int hash_string (const unsigned char *s, int n)
 
 HASH *hash_create (int nelem)
 {
-  HASH *table = safe_malloc (sizeof (HASH));
+  HASH *table = mem_malloc (sizeof (HASH));
 
   if (nelem == 0)
     nelem = 2;
   table->nelem = nelem;
   table->curnelem = 0;
-  table->table = safe_calloc (nelem, sizeof (struct hash_elem *));
+  table->table = mem_calloc (nelem, sizeof (struct hash_elem *));
   return table;
 }
 
@@ -63,11 +63,11 @@ HASH *hash_resize (HASH * ptr, int nelem)
       tmp = elem;
       elem = elem->next;
       hash_insert (table, tmp->key, tmp->data, 1);
-      FREE (&tmp);
+      mem_free (&tmp);
     }
   }
-  FREE (&ptr->table);
-  FREE (&ptr);
+  mem_free (&ptr->table);
+  mem_free (&ptr);
 
   return table;
 }
@@ -82,7 +82,7 @@ int hash_insert (HASH * table, const char *key, void *data, int allow_dup)
   struct hash_elem *ptr;
   int h;
 
-  ptr = (struct hash_elem *) safe_malloc (sizeof (struct hash_elem));
+  ptr = (struct hash_elem *) mem_malloc (sizeof (struct hash_elem));
   h = hash_string ((unsigned char *) key, table->nelem);
   ptr->key = key;
   ptr->data = data;
@@ -99,7 +99,7 @@ int hash_insert (HASH * table, const char *key, void *data, int allow_dup)
     for (tmp = table->table[h], last = NULL; tmp; last = tmp, tmp = tmp->next) {
       r = str_cmp (tmp->key, key);
       if (r == 0) {
-        FREE (&ptr);
+        mem_free (&ptr);
         return (-1);
       }
       if (r > 0)
@@ -137,7 +137,7 @@ void hash_delete_hash (HASH * table, int hash, const char *key, const void *data
       *last = ptr->next;
       if (destroy)
         destroy (ptr->data);
-      FREE (&ptr);
+      mem_free (&ptr);
 
       ptr = *last;
     } else {
@@ -162,9 +162,9 @@ void hash_destroy (HASH ** ptr, void (*destroy) (void *))
       elem = elem->next;
       if (destroy)
         destroy (tmp->data);
-      FREE (&tmp);
+      mem_free (&tmp);
     }
   }
-  FREE (&pptr->table);
-  FREE (ptr);
+  mem_free (&pptr->table);
+  mem_free (ptr);
 }

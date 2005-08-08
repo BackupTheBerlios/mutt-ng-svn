@@ -33,13 +33,13 @@ static void init_history (struct history *h)
   if (OldSize) {
     if (h->hist) {
       for (i = 0; i < OldSize; i++)
-        FREE (&h->hist[i]);
-      FREE (&h->hist);
+        mem_free (&h->hist[i]);
+      mem_free (&h->hist);
     }
   }
 
   if (HistSize)
-    h->hist = safe_calloc (HistSize, sizeof (char *));
+    h->hist = mem_calloc (HistSize, sizeof (char *));
 
   h->cur = 0;
   h->last = 0;

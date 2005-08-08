@@ -643,8 +643,8 @@ static int _mbox_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
     offset -= (sizeof MMDF_SEP - 1);
 
   /* allocate space for the new offsets */
-  newOffset = safe_calloc (ctx->msgcount - first, sizeof (struct m_update_t));
-  oldOffset = safe_calloc (ctx->msgcount - first, sizeof (struct m_update_t));
+  newOffset = mem_calloc (ctx->msgcount - first, sizeof (struct m_update_t));
+  oldOffset = mem_calloc (ctx->msgcount - first, sizeof (struct m_update_t));
 
   for (i = first, j = 0; i < ctx->msgcount; i++) {
     /*
@@ -823,8 +823,8 @@ static int _mbox_sync_mailbox (CONTEXT * ctx, int unused, int *index_hint)
       ctx->hdrs[i]->index = j++;
     }
   }
-  FREE (&newOffset);
-  FREE (&oldOffset);
+  mem_free (&newOffset);
+  mem_free (&oldOffset);
   unlink (tempfile);            /* remove partial copy of the mailbox */
   mutt_unblock_signals ();
 
@@ -849,8 +849,8 @@ bail:                          /* Come here in case of disaster */
   mbox_unlock_mailbox (ctx);
 
   mutt_unblock_signals ();
-  FREE (&newOffset);
-  FREE (&oldOffset);
+  mem_free (&newOffset);
+  mem_free (&oldOffset);
 
   if ((ctx->fp = freopen (ctx->path, "r", ctx->fp)) == NULL) {
     mutt_error _("Could not reopen mailbox!");
@@ -929,11 +929,11 @@ static int mbox_reopen_mailbox (CONTEXT * ctx, int *index_hint)
   if (ctx->subj_hash)
     hash_destroy (&ctx->subj_hash, NULL);
   mutt_clear_threads (ctx);
-  FREE (&ctx->v2r);
+  mem_free (&ctx->v2r);
   if (ctx->readonly) {
     for (i = 0; i < ctx->msgcount; i++)
       mutt_free_header (&(ctx->hdrs[i]));       /* nothing to do! */
-    FREE (&ctx->hdrs);
+    mem_free (&ctx->hdrs);
   }
   else {
     /* save the old headers */
@@ -979,7 +979,7 @@ static int mbox_reopen_mailbox (CONTEXT * ctx, int *index_hint)
     /* free the old headers */
     for (j = 0; j < old_msgcount; j++)
       mutt_free_header (&(old_hdrs[j]));
-    FREE (&old_hdrs);
+    mem_free (&old_hdrs);
 
     ctx->quiet = 0;
     return (-1);
@@ -1047,7 +1047,7 @@ static int mbox_reopen_mailbox (CONTEXT * ctx, int *index_hint)
         msg_mod = 1;
       }
     }
-    FREE (&old_hdrs);
+    mem_free (&old_hdrs);
   }
 
   ctx->quiet = 0;
@@ -1137,7 +1137,7 @@ static int mmdf_commit_message (MESSAGE* msg, CONTEXT* ctx) {
 }
 
 static mx_t* reg_mx (void) {
-  mx_t* fmt = safe_calloc (1, sizeof (mx_t));
+  mx_t* fmt = mem_calloc (1, sizeof (mx_t));
   fmt->local = 1;
   fmt->mx_check_empty = mbox_check_empty;
   fmt->mx_is_magic = mbox_is_magic;

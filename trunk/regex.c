@@ -313,7 +313,7 @@ static void init_syntax_once ()
 
 #define REGEX_ALLOCATE malloc
 #define REGEX_REALLOCATE(source, osize, nsize) realloc (source, nsize)
-#define REGEX_FREE free
+#define REGEX_mem_free free
 
 #else /* not REGEX_MALLOC  */
 
@@ -346,7 +346,7 @@ char *alloca ();
    destination)
 
 /* No need to do anything to free, after alloca.  */
-#define REGEX_FREE(arg) ((void)0)       /* Do nothing!  But inhibit gcc warning.  */
+#define REGEX_mem_free(arg) ((void)0)       /* Do nothing!  But inhibit gcc warning.  */
 
 #endif /* not REGEX_MALLOC */
 
@@ -358,7 +358,7 @@ char *alloca ();
   r_alloc (&failure_stack_ptr, (size))
 #define REGEX_REALLOCATE_STACK(source, osize, nsize)                \
   r_re_alloc (&failure_stack_ptr, (nsize))
-#define REGEX_FREE_STACK(ptr)                                        \
+#define REGEX_mem_free_STACK(ptr)                                        \
   r_alloc_free (&failure_stack_ptr)
 
 #else /* not using relocating allocator */
@@ -367,7 +367,7 @@ char *alloca ();
 
 #define REGEX_ALLOCATE_STACK malloc
 #define REGEX_REALLOCATE_STACK(source, osize, nsize) realloc (source, nsize)
-#define REGEX_FREE_STACK free
+#define REGEX_mem_free_STACK free
 
 #else /* not REGEX_MALLOC */
 
@@ -376,7 +376,7 @@ char *alloca ();
 #define REGEX_REALLOCATE_STACK(source, osize, nsize)                        \
    REGEX_REALLOCATE (source, osize, nsize)
 /* No need to explicitly free anything.  */
-#define REGEX_FREE_STACK(arg)
+#define REGEX_mem_free_STACK(arg)
 
 #endif /* not REGEX_MALLOC */
 #endif /* not using relocating allocator */
@@ -1156,7 +1156,7 @@ typedef struct {
     fail_stack.avail = 0;                                                \
   } while (0)
 
-#define RESET_FAIL_STACK()  REGEX_FREE_STACK (fail_stack.stack)
+#define RESET_FAIL_STACK()  REGEX_mem_free_STACK (fail_stack.stack)
 #else
 #define INIT_FAIL_STACK()                                                \
   do {                                                                        \
@@ -1808,7 +1808,7 @@ static boolean group_in_compile_stack _RE_ARGS ((compile_stack_type
    examined nor set.  */
 
 /* Return, freeing storage we allocated.  */
-#define FREE_STACK_RETURN(value)                \
+#define mem_free_STACK_RETURN(value)                \
   return (free (compile_stack.stack), value)    /* __MEM_CHECKED__ */
 
 #ifndef HAVE_ISCTYPE
@@ -1946,7 +1946,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
       bufp->buffer = TALLOC (INIT_BUF_SIZE, unsigned char);
     }
     if (!bufp->buffer)
-      FREE_STACK_RETURN (REG_ESPACE);
+      mem_free_STACK_RETURN (REG_ESPACE);
 
     bufp->allocated = INIT_BUF_SIZE;
   }
@@ -1998,7 +1998,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
       /* If there is no previous pattern... */
       if (!laststart) {
         if (syntax & RE_CONTEXT_INVALID_OPS)
-          FREE_STACK_RETURN (REG_BADRPT);
+          mem_free_STACK_RETURN (REG_BADRPT);
         else if (!(syntax & RE_CONTEXT_INDEP_OPS))
           goto normal_char;
       }
@@ -2029,7 +2029,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
 
           else if (syntax & RE_BK_PLUS_QM && c == '\\') {
             if (p == pend)
-              FREE_STACK_RETURN (REG_EESCAPE);
+              mem_free_STACK_RETURN (REG_EESCAPE);
 
             PATFETCH (c1);
             if (!(c1 == '+' || c1 == '?')) {
@@ -2123,7 +2123,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
         boolean had_char_class = false;
 
         if (p == pend)
-          FREE_STACK_RETURN (REG_EBRACK);
+          mem_free_STACK_RETURN (REG_EBRACK);
 
         /* Ensure that we have enough space to push a charset: the
            opcode, the length count, and the bitset; 34 bytes in all.  */
@@ -2154,14 +2154,14 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
         /* Read in characters and ranges, setting map bits.  */
         for (;;) {
           if (p == pend)
-            FREE_STACK_RETURN (REG_EBRACK);
+            mem_free_STACK_RETURN (REG_EBRACK);
 
           PATFETCH (c);
 
           /* \ might escape characters inside [...] and [^...].  */
           if ((syntax & RE_BACKSLASH_ESCAPE_IN_LISTS) && c == '\\') {
             if (p == pend)
-              FREE_STACK_RETURN (REG_EESCAPE);
+              mem_free_STACK_RETURN (REG_EESCAPE);
 
             PATFETCH (c1);
             SET_LIST_BIT (c1);
@@ -2177,7 +2177,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
           /* Look ahead to see if it's a range when the last thing
              was a character class.  */
           if (had_char_class && c == '-' && *p != ']')
-            FREE_STACK_RETURN (REG_ERANGE);
+            mem_free_STACK_RETURN (REG_ERANGE);
 
           /* Look ahead to see if it's a range when the last thing
              was a character: if this is a hyphen not at the
@@ -2189,7 +2189,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
             reg_errcode_t ret
               = compile_range (&p, pend, translate, syntax, b);
             if (ret != REG_NOERROR)
-              FREE_STACK_RETURN (ret);
+              mem_free_STACK_RETURN (ret);
           }
 
           else if (p[0] == '-' && p[1] != ']') {        /* This handles ranges made up of characters only.  */
@@ -2200,7 +2200,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
 
             ret = compile_range (&p, pend, translate, syntax, b);
             if (ret != REG_NOERROR)
-              FREE_STACK_RETURN (ret);
+              mem_free_STACK_RETURN (ret);
           }
 
           /* See if we're at the beginning of a possible character
@@ -2214,7 +2214,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
 
             /* If pattern is `[[:'.  */
             if (p == pend)
-              FREE_STACK_RETURN (REG_EBRACK);
+              mem_free_STACK_RETURN (REG_EBRACK);
 
             for (;;) {
               PATFETCH (c);
@@ -2237,14 +2237,14 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
 
               wt = ctype (str);
               if (wt == 0)
-                FREE_STACK_RETURN (REG_ECTYPE);
+                mem_free_STACK_RETURN (REG_ECTYPE);
 
               /* Throw away the ] at the end of the character
                  class.  */
               PATFETCH (c);
 
               if (p == pend)
-                FREE_STACK_RETURN (REG_EBRACK);
+                mem_free_STACK_RETURN (REG_EBRACK);
 
               for (ch = 0; ch < 1 << BYTEWIDTH; ++ch) {
                 if (isctype (ch, wt))
@@ -2272,14 +2272,14 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
               boolean is_xdigit = STREQ (str, "xdigit");
 
               if (!IS_CHAR_CLASS (str))
-                FREE_STACK_RETURN (REG_ECTYPE);
+                mem_free_STACK_RETURN (REG_ECTYPE);
 
               /* Throw away the ] at the end of the character
                  class.  */
               PATFETCH (c);
 
               if (p == pend)
-                FREE_STACK_RETURN (REG_EBRACK);
+                mem_free_STACK_RETURN (REG_EBRACK);
 
               for (ch = 0; ch < 1 << BYTEWIDTH; ch++) {
                 /* This was split into 3 if's to
@@ -2367,7 +2367,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
 
     case '\\':
       if (p == pend)
-        FREE_STACK_RETURN (REG_EESCAPE);
+        mem_free_STACK_RETURN (REG_EESCAPE);
 
       /* Do not translate the character after the \, so that we can
          distinguish, e.g., \B from \b, even if we normally would
@@ -2431,7 +2431,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
           if (syntax & RE_UNMATCHED_RIGHT_PAREN_ORD) {
             goto normal_backslash;
           } else {
-            FREE_STACK_RETURN (REG_ERPAREN);
+            mem_free_STACK_RETURN (REG_ERPAREN);
           }
         }
 
@@ -2452,7 +2452,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
           if (syntax & RE_UNMATCHED_RIGHT_PAREN_ORD) {
             goto normal_char;
           } else {
-            FREE_STACK_RETURN (REG_ERPAREN);
+            mem_free_STACK_RETURN (REG_ERPAREN);
           }
         }
 
@@ -2558,7 +2558,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
             if (syntax & RE_NO_BK_BRACES)
               goto unfetch_interval;
             else
-              FREE_STACK_RETURN (REG_EBRACE);
+              mem_free_STACK_RETURN (REG_EBRACE);
           }
 
           GET_UNSIGNED_NUMBER (lower_bound);
@@ -2577,12 +2577,12 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
             if (syntax & RE_NO_BK_BRACES)
               goto unfetch_interval;
             else
-              FREE_STACK_RETURN (REG_BADBR);
+              mem_free_STACK_RETURN (REG_BADBR);
           }
 
           if (!(syntax & RE_NO_BK_BRACES)) {
             if (c != '\\')
-              FREE_STACK_RETURN (REG_EBRACE);
+              mem_free_STACK_RETURN (REG_EBRACE);
 
             PATFETCH (c);
           }
@@ -2591,7 +2591,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
             if (syntax & RE_NO_BK_BRACES)
               goto unfetch_interval;
             else
-              FREE_STACK_RETURN (REG_BADBR);
+              mem_free_STACK_RETURN (REG_BADBR);
           }
 
           /* We just parsed a valid interval.  */
@@ -2599,7 +2599,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
           /* If it's invalid to have no preceding re.  */
           if (!laststart) {
             if (syntax & RE_CONTEXT_INVALID_OPS)
-              FREE_STACK_RETURN (REG_BADRPT);
+              mem_free_STACK_RETURN (REG_BADRPT);
             else if (syntax & RE_CONTEXT_INDEP_OPS)
               laststart = b;
             else
@@ -2783,7 +2783,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
         c1 = c - '0';
 
         if (c1 > regnum)
-          FREE_STACK_RETURN (REG_ESUBREG);
+          mem_free_STACK_RETURN (REG_ESUBREG);
 
         /* Can't back reference to a subexpression if inside of it.  */
         if (group_in_compile_stack (compile_stack, (regnum_t) c1))
@@ -2850,7 +2850,7 @@ static reg_errcode_t regex_compile (pattern, size, syntax, bufp)
     STORE_JUMP (jump_past_alt, fixup_alt_jump, b);
 
   if (!COMPILE_STACK_EMPTY)
-    FREE_STACK_RETURN (REG_EPAREN);
+    mem_free_STACK_RETURN (REG_EPAREN);
 
   /* If we don't want backtracking, force success
      the first time we reach the end of the compiled pattern.  */
@@ -3634,22 +3634,22 @@ re_search_2 (bufp, string1, size1, string2, size2, startpos, range, regs,
 
 /* Free everything we malloc.  */
 #ifdef MATCH_MAY_ALLOCATE
-#define FREE_VAR(var) if (var) REGEX_FREE (var); var = NULL
-#define FREE_VARIABLES()                                                \
+#define mem_free_VAR(var) if (var) REGEX_mem_free (var); var = NULL
+#define mem_free_VARIABLES()                                                \
   do {                                                                        \
-    REGEX_FREE_STACK (fail_stack.stack);                                \
-    FREE_VAR (regstart);                                                \
-    FREE_VAR (regend);                                                        \
-    FREE_VAR (old_regstart);                                                \
-    FREE_VAR (old_regend);                                                \
-    FREE_VAR (best_regstart);                                                \
-    FREE_VAR (best_regend);                                                \
-    FREE_VAR (reg_info);                                                \
-    FREE_VAR (reg_dummy);                                                \
-    FREE_VAR (reg_info_dummy);                                                \
+    REGEX_mem_free_STACK (fail_stack.stack);                                \
+    mem_free_VAR (regstart);                                                \
+    mem_free_VAR (regend);                                                        \
+    mem_free_VAR (old_regstart);                                                \
+    mem_free_VAR (old_regend);                                                \
+    mem_free_VAR (best_regstart);                                                \
+    mem_free_VAR (best_regend);                                                \
+    mem_free_VAR (reg_info);                                                \
+    mem_free_VAR (reg_dummy);                                                \
+    mem_free_VAR (reg_info_dummy);                                                \
   } while (0)
 #else
-#define FREE_VARIABLES() ((void)0)      /* Do nothing!  But inhibit gcc warning.  */
+#define mem_free_VARIABLES() ((void)0)      /* Do nothing!  But inhibit gcc warning.  */
 #endif /* not MATCH_MAY_ALLOCATE */
 
 /* These values must meet several constraints.  They must not be valid
@@ -3887,13 +3887,13 @@ re_match_2_internal (bufp, string1, size1, string2, size2, pos, regs, stop)
 
     if (!(regstart && regend && old_regstart && old_regend && reg_info
           && best_regstart && best_regend && reg_dummy && reg_info_dummy)) {
-      FREE_VARIABLES ();
+      mem_free_VARIABLES ();
       return -2;
     }
   }
   else {
     /* We must initialize all our variables to NULL, so that
-       `FREE_VARIABLES' doesn't try to free them.  */
+       `mem_free_VARIABLES' doesn't try to free them.  */
     regstart = regend = old_regstart = old_regend = best_regstart
       = best_regend = reg_dummy = NULL;
     reg_info = reg_info_dummy = (register_info_type *) NULL;
@@ -3902,7 +3902,7 @@ re_match_2_internal (bufp, string1, size1, string2, size2, pos, regs, stop)
 
   /* The starting position is bogus.  */
   if (pos < 0 || pos > size1 + size2) {
-    FREE_VARIABLES ();
+    mem_free_VARIABLES ();
     return -1;
   }
 
@@ -4047,7 +4047,7 @@ re_match_2_internal (bufp, string1, size1, string2, size2, pos, regs, stop)
           regs->start = TALLOC (regs->num_regs, regoff_t);
           regs->end = TALLOC (regs->num_regs, regoff_t);
           if (regs->start == NULL || regs->end == NULL) {
-            FREE_VARIABLES ();
+            mem_free_VARIABLES ();
             return -2;
           }
           bufp->regs_allocated = REGS_REALLOCATE;
@@ -4060,7 +4060,7 @@ re_match_2_internal (bufp, string1, size1, string2, size2, pos, regs, stop)
             RETALLOC (regs->start, regs->num_regs, regoff_t);
             RETALLOC (regs->end, regs->num_regs, regoff_t);
             if (regs->start == NULL || regs->end == NULL) {
-              FREE_VARIABLES ();
+              mem_free_VARIABLES ();
               return -2;
             }
           }
@@ -4113,7 +4113,7 @@ re_match_2_internal (bufp, string1, size1, string2, size2, pos, regs, stop)
 
       DEBUG_PRINT2 ("Returning %d from re_match_2.\n", mcnt);
 
-      FREE_VARIABLES ();
+      mem_free_VARIABLES ();
       return mcnt;
     }
 
@@ -5054,7 +5054,7 @@ re_match_2_internal (bufp, string1, size1, string2, size2, pos, regs, stop)
   if (best_regs_set)
     goto restore_best_regs;
 
-  FREE_VARIABLES ();
+  mem_free_VARIABLES ();
 
   return -1;                    /* Failure to match.  */
 }                               /* re_match_2 */

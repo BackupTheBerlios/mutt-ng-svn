@@ -46,7 +46,7 @@
 
 BODY *mutt_new_body (void)
 {
-  BODY *p = (BODY *) safe_calloc (1, sizeof (BODY));
+  BODY *p = (BODY *) mem_calloc (1, sizeof (BODY));
 
   p->disposition = DISPATTACH;
   p->use_disp = 1;
@@ -177,12 +177,12 @@ void mutt_free_body (BODY ** p)
     else if (b->filename)
       debug_print (1, ("not unlinking %s.\n", b->filename));
 
-    FREE (&b->filename);
-    FREE (&b->content);
-    FREE (&b->xtype);
-    FREE (&b->subtype);
-    FREE (&b->description);
-    FREE (&b->form_name);
+    mem_free (&b->filename);
+    mem_free (&b->content);
+    mem_free (&b->xtype);
+    mem_free (&b->subtype);
+    mem_free (&b->description);
+    mem_free (&b->form_name);
 
     if (b->hdr) {
       /* Don't free twice (b->hdr->content = b->parts) */
@@ -193,7 +193,7 @@ void mutt_free_body (BODY ** p)
     if (b->parts)
       mutt_free_body (&b->parts);
 
-    FREE (&b);
+    mem_free (&b);
   }
 
   *p = 0;
@@ -205,11 +205,11 @@ void mutt_free_parameter (PARAMETER ** p)
   PARAMETER *o;
 
   while (t) {
-    FREE (&t->attribute);
-    FREE (&t->value);
+    mem_free (&t->attribute);
+    mem_free (&t->value);
     o = t;
     t = t->next;
-    FREE (&o);
+    mem_free (&o);
   }
   *p = 0;
 }
@@ -225,12 +225,12 @@ LIST *mutt_add_list_n (LIST *head, const void *data, size_t len) {
   for (tmp = head; tmp && tmp->next; tmp = tmp->next);
 
   if (tmp) {
-    tmp->next = safe_malloc (sizeof (LIST));
+    tmp->next = mem_malloc (sizeof (LIST));
     tmp = tmp->next;
   } else
-    head = tmp = safe_malloc (sizeof (LIST));
+    head = tmp = mem_malloc (sizeof (LIST));
 
-  tmp->data = safe_malloc (len);
+  tmp->data = mem_malloc (len);
   if (len)
     memcpy (tmp->data, data, len);
   tmp->next = NULL;
@@ -246,8 +246,8 @@ void mutt_free_list (LIST ** list)
   while (*list) {
     p = *list;
     *list = (*list)->next;
-    FREE (&p->data);
-    FREE (&p);
+    mem_free (&p->data);
+    mem_free (&p);
   }
 }
 
@@ -266,16 +266,16 @@ void mutt_free_header (HEADER ** h)
     return;
   mutt_free_envelope (&(*h)->env);
   mutt_free_body (&(*h)->content);
-  FREE (&(*h)->maildir_flags);
-  FREE (&(*h)->tree);
-  FREE (&(*h)->path);
+  mem_free (&(*h)->maildir_flags);
+  mem_free (&(*h)->tree);
+  mem_free (&(*h)->path);
 #ifdef MIXMASTER
   mutt_free_list (&(*h)->chain);
 #endif
 #if defined USE_POP || defined USE_IMAP || defined USE_NNTP
-  FREE (&(*h)->data);
+  mem_free (&(*h)->data);
 #endif
-  FREE (h);
+  mem_free (h);
 }
 
 /* returns true if the header contained in "s" is in list "t" */
@@ -621,26 +621,26 @@ void mutt_free_envelope (ENVELOPE ** p)
   rfc822_free_address (&(*p)->reply_to);
   rfc822_free_address (&(*p)->mail_followup_to);
 
-  FREE (&(*p)->list_post);
-  FREE (&(*p)->subject);
+  mem_free (&(*p)->list_post);
+  mem_free (&(*p)->subject);
   /* real_subj is just an offset to subject and shouldn't be freed */
-  FREE (&(*p)->message_id);
-  FREE (&(*p)->supersedes);
-  FREE (&(*p)->date);
-  FREE (&(*p)->x_label);
-  FREE (&(*p)->organization);
+  mem_free (&(*p)->message_id);
+  mem_free (&(*p)->supersedes);
+  mem_free (&(*p)->date);
+  mem_free (&(*p)->x_label);
+  mem_free (&(*p)->organization);
 #ifdef USE_NNTP
-  FREE (&(*p)->newsgroups);
-  FREE (&(*p)->xref);
-  FREE (&(*p)->followup_to);
-  FREE (&(*p)->x_comment_to);
+  mem_free (&(*p)->newsgroups);
+  mem_free (&(*p)->xref);
+  mem_free (&(*p)->followup_to);
+  mem_free (&(*p)->x_comment_to);
 #endif
 
   mutt_buffer_free (&(*p)->spam);
   mutt_free_list (&(*p)->references);
   mutt_free_list (&(*p)->in_reply_to);
   mutt_free_list (&(*p)->userhdrs);
-  FREE (p);
+  mem_free (p);
 }
 
 /* move all the headers from extra not present in base into base */
@@ -704,9 +704,9 @@ void mutt_free_alias (ALIAS ** p)
   while (*p) {
     t = *p;
     *p = (*p)->next;
-    FREE (&t->name);
+    mem_free (&t->name);
     rfc822_free_address (&t->addr);
-    FREE (&t);
+    mem_free (&t);
   }
 }
 
@@ -860,13 +860,13 @@ int mutt_check_overwrite (const char *attname, const char *path,
         str_replace (directory, fname);
         break;
       case 1:                  /* yes */
-        FREE (directory);
+        mem_free (directory);
         break;
       case -1:                 /* abort */
-        FREE (directory);
+        mem_free (directory);
         return -1;
       case 2:                  /* no */
-        FREE (directory);
+        mem_free (directory);
         return 1;
       }
     }
@@ -1148,7 +1148,7 @@ void mutt_FormatString (char *dest,     /* output buffer */
     }
     else {
       unsigned int bar = mutt_skipchars (src, "%\\");
-      char *bar2 = safe_malloc (bar + 1);
+      char *bar2 = mem_malloc (bar + 1);
 
       strfcpy (bar2, src, bar + 1);
       while (bar--) {
@@ -1156,7 +1156,7 @@ void mutt_FormatString (char *dest,     /* output buffer */
         wlen++;
       }
       col += mutt_strwidth (bar2);
-      FREE (&bar2);
+      mem_free (&bar2);
     }
   }
   *wptr = 0;
@@ -1190,7 +1190,7 @@ FILE *mutt_open_read (const char *path, pid_t * thepid)
     s[len - 1] = 0;
     mutt_endwin (NULL);
     *thepid = mutt_create_filter (s, NULL, &f, NULL);
-    FREE (&s);
+    mem_free (&s);
   }
   else {
     if (stat (path, &s) < 0)
@@ -1378,12 +1378,12 @@ void mutt_sleep (short s)
 BUFFER *mutt_buffer_init (BUFFER * b)
 {
   if (!b) {
-    b = safe_malloc (sizeof (BUFFER));
+    b = mem_malloc (sizeof (BUFFER));
     if (!b)
       return NULL;
   }
   else {
-    FREE(&b->data);
+    mem_free(&b->data);
   }
   memset (b, 0, sizeof (BUFFER));
   return b;
@@ -1424,9 +1424,9 @@ void mutt_buffer_free (BUFFER ** p)
   if (!p || !*p)
     return;
 
-  FREE (&(*p)->data);
+  mem_free (&(*p)->data);
   /* dptr is just an offset to data and shouldn't be freed */
-  FREE (p);
+  mem_free (p);
 }
 
 /* dynamically grows a BUFFER to accomodate s, in increments of 128 bytes.
@@ -1439,7 +1439,7 @@ void mutt_buffer_add (BUFFER * buf, const char *s, size_t len)
   if (buf->dptr + len + 1 > buf->data + buf->dsize) {
     offset = buf->dptr - buf->data;
     buf->dsize += len < 128 ? 128 : len + 1;
-    safe_realloc ((void **) &buf->data, buf->dsize);
+    mem_realloc ((void **) &buf->data, buf->dsize);
     buf->dptr = buf->data + offset;
   }
   memcpy (buf->dptr, s, len);
@@ -1490,8 +1490,8 @@ void mutt_free_spam_list (SPAM_LIST ** list)
     p = *list;
     *list = (*list)->next;
     rx_free (&p->rx);
-    FREE(&p->template);
-    FREE(&p);
+    mem_free(&p->template);
+    mem_free(&p);
   }
 }
 
@@ -1510,7 +1510,7 @@ int mutt_match_spam_list (const char *s, SPAM_LIST * l, char *text, int x)
   for (; l; l = l->next) {
     /* If this pattern needs more matches, expand pmatch. */
     if (l->nmatch > nmatch) {
-      safe_realloc (&pmatch, l->nmatch * sizeof (regmatch_t));
+      mem_realloc (&pmatch, l->nmatch * sizeof (regmatch_t));
       nmatch = l->nmatch;
     }
 

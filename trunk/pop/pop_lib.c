@@ -53,7 +53,7 @@ int pop_parse_path (const char *path, ACCOUNT * acct)
       ret = 0;
   }
 
-  FREE (&c);
+  mem_free (&c);
   return ret;
 }
 
@@ -84,7 +84,7 @@ static int fetch_capa (char *line, void *data)
   char *c;
 
   if (!ascii_strncasecmp (line, "SASL", 4)) {
-    FREE (&pop_data->auth_list);
+    mem_free (&pop_data->auth_list);
     c = line + 4;
     SKIPWS (c);
     pop_data->auth_list = str_dup (c);
@@ -111,11 +111,11 @@ static int fetch_auth (char *line, void *data)
   POP_DATA *pop_data = (POP_DATA *) data;
 
   if (!pop_data->auth_list) {
-    pop_data->auth_list = safe_malloc (strlen (line) + 1);
+    pop_data->auth_list = mem_malloc (strlen (line) + 1);
     *pop_data->auth_list = '\0';
   }
   else {
-    safe_realloc (&pop_data->auth_list,
+    mem_realloc (&pop_data->auth_list,
                   strlen (pop_data->auth_list) + strlen (line) + 2);
     strcat (pop_data->auth_list, " ");  /* __STRCAT_CHECKED__ */
   }
@@ -148,7 +148,7 @@ static pop_query_status pop_capabilities (POP_DATA * pop_data, int mode)
     pop_data->resp_codes = 0;
     pop_data->expire = 1;
     pop_data->login_delay = 0;
-    FREE (&pop_data->auth_list);
+    mem_free (&pop_data->auth_list);
   }
 
   /* Execute CAPA command */
@@ -443,7 +443,7 @@ pop_query_status pop_fetch_data (POP_DATA * pop_data, char *query, char *msg,
   if (ret != PQ_OK)
     return ret;
 
-  inbuf = safe_malloc (sizeof (buf));
+  inbuf = mem_malloc (sizeof (buf));
 
   FOREVER {
     chunk =
@@ -476,10 +476,10 @@ pop_query_status pop_fetch_data (POP_DATA * pop_data, char *query, char *msg,
       lenbuf = 0;
     }
 
-    safe_realloc (&inbuf, lenbuf + sizeof (buf));
+    mem_realloc (&inbuf, lenbuf + sizeof (buf));
   }
 
-  FREE (&inbuf);
+  mem_free (&inbuf);
   return ret;
 }
 

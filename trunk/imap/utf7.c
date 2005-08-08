@@ -52,7 +52,7 @@ static char *utf7_to_utf8 (const char *u7, size_t u7len, char **u8,
   char *buf, *p;
   int b, ch, k;
 
-  p = buf = safe_malloc (u7len + u7len / 8 + 1);
+  p = buf = mem_malloc (u7len + u7len / 8 + 1);
 
   for (; u7len; u7++, u7len--) {
     if (*u7 == '&') {
@@ -113,13 +113,13 @@ static char *utf7_to_utf8 (const char *u7, size_t u7len, char **u8,
   if (u8len)
     *u8len = p - buf;
 
-  safe_realloc (&buf, p - buf);
+  mem_realloc (&buf, p - buf);
   if (u8)
     *u8 = buf;
   return buf;
 
 bail:
-  FREE (&buf);
+  mem_free (&buf);
   return 0;
 }
 
@@ -142,7 +142,7 @@ static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
    * In the worst case we convert 2 chars to 7 chars. For example:
    * "\x10&\x10&..." -> "&ABA-&-&ABA-&-...".
    */
-  p = buf = safe_malloc ((u8len / 2) * 7 + 6);
+  p = buf = mem_malloc ((u8len / 2) * 7 + 6);
 
   while (u8len) {
     unsigned char c = *u8;
@@ -206,7 +206,7 @@ static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
   }
 
   if (u8len) {
-    FREE (&buf);
+    mem_free (&buf);
     return 0;
   }
 
@@ -219,13 +219,13 @@ static char *utf8_to_utf7 (const char *u8, size_t u8len, char **u7,
   *p++ = '\0';
   if (u7len)
     *u7len = p - buf;
-  safe_realloc (&buf, p - buf);
+  mem_realloc (&buf, p - buf);
   if (u7)
     *u7 = buf;
   return buf;
 
 bail:
-  FREE (&buf);
+  mem_free (&buf);
   return 0;
 }
 
@@ -236,7 +236,7 @@ void imap_utf7_encode (char **s)
 
     if (!mutt_convert_string (&t, Charset, "UTF-8", 0))
       utf8_to_utf7 (t, str_len (t), s, 0);
-    FREE (&t);
+    mem_free (&t);
   }
 }
 
@@ -246,7 +246,7 @@ void imap_utf7_decode (char **s)
     char *t = utf7_to_utf8 (*s, str_len (*s), 0, 0);
 
     if (t && !mutt_convert_string (&t, "UTF-8", Charset, 0)) {
-      FREE (s);
+      mem_free (s);
       *s = t;
     }
   }

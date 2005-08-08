@@ -14,10 +14,10 @@
 #include "str.h"
 
 rx_t *rx_compile (const char *s, int flags) {
-  rx_t *pp = safe_calloc (1, sizeof (rx_t));
+  rx_t *pp = mem_calloc (1, sizeof (rx_t));
 
   pp->pattern = str_dup (s);
-  pp->rx = safe_calloc (1, sizeof (regex_t));
+  pp->rx = mem_calloc (1, sizeof (regex_t));
   if (REGCOMP(pp->rx, NONULL (s), flags) != 0)
     rx_free (&pp);
 
@@ -25,10 +25,10 @@ rx_t *rx_compile (const char *s, int flags) {
 }
 
 void rx_free (rx_t** p) {
-  FREE(&(*p)->pattern);
+  mem_free(&(*p)->pattern);
   regfree ((*p)->rx);
-  FREE(&(*p)->rx);
-  FREE(p);
+  mem_free(&(*p)->rx);
+  mem_free(p);
 }
 
 int rx_compare (const rx_t* r1, const rx_t* r2) {

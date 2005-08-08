@@ -288,7 +288,7 @@ static void update_index (MUTTMENU * menu, CONTEXT * ctx, int check,
   /* save the list of new messages */
   if (oldcount && check != M_REOPENED && ((Sort & SORT_MASK) == SORT_THREADS)) {
     save_new =
-      (HEADER **) safe_malloc (sizeof (HEADER *) *
+      (HEADER **) mem_malloc (sizeof (HEADER *) *
                                (Context->msgcount - oldcount));
     for (j = oldcount; j < Context->msgcount; j++)
       save_new[j - oldcount] = Context->hdrs[j];
@@ -321,7 +321,7 @@ static void update_index (MUTTMENU * menu, CONTEXT * ctx, int check,
             mutt_uncollapse_thread (Context, h);
         }
       }
-      FREE (&save_new);
+      mem_free (&save_new);
       mutt_set_virtual (Context);
     }
   }
@@ -474,7 +474,7 @@ int mutt_index_menu (void)
       if ((check = mx_check_mailbox (Context, &index_hint, 0)) < 0) {
         if (!Context->path) {
           /* fatal error occurred */
-          FREE (&Context);
+          mem_free (&Context);
           menu->redraw = REDRAW_FULL;
         }
         set_option (OPTSEARCHINVALID);
@@ -956,7 +956,7 @@ int mutt_index_menu (void)
             snprintf (buf, sizeof (buf), "~A");
           unset_option (OPTHIDEREAD);
         }
-        FREE (&Context->pattern);
+        mem_free (&Context->pattern);
         Context->pattern = str_dup (buf);
       }
       if ((op == OP_TOGGLE_READ && mutt_pattern_func (M_LIMIT, NULL) == 0) ||
@@ -1142,7 +1142,7 @@ int mutt_index_menu (void)
 
       /* check for a fatal error, or all messages deleted */
       if (!Context->path)
-        FREE (&Context);
+        mem_free (&Context);
 
       /* if we were in the pager, redisplay the message */
       if (menu->menu == MENU_PAGER) {
@@ -1241,7 +1241,7 @@ int mutt_index_menu (void)
           menu->redraw = REDRAW_INDEX | REDRAW_STATUS;
           break;
         }
-        FREE (&Context);
+        mem_free (&Context);
       }
 
       mutt_sleep (0);
@@ -1324,7 +1324,7 @@ int mutt_index_menu (void)
       {
         if (Context) {
           mx_fastclose_mailbox (Context);
-          FREE (&Context);
+          mem_free (&Context);
         }
         done = 1;
       }

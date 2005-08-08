@@ -345,8 +345,8 @@ static void cleanup_quote (struct q_class_t **QuoteList)
       cleanup_quote (&((*QuoteList)->down));
     ptr = (*QuoteList)->next;
     if ((*QuoteList)->prefix)
-      FREE (&(*QuoteList)->prefix);
-    FREE (QuoteList);
+      mem_free (&(*QuoteList)->prefix);
+    mem_free (QuoteList);
     *QuoteList = ptr;
   }
 
@@ -367,7 +367,7 @@ static struct q_class_t *classify_quote (struct q_class_t **QuoteList,
     /* not much point in classifying quotes... */
 
     if (*QuoteList == NULL) {
-      class = (struct q_class_t *) safe_calloc (1, sizeof (struct q_class_t));
+      class = (struct q_class_t *) mem_calloc (1, sizeof (struct q_class_t));
       class->color = ColorQuote[0];
       *QuoteList = class;
     }
@@ -389,8 +389,8 @@ static struct q_class_t *classify_quote (struct q_class_t **QuoteList,
         if (tmp == NULL) {
           /* add a node above q_list */
           tmp =
-            (struct q_class_t *) safe_calloc (1, sizeof (struct q_class_t));
-          tmp->prefix = (char *) safe_calloc (1, length + 1);
+            (struct q_class_t *) mem_calloc (1, sizeof (struct q_class_t));
+          tmp->prefix = (char *) mem_calloc (1, length + 1);
           strncpy (tmp->prefix, qptr, length);
           tmp->length = length;
 
@@ -491,10 +491,10 @@ static struct q_class_t *classify_quote (struct q_class_t **QuoteList,
               /* found shorter common prefix */
               if (tmp == NULL) {
                 /* add a node above q_list */
-                tmp = (struct q_class_t *) safe_calloc (1,
+                tmp = (struct q_class_t *) mem_calloc (1,
                                                         sizeof (struct
                                                                 q_class_t));
-                tmp->prefix = (char *) safe_calloc (1, length + 1);
+                tmp->prefix = (char *) mem_calloc (1, length + 1);
                 strncpy (tmp->prefix, qptr, length);
                 tmp->length = length;
 
@@ -589,8 +589,8 @@ static struct q_class_t *classify_quote (struct q_class_t **QuoteList,
         /* still not found so far: add it as a sibling to the current node */
         if (class == NULL) {
           tmp =
-            (struct q_class_t *) safe_calloc (1, sizeof (struct q_class_t));
-          tmp->prefix = (char *) safe_calloc (1, length + 1);
+            (struct q_class_t *) mem_calloc (1, sizeof (struct q_class_t));
+          tmp->prefix = (char *) mem_calloc (1, length + 1);
           strncpy (tmp->prefix, qptr, length);
           tmp->length = length;
 
@@ -622,8 +622,8 @@ static struct q_class_t *classify_quote (struct q_class_t **QuoteList,
 
   if (class == NULL) {
     /* not found so far: add it as a top level class */
-    class = (struct q_class_t *) safe_calloc (1, sizeof (struct q_class_t));
-    class->prefix = (char *) safe_calloc (1, length + 1);
+    class = (struct q_class_t *) mem_calloc (1, sizeof (struct q_class_t));
+    class->prefix = (char *) mem_calloc (1, length + 1);
     strncpy (class->prefix, qptr, length);
     class->length = length;
     new_class_color (class, q_level);
@@ -693,7 +693,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
       /* oops... */
       if (lineInfo[i].chunks) {
         lineInfo[i].chunks = 0;
-        safe_realloc (&(lineInfo[n].syntax), sizeof (struct syntax_t));
+        mem_realloc (&(lineInfo[n].syntax), sizeof (struct syntax_t));
       }
       lineInfo[i++].type = MT_COLOR_SIGNATURE;
     }
@@ -757,7 +757,7 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
           if (pmatch[0].rm_eo != pmatch[0].rm_so) {
             if (!found) {
               if (++(lineInfo[n].chunks) > 1)
-                safe_realloc (&(lineInfo[n].syntax),
+                mem_realloc (&(lineInfo[n].syntax),
                               (lineInfo[n].chunks) *
                               sizeof (struct syntax_t));
             }
@@ -1140,12 +1140,12 @@ display_line (FILE * f, long *last_pos, struct line_t **lineInfo, int n,
   }
 
   if (*last == *max) {
-    safe_realloc (lineInfo, sizeof (struct line_t) * (*max += LINES));
+    mem_realloc (lineInfo, sizeof (struct line_t) * (*max += LINES));
     for (ch = *last; ch < *max; ch++) {
       memset (&((*lineInfo)[ch]), 0, sizeof (struct line_t));
       (*lineInfo)[ch].type = -1;
       (*lineInfo)[ch].search_cnt = -1;
-      (*lineInfo)[ch].syntax = safe_malloc (sizeof (struct syntax_t));
+      (*lineInfo)[ch].syntax = mem_malloc (sizeof (struct syntax_t));
       ((*lineInfo)[ch].syntax)[0].first = ((*lineInfo)[ch].syntax)[0].last =
         -1;
     }
@@ -1217,10 +1217,10 @@ display_line (FILE * f, long *last_pos, struct line_t **lineInfo, int n,
            (SearchRE, (char *) fmt + offset, 1, pmatch,
             (offset ? REG_NOTBOL : 0)) == 0) {
       if (++((*lineInfo)[n].search_cnt) > 1)
-        safe_realloc (&((*lineInfo)[n].search),
+        mem_realloc (&((*lineInfo)[n].search),
                       ((*lineInfo)[n].search_cnt) * sizeof (struct syntax_t));
       else
-        (*lineInfo)[n].search = safe_malloc (sizeof (struct syntax_t));
+        (*lineInfo)[n].search = mem_malloc (sizeof (struct syntax_t));
       pmatch[0].rm_so += offset;
       pmatch[0].rm_eo += offset;
       ((*lineInfo)[n].search)[(*lineInfo)[n].search_cnt - 1].first =
@@ -1457,12 +1457,12 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
     mutt_set_flag (Context, extra->hdr, M_READ, 1);
   }
 
-  lineInfo = safe_malloc (sizeof (struct line_t) * (maxLine = LINES));
+  lineInfo = mem_malloc (sizeof (struct line_t) * (maxLine = LINES));
   for (i = 0; i < maxLine; i++) {
     memset (&lineInfo[i], 0, sizeof (struct line_t));
     lineInfo[i].type = -1;
     lineInfo[i].search_cnt = -1;
-    lineInfo[i].syntax = safe_malloc (sizeof (struct syntax_t));
+    lineInfo[i].syntax = mem_malloc (sizeof (struct syntax_t));
     (lineInfo[i].syntax)[0].first = (lineInfo[i].syntax)[0].last = -1;
   }
 
@@ -1540,7 +1540,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
         lines = Resize->line;
         redraw |= REDRAW_SIGWINCH;
 
-        FREE (&Resize);
+        mem_free (&Resize);
       }
 #endif
 
@@ -1711,7 +1711,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
           lines++;
 
       if (flags & M_PAGER_RETWINCH) {
-        Resize = safe_malloc (sizeof (struct resize));
+        Resize = mem_malloc (sizeof (struct resize));
 
         Resize->line = lines;
         Resize->SearchCompiled = SearchCompiled;
@@ -1729,9 +1729,9 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
           lineInfo[i].search_cnt = -1;
           lineInfo[i].quote = NULL;
 
-          safe_realloc (&(lineInfo[i].syntax), sizeof (struct syntax_t));
+          mem_realloc (&(lineInfo[i].syntax), sizeof (struct syntax_t));
           if (SearchCompiled && lineInfo[i].search)
-            FREE (&(lineInfo[i].search));
+            mem_free (&(lineInfo[i].search));
         }
 
         lastLine = 0;
@@ -1907,7 +1907,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
         regfree (&SearchRE);
         for (i = 0; i < lastLine; i++) {
           if (lineInfo[i].search)
-            FREE (&(lineInfo[i].search));
+            mem_free (&(lineInfo[i].search));
           lineInfo[i].search_cnt = -1;
         }
       }
@@ -1921,7 +1921,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
         for (i = 0; i < maxLine; i++) {
           /* cleanup */
           if (lineInfo[i].search)
-            FREE (&(lineInfo[i].search));
+            mem_free (&(lineInfo[i].search));
           lineInfo[i].search_cnt = -1;
         }
         SearchFlag = 0;
@@ -2211,9 +2211,9 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
           lineInfo[i].search_cnt = -1;
           lineInfo[i].quote = NULL;
 
-          safe_realloc (&(lineInfo[i].syntax), sizeof (struct syntax_t));
+          mem_realloc (&(lineInfo[i].syntax), sizeof (struct syntax_t));
           if (SearchCompiled && lineInfo[i].search)
-            FREE (&(lineInfo[i].search));
+            mem_free (&(lineInfo[i].search));
         }
 
         if (SearchCompiled) {
@@ -2593,15 +2593,15 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
   cleanup_quote (&QuoteList);
 
   for (i = 0; i < maxLine; i++) {
-    FREE (&(lineInfo[i].syntax));
+    mem_free (&(lineInfo[i].syntax));
     if (SearchCompiled && lineInfo[i].search)
-      FREE (&(lineInfo[i].search));
+      mem_free (&(lineInfo[i].search));
   }
   if (SearchCompiled) {
     regfree (&SearchRE);
     SearchCompiled = 0;
   }
-  FREE (&lineInfo);
+  mem_free (&lineInfo);
   if (index)
     mutt_menuDestroy (&index);
   return (rc != -1 ? rc : 0);

@@ -120,9 +120,9 @@
    code is also used in GNU C Library where the names have a __
    prefix.  So we have to make a difference here.  */
 #ifdef _LIBC
-# define FREE_EXPRESSION __gettext_free_exp
+# define mem_free_EXPRESSION __gettext_free_exp
 #else
-# define FREE_EXPRESSION gettext_free_exp__
+# define mem_free_EXPRESSION gettext_free_exp__
 # define __gettextparse gettextparse__
 #endif
 
@@ -207,7 +207,7 @@ new_exp (nargs, op, args)
 
  fail:
   for (i = nargs - 1; i >= 0; i--)
-    FREE_EXPRESSION (args[i]);
+    mem_free_EXPRESSION (args[i]);
 
   return NULL;
 }
@@ -283,14 +283,14 @@ new_exp_3 (op, bexp, tbranch, fbranch)
 
 # ifdef YYSTACK_ALLOC
    /* Pacify GCC's `empty if-body' warning. */
-#  define YYSTACK_FREE(Ptr) do { /* empty */; } while (0)
+#  define YYSTACK_mem_free(Ptr) do { /* empty */; } while (0)
 # else
 #  if defined (__STDC__) || defined (__cplusplus)
 #   include <stdlib.h> /* INFRINGES ON USER NAME SPACE */
 #   define YYSIZE_T size_t
 #  endif
 #  define YYSTACK_ALLOC malloc
-#  define YYSTACK_FREE free
+#  define YYSTACK_mem_free free
 # endif
 #endif /* ! defined (yyoverflow) || YYERROR_VERBOSE */
 
@@ -1023,7 +1023,7 @@ int yynerrs;
 
 #  undef YYSTACK_RELOCATE
 	if (yyss1 != yyssa)
-	  YYSTACK_FREE (yyss1);
+	  YYSTACK_mem_free (yyss1);
       }
 # endif
 #endif /* no yyoverflow */
@@ -1310,7 +1310,7 @@ yyerrlab:
 		      }
 		}
 	      yyerror (yymsg);
-	      YYSTACK_FREE (yymsg);
+	      YYSTACK_mem_free (yymsg);
 	    }
 	  else
 	    yyerror ("syntax error; also virtual memory exhausted");
@@ -1424,7 +1424,7 @@ yyoverflowlab:
 yyreturn:
 #ifndef yyoverflow
   if (yyss != yyssa)
-    YYSTACK_FREE (yyss);
+    YYSTACK_mem_free (yyss);
 #endif
   return yyresult;
 }
@@ -1435,7 +1435,7 @@ yyreturn:
 
 void
 internal_function
-FREE_EXPRESSION (exp)
+mem_free_EXPRESSION (exp)
      struct expression *exp;
 {
   if (exp == NULL)
@@ -1445,13 +1445,13 @@ FREE_EXPRESSION (exp)
   switch (exp->nargs)
     {
     case 3:
-      FREE_EXPRESSION (exp->val.args[2]);
+      mem_free_EXPRESSION (exp->val.args[2]);
       /* FALLTHROUGH */
     case 2:
-      FREE_EXPRESSION (exp->val.args[1]);
+      mem_free_EXPRESSION (exp->val.args[1]);
       /* FALLTHROUGH */
     case 1:
-      FREE_EXPRESSION (exp->val.args[0]);
+      mem_free_EXPRESSION (exp->val.args[0]);
       /* FALLTHROUGH */
     default:
       break;

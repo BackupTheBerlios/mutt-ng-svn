@@ -10,38 +10,38 @@
 #include "exit.h"
 #include "intl.h"
 
-void *_safe_calloc (size_t nmemb, size_t size, int line, const char* fname) {
+void *_mem_calloc (size_t nmemb, size_t size, int line, const char* fname) {
   void *p;
 
   if (!nmemb || !size)
     return NULL;
 
   if (((size_t) - 1) / nmemb <= size) {
-    exit_fatal ("safe_calloc", _("Integer overflow -- can't allocate memory!"),
+    exit_fatal ("mem_calloc", _("Integer overflow -- can't allocate memory!"),
                 line, fname, 1);
     return (NULL);
   }
 
   if (!(p = calloc (nmemb, size))) {
-    exit_fatal ("safe_calloc", _("Out of memory!"), line, fname, 1);
+    exit_fatal ("mem_calloc", _("Out of memory!"), line, fname, 1);
     return (NULL);
   }
   return p;
 }
 
-void *_safe_malloc (size_t siz, int line, const char* fname) {
+void *_mem_malloc (size_t siz, int line, const char* fname) {
   void *p;
 
   if (siz == 0)
     return 0;
   if ((p = (void *) malloc (siz)) == 0) {       /* __MEM_CHECKED__ */
-    exit_fatal ("safe_malloc", _("Out of memory!"), line, fname, 1);
+    exit_fatal ("mem_malloc", _("Out of memory!"), line, fname, 1);
     return (NULL);
   }
   return (p);
 }
 
-void _safe_realloc (void *ptr, size_t siz, int line, const char* fname) {
+void _mem_realloc (void *ptr, size_t siz, int line, const char* fname) {
   void *r;
   void **p = (void **) ptr;
 
@@ -61,12 +61,12 @@ void _safe_realloc (void *ptr, size_t siz, int line, const char* fname) {
   }
 
   if (!r)
-    exit_fatal ("safe_realloc", _("Out of memory!"), line, fname, 1);
+    exit_fatal ("mem_realloc", _("Out of memory!"), line, fname, 1);
 
   *p = r;
 }
 
-void _safe_free (void *ptr) {
+void _mem_free (void *ptr) {
   void **p = (void **) ptr;
 
   if (*p) {

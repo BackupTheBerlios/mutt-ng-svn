@@ -450,7 +450,7 @@ static pgp_key_t pgp_select_key (pgp_key_t keys, ADDRESS * p, const char *s)
 
       if (i == keymax) {
         keymax += 5;
-        safe_realloc (&KeyTable, sizeof (pgp_uid_t *) * keymax);
+        mem_realloc (&KeyTable, sizeof (pgp_uid_t *) * keymax);
       }
 
       KeyTable[i++] = a;
@@ -622,7 +622,7 @@ static pgp_key_t pgp_select_key (pgp_key_t keys, ADDRESS * p, const char *s)
   }
 
   mutt_menuDestroy (&menu);
-  FREE (&KeyTable);
+  mem_free (&KeyTable);
 
   set_option (OPTNEEDREDRAW);
 
@@ -658,7 +658,7 @@ pgp_key_t pgp_ask_for_key (char *tag, char *whatfor,
       if (l)
         str_replace (&l->dflt, resp);
       else {
-        l = safe_malloc (sizeof (struct pgp_cache));
+        l = mem_malloc (sizeof (struct pgp_cache));
         l->next = id_defaults;
         id_defaults = l;
         l->what = str_dup (whatfor);
@@ -767,7 +767,7 @@ static LIST *pgp_add_string_to_hints (LIST * hints, const char *str)
       hints = mutt_add_list (hints, t);
   }
 
-  FREE (&scratch);
+  mem_free (&scratch);
   return hints;
 }
 

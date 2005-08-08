@@ -56,7 +56,7 @@ static struct mapping_t AttachHelp[] = {
 
 int mutt_extract_path (char *filename, char *path)
 {
-  char *tmp = safe_malloc (sizeof (char) * _POSIX_PATH_MAX);
+  char *tmp = mem_malloc (sizeof (char) * _POSIX_PATH_MAX);
   char *help_ptr;
 
   help_ptr = tmp;
@@ -70,7 +70,7 @@ int mutt_extract_path (char *filename, char *path)
     }
     *help_ptr++ = *filename++;
   }
-  FREE (&tmp);
+  mem_free (&tmp);
   return 0;
 }
 
@@ -120,7 +120,7 @@ ATTACHPTR **mutt_gen_attach_list (BODY * m,
 
   for (; m; m = m->next) {
     if (*idxlen == *idxmax) {
-      safe_realloc (&idx, sizeof (ATTACHPTR *) * ((*idxmax) += 5));
+      mem_realloc (&idx, sizeof (ATTACHPTR *) * ((*idxmax) += 5));
       for (i = *idxlen; i < *idxmax; i++)
         idx[i] = NULL;
     }
@@ -138,7 +138,7 @@ ATTACHPTR **mutt_gen_attach_list (BODY * m,
     }
     else {
       if (!idx[*idxlen])
-        idx[*idxlen] = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+        idx[*idxlen] = (ATTACHPTR *) mem_calloc (1, sizeof (ATTACHPTR));
 
       new = idx[(*idxlen)++];
       new->content = m;
@@ -527,7 +527,7 @@ void mutt_save_attachment_list (FILE * fp, int tag, BODY * top, HEADER * hdr,
       break;
   }
 
-  FREE (&directory);
+  mem_free (&directory);
 
   if (tag && menu) {
     menu->oldcurrent = menu->current;
@@ -1218,12 +1218,12 @@ void mutt_view_attachments (HEADER * hdr)
           hdr->attach_del = 1;
         if (idx[idxmax]->content)
           idx[idxmax]->content->aptr = NULL;
-        FREE (&idx[idxmax]->tree);
-        FREE (&idx[idxmax]);
+        mem_free (&idx[idxmax]->tree);
+        mem_free (&idx[idxmax]);
       }
       if (hdr->attach_del)
         hdr->changed = 1;
-      FREE (&idx);
+      mem_free (&idx);
       idxmax = 0;
 
       if (WithCrypto && need_secured && secured) {

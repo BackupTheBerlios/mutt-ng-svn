@@ -128,7 +128,7 @@ static void calculate_visibility (CONTEXT * ctx, int *max_depth)
 
     tree->subtree_visible = 0;
     if (tree->message) {
-      FREE (&tree->message->tree);
+      mem_free (&tree->message->tree);
       if (VISIBLE (tree->message, ctx)) {
         tree->deep = 1;
         tree->visible = 1;
@@ -220,8 +220,8 @@ void mutt_draw_tree (CONTEXT * ctx)
    * From now on we can simply ignore invisible subtrees
    */
   calculate_visibility (ctx, &max_depth);
-  pfx = safe_malloc (width * max_depth + 2);
-  arrow = safe_malloc (width * max_depth + 2);
+  pfx = mem_malloc (width * max_depth + 2);
+  arrow = mem_malloc (width * max_depth + 2);
   while (tree) {
     if (depth) {
       myarrow = arrow + (depth - start_depth - (start_depth ? 0 : 1)) * width;
@@ -239,7 +239,7 @@ void mutt_draw_tree (CONTEXT * ctx)
       if (tree->visible) {
         myarrow[width] = M_TREE_RARROW;
         myarrow[width + 1] = 0;
-        new_tree = safe_malloc ((2 + depth * width));
+        new_tree = mem_malloc ((2 + depth * width));
         if (start_depth > 1) {
           strncpy (new_tree, pfx, (start_depth - 1) * width);
           strfcpy (new_tree + (start_depth - 1) * width,
@@ -306,8 +306,8 @@ void mutt_draw_tree (CONTEXT * ctx)
     while (!tree->deep);
   }
 
-  FREE (&pfx);
-  FREE (&arrow);
+  mem_free (&pfx);
+  mem_free (&arrow);
 }
 
 /* since we may be trying to attach as a pseudo-thread a THREAD that
@@ -343,7 +343,7 @@ static LIST *make_subject_list (THREAD * cur, time_t * dateptr)
           break;
       }
       if (!curlist || rc > 0) {
-        newlist = safe_calloc (1, sizeof (LIST));
+        newlist = mem_calloc (1, sizeof (LIST));
         newlist->data = env->real_subj;
         if (oldlist) {
           newlist->next = oldlist->next;
@@ -404,7 +404,7 @@ static THREAD *find_subject (CONTEXT * ctx, THREAD * cur)
 
     oldlist = subjects;
     subjects = subjects->next;
-    FREE (&oldlist);
+    mem_free (&oldlist);
   }
   return (last);
 }
@@ -546,7 +546,7 @@ THREAD *mutt_sort_subthreads (THREAD * thread, int init)
 
   top = thread;
 
-  array = safe_calloc ((array_size = 256), sizeof (THREAD *));
+  array = mem_calloc ((array_size = 256), sizeof (THREAD *));
   while (1) {
     if (init || !thread->sort_key) {
       thread->sort_key = NULL;
@@ -578,7 +578,7 @@ THREAD *mutt_sort_subthreads (THREAD * thread, int init)
         /* put them into the array */
         for (i = 0; thread; i++, thread = thread->prev) {
           if (i >= array_size)
-            safe_realloc (&array, (array_size *= 2) * sizeof (THREAD *));
+            mem_realloc (&array, (array_size *= 2) * sizeof (THREAD *));
 
           array[i] = thread;
         }
@@ -638,7 +638,7 @@ THREAD *mutt_sort_subthreads (THREAD * thread, int init)
       }
       else {
         Sort ^= SORT_REVERSE;
-        FREE (&array);
+        mem_free (&array);
         return (top);
       }
     }
@@ -755,7 +755,7 @@ void mutt_sort_threads (CONTEXT * ctx, int init)
       else {
         new = (option (OPTDUPTHREADS) ? thread : NULL);
 
-        thread = safe_calloc (1, sizeof (THREAD));
+        thread = mem_calloc (1, sizeof (THREAD));
         thread->message = cur;
         thread->check_subject = 1;
         cur->thread = thread;
@@ -836,7 +836,7 @@ void mutt_sort_threads (CONTEXT * ctx, int init)
         break;
 
       if ((new = hash_find (ctx->thread_hash, ref->data)) == NULL) {
-        new = safe_calloc (1, sizeof (THREAD));
+        new = mem_calloc (1, sizeof (THREAD));
         hash_insert (ctx->thread_hash, ref->data, new, 1);
       }
       else {

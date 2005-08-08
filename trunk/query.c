@@ -100,11 +100,11 @@ static QUERY *run_query (char *s, int quiet)
       if (first == NULL) {
         FirstColumn = 0;
         SecondColumn = 0;
-        first = (QUERY *) safe_calloc (1, sizeof (QUERY));
+        first = (QUERY *) mem_calloc (1, sizeof (QUERY));
         cur = first;
       }
       else {
-        cur->next = (QUERY *) safe_calloc (1, sizeof (QUERY));
+        cur->next = (QUERY *) mem_calloc (1, sizeof (QUERY));
         cur = cur->next;
       }
 
@@ -126,7 +126,7 @@ static QUERY *run_query (char *s, int quiet)
       }
     }
   }
-  FREE (&buf);
+  mem_free (&buf);
   fclose (fp);
   if (mutt_wait_filter (thepid)) {
     debug_print (1, ("Error: %s\n", msg));
@@ -288,7 +288,7 @@ static void query_menu (char *buf, size_t buflen, QUERY * results, int retbuf)
       menu->max++;
 
     menu->data = QueryTable =
-      (ENTRY *) safe_calloc (menu->max, sizeof (ENTRY));
+      (ENTRY *) mem_calloc (menu->max, sizeof (ENTRY));
 
     for (i = 0, queryp = results; queryp; queryp = queryp->next, i++)
       QueryTable[i].data = queryp;
@@ -310,14 +310,14 @@ static void query_menu (char *buf, size_t buflen, QUERY * results, int retbuf)
               queryp = results;
               while (queryp) {
                 rfc822_free_address (&queryp->addr);
-                FREE (&queryp->name);
-                FREE (&queryp->other);
+                mem_free (&queryp->name);
+                mem_free (&queryp->other);
                 results = queryp->next;
-                FREE (&queryp);
+                mem_free (&queryp);
                 queryp = results;
               }
               results = newresults;
-              FREE (&QueryTable);
+              mem_free (&QueryTable);
             }
             else {
               /* append */
@@ -345,7 +345,7 @@ static void query_menu (char *buf, size_t buflen, QUERY * results, int retbuf)
 
             if (op == OP_QUERY) {
               menu->data = QueryTable =
-                (ENTRY *) safe_calloc (menu->max, sizeof (ENTRY));
+                (ENTRY *) mem_calloc (menu->max, sizeof (ENTRY));
 
               for (i = 0, queryp = results; queryp;
                    queryp = queryp->next, i++)
@@ -355,7 +355,7 @@ static void query_menu (char *buf, size_t buflen, QUERY * results, int retbuf)
               int clear = 0;
 
               /* append */
-              safe_realloc (&QueryTable, menu->max * sizeof (ENTRY));
+              mem_realloc (&QueryTable, menu->max * sizeof (ENTRY));
 
               menu->data = QueryTable;
 
@@ -473,13 +473,13 @@ static void query_menu (char *buf, size_t buflen, QUERY * results, int retbuf)
     queryp = results;
     while (queryp) {
       rfc822_free_address (&queryp->addr);
-      FREE (&queryp->name);
-      FREE (&queryp->other);
+      mem_free (&queryp->name);
+      mem_free (&queryp->other);
       results = queryp->next;
-      FREE (&queryp);
+      mem_free (&queryp);
       queryp = results;
     }
-    FREE (&QueryTable);
+    mem_free (&QueryTable);
 
     /* tell whoever called me to redraw the screen when I return */
     set_option (OPTNEEDREDRAW);

@@ -79,7 +79,7 @@ static char *shortened_hierarchy (char *box, int maxlen)
 
   if (last_dot) {
     ++last_dot;
-    new_box = safe_malloc (maxlen + 1);
+    new_box = mem_malloc (maxlen + 1);
     new_box[0] = box[0];
     for (i = 1, j = 1; j < maxlen && i < len; ++i) {
       if (strchr (SidebarBoundary, box[i])) {
@@ -225,7 +225,7 @@ int make_sidebar_entry (char* box, int idx, size_t len)
   addnstr (entry, len);
 
   if (shortened)
-    FREE(&box);
+    mem_free(&box);
 
   return (1);
 }

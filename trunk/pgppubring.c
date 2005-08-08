@@ -252,7 +252,7 @@ static pgp_key_t pgp_parse_pgp2_key (unsigned char *buff, size_t l)
 
 bailout:
 
-  FREE (&p);
+  mem_free (&p);
   return NULL;
 }
 
@@ -636,7 +636,7 @@ static pgp_key_t pgp_parse_keyblock (FILE * fp)
     case PT_SIG:
       {
         if (lsig) {
-          pgp_sig_t *signature = safe_calloc (sizeof (pgp_sig_t), 1);
+          pgp_sig_t *signature = mem_calloc (sizeof (pgp_sig_t), 1);
 
           *lsig = signature;
           lsig = &signature->next;
@@ -667,12 +667,12 @@ static pgp_key_t pgp_parse_keyblock (FILE * fp)
         if (!addr)
           break;
 
-        chr = safe_malloc (l);
+        chr = mem_malloc (l);
         memcpy (chr, buff + 1, l - 1);
         chr[l - 1] = '\0';
 
 
-        *addr = uid = safe_calloc (1, sizeof (pgp_uid_t));      /* XXX */
+        *addr = uid = mem_calloc (1, sizeof (pgp_uid_t));      /* XXX */
         uid->addr = chr;
         uid->parent = p;
         uid->trust = 0;
@@ -744,10 +744,10 @@ static void pgpring_find_candidates (char *ringfile, const char *hints[],
     size_t error_buf_len;
 
     error_buf_len = sizeof ("fopen: ") - 1 + str_len (ringfile) + 1;
-    error_buf = safe_malloc (error_buf_len);
+    error_buf = mem_malloc (error_buf_len);
     snprintf (error_buf, error_buf_len, "fopen: %s", ringfile);
     perror (error_buf);
-    FREE (&error_buf);
+    mem_free (&error_buf);
     return;
   }
 
@@ -764,7 +764,7 @@ static void pgpring_find_candidates (char *ringfile, const char *hints[],
       keypos = pos;
     }
     else if (pt == PT_NAME) {
-      char *tmp = safe_malloc (l);
+      char *tmp = mem_malloc (l);
 
       memcpy (tmp, buff + 1, l - 1);
       tmp[l - 1] = '\0';
@@ -785,7 +785,7 @@ static void pgpring_find_candidates (char *ringfile, const char *hints[],
         pgp_free_key (&p);
       }
 
-      FREE (&tmp);
+      mem_free (&tmp);
     }
 
     FGETPOS (rfp, pos);

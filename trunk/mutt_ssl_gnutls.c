@@ -155,11 +155,11 @@ static int tls_negotiate (CONNECTION * conn)
   tlssockdata *data;
   int err;
 
-  data = (tlssockdata *) safe_calloc (1, sizeof (tlssockdata));
+  data = (tlssockdata *) mem_calloc (1, sizeof (tlssockdata));
   conn->sockdata = data;
   err = gnutls_certificate_allocate_credentials (&data->xcred);
   if (err < 0) {
-    FREE (&conn->sockdata);
+    mem_free (&conn->sockdata);
     mutt_error (_("gnutls_certificate_allocate_credentials: %s"),
                 gnutls_strerror (err));
     mutt_sleep (2);
@@ -256,7 +256,7 @@ static int tls_negotiate (CONNECTION * conn)
 fail:
   gnutls_certificate_free_credentials (data->xcred);
   gnutls_deinit (data->state);
-  FREE (&conn->sockdata);
+  mem_free (&conn->sockdata);
   return -1;
 }
 
@@ -269,7 +269,7 @@ static int tls_socket_close (CONNECTION * conn)
 
     gnutls_certificate_free_credentials (data->xcred);
     gnutls_deinit (data->state);
-    FREE(&conn->sockdata);
+    mem_free(&conn->sockdata);
   }
 
   return raw_socket_close (conn);
@@ -304,7 +304,7 @@ static int tls_compare_certificates (const gnutls_datum * peercert)
     return 0;
 
   b64_data.size = filestat.st_size + 1;
-  b64_data_data = (unsigned char *) safe_calloc (1, b64_data.size);
+  b64_data_data = (unsigned char *) mem_calloc (1, b64_data.size);
   b64_data_data[b64_data.size - 1] = '\0';
   b64_data.data = b64_data_data;
 
@@ -319,7 +319,7 @@ static int tls_compare_certificates (const gnutls_datum * peercert)
   do {
     ret = gnutls_pem_base64_decode_alloc (NULL, &b64_data, &cert);
     if (ret != 0) {
-      FREE (&b64_data_data);
+      mem_free (&b64_data_data);
       return 0;
     }
 
@@ -333,7 +333,7 @@ static int tls_compare_certificates (const gnutls_datum * peercert)
       if (memcmp (cert.data, peercert->data, cert.size) == 0) {
         /* match found */
         gnutls_free (cert.data);
-        FREE (&b64_data_data);
+        mem_free (&b64_data_data);
         return 1;
       }
     }
@@ -342,7 +342,7 @@ static int tls_compare_certificates (const gnutls_datum * peercert)
   } while (ptr != NULL);
 
   /* no match found */
-  FREE (&b64_data_data);
+  mem_free (&b64_data_data);
   return 0;
 }
 
@@ -415,7 +415,7 @@ static int tls_check_stored_hostname (const gnutls_datum * cert,
           if (str_cmp (linestr + pmatch[1].rm_so, hostname) == 0 &&
               str_cmp (linestr + pmatch[2].rm_so, buf) == 0) {
             regfree (&preg);
-            FREE(&linestr);
+            mem_free(&linestr);
             fclose (fp);
             return 1;
           }
@@ -583,9 +583,9 @@ static int tls_check_certificate (CONNECTION * conn)
   /* interactive check from user */
   menu = mutt_new_menu ();
   menu->max = 25;
-  menu->dialog = (char **) safe_calloc (1, menu->max * sizeof (char *));
+  menu->dialog = (char **) mem_calloc (1, menu->max * sizeof (char *));
   for (i = 0; i < menu->max; i++)
-    menu->dialog[i] = (char *) safe_calloc (1, SHORT_STRING * sizeof (char));
+    menu->dialog[i] = (char *) mem_calloc (1, SHORT_STRING * sizeof (char));
 
   row = 0;
   strfcpy (menu->dialog[row], _("This certificate belongs to:"),

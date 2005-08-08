@@ -72,7 +72,7 @@ static char *read_rfc822_line (FILE * f, char *line, size_t * linelen)
     if (*linelen < offset + STRING) {
       /* grow the buffer */
       *linelen += STRING;
-      safe_realloc (&line, *linelen);
+      mem_realloc (&line, *linelen);
       buf = line + offset;
     }
   }
@@ -108,7 +108,7 @@ LIST *mutt_parse_references (char *s, int in_reply_to)
     else if (o) {
       m = str_len (s);
       if (s[m - 1] == '>') {
-        new = safe_malloc (sizeof (char) * (n + m + 1));
+        new = mem_malloc (sizeof (char) * (n + m + 1));
         strcpy (new, o);        /* __STRCPY_CHECKED__ */
         strcpy (new + n, s);    /* __STRCPY_CHECKED__ */
       }
@@ -122,9 +122,9 @@ LIST *mutt_parse_references (char *s, int in_reply_to)
        */
       if (!(at = strchr (new, '@')) || strchr (at + 1, '@')
           || (in_reply_to && at - new <= 8))
-        FREE (&new);
+        mem_free (&new);
       else {
-        t = (LIST *) safe_malloc (sizeof (LIST));
+        t = (LIST *) mem_malloc (sizeof (LIST));
         t->data = new;
         t->next = lst;
         lst = t;
@@ -183,7 +183,7 @@ static PARAMETER *parse_parameters (const char *s)
 
       new = mutt_new_parameter ();
 
-      new->attribute = safe_malloc (i + 1);
+      new->attribute = mem_malloc (i + 1);
       memcpy (new->attribute, s, i);
       new->attribute[i] = 0;
 
@@ -299,7 +299,7 @@ void mutt_parse_content_type (char *s, BODY * ct)
   char *pc;
   char *subtype;
 
-  FREE (&ct->subtype);
+  mem_free (&ct->subtype);
   mutt_free_parameter (&ct->parameter);
 
   /* First extract any existing parameters */
@@ -412,7 +412,7 @@ BODY *mutt_read_mime_header (FILE * fp, int digest)
 {
   BODY *p = mutt_new_body ();
   char *c;
-  char *line = safe_malloc (LONG_STRING);
+  char *line = mem_malloc (LONG_STRING);
   size_t linelen = LONG_STRING;
 
   p->hdr_offset = ftell (fp);
@@ -470,7 +470,7 @@ BODY *mutt_read_mime_header (FILE * fp, int digest)
   else if (p->type == TYPEMESSAGE && !p->subtype)
     p->subtype = str_dup ("rfc822");
 
-  FREE (&line);
+  mem_free (&line);
 
   return (p);
 }
@@ -912,7 +912,7 @@ static char *extract_message_id (const char *s)
   if ((s = strchr (s, '<')) == NULL || (p = strchr (s, '>')) == NULL)
     return (NULL);
   l = (size_t) (p - s) + 1;
-  r = safe_malloc (l + 1);
+  r = mem_malloc (l + 1);
   memcpy (r, s, l);
   r[l] = 0;
   return (r);
@@ -1080,7 +1080,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
 
           /* Take the first mailto URL */
           if (url_check_scheme (beg) == U_MAILTO) {
-            FREE (&e->list_post);
+            mem_free (&e->list_post);
             e->list_post = str_substrdup (beg, end);
             break;
           }
@@ -1098,7 +1098,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
     }
     else if (!ascii_strcasecmp (line + 1, "essage-id")) {
       /* We add a new "Message-Id:" when building a message */
-      FREE (&e->message_id);
+      mem_free (&e->message_id);
       e->message_id = extract_message_id (p);
       matched = 1;
     }
@@ -1119,7 +1119,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
 #ifdef USE_NNTP
   case 'n':
     if (!str_casecmp (line + 1, "ewsgroups")) {
-      FREE (&e->newsgroups);
+      mem_free (&e->newsgroups);
       str_skip_trailws (p);
       e->newsgroups = str_dup (str_skip_initws (p));
       matched = 1;
@@ -1293,7 +1293,7 @@ ENVELOPE *mutt_read_rfc822_header (FILE * f, HEADER * hdr, short user_hdrs,
 {
   ENVELOPE *e = mutt_new_envelope ();
   LIST *last = NULL;
-  char *line = safe_malloc (LONG_STRING);
+  char *line = mem_malloc (LONG_STRING);
   char *p;
   long loc;
   int matched;
@@ -1384,7 +1384,7 @@ ENVELOPE *mutt_read_rfc822_header (FILE * f, HEADER * hdr, short user_hdrs,
 
   }
 
-  FREE (&line);
+  mem_free (&line);
 
   if (hdr) {
     hdr->content->hdr_offset = hdr->offset;

@@ -315,7 +315,7 @@ int mutt_write_mime_header (BODY * a, FILE * f)
           && !strcmp (buffer, tmp))
         snprintf (buffer, sizeof (buffer), "\"%s\"", tmp);
 
-      FREE (&tmp);
+      mem_free (&tmp);
 
       tmplen = str_len (buffer) + str_len (p->attribute) + 1;
 
@@ -357,7 +357,7 @@ int mutt_write_mime_header (BODY * a, FILE * f)
       tmp = str_dup (t);
       encode = rfc2231_encode_string (&tmp);
       rfc822_cat (buffer, sizeof (buffer), tmp, MimeSpecials);
-      FREE (&tmp);
+      mem_free (&tmp);
       fprintf (f, "; filename%s=%s", encode ? "*" : "", buffer);
     }
   }
@@ -613,10 +613,10 @@ static size_t convert_file_to (FILE * file, const char *fromcode,
   if (cd1 == (iconv_t) (-1))
     return -1;
 
-  cd = safe_calloc (ncodes, sizeof (iconv_t));
-  score = safe_calloc (ncodes, sizeof (size_t));
-  states = safe_calloc (ncodes, sizeof (CONTENT_STATE));
-  infos = safe_calloc (ncodes, sizeof (CONTENT));
+  cd = mem_calloc (ncodes, sizeof (iconv_t));
+  score = mem_calloc (ncodes, sizeof (size_t));
+  states = mem_calloc (ncodes, sizeof (CONTENT_STATE));
+  infos = mem_calloc (ncodes, sizeof (CONTENT));
 
   for (i = 0; i < ncodes; i++)
     if (ascii_strcasecmp (tocodes[i], "UTF-8"))
@@ -706,10 +706,10 @@ static size_t convert_file_to (FILE * file, const char *fromcode,
       iconv_close (cd[i]);
 
   iconv_close (cd1);
-  FREE (&cd);
-  FREE (&infos);
-  FREE (&score);
-  FREE (&states);
+  mem_free (&cd);
+  mem_free (&infos);
+  mem_free (&score);
+  mem_free (&states);
 
   return ret;
 #else
@@ -748,7 +748,7 @@ static size_t convert_file_from_to (FILE * file,
   }
 
   /* Copy them */
-  tcode = safe_malloc (ncodes * sizeof (char *));
+  tcode = mem_malloc (ncodes * sizeof (char *));
   for (c = tocodes, i = 0; c; c = c1 ? c1 + 1 : 0, i++) {
     if ((c1 = strchr (c, ':')) == c)
       continue;
@@ -771,7 +771,7 @@ static size_t convert_file_from_to (FILE * file,
         tcode[cn] = 0;
         break;
       }
-      FREE (&fcode);
+      mem_free (&fcode);
     }
   }
   else {
@@ -786,9 +786,9 @@ static size_t convert_file_from_to (FILE * file,
 
   /* Free memory */
   for (i = 0; i < ncodes; i++)
-    FREE (&tcode[i]);
+    mem_free (&tcode[i]);
 
-  FREE (tcode);
+  mem_free (tcode);
 
   return ret;
 }
@@ -828,7 +828,7 @@ CONTENT *mutt_get_content_info (const char *fname, BODY * b)
     return (NULL);
   }
 
-  info = safe_calloc (1, sizeof (CONTENT));
+  info = mem_calloc (1, sizeof (CONTENT));
   memset (&state, 0, sizeof (state));
 
   if (b != NULL && b->type == TYPETEXT && (!b->noconv && !b->force_charset)) {
@@ -843,7 +843,7 @@ CONTENT *mutt_get_content_info (const char *fname, BODY * b)
         mutt_set_parameter ("charset", chsbuf, &b->parameter);
       }
       b->file_charset = fromcode;
-      FREE (&tocode);
+      mem_free (&tocode);
       safe_fclose (&fp);
       return info;
     }
@@ -1015,7 +1015,7 @@ void mutt_message_to_7bit (BODY * a, FILE * fp)
   mutt_write_mime_body (a->parts, fpout);
 
 cleanup:
-  FREE (&line);
+  mem_free (&line);
 
   if (fpin && !fp)
     fclose (fpin);
@@ -1179,7 +1179,7 @@ void mutt_update_encoding (BODY * a)
   mutt_set_encoding (a, info);
   mutt_stamp_attachment (a);
 
-  FREE (&a->content);
+  mem_free (&a->content);
   a->content = info;
 
 }
@@ -1433,7 +1433,7 @@ void mutt_write_references (LIST * r, FILE * f)
 
   for (; (TrimRef == 0 || refcnt < TrimRef) && r; r = r->next) {
     if (refcnt == refmax)
-      safe_realloc (&ref, (refmax += REF_INC) * sizeof (LIST *));
+      mem_realloc (&ref, (refmax += REF_INC) * sizeof (LIST *));
     ref[refcnt++] = r;
   }
 
@@ -1442,7 +1442,7 @@ void mutt_write_references (LIST * r, FILE * f)
     fputs (ref[refcnt]->data, f);
   }
 
-  FREE (&ref);
+  mem_free (&ref);
 }
 
 /* Note: all RFC2047 encoding should be done outside of this routine, except
@@ -1637,12 +1637,12 @@ static void encode_headers (LIST * h)
       continue;
 
     rfc2047_encode_string (&tmp);
-    safe_realloc (&h->data,
+    mem_realloc (&h->data,
                   str_len (h->data) + 2 + str_len (tmp) + 1);
 
     sprintf (h->data + i, ": %s", NONULL (tmp));        /* __SPRINTF_CHECKED__ */
 
-    FREE (&tmp);
+    mem_free (&tmp);
   }
 }
 
@@ -1869,7 +1869,7 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
     }
     else if (pid == -1) {
       unlink (msg);
-      FREE (tempfile);
+      mem_free (tempfile);
       _exit (S_ERR);
     }
 
@@ -1897,14 +1897,14 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
       st = WIFEXITED (st) ? WEXITSTATUS (st) : S_ERR;
       if (SendmailWait && st == (0xff & EX_OK)) {
         unlink (*tempfile);     /* no longer needed */
-        FREE (tempfile);
+        mem_free (tempfile);
       }
     }
     else {
       st = (SendmailWait > 0 && errno == EINTR && SigAlrm) ? S_BKG : S_ERR;
       if (SendmailWait > 0) {
         unlink (*tempfile);
-        FREE (tempfile);
+        mem_free (tempfile);
       }
     }
 
@@ -1915,7 +1915,7 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
     if (kill (ppid, 0) == -1 && errno == ESRCH) {
       /* the parent is already dead */
       unlink (*tempfile);
-      FREE (tempfile);
+      mem_free (tempfile);
     }
 
     _exit (st);
@@ -1940,7 +1940,7 @@ static char **add_args (char **args, size_t * argslen, size_t * argsmax,
     /* weed out group mailboxes, since those are for display only */
     if (addr->mailbox && !addr->group) {
       if (*argslen == *argsmax)
-        safe_realloc (&args, (*argsmax += 5) * sizeof (char *));
+        mem_realloc (&args, (*argsmax += 5) * sizeof (char *));
       args[(*argslen)++] = addr->mailbox;
     }
   }
@@ -1951,7 +1951,7 @@ static char **add_option (char **args, size_t * argslen, size_t * argsmax,
                           char *s)
 {
   if (*argslen == *argsmax)
-    safe_realloc (&args, (*argsmax += 5) * sizeof (char *));
+    mem_realloc (&args, (*argsmax += 5) * sizeof (char *));
   args[(*argslen)++] = s;
   return (args);
 }
@@ -1988,7 +1988,7 @@ static int mutt_invoke_sendmail (ADDRESS * from,        /* the sender */
   i = 0;
   while ((ps = strtok (ps, " "))) {
     if (argslen == argsmax)
-      safe_realloc (&args, sizeof (char *) * (argsmax += 5));
+      mem_realloc (&args, sizeof (char *) * (argsmax += 5));
 
     if (i)
       args[argslen++] = ps;
@@ -2032,7 +2032,7 @@ static int mutt_invoke_sendmail (ADDRESS * from,        /* the sender */
 #endif
 
   if (argslen == argsmax)
-    safe_realloc (&args, sizeof (char *) * (++argsmax));
+    mem_realloc (&args, sizeof (char *) * (++argsmax));
 
   args[argslen++] = NULL;
 
@@ -2055,10 +2055,10 @@ static int mutt_invoke_sendmail (ADDRESS * from,        /* the sender */
   else
     unlink (childout);
 
-  FREE (&childout);
-  FREE (&path);
-  FREE (&s);
-  FREE (&args);
+  mem_free (&childout);
+  mem_free (&path);
+  mem_free (&s);
+  mem_free (&args);
 
   if (i == (EX_OK & 0xff))
     i = 0;
@@ -2088,7 +2088,7 @@ char *mutt_append_string (char *a, const char *b)
 {
   size_t la = str_len (a);
 
-  safe_realloc (&a, la + str_len (b) + 1);
+  mem_realloc (&a, la + str_len (b) + 1);
   strcpy (a + la, b);           /* __STRCPY_CHECKED__ */
   return (a);
 }
@@ -2117,13 +2117,13 @@ char *mutt_quote_string (const char *s)
   size_t rlen;
 
   rlen = str_len (s) + 3;
-  pr = r = (char *) safe_malloc (rlen);
+  pr = r = (char *) mem_malloc (rlen);
   *pr++ = '"';
   while (*s) {
     if (INVALID_CHAR (*s)) {
       size_t o = pr - r;
 
-      safe_realloc (&r, ++rlen);
+      mem_realloc (&r, ++rlen);
       pr = r + o;
       *pr++ = '\\';
     }

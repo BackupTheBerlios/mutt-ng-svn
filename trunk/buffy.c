@@ -169,8 +169,8 @@ void buffy_update_mailbox (BUFFY * b)
 
 /* func to free buffy for list_del() */
 static void buffy_free (BUFFY** p) {
-  FREE(&(*p)->path);
-  FREE(p);
+  mem_free(&(*p)->path);
+  mem_free(p);
 }
 
 int buffy_lookup (const char* path) {
@@ -219,7 +219,7 @@ int buffy_parse_mailboxes (BUFFER * path, BUFFER * s, unsigned long data,
     }
 
     if (i < 0) {
-      tmp = safe_calloc (1, sizeof (BUFFY));
+      tmp = mem_calloc (1, sizeof (BUFFY));
       tmp->path = str_dup (buf);
       tmp->magic = 0;
       list_push_back (&Incoming, tmp);

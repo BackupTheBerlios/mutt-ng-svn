@@ -571,8 +571,8 @@ typedef struct spam_list_t {
 } SPAM_LIST;
 
 
-#define mutt_new_list() safe_calloc (1, sizeof (LIST))
-#define mutt_new_spam_list() safe_calloc (1, sizeof (SPAM_LIST))
+#define mutt_new_list() mem_calloc (1, sizeof (LIST))
+#define mutt_new_spam_list() mem_calloc (1, sizeof (SPAM_LIST))
 void mutt_free_list (LIST **);
 void mutt_free_spam_list (SPAM_LIST **);
 LIST *mutt_copy_list (LIST *);

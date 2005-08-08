@@ -96,7 +96,7 @@ static struct mapping_t Fields[] = {
 
 static COLOR_LINE *mutt_new_color_line (void)
 {
-  COLOR_LINE *p = safe_calloc (1, sizeof (COLOR_LINE));
+  COLOR_LINE *p = mem_calloc (1, sizeof (COLOR_LINE));
 
   p->fg = p->bg = -1;
 
@@ -123,14 +123,14 @@ static void mutt_free_color_line (COLOR_LINE ** l, int free_colors)
 
   regfree (&tmp->rx);
   mutt_pattern_free (&tmp->color_pattern);
-  FREE (&tmp->pattern);
-  FREE (l);
+  mem_free (&tmp->pattern);
+  mem_free (l);
 }
 
 void ci_start_color (void)
 {
   memset (ColorDefs, A_NORMAL, sizeof (int) * MT_COLOR_MAX);
-  ColorQuote = (int *) safe_malloc (COLOR_QUOTE_INIT * sizeof (int));
+  ColorQuote = (int *) mem_malloc (COLOR_QUOTE_INIT * sizeof (int));
   memset (ColorQuote, A_NORMAL, sizeof (int) * COLOR_QUOTE_INIT);
   ColorQuoteSize = COLOR_QUOTE_INIT;
   ColorQuoteUsed = 0;
@@ -223,7 +223,7 @@ int mutt_alloc_color (int fg, int bg)
     i++;
   }
 
-  p = (COLOR_LIST *) safe_malloc (sizeof (COLOR_LIST));
+  p = (COLOR_LIST *) mem_malloc (sizeof (COLOR_LIST));
   p->next = ColorList;
   ColorList = p;
 
@@ -267,14 +267,14 @@ void mutt_free_color (int fg, int bg)
 
       if (p == ColorList) {
         ColorList = ColorList->next;
-        FREE (&p);
+        mem_free (&p);
         return;
       }
       q = ColorList;
       while (q) {
         if (q->next == p) {
           q->next = p->next;
-          FREE (&p);
+          mem_free (&p);
           return;
         }
         q = q->next;
@@ -698,7 +698,7 @@ _mutt_parse_color (BUFFER * buf, BUFFER * s, BUFFER * err,
   }
   else if (object == MT_COLOR_QUOTED) {
     if (q_level >= ColorQuoteSize) {
-      safe_realloc (&ColorQuote, (ColorQuoteSize += 2) * sizeof (int));
+      mem_realloc (&ColorQuote, (ColorQuoteSize += 2) * sizeof (int));
       ColorQuote[ColorQuoteSize - 2] = ColorDefs[MT_COLOR_QUOTED];
       ColorQuote[ColorQuoteSize - 1] = ColorDefs[MT_COLOR_QUOTED];
     }

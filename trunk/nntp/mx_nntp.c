@@ -40,7 +40,7 @@ static int acl_check_nntp (CONTEXT* ctx, int bit) {
 
 /* called by nntp_init(); don't call elsewhere */
 mx_t* nntp_reg_mx (void) {
-  mx_t* fmt = safe_calloc (1, sizeof (mx_t));
+  mx_t* fmt = mem_calloc (1, sizeof (mx_t));
 
   /* make up mx_t record... */
   fmt->type = M_NNTP;

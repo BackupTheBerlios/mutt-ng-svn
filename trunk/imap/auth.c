@@ -70,7 +70,7 @@ int imap_authenticate (IMAP_DATA * idata)
             !ascii_strcasecmp (authenticator->method, method))
           if ((r = authenticator->authenticate (idata, method)) !=
               IMAP_AUTH_UNAVAIL) {
-            FREE (&methods);
+            mem_free (&methods);
             return r;
           }
 
@@ -78,7 +78,7 @@ int imap_authenticate (IMAP_DATA * idata)
       }
     }
 
-    FREE (&methods);
+    mem_free (&methods);
   }
   else {
     /* Fall back to default: any authenticator */

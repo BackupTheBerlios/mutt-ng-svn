@@ -559,7 +559,7 @@ static void enriched_flush (struct enriched_state *stte, int wrap)
     stte->line_used += stte->buff_used;
     if (stte->line_used > stte->line_max) {
       stte->line_max = stte->line_used;
-      safe_realloc (&stte->line, stte->line_max + 1);
+      mem_realloc (&stte->line, stte->line_max + 1);
     }
     strcat (stte->line, stte->buffer);  /* __STRCAT_CHECKED__ */
     stte->line_len += stte->word_len;
@@ -576,7 +576,7 @@ static void enriched_putc (int c, struct enriched_state *stte)
   if (stte->tag_level[RICH_PARAM]) {
     if (stte->tag_level[RICH_COLOR]) {
       if (stte->param_used + 1 >= stte->param_len)
-        safe_realloc (&stte->param, (stte->param_len += STRING));
+        mem_realloc (&stte->param, (stte->param_len += STRING));
 
       stte->param[stte->param_used++] = c;
     }
@@ -586,7 +586,7 @@ static void enriched_putc (int c, struct enriched_state *stte)
   /* see if more space is needed (plus extra for possible rich characters) */
   if (stte->buff_len < stte->buff_used + 3) {
     stte->buff_len += LONG_STRING;
-    safe_realloc (&stte->buffer, stte->buff_len + 1);
+    mem_realloc (&stte->buffer, stte->buff_len + 1);
   }
 
   if ((!stte->tag_level[RICH_NOFILL] && ISSPACE (c)) || c == '\0') {
@@ -633,7 +633,7 @@ static void enriched_puts (char *s, struct enriched_state *stte)
 
   if (stte->buff_len < stte->buff_used + str_len (s)) {
     stte->buff_len += LONG_STRING;
-    safe_realloc (&stte->buffer, stte->buff_len + 1);
+    mem_realloc (&stte->buffer, stte->buff_len + 1);
   }
   c = s;
   while (*c) {
@@ -727,8 +727,8 @@ void text_enriched_handler (BODY * a, STATE * s)
     ((s->flags & M_DISPLAY) ? (COLS - 4) : ((COLS - 4) <
                                             72) ? (COLS - 4) : 72);
   stte.line_max = stte.WrapMargin * 4;
-  stte.line = (char *) safe_calloc (1, stte.line_max + 1);
-  stte.param = (char *) safe_calloc (1, STRING);
+  stte.line = (char *) mem_calloc (1, stte.line_max + 1);
+  stte.param = (char *) mem_calloc (1, STRING);
 
   stte.param_len = STRING;
   stte.param_used = 0;
@@ -819,9 +819,9 @@ void text_enriched_handler (BODY * a, STATE * s)
 
   state_putc ('\n', s);         /* add a final newline */
 
-  FREE (&(stte.buffer));
-  FREE (&(stte.line));
-  FREE (&(stte.param));
+  mem_free (&(stte.buffer));
+  mem_free (&(stte.line));
+  mem_free (&(stte.param));
 }
 
 /*
@@ -976,7 +976,7 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
         else {
           print_flowed_line (curline, s, quotelevel);
         }
-        FREE (&curline);
+        mem_free (&curline);
         curline_len = 1;
         curline = realloc (curline, curline_len + str_len (buf));
         if (curline_len == 1)
@@ -1002,7 +1002,7 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
   }
   if (curline) {
     print_flowed_line (curline, s, quotelevel);
-    FREE (&curline);
+    mem_free (&curline);
   }
 }
 
@@ -1314,7 +1314,7 @@ void autoview_handler (BODY * a, STATE * s)
   mutt_sanitize_filename (fname, 1);
   rfc1524_expand_filename (entry->nametemplate, fname, tempfile,
                            sizeof (tempfile));
-  FREE (&fname);
+  mem_free (&fname);
 
   if (entry->command) {
     strfcpy (command, entry->command, sizeof (command));

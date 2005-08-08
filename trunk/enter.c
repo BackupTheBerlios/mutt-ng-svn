@@ -132,7 +132,7 @@ size_t my_mbstowcs (wchar_t ** pwbuf, size_t * pwbuflen, size_t i, char *buf)
        k != (size_t) (-1) && k != (size_t) (-2); buf += k) {
     if (i >= wbuflen) {
       wbuflen = i + 20;
-      safe_realloc (&wbuf, wbuflen * sizeof (*wbuf));
+      mem_realloc (&wbuf, wbuflen * sizeof (*wbuf));
     }
     wbuf[i++] = wc;
   }
@@ -148,7 +148,7 @@ static void replace_part (ENTER_STATE * state, size_t from, char *buf)
 {
   /* Save the suffix */
   size_t savelen = state->lastchar - state->curpos;
-  wchar_t *savebuf = safe_calloc (savelen, sizeof (wchar_t));
+  wchar_t *savebuf = mem_calloc (savelen, sizeof (wchar_t));
 
   memcpy (savebuf, state->wbuf + state->curpos, savelen * sizeof (wchar_t));
 
@@ -158,14 +158,14 @@ static void replace_part (ENTER_STATE * state, size_t from, char *buf)
   /* Make space for suffix */
   if (state->curpos + savelen > state->wbuflen) {
     state->wbuflen = state->curpos + savelen;
-    safe_realloc (&state->wbuf, state->wbuflen * sizeof (wchar_t));
+    mem_realloc (&state->wbuf, state->wbuflen * sizeof (wchar_t));
   }
 
   /* Restore suffix */
   memcpy (state->wbuf + state->curpos, savebuf, savelen * sizeof (wchar_t));
   state->lastchar = state->curpos + savelen;
 
-  FREE (&savebuf);
+  mem_free (&savebuf);
 }
 
 /*
@@ -468,7 +468,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
           }
           if (!mutt_complete (buf, buflen)) {
             templen = state->lastchar - i;
-            safe_realloc (&tempbuf, templen * sizeof (wchar_t));
+            mem_realloc (&tempbuf, templen * sizeof (wchar_t));
           }
           else
             BEEP ();
@@ -536,7 +536,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
 
           if (!mutt_complete (buf, buflen)) {
             templen = state->lastchar;
-            safe_realloc (&tempbuf, templen * sizeof (wchar_t));
+            mem_realloc (&tempbuf, templen * sizeof (wchar_t));
             memcpy (tempbuf, state->wbuf, templen * sizeof (wchar_t));
           }
           else
@@ -635,7 +635,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
           char **tfiles;
 
           *numfiles = 1;
-          tfiles = safe_calloc (*numfiles, sizeof (char *));
+          tfiles = mem_calloc (*numfiles, sizeof (char *));
           mutt_expand_path (buf, buflen);
           tfiles[0] = str_dup (buf);
           *files = tfiles;
@@ -646,7 +646,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
       else if (wc && (wc < ' ' || IsWPrint (wc))) {     /* why? */
         if (state->lastchar >= state->wbuflen) {
           state->wbuflen = state->lastchar + 20;
-          safe_realloc (&state->wbuf, state->wbuflen * sizeof (wchar_t));
+          mem_realloc (&state->wbuf, state->wbuflen * sizeof (wchar_t));
         }
         memmove (state->wbuf + state->curpos + 1, state->wbuf + state->curpos,
                  (state->lastchar - state->curpos) * sizeof (wchar_t));
@@ -662,7 +662,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
 
 bye:
 
-  FREE (&tempbuf);
+  mem_free (&tempbuf);
   return rv;
 }
 
@@ -671,8 +671,8 @@ void mutt_free_enter_state (ENTER_STATE ** esp)
   if (!esp)
     return;
 
-  FREE (&(*esp)->wbuf);
-  FREE (esp);
+  mem_free (&(*esp)->wbuf);
+  mem_free (esp);
 }
 
 /*

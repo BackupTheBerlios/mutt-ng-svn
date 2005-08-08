@@ -15,7 +15,7 @@
 #include "mem.h"
 
 list2_t* list_new (void) {
-  return (safe_calloc (1, sizeof (list2_t)));
+  return (mem_calloc (1, sizeof (list2_t)));
 }
 
 void list_del (list2_t** l, list_del_t* del) {
@@ -25,21 +25,21 @@ void list_del (list2_t** l, list_del_t* del) {
   if (del)
     for (i = 0; i < (*l)->length; i++)
       del (&(*l)->data[i]);
-  FREE(&(*l)->data);
-  FREE(l);
+  mem_free(&(*l)->data);
+  mem_free(l);
 }
 
 void list_push_back (list2_t** l, void* p) {
   if (!*l)
     *l = list_new ();
-  safe_realloc (&(*l)->data, (++(*l)->length)*sizeof(void*));
+  mem_realloc (&(*l)->data, (++(*l)->length)*sizeof(void*));
   (*l)->data[(*l)->length-1] = p;
 }
 
 void list_push_front (list2_t** l, void* p) {
   if (!*l)
     *l = list_new ();
-  safe_realloc (&(*l)->data, (++(*l)->length)*sizeof(void*));
+  mem_realloc (&(*l)->data, (++(*l)->length)*sizeof(void*));
   if ((*l)->length > 1)
     memmove (&(*l)->data[1], &(*l)->data[0], ((*l)->length-1)*sizeof(void*));
   (*l)->data[0] = p;
@@ -50,7 +50,7 @@ void* list_pop_back (list2_t* l) {
   if (list_empty(l))
     return (NULL);
   p = l->data[l->length-1];
-  safe_realloc (&l->data, --(l->length)*sizeof(void*));
+  mem_realloc (&l->data, --(l->length)*sizeof(void*));
   return (p);
 }
 
@@ -60,7 +60,7 @@ void* list_pop_front (list2_t* l) {
     return (NULL);
   p = l->data[0];
   memmove (&l->data[0], &l->data[1], (--(l->length))*sizeof(void*));
-  safe_realloc (&l->data, l->length*sizeof(void*));
+  mem_realloc (&l->data, l->length*sizeof(void*));
   return (p);
 }
 
@@ -72,7 +72,7 @@ void* list_pop_idx (list2_t* l, int c) {
     return (list_pop_back (l));
   p = l->data[c];
   memmove (&l->data[c], &l->data[c+1], (l->length-c)*sizeof(void*));
-  safe_realloc (&l->data, (--(l->length))*sizeof(void*));
+  mem_realloc (&l->data, (--(l->length))*sizeof(void*));
   return (p);
 }
 
@@ -82,7 +82,7 @@ list2_t* list_cpy (list2_t* l) {
     return (NULL);
   ret = list_new ();
   ret->length = l->length;
-  ret->data = safe_malloc (l->length*sizeof(void*));
+  ret->data = mem_malloc (l->length*sizeof(void*));
   memcpy (ret->data, l->data, l->length*sizeof(void*));
   return (ret);
 }
@@ -94,7 +94,7 @@ list2_t* list_dup (list2_t* l, void* (*dup) (void*)) {
     return (NULL);
   ret = list_new ();
   ret->length = l->length;
-  ret->data = safe_malloc (l->length*sizeof(void*));
+  ret->data = mem_malloc (l->length*sizeof(void*));
   for (i = 0; i < l->length; i++)
     ret->data[i] = dup (l->data[i]);
   return (ret);

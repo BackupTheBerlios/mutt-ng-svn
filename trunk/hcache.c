@@ -86,7 +86,7 @@ static void *lazy_malloc (size_t siz)
     siz = 4096;
   }
 
-  return safe_malloc (siz);
+  return mem_malloc (siz);
 }
 
 static void lazy_realloc (void *ptr, size_t siz)
@@ -97,7 +97,7 @@ static void lazy_realloc (void *ptr, size_t siz)
     return;
   }
 
-  safe_realloc (ptr, siz);
+  mem_realloc (ptr, siz);
 }
 
 static unsigned char *dump_int (unsigned int i, unsigned char *d, int *off)
@@ -164,7 +164,7 @@ static void restore_char (char **c, const unsigned char *d, int *off)
     return;
   }
 
-  *c = safe_malloc (size);
+  *c = mem_malloc (size);
   memcpy (*c, d + *off, size);
   *off += size;
 }
@@ -196,7 +196,7 @@ static void restore_address (ADDRESS ** a, const unsigned char *d, int *off)
   restore_int (&counter, d, off);
 
   while (counter) {
-    *a = safe_malloc (sizeof (ADDRESS));
+    *a = mem_malloc (sizeof (ADDRESS));
     restore_char (&(*a)->personal, d, off);
     restore_char (&(*a)->mailbox, d, off);
     restore_int ((unsigned int *) &(*a)->group, d, off);
@@ -232,7 +232,7 @@ static void restore_list (LIST ** l, const unsigned char *d, int *off)
   restore_int (&counter, d, off);
 
   while (counter) {
-    *l = safe_malloc (sizeof (LIST));
+    *l = mem_malloc (sizeof (LIST));
     restore_char (&(*l)->data, d, off);
     l = &(*l)->next;
     counter--;
@@ -270,7 +270,7 @@ static void restore_buffer (BUFFER ** b, const unsigned char *d, int *off)
     return;
   }
 
-  *b = safe_malloc (sizeof (BUFFER));
+  *b = mem_malloc (sizeof (BUFFER));
 
   restore_char (&(*b)->data, d, off);
   restore_int (&offset, d, off);
@@ -308,7 +308,7 @@ restore_parameter (PARAMETER ** p, const unsigned char *d, int *off)
   restore_int (&counter, d, off);
 
   while (counter) {
-    *p = safe_malloc (sizeof (PARAMETER));
+    *p = mem_malloc (sizeof (PARAMETER));
     restore_char (&(*p)->attribute, d, off);
     restore_char (&(*p)->value, d, off);
     p = &(*p)->next;
@@ -604,7 +604,7 @@ HEADER *mutt_hcache_restore (const unsigned char *d, HEADER ** oh)
 void *
 mutt_hcache_open(const char *path, const char *folder)
 {
-  struct header_cache *h = safe_calloc(1, sizeof (HEADER_CACHE));
+  struct header_cache *h = mem_calloc(1, sizeof (HEADER_CACHE));
   int    flags = VL_OWRITER | VL_OCREAT;
   h->db = NULL;
   h->folder = str_dup(folder);
@@ -612,8 +612,8 @@ mutt_hcache_open(const char *path, const char *folder)
 
   if (!path || path[0] == '\0')
   {
-    FREE(&h->folder);
-    FREE(&h);
+    mem_free(&h->folder);
+    mem_free(&h);
     return NULL;
   }
 
@@ -627,8 +627,8 @@ mutt_hcache_open(const char *path, const char *folder)
     return h;
   else
   {
-    FREE(&h->folder);
-    FREE(&h);
+    mem_free(&h->folder);
+    mem_free(&h);
 
     return NULL;
   }
@@ -643,8 +643,8 @@ mutt_hcache_close(void *db)
     return;
 
   vlclose(h->db);
-  FREE(&h->folder);
-  FREE(&h);
+  mem_free(&h->folder);
+  mem_free(&h);
 }
 
 void *
@@ -668,7 +668,7 @@ mutt_hcache_fetch(void *db, const char *filename,
 
   if (! crc32_matches(data, h->crc))
   {
-    FREE(&data);
+    mem_free(&data);
     return NULL;
   }
 
@@ -698,7 +698,7 @@ mutt_hcache_store(void *db, const char *filename, HEADER * header,
 
   ret = vlput(h->db, path, ksize, data, dsize, VL_DOVER);
 
-  FREE(&data);
+  mem_free(&data);
 
   return ret;
 }
@@ -726,7 +726,7 @@ mutt_hcache_delete(void *db, const char *filename,
 
 void *mutt_hcache_open (const char *path, const char *folder)
 {
-  struct header_cache *h = safe_calloc (1, sizeof (HEADER_CACHE));
+  struct header_cache *h = mem_calloc (1, sizeof (HEADER_CACHE));
   int pagesize =
     atoi (HeaderCachePageSize) ? atoi (HeaderCachePageSize) : 16384;
   h->db = NULL;
@@ -734,8 +734,8 @@ void *mutt_hcache_open (const char *path, const char *folder)
   h->crc = generate_crc32 ();
 
   if (!path || path[0] == '\0') {
-    FREE (&h->folder);
-    FREE (&h);
+    mem_free (&h->folder);
+    mem_free (&h);
     return NULL;
   }
 
@@ -752,8 +752,8 @@ void *mutt_hcache_open (const char *path, const char *folder)
     return h;
   }
   else {
-    FREE (&h->folder);
-    FREE (&h);
+    mem_free (&h->folder);
+    mem_free (&h);
 
     return NULL;
   }
@@ -768,8 +768,8 @@ void mutt_hcache_close (void *db)
   }
 
   gdbm_close (h->db);
-  FREE (&h->folder);
-  FREE (&h);
+  mem_free (&h->folder);
+  mem_free (&h);
 }
 
 void *mutt_hcache_fetch (void *db, const char *filename,
@@ -793,7 +793,7 @@ void *mutt_hcache_fetch (void *db, const char *filename,
   data = gdbm_fetch (h->db, key);
 
   if (!crc32_matches (data.dptr, h->crc)) {
-    FREE(&data.dptr);
+    mem_free(&data.dptr);
     return NULL;
   }
 
@@ -824,7 +824,7 @@ mutt_hcache_store (void *db, const char *filename, HEADER * header,
 
   ret = gdbm_store (h->db, key, data, GDBM_REPLACE);
 
-  FREE (&data.dptr);
+  mem_free (&data.dptr);
 
   return ret;
 }
@@ -878,7 +878,7 @@ void *mutt_hcache_open (const char *path, const char *folder)
   h->crc = generate_crc32 ();
 
   if (!path || path[0] == '\0') {
-    FREE (&h);
+    mem_free (&h);
     return NULL;
   }
 
@@ -888,13 +888,13 @@ void *mutt_hcache_open (const char *path, const char *folder)
 
   h->fd = open (h->lockfile, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
   if (h->fd < 0) {
-    FREE (&h);
+    mem_free (&h);
     return NULL;
   }
 
   if (mx_lock_file (h->lockfile, h->fd, 1, 0, 5)) {
     close (h->fd);
-    FREE (&h);
+    mem_free (&h);
     return NULL;
   }
 
@@ -902,7 +902,7 @@ void *mutt_hcache_open (const char *path, const char *folder)
   if (ret) {
     mx_unlock_file (h->lockfile, h->fd, 0);
     close (h->fd);
-    FREE (&h);
+    mem_free (&h);
     return NULL;
   }
 
@@ -914,7 +914,7 @@ void *mutt_hcache_open (const char *path, const char *folder)
       h->env->close (h->env, 0);
       mx_unlock_file (h->lockfile, h->fd, 0);
       close (h->fd);
-      FREE (&h);
+      mem_free (&h);
       return NULL;
     }
   }
@@ -930,7 +930,7 @@ void *mutt_hcache_open (const char *path, const char *folder)
     h->env->close (h->env, 0);
     mx_unlock_file (h->lockfile, h->fd, 0);
     close (h->fd);
-    FREE (&h);
+    mem_free (&h);
     return NULL;
   }
 
@@ -949,7 +949,7 @@ void mutt_hcache_close (void *db)
   h->env->close (h->env, 0);
   mx_unlock_file (h->lockfile, h->fd, 0);
   close (h->fd);
-  FREE (&h);
+  mem_free (&h);
 }
 
 void *mutt_hcache_fetch (void *db, const char *filename,
@@ -972,7 +972,7 @@ void *mutt_hcache_fetch (void *db, const char *filename,
   h->db->get (h->db, NULL, &key, &data, 0);
 
   if (!crc32_matches (data.data, h->crc)) {
-    FREE(&data.data);
+    mem_free(&data.data);
     return NULL;
   }
 
@@ -1004,7 +1004,7 @@ mutt_hcache_store (void *db, const char *filename, HEADER * header,
 
   ret = h->db->put (h->db, NULL, &key, &data, 0);
 
-  FREE (&data.data);
+  mem_free (&data.data);
 
   return ret;
 }

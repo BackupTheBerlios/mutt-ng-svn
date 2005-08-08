@@ -138,7 +138,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
       /* sasl_client_st(art|ep) allocate pc with malloc, expect me to 
        * free it */
 #ifndef USE_SASL2
-      FREE (&pc);
+      mem_free (&pc);
 #endif
     }
   }
@@ -174,7 +174,7 @@ void pop_apop_timestamp (POP_DATA * pop_data, char *buf)
 {
   char *p1, *p2;
 
-  FREE (&pop_data->timestamp);
+  mem_free (&pop_data->timestamp);
 
   if ((p1 = strchr (buf, '<')) && (p2 = strchr (p1, '>'))) {
     p2[1] = '\0';
@@ -349,7 +349,7 @@ pop_query_status pop_authenticate (POP_DATA * pop_data)
       method = comma;
     }
 
-    FREE (&methods);
+    mem_free (&methods);
   }
   else {
     /* Fall back to default: any authenticator */

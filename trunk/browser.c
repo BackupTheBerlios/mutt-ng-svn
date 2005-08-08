@@ -76,14 +76,14 @@ static void destroy_state (struct browser_state *state)
   int c;
 
   for (c = 0; c < state->entrylen; c++) {
-    FREE (&((state->entry)[c].name));
-    FREE (&((state->entry)[c].desc));
-    FREE (&((state->entry)[c].st));
+    mem_free (&((state->entry)[c].name));
+    mem_free (&((state->entry)[c].desc));
+    mem_free (&((state->entry)[c].st));
   }
 #ifdef USE_IMAP
-  FREE (&state->folder);
+  mem_free (&state->folder);
 #endif
-  FREE (&state->entry);
+  mem_free (&state->entry);
 }
 
 static int browser_compare_subject (const void *a, const void *b)
@@ -424,7 +424,7 @@ static void add_folder (MUTTMENU * m, struct browser_state *state,
 {
   if (state->entrylen == state->entrymax) {
     /* need to allocate more space */
-    safe_realloc (&state->entry,
+    mem_realloc (&state->entry,
                   sizeof (struct folder_file) * (state->entrymax += 256));
     memset (&state->entry[state->entrylen], 0,
             sizeof (struct folder_file) * 256);
@@ -437,7 +437,7 @@ static void add_folder (MUTTMENU * m, struct browser_state *state,
     (state->entry)[state->entrylen].mtime = s->st_mtime;
     (state->entry)[state->entrylen].size = s->st_size;
 
-    (state->entry)[state->entrylen].st = safe_malloc (sizeof (struct stat));
+    (state->entry)[state->entrylen].st = mem_malloc (sizeof (struct stat));
     memcpy ((state->entry)[state->entrylen].st, s, sizeof (struct stat));
   }
 
@@ -459,7 +459,7 @@ static void init_state (struct browser_state *state, MUTTMENU * menu)
   state->entrylen = 0;
   state->entrymax = 256;
   state->entry =
-    (struct folder_file *) safe_calloc (state->entrymax,
+    (struct folder_file *) mem_calloc (state->entrymax,
                                         sizeof (struct folder_file));
 #ifdef USE_IMAP
   state->imap_browse = 0;
@@ -996,7 +996,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
 
         if (menu->tagged) {
           *numfiles = menu->tagged;
-          tfiles = safe_calloc (*numfiles, sizeof (char *));
+          tfiles = mem_calloc (*numfiles, sizeof (char *));
           for (i = 0, j = 0; i < state.entrylen; i++) {
             struct folder_file ff = state.entry[i];
             char full[_POSIX_PATH_MAX];
@@ -1011,7 +1011,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
         }
         else if (f[0]) {        /* no tagged entries. return selected entry */
           *numfiles = 1;
-          tfiles = safe_calloc (*numfiles, sizeof (char *));
+          tfiles = mem_calloc (*numfiles, sizeof (char *));
           mutt_expand_path (f, flen);
           tfiles[0] = str_dup (f);
           *files = tfiles;
@@ -1091,8 +1091,8 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
         if (mutt_yesorno (msg, M_NO) == M_YES) {
           if (!imap_delete_mailbox (Context, mx)) {
             /* free the mailbox from the browser */
-            FREE (&((state.entry)[nentry].name));
-            FREE (&((state.entry)[nentry].desc));
+            mem_free (&((state.entry)[nentry].name));
+            mem_free (&((state.entry)[nentry].desc));
             /* and move all other entries up */
             if (nentry + 1 < state.entrylen)
               memmove (state.entry + nentry, state.entry + nentry + 1,
@@ -1107,7 +1107,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
         }
         else
           mutt_message _("Mailbox not deleted.");
-        FREE (&mx.mbox);
+        mem_free (&mx.mbox);
       }
       break;
 #endif
@@ -1179,7 +1179,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
 
       strfcpy (buf, NONULL (Mask.pattern), sizeof (buf));
       if (mutt_get_field (_("File Mask: "), buf, sizeof (buf), 0) == 0) {
-        regex_t *rx = (regex_t *) safe_malloc (sizeof (regex_t));
+        regex_t *rx = (regex_t *) mem_malloc (sizeof (regex_t));
         char *s = buf;
         int not = 0, err;
 
@@ -1197,13 +1197,13 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
         if ((err = REGCOMP (rx, s, REG_NOSUB)) != 0) {
           regerror (err, rx, buf, sizeof (buf));
           regfree (rx);
-          FREE (&rx);
+          mem_free (&rx);
           mutt_error ("%s", buf);
         }
         else {
           str_replace (&Mask.pattern, buf);
           regfree (Mask.rx);
-          FREE (&Mask.rx);
+          mem_free (&Mask.rx);
           Mask.rx = rx;
           Mask.not = not;
 
@@ -1384,7 +1384,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
 	    folder.ff->st = NULL;
 	    folder.ff->is_new = nd->new;
 	    folder.ff->nd = nd;
-	    FREE (&f->desc);
+	    mem_free (&f->desc);
 	    mutt_FormatString (buffer, sizeof (buffer), NONULL(GroupFormat),
 		  newsgroup_format_str, (unsigned long) &folder,
 		  M_FORMAT_ARROWCURSOR);
@@ -1428,7 +1428,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
     case OP_SUBSCRIBE_PATTERN:
     case OP_UNSUBSCRIBE_PATTERN:
       if (option (OPTNEWS)) {
-        regex_t *rx = (regex_t *) safe_malloc (sizeof (regex_t));
+        regex_t *rx = (regex_t *) mem_malloc (sizeof (regex_t));
         char *s = buf;
         int j = menu->current;
         NNTP_DATA *nd;
@@ -1444,14 +1444,14 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
           else
             snprintf (tmp, sizeof (tmp), _("Unsubscribe pattern: "));
           if (mutt_get_field (tmp, buf, sizeof (buf), 0) != 0 || !buf[0]) {
-            FREE (&rx);
+            mem_free (&rx);
             break;
           }
 
           if ((err = REGCOMP (rx, s, REG_NOSUB)) != 0) {
             regerror (err, rx, buf, sizeof (buf));
             regfree (rx);
-            FREE (&rx);
+            mem_free (&rx);
             mutt_error ("%s", buf);
             break;
           }
@@ -1482,7 +1482,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
 		folder.f = NULL;
 		folder.new = nd->new;
 		folder.nd = nd;
-		FREE (&f->desc);
+		mem_free (&f->desc);
 		mutt_FormatString (buffer, sizeof (buffer), NONULL(GroupFormat),
 			newsgroup_format_str, (unsigned long) &folder,
 			M_FORMAT_ARROWCURSOR);
@@ -1516,7 +1516,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
         nntp_clear_cacheindex (news);
         if (i != OP_BROWSER_SUBSCRIBE && i != OP_BROWSER_UNSUBSCRIBE)
           regfree (rx);
-        FREE (&rx);
+        mem_free (&rx);
       }
 #ifdef USE_IMAP
       else

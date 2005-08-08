@@ -149,7 +149,7 @@ void mutt_attach_bounce (FILE * fp, HEADER * hdr,
 
   if (mutt_addrlist_to_idna (adr, &err) < 0) {
     mutt_error (_("Bad IDN: '%s'"), err);
-    FREE (&err);
+    mem_free (&err);
     rfc822_free_address (&adr);
     return;
   }

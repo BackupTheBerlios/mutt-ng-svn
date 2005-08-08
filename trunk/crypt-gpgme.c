@@ -128,12 +128,12 @@ static void print_utf8 (FILE * fp, const char *buf, size_t len)
 {
   char *tstr;
 
-  tstr = safe_malloc (len + 1);
+  tstr = mem_malloc (len + 1);
   memcpy (tstr, buf, len);
   tstr[len] = 0;
   mutt_convert_string (&tstr, "utf-8", Charset, M_ICONV_HOOK_FROM);
   fputs (tstr, fp);
-  FREE (&tstr);
+  mem_free (&tstr);
 }
 
 
@@ -212,7 +212,7 @@ static crypt_key_t *crypt_copy_key (crypt_key_t * key)
 {
   crypt_key_t *k;
 
-  k = safe_calloc (1, sizeof *k);
+  k = mem_calloc (1, sizeof *k);
   k->kobj = key->kobj;
   gpgme_key_ref (key->kobj);
   k->idx = key->idx;
@@ -229,7 +229,7 @@ static void crypt_free_key (crypt_key_t ** keylist)
   while (*keylist) {
     crypt_key_t *k = (*keylist)->next;
 
-    FREE (&k);
+    mem_free (&k);
     *keylist = k;
   }
 }
@@ -550,13 +550,13 @@ static gpgme_key_t *create_recipient_set (const char *keylist,
           err = gpgme_get_key (context, buf, &key, 0);
 
         if (!err) {
-          safe_realloc (&rset, sizeof (*rset) * (rset_n + 1));
+          mem_realloc (&rset, sizeof (*rset) * (rset_n + 1));
           rset[rset_n++] = key;
         }
         else {
           mutt_error (_("error adding recipient `%s': %s\n"),
                       buf, gpgme_strerror (err));
-          FREE (&rset);
+          mem_free (&rset);
           return NULL;
         }
       }
@@ -564,7 +564,7 @@ static gpgme_key_t *create_recipient_set (const char *keylist,
   }
 
   /* NULL terminate.  */
-  safe_realloc (&rset, sizeof (*rset) * (rset_n + 1));
+  mem_realloc (&rset, sizeof (*rset) * (rset_n + 1));
   rset[rset_n++] = NULL;
 
   if (context)
@@ -832,13 +832,13 @@ BODY *pgp_gpgme_encrypt_message (BODY * a, char *keylist, int sign)
     convert_to_7bit (a);
   plaintext = body_to_data_object (a, 0);
   if (!plaintext) {
-    FREE (&rset);
+    mem_free (&rset);
     return NULL;
   }
 
   outfile = encrypt_gpgme_object (plaintext, rset, 0, sign);
   gpgme_data_release (plaintext);
-  FREE (&rset);
+  mem_free (&rset);
   if (!outfile)
     return NULL;
 
@@ -890,13 +890,13 @@ BODY *smime_gpgme_build_smime_entity (BODY * a, char *keylist)
 
   plaintext = body_to_data_object (a, 0);
   if (!plaintext) {
-    FREE (&rset);
+    mem_free (&rset);
     return NULL;
   }
 
   outfile = encrypt_gpgme_object (plaintext, rset, 1, 0);
   gpgme_data_release (plaintext);
-  FREE (&rset);
+  mem_free (&rset);
   if (!outfile)
     return NULL;
 
@@ -1030,7 +1030,7 @@ static void show_fingerprint (gpgme_key_t key, STATE * state)
     return;
   is_pgp = (key->protocol == GPGME_PROTOCOL_OpenPGP);
 
-  buf = safe_malloc (str_len (prefix) + str_len (s) * 4 + 2);
+  buf = mem_malloc (str_len (prefix) + str_len (s) * 4 + 2);
   strcpy (buf, prefix);         /* __STRCPY_CHECKED__ */
   p = buf + str_len (buf);
   if (is_pgp && str_len (s) == 40) {     /* PGP v4 style formatted. */
@@ -1060,7 +1060,7 @@ static void show_fingerprint (gpgme_key_t key, STATE * state)
   *p++ = '\n';
   *p = 0;
   state_attach_puts (buf, state);
-  FREE (&buf);
+  mem_free (&buf);
 }
 
 /* Show the valididy of a key used for one signature. */
@@ -1725,7 +1725,7 @@ static void copy_clearsigned (gpgme_data_t data, STATE * s, char *charset)
   if (!fname)
     return;
   unlink (fname);
-  FREE (&fname);
+  mem_free (&fname);
 
   fc = fgetconv_open (fp, charset, Charset, M_ICONV_HOOK_FROM);
 
@@ -1917,7 +1917,7 @@ void pgp_gpgme_application_handler (BODY * m, STATE * s)
           }
           else {
             unlink (tmpfname);
-            FREE (&tmpfname);
+            mem_free (&tmpfname);
           }
         }
         gpgme_release (ctx);
@@ -2538,7 +2538,7 @@ static const unsigned char *parse_dn_part (struct dn_array_s *array,
   n = s - string;
   if (!n)
     return NULL;                /* empty key */
-  array->key = safe_malloc (n + 1);
+  array->key = mem_malloc (n + 1);
   p = (unsigned char *) array->key;
   memcpy (p, string, n);        /* fixme: trim trailing spaces */
   p[n] = 0;
@@ -2552,7 +2552,7 @@ static const unsigned char *parse_dn_part (struct dn_array_s *array,
     if (!n || (n & 1))
       return NULL;              /* empty or odd number of digits */
     n /= 2;
-    p = safe_malloc (n + 1);
+    p = mem_malloc (n + 1);
     array->value = (char *) p;
     for (s1 = string; n; s1 += 2, n--)
       *p++ = xtoi_2 (s1);
@@ -2582,7 +2582,7 @@ static const unsigned char *parse_dn_part (struct dn_array_s *array,
         n++;
     }
 
-    p = safe_malloc (n + 1);
+    p = mem_malloc (n + 1);
     array->value = (char *) p;
     for (s = string; n; s++, n--) {
       if (*s == '\\') {
@@ -2613,7 +2613,7 @@ static struct dn_array_s *parse_dn (const unsigned char *string)
   int i;
 
   arraysize = 7;                /* C,ST,L,O,OU,CN,email */
-  array = safe_malloc ((arraysize + 1) * sizeof *array);
+  array = mem_malloc ((arraysize + 1) * sizeof *array);
   arrayidx = 0;
   while (*string) {
     while (*string == ' ')
@@ -2624,12 +2624,12 @@ static struct dn_array_s *parse_dn (const unsigned char *string)
       struct dn_array_s *a2;
 
       arraysize += 5;
-      a2 = safe_malloc ((arraysize + 1) * sizeof *array);
+      a2 = mem_malloc ((arraysize + 1) * sizeof *array);
       for (i = 0; i < arrayidx; i++) {
         a2[i].key = array[i].key;
         a2[i].value = array[i].value;
       }
-      FREE (&array);
+      mem_free (&array);
       array = a2;
     }
     array[arrayidx].key = NULL;
@@ -2651,10 +2651,10 @@ static struct dn_array_s *parse_dn (const unsigned char *string)
 
 failure:
   for (i = 0; i < arrayidx; i++) {
-    FREE (&array[i].key);
-    FREE (&array[i].value);
+    mem_free (&array[i].key);
+    mem_free (&array[i].value);
   }
-  FREE (&array);
+  mem_free (&array);
   return NULL;
 }
 
@@ -2685,10 +2685,10 @@ static void parse_and_print_user_id (FILE * fp, const char *userid)
     else {
       print_dn_parts (fp, dn);
       for (i = 0; dn[i].key; i++) {
-        FREE (&dn[i].key);
-        FREE (&dn[i].value);
+        mem_free (&dn[i].key);
+        mem_free (&dn[i].value);
       }
-      FREE (&dn);
+      mem_free (&dn);
     }
   }
 }
@@ -3035,7 +3035,7 @@ static char *list_to_pattern (LIST * list)
     n++;                        /* delimiter or end of string */
   }
   n++;                          /* make sure to allocate at least one byte */
-  pattern = p = safe_calloc (1, n);
+  pattern = p = mem_calloc (1, n);
   for (l = list; l; l = l->next) {
     s = l->data;
     if (*s) {
@@ -3083,7 +3083,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app,
   err = gpgme_new (&ctx);
   if (err) {
     mutt_error (_("gpgme_new failed: %s"), gpgme_strerror (err));
-    FREE (&pattern);
+    mem_free (&pattern);
     return NULL;
   }
 
@@ -3106,7 +3106,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app,
     if (!n)
       goto no_pgphints;
 
-    patarr = safe_calloc (n + 1, sizeof *patarr);
+    patarr = mem_calloc (n + 1, sizeof *patarr);
     for (l = hints, n = 0; l; l = l->next) {
       if (l->data && *l->data)
         patarr[n++] = str_dup (l->data);
@@ -3114,12 +3114,12 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app,
     patarr[n] = NULL;
     err = gpgme_op_keylist_ext_start (ctx, (const char **) patarr, secret, 0);
     for (n = 0; patarr[n]; n++)
-      FREE (&patarr[n]);
-    FREE (&patarr);
+      mem_free (&patarr[n]);
+    mem_free (&patarr);
     if (err) {
       mutt_error (_("gpgme_op_keylist_start failed: %s"), gpgme_strerror (err));
       gpgme_release (ctx);
-      FREE (&pattern);
+      mem_free (&pattern);
       return NULL;
     }
 
@@ -3152,7 +3152,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app,
 #endif /* DISABLED code */
 
       for (idx = 0, uid = key->uids; uid; idx++, uid = uid->next) {
-        k = safe_calloc (1, sizeof *k);
+        k = mem_calloc (1, sizeof *k);
         k->kobj = key;
         k->idx = idx;
         k->uid = uid->uid;
@@ -3175,7 +3175,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app,
     if (err) {
       mutt_error (_("gpgme_op_keylist_start failed: %s"), gpgme_strerror (err));
       gpgme_release (ctx);
-      FREE (&pattern);
+      mem_free (&pattern);
       return NULL;
     }
 
@@ -3188,7 +3188,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app,
         flags |= KEYFLAG_CANSIGN;
 
       for (idx = 0, uid = key->uids; uid; idx++, uid = uid->next) {
-        k = safe_calloc (1, sizeof *k);
+        k = mem_calloc (1, sizeof *k);
         k->kobj = key;
         k->idx = idx;
         k->uid = uid->uid;
@@ -3203,7 +3203,7 @@ static crypt_key_t *get_candidates (LIST * hints, unsigned int app,
   }
 
   gpgme_release (ctx);
-  FREE (&pattern);
+  mem_free (&pattern);
   return db;
 }
 
@@ -3223,7 +3223,7 @@ static LIST *crypt_add_string_to_hints (LIST * hints, const char *str)
       hints = mutt_add_list (hints, t);
   }
 
-  FREE (&scratch);
+  mem_free (&scratch);
   return hints;
 }
 
@@ -3257,7 +3257,7 @@ static crypt_key_t *crypt_select_key (crypt_key_t * keys,
 
     if (i == keymax) {
       keymax += 20;
-      safe_realloc (&key_table, sizeof (crypt_key_t *) * keymax);
+      mem_realloc (&key_table, sizeof (crypt_key_t *) * keymax);
     }
 
     key_table[i++] = k;
@@ -3415,7 +3415,7 @@ static crypt_key_t *crypt_select_key (crypt_key_t * keys,
   }
 
   mutt_menuDestroy (&menu);
-  FREE (&key_table);
+  mem_free (&key_table);
 
   set_option (OPTNEEDREDRAW);
 
@@ -3636,7 +3636,7 @@ static crypt_key_t *crypt_ask_for_key (char *tag,
       if (l)
         str_replace (&l->dflt, resp);
       else {
-        l = safe_malloc (sizeof (struct crypt_cache));
+        l = mem_malloc (sizeof (struct crypt_cache));
         l->next = id_defaults;
         id_defaults = l;
         l->what = str_dup (whatfor);
@@ -3727,7 +3727,7 @@ static char *find_keys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc,
         }
       }
       else if (r == -1) {
-        FREE (&keylist);
+        mem_free (&keylist);
         rfc822_free_address (&tmp);
         rfc822_free_address (&addr);
         return NULL;
@@ -3746,7 +3746,7 @@ static char *find_keys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc,
                                     app,
 #endif
                                     &forced_valid)) == NULL) {
-        FREE (&keylist);
+        mem_free (&keylist);
         rfc822_free_address (&tmp);
         rfc822_free_address (&addr);
         return NULL;
@@ -3766,7 +3766,7 @@ static char *find_keys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc,
 #endif
 
       keylist_size += str_len (s) + 4 + 1;
-      safe_realloc (&keylist, keylist_size);
+      mem_realloc (&keylist, keylist_size);
       sprintf (keylist + keylist_used, "%s0x%s%s",      /* __SPRINTF_CHECKED__ */
                keylist_used ? " " : "", s, forced_valid ? "!" : "");
     }

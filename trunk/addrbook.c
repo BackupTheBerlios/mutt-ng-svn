@@ -164,7 +164,7 @@ new_aliases:
     menu->max++;
   }
 
-  safe_realloc (&AliasTable, menu->max * sizeof (ALIAS *));
+  mem_realloc (&AliasTable, menu->max * sizeof (ALIAS *));
   menu->data = AliasTable;
 
   for (i = omax, aliasp = aliases; aliasp; aliasp = aliasp->next, i++) {
@@ -228,6 +228,6 @@ new_aliases:
   }
 
   mutt_menuDestroy (&menu);
-  FREE (&AliasTable);
+  mem_free (&AliasTable);
 
 }

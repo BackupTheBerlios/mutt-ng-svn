@@ -60,11 +60,11 @@ static size_t convert_string (ICONV_CONST char *f, size_t flen,
   if (cd == (iconv_t) (-1))
     return (size_t) (-1);
   obl = 4 * flen + 1;
-  ob = buf = safe_malloc (obl);
+  ob = buf = mem_malloc (obl);
   n = iconv (cd, &f, &flen, &ob, &obl);
   if (n == (size_t) (-1) || iconv (cd, 0, 0, &ob, &obl) == (size_t) (-1)) {
     e = errno;
-    FREE (&buf);
+    mem_free (&buf);
     iconv_close (cd);
     errno = e;
     return (size_t) (-1);
@@ -73,7 +73,7 @@ static size_t convert_string (ICONV_CONST char *f, size_t flen,
 
   *tlen = ob - buf;
 
-  safe_realloc (&buf, ob - buf + 1);
+  mem_realloc (&buf, ob - buf + 1);
   *t = buf;
   iconv_close (cd);
 
@@ -102,7 +102,7 @@ char *mutt_choose_charset (const char *fromcode, const char *charsets,
         n > (ENCWORD_LEN_MAX - ENCWORD_LEN_MIN + 2 - 12))
       continue;
 
-    t = safe_malloc (n + 1);
+    t = mem_malloc (n + 1);
     memcpy (t, p, n);
     t[n] = '\0';
 
@@ -112,21 +112,21 @@ char *mutt_choose_charset (const char *fromcode, const char *charsets,
 
     if (!tocode || n < bestn) {
       bestn = n;
-      FREE (&tocode);
+      mem_free (&tocode);
       tocode = t;
       if (d) {
-        FREE (&e);
+        mem_free (&e);
         e = s;
       }
       else
-        FREE (&s);
+        mem_free (&s);
       elen = slen;
       if (!bestn)
         break;
     }
     else {
-      FREE (&t);
-      FREE (&s);
+      mem_free (&t);
+      mem_free (&s);
     }
   }
   if (tocode) {
@@ -361,7 +361,7 @@ static int rfc2047_encode (ICONV_CONST char *d, size_t dlen, int col,
   if (convert_string (d, dlen, fromcode, icode, &u, &ulen)) {
     ret = 1;
     icode = 0;
-    u = safe_malloc ((ulen = dlen) + 1);
+    u = mem_malloc ((ulen = dlen) + 1);
     memcpy (u, d, dlen);
     u[ulen] = 0;
   }
@@ -446,7 +446,7 @@ static int rfc2047_encode (ICONV_CONST char *d, size_t dlen, int col,
 
   /* Initialise the output buffer with the us-ascii prefix. */
   buflen = 2 * ulen;
-  buf = safe_malloc (buflen);
+  buf = mem_malloc (buflen);
   bufpos = t0 - u;
   memcpy (buf, u, t0 - u);
 
@@ -482,7 +482,7 @@ static int rfc2047_encode (ICONV_CONST char *d, size_t dlen, int col,
 #define LINEBREAK "\n\t"
     if (bufpos + wlen + str_len (LINEBREAK) > buflen) {
       buflen = bufpos + wlen + str_len (LINEBREAK);
-      safe_realloc (&buf, buflen);
+      mem_realloc (&buf, buflen);
     }
     r = encode_block (buf + bufpos, t, n, icode, tocode, encoder);
     assert (r == wlen);
@@ -498,14 +498,14 @@ static int rfc2047_encode (ICONV_CONST char *d, size_t dlen, int col,
 
   /* Add last encoded word and us-ascii suffix to buffer. */
   buflen = bufpos + wlen + (u + ulen - t1);
-  safe_realloc (&buf, buflen + 1);
+  mem_realloc (&buf, buflen + 1);
   r = encode_block (buf + bufpos, t, t1 - t, icode, tocode, encoder);
   assert (r == wlen);
   bufpos += wlen;
   memcpy (buf + bufpos, t1, u + ulen - t1);
 
-  FREE (&tocode1);
-  FREE (&u);
+  mem_free (&tocode1);
+  mem_free (&u);
 
   buf[buflen] = '\0';
 
@@ -531,7 +531,7 @@ void _rfc2047_encode_string (char **pd, int encode_specials, int col)
                   Charset, charsets, &e, &elen,
                   encode_specials ? RFC822Specials : NULL);
 
-  FREE (pd);
+  mem_free (pd);
   *pd = e;
 }
 
@@ -555,7 +555,7 @@ static int rfc2047_decode_word (char *d, const char *s, size_t len)
   int enc = 0, count = 0;
   char *charset = NULL;
 
-  pd = d0 = safe_malloc (str_len (s));
+  pd = d0 = mem_malloc (str_len (s));
 
   for (pp = s; (pp1 = strchr (pp, '?')); pp = pp1 + 1) {
     count++;
@@ -565,7 +565,7 @@ static int rfc2047_decode_word (char *d, const char *s, size_t len)
       t = pp1;
       if ((t1 = memchr (pp, '*', t - pp)))
         t = t1;
-      charset = safe_malloc (t - pp + 1);
+      charset = mem_malloc (t - pp + 1);
       memcpy (charset, pp, t - pp);
       charset[t - pp] = '\0';
       break;
@@ -575,8 +575,8 @@ static int rfc2047_decode_word (char *d, const char *s, size_t len)
       else if (toupper ((unsigned char) *pp) == 'B')
         enc = ENCBASE64;
       else {
-        FREE (&charset);
-        FREE (&d0);
+        mem_free (&charset);
+        mem_free (&d0);
         return (-1);
       }
       break;
@@ -623,8 +623,8 @@ static int rfc2047_decode_word (char *d, const char *s, size_t len)
   if (charset)
     mutt_convert_string (&d0, charset, Charset, M_ICONV_HOOK_FROM);
   strfcpy (d, d0, len);
-  FREE (&charset);
-  FREE (&d0);
+  mem_free (&charset);
+  mem_free (&d0);
   return (0);
 }
 
@@ -712,7 +712,7 @@ void rfc2047_decode (char **pd)
     return;
 
   dlen = 4 * str_len (s);        /* should be enough */
-  d = d0 = safe_malloc (dlen + 1);
+  d = d0 = mem_malloc (dlen + 1);
 
   while (*s && dlen > 0) {
     if (!(p = find_encoded_word (s, &q))) {
@@ -728,7 +728,7 @@ void rfc2047_decode (char **pd)
           char *t;
           size_t tlen;
 
-          t = safe_malloc (n + 1);
+          t = mem_malloc (n + 1);
           strfcpy (t, s, n + 1);
           if (mutt_convert_nonmime_string (&t) == 0) {
             tlen = str_len (t);
@@ -739,7 +739,7 @@ void rfc2047_decode (char **pd)
             strncpy (d, s, n);
             d += n;
           }
-          FREE (&t);
+          mem_free (&t);
           break;
         }
       }
@@ -787,7 +787,7 @@ void rfc2047_decode (char **pd)
   }
   *d = 0;
 
-  FREE (pd);
+  mem_free (pd);
   *pd = d0;
   str_adjust (pd);
 }

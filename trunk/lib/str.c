@@ -24,7 +24,7 @@ char *str_dup (const char *s)
   if (!s || !*s)
     return 0;
   l = str_len (s) + 1;
-  p = (char *) safe_malloc (l);
+  p = (char *) mem_malloc (l);
   memcpy (p, s, l);
   return (p);
 }
@@ -99,7 +99,7 @@ int str_coll (const char *a, const char *b)
 
 void str_replace (char **p, const char *s)
 {
-  FREE (p);
+  mem_free (p);
   *p = str_dup (s);
 }
 
@@ -107,7 +107,7 @@ void str_adjust (char **p)
 {
   if (!p || !*p)
     return;
-  safe_realloc (p, str_len (*p) + 1);
+  mem_realloc (p, str_len (*p) + 1);
 }
 
 /* convert all characters in the string to lowercase */
@@ -148,7 +148,7 @@ char *str_substrdup (const char *begin, const char *end)
   else
     len = str_len (begin);
 
-  p = safe_malloc (len + 1);
+  p = mem_malloc (len + 1);
   memcpy (p, begin, len);
   p[len] = 0;
   return p;

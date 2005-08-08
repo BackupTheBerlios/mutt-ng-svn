@@ -124,7 +124,7 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
 
   debug_print (1, ("WEED is %s\n", (flags & CH_WEED) ? "Set" : "Not"));
 
-  headers = safe_calloc (hdr_count, sizeof (char *));
+  headers = mem_calloc (hdr_count, sizeof (char *));
 
   /* Read all the headers into the array */
   while (ftell (in) < off_end) {
@@ -146,10 +146,10 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
         if (!headers[x])
           headers[x] = this_one;
         else {
-          safe_realloc (&headers[x], str_len (headers[x]) +
+          mem_realloc (&headers[x], str_len (headers[x]) +
                         str_len (this_one) + sizeof (char));
           strcat (headers[x], this_one);        /* __STRCAT_CHECKED__ */
-          FREE (&this_one);
+          mem_free (&this_one);
         }
 
         this_one = NULL;
@@ -213,7 +213,7 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
       if (!this_one)
         this_one = str_dup (buf);
       else {
-        safe_realloc (&this_one,
+        mem_realloc (&this_one,
                       str_len (this_one) + str_len (buf) +
                       sizeof (char));
         strcat (this_one, buf); /* __STRCAT_CHECKED__ */
@@ -231,10 +231,10 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
     if (!headers[x])
       headers[x] = this_one;
     else {
-      safe_realloc (&headers[x], str_len (headers[x]) +
+      mem_realloc (&headers[x], str_len (headers[x]) +
                     str_len (this_one) + sizeof (char));
       strcat (headers[x], this_one);    /* __STRCAT_CHECKED__ */
-      FREE (&this_one);
+      mem_free (&this_one);
     }
 
     this_one = NULL;
@@ -287,8 +287,8 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
   /* Free in a separate loop to be sure that all headers are freed
    * in case of error. */
   for (x = 0; x < hdr_count; x++)
-    FREE (&headers[x]);
-  FREE (&headers);
+    mem_free (&headers[x]);
+  mem_free (&headers);
 
   if (error)
     return (-1);
@@ -374,7 +374,7 @@ mutt_copy_header (FILE * in, HEADER * h, FILE * out, int flags,
         /* Mutt stores references in reverse order, thus we create
          * a reordered refs list that we can put in the headers */
         for (; listp; listp = listp->next, refs = t) {
-          t = (LIST *) safe_malloc (sizeof (LIST));
+          t = (LIST *) mem_malloc (sizeof (LIST));
           t->data = listp->data;
           t->next = refs;
         }
@@ -385,7 +385,7 @@ mutt_copy_header (FILE * in, HEADER * h, FILE * out, int flags,
 
         /* clearing refs from memory */
         for (t = refs; refs; refs = t->next, t = refs)
-          FREE (&refs);
+          mem_free (&refs);
 
         if (fputc ('\n', out) == EOF)
           return (-1);
@@ -808,7 +808,7 @@ static void format_address_header (char **h, ADDRESS * a)
   buflen = linelen + 3;
 
 
-  safe_realloc (h, buflen);
+  mem_realloc (h, buflen);
   for (count = 0; a; a = a->next, count++) {
     ADDRESS *tmp = a->next;
 
@@ -836,7 +836,7 @@ static void format_address_header (char **h, ADDRESS * a)
     }
 
     buflen += l + str_len (cbuf) + str_len (c2buf);
-    safe_realloc (h, buflen);
+    mem_realloc (h, buflen);
     strcat (*h, cbuf);          /* __STRCAT_CHECKED__ */
     strcat (*h, buf);           /* __STRCAT_CHECKED__ */
     strcat (*h, c2buf);         /* __STRCAT_CHECKED__ */
@@ -919,7 +919,7 @@ static int address_header_decode (char **h)
   mutt_addrlist_to_local (a);
   rfc2047_decode_adrlist (a);
 
-  *h = safe_calloc (1, l + 2);
+  *h = mem_calloc (1, l + 2);
 
   strfcpy (*h, s, l + 1);
 
@@ -927,6 +927,6 @@ static int address_header_decode (char **h)
 
   rfc822_free_address (&a);
 
-  FREE (&s);
+  mem_free (&s);
   return 1;
 }

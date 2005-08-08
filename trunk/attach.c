@@ -141,12 +141,12 @@ int mutt_compose_attachment (BODY * a)
               b->parameter = NULL;
             }
             if (b->description) {
-              FREE (&a->description);
+              mem_free (&a->description);
               a->description = b->description;
               b->description = NULL;
             }
             if (b->form_name) {
-              FREE (&a->form_name);
+              mem_free (&a->form_name);
               a->form_name = b->form_name;
               b->form_name = NULL;
             }
@@ -329,9 +329,9 @@ void mutt_check_lookup_list (BODY * b, char *type, int len)
         debug_print (1, ("\"%s\" -> %s\n", b->filename, type));
       }
       if (tmp.subtype)
-        FREE (&tmp.subtype);
+        mem_free (&tmp.subtype);
       if (tmp.xtype)
-        FREE (&tmp.xtype);
+        mem_free (&tmp.xtype);
     }
   }
 }
@@ -446,7 +446,7 @@ int mutt_view_attachment (FILE * fp, BODY * a, int flag, HEADER * hdr,
 
     if (fp) {
       /* recv case: we need to save the attachment to a file */
-      FREE (&fname);
+      mem_free (&fname);
       if (mutt_save_attachment (fp, a, tempfile, 0, NULL) == -1)
         goto return_error;
     }

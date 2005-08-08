@@ -409,14 +409,14 @@ int mutt_convert_string (char **ps, const char *from, const char *to,
     len = str_len (s);
     ib = s, ibl = len + 1;
     obl = MB_LEN_MAX * ibl;
-    ob = buf = safe_malloc (obl + 1);
+    ob = buf = mem_malloc (obl + 1);
 
     mutt_iconv (cd, &ib, &ibl, &ob, &obl, inrepls, outrepl);
     iconv_close (cd);
 
     *ob = '\0';
 
-    FREE (ps);
+    mem_free (ps);
     *ps = buf;
 
     str_adjust (ps);
@@ -460,14 +460,14 @@ FGETCONV *fgetconv_open (FILE * file, const char *from, const char *to,
     cd = mutt_iconv_open (to, from, flags);
 
   if (cd != (iconv_t) - 1) {
-    fc = safe_malloc (sizeof (struct fgetconv_s));
+    fc = mem_malloc (sizeof (struct fgetconv_s));
     fc->p = fc->ob = fc->bufo;
     fc->ib = fc->bufi;
     fc->ibl = 0;
     fc->inrepls = mutt_is_utf8 (to) ? repls : repls + 1;
   }
   else
-    fc = safe_malloc (sizeof (struct fgetconv_not));
+    fc = mem_malloc (sizeof (struct fgetconv_not));
   fc->file = file;
   fc->cd = cd;
   return (FGETCONV *) fc;
@@ -552,7 +552,7 @@ void fgetconv_close (FGETCONV ** _fc)
 
   if (fc->cd != (iconv_t) - 1)
     iconv_close (fc->cd);
-  FREE (_fc);
+  mem_free (_fc);
 }
 
 char *mutt_get_first_charset (const char *charset)
@@ -582,11 +582,11 @@ static size_t convert_string (ICONV_CONST char *f, size_t flen,
   if (cd == (iconv_t) (-1))
     return (size_t) (-1);
   obl = 4 * flen + 1;
-  ob = buf = safe_malloc (obl);
+  ob = buf = mem_malloc (obl);
   n = iconv (cd, &f, &flen, &ob, &obl);
   if (n == (size_t) (-1) || iconv (cd, 0, 0, &ob, &obl) == (size_t) (-1)) {
     e = errno;
-    FREE (&buf);
+    mem_free (&buf);
     iconv_close (cd);
     errno = e;
     return (size_t) (-1);
@@ -595,7 +595,7 @@ static size_t convert_string (ICONV_CONST char *f, size_t flen,
 
   *tlen = ob - buf;
 
-  safe_realloc (&buf, ob - buf + 1);
+  mem_realloc (&buf, ob - buf + 1);
   *t = buf;
   iconv_close (cd);
 
@@ -621,12 +621,12 @@ int mutt_convert_nonmime_string (char **ps)
     n = c1 ? c1 - c : str_len (c);
     if (!n)
       continue;
-    fromcode = safe_malloc (n + 1);
+    fromcode = mem_malloc (n + 1);
     strfcpy (fromcode, c, n + 1);
     m = convert_string (u, ulen, fromcode, Charset, &s, &slen);
-    FREE (&fromcode);
+    mem_free (&fromcode);
     if (m != (size_t) (-1)) {
-      FREE (ps);
+      mem_free (ps);
       *ps = s;
       return 0;
     }

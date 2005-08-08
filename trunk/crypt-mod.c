@@ -27,7 +27,7 @@ static crypt_module_t modules;
 /* Register a new crypto module. */
 void crypto_module_register (crypt_module_specs_t specs)
 {
-  crypt_module_t module_new = safe_malloc (sizeof (*module_new));
+  crypt_module_t module_new = mem_malloc (sizeof (*module_new));
 
   module_new->specs = specs;
   module_new->next = modules;

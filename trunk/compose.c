@@ -337,7 +337,7 @@ static int edit_address_list (int line, ADDRESS ** addr)
   if (mutt_addrlist_to_idna (*addr, &err) != 0) {
     mutt_error (_("Warning: '%s' is a bad IDN."), err);
     mutt_refresh ();
-    FREE (&err);
+    mem_free (&err);
   }
 
   /* redraw the expanded list so the user can see the result */
@@ -373,8 +373,8 @@ static int delete_attachment (MUTTMENU * menu, short *idxlen, int x)
   idx[x]->content->next = NULL;
   idx[x]->content->parts = NULL;
   mutt_free_body (&(idx[x]->content));
-  FREE (&idx[x]->tree);
-  FREE (&idx[x]);
+  mem_free (&idx[x]->tree);
+  mem_free (&idx[x]);
   for (; x < *idxlen - 1; x++)
     idx[x] = idx[x + 1];
   menu->max = --(*idxlen);
@@ -617,7 +617,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
           buf[0] = 0;
         if (mutt_get_field ("Newsgroups: ", buf, sizeof (buf), 0) == 0
             && buf[0]) {
-          FREE (&msg->env->newsgroups);
+          mem_free (&msg->env->newsgroups);
           str_skip_trailws (buf);
           msg->env->newsgroups = str_dup (str_skip_initws (buf));
           move (HDR_TO, HDR_XOFFSET);
@@ -635,7 +635,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
           strfcpy (buf, msg->env->followup_to, sizeof (buf));
         if (mutt_get_field ("Followup-To: ", buf, sizeof (buf), 0) == 0
             && buf[0]) {
-          FREE (&msg->env->followup_to);
+          mem_free (&msg->env->followup_to);
           str_skip_trailws (buf);
           msg->env->followup_to = str_dup (str_skip_initws (buf));
           move (HDR_CC, HDR_XOFFSET);
@@ -653,7 +653,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
           strfcpy (buf, msg->env->x_comment_to, sizeof (buf));
         if (mutt_get_field ("X-Comment-To: ", buf, sizeof (buf), 0) == 0
             && buf[0]) {
-          FREE (&msg->env->x_comment_to);
+          mem_free (&msg->env->x_comment_to);
           msg->env->x_comment_to = str_dup (buf);
           move (HDR_BCC, HDR_XOFFSET);
           clrtoeol ();
@@ -714,7 +714,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
                            fcc, fcclen);
         if (mutt_env_to_idna (msg->env, &tag, &err)) {
           mutt_error (_("Bad IDN in \"%s\": '%s'"), tag, err);
-          FREE (&err);
+          mem_free (&err);
         }
       }
       else {
@@ -729,7 +729,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
       /* attachments may have been added */
       if (idxlen && idx[idxlen - 1]->content->next) {
         for (i = 0; i < idxlen; i++)
-          FREE (&idx[i]);
+          mem_free (&idx[i]);
         idxlen = 0;
         idx =
           mutt_gen_attach_list (msg->content, -1, idx, &idxlen, &idxmax, 0,
@@ -748,18 +748,18 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
       if (!(WithCrypto & APPLICATION_PGP))
         break;
       if (idxlen == idxmax) {
-        safe_realloc (&idx, sizeof (ATTACHPTR *) * (idxmax += 5));
+        mem_realloc (&idx, sizeof (ATTACHPTR *) * (idxmax += 5));
         menu->data = idx;
       }
 
-      idx[idxlen] = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+      idx[idxlen] = (ATTACHPTR *) mem_calloc (1, sizeof (ATTACHPTR));
       if ((idx[idxlen]->content =
            crypt_pgp_make_key_attachment (NULL)) != NULL) {
         update_idx (menu, idx, idxlen++);
         menu->redraw |= REDRAW_INDEX;
       }
       else
-        FREE (&idx[idxlen]);
+        mem_free (&idx[idxlen]);
 
       menu->redraw |= REDRAW_STATUS;
 
@@ -788,7 +788,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
           break;
 
         if (idxlen + numfiles >= idxmax) {
-          safe_realloc (&idx,
+          mem_realloc (&idx,
                         sizeof (ATTACHPTR *) * (idxmax += 5 + numfiles));
           menu->data = idx;
         }
@@ -800,7 +800,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
         for (i = 0; i < numfiles; i++) {
           char *att = files[i];
 
-          idx[idxlen] = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+          idx[idxlen] = (ATTACHPTR *) mem_calloc (1, sizeof (ATTACHPTR));
           idx[idxlen]->unowned = 1;
           idx[idxlen]->content = mutt_make_file_attach (att);
           if (idx[idxlen]->content != NULL)
@@ -808,11 +808,11 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
           else {
             error = 1;
             mutt_error (_("Unable to attach %s!"), att);
-            FREE (&idx[idxlen]);
+            mem_free (&idx[idxlen]);
           }
         }
 
-        FREE (&files);
+        mem_free (&files);
         if (!error)
           mutt_clear_error ();
 
@@ -888,7 +888,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
 
         if (!ctx->msgcount) {
           mx_close_mailbox (ctx, NULL);
-          FREE (&ctx);
+          mem_free (&ctx);
           mutt_error _("No messages in that folder.");
 
           break;
@@ -916,7 +916,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
         }
 
         if (idxlen + Context->tagged >= idxmax) {
-          safe_realloc (&idx,
+          mem_realloc (&idx,
                         sizeof (ATTACHPTR *) * (idxmax +=
                                                 5 + Context->tagged));
           menu->data = idx;
@@ -925,14 +925,14 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
         for (i = 0; i < Context->msgcount; i++) {
           h = Context->hdrs[i];
           if (h->tagged) {
-            idx[idxlen] = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+            idx[idxlen] = (ATTACHPTR *) mem_calloc (1, sizeof (ATTACHPTR));
             idx[idxlen]->content = mutt_make_message_attach (Context, h, 1);
             if (idx[idxlen]->content != NULL)
               update_idx (menu, idx, idxlen++);
             else {
               mutt_error _("Unable to attach!");
 
-              FREE (&idx[idxlen]);
+              mem_free (&idx[idxlen]);
             }
           }
         }
@@ -942,7 +942,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
           mx_close_mailbox (Context, NULL);
         else
           mx_fastclose_mailbox (Context);
-        FREE (&Context);
+        mem_free (&Context);
 
         /* go back to the folder we started from */
         Context = this;
@@ -1190,15 +1190,15 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
           continue;
         }
         if (idxlen == idxmax) {
-          safe_realloc (&idx, sizeof (ATTACHPTR *) * (idxmax += 5));
+          mem_realloc (&idx, sizeof (ATTACHPTR *) * (idxmax += 5));
           menu->data = idx;
         }
 
-        idx[idxlen] = (ATTACHPTR *) safe_calloc (1, sizeof (ATTACHPTR));
+        idx[idxlen] = (ATTACHPTR *) mem_calloc (1, sizeof (ATTACHPTR));
         /* Touch the file */
         if (!(fp = safe_fopen (fname, "w"))) {
           mutt_error (_("Can't create file %s"), fname);
-          FREE (&idx[idxlen]);
+          mem_free (&idx[idxlen]);
           continue;
         }
         fclose (fp);
@@ -1284,10 +1284,10 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
           if (idx[idxlen]->unowned)
             idx[idxlen]->content->unlink = 0;
           mutt_free_body (&idx[idxlen]->content);
-          FREE (&idx[idxlen]->tree);
-          FREE (&idx[idxlen]);
+          mem_free (&idx[idxlen]->tree);
+          mem_free (&idx[idxlen]);
         }
-        FREE (&idx);
+        mem_free (&idx);
         idxlen = 0;
         idxmax = 0;
         r = -1;
@@ -1418,13 +1418,13 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
     msg->content = idx[0]->content;
     for (i = 0; i < idxlen; i++) {
       idx[i]->content->aptr = NULL;
-      FREE (&idx[i]);
+      mem_free (&idx[i]);
     }
   }
   else
     msg->content = NULL;
 
-  FREE (&idx);
+  mem_free (&idx);
 
   return (r);
 }

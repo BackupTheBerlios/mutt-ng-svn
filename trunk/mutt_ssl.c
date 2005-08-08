@@ -84,7 +84,7 @@ int mutt_ssl_starttls (CONNECTION * conn)
   if (ssl_init ())
     goto bail;
 
-  ssldata = (sslsockdata *) safe_calloc (1, sizeof (sslsockdata));
+  ssldata = (sslsockdata *) mem_calloc (1, sizeof (sslsockdata));
   /* the ssl_use_xxx protocol options don't apply. We must use TLS in TLS. */
   if (!(ssldata->ctx = SSL_CTX_new (TLSv1_client_method ()))) {
     debug_print (1, ("Error allocating SSL_CTX\n"));
@@ -118,11 +118,11 @@ int mutt_ssl_starttls (CONNECTION * conn)
   return 0;
 
 bail_ssl:
-  FREE (&ssldata->ssl);
+  mem_free (&ssldata->ssl);
 bail_ctx:
-  FREE (&ssldata->ctx);
+  mem_free (&ssldata->ctx);
 bail_ssldata:
-  FREE (&ssldata);
+  mem_free (&ssldata);
 bail:
   return -1;
 }
@@ -256,7 +256,7 @@ static int ssl_socket_open (CONNECTION * conn)
   if (raw_socket_open (conn) < 0)
     return -1;
 
-  data = (sslsockdata *) safe_calloc (1, sizeof (sslsockdata));
+  data = (sslsockdata *) mem_calloc (1, sizeof (sslsockdata));
   conn->sockdata = data;
 
   data->ctx = SSL_CTX_new (SSLv23_client_method ());
@@ -348,7 +348,7 @@ static int ssl_socket_close (CONNECTION * conn)
 #endif
     SSL_free (data->ssl);
     SSL_CTX_free (data->ctx);
-    FREE (&conn->sockdata);
+    mem_free (&conn->sockdata);
   }
 
   return raw_socket_close (conn);
@@ -582,9 +582,9 @@ static int ssl_check_certificate (sslsockdata * data)
   /* interactive check from user */
   menu = mutt_new_menu ();
   menu->max = 19;
-  menu->dialog = (char **) safe_calloc (1, menu->max * sizeof (char *));
+  menu->dialog = (char **) mem_calloc (1, menu->max * sizeof (char *));
   for (i = 0; i < menu->max; i++)
-    menu->dialog[i] = (char *) safe_calloc (1, SHORT_STRING * sizeof (char));
+    menu->dialog[i] = (char *) mem_calloc (1, SHORT_STRING * sizeof (char));
 
   row = 0;
   strfcpy (menu->dialog[row], _("This certificate belongs to:"),

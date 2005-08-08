@@ -66,7 +66,7 @@ unsigned char *pgp_read_packet (FILE * fp, size_t * len)
 
   if (!plen) {
     plen = CHUNKSIZE;
-    pbuf = safe_malloc (plen);
+    pbuf = mem_malloc (plen);
   }
 
   if (fread (&ctb, 1, 1, fp) < 1) {
@@ -200,5 +200,5 @@ bail:
 void pgp_release_packet (void)
 {
   plen = 0;
-  FREE (&pbuf);
+  mem_free (&pbuf);
 }

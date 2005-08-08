@@ -60,7 +60,7 @@ int CurRCLine = 0;
 
 /* for synonym warning reports: adds synonym to end of list */
 static void syn_add (int n, int o) {
-  syn_t* tmp = safe_malloc (sizeof (syn_t));
+  syn_t* tmp = mem_malloc (sizeof (syn_t));
   tmp->f = str_dup (CurRCFile);
   tmp->l = CurRCLine;
   tmp->n = n;
@@ -70,8 +70,8 @@ static void syn_add (int n, int o) {
 
 /* for synonym warning reports: free single item (for list_del()) */
 static void syn_del (void** p) {
-  FREE(&(*(syn_t**) p)->f);
-  FREE(p);
+  mem_free(&(*(syn_t**) p)->f);
+  mem_free(p);
 }
 
 void toggle_quadoption (int opt)
@@ -238,10 +238,10 @@ int mutt_extract_token (BUFFER * dest, BUFFER * tok, int flags)
       cmd = str_substrdup (tok->dptr, pc);
       if ((pid = mutt_create_filter (cmd, NULL, &fp, NULL)) < 0) {
         debug_print (1, ("unable to fork command: %s\n", cmd));
-        FREE (&cmd);
+        mem_free (&cmd);
         return (-1);
       }
-      FREE (&cmd);
+      mem_free (&cmd);
 
       tok->dptr = pc + 1;
 
@@ -257,21 +257,21 @@ int mutt_extract_token (BUFFER * dest, BUFFER * tok, int flags)
        * the token */
       if (expn.data && qc) {
         mutt_buffer_addstr (dest, expn.data);
-        FREE (&expn.data);
+        mem_free (&expn.data);
       }
       else if (expn.data) {
         expnlen = str_len (expn.data);
         tok->dsize = expnlen + str_len (tok->dptr) + 1;
-        ptr = safe_malloc (tok->dsize);
+        ptr = mem_malloc (tok->dsize);
         memcpy (ptr, expn.data, expnlen);
         strcpy (ptr + expnlen, tok->dptr);      /* __STRCPY_CHECKED__ */
         if (tok->destroy)
-          FREE (&tok->data);
+          mem_free (&tok->data);
         tok->data = ptr;
         tok->dptr = ptr;
         tok->destroy = 1;       /* mark that the caller should destroy this data */
         ptr = NULL;
-        FREE (&expn.data);
+        mem_free (&expn.data);
       }
     }
     else if (ch == '$' && (!qc || qc == '"')
@@ -293,7 +293,7 @@ int mutt_extract_token (BUFFER * dest, BUFFER * tok, int flags)
       }
       if (var && (env = getenv (var)))
         mutt_buffer_addstr (dest, env);
-      FREE (&var);
+      mem_free (&var);
     }
     else
       mutt_buffer_addch (dest, ch);
@@ -323,7 +323,7 @@ static void add_to_list (LIST ** list, const char *str)
   }
 
   if (!*list || last) {
-    t = (LIST *) safe_calloc (1, sizeof (LIST));
+    t = (LIST *) mem_calloc (1, sizeof (LIST));
     t->data = str_dup (str);
     if (last) {
       last->next = t;
@@ -382,7 +382,7 @@ static int add_to_spam_list (SPAM_LIST ** list, const char *pat,
        * the template, and leaving t pointed at the current item.
        */
       t = last;
-      FREE(t->template);
+      mem_free(t->template);
       break;
     }
     if (!last->next)
@@ -434,8 +434,8 @@ static int remove_from_spam_list (SPAM_LIST ** list, const char *pat)
   if (spam->rx && !str_cmp (spam->rx->pattern, pat)) {
     *list = spam->next;
     rx_free (&spam->rx);
-    FREE(&spam->template);
-    FREE(&spam);
+    mem_free(&spam->template);
+    mem_free(&spam);
     return 1;
   }
 
@@ -444,8 +444,8 @@ static int remove_from_spam_list (SPAM_LIST ** list, const char *pat)
     if (!str_cmp (spam->rx->pattern, pat)) {
       prev->next = spam->next;
       rx_free (&spam->rx);
-      FREE(spam->template);
-      FREE(spam);
+      mem_free(spam->template);
+      mem_free(spam);
       spam = prev->next;
       ++nremoved;
     }
@@ -468,12 +468,12 @@ static void remove_from_list (LIST ** l, const char *str)
     last = NULL;
     while (p) {
       if (ascii_strcasecmp (str, p->data) == 0) {
-        FREE (&p->data);
+        mem_free (&p->data);
         if (last)
           last->next = p->next;
         else
           (*l) = p->next;
-        FREE (&p);
+        mem_free (&p);
       }
       else {
         last = p;
@@ -559,10 +559,10 @@ static int parse_ifdef (BUFFER * tmp, BUFFER * s, unsigned long data,
   if ((data && res) || (!data && !res)) {
     if (mutt_parse_rc_line (tmp->data, &token, err) == -1) {
       mutt_error ("Error: %s", err->data);
-      FREE (&token.data);
+      mem_free (&token.data);
       return (-1);
     }
-    FREE (&token.data);
+    mem_free (&token.data);
   }
   return 0;
 }
@@ -680,10 +680,10 @@ static int parse_spam_list (BUFFER * buf, BUFFER * s, unsigned long data,
 
       /* Add to the spam list. */
       if (add_to_spam_list (&SpamList, buf->data, templ.data, err) != 0) {
-        FREE (&templ.data);
+        mem_free (&templ.data);
         return -1;
       }
-      FREE (&templ.data);
+      mem_free (&templ.data);
     }
 
     /* If not, try to remove from the nospam list. */
@@ -873,7 +873,7 @@ static int parse_alias (BUFFER * buf, BUFFER * s, unsigned long data,
 
   if (!tmp) {
     /* create a new alias */
-    tmp = (ALIAS *) safe_calloc (1, sizeof (ALIAS));
+    tmp = (ALIAS *) mem_calloc (1, sizeof (ALIAS));
     tmp->self = tmp;
     tmp->name = str_dup (buf->data);
     /* give the main addressbook code a chance */
@@ -977,7 +977,7 @@ static int parse_my_hdr (BUFFER * buf, BUFFER * s, unsigned long data,
       /* see if there is already a field by this name */
       if (ascii_strncasecmp (buf->data, tmp->data, keylen) == 0) {
         /* replace the old value */
-        FREE (&tmp->data);
+        mem_free (&tmp->data);
         tmp->data = buf->data;
         memset (buf, 0, sizeof (BUFFER));
         return 0;
@@ -1099,16 +1099,16 @@ static void mutt_restore_default (struct option_t *p)
       rx_t *pp = (rx_t *) p->data;
       int flags = 0;
 
-      FREE (&pp->pattern);
+      mem_free (&pp->pattern);
       if (pp->rx) {
         regfree (pp->rx);
-        FREE (&pp->rx);
+        mem_free (&pp->rx);
       }
 
       if (p->init) {
         char *s = (char *) p->init;
 
-        pp->rx = safe_calloc (1, sizeof (regex_t));
+        pp->rx = mem_calloc (1, sizeof (regex_t));
         if (str_cmp (p->option, "mask") != 0)
           flags |= mutt_which_case ((const char *) p->init);
         if (str_cmp (p->option, "mask") == 0 && *s == '!') {
@@ -1119,9 +1119,9 @@ static void mutt_restore_default (struct option_t *p)
           fprintf (stderr,
                    _("mutt_restore_default(%s): error in regexp: %s\n"),
                    p->option, pp->pattern);
-          FREE (&pp->pattern);
+          mem_free (&pp->pattern);
           regfree (pp->rx);
-          FREE (&pp->rx);
+          mem_free (&pp->rx);
         }
         else
           str_replace (&pp->pattern, (char *) p->init);
@@ -1242,7 +1242,7 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
         if (DTYPE (MuttVars[idx].type) == DT_ADDR)
           rfc822_free_address ((ADDRESS **) MuttVars[idx].data);
         else
-          FREE ((void *) MuttVars[idx].data);
+          mem_free ((void *) MuttVars[idx].data);
       }
       else if (query || *s->dptr != '=') {
         char _tmp[STRING];
@@ -1269,7 +1269,7 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
         if (DTYPE (MuttVars[idx].type) == DT_ADDR)
           rfc822_free_address ((ADDRESS **) MuttVars[idx].data);
         else
-          FREE ((void *) MuttVars[idx].data);
+          mem_free ((void *) MuttVars[idx].data);
 
         mutt_extract_token (tmp, s, 0);
         if (DTYPE (MuttVars[idx].type) == DT_PATH) {
@@ -1328,19 +1328,19 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
           }
         }
 
-        rx = (regex_t *) safe_malloc (sizeof (regex_t));
+        rx = (regex_t *) mem_malloc (sizeof (regex_t));
         if ((e = REGCOMP (rx, p, flags)) != 0) {
           regerror (e, rx, err->data, err->dsize);
           regfree (rx);
-          FREE (&rx);
+          mem_free (&rx);
           break;
         }
 
         /* get here only if everything went smootly */
         if (ptr->pattern) {
-          FREE (&ptr->pattern);
+          mem_free (&ptr->pattern);
           regfree ((regex_t *) ptr->rx);
-          FREE (&ptr->rx);
+          mem_free (&ptr->rx);
         }
 
         ptr->pattern = str_dup (tmp->data);
@@ -1584,7 +1584,7 @@ static int source_rc (const char *rcfile, BUFFER * err)
       mutt_error (_("Error in %s, line %d: %s"), rcfile, line, err->data);
       if (--rc < -MAXERRS) {
         if (conv)
-          FREE (&currentline);
+          mem_free (&currentline);
         break;
       }
     }
@@ -1593,10 +1593,10 @@ static int source_rc (const char *rcfile, BUFFER * err)
         rc = -1;
     }
     if (conv)
-      FREE (&currentline);
+      mem_free (&currentline);
   }
-  FREE (&token.data);
-  FREE (&linebuf);
+  mem_free (&token.data);
+  mem_free (&linebuf);
   fclose (f);
   if (pid != -1)
     mutt_wait_filter (pid);
@@ -1681,7 +1681,7 @@ int mutt_parse_rc_line ( /* const */ char *line, BUFFER * token, BUFFER * err)
   r = 0;
 finish:
   if (expn.destroy)
-    FREE (&expn.data);
+    mem_free (&expn.data);
   return (r);
 }
 
@@ -2003,13 +2003,13 @@ int mutt_query_variables (LIST * queries)
     snprintf (command, sizeof (command), "set ?%s\n", p->data);
     if (mutt_parse_rc_line (command, &token, &err) == -1) {
       fprintf (stderr, "%s\n", err.data);
-      FREE (&token.data);
+      mem_free (&token.data);
       return 1;
     }
     printf ("%s\n", err.data);
   }
 
-  FREE (&token.data);
+  mem_free (&token.data);
   return 0;
 }
 
@@ -2045,11 +2045,11 @@ static int mutt_execute_commands (LIST * p)
   for (; p; p = p->next) {
     if (mutt_parse_rc_line (p->data, &token, &err) != 0) {
       fprintf (stderr, _("Error in command line: %s\n"), err.data);
-      FREE (&token.data);
+      mem_free (&token.data);
       return (-1);
     }
   }
-  FREE (&token.data);
+  mem_free (&token.data);
   return 0;
 }
 
@@ -2123,7 +2123,7 @@ void mutt_init (int skip_sys_rc, LIST * commands)
   else
 #endif /* DOMAIN */
   if (*DOMAIN != '@') {
-    Fqdn = safe_malloc (str_len (DOMAIN) + str_len (Hostname) + 2);
+    Fqdn = mem_malloc (str_len (DOMAIN) + str_len (Hostname) + 2);
     sprintf (Fqdn, "%s.%s", NONULL (Hostname), DOMAIN); /* __SPRINTF_CHECKED__ */
   }
   else
@@ -2196,7 +2196,7 @@ void mutt_init (int skip_sys_rc, LIST * commands)
 
     memset (&token, 0, sizeof (token));
     parse_my_hdr (&token, &buf, 0, &err);
-    FREE (&token.data);
+    mem_free (&token.data);
   }
 
   if ((p = getenv ("EMAIL")) != NULL)
@@ -2264,11 +2264,11 @@ void mutt_init (int skip_sys_rc, LIST * commands)
   }
   else {
     strfcpy (buffer, Muttrc, sizeof (buffer));
-    FREE (&Muttrc);
+    mem_free (&Muttrc);
     mutt_expand_path (buffer, sizeof (buffer));
     Muttrc = str_dup (buffer);
   }
-  FREE (&AliasFile);
+  mem_free (&AliasFile);
   AliasFile = str_dup (NONULL (Muttrc));
 
   /* Process the global rc file if it exists and the user hasn't explicity
@@ -2327,7 +2327,7 @@ void mutt_init (int skip_sys_rc, LIST * commands)
     need_pause = 1;
   }
   /* this is not needed during runtime */
-  FREE(&CurRCFile);
+  mem_free(&CurRCFile);
 
   if (need_pause && !option (OPTNOCURSES)) {
     if (mutt_any_key_to_continue (NULL) == -1)
@@ -2384,14 +2384,14 @@ int mutt_dump_variables (void) {
                 ((struct option_t*) tmp->data[i])->option);
       if (mutt_parse_rc_line (command, &token, &err) == -1) {
         fprintf (stderr, "%s\n", err.data);
-        FREE (&token.data);
+        mem_free (&token.data);
         list_del (&tmp, NULL);
         return 1;
       }
       printf("%s\n", err.data);
     }
   }
-  FREE (&token.data);
+  mem_free (&token.data);
   list_del (&tmp, NULL);
   return 0;
 }

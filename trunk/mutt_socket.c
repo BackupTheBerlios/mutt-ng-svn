@@ -189,7 +189,7 @@ void mutt_socket_free (CONNECTION * conn)
   /* head is special case, doesn't need prev updated */
   if (iter == conn) {
     Connections = iter->next;
-    FREE (&iter);
+    mem_free (&iter);
     return;
   }
 
@@ -197,7 +197,7 @@ void mutt_socket_free (CONNECTION * conn)
     if (iter->next == conn) {
       tmp = iter->next;
       iter->next = tmp->next;
-      FREE (&tmp);
+      mem_free (&tmp);
       return;
     }
     iter = iter->next;
@@ -326,7 +326,7 @@ static CONNECTION *socket_new_conn (void)
 {
   CONNECTION *conn;
 
-  conn = (CONNECTION *) safe_calloc (1, sizeof (CONNECTION));
+  conn = (CONNECTION *) mem_calloc (1, sizeof (CONNECTION));
   conn->fd = -1;
 
   return conn;
@@ -406,7 +406,7 @@ int raw_socket_open (CONNECTION * conn)
   rc = getaddrinfo (host_idna, port, &hints, &res);
 
 # ifdef HAVE_LIBIDN
-  FREE (&host_idna);
+  mem_free (&host_idna);
 # endif
 
   if (rc) {
@@ -456,7 +456,7 @@ int raw_socket_open (CONNECTION * conn)
 
   if ((he = gethostbyname (host_idna)) == NULL) {
 # ifdef HAVE_LIBIDN
-    FREE (&host_idna);
+    mem_free (&host_idna);
 # endif
     mutt_error (_("Could not find the host \"%s\""), conn->account.host);
 
@@ -464,7 +464,7 @@ int raw_socket_open (CONNECTION * conn)
   }
 
 # ifdef HAVE_LIBIDN
-  FREE (&host_idna);
+  mem_free (&host_idna);
 # endif
 
   mutt_message (_("Connecting to %s..."), conn->account.host);

@@ -41,7 +41,7 @@ void nntp_add_to_list (NNTP_SERVER * s, NNTP_DATA * d)
   if (!s || !d)
     return;
 
-  l = safe_calloc (1, sizeof (LIST));
+  l = mem_calloc (1, sizeof (LIST));
   if (s->list)
     s->tail->next = l;
   else
@@ -74,7 +74,7 @@ static int nntp_parse_newsrc_line (NNTP_SERVER * news, char *line)
   strfcpy (group, line, len);
   if ((data = (NNTP_DATA *) hash_find (news->newsgroups, group)) == NULL) {
     data =
-      (NNTP_DATA *) safe_calloc (1, sizeof (NNTP_DATA) + str_len (group) + 1);
+      (NNTP_DATA *) mem_calloc (1, sizeof (NNTP_DATA) + str_len (group) + 1);
     data->group = (char *) data + sizeof (NNTP_DATA);
     strcpy (data->group, group);
     data->nserv = news;
@@ -86,10 +86,10 @@ static int nntp_parse_newsrc_line (NNTP_SERVER * news, char *line)
     nntp_add_to_list (news, data);
   }
   else
-    FREE ((void **) &data->entries);
+    mem_free ((void **) &data->entries);
 
   data->rc = 1;
-  data->entries = safe_calloc (x * 2, sizeof (NEWSRC_ENTRY));
+  data->entries = mem_calloc (x * 2, sizeof (NEWSRC_ENTRY));
   data->max = x * 2;
 
   if (*p == ':')
@@ -148,10 +148,10 @@ static int slurp_newsrc (NNTP_SERVER * news)
     return -1;
   }
 
-  buf = safe_malloc (sb.st_size + 1);
+  buf = mem_malloc (sb.st_size + 1);
   while (fgets (buf, sb.st_size + 1, fp))
     nntp_parse_newsrc_line (news, buf);
-  FREE (&buf);
+  mem_free (&buf);
 
   mx_unlock_file (news->newsrc, fileno (fp), 0);
   fclose (fp);
@@ -199,7 +199,7 @@ static int nntp_parse_cacheindex (NNTP_SERVER * news)
 
   set_option (OPTNEWSCACHE);
 
-  FREE (&news->cache);
+  mem_free (&news->cache);
   snprintf (buf, sizeof (buf), "%s/.index", dir);
   if (!(index = safe_fopen (buf, "a+")))
     return 0;
@@ -227,7 +227,7 @@ static int nntp_parse_cacheindex (NNTP_SERVER * news)
     else if (news->newsgroups) {
       if ((data = (NNTP_DATA *) hash_find (news->newsgroups, buf)) == NULL) {
         data =
-          (NNTP_DATA *) safe_calloc (1,
+          (NNTP_DATA *) mem_calloc (1,
                                      sizeof (NNTP_DATA) + str_len (buf) + 1);
         data->group = (char *) data + sizeof (NNTP_DATA);
         strcpy (data->group, buf);
@@ -304,7 +304,7 @@ int nntp_parse_url (const char *server, ACCOUNT * acct,
     ret = mutt_account_fromurl (acct, &url);
   }
 
-  FREE (&c);
+  mem_free (&c);
   return ret;
 }
 
@@ -315,7 +315,7 @@ void nntp_expand_path (char *line, size_t len, ACCOUNT * acct)
   url.path = str_dup (line);
   mutt_account_tourl (acct, &url);
   url_ciss_tostring (&url, line, len, 0);
-  FREE (&url.path);
+  mem_free (&url.path);
 }
 
 /*
@@ -343,7 +343,7 @@ NNTP_SERVER *mutt_select_newsserver (char *server)
     return NULL;
   }
 
-  buf = p = safe_calloc (str_len (server) + 10, sizeof (char));
+  buf = p = mem_calloc (str_len (server) + 10, sizeof (char));
   if (url_check_scheme (server) == U_UNKNOWN) {
     strcpy (buf, "nntp://");
     p = strchr (buf, '\0');
@@ -351,11 +351,11 @@ NNTP_SERVER *mutt_select_newsserver (char *server)
   strcpy (p, server);
 
   if ((nntp_parse_url (buf, &acct, file, sizeof (file))) < 0 || *file) {
-    FREE (&buf);
+    mem_free (&buf);
     mutt_error (_("%s is an invalid newsserver specification!"), server);
     return NULL;
   }
-  FREE (&buf);
+  mem_free (&buf);
 
   conn = mutt_conn_find (NULL, &acct);
   if (!conn)
@@ -393,7 +393,7 @@ NNTP_SERVER *mutt_select_newsserver (char *server)
   }
 
   /* New newsserver */
-  serv = safe_calloc (1, sizeof (NNTP_SERVER));
+  serv = mem_calloc (1, sizeof (NNTP_SERVER));
   serv->conn = conn;
   serv->newsrc = str_dup (file);
   serv->newsgroups = hash_create (1009);
@@ -406,9 +406,9 @@ NNTP_SERVER *mutt_select_newsserver (char *server)
     for (list = serv->list; list; list = list->next)
       list->data = NULL;
     mutt_free_list (&serv->list);
-    FREE (&serv->newsrc);
-    FREE (&serv->cache);
-    FREE (&serv);
+    mem_free (&serv->newsrc);
+    mem_free (&serv->cache);
+    mem_free (&serv);
     return NULL;
   }
   nntp_clear_cacheindex (serv);
@@ -508,7 +508,7 @@ static void nntp_create_newsrc_line (NNTP_DATA * data, char **buf,
     len += *buflen;
     *buflen *= 2;
     line = *buf;
-    safe_realloc (buf, *buflen);
+    mem_realloc (buf, *buflen);
     line = *buf + (*pline - line);
   }
   strcpy (line, data->group);
@@ -524,7 +524,7 @@ static void nntp_create_newsrc_line (NNTP_DATA * data, char **buf,
       *buflen *= 2;
       *pline = line;
       line = *buf;
-      safe_realloc (buf, *buflen);
+      mem_realloc (buf, *buflen);
       line = *buf + (*pline - line);
     }
     if (x) {
@@ -572,7 +572,7 @@ void newsrc_gen_entries (CONTEXT * ctx)
   }
 
   if (!data->max) {
-    data->entries = safe_calloc (5, sizeof (NEWSRC_ENTRY));
+    data->entries = mem_calloc (5, sizeof (NEWSRC_ENTRY));
     data->max = 5;
   }
 
@@ -594,7 +594,7 @@ void newsrc_gen_entries (CONTEXT * ctx)
           !ctx->hdrs[x]->read) {
         if (data->num >= data->max) {
           data->max = data->max * 2;
-          safe_realloc (&data->entries, data->max * sizeof (NEWSRC_ENTRY));
+          mem_realloc (&data->entries, data->max * sizeof (NEWSRC_ENTRY));
         }
         data->entries[data->num].first = first;
         data->entries[data->num].last = last - 1;
@@ -614,7 +614,7 @@ void newsrc_gen_entries (CONTEXT * ctx)
   if (series && first <= data->lastLoaded) {
     if (data->num >= data->max) {
       data->max = data->max * 2;
-      safe_realloc (&data->entries, data->max * sizeof (NEWSRC_ENTRY));
+      mem_realloc (&data->entries, data->max * sizeof (NEWSRC_ENTRY));
     }
     data->entries[data->num].first = first;
     data->entries[data->num].last = data->lastLoaded;
@@ -638,7 +638,7 @@ int mutt_newsrc_update (NNTP_SERVER * news)
   if (!news)
     return -1;
   llen = len = 10 * LONG_STRING;
-  line = buf = safe_calloc (1, len);
+  line = buf = mem_calloc (1, len);
   /* we will generate full newsrc here */
   for (tmp = news->list; tmp; tmp = tmp->next) {
     data = (NNTP_DATA *) tmp->data;
@@ -657,7 +657,7 @@ int mutt_newsrc_update (NNTP_SERVER * news)
     news->size = st.st_size;
     news->mtime = st.st_mtime;
   }
-  FREE (&buf);
+  mem_free (&buf);
   return r;
 }
 
@@ -864,7 +864,7 @@ void nntp_delete_cache (NNTP_DATA * data)
 
   nntp_cache_expand (buf, data->cache);
   unlink (buf);
-  FREE (&data->cache);
+  mem_free (&data->cache);
   data->lastCached = 0;
   nntp_cache_expand (buf, ".index");
   mutt_update_list_file (buf, data->nserv->conn->account.host, data->group,
@@ -879,7 +879,7 @@ NNTP_DATA *mutt_newsgroup_subscribe (NNTP_SERVER * news, char *group)
     return NULL;
   if (!(data = (NNTP_DATA *) hash_find (news->newsgroups, group))) {
     data =
-      (NNTP_DATA *) safe_calloc (1, sizeof (NNTP_DATA) + str_len (group) + 1);
+      (NNTP_DATA *) mem_calloc (1, sizeof (NNTP_DATA) + str_len (group) + 1);
     data->group = (char *) data + sizeof (NNTP_DATA);
     strcpy (data->group, group);
     data->nserv = news;
@@ -920,7 +920,7 @@ NNTP_DATA *mutt_newsgroup_catchup (NNTP_SERVER * news, char *group)
       !(data = (NNTP_DATA *) hash_find (news->newsgroups, group)))
     return NULL;
   if (!data->max) {
-    data->entries = safe_calloc (5, sizeof (NEWSRC_ENTRY));
+    data->entries = mem_calloc (5, sizeof (NEWSRC_ENTRY));
     data->max = 5;
   }
   data->num = 1;
@@ -944,7 +944,7 @@ NNTP_DATA *mutt_newsgroup_uncatchup (NNTP_SERVER * news, char *group)
       !(data = (NNTP_DATA *) hash_find (news->newsgroups, group)))
     return NULL;
   if (!data->max) {
-    data->entries = safe_calloc (5, sizeof (NEWSRC_ENTRY));
+    data->entries = mem_calloc (5, sizeof (NEWSRC_ENTRY));
     data->max = 5;
   }
   data->num = 1;

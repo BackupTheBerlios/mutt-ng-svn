@@ -70,7 +70,7 @@ int mutt_parse_score (BUFFER * buf, BUFFER * s, unsigned long data,
   memset (buf, 0, sizeof (BUFFER));
   mutt_extract_token (buf, s, 0);
   if (MoreArgs (s)) {
-    FREE (&pattern);
+    mem_free (&pattern);
     strfcpy (err->data, _("score: too many arguments"), err->dsize);
     return (-1);
   }
@@ -82,10 +82,10 @@ int mutt_parse_score (BUFFER * buf, BUFFER * s, unsigned long data,
       break;
   if (!ptr) {
     if ((pat = mutt_pattern_comp (pattern, 0, err)) == NULL) {
-      FREE (&pattern);
+      mem_free (&pattern);
       return (-1);
     }
-    ptr = safe_calloc (1, sizeof (SCORE));
+    ptr = mem_calloc (1, sizeof (SCORE));
     if (last)
       last->next = ptr;
     else
@@ -140,7 +140,7 @@ int mutt_parse_unscore (BUFFER * buf, BUFFER * s, unsigned long data,
         last = tmp;
         tmp = tmp->next;
         mutt_pattern_free (&last->pat);
-        FREE (&last);
+        mem_free (&last);
       }
       Score = NULL;
     }
@@ -152,7 +152,7 @@ int mutt_parse_unscore (BUFFER * buf, BUFFER * s, unsigned long data,
           else
             Score = tmp->next;
           mutt_pattern_free (&tmp->pat);
-          FREE (&tmp);
+          mem_free (&tmp);
           /* there should only be one score per pattern, so we can stop here */
           break;
         }

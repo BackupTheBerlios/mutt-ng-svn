@@ -213,12 +213,12 @@ int mutt_yesorno (const char *msg, int def)
    * ensure there is enough room for the answer and truncate the question
    * to fit.
    */
-  answer_string = safe_malloc (COLS + 1);
+  answer_string = mem_malloc (COLS + 1);
   snprintf (answer_string, COLS + 1, " ([%s]/%s): ", def == M_YES ? yes : no,
             def == M_YES ? no : yes);
   answer_string_len = str_len (answer_string);
   printw ("%.*s%s", COLS - answer_string_len, msg, answer_string);
-  FREE (&answer_string);
+  mem_free (&answer_string);
 
   FOREVER {
     mutt_refresh ();
@@ -446,7 +446,7 @@ int _mutt_enter_fname (const char *prompt, char *buf, size_t blen,
     *redraw = REDRAW_FULL;
   }
   else {
-    char *pc = safe_malloc (str_len (prompt) + 3);
+    char *pc = mem_malloc (str_len (prompt) + 3);
 
     sprintf (pc, "%s: ", prompt);       /* __SPRINTF_CHECKED__ */
     mutt_ungetch (ch.op ? 0 : ch.ch, ch.op ? ch.op : 0);
@@ -456,7 +456,7 @@ int _mutt_enter_fname (const char *prompt, char *buf, size_t blen,
         != 0)
       buf[0] = 0;
     MAYBE_REDRAW (*redraw);
-    FREE (&pc);
+    mem_free (&pc);
   }
 
   return 0;
@@ -470,7 +470,7 @@ void mutt_ungetch (int ch, int op)
   tmp.op = op;
 
   if (UngetCount >= UngetBufLen)
-    safe_realloc (&KeyEvent, (UngetBufLen += 128) * sizeof (event_t));
+    mem_realloc (&KeyEvent, (UngetBufLen += 128) * sizeof (event_t));
 
   KeyEvent[UngetCount++] = tmp;
 }

@@ -262,7 +262,7 @@ void ci_bounce_message (HEADER * h, int *redraw)
 
   if (mutt_addrlist_to_idna (adr, &err) < 0) {
     mutt_error (_("Bad IDN: '%s'"), err);
-    FREE (&err);
+    mem_free (&err);
     rfc822_free_address (&adr);
     return;
   }
@@ -570,7 +570,7 @@ void mutt_enter_command (void)
   err.dsize = sizeof (errbuf);
   memset (&token, 0, sizeof (token));
   r = mutt_parse_rc_line (buffer, &token, &err);
-  FREE (&token.data);
+  mem_free (&token.data);
   if (errbuf[0]) {
     /* since errbuf could potentially contain printf() sequences in it,
        we must call mutt_error() in this fashion so that vsprintf()
@@ -980,7 +980,7 @@ void mutt_edit_content_type (HEADER * h, BODY * b, FILE * fp)
 
   /* clean up previous junk */
   mutt_free_parameter (&b->parameter);
-  FREE (&b->subtype);
+  mem_free (&b->subtype);
 
   mutt_parse_content_type (buf, b);
 

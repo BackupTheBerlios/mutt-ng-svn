@@ -73,8 +73,8 @@ int mutt_idna_to_local (const char *in, char **out, int flags)
       irrev = 1;
     }
 
-    FREE (&t2);
-    FREE (&tmp);
+    mem_free (&t2);
+    mem_free (&tmp);
 
     if (irrev)
       goto notrans;
@@ -83,7 +83,7 @@ int mutt_idna_to_local (const char *in, char **out, int flags)
   return 0;
 
 notrans:
-  FREE (out);
+  mem_free (out);
   *out = str_dup (in);
   return 1;
 }
@@ -105,9 +105,9 @@ int mutt_local_to_idna (const char *in, char **out)
   if (!rv && idna_to_ascii_8z (tmp, out, 1) != IDNA_SUCCESS)
     rv = -2;
 
-  FREE (&tmp);
+  mem_free (&tmp);
   if (rv < 0) {
-    FREE (out);
+    mem_free (out);
     *out = str_dup (in);
   }
   return rv;
@@ -128,7 +128,7 @@ static int mbox_to_udomain (const char *mbx, char **user, char **domain)
   p = strchr (mbx, '@');
   if (!p)
     return -1;
-  *user = safe_calloc ((p - mbx + 1), sizeof (mbx[0]));
+  *user = mem_calloc ((p - mbx + 1), sizeof (mbx[0]));
   strfcpy (*user, mbx, (p - mbx + 1));
   *domain = str_dup (p + 1);
   return 0;
@@ -155,13 +155,13 @@ int mutt_addrlist_to_idna (ADDRESS * a, char **err)
         *err = str_dup (domain);
     }
     else {
-      safe_realloc (&a->mailbox, str_len (user) + str_len (tmp) + 2);
+      mem_realloc (&a->mailbox, str_len (user) + str_len (tmp) + 2);
       sprintf (a->mailbox, "%s@%s", NONULL (user), NONULL (tmp));       /* __SPRINTF_CHECKED__ */
     }
 
-    FREE (&domain);
-    FREE (&user);
-    FREE (&tmp);
+    mem_free (&domain);
+    mem_free (&user);
+    mem_free (&tmp);
 
     if (e)
       return -1;
@@ -182,13 +182,13 @@ int mutt_addrlist_to_local (ADDRESS * a)
       continue;
 
     if (mutt_idna_to_local (domain, &tmp, 0) == 0) {
-      safe_realloc (&a->mailbox, str_len (user) + str_len (tmp) + 2);
+      mem_realloc (&a->mailbox, str_len (user) + str_len (tmp) + 2);
       sprintf (a->mailbox, "%s@%s", NONULL (user), NONULL (tmp));       /* __SPRINTF_CHECKED__ */
     }
 
-    FREE (&domain);
-    FREE (&user);
-    FREE (&tmp);
+    mem_free (&domain);
+    mem_free (&user);
+    mem_free (&tmp);
   }
 
   return 0;
@@ -205,22 +205,22 @@ const char *mutt_addr_for_display (ADDRESS * a)
   char *domain = NULL;
   char *user = NULL;
 
-  FREE (&buff);
+  mem_free (&buff);
 
   if (mbox_to_udomain (a->mailbox, &user, &domain) != 0)
     return a->mailbox;
   if (mutt_idna_to_local (domain, &tmp, MI_MAY_BE_IRREVERSIBLE) != 0) {
-    FREE (&user);
-    FREE (&domain);
-    FREE (&tmp);
+    mem_free (&user);
+    mem_free (&domain);
+    mem_free (&tmp);
     return a->mailbox;
   }
 
-  safe_realloc (&buff, str_len (tmp) + str_len (user) + 2);
+  mem_realloc (&buff, str_len (tmp) + str_len (user) + 2);
   sprintf (buff, "%s@%s", NONULL (user), NONULL (tmp)); /* __SPRINTF_CHECKED__ */
-  FREE (&tmp);
-  FREE (&user);
-  FREE (&domain);
+  mem_free (&tmp);
+  mem_free (&user);
+  mem_free (&domain);
   return buff;
 }
 

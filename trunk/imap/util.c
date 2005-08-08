@@ -56,7 +56,7 @@ int imap_expand_path (char *path, size_t len)
   url.path = mx.mbox;
 
   rc = url_ciss_tostring (&url, path, len, U_DECODE_PASSWD);
-  FREE (&mx.mbox);
+  mem_free (&mx.mbox);
 
   return rc;
 }
@@ -99,7 +99,7 @@ int imap_parse_path (const char *path, IMAP_MBOX * mx)
 
   if (!(url.scheme == U_IMAP || url.scheme == U_IMAPS) ||
       mutt_account_fromurl (&mx->account, &url) < 0) {
-    FREE (&c);
+    mem_free (&c);
     return -1;
   }
 
@@ -108,7 +108,7 @@ int imap_parse_path (const char *path, IMAP_MBOX * mx)
   if (url.scheme == U_IMAPS)
     mx->account.flags |= M_ACCT_SSL;
 
-  FREE (&c);
+  mem_free (&c);
 
   if ((mx->account.flags & M_ACCT_SSL) && !(mx->account.flags & M_ACCT_PORT))
     mx->account.port = ImapsPort;
@@ -143,7 +143,7 @@ void imap_pretty_mailbox (char *path)
           if (target.mbox[hlen] == *delim)
             home_match = 1;
     }
-    FREE (&home.mbox);
+    mem_free (&home.mbox);
   }
 
   /* do the '=' substitution */
@@ -164,7 +164,7 @@ void imap_pretty_mailbox (char *path)
     url_ciss_tostring (&url, path, 1024, 0);
   }
 
-  FREE (&target.mbox);
+  mem_free (&target.mbox);
 }
 
 /* -- library functions -- */
@@ -188,7 +188,7 @@ void imap_error (const char *where, const char *msg)
  *   Returns NULL on failure (no mem) */
 IMAP_DATA *imap_new_idata (void)
 {
-  return safe_calloc (1, sizeof (IMAP_DATA));
+  return mem_calloc (1, sizeof (IMAP_DATA));
 }
 
 /* imap_free_idata: Release and clear storage in an IMAP_DATA structure. */
@@ -197,10 +197,10 @@ void imap_free_idata (IMAP_DATA ** idata)
   if (!idata)
     return;
 
-  FREE (&(*idata)->capstr);
+  mem_free (&(*idata)->capstr);
   mutt_free_list (&(*idata)->flags);
-  FREE (&((*idata)->cmd.buf));
-  FREE (idata);
+  mem_free (&((*idata)->cmd.buf));
+  mem_free (idata);
 }
 
 /*
@@ -429,7 +429,7 @@ void imap_munge_mbox_name (char *dest, size_t dlen, const char *src)
 
   imap_quote_string (dest, dlen, buf);
 
-  FREE (&buf);
+  mem_free (&buf);
 }
 
 void imap_unmunge_mbox_name (char *s)
@@ -444,7 +444,7 @@ void imap_unmunge_mbox_name (char *s)
     strncpy (s, buf, str_len (s));
   }
 
-  FREE (&buf);
+  mem_free (&buf);
 }
 
 /* imap_wordcasecmp: find word a in word list b */
@@ -494,12 +494,12 @@ void imap_keepalive (void)
         if (idata->ctx)
           ctx = idata->ctx;
         else {
-          ctx = safe_calloc (1, sizeof (CONTEXT));
+          ctx = mem_calloc (1, sizeof (CONTEXT));
           ctx->data = idata;
         }
         imap_check_mailbox (ctx, NULL, 1);
         if (!idata->ctx)
-          FREE (&ctx);
+          mem_free (&ctx);
       }
     }
 

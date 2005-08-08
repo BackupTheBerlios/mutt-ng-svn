@@ -70,9 +70,9 @@ void rfc822_free_address (ADDRESS ** p)
   while (*p) {
     t = *p;
     *p = (*p)->next;
-    FREE (&t->personal);
-    FREE (&t->mailbox);
-    FREE (&t);
+    mem_free (&t->personal);
+    mem_free (&t->mailbox);
+    mem_free (&t);
   }
 }
 
@@ -389,7 +389,7 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS * top, const char *s)
       cur = rfc822_new_address ();
       if (phraselen) {
         if (cur->personal)
-          FREE (&cur->personal);
+          mem_free (&cur->personal);
         /* if we get something like "Michael R. Elkins" remove the quotes */
         rfc822_dequote_comment (phrase);
         cur->personal = str_dup (phrase);
@@ -446,9 +446,9 @@ void rfc822_qualify (ADDRESS * addr, const char *host)
 
   for (; addr; addr = addr->next)
     if (!addr->group && addr->mailbox && strchr (addr->mailbox, '@') == NULL) {
-      p = safe_malloc (str_len (addr->mailbox) + str_len (host) + 2);
+      p = mem_malloc (str_len (addr->mailbox) + str_len (host) + 2);
       sprintf (p, "%s@%s", addr->mailbox, host);        /* __SPRINTF_CHECKED__ */
-      FREE (&addr->mailbox);
+      mem_free (&addr->mailbox);
       addr->mailbox = p;
     }
 }

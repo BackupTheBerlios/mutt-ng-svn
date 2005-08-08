@@ -240,10 +240,10 @@ int pop_open_mailbox (CONTEXT * ctx)
   if (!conn)
     return -1;
 
-  FREE (&ctx->path);
+  mem_free (&ctx->path);
   ctx->path = str_dup (buf);
 
-  pop_data = safe_calloc (1, sizeof (POP_DATA));
+  pop_data = mem_calloc (1, sizeof (POP_DATA));
   pop_data->conn = conn;
   ctx->data = pop_data;
 
@@ -285,7 +285,7 @@ static void pop_clear_cache (POP_DATA * pop_data)
   for (i = 0; i < POP_CACHE_LEN; i++) {
     if (pop_data->cache[i].path) {
       unlink (pop_data->cache[i].path);
-      FREE (&pop_data->cache[i].path);
+      mem_free (&pop_data->cache[i].path);
     }
   }
 }
@@ -343,7 +343,7 @@ int pop_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
     else {
       /* clear the previous entry */
       unlink (cache->path);
-      FREE (&cache->path);
+      mem_free (&cache->path);
     }
   }
 
@@ -516,7 +516,7 @@ void pop_fetch_mail (void)
     return;
   }
 
-  url = p = safe_calloc (strlen (PopHost) + 7, sizeof (char));
+  url = p = mem_calloc (strlen (PopHost) + 7, sizeof (char));
   if (url_check_scheme (PopHost) == U_UNKNOWN) {
     strcpy (url, "pop://");     /* __STRCPY_CHECKED__ */
     p = strchr (url, '\0');
@@ -524,7 +524,7 @@ void pop_fetch_mail (void)
   strcpy (p, PopHost);          /* __STRCPY_CHECKED__ */
 
   ret = pop_parse_path (url, &acct);
-  FREE (&url);
+  mem_free (&url);
   if (ret) {
     mutt_error (_("%s is an invalid POP path"), PopHost);
     return;
@@ -534,12 +534,12 @@ void pop_fetch_mail (void)
   if (!conn)
     return;
 
-  pop_data = safe_calloc (1, sizeof (POP_DATA));
+  pop_data = mem_calloc (1, sizeof (POP_DATA));
   pop_data->conn = conn;
 
   if (pop_open_connection (pop_data) < 0) {
     mutt_socket_free (pop_data->conn);
-    FREE (&pop_data);
+    mem_free (&pop_data);
     return;
   }
 
@@ -641,11 +641,11 @@ finish:
   if (pop_query (pop_data, buffer, sizeof (buffer)) == PQ_NOT_CONNECTED)
     goto fail;
   mutt_socket_close (conn);
-  FREE (&pop_data);
+  mem_free (&pop_data);
   return;
 
 fail:
   mutt_error _("Server closed connection!");
   mutt_socket_close (conn);
-  FREE (&pop_data);
+  mem_free (&pop_data);
 }

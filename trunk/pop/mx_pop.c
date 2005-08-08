@@ -39,7 +39,7 @@ static int acl_check_pop (CONTEXT* ctx, int bit) {
 }
 
 mx_t* pop_reg_mx (void) {
-  mx_t* fmt = safe_calloc (1, sizeof (mx_t));
+  mx_t* fmt = mem_calloc (1, sizeof (mx_t));
 
   /* make up mx_t record... */
   fmt->type = M_POP;

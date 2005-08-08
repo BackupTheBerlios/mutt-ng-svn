@@ -397,13 +397,13 @@ char *mutt_read_line (char *s, size_t * size, FILE * fp, int *line)
   char *ch;
 
   if (!s) {
-    s = safe_malloc (STRING);
+    s = mem_malloc (STRING);
     *size = STRING;
   }
 
   FOREVER {
     if (fgets (s + offset, *size - offset, fp) == NULL) {
-      FREE (&s);
+      mem_free (&s);
       return NULL;
     }
     if ((ch = strchr (s + offset, '\n')) != NULL) {
@@ -433,7 +433,7 @@ char *mutt_read_line (char *s, size_t * size, FILE * fp, int *line)
         /* There wasn't room for the line -- increase ``s'' */
         offset = *size - 1;     /* overwrite the terminating 0 */
         *size += STRING;
-        safe_realloc (&s, *size);
+        mem_realloc (&s, *size);
       }
     }
   }

@@ -161,7 +161,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
       /* sasl_client_st(art|ep) allocate pc with malloc, expect me to 
        * free it */
 #ifndef USE_SASL2
-      FREE (&pc);
+      mem_free (&pc);
 #endif
     }
 

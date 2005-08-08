@@ -116,7 +116,7 @@ void pgp_free_sig (pgp_sig_t ** sigp)
 
   for (sp = *sigp; sp; sp = q) {
     q = sp->next;
-    FREE (&sp);
+    mem_free (&sp);
   }
 
   *sigp = NULL;
@@ -131,8 +131,8 @@ void pgp_free_uid (pgp_uid_t ** upp)
   for (up = *upp; up; up = q) {
     q = up->next;
     pgp_free_sig (&up->sigs);
-    FREE (&up->addr);
-    FREE (&up);
+    mem_free (&up->addr);
+    mem_free (&up);
   }
 
   *upp = NULL;
@@ -144,7 +144,7 @@ pgp_uid_t *pgp_copy_uids (pgp_uid_t * up, pgp_key_t parent)
   pgp_uid_t **lp = &l;
 
   for (; up; up = up->next) {
-    *lp = safe_calloc (1, sizeof (pgp_uid_t));
+    *lp = mem_calloc (1, sizeof (pgp_uid_t));
     (*lp)->trust = up->trust;
     (*lp)->flags = up->flags;
     (*lp)->addr = str_dup (up->addr);
@@ -165,8 +165,8 @@ static void _pgp_free_key (pgp_key_t * kpp)
   kp = *kpp;
 
   pgp_free_uid (&kp->address);
-  FREE (&kp->keyid);
-  FREE (kpp);
+  mem_free (&kp->keyid);
+  mem_free (kpp);
 }
 
 pgp_key_t pgp_remove_key (pgp_key_t * klist, pgp_key_t key)

@@ -88,7 +88,7 @@ static void fix_uid (char *uid)
     char *ob;
     size_t ibl, obl;
 
-    buf = safe_malloc (n + 1);
+    buf = mem_malloc (n + 1);
     ib = uid, ibl = d - uid + 1, ob = buf, obl = n;
     iconv (cd, &ib, &ibl, &ob, &obl);
     if (!ibl) {
@@ -99,7 +99,7 @@ static void fix_uid (char *uid)
       else if (ob - buf == n && (buf[n] = 0, str_len (buf) < n))
         memcpy (uid, buf, n);
     }
-    FREE (&buf);
+    mem_free (&buf);
     iconv_close (cd);
   }
 }
@@ -142,7 +142,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
           return NULL;
 
         if (!(is_uid || (*is_subkey && option (OPTPGPIGNORESUB))))
-          k = safe_calloc (sizeof *k, 1);
+          k = mem_calloc (sizeof *k, 1);
 
         break;
       }
@@ -246,7 +246,7 @@ static pgp_key_t parse_pub_line (char *buf, int *is_subkey, pgp_key_t k)
 
         debug_print (2, ("user ID: %s\n", p));
 
-        uid = safe_calloc (sizeof (pgp_uid_t), 1);
+        uid = mem_calloc (sizeof (pgp_uid_t), 1);
         fix_uid (p);
         uid->addr = str_dup (p);
         uid->trust = trust;

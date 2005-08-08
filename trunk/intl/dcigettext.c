@@ -306,7 +306,7 @@ static const char *guess_category_value PARAMS ((int category,
 #ifdef HAVE_ALLOCA
 /* Nothing has to be done.  */
 # define ADD_BLOCK(list, address) /* nothing */
-# define FREE_BLOCKS(list) /* nothing */
+# define mem_free_BLOCKS(list) /* nothing */
 #else
 struct block_list
 {
@@ -324,7 +324,7 @@ struct block_list
       (list) = newp;							      \
     }									      \
   } while (0)
-# define FREE_BLOCKS(list)						      \
+# define mem_free_BLOCKS(list)						      \
   do {									      \
     while (list != NULL) {						      \
       struct block_list *old = list;					      \
@@ -517,7 +517,7 @@ DCIGETTEXT (domainname, msgid1, msgid2, plural, n, category)
 	{
 	  /* We cannot get the current working directory.  Don't signal an
 	     error but simply return the default string.  */
-	  FREE_BLOCKS (block_list);
+	  mem_free_BLOCKS (block_list);
 	  __libc_rwlock_unlock (_nl_state_lock);
 	  __set_errno (saved_errno);
 	  return (plural == 0
@@ -582,7 +582,7 @@ DCIGETTEXT (domainname, msgid1, msgid2, plural, n, category)
       if (strcmp (single_locale, "C") == 0
 	  || strcmp (single_locale, "POSIX") == 0)
 	{
-	  FREE_BLOCKS (block_list);
+	  mem_free_BLOCKS (block_list);
 	  __libc_rwlock_unlock (_nl_state_lock);
 	  __set_errno (saved_errno);
 	  return (plural == 0
@@ -621,7 +621,7 @@ DCIGETTEXT (domainname, msgid1, msgid2, plural, n, category)
 	    {
 	      /* Found the translation of MSGID1 in domain DOMAIN:
 		 starting at RETVAL, RETLEN bytes.  */
-	      FREE_BLOCKS (block_list);
+	      mem_free_BLOCKS (block_list);
 	      __set_errno (saved_errno);
 #if defined HAVE_TSEARCH || defined _LIBC
 	      if (foundp == NULL)

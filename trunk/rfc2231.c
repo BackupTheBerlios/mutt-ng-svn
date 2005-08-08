@@ -145,7 +145,7 @@ void rfc2231_decode_parameters (PARAMETER ** headp)
 
       p->attribute = NULL;
       p->value = NULL;
-      FREE (&p);
+      mem_free (&p);
 
       rfc2231_list_insert (&conthead, conttmp);
     }
@@ -164,15 +164,15 @@ void rfc2231_decode_parameters (PARAMETER ** headp)
 
 static struct rfc2231_parameter *rfc2231_new_parameter (void)
 {
-  return safe_calloc (sizeof (struct rfc2231_parameter), 1);
+  return mem_calloc (sizeof (struct rfc2231_parameter), 1);
 }
 
 static void rfc2231_free_parameter (struct rfc2231_parameter **p)
 {
   if (*p) {
-    FREE (&(*p)->attribute);
-    FREE (&(*p)->value);
-    FREE (p);
+    mem_free (&(*p)->attribute);
+    mem_free (&(*p)->value);
+    mem_free (p);
   }
 }
 
@@ -271,7 +271,7 @@ static void rfc2231_join_continuations (PARAMETER ** head,
 
       vl = str_len (par->value);
 
-      safe_realloc (&value, l + vl + 1);
+      mem_realloc (&value, l + vl + 1);
       strcpy (value + l, par->value);   /* __STRCPY_CHECKED__ */
       l += vl;
 
@@ -330,7 +330,7 @@ int rfc2231_encode_string (char **pd)
       ++ext;
 
   if (encode) {
-    e = safe_malloc (dlen + 2 * ext + str_len (charset) + 3);
+    e = mem_malloc (dlen + 2 * ext + str_len (charset) + 3);
     sprintf (e, "%s''", charset);       /* __SPRINTF_CHECKED__ */
     t = e + str_len (e);
     for (s = d, slen = dlen; slen; s++, slen--)
@@ -344,16 +344,16 @@ int rfc2231_encode_string (char **pd)
     *t = '\0';
 
     if (d != *pd)
-      FREE (&d);
-    FREE (pd);
+      mem_free (&d);
+    mem_free (pd);
     *pd = e;
   }
   else if (d != *pd) {
-    FREE (pd);
+    mem_free (pd);
     *pd = d;
   }
 
-  FREE (&charset);
+  mem_free (&charset);
 
   return encode;
 }

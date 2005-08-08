@@ -266,13 +266,13 @@ static int rfc1524_mailcap_parse (BODY * a,
           if (get_field_text (field + 4, &test_command, type, filename, line)
               && test_command) {
             len = str_len (test_command) + STRING;
-            safe_realloc (&test_command, len);
+            mem_realloc (&test_command, len);
             rfc1524_expand_command (a, a->filename, type, test_command, len);
             if (mutt_system (test_command)) {
               /* a non-zero exit code means test failed */
               found = FALSE;
             }
-            FREE (&test_command);
+            mem_free (&test_command);
           }
         }
       }                         /* while (ch) */
@@ -297,13 +297,13 @@ static int rfc1524_mailcap_parse (BODY * a,
       if (!found) {
         /* reset */
         if (entry) {
-          FREE (&entry->command);
-          FREE (&entry->composecommand);
-          FREE (&entry->composetypecommand);
-          FREE (&entry->editcommand);
-          FREE (&entry->printcommand);
-          FREE (&entry->nametemplate);
-          FREE (&entry->convert);
+          mem_free (&entry->command);
+          mem_free (&entry->composecommand);
+          mem_free (&entry->composetypecommand);
+          mem_free (&entry->editcommand);
+          mem_free (&entry->printcommand);
+          mem_free (&entry->nametemplate);
+          mem_free (&entry->convert);
           entry->needsterminal = 0;
           entry->copiousoutput = 0;
         }
@@ -311,27 +311,27 @@ static int rfc1524_mailcap_parse (BODY * a,
     }                           /* while (!found && (buf = mutt_read_line ())) */
     fclose (fp);
   }                             /* if ((fp = fopen ())) */
-  FREE (&buf);
+  mem_free (&buf);
   return found;
 }
 
 rfc1524_entry *rfc1524_new_entry (void)
 {
-  return (rfc1524_entry *) safe_calloc (1, sizeof (rfc1524_entry));
+  return (rfc1524_entry *) mem_calloc (1, sizeof (rfc1524_entry));
 }
 
 void rfc1524_free_entry (rfc1524_entry ** entry)
 {
   rfc1524_entry *p = *entry;
 
-  FREE (&p->command);
-  FREE (&p->testcommand);
-  FREE (&p->composecommand);
-  FREE (&p->composetypecommand);
-  FREE (&p->editcommand);
-  FREE (&p->printcommand);
-  FREE (&p->nametemplate);
-  FREE (entry);
+  mem_free (&p->command);
+  mem_free (&p->testcommand);
+  mem_free (&p->composecommand);
+  mem_free (&p->composetypecommand);
+  mem_free (&p->editcommand);
+  mem_free (&p->printcommand);
+  mem_free (&p->nametemplate);
+  mem_free (entry);
 }
 
 /*

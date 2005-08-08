@@ -151,7 +151,7 @@ static int pgp_copy_checksig (FILE * fpin, FILE * fpout)
       fputs (line, fpout);
       fputc ('\n', fpout);
     }
-    FREE (&line);
+    mem_free (&line);
   }
   else {
     debug_print (2, ("No pattern.\n"));
@@ -1100,7 +1100,7 @@ char *pgp_findKeys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc)
           k_info = pgp_getkeybystr (keyID, KEYFLAG_CANENCRYPT, PGP_PUBRING);
       }
       else if (r == -1) {
-        FREE (&keylist);
+        mem_free (&keylist);
         rfc822_free_address (&tmp);
         rfc822_free_address (&addr);
         return NULL;
@@ -1117,7 +1117,7 @@ char *pgp_findKeys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc)
 
       if ((key = pgp_ask_for_key (buf, q->mailbox,
                                   KEYFLAG_CANENCRYPT, PGP_PUBRING)) == NULL) {
-        FREE (&keylist);
+        mem_free (&keylist);
         rfc822_free_address (&tmp);
         rfc822_free_address (&addr);
         return NULL;
@@ -1130,7 +1130,7 @@ char *pgp_findKeys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc)
 
   bypass_selection:
     keylist_size += str_len (keyID) + 4;
-    safe_realloc (&keylist, keylist_size);
+    mem_realloc (&keylist, keylist_size);
     sprintf (keylist + keylist_used, "%s0x%s", keylist_used ? " " : "", /* __SPRINTF_CHECKED__ */
              keyID);
     keylist_used = str_len (keylist);

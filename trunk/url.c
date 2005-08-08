@@ -253,6 +253,6 @@ int url_parse_mailto (ENVELOPE * e, char **body, const char *src)
     }
   }
 
-  FREE (&tmp);
+  mem_free (&tmp);
   return 0;
 }

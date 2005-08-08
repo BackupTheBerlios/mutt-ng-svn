@@ -59,7 +59,7 @@ static int tunnel_socket_open (CONNECTION * conn)
   int rc;
   int pin[2], pout[2];
 
-  tunnel = (TUNNEL_DATA *) safe_malloc (sizeof (TUNNEL_DATA));
+  tunnel = (TUNNEL_DATA *) mem_malloc (sizeof (TUNNEL_DATA));
   conn->sockdata = tunnel;
 
   mutt_message (_("Connecting with \"%s\"..."), Tunnel);
@@ -129,7 +129,7 @@ static int tunnel_socket_close (CONNECTION * conn)
                NONULL(mutt_strsysexit(WEXITSTATUS(status))));
     mutt_sleep (2);
   }
-  FREE (&conn->sockdata);
+  mem_free (&conn->sockdata);
   return 0;
 }
 

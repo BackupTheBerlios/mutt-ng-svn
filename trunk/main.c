@@ -841,7 +841,7 @@ int main (int argc, char **argv)
             mutt_endwin (NULL);
           perror (tempfile);
           fclose (fin);
-          FREE (&tempfile);
+          mem_free (&tempfile);
           exit (1);
         }
         if (fin)
@@ -854,7 +854,7 @@ int main (int argc, char **argv)
       }
     }
 
-    FREE (&bodytext);
+    mem_free (&bodytext);
 
     if (attach) {
       LIST *t = attach;
@@ -956,7 +956,7 @@ int main (int argc, char **argv)
       if (option (OPTXTERMSETTITLES))
         mutt_xterm_set_title (NONULL (XtermLeave));
       if (Context)
-        FREE (&Context);
+        mem_free (&Context);
     }
     mutt_endwin (Errorbuf);
   }

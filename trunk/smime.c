@@ -387,7 +387,7 @@ char *smime_ask_for_key (char *prompt, char *mailbox, short public)
     }
     /* Read Entries */
     cur = 0;
-    Table = safe_calloc (cert_num, sizeof (smime_id));
+    Table = mem_calloc (cert_num, sizeof (smime_id));
     while (!feof (index)) {
       numFields =
         fscanf (index, MUTT_FORMAT (STRING) " %x.%i " MUTT_FORMAT (STRING),
@@ -453,14 +453,14 @@ char *smime_ask_for_key (char *prompt, char *mailbox, short public)
       }
     }
     if (hash) {
-      fname = safe_malloc (13); /* Hash + '.' + Suffix + \0 */
+      fname = mem_malloc (13); /* Hash + '.' + Suffix + \0 */
       sprintf (fname, "%.8x.%i", Table[cur].hash, Table[cur].suffix);
     }
     else
       fname = NULL;
 
     mutt_menuDestroy (&menu);
-    FREE (&Table);
+    mem_free (&Table);
     set_option (OPTNEEDREDRAW);
 
     if (fname)
@@ -647,7 +647,7 @@ void _smime_getkeys (char *mailbox)
     /* the key used last time. */
     if (*SmimeKeyToUse &&
         !str_casecmp (k, SmimeKeyToUse + str_len (SmimeKeys) + 1)) {
-      FREE (&k);
+      mem_free (&k);
       return;
     }
     else
@@ -662,7 +662,7 @@ void _smime_getkeys (char *mailbox)
     if (str_casecmp (k, SmimeDefaultKey))
       smime_void_passphrase ();
 
-    FREE (&k);
+    mem_free (&k);
     return;
   }
 
@@ -764,14 +764,14 @@ char *smime_findKeys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc)
     }
     if (!keyID) {
       mutt_message (_("No (valid) certificate found for %s."), q->mailbox);
-      FREE (&keylist);
+      mem_free (&keylist);
       rfc822_free_address (&tmp);
       rfc822_free_address (&addr);
       return NULL;
     }
 
     keylist_size += str_len (keyID) + 2;
-    safe_realloc (&keylist, keylist_size);
+    mem_realloc (&keylist, keylist_size);
     sprintf (keylist + keylist_used, "%s\n", keyID);    /* __SPRINTF_CHECKED__ */
     keylist_used = str_len (keylist);
 
@@ -852,13 +852,13 @@ static int smime_handle_cert_email (char *certificate, char *mailbox,
 
   if (copy && buffer && num) {
     (*num) = count;
-    *buffer = safe_calloc (sizeof (char *), count);
+    *buffer = mem_calloc (sizeof (char *), count);
     count = 0;
 
     rewind (fpout);
     while ((fgets (email, sizeof (email), fpout))) {
       *(email + str_len (email) - 1) = '\0';
-      (*buffer)[count] = safe_calloc (1, str_len (email) + 1);
+      (*buffer)[count] = mem_calloc (1, str_len (email) + 1);
       strncpy ((*buffer)[count], email, str_len (email));
       count++;
     }
@@ -1089,7 +1089,7 @@ void smime_invoke_import (char *infile, char *mailbox)
     mutt_wait_filter (thepid);
 
     mutt_unlink (certfile);
-    FREE (&certfile);
+    mem_free (&certfile);
   }
 
   fflush (fpout);
@@ -1148,7 +1148,7 @@ int smime_verify_sender (HEADER * h)
       else
         retval = 0;
       mutt_unlink (certfile);
-      FREE (&certfile);
+      mem_free (&certfile);
     }
     else
       mutt_any_key_to_continue (_("no certfile"));
@@ -1565,7 +1565,7 @@ int smime_verify_one (BODY * sigbdy, STATE * s, const char *tempfile)
       if (linelen && !str_casecmp (line, "verification successful"))
         badsig = 0;
 
-      FREE (&line);
+      mem_free (&line);
     }
   }
 
@@ -1778,7 +1778,7 @@ static BODY *smime_handle_entity (BODY * m, STATE * s, FILE * outFile)
     line = mutt_read_line (line, &linelen, smimeerr, &lineno);
     if (linelen && !str_casecmp (line, "verification successful"))
       m->goodsig = 1;
-    FREE (&line);
+    mem_free (&line);
   }
   else {
     m->goodsig = p->goodsig;

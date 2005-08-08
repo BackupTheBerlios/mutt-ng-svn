@@ -71,12 +71,12 @@ int imap_cmd_start (IMAP_DATA * idata, const char *cmd)
   cmd_make_sequence (idata);
   /* seq, space, cmd, \r\n\0 */
   outlen = str_len (idata->cmd.seq) + str_len (cmd) + 4;
-  out = (char *) safe_malloc (outlen);
+  out = (char *) mem_malloc (outlen);
   snprintf (out, outlen, "%s %s\r\n", idata->cmd.seq, cmd);
 
   rc = mutt_socket_write (idata->conn, out);
 
-  FREE (&out);
+  mem_free (&out);
 
   return (rc < 0) ? IMAP_CMD_BAD : 0;
 }
@@ -100,7 +100,7 @@ int imap_cmd_step (IMAP_DATA * idata)
    * line */
   do {
     if (len == cmd->blen) {
-      safe_realloc (&cmd->buf, cmd->blen + IMAP_CMD_BUFSIZE);
+      mem_realloc (&cmd->buf, cmd->blen + IMAP_CMD_BUFSIZE);
       cmd->blen = cmd->blen + IMAP_CMD_BUFSIZE;
       debug_print (3, ("grew buffer to %u bytes\n", cmd->blen));
     }
@@ -121,7 +121,7 @@ int imap_cmd_step (IMAP_DATA * idata)
 
   /* don't let one large string make cmd->buf hog memory forever */
   if ((cmd->blen > IMAP_CMD_BUFSIZE) && (len <= IMAP_CMD_BUFSIZE)) {
-    safe_realloc (&cmd->buf, IMAP_CMD_BUFSIZE);
+    mem_realloc (&cmd->buf, IMAP_CMD_BUFSIZE);
     cmd->blen = IMAP_CMD_BUFSIZE;
     debug_print (3, ("shrank buffer to %u bytes\n", cmd->blen));
   }
@@ -183,13 +183,13 @@ int imap_exec (IMAP_DATA * idata, const char *cmd, int flags)
   cmd_make_sequence (idata);
   /* seq, space, cmd, \r\n\0 */
   outlen = str_len (idata->cmd.seq) + str_len (cmd) + 4;
-  out = (char *) safe_malloc (outlen);
+  out = (char *) mem_malloc (outlen);
   snprintf (out, outlen, "%s %s\r\n", idata->cmd.seq, cmd);
 
   rc = mutt_socket_write_d (idata->conn, out,
                             flags & IMAP_CMD_PASS ? IMAP_LOG_PASS :
                             IMAP_LOG_CMD);
-  FREE (&out);
+  mem_free (&out);
 
   if (rc < 0) {
     cmd_handle_fatal (idata);
@@ -394,7 +394,7 @@ static void cmd_parse_capabilities (IMAP_DATA * idata, char *s)
   debug_print (2, ("Handling CAPABILITY\n"));
 
   s = imap_next_word (s);
-  FREE (&idata->capstr);
+  mem_free (&idata->capstr);
   idata->capstr = str_dup (s);
 
   memset (idata->capabilities, 0, sizeof (idata->capabilities));

@@ -113,7 +113,7 @@ static COMPRESS_INFO *set_compress_info (CONTEXT * ctx)
   COMPRESS_INFO *ci;
 
   /* Now lets uncompress this thing */
-  ci = safe_malloc (sizeof (COMPRESS_INFO));
+  ci = mem_malloc (sizeof (COMPRESS_INFO));
   ctx->compressinfo = (void *) ci;
   ci->append = find_compress_hook (M_APPENDHOOK, ctx->path);
   ci->open = find_compress_hook (M_OPENHOOK, ctx->path);
@@ -130,7 +130,7 @@ static void set_path (CONTEXT * ctx)
 
   /* Uncompress to /tmp */
   mutt_mktemp (tmppath);
-  ctx->path = safe_malloc (str_len (tmppath) + 1);
+  ctx->path = mem_malloc (str_len (tmppath) + 1);
   strcpy (ctx->path, tmppath);
 }
 
@@ -197,8 +197,8 @@ int mutt_check_mailbox_compressed (CONTEXT * ctx)
   COMPRESS_INFO *ci = (COMPRESS_INFO *) ctx->compressinfo;
 
   if (ci->size != get_size (ctx->realpath)) {
-    FREE (&ctx->compressinfo);
-    FREE (&ctx->realpath);
+    mem_free (&ctx->compressinfo);
+    mem_free (&ctx->realpath);
     mutt_error _("Mailbox was corrupted!");
 
     return (-1);
@@ -216,7 +216,7 @@ int mutt_open_read_compressed (CONTEXT * ctx)
 
   if (!ci->open) {
     ctx->magic = 0;
-    FREE (ctx->compressinfo);
+    mem_free (ctx->compressinfo);
     return (-1);
   }
   if (!ci->close || access (ctx->path, W_OK) != 0)
@@ -235,7 +235,7 @@ int mutt_open_read_compressed (CONTEXT * ctx)
 
   if ((fp = fopen (ctx->realpath, "r")) == NULL) {
     mutt_perror (ctx->realpath);
-    FREE (&cmd);
+    mem_free (&cmd);
     return (-1);
   }
   mutt_block_signals ();
@@ -244,7 +244,7 @@ int mutt_open_read_compressed (CONTEXT * ctx)
     mutt_unblock_signals ();
     mutt_error _("Unable to lock mailbox!");
 
-    FREE (&cmd);
+    mem_free (&cmd);
     return (-1);
   }
 
@@ -260,11 +260,11 @@ int mutt_open_read_compressed (CONTEXT * ctx)
   if (rc) {
     mutt_any_key_to_continue (NULL);
     ctx->magic = 0;
-    FREE (ctx->compressinfo);
+    mem_free (ctx->compressinfo);
     mutt_error (_("Error executing: %s : unable to open the mailbox!\n"),
                 cmd);
   }
-  FREE (&cmd);
+  mem_free (&cmd);
   if (rc)
     return (-1);
 
@@ -278,7 +278,7 @@ int mutt_open_read_compressed (CONTEXT * ctx)
 
 void restore_path (CONTEXT * ctx)
 {
-  FREE (&ctx->path);
+  mem_free (&ctx->path);
   ctx->path = ctx->realpath;
 }
 
@@ -299,7 +299,7 @@ int mutt_open_append_compressed (CONTEXT * ctx)
       return (mutt_open_read_compressed (ctx));
 
     ctx->magic = 0;
-    FREE (&ctx->compressinfo);
+    mem_free (&ctx->compressinfo);
     return (-1);
   }
 
@@ -332,7 +332,7 @@ void mutt_fast_close_compressed (CONTEXT * ctx)
       remove_file (ctx);
 
     restore_path (ctx);
-    FREE (&ctx->compressinfo);
+    mem_free (&ctx->compressinfo);
   }
 }
 
@@ -353,7 +353,7 @@ int mutt_sync_compressed (CONTEXT * ctx)
 
   if ((fp = fopen (ctx->realpath, "a")) == NULL) {
     mutt_perror (ctx->realpath);
-    FREE (&cmd);
+    mem_free (&cmd);
     return (-1);
   }
   mutt_block_signals ();
@@ -364,7 +364,7 @@ int mutt_sync_compressed (CONTEXT * ctx)
 
     store_size (ctx);
 
-    FREE (&cmd);
+    mem_free (&cmd);
     return (-1);
   }
 
@@ -386,7 +386,7 @@ int mutt_sync_compressed (CONTEXT * ctx)
   mutt_unblock_signals ();
   fclose (fp);
 
-  FREE (&cmd);
+  mem_free (&cmd);
 
   store_size (ctx);
 
@@ -428,7 +428,7 @@ int mutt_slow_close_compressed (CONTEXT * ctx)
 
   if ((fp = fopen (ctx->realpath, "a")) == NULL) {
     mutt_perror (ctx->realpath);
-    FREE (&cmd);
+    mem_free (&cmd);
     return (-1);
   }
   mutt_block_signals ();
@@ -437,7 +437,7 @@ int mutt_slow_close_compressed (CONTEXT * ctx)
     mutt_unblock_signals ();
     mutt_error _("Unable to lock mailbox!");
 
-    FREE (&cmd);
+    mem_free (&cmd);
     return (-1);
   }
 
@@ -458,7 +458,7 @@ int mutt_slow_close_compressed (CONTEXT * ctx)
     mutt_error (_
                 (" %s: Error compressing mailbox!  Uncompressed one kept!\n"),
                 ctx->path);
-    FREE (&cmd);
+    mem_free (&cmd);
     mbox_unlock_compressed (ctx, fp);
     mutt_unblock_signals ();
     fclose (fp);
@@ -470,14 +470,14 @@ int mutt_slow_close_compressed (CONTEXT * ctx)
   fclose (fp);
   remove_file (ctx);
   restore_path (ctx);
-  FREE (&cmd);
-  FREE (&ctx->compressinfo);
+  mem_free (&cmd);
+  mem_free (&ctx->compressinfo);
 
   return (0);
 }
 
 mx_t* compress_reg_mx (void) {
-  mx_t* fmt = safe_calloc (1, sizeof (mx_t));
+  mx_t* fmt = mem_calloc (1, sizeof (mx_t));
   fmt->type = M_COMPRESSED;
   fmt->local = 1;
   fmt->mx_is_magic = mbox_is_magic;

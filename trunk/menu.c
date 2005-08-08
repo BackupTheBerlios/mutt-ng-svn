@@ -149,7 +149,7 @@ void menu_pad_string (char *s, size_t n)
 {
   int shift = option (OPTARROWCURSOR) ? 3 : 0;
   int cols;
-  char *tmpbuf = safe_malloc (n);
+  char *tmpbuf = mem_malloc (n);
 
   if (option (OPTMBOXPANE))
     cols = COLS - shift - SidebarWidth;
@@ -158,7 +158,7 @@ void menu_pad_string (char *s, size_t n)
   mutt_format_string (tmpbuf, n, cols, cols, 0, ' ', s, str_len (s), 1);
   tmpbuf[n - 1] = 0;
   snprintf (s, n, "%s", tmpbuf);        /* overkill */
-  FREE (&tmpbuf);
+  mem_free (&tmpbuf);
 }
 
 void menu_redraw_full (MUTTMENU * menu)
@@ -656,7 +656,7 @@ static int menu_search_generic (MUTTMENU * m, regex_t * re, int n)
 
 MUTTMENU *mutt_new_menu (void)
 {
-  MUTTMENU *p = (MUTTMENU *) safe_calloc (1, sizeof (MUTTMENU));
+  MUTTMENU *p = (MUTTMENU *) mem_calloc (1, sizeof (MUTTMENU));
 
   p->current = 0;
   p->top = 0;
@@ -672,16 +672,16 @@ void mutt_menuDestroy (MUTTMENU ** p)
 {
   int i;
 
-  FREE (&(*p)->searchBuf);
+  mem_free (&(*p)->searchBuf);
 
   if ((*p)->dialog) {
     for (i = 0; i < (*p)->max; i++)
-      FREE (&(*p)->dialog[i]);
+      mem_free (&(*p)->dialog[i]);
 
-    FREE (&(*p)->dialog);
+    mem_free (&(*p)->dialog);
   }
 
-  FREE (p);
+  mem_free (p);
 }
 
 #define M_SEARCH_UP   1

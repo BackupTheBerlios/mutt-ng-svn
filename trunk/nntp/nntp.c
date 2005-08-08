@@ -300,7 +300,7 @@ static int mutt_nntp_fetch (NNTP_DATA * nntp_data, char *query, char *msg,
 
     ret = 0;
     line = 0;
-    inbuf = safe_malloc (sizeof (buf));
+    inbuf = mem_malloc (sizeof (buf));
 
     FOREVER {
       chunk = mutt_socket_readln_d (buf, sizeof (buf), nntp_data->nserv->conn,
@@ -337,9 +337,9 @@ static int mutt_nntp_fetch (NNTP_DATA * nntp_data, char *query, char *msg,
         lenbuf = 0;
       }
 
-      safe_realloc (&inbuf, lenbuf + sizeof (buf));
+      mem_realloc (&inbuf, lenbuf + sizeof (buf));
     }
-    FREE (&inbuf);
+    mem_free (&inbuf);
     funct (NULL, data);
   }
   while (!done);
@@ -461,7 +461,7 @@ static int parse_description (char *line, void *n)
   debug_print (2, ("group: %s, desc: %s\n", line, d));
   if ((data = (NNTP_DATA *) hash_find (news->newsgroups, line)) != NULL &&
       str_cmp (d, data->desc)) {
-    FREE (&data->desc);
+    mem_free (&data->desc);
     data->desc = str_dup (d);
   }
   return 0;
@@ -551,7 +551,7 @@ static int nntp_parse_xover (CONTEXT * ctx, char *buf, HEADER * hdr)
       hdr->received = hdr->date_sent;
       break;
     case 4:
-      FREE (&hdr->env->message_id);
+      mem_free (&hdr->env->message_id);
       hdr->env->message_id = str_dup (b);
       break;
     case 5:
@@ -566,7 +566,7 @@ static int nntp_parse_xover (CONTEXT * ctx, char *buf, HEADER * hdr)
       break;
     case 8:
       if (!hdr->read)
-        FREE (&hdr->env->xref);
+        mem_free (&hdr->env->xref);
       b = b + 6;                /* skips the "Xref: " */
       hdr->env->xref = str_dup (b);
       nntp_parse_xref (ctx, nntp_data->group, b, hdr);
@@ -659,7 +659,7 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
   fc.ctx = ctx;
   fc.base = first;
   fc.last = last;
-  fc.messages = safe_calloc (last - first + 1, sizeof (unsigned short));
+  fc.messages = mem_calloc (last - first + 1, sizeof (unsigned short));
   if (nntp_data->nserv->hasLISTGROUP) {
     snprintf (buf, sizeof (buf), "LISTGROUP %s\r\n", nntp_data->group);
     if (mutt_nntp_fetch (nntp_data, buf, NULL, nntp_fetch_numbers, &fc, 0) !=
@@ -669,7 +669,7 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
 #ifdef DEBUG
       nntp_error ("nntp_fetch_headers()", buf);
 #endif
-      FREE (&fc.messages);
+      mem_free (&fc.messages);
       return -1;
     }
   }
@@ -680,7 +680,7 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
     mutt_nntp_query (nntp_data, buf, sizeof (buf));
     if (sscanf (buf + 4, "%d %u %u %s", &num, &fc.first, &fc.last, buf) != 4) {
       mutt_error (_("GROUP command failed: %s"), buf);
-      FREE (&fc.messages);
+      mem_free (&fc.messages);
       return (-1);
     }
     else {
@@ -721,7 +721,7 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
   }
   num = last - first + 1;
   if (num <= 0) {
-    FREE (&fc.messages);
+    mem_free (&fc.messages);
     return 0;
   }
 
@@ -744,7 +744,7 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
 #ifdef DEBUG
       nntp_error ("nntp_fetch_headers()", buf);
 #endif
-      FREE (&fc.messages);
+      mem_free (&fc.messages);
       return -1;
     }
     /* fetched OK */
@@ -773,14 +773,14 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
       else
         mutt_free_header (&h);  /* skip it */
       if (ret == -1) {
-        FREE (&fc.messages);
+        mem_free (&fc.messages);
         return -1;
       }
 
       if (current > nntp_data->lastLoaded)
         nntp_data->lastLoaded = current;
     }
-  FREE (&fc.messages);
+  mem_free (&fc.messages);
   nntp_data->lastLoaded = last;
   mutt_clear_error ();
   return 0;
@@ -814,7 +814,7 @@ int nntp_open_mailbox (CONTEXT * ctx)
 
   /* create NNTP-specific state struct if nof found in list */
   if ((nntp_data = (NNTP_DATA *) hash_find (serv->newsgroups, buf)) == NULL) {
-    nntp_data = safe_calloc (1, sizeof (NNTP_DATA) + str_len (buf) + 1);
+    nntp_data = mem_calloc (1, sizeof (NNTP_DATA) + str_len (buf) + 1);
     nntp_data->group = (char *) nntp_data + sizeof (NNTP_DATA);
     strcpy (nntp_data->group, buf);
     hash_insert (serv->newsgroups, nntp_data->group, nntp_data, 0);
@@ -909,7 +909,7 @@ int nntp_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
   mutt_mktemp (path);
   cache->path = str_dup (path);
   if (!(msg->fp = safe_fopen (path, "w+"))) {
-    FREE (&cache->path);
+    mem_free (&cache->path);
     return -1;
   }
 
@@ -931,7 +931,7 @@ int nntp_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
   if (ret) {
     fclose (msg->fp);
     unlink (path);
-    FREE (&cache->path);
+    mem_free (&cache->path);
     return -1;
   }
 
@@ -1062,7 +1062,7 @@ static void nntp_free_acache (NNTP_DATA * data)
   for (i = 0; i < NNTP_CACHE_LEN; i++) {
     if (data->acache[i].path) {
       unlink (data->acache[i].path);
-      FREE (&data->acache[i].path);
+      mem_free (&data->acache[i].path);
     }
   }
 }
@@ -1073,11 +1073,11 @@ void nntp_delete_data (void *p)
 
   if (!p)
     return;
-  FREE (&data->entries);
-  FREE (&data->desc);
-  FREE (&data->cache);
+  mem_free (&data->entries);
+  mem_free (&data->desc);
+  mem_free (&data->cache);
   nntp_free_acache (data);
-  FREE (p);
+  mem_free (p);
 }
 
 int nntp_sync_mailbox (CONTEXT * ctx, int unused1, int* unused2)
@@ -1184,7 +1184,7 @@ static int _nntp_check_mailbox (CONTEXT * ctx, NNTP_DATA * nntp_data)
     /* active was renumbered? */
     if (last < nntp_data->lastLoaded) {
       if (!nntp_data->max) {
-        nntp_data->entries = safe_calloc (5, sizeof (NEWSRC_ENTRY));
+        nntp_data->entries = mem_calloc (5, sizeof (NEWSRC_ENTRY));
         nntp_data->max = 5;
       }
       nntp_data->lastCached = 0;
@@ -1224,7 +1224,7 @@ static int add_group (char *buf, void *serv)
     return 0;
   if ((nntp_data = (NNTP_DATA *) hash_find (s->newsgroups, group)) == NULL) {
     n++;
-    nntp_data = safe_calloc (1, sizeof (NNTP_DATA) + str_len (group) + 1);
+    nntp_data = mem_calloc (1, sizeof (NNTP_DATA) + str_len (group) + 1);
     nntp_data->group = (char *) nntp_data + sizeof (NNTP_DATA);
     strcpy (nntp_data->group, group);
     nntp_data->nserv = s;
@@ -1241,7 +1241,7 @@ static int add_group (char *buf, void *serv)
   else
     nntp_data->allowed = 0;
   if (nntp_data->desc)
-    FREE (&nntp_data->desc);
+    mem_free (&nntp_data->desc);
   if (*desc)
     nntp_data->desc = str_dup (desc);
   if (nntp_data->rc || nntp_data->lastCached)
@@ -1347,7 +1347,7 @@ int nntp_get_cache_all (NNTP_SERVER * serv)
     return 0;
   }
   else {
-    FREE (&serv->cache);
+    mem_free (&serv->cache);
     return -1;
   }
 }
@@ -1444,7 +1444,7 @@ static int check_children (char *s, void *c)
     if (cc->ctx->hdrs[i]->article_num == n)
       return 0;
   if (cc->num >= cc->max)
-    safe_realloc (&cc->child, sizeof (unsigned int) * (cc->max += 25));
+    mem_realloc (&cc->child, sizeof (unsigned int) * (cc->max += 25));
   cc->child[cc->num++] = n;
 
   return 0;
@@ -1475,9 +1475,9 @@ int nntp_check_children (CONTEXT * ctx, const char *msgid)
   cc.ctx = ctx;
   cc.num = 0;
   cc.max = 25;
-  cc.child = safe_malloc (sizeof (unsigned int) * 25);
+  cc.child = mem_malloc (sizeof (unsigned int) * 25);
   if (mutt_nntp_fetch (nntp_data, buf, NULL, check_children, &cc, 0)) {
-    FREE (&cc.child);
+    mem_free (&cc.child);
     return -1;
   }
   /* dont try to read the xover cache. check_children() already
@@ -1497,6 +1497,6 @@ int nntp_check_children (CONTEXT * ctx, const char *msgid)
   }
   if (tmp)
     set_option (OPTNEWSCACHE);
-  FREE (&cc.child);
+  mem_free (&cc.child);
   return ret;
 }
