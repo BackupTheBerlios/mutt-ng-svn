@@ -1,7 +1,7 @@
 /*
  * Copyright notice from original mutt:
  * Copyright (C) 2000 Manoj Kasichainula <manoj@io.com>
- * Copyright (C) 2001 Brendan Cully <brendan@kublai.com>
+ * Copyright (C) 2001,2005 Brendan Cully <brendan@kublai.com>
  *
  * This file is part of mutt-ng, see http://www.muttng.org/.
  * It's licensed under the GNU General Public License,
@@ -118,12 +118,18 @@ static int tunnel_socket_open (CONNECTION * conn)
 static int tunnel_socket_close (CONNECTION * conn)
 {
   TUNNEL_DATA *tunnel = (TUNNEL_DATA *) conn->sockdata;
+  int status;
 
   close (tunnel->readfd);
   close (tunnel->writefd);
-  waitpid (tunnel->pid, NULL, 0);
+  waitpid (tunnel->pid, &status, 0);
+  if (!WIFEXITED(status) || WEXITSTATUS(status)) {
+    mutt_error(_("Tunnel to %s returned error %d (%s)"),
+               conn->account.host, WEXITSTATUS(status),
+               NONULL(mutt_strsysexit(WEXITSTATUS(status))));
+    mutt_sleep (2);
+  }
   FREE (&conn->sockdata);
-
   return 0;
 }
 

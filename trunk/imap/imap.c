@@ -26,6 +26,7 @@
 #if defined(USE_SSL) || defined(USE_GNUTLS)
 # include "mutt_ssl.h"
 #endif
+#include "buffy.h"
 
 #include "lib/mem.h"
 #include "lib/intl.h"
@@ -399,10 +400,6 @@ int imap_open_connection (IMAP_DATA * idata)
   idata->state = IMAP_CONNECTED;
 
   if (imap_cmd_step (idata) != IMAP_CMD_CONTINUE) {
-    mutt_error (_("Unexpected response received from server: %s"),
-                idata->cmd.buf);
-    mutt_sleep (1);
-
     mutt_socket_close (idata->conn);
     idata->state = IMAP_DISCONNECTED;
     return -1;
@@ -414,11 +411,14 @@ int imap_open_connection (IMAP_DATA * idata)
       goto bail;
 #if defined(USE_SSL) || defined(USE_GNUTLS)
     /* Attempt STARTTLS if available and desired. */
-    if (mutt_bit_isset (idata->capabilities, STARTTLS) && !idata->conn->ssf) {
+    if (!idata->conn->ssf && (option(OPTSSLFORCETLS) || 
+                              mutt_bit_isset (idata->capabilities, STARTTLS))) {
       int rc;
 
-      if ((rc = query_quadoption (OPT_SSLSTARTTLS,
-                                  _("Secure connection with TLS?"))) == -1)
+      if (option (OPTSSLFORCETLS))
+        rc = M_YES;
+      else if ((rc = query_quadoption (OPT_SSLSTARTTLS,
+                                       _("Secure connection with TLS?"))) == -1)
         goto err_close_conn;
       if (rc == M_YES) {
         if ((rc = imap_exec (idata, "STARTTLS", IMAP_CMD_FAIL_OK)) == -1)
@@ -441,6 +441,12 @@ int imap_open_connection (IMAP_DATA * idata)
           }
         }
       }
+    }
+
+    if (option(OPTSSLFORCETLS) && ! idata->conn->ssf) {
+      mutt_error _("Encrypted connection unavailable");
+      mutt_sleep (1);
+      goto err_close_conn;
     }
 #endif
   }
@@ -1325,10 +1331,69 @@ fail:
   return -1;
 }
 
+/* trim dest to the length of the longest prefix it shares with src,
+ * returning the length of the trimmed string */
+static int longest_common_prefix (char *dest, const char* src,
+                                  int start, size_t dlen) {
+  int pos = start;
+
+  while (pos < dlen && dest[pos] && dest[pos] == src[pos])
+    pos++;
+  dest[pos] = '\0';
+
+  return pos;
+}
+
+/* look for IMAP URLs to complete from defined mailboxes. Could be extended
+ * to complete over open connections and account/folder hooks too. */
+static int imap_complete_hosts (char *dest, size_t len) {
+  BUFFY* mailbox;
+  CONNECTION* conn;
+  int rc = -1;
+  int matchlen;
+  int i = 0;
+
+  matchlen = mutt_strlen (dest);
+  if (list_empty (Incoming))
+    return (-1);
+  for (i = 0; i < Incoming->length; i++) {
+    mailbox = (BUFFY*) Incoming->data[i];
+    if (!safe_strncmp (dest, mailbox->path, matchlen)) {
+      if (rc) {
+        strfcpy (dest, mailbox->path, len);
+        rc = 0;
+      } else
+        longest_common_prefix (dest, mailbox->path, matchlen, len);
+    }
+  }
+
+  for (conn = mutt_socket_head (); conn->next; conn = conn->next) {
+    ciss_url_t url;
+    char urlstr[LONG_STRING];
+
+    if (conn->account.type != M_ACCT_TYPE_IMAP)
+      continue;
+
+    mutt_account_tourl (&conn->account, &url);
+    /* FIXME: how to handle multiple users on the same host? */
+    url.user = NULL;
+    url.path = NULL;
+    url_ciss_tostring (&url, urlstr, sizeof (urlstr), 0);
+    if (!safe_strncmp (dest, urlstr, matchlen)) {
+      if (rc) {
+        strfcpy (dest, urlstr, len);
+        rc = 0;
+      } else
+        longest_common_prefix (dest, urlstr, matchlen, len);
+    }
+  }
+
+  return rc;
+}
+
 /* imap_complete: given a partial IMAP folder path, return a string which
  *   adds as much to the path as is unique */
-int imap_complete (char *dest, size_t dlen, char *path)
-{
+int imap_complete (char *dest, size_t dlen, char *path) {
   CONNECTION *conn;
   IMAP_DATA *idata;
   char list[LONG_STRING];
@@ -1339,18 +1404,20 @@ int imap_complete (char *dest, size_t dlen, char *path)
   char completion[LONG_STRING];
   int clen, matchlen = 0;
   int completions = 0;
-  int pos = 0;
   IMAP_MBOX mx;
 
-  /* verify passed in path is an IMAP path */
-  if (imap_parse_path (path, &mx)) {
-    debug_print (2, ("bad path %s\n", path));
-    return -1;
+  if (imap_parse_path (path, &mx) || !mx.mbox) {
+    strfcpy (dest, path, dlen);
+    return imap_complete_hosts (dest, dlen);
   }
 
-  /* don't open a new socket just for completion */
-  if (!(idata = imap_conn_find (&(mx.account), M_IMAP_CONN_NONEW)))
-    goto fail;
+  /* don't open a new socket just for completion. Instead complete over
+   * known mailboxes/hooks/etc */
+  if (!(idata = imap_conn_find (&(mx.account), M_IMAP_CONN_NONEW))) {
+    FREE (&mx.mbox);
+    strfcpy (dest, path, dlen);
+    return imap_complete_hosts (dest, dlen);
+  }
   conn = idata->conn;
 
   /* reformat path for IMAP list, and append wildcard */
@@ -1392,13 +1459,7 @@ int imap_complete (char *dest, size_t dlen, char *path)
         continue;
       }
 
-      pos = 0;
-      while (pos < matchlen && list_word[pos] &&
-             completion[pos] == list_word[pos])
-        pos++;
-      completion[pos] = '\0';
-      matchlen = pos;
-
+      matchlen = longest_common_prefix (completion, list_word, 0, matchlen);
       completions++;
     }
   }
@@ -1413,8 +1474,6 @@ int imap_complete (char *dest, size_t dlen, char *path)
     return 0;
   }
 
-fail:
-  FREE (&mx.mbox);
   return -1;
 }
 

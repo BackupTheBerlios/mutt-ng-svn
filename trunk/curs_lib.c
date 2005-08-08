@@ -137,16 +137,14 @@ int _mutt_get_field ( /* const */ char *field, char *buf, size_t buflen,
   return (ret);
 }
 
-int mutt_get_password (char *msg, char *buf, size_t buflen)
+int mutt_get_field_unbuffered (char *msg, char *buf, size_t buflen, int flags)
 {
   int rc;
 
-  CLEARLINE (LINES - 1);
-  addstr (msg);
   set_option (OPTUNBUFFEREDINPUT);
-  rc = mutt_enter_string (buf, buflen, LINES - 1, mutt_strlen (msg), M_PASS);
+  rc = mutt_get_field (msg, buf, buflen, flags);
   unset_option (OPTUNBUFFEREDINPUT);
-  CLEARLINE (LINES - 1);
+
   return (rc);
 }
 

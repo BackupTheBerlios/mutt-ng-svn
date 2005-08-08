@@ -44,6 +44,10 @@ extern void (*mutt_error) (const char *, ...);
 # endif
 void mutt_exit (int);
 
+/* Exit values used in send_msg() */
+#define S_ERR 127
+#define S_BKG 126
+
 /* The actual library functions. */
 
 FILE *safe_fopen (const char *, const char *);
@@ -67,5 +71,7 @@ size_t mutt_quote_filename (char *, size_t, const char *);
 void mutt_nocurses_error (const char *, ...);
 void mutt_sanitize_filename (char *, short);
 void mutt_unlink (const char *);
+
+const char *mutt_strsysexit(int e);
 
 #endif

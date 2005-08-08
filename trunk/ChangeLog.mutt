@@ -1,3 +1,61 @@
+2005-08-08 03:30:59  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* browser.c: Avoid a segfault attempting to browse an invalid IMAP
+	URL.
+
+	* imap/imap.c: Extend IMAP host completion to complete over open
+	connections.
+
+	* imap/imap.c: Allow IMAP tab-completion to complete over defined
+	mailboxes, saving a bunch of typing for the hostname part of the
+	URL. Should probably be extended to complete over open connections
+	and possibly also folder/account hooks.
+
+	* account.c, curs_lib.c, protos.h: Reuse mutt_get_field for
+	mutt_get_field_unbuffered.
+
+2005-08-07 06:20:37  Anders Helmersson  <anders.helmersson.utsikt@wasadata.net>  (brendan)
+
+	* pager.c: Certain versions of libc may segfault during regex
+	processing if given incomplete multibyte characters. Work around
+	this by manually trimming the display buffer. I modified it
+	somewhat to only check when the situation is most likely to occur:
+	fgets has read all the way to the capacity of the buffer. Thanks
+	also to Tamo for his comments.
+
+2005-08-07 04:58:12  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* account.c, curs_lib.c, protos.h: Make username prompts
+	unbuffered like password prompts are (no more folder-hook push
+	garbage)
+
+2005-08-06 22:20:55  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* imap/imap.c, lib.c, lib.h, mutt.h, mutt_tunnel.c, sendlib.c:
+	Report non-zero exit status of tunnel command. Closes: #1749.
+
+	* imap/imap.c, imap/util.c, init.h, mutt.h, pop_lib.c: Replace
+	pointless imap_force_ssl option with ssl_force_tls, which requires
+	any connection (POP or IMAP) to a remote server to be encrypted,
+	and attempts to negotiate encryption even if the capability isn't
+	advertised (this last bit is of dubious utility, but essentially
+	harmless since the connection would otherwise fail
+	anyway). Closes: #1284.
+
+	* imap/browse.c: Kill a warning.
+
+2005-08-06 19:06:36  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* init.c: Use isalnum instead of isalpha when parsing unbraced
+	environment variable names, per tamo's suggestion. Closes #2022.
+
+2005-08-05 02:16:46  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* attach.c, attach.h, browser.c, curs_main.c, mutt.h, mutt_menu.h,
+	pager.h, protos.h: Move some attachment-related prototypes and
+	structures into attach.h from the global headers. A small step
+	towards sane dependency tracking and code cleanliness.
+                                 
 2005-08-04 01:15:52  Brendan Cully <brendan@kublai.com>  (brendan)
 
 	* compose.c: Don't unlink non-mutt files that would have been

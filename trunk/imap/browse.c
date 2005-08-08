@@ -77,7 +77,6 @@ int imap_browse (char *path, struct browser_state *state)
     home_namespace = 1;
     mbox[0] = '\0';             /* Do not replace "" with "INBOX" here */
     mx.mbox = safe_strdup (ImapHomeNamespace);
-    nns = 0;
     if (mutt_bit_isset (idata->capabilities, NAMESPACE)) {
       mutt_message _("Getting namespaces...");
 

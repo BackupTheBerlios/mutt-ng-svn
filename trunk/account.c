@@ -159,7 +159,8 @@ int mutt_account_getuser (ACCOUNT * account)
   else {
     snprintf (prompt, sizeof (prompt), _("Username at %s: "), account->host);
     strfcpy (account->user, NONULL (Username), sizeof (account->user));
-    if (mutt_get_field (prompt, account->user, sizeof (account->user), 0))
+    if (mutt_get_field_unbuffered (prompt, account->user,
+                                    sizeof (account->user), 0))
       return -1;
   }
 
@@ -217,7 +218,8 @@ int mutt_account_getpass (ACCOUNT * account)
               account->flags & M_ACCT_LOGIN ? account->login : account->user,
               account->host);
     account->pass[0] = '\0';
-    if (mutt_get_password (prompt, account->pass, sizeof (account->pass)))
+    if (mutt_get_field_unbuffered (prompt, account->pass,
+                                   sizeof (account->pass), M_PASS))
       return -1;
   }
 

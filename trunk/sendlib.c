@@ -66,77 +66,6 @@
 
 extern char RFC822Specials[];
 
-static struct sysexits {
-  int v;
-  const char *str;
-} sysexits_h[] = {
-#ifdef EX_USAGE
-  {
-  0xff & EX_USAGE, "Bad usage."},
-#endif
-#ifdef EX_DATAERR
-  {
-  0xff & EX_DATAERR, "Data format error."},
-#endif
-#ifdef EX_NOINPUT
-  {
-  0xff & EX_NOINPUT, "Cannot open input."},
-#endif
-#ifdef EX_NOUSER
-  {
-  0xff & EX_NOUSER, "User unknown."},
-#endif
-#ifdef EX_NOHOST
-  {
-  0xff & EX_NOHOST, "Host unknown."},
-#endif
-#ifdef EX_UNAVAILABLE
-  {
-  0xff & EX_UNAVAILABLE, "Service unavailable."},
-#endif
-#ifdef EX_SOFTWARE
-  {
-  0xff & EX_SOFTWARE, "Internal error."},
-#endif
-#ifdef EX_OSERR
-  {
-  0xff & EX_OSERR, "Operating system error."},
-#endif
-#ifdef EX_OSFILE
-  {
-  0xff & EX_OSFILE, "System file missing."},
-#endif
-#ifdef EX_CANTCREAT
-  {
-  0xff & EX_CANTCREAT, "Can't create output."},
-#endif
-#ifdef EX_IOERR
-  {
-  0xff & EX_IOERR, "I/O error."},
-#endif
-#ifdef EX_TEMPFAIL
-  {
-  0xff & EX_TEMPFAIL, "Deferred."},
-#endif
-#ifdef EX_PROTOCOL
-  {
-  0xff & EX_PROTOCOL, "Remote protocol error."},
-#endif
-#ifdef EX_NOPERM
-  {
-  0xff & EX_NOPERM, "Insufficient permission."},
-#endif
-#ifdef EX_CONFIG
-  {
-  0xff & EX_NOPERM, "Local configuration error."},
-#endif
-  {
-  S_ERR, "Exec error."}, {
-  -1, NULL}
-};
-
-
-
 #define DISPOSITION(X) X==DISPATTACH?"attachment":"inline"
 
 const char MimeSpecials[] = "@.,;:<>[]\\\"()?/= \t";
@@ -2027,19 +1956,6 @@ static char **add_option (char **args, size_t * argslen, size_t * argsmax,
   return (args);
 }
 
-static const char *strsysexit (int e)
-{
-  int i;
-
-  for (i = 0; sysexits_h[i].str; i++) {
-    if (e == sysexits_h[i].v)
-      break;
-  }
-
-  return sysexits_h[i].str;
-}
-
-
 static int mutt_invoke_sendmail (ADDRESS * from,        /* the sender */
                                  ADDRESS * to, ADDRESS * cc, ADDRESS * bcc,     /* recips */
                                  const char *msg,       /* file containing message */
@@ -2122,9 +2038,9 @@ static int mutt_invoke_sendmail (ADDRESS * from,        /* the sender */
 
   if ((i = send_msg (path, args, msg, &childout)) != (EX_OK & 0xff)) {
     if (i != S_BKG) {
-      const char *e = strsysexit (i);
+      const char *e = mutt_strsysexit (i);
 
-      e = strsysexit (i);
+      e = mutt_strsysexit (i);
       mutt_error (_("Error sending message, child exited %d (%s)."), i,
                   NONULL (e));
       if (childout) {

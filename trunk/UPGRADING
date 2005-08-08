@@ -10,6 +10,11 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-08-08:
+
+  The $imap_force_ssl option has been replaced with the more generic
+  $ssl_force_tls option.
+
 2005-08-07:
 
   For $sidebar_number_format, the expandos %c and %f are replaced with

@@ -382,20 +382,16 @@ enum {
   OPTIMAPPASSIVE,
   OPTIMAPPEEK,
   OPTIMAPSERVERNOISE,
-# if defined(USE_SSL) || defined(USE_GNUTLS)
-  OPTIMAPFORCESSL,
-# endif
 #endif
 #if defined(USE_SSL) || defined(USE_GNUTLS)
 # ifndef USE_GNUTLS
+  OPTSSLSYSTEMCERTS,
   OPTSSLV2,
-# endif
+# endif /* !USE_GNUTLS */
   OPTSSLV3,
   OPTTLSV1,
-# ifndef USE_GNUTLS
-  OPTSSLSYSTEMCERTS,
-# endif
-#endif
+  OPTSSLFORCETLS,
+#endif /* USE_SSL || USE_GNUTLS */
   OPTIMPLICITAUTOVIEW,
   OPTINCLUDEONLYFIRST,
   OPTKEEPFLAGGED,
@@ -561,10 +557,6 @@ enum {
 #define unset_option(x) mutt_bit_unset(Options,x)
 #define toggle_option(x) mutt_bit_toggle(Options,x)
 #define option(x) mutt_bit_isset(Options,x)
-
-/* Exit values used in send_msg() */
-#define S_ERR 127
-#define S_BKG 126
 
 typedef struct list_t {
   char *data;

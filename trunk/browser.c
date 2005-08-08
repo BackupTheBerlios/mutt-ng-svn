@@ -770,8 +770,8 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
     if (imap_is_magic (f, NULL) == M_IMAP) {
       init_state (&state, NULL);
       state.imap_browse = 1;
-      imap_browse (f, &state);
-      strfcpy (LastDir, state.folder, sizeof (LastDir));
+      if (!imap_browse (f, &state))
+        strfcpy (LastDir, state.folder, sizeof (LastDir));
     }
     else {
 #endif
