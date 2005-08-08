@@ -27,6 +27,7 @@
 #include "charset.h"
 #include "mutt_crypt.h"
 #include "state.h"
+#include "attach.h"
 #include "lib.h"
 
 #include "lib/mem.h"

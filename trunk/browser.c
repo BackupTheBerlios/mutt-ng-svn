@@ -19,6 +19,8 @@
 #include "mapping.h"
 #include "sort.h"
 #include "browser.h"
+#include "attach.h"
+
 #ifdef USE_IMAP
 #include "imap.h"
 #include "imap/mx_imap.h"

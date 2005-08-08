@@ -8,6 +8,11 @@
  * It's licensed under the GNU General Public License,
  * please see the file GPL in the top level source directory.
  */
+#if HAVE_CONFIG_H
+#include "config.h"
+#endif /* HAVE_CONFIG_H */
+
+#ifdef USE_HCACHE
 
 # if HAVE_INTTYPES_H
 #  include <inttypes.h>
@@ -16,12 +21,6 @@
 #   include <stdint.h>
 #  endif
 # endif
-
-#if HAVE_CONFIG_H
-#include "config.h"
-#endif /* HAVE_CONFIG_H */
-
-#ifdef USE_HCACHE
 
 #if HAVE_QDBM
 #include <depot.h>

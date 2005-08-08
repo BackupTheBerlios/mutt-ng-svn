@@ -870,15 +870,6 @@ typedef struct {
   unsigned int counting:1;      /* do we just want to cound? */
 } CONTEXT;
 
-typedef struct attachptr {
-  BODY *content;
-  int parent_type;
-  char *tree;
-  int level;
-  int num;
-  unsigned int unowned:1;       /* don't unlink on detach */
-} ATTACHPTR;
-
 #include "ascii.h"
 #include "alias.h"
 #include "buffer.h"

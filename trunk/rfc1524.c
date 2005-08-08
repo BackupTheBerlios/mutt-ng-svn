@@ -23,6 +23,7 @@
 
 #include "mutt.h"
 #include "rfc1524.h"
+#include "attach.h"
 
 #include "lib/mem.h"
 #include "lib/intl.h"

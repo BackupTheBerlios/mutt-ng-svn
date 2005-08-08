@@ -22,6 +22,7 @@
 #include "imap_private.h"
 #include "message.h"
 #include "mx.h"
+#include "hcache.h"
 
 #ifdef HAVE_PGP
 #include "pgp.h"

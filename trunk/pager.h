@@ -6,6 +6,10 @@
  * It's licensed under the GNU General Public License,
  * please see the file GPL in the top level source directory.
  */
+#ifndef _MUTT_PAGER_H
+#define _MUTT_PAGER_H
+
+#include "attach.h"
 
 /* dynamic internal flags */
 #define M_SHOWFLAT	(1<<0)
@@ -35,3 +39,5 @@ typedef struct {
 
 int mutt_do_pager (const char *, const char *, int, pager_t *);
 int mutt_pager (const char *, const char *, int, pager_t *);
+
+#endif /* !_MUTT_PAGER_H */

@@ -17,6 +17,7 @@
 #include "mime.h"
 #include "mx.h"
 #include "url.h"
+#include "attach.h"
 
 #include "reldate.h"
 

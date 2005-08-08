@@ -26,6 +26,7 @@
 #include "pgp.h"
 #include "mime.h"
 #include "copy.h"
+#include "attach.h"
 
 #include "lib/mem.h"
 #include "lib/intl.h"

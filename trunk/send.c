@@ -21,6 +21,7 @@
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
 #include "url.h"
+#include "attach.h"
 
 #include "lib/mem.h"
 #include "lib/intl.h"
