@@ -584,16 +584,6 @@ LIST *mutt_add_list_n (LIST*, const void*, size_t len);
 
 void mutt_init (int, LIST *);
 
-typedef struct alias {
-  struct alias *self;           /* XXX - ugly hack */
-  char *name;
-  ADDRESS *addr;
-  struct alias *next;
-  short tagged;
-  short del;
-  short num;
-} ALIAS;
-
 typedef struct envelope {
   ADDRESS *return_path;
   ADDRESS *from;
@@ -928,6 +918,9 @@ void state_prefix_putc (char, STATE *);
 int state_printf (STATE *, const char *, ...);
 
 #include "ascii.h"
+#include "alias.h"
+#include "addrbook.h"
+#include "buffer.h"
 #include "protos.h"
 #include "lib.h"
 #include "globals.h"

@@ -16,6 +16,7 @@
 #elif HAVE_INTTYPES_H
 #include <inttypes.h>
 #endif
+
 #include "mbyte.h"
 
 #define MoreArgs(p) (*p->dptr && *p->dptr != ';' && *p->dptr != '#')
@@ -23,14 +24,6 @@
 #define mutt_make_string(A,B,C,D,E) _mutt_make_string(A,B,C,D,E,0)
 void _mutt_make_string (char *, size_t, const char *, CONTEXT *,
                         HEADER *, format_flag);
-
-int mutt_extract_token (BUFFER *, BUFFER *, int);
-BUFFER *mutt_buffer_init (BUFFER *);
-BUFFER *mutt_buffer_from (BUFFER *, char *);
-void mutt_buffer_free (BUFFER **);
-void mutt_buffer_add (BUFFER *, const char *, size_t);
-void mutt_buffer_addstr (BUFFER *, const char *);
-void mutt_buffer_addch (BUFFER *, char);
 
 #define mutt_system(x) _mutt_system(x,0)
 int _mutt_system (const char *, int);
@@ -73,10 +66,7 @@ int query_quadoption (int, const char *);
 int quadoption (int);
 
 ADDRESS *mutt_default_from (void);
-ADDRESS *mutt_get_address (ENVELOPE *, char **);
-ADDRESS *mutt_lookup_alias (const char *s);
 ADDRESS *mutt_remove_duplicates (ADDRESS *);
-ADDRESS *mutt_expand_aliases (ADDRESS *);
 ADDRESS *mutt_parse_adrlist (ADDRESS *, const char *);
 
 BODY *mutt_make_file_attach (const char *);
@@ -159,7 +149,6 @@ void mutt_account_hook (const char *url);
 void mutt_add_to_reference_headers (ENVELOPE * env, ENVELOPE * curenv,
                                     LIST *** pp, LIST *** qq);
 void mutt_adv_mktemp (char *, size_t);
-void mutt_alias_menu (char *, size_t, ALIAS *);
 void mutt_allow_interrupt (int);
 void mutt_attach_init (BODY *);
 void mutt_block_signals (void);
@@ -170,7 +159,6 @@ void mutt_break_thread (HEADER *);
 void mutt_canonical_charset (char *, size_t, const char *);
 void mutt_check_rescore (CONTEXT *);
 void mutt_clear_error (void);
-void mutt_create_alias (ENVELOPE *, ADDRESS *);
 void mutt_decode_attachment (BODY *, STATE *);
 void mutt_decode_base64 (STATE * s, long len, int istext, iconv_t cd);
 void mutt_default_save (char *, size_t, HEADER *);
@@ -182,7 +170,6 @@ void mutt_edit_headers (const char *, const char *, HEADER *, char *, size_t);
 void mutt_curses_error (const char *, ...);
 void mutt_curses_message (const char *, ...);
 void mutt_enter_command (void);
-void mutt_expand_aliases_env (ENVELOPE *);
 void mutt_expand_file_fmt (char *, size_t, const char *, const char *);
 void mutt_expand_fmt (char *, size_t, const char *, const char *);
 void mutt_expand_link (char *, const char *, const char *);
@@ -194,7 +181,6 @@ void mutt_format_s (char *, size_t, const char *, const char *);
 void mutt_format_s_tree (char *, size_t, const char *, const char *);
 void mutt_forward_intro (FILE * fp, HEADER * cur);
 void mutt_forward_trailer (FILE * fp);
-void mutt_free_alias (ALIAS **);
 void mutt_free_body (BODY **);
 void mutt_free_color (int fg, int bg);
 void mutt_free_enter_state (ENTER_STATE **);
@@ -260,15 +246,12 @@ void mutt_write_address_list (ADDRESS * adr, FILE * fp, int linelen,
                               int display);
 void mutt_set_virtual (CONTEXT *);
 
-int mutt_addr_is_user (ADDRESS *);
 int mutt_addwch (wchar_t);
-int mutt_alias_complete (char *, size_t);
 int mutt_alloc_color (int fg, int bg);
 int mutt_any_key_to_continue (const char *);
 int mutt_builtin_editor (const char *, HEADER *, HEADER *);
 int mutt_can_decode (BODY *);
 int mutt_change_flag (HEADER *, int);
-int mutt_check_alias_name (const char *, char *);
 int mutt_check_encoding (const char *);
 int mutt_check_key (const char *);
 int mutt_check_menu (const char *);
@@ -376,8 +359,6 @@ int mh_valid_message (const char *);
 pid_t mutt_create_filter (const char *, FILE **, FILE **, FILE **);
 pid_t mutt_create_filter_fd (const char *, FILE **, FILE **, FILE **, int,
                              int, int);
-
-ADDRESS *alias_reverse_lookup (ADDRESS *);
 
 /* base64.c */
 void mutt_to_base64 (unsigned char *, const unsigned char *, size_t, size_t);

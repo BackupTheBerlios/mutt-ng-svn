@@ -27,18 +27,26 @@ BUILT_SOURCES = keymap_defs.h patchlist.c
 
 bin_PROGRAMS = muttng @DOTLOCK_TARGET@ @PGPAUX_TARGET@ @SMIMEAUX_TARGET@
 muttng_SOURCES = $(BUILT_SOURCES) \
-	addrbook.c alias.c attach.c base64.c browser.c buffy.c color.c \
-	compress.c crypt.c cryptglue.c \
-	commands.c complete.c compose.c copy.c curs_lib.c curs_main.c date.c \
-	edit.c enter.c flags.c init.c filter.c from.c getdomain.c \
-	handler.c hash.c hdrline.c headers.c help.c hook.c keymap.c \
-	main.c mbox.c menu.c mh.c mx.c pager.c parse.c pattern.c \
-	postpone.c query.c recvattach.c recvcmd.c \
-	rfc822.c rfc1524.c rfc2047.c rfc2231.c \
-	score.c send.c sendlib.c signal.c sort.c \
-	status.c system.c thread.c charset.c history.c lib.c \
-	muttlib.c editmsg.c utf8.c mbyte.c wcwidth.c md5c.c \
-	url.c ascii.c mutt_idna.c sidebar.c hcache.c crypt-mod.c crypt-mod.h \
+	alias.c ascii.c attach.c \
+	base64.c buffer.c browser.c buffy.c \
+	charset.c color.c compress.c crypt.c cryptglue.c commands.c complete.c compose.c \
+	copy.c curs_lib.c curs_main.c crypt-mod.c crypt-mod.h \
+	date.c \
+	edit.c editmsg.c enter.c \
+	flags.c filter.c from.c \
+	getdomain.c \
+	handler.c hash.c hcache.c hdrline.c headers.c help.c history.c hook.c \
+	init.c \
+	keymap.c \
+	lib.c \
+	main.c mbox.c mbyte.c md5c.c menu.c mh.c muttlib.c mutt_idna.c mx.c \
+	pager.c parse.c pattern.c postpone.c \
+	query.c \
+	recvattach.c recvcmd.c rfc822.c rfc1524.c rfc2047.c rfc2231.c \
+	score.c send.c sendlib.c sidebar.c signal.c sort.c status.c system.c \
+	thread.c \
+	url.c utf8.c \
+	wcwidth.c \
 	xterm.c
 
 muttng_LDADD = @MUTT_LIB_OBJECTS@ @LIBOBJS@ $(LIBIMAP) $(LIBPOP) $(LIBNNTP) \
@@ -68,25 +76,29 @@ INCLUDES=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(POP_INCLUDES) $(NNTP_INCLUDES) $
 
 CPPFLAGS=@CPPFLAGS@ -I$(includedir)
 
-
-EXTRA_muttng_SOURCES = account.c md5c.c mutt_sasl.c mutt_socket.c mutt_ssl.c \
+EXTRA_muttng_SOURCES = \
+	account.c md5c.c mutt_sasl.c mutt_socket.c mutt_ssl.c \
 	mutt_tunnel.c smime.c pgp.c pgpinvoke.c pgpkey.c \
 	pgplib.c sha1.c pgpmicalg.c gnupgparse.c resize.c dotlock.c remailer.c \
-	browser.h mbyte.h remailer.h url.h \
+	alias.h \
+	buffer.h browser.h \
+	mbyte.h remailer.h url.h \
 	pgppacket.c mutt_idna.h mutt_libesmtp.c \
 	sidebar.h crypt-mod-pgp-classic.c crypt-mod-smime-classic.c
 
 EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
-	configure acconfig.h account.h \
-	compress.h \
-	attach.h buffy.h charset.h copy.h crypthash.h dotlock.h functions.h gen_defs \
+	configure acconfig.h \
+	account.h alias.h attach.h \
+	buffer.h buffy.h \
+	charset.h compress.h copy.h crypthash.h \
+	dotlock.h functions.h gen_defs \
 	globals.h hash.h history.h init.h keymap.h mutt_crypt.h \
 	mapping.h md5.h mime.h mutt.h mutt_curses.h mutt_menu.h \
 	mutt_sasl.h mutt_socket.h mutt_ssl.h mutt_tunnel.h \
 	mbox.h mh.h mx.h pager.h pgp.h protos.h reldate.h rfc1524.h rfc2047.h \
 	rfc2231.h rfc822.h sha1.h sort.h mime.types VERSION autogen.sh \
 	_regex.h OPS.MIX remailer.c remailer.h browser.h \
-	mbyte.h	lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h Muttngrc.head Muttngrc \
+	mbyte.h lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h Muttngrc.head Muttngrc \
 	makedoc.c stamp-doc-rc README.SSL smime.h\
 	muttngbug pgppacket.h depcomp ascii.h BEWARE PATCHES patchlist.sh	\
 	mkchangelog.sh cvslog2changelog.pl mutt_idna.h \
