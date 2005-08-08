@@ -125,7 +125,7 @@ static unsigned char *dump_char (char *c, unsigned char *d, int *off)
     return d;
   }
 
-  size = mutt_strlen (c) + 1;
+  size = str_len (c) + 1;
   d = dump_int (size, d, off);
   lazy_realloc (&d, *off + size);
   memcpy (d + *off, c, size);
@@ -447,35 +447,35 @@ static int generate_crc32 ()
 
   crc = crc32 (crc, (unsigned char const *)
                "sithglan@stud.uni-erlangen.de[sithglan]|hcache.c|20041108231548|29613",
-               mutt_strlen
+               str_len
                ("sithglan@stud.uni-erlangen.de[sithglan]|hcache.c|20041108231548|29613"));
 
 #if HAVE_LANGINFO_CODESET
-  crc = crc32 (crc, (unsigned char const *) Charset, mutt_strlen (Charset));
+  crc = crc32 (crc, (unsigned char const *) Charset, str_len (Charset));
   crc =
     crc32 (crc, (unsigned char const *) "HAVE_LANGINFO_CODESET",
-           mutt_strlen ("HAVE_LANGINFO_CODESET"));
+           str_len ("HAVE_LANGINFO_CODESET"));
 #endif
 
 #ifdef USE_POP
   crc =
-    crc32 (crc, (unsigned char const *) "USE_POP", mutt_strlen ("USE_POP"));
+    crc32 (crc, (unsigned char const *) "USE_POP", str_len ("USE_POP"));
 #endif
 
 #ifdef MIXMASTER
   crc =
     crc32 (crc, (unsigned char const *) "MIXMASTER",
-           mutt_strlen ("MIXMASTER"));
+           str_len ("MIXMASTER"));
 #endif
 
 #ifdef USE_IMAP
   crc =
-    crc32 (crc, (unsigned char const *) "USE_IMAP", mutt_strlen ("USE_IMAP"));
+    crc32 (crc, (unsigned char const *) "USE_IMAP", str_len ("USE_IMAP"));
 #endif
 
 #ifdef USE_NNTP
   crc =
-    crc32 (crc, (unsigned char const *) "USE_NNTP", mutt_strlen ("USE_NNTP"));
+    crc32 (crc, (unsigned char const *) "USE_NNTP", str_len ("USE_NNTP"));
 #endif
   return crc;
 }
@@ -514,7 +514,7 @@ static const char *mutt_hcache_per_folder (const char *path,
   }
 
   MD5Init (&md5);
-  MD5Update (&md5, (unsigned char *) folder, mutt_strlen (folder));
+  MD5Update (&md5, (unsigned char *) folder, str_len (folder));
   MD5Final (md5sum, &md5);
 
   ret = snprintf (mutt_hcache_per_folder_path, _POSIX_PATH_MAX,
@@ -593,7 +593,7 @@ HEADER *mutt_hcache_restore (const unsigned char *d, HEADER ** oh)
   /* this is needed for maildir style mailboxes */
   if (oh) {
     h->old = (*oh)->old;
-    h->path = safe_strdup ((*oh)->path);
+    h->path = str_dup ((*oh)->path);
     mutt_free_header (oh);
   }
 
@@ -607,7 +607,7 @@ mutt_hcache_open(const char *path, const char *folder)
   struct header_cache *h = safe_calloc(1, sizeof (HEADER_CACHE));
   int    flags = VL_OWRITER | VL_OCREAT;
   h->db = NULL;
-  h->folder = safe_strdup(folder);
+  h->folder = str_dup(folder);
   h->crc = generate_crc32();
 
   if (!path || path[0] == '\0')
@@ -660,7 +660,7 @@ mutt_hcache_fetch(void *db, const char *filename,
     return NULL;
 
   strncpy(path, h->folder, sizeof (path));
-  safe_strcat(path, sizeof (path), filename);
+  str_cat(path, sizeof (path), filename);
 
   ksize = strlen(h->folder) + keylen(path + strlen(h->folder));
 
@@ -690,7 +690,7 @@ mutt_hcache_store(void *db, const char *filename, HEADER * header,
     return -1;
 
   strncpy(path, h->folder, sizeof (path));
-  safe_strcat(path, sizeof (path), filename);
+  str_cat(path, sizeof (path), filename);
 
   ksize = strlen(h->folder) + keylen(path + strlen(h->folder));
 
@@ -715,7 +715,7 @@ mutt_hcache_delete(void *db, const char *filename,
     return -1;
 
   strncpy(path, h->folder, sizeof (path));
-  safe_strcat(path, sizeof (path), filename);
+  str_cat(path, sizeof (path), filename);
 
   ksize = strlen(h->folder) + keylen(path + strlen(h->folder));
 
@@ -730,7 +730,7 @@ void *mutt_hcache_open (const char *path, const char *folder)
   int pagesize =
     atoi (HeaderCachePageSize) ? atoi (HeaderCachePageSize) : 16384;
   h->db = NULL;
-  h->folder = safe_strdup (folder);
+  h->folder = str_dup (folder);
   h->crc = generate_crc32 ();
 
   if (!path || path[0] == '\0') {
@@ -785,7 +785,7 @@ void *mutt_hcache_fetch (void *db, const char *filename,
   }
 
   strncpy (path, h->folder, sizeof (path));
-  strncat (path, filename, sizeof (path) - mutt_strlen (path));
+  strncat (path, filename, sizeof (path) - str_len (path));
 
   key.dptr = path;
   key.dsize = keylen (path);
@@ -815,7 +815,7 @@ mutt_hcache_store (void *db, const char *filename, HEADER * header,
   }
 
   strncpy (path, h->folder, sizeof (path));
-  strncat (path, filename, sizeof (path) - mutt_strlen (path));
+  strncat (path, filename, sizeof (path) - str_len (path));
 
   key.dptr = path;
   key.dsize = keylen (path);
@@ -842,7 +842,7 @@ mutt_hcache_delete (void *db, const char *filename,
   }
 
   strncpy (path, h->folder, sizeof (path));
-  strncat (path, filename, sizeof (path) - mutt_strlen (path));
+  strncat (path, filename, sizeof (path) - str_len (path));
 
   key.dptr = path;
   key.dsize = keylen (path);

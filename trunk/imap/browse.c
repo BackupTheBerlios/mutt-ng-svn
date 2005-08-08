@@ -76,7 +76,7 @@ int imap_browse (char *path, struct browser_state *state)
   if (!mx.mbox) {
     home_namespace = 1;
     mbox[0] = '\0';             /* Do not replace "" with "INBOX" here */
-    mx.mbox = safe_strdup (ImapHomeNamespace);
+    mx.mbox = str_dup (ImapHomeNamespace);
     if (mutt_bit_isset (idata->capabilities, NAMESPACE)) {
       mutt_message _("Getting namespaces...");
 
@@ -97,7 +97,7 @@ int imap_browse (char *path, struct browser_state *state)
     imap_unquote_string (buf);  /* As kludgy as it gets */
     mbox[sizeof (mbox) - 1] = '\0';
     strncpy (mbox, buf, sizeof (mbox) - 1);
-    n = mutt_strlen (mbox);
+    n = str_len (mbox);
 
     debug_print (3, ("mbox: %s\n", mbox));
 
@@ -115,7 +115,7 @@ int imap_browse (char *path, struct browser_state *state)
           imap_unmunge_mbox_name (cur_folder);
 
           if (!noinferiors && cur_folder[0] &&
-              (n = mutt_strlen (mbox)) < LONG_STRING - 1) {
+              (n = str_len (mbox)) < LONG_STRING - 1) {
             mbox[n++] = idata->delim;
             mbox[n] = '\0';
           }
@@ -130,7 +130,7 @@ int imap_browse (char *path, struct browser_state *state)
       if (!home_namespace)
         showparents = 1;
       imap_qualify_path (buf, sizeof (buf), &mx, mbox);
-      state->folder = safe_strdup (buf);
+      state->folder = str_dup (buf);
       n--;
     }
 
@@ -159,7 +159,7 @@ int imap_browse (char *path, struct browser_state *state)
         ctmp = mbox[n];
         mbox[n] = '\0';
         imap_qualify_path (buf, sizeof (buf), &mx, mbox);
-        state->folder = safe_strdup (buf);
+        state->folder = str_dup (buf);
       }
       mbox[n] = ctmp;
     }
@@ -173,7 +173,7 @@ int imap_browse (char *path, struct browser_state *state)
         imap_add_folder (idata->delim, relpath, 1, 0, state, 1);
       if (!state->folder) {
         imap_qualify_path (buf, sizeof (buf), &mx, relpath);
-        state->folder = safe_strdup (buf);
+        state->folder = str_dup (buf);
       }
     }
   }
@@ -181,7 +181,7 @@ int imap_browse (char *path, struct browser_state *state)
   /* no namespace, no folder: set folder to host only */
   if (!state->folder) {
     imap_qualify_path (buf, sizeof (buf), &mx, NULL);
-    state->folder = safe_strdup (buf);
+    state->folder = str_dup (buf);
   }
 
   if (home_namespace && mbox[0] != '\0') {
@@ -252,7 +252,7 @@ int imap_mailbox_create (const char *folder)
   strfcpy (buf, NONULL (mx.mbox), sizeof (buf));
 
   /* append a delimiter if necessary */
-  n = mutt_strlen (buf);
+  n = str_len (buf);
   if (n && (n < sizeof (buf) - 1) && (buf[n - 1] != idata->delim)) {
     buf[n++] = idata->delim;
     buf[n] = '\0';
@@ -261,7 +261,7 @@ int imap_mailbox_create (const char *folder)
   if (mutt_get_field (_("Create mailbox: "), buf, sizeof (buf), M_FILE) < 0)
     goto fail;
 
-  if (!mutt_strlen (buf)) {
+  if (!str_len (buf)) {
     mutt_error (_("Mailbox must have a name."));
     mutt_sleep (1);
     goto fail;
@@ -304,7 +304,7 @@ int imap_mailbox_rename (const char *mailbox)
   if (mutt_get_field (buf, newname, sizeof (newname), M_FILE) < 0)
     goto fail;
 
-  if (!mutt_strlen (newname)) {
+  if (!str_len (newname)) {
     mutt_error (_("Mailbox must have a name."));
     mutt_sleep (1);
     goto fail;
@@ -355,7 +355,7 @@ static int browse_add_list_result (IMAP_DATA * idata, const char *cmd,
       if (isparent)
         noselect = 1;
       /* prune current folder from output */
-      if (isparent || safe_strncmp (name, mx.mbox, mutt_strlen (name)))
+      if (isparent || str_ncmp (name, mx.mbox, str_len (name)))
         imap_add_folder (idata->delim, name, noselect, noinferiors, state,
                          isparent);
     }
@@ -393,8 +393,8 @@ static void imap_add_folder (char delim, char *folder, int noselect,
   if (isparent)
     strfcpy (relpath, "../", sizeof (relpath));
   /* strip current folder from target, to render a relative path */
-  else if (!safe_strncmp (mx.mbox, folder, mutt_strlen (mx.mbox)))
-    strfcpy (relpath, folder + mutt_strlen (mx.mbox), sizeof (relpath));
+  else if (!str_ncmp (mx.mbox, folder, str_len (mx.mbox)))
+    strfcpy (relpath, folder + str_len (mx.mbox), sizeof (relpath));
   else
     strfcpy (relpath, folder, sizeof (relpath));
 
@@ -407,15 +407,15 @@ static void imap_add_folder (char delim, char *folder, int noselect,
   }
 
   imap_qualify_path (tmp, sizeof (tmp), &mx, folder);
-  (state->entry)[state->entrylen].name = safe_strdup (tmp);
+  (state->entry)[state->entrylen].name = str_dup (tmp);
 
   /* mark desc with delim in browser if it can have subfolders */
-  if (!isparent && !noinferiors && mutt_strlen (relpath) < sizeof (relpath) - 1) {
-    relpath[mutt_strlen (relpath) + 1] = '\0';
-    relpath[mutt_strlen (relpath)] = delim;
+  if (!isparent && !noinferiors && str_len (relpath) < sizeof (relpath) - 1) {
+    relpath[str_len (relpath) + 1] = '\0';
+    relpath[str_len (relpath)] = delim;
   }
 
-  (state->entry)[state->entrylen].desc = safe_strdup (relpath);
+  (state->entry)[state->entrylen].desc = str_dup (relpath);
 
   (state->entry)[state->entrylen].imap = 1;
   /* delimiter at the root is useless. */
@@ -431,7 +431,7 @@ static void imap_add_folder (char delim, char *folder, int noselect,
 
 static int compare_names (struct folder_file *a, struct folder_file *b)
 {
-  return mutt_strcmp (a->name, b->name);
+  return str_cmp (a->name, b->name);
 }
 
 static int browse_get_namespace (IMAP_DATA * idata, char *nsbuf, int nsblen,

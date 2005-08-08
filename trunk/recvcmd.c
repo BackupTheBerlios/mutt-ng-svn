@@ -169,10 +169,10 @@ void mutt_attach_bounce (FILE * fp, HEADER * hdr,
     mutt_format_string (prompt, sizeof (prompt) - 4,
                         0, COLS - extra_space, 0, 0,
                         prompt, sizeof (prompt), 0);
-    safe_strcat (prompt, sizeof (prompt), "...?");
+    str_cat (prompt, sizeof (prompt), "...?");
   }
   else
-    safe_strcat (prompt, sizeof (prompt), "?");
+    str_cat (prompt, sizeof (prompt), "?");
 
   if (query_quadoption (OPT_BOUNCE, prompt) != M_YES) {
     rfc822_free_address (&adr);
@@ -683,8 +683,8 @@ attach_reply_envelope_defaults (ENVELOPE * env, ATTACHPTR ** idx,
   if ((flags & SENDNEWS)) {
     /* in case followup set Newsgroups: with Followup-To: if it present */
     if (!env->newsgroups && curenv &&
-        safe_strcasecmp (curenv->followup_to, "poster"))
-      env->newsgroups = safe_strdup (curenv->followup_to);
+        str_casecmp (curenv->followup_to, "poster"))
+      env->newsgroups = str_dup (curenv->followup_to);
   }
   else
 #endif

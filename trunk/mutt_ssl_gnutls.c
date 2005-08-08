@@ -412,8 +412,8 @@ static int tls_check_stored_hostname (const gnutls_datum * cert,
         if (regexec (&preg, linestr, 3, pmatch, 0) == 0) {
           linestr[pmatch[1].rm_eo] = '\0';
           linestr[pmatch[2].rm_eo] = '\0';
-          if (mutt_strcmp (linestr + pmatch[1].rm_so, hostname) == 0 &&
-              mutt_strcmp (linestr + pmatch[2].rm_so, buf) == 0) {
+          if (str_cmp (linestr + pmatch[1].rm_so, hostname) == 0 &&
+              str_cmp (linestr + pmatch[2].rm_so, buf) == 0) {
             regfree (&preg);
             FREE(&linestr);
             fclose (fp);

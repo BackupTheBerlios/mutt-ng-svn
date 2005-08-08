@@ -130,7 +130,7 @@ static void set_path (CONTEXT * ctx)
 
   /* Uncompress to /tmp */
   mutt_mktemp (tmppath);
-  ctx->path = safe_malloc (mutt_strlen (tmppath) + 1);
+  ctx->path = safe_malloc (str_len (tmppath) + 1);
   strcpy (ctx->path, tmppath);
 }
 
@@ -189,7 +189,7 @@ static char *get_compression_cmd (const char *cmd, const CONTEXT * ctx)
 
   mutt_FormatString (expanded, sizeof (expanded), cmd,
                      compresshook_format_str, (unsigned long) ctx, 0);
-  return safe_strdup (expanded);
+  return str_dup (expanded);
 }
 
 int mutt_check_mailbox_compressed (CONTEXT * ctx)

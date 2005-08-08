@@ -415,7 +415,7 @@ static char *x509_get_part (char *line, const char *ndx)
 
   c = strstr (line, ndx);
   if (c) {
-    c += mutt_strlen (ndx);
+    c += str_len (ndx);
     c2 = strchr (c, '/');
     if (c2)
       *c2 = '\0';
@@ -441,7 +441,7 @@ static void x509_fingerprint (char *s, int l, X509 * cert)
       char ch[8];
 
       snprintf (ch, 8, "%02X%s", md[j], (j % 2 ? " " : ""));
-      safe_strcat (s, l, ch);
+      str_cat (s, l, ch);
     }
   }
 }
@@ -635,9 +635,9 @@ static int ssl_check_certificate (sslsockdata * data)
 
   helpstr[0] = '\0';
   mutt_make_help (buf, sizeof (buf), _("Exit  "), MENU_GENERIC, OP_EXIT);
-  safe_strcat (helpstr, sizeof (helpstr), buf);
+  str_cat (helpstr, sizeof (helpstr), buf);
   mutt_make_help (buf, sizeof (buf), _("Help"), MENU_GENERIC, OP_HELP);
-  safe_strcat (helpstr, sizeof (helpstr), buf);
+  str_cat (helpstr, sizeof (helpstr), buf);
   menu->help = helpstr;
 
   done = 0;

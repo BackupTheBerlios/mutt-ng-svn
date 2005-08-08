@@ -195,15 +195,15 @@ void mutt_set_langinfo_charset (void)
   mutt_canonical_charset (buff2, sizeof (buff2), buff);
 
   /* finally, set $charset */
-  if (!(Charset = safe_strdup (buff2)))
-    Charset = safe_strdup ("iso-8859-1");
+  if (!(Charset = str_dup (buff2)))
+    Charset = str_dup ("iso-8859-1");
 }
 
 #else
 
 void mutt_set_langinfo_charset (void)
 {
-  Charset = safe_strdup ("iso-8859-1");
+  Charset = str_dup ("iso-8859-1");
 }
 
 #endif
@@ -228,7 +228,7 @@ void mutt_canonical_charset (char *dest, size_t dlen, const char *name)
 
   for (i = 0; PreferredMIMENames[i].key; i++)
     if (!ascii_strcasecmp (scratch, PreferredMIMENames[i].key) ||
-        !safe_strcasecmp (scratch, PreferredMIMENames[i].key)) {
+        !str_casecmp (scratch, PreferredMIMENames[i].key)) {
       strfcpy (dest, PreferredMIMENames[i].pref, dlen);
       return;
     }
@@ -335,7 +335,7 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t * inbytesleft,
 
         for (t = inrepls; *t; t++) {
           ICONV_CONST char *ib1 = *t;
-          size_t ibl1 = mutt_strlen (*t);
+          size_t ibl1 = str_len (*t);
           char *ob1 = ob;
           size_t obl1 = obl;
 
@@ -355,7 +355,7 @@ size_t mutt_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t * inbytesleft,
         outrepl = "?";
       iconv (cd, 0, 0, &ob, &obl);
       if (obl) {
-        int n = mutt_strlen (outrepl);
+        int n = str_len (outrepl);
 
         if (n > obl) {
           outrepl = "?";
@@ -406,7 +406,7 @@ int mutt_convert_string (char **ps, const char *from, const char *to,
     else
       outrepl = "?";
 
-    len = mutt_strlen (s);
+    len = str_len (s);
     ib = s, ibl = len + 1;
     obl = MB_LEN_MAX * ibl;
     ob = buf = safe_malloc (obl + 1);
@@ -561,7 +561,7 @@ char *mutt_get_first_charset (const char *charset)
   const char *c, *c1;
 
   c = charset;
-  if (!mutt_strlen (c))
+  if (!str_len (c))
     return "us-ascii";
   if (!(c1 = strchr (c, ':')))
     return ((char*) charset);
@@ -611,14 +611,14 @@ int mutt_convert_nonmime_string (char **ps)
     char *s;
     char *fromcode;
     size_t m, n;
-    size_t ulen = mutt_strlen (*ps);
+    size_t ulen = str_len (*ps);
     size_t slen;
 
     if (!u || !*u)
       return 0;
 
     c1 = strchr (c, ':');
-    n = c1 ? c1 - c : mutt_strlen (c);
+    n = c1 ? c1 - c : str_len (c);
     if (!n)
       continue;
     fromcode = safe_malloc (n + 1);

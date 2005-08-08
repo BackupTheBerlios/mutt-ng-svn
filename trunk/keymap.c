@@ -189,8 +189,8 @@ void km_bind (char *s, int menu, int op, char *macro, char *descr)
 
   map = allocKeys (len, buf);
   map->op = op;
-  map->macro = safe_strdup (macro);
-  map->descr = safe_strdup (descr);
+  map->macro = str_dup (macro);
+  map->descr = str_dup (descr);
 
   tmp = Keymaps[menu];
 
@@ -247,7 +247,7 @@ static int get_op (struct binding_t *bindings, const char *start, size_t len)
 
   for (i = 0; bindings[i].name; i++) {
     if (!ascii_strncasecmp (start, bindings[i].name, len) &&
-        mutt_strlen (bindings[i].name) == len)
+        str_len (bindings[i].name) == len)
       return bindings[i].op;
   }
 
@@ -269,7 +269,7 @@ static char *get_func (struct binding_t *bindings, int op)
 
 static void push_string (char *s)
 {
-  char *pp, *p = s + mutt_strlen (s) - 1;
+  char *pp, *p = s + str_len (s) - 1;
   size_t l;
   int i, op = OP_NULL;
 
@@ -488,7 +488,7 @@ int km_expand_key (char *s, size_t len, struct keymap_t *map)
 
   FOREVER {
     strfcpy (s, km_keyname (map->keys[p]), len);
-    len -= (l = mutt_strlen (s));
+    len -= (l = str_len (s));
 
     if (++p >= map->len || !len)
       return (1);
@@ -717,7 +717,7 @@ try_bind (char *key, int menu, char *func, struct binding_t *bindings)
   int i;
 
   for (i = 0; bindings[i].name; i++)
-    if (mutt_strcmp (func, bindings[i].name) == 0) {
+    if (str_cmp (func, bindings[i].name) == 0) {
       km_bindkey (key, menu, bindings[i].op);
       return (0);
     }
@@ -832,7 +832,7 @@ int mutt_parse_macro (BUFFER * buf, BUFFER * s, unsigned long data,
   }
   else {
     if (MoreArgs (s)) {
-      seq = safe_strdup (buf->data);
+      seq = str_dup (buf->data);
       mutt_extract_token (buf, s, M_TOKEN_CONDENSE);
 
       if (MoreArgs (s)) {
@@ -880,9 +880,9 @@ int mutt_parse_exec (BUFFER * buf, BUFFER * s, unsigned long data,
         && CurrentMenu != MENU_PAGER)
       bindings = OpGeneric;
 
-    ops[nops] = get_op (bindings, function, mutt_strlen (function));
+    ops[nops] = get_op (bindings, function, str_len (function));
     if (ops[nops] == OP_NULL && CurrentMenu != MENU_PAGER)
-      ops[nops] = get_op (OpGeneric, function, mutt_strlen (function));
+      ops[nops] = get_op (OpGeneric, function, str_len (function));
 
     if (ops[nops] == OP_NULL) {
       mutt_flushinp ();

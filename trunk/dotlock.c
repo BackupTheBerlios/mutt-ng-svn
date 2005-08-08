@@ -126,7 +126,7 @@ static int dotlock_lock (const char *);
 
 #define check_flags(a) if (a & DL_FL_ACTIONS) usage (argv[0])
 
-size_t mutt_strlen (const char* s) {
+size_t str_len (const char* s) {
   return (s ? strlen (s) : 0);
 }
 
@@ -453,7 +453,7 @@ static int dotlock_prepare (char *bn, size_t l, const char *f, int _fd)
     dirname = ".";
   }
 
-  if (mutt_strlen (basename) + 1 > l)
+  if (str_len (basename) + 1 > l)
     return -1;
 
   strfcpy (bn, basename, l);

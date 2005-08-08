@@ -94,7 +94,7 @@ int imap_parse_path (const char *path, IMAP_MBOX * mx)
   mx->account.port = ImapPort;
   mx->account.type = M_ACCT_TYPE_IMAP;
 
-  c = safe_strdup (path);
+  c = str_dup (path);
   url_parse_ciss (&url, c);
 
   if (!(url.scheme == U_IMAP || url.scheme == U_IMAPS) ||
@@ -103,7 +103,7 @@ int imap_parse_path (const char *path, IMAP_MBOX * mx)
     return -1;
   }
 
-  mx->mbox = safe_strdup (url.path);
+  mx->mbox = str_dup (url.path);
 
   if (url.scheme == U_IMAPS)
     mx->account.flags |= M_ACCT_SSL;
@@ -130,12 +130,12 @@ void imap_pretty_mailbox (char *path)
   if (imap_parse_path (path, &target) < 0)
     return;
 
-  tlen = mutt_strlen (target.mbox);
+  tlen = str_len (target.mbox);
   /* check whether we can do '=' substitution */
   if (mx_get_magic (Maildir) == M_IMAP && !imap_parse_path (Maildir, &home)) {
-    hlen = mutt_strlen (home.mbox);
+    hlen = str_len (home.mbox);
     if (tlen && mutt_account_match (&home.account, &target.account) &&
-        !safe_strncmp (home.mbox, target.mbox, hlen)) {
+        !str_ncmp (home.mbox, target.mbox, hlen)) {
       if (!hlen)
         home_match = 1;
       else
@@ -424,7 +424,7 @@ void imap_munge_mbox_name (char *dest, size_t dlen, const char *src)
 {
   char *buf;
 
-  buf = safe_strdup (src);
+  buf = str_dup (src);
   imap_utf7_encode (&buf);
 
   imap_quote_string (dest, dlen, buf);
@@ -438,10 +438,10 @@ void imap_unmunge_mbox_name (char *s)
 
   imap_unquote_string (s);
 
-  buf = safe_strdup (s);
+  buf = str_dup (s);
   if (buf) {
     imap_utf7_decode (&buf);
-    strncpy (s, buf, mutt_strlen (s));
+    strncpy (s, buf, str_len (s));
   }
 
   FREE (&buf);

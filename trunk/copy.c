@@ -72,7 +72,7 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
       /* Is it the begining of a header? */
       if (nl && buf[0] != ' ' && buf[0] != '\t') {
         ignore = 1;
-        if (!from && safe_strncmp ("From ", buf, 5) == 0) {
+        if (!from && str_ncmp ("From ", buf, 5) == 0) {
           if ((flags & CH_FROM) == 0)
             continue;
           from = 1;
@@ -146,8 +146,8 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
         if (!headers[x])
           headers[x] = this_one;
         else {
-          safe_realloc (&headers[x], mutt_strlen (headers[x]) +
-                        mutt_strlen (this_one) + sizeof (char));
+          safe_realloc (&headers[x], str_len (headers[x]) +
+                        str_len (this_one) + sizeof (char));
           strcat (headers[x], this_one);        /* __STRCAT_CHECKED__ */
           FREE (&this_one);
         }
@@ -157,7 +157,7 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
 
       ignore = 1;
       this_is_from = 0;
-      if (!from && safe_strncmp ("From ", buf, 5) == 0) {
+      if (!from && str_ncmp ("From ", buf, 5) == 0) {
         if ((flags & CH_FROM) == 0)
           continue;
         this_is_from = from = 1;
@@ -198,7 +198,7 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
       /* Find x -- the array entry where this header is to be saved */
       if (flags & CH_REORDER) {
         for (t = HeaderOrderList, x = 0; (t); t = t->next, x++) {
-          if (!ascii_strncasecmp (buf, t->data, mutt_strlen (t->data))) {
+          if (!ascii_strncasecmp (buf, t->data, str_len (t->data))) {
             debug_print (2, ("Reorder: %s matches %s\n", t->data, buf));
             break;
           }
@@ -211,10 +211,10 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
     if (!ignore) {
       debug_print (2, ("Reorder: x = %d; hdr_count = %d\n", x, hdr_count));
       if (!this_one)
-        this_one = safe_strdup (buf);
+        this_one = str_dup (buf);
       else {
         safe_realloc (&this_one,
-                      mutt_strlen (this_one) + mutt_strlen (buf) +
+                      str_len (this_one) + str_len (buf) +
                       sizeof (char));
         strcat (this_one, buf); /* __STRCAT_CHECKED__ */
       }
@@ -231,8 +231,8 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
     if (!headers[x])
       headers[x] = this_one;
     else {
-      safe_realloc (&headers[x], mutt_strlen (headers[x]) +
-                    mutt_strlen (this_one) + sizeof (char));
+      safe_realloc (&headers[x], str_len (headers[x]) +
+                    str_len (this_one) + sizeof (char));
       strcat (headers[x], this_one);    /* __STRCAT_CHECKED__ */
       FREE (&this_one);
     }
@@ -521,12 +521,12 @@ _mutt_copy_message (FILE * fpout, FILE * fpin, HEADER * hdr, BODY * body,
       char date[SHORT_STRING];
 
       mutt_make_date (date, sizeof (date));
-      date[5] = date[mutt_strlen (date) - 1] = '\"';
+      date[5] = date[str_len (date) - 1] = '\"';
 
       /* Count the number of lines and bytes to be deleted */
       fseek (fpin, body->offset, SEEK_SET);
       new_lines = hdr->lines -
-        count_delete_lines (fpin, body, &new_length, mutt_strlen (date));
+        count_delete_lines (fpin, body, &new_length, str_len (date));
 
       /* Copy the headers */
       if (mutt_copy_header (fpin, hdr, fpout,
@@ -804,7 +804,7 @@ static void format_address_header (char **h, ADDRESS * a)
 
   int l, linelen, buflen, count;
 
-  linelen = mutt_strlen (*h);
+  linelen = str_len (*h);
   buflen = linelen + 3;
 
 
@@ -817,7 +817,7 @@ static void format_address_header (char **h, ADDRESS * a)
     rfc822_write_address (buf, sizeof (buf), a, 0);
     a->next = tmp;
 
-    l = mutt_strlen (buf);
+    l = str_len (buf);
     if (count && linelen + l > 74) {
       strcpy (cbuf, "\n\t");    /* __STRCPY_CHECKED__ */
       linelen = l + 8;
@@ -835,7 +835,7 @@ static void format_address_header (char **h, ADDRESS * a)
       strcpy (c2buf, ",");      /* __STRCPY_CHECKED__ */
     }
 
-    buflen += l + mutt_strlen (cbuf) + mutt_strlen (c2buf);
+    buflen += l + str_len (cbuf) + str_len (c2buf);
     safe_realloc (h, buflen);
     strcat (*h, cbuf);          /* __STRCAT_CHECKED__ */
     strcat (*h, buf);           /* __STRCAT_CHECKED__ */

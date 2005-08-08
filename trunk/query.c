@@ -62,7 +62,7 @@ static ADDRESS *result_to_addr (QUERY * r)
   tmp = rfc822_cpy_adr (r->addr);
 
   if (!tmp->next && !tmp->personal)
-    tmp->personal = safe_strdup (r->name);
+    tmp->personal = str_dup (r->name);
 
   mutt_addrlist_to_idna (tmp, NULL);
   return tmp;
@@ -118,10 +118,10 @@ static QUERY *run_query (char *s, int quiet)
         l = mutt_strwidth (p);
         if (l > FirstColumn)
           FirstColumn = l;
-        cur->name = safe_strdup (p);
+        cur->name = str_dup (p);
         p = strtok (NULL, "\t\n");
         if (p) {
-          cur->other = safe_strdup (p);
+          cur->other = str_dup (p);
         }
       }
     }
@@ -185,7 +185,7 @@ static void query_entry (char *s, size_t slen, MUTTMENU * m, int num)
   mutt_format_string (buf2, sizeof (buf2),
                       FirstColumn + 2, FirstColumn + 2,
                       0, ' ', table[num].data->name,
-                      mutt_strlen (table[num].data->name), 0);
+                      str_len (table[num].data->name), 0);
 
   snprintf (s, slen, " %c %3d %s %-*.*s %s",
             table[num].tagged ? '*' : ' ',
@@ -444,7 +444,7 @@ static void query_menu (char *buf, size_t buflen, QUERY * results, int retbuf)
             mutt_addrlist_to_local (tmpa);
             tagged = 1;
             rfc822_write_address (buf, buflen, tmpa, 0);
-            curpos = mutt_strlen (buf);
+            curpos = str_len (buf);
             rfc822_free_address (&tmpa);
           }
           else if (curpos + 2 < buflen) {
@@ -454,7 +454,7 @@ static void query_menu (char *buf, size_t buflen, QUERY * results, int retbuf)
             strcat (buf, ", "); /* __STRCAT_CHECKED__ */
             rfc822_write_address ((char *) buf + curpos + 1,
                                   buflen - curpos - 1, tmpa, 0);
-            curpos = mutt_strlen (buf);
+            curpos = str_len (buf);
             rfc822_free_address (&tmpa);
           }
         }

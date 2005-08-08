@@ -53,7 +53,7 @@ int imap_authenticate (IMAP_DATA * idata)
 
   if (ImapAuthenticators && *ImapAuthenticators) {
     /* Try user-specified list of authentication methods */
-    methods = safe_strdup (ImapAuthenticators);
+    methods = str_dup (ImapAuthenticators);
 
     for (method = methods; method; method = delim) {
       delim = strchr (method, ':');

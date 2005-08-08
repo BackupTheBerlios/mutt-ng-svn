@@ -101,8 +101,8 @@ imap_auth_res_t imap_auth_cram_md5 (IMAP_DATA * idata, const char *method)
    */
 
   mutt_to_base64 ((unsigned char *) ibuf, (unsigned char *) obuf,
-                  mutt_strlen (obuf), sizeof (ibuf) - 2);
-  safe_strcat (ibuf, sizeof (ibuf), "\r\n");
+                  str_len (obuf), sizeof (ibuf) - 2);
+  str_cat (ibuf, sizeof (ibuf), "\r\n");
   mutt_socket_write (idata->conn, ibuf);
 
   do
@@ -134,8 +134,8 @@ static void hmac_md5 (const char *password, char *challenge,
   unsigned int secret_len, chal_len;
   int i;
 
-  secret_len = mutt_strlen (password);
-  chal_len = mutt_strlen (challenge);
+  secret_len = str_len (password);
+  chal_len = str_len (challenge);
 
   /* passwords longer than MD5_BLOCK_LEN bytes are substituted with their MD5
    * digests */

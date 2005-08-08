@@ -232,10 +232,10 @@ bail:
 void imap_utf7_encode (char **s)
 {
   if (Charset) {
-    char *t = safe_strdup (*s);
+    char *t = str_dup (*s);
 
     if (!mutt_convert_string (&t, Charset, "UTF-8", 0))
-      utf8_to_utf7 (t, mutt_strlen (t), s, 0);
+      utf8_to_utf7 (t, str_len (t), s, 0);
     FREE (&t);
   }
 }
@@ -243,7 +243,7 @@ void imap_utf7_encode (char **s)
 void imap_utf7_decode (char **s)
 {
   if (Charset) {
-    char *t = utf7_to_utf8 (*s, mutt_strlen (*s), 0, 0);
+    char *t = utf7_to_utf8 (*s, str_len (*s), 0, 0);
 
     if (t && !mutt_convert_string (&t, "UTF-8", Charset, 0)) {
       FREE (s);

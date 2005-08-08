@@ -241,7 +241,7 @@ static const char *status_format_str (char *buf, size_t buflen, char op,
 
       if (!StChars)
         buf[0] = 0;
-      else if (i >= mutt_strlen (StChars))
+      else if (i >= str_len (StChars))
         buf[0] = StChars[0];
       else
         buf[0] = StChars[i];

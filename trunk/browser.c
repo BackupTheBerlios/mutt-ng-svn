@@ -91,7 +91,7 @@ static int browser_compare_subject (const void *a, const void *b)
   struct folder_file *pa = (struct folder_file *) a;
   struct folder_file *pb = (struct folder_file *) b;
 
-  int r = safe_strcoll (pa->name, pb->name);
+  int r = str_coll (pa->name, pb->name);
 
   return ((BrowserSort & SORT_REVERSE) ? -r : r);
 }
@@ -442,8 +442,8 @@ static void add_folder (MUTTMENU * m, struct browser_state *state,
   }
 
   (state->entry)[state->entrylen].new = new;
-  (state->entry)[state->entrylen].name = safe_strdup (name);
-  (state->entry)[state->entrylen].desc = safe_strdup (name);
+  (state->entry)[state->entrylen].name = str_dup (name);
+  (state->entry)[state->entrylen].desc = str_dup (name);
 #ifdef USE_IMAP
   (state->entry)[state->entrylen].imap = 0;
 #endif
@@ -485,7 +485,7 @@ static int examine_directory (MUTTMENU * menu, struct browser_state *state,
       if (!(data = (NNTP_DATA *) tmp->data))
         continue;
       if (prefix && *prefix && strncmp (prefix, data->group,
-                                        mutt_strlen (prefix)) != 0)
+                                        str_len (prefix)) != 0)
         continue;
       if (!((regexec (Mask.rx, data->group, 0, NULL, 0) == 0) ^ Mask.not))
         continue;
@@ -530,11 +530,11 @@ static int examine_directory (MUTTMENU * menu, struct browser_state *state,
     init_state (state, menu);
 
     while ((de = readdir (dp)) != NULL) {
-      if (mutt_strcmp (de->d_name, ".") == 0)
+      if (str_cmp (de->d_name, ".") == 0)
         continue;               /* we don't need . */
 
       if (prefix && *prefix
-          && safe_strncmp (prefix, de->d_name, mutt_strlen (prefix)) != 0)
+          && str_ncmp (prefix, de->d_name, str_len (prefix)) != 0)
         continue;
       if (!((regexec (Mask.rx, de->d_name, 0, NULL, 0) == 0) ^ Mask.not))
         continue;
@@ -775,7 +775,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
     }
     else {
 #endif
-      for (i = mutt_strlen (f) - 1; i > 0 && f[i] != '/'; i--);
+      for (i = str_len (f) - 1; i > 0 && f[i] != '/'; i--);
       if (i > 0) {
         if (f[0] == '/') {
           if (i > sizeof (LastDir) - 1)
@@ -785,8 +785,8 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
         }
         else {
           getcwd (LastDir, sizeof (LastDir));
-          safe_strcat (LastDir, sizeof (LastDir), "/");
-          safe_strncat (LastDir, sizeof (LastDir), f, i);
+          str_cat (LastDir, sizeof (LastDir), "/");
+          str_ncat (LastDir, sizeof (LastDir), f, i);
         }
       }
       else {
@@ -891,8 +891,8 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
           /* save the old directory */
           strfcpy (OldLastDir, LastDir, sizeof (OldLastDir));
 
-          if (mutt_strcmp (state.entry[menu->current].name, "..") == 0) {
-            if (mutt_strcmp ("..", LastDir + mutt_strlen (LastDir) - 2) == 0)
+          if (str_cmp (state.entry[menu->current].name, "..") == 0) {
+            if (str_cmp ("..", LastDir + str_len (LastDir) - 2) == 0)
               strcat (LastDir, "/..");  /* __STRCAT_CHECKED__ */
             else {
               char *p = strrchr (LastDir + 1, '/');
@@ -920,7 +920,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
             strfcpy (LastDir, state.entry[menu->current].name,
                      sizeof (LastDir));
             /* tack on delimiter here */
-            n = mutt_strlen (LastDir) + 1;
+            n = str_len (LastDir) + 1;
 
             /* special case "" needs no delimiter */
             url_parse_ciss (&url, state.entry[menu->current].name);
@@ -1004,7 +1004,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
             if (ff.tagged) {
               mutt_concat_path (full, LastDir, ff.name, sizeof (full));
               mutt_expand_path (full, sizeof (full));
-              tfiles[j++] = safe_strdup (full);
+              tfiles[j++] = str_dup (full);
             }
           }
           *files = tfiles;
@@ -1013,7 +1013,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
           *numfiles = 1;
           tfiles = safe_calloc (*numfiles, sizeof (char *));
           mutt_expand_path (f, flen);
-          tfiles[0] = safe_strdup (f);
+          tfiles[0] = str_dup (f);
           *files = tfiles;
         }
       }
@@ -1125,7 +1125,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
 #endif
       {
         /* add '/' at the end of the directory name if not already there */
-        int len = mutt_strlen (LastDir);
+        int len = str_len (LastDir);
 
         if (len && LastDir[len - 1] != '/' && sizeof (buf) > len)
           buf[len] = '/';
@@ -1388,7 +1388,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
 	    mutt_FormatString (buffer, sizeof (buffer), NONULL(GroupFormat),
 		  newsgroup_format_str, (unsigned long) &folder,
 		  M_FORMAT_ARROWCURSOR);
-	    f->desc = safe_strdup (buffer); */
+	    f->desc = str_dup (buffer); */
           if (menu->current + 1 < menu->max)
             menu->current++;
           menu->redraw = REDRAW_MOTION_RESYNCH;
@@ -1486,7 +1486,7 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
 		mutt_FormatString (buffer, sizeof (buffer), NONULL(GroupFormat),
 			newsgroup_format_str, (unsigned long) &folder,
 			M_FORMAT_ARROWCURSOR);
-		f->desc = safe_strdup (buffer);
+		f->desc = str_dup (buffer);
 	      } */
           }
           if (i == OP_BROWSER_SUBSCRIBE || i == OP_BROWSER_UNSUBSCRIBE) {

@@ -349,7 +349,7 @@ int imap_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
 
   cache->uid = HEADER_DATA (h)->uid;
   mutt_mktemp (path);
-  cache->path = safe_strdup (path);
+  cache->path = str_dup (path);
   if (!(msg->fp = safe_fopen (path, "w+"))) {
     FREE (&cache->path);
     return -1;
@@ -754,8 +754,8 @@ void imap_add_keywords (char *s, HEADER * h, LIST * mailbox_flags,
 
   while (keywords) {
     if (msg_has_flag (mailbox_flags, keywords->data)) {
-      safe_strcat (s, slen, keywords->data);
-      safe_strcat (s, slen, " ");
+      str_cat (s, slen, keywords->data);
+      str_cat (s, slen, " ");
     }
     keywords = keywords->next;
   }
@@ -878,7 +878,7 @@ static int msg_fetch_header (CONTEXT * ctx, IMAP_HEADER * h, char *buf,
 #if USE_HCACHE
 static size_t imap_hcache_keylen (const char *fn)
 {
-  return mutt_strlen (fn);
+  return str_len (fn);
 }
 
 /* msg_fetch_header: import IMAP FETCH response into an IMAP_HEADER.
@@ -934,7 +934,7 @@ static int msg_has_flag (LIST * flag_list, const char *flag)
 
   flag_list = flag_list->next;
   while (flag_list) {
-    if (!ascii_strncasecmp (flag_list->data, flag, mutt_strlen (flag_list->data)))
+    if (!ascii_strncasecmp (flag_list->data, flag, str_len (flag_list->data)))
       return 1;
 
     flag_list = flag_list->next;

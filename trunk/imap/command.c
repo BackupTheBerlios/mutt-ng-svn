@@ -70,7 +70,7 @@ int imap_cmd_start (IMAP_DATA * idata, const char *cmd)
 
   cmd_make_sequence (idata);
   /* seq, space, cmd, \r\n\0 */
-  outlen = mutt_strlen (idata->cmd.seq) + mutt_strlen (cmd) + 4;
+  outlen = str_len (idata->cmd.seq) + str_len (cmd) + 4;
   out = (char *) safe_malloc (outlen);
   snprintf (out, outlen, "%s %s\r\n", idata->cmd.seq, cmd);
 
@@ -182,7 +182,7 @@ int imap_exec (IMAP_DATA * idata, const char *cmd, int flags)
   /* create sequence for command */
   cmd_make_sequence (idata);
   /* seq, space, cmd, \r\n\0 */
-  outlen = mutt_strlen (idata->cmd.seq) + mutt_strlen (cmd) + 4;
+  outlen = str_len (idata->cmd.seq) + str_len (cmd) + 4;
   out = (char *) safe_malloc (outlen);
   snprintf (out, outlen, "%s %s\r\n", idata->cmd.seq, cmd);
 
@@ -395,7 +395,7 @@ static void cmd_parse_capabilities (IMAP_DATA * idata, char *s)
 
   s = imap_next_word (s);
   FREE (&idata->capstr);
-  idata->capstr = safe_strdup (s);
+  idata->capstr = str_dup (s);
 
   memset (idata->capabilities, 0, sizeof (idata->capabilities));
 

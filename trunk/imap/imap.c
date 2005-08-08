@@ -550,11 +550,11 @@ int imap_open_mailbox (CONTEXT * ctx)
   /* Clean up path and replace the one in the ctx */
   imap_fix_path (idata, mx.mbox, buf, sizeof (buf));
   FREE (&(idata->mailbox));
-  idata->mailbox = safe_strdup (buf);
+  idata->mailbox = str_dup (buf);
   imap_qualify_path (buf, sizeof (buf), &mx, idata->mailbox);
 
   FREE (&(ctx->path));
-  ctx->path = safe_strdup (buf);
+  ctx->path = str_dup (buf);
 
   idata->ctx = ctx;
 
@@ -781,7 +781,7 @@ static void imap_set_flag (IMAP_DATA * idata, int aclbit, int flag,
 {
   if (mutt_bit_isset (idata->rights, aclbit))
     if (flag)
-      safe_strcat (flags, flsize, str);
+      str_cat (flags, flsize, str);
 }
 
 /* imap_make_msg_set: make an IMAP4rev1 UID message set out of a set of
@@ -1170,9 +1170,9 @@ int imap_mailbox_check (char *path, int new)
    * command on a mailbox that you have selected 
    */
 
-  if (mutt_strcmp (mbox_unquoted, idata->mailbox) == 0
+  if (str_cmp (mbox_unquoted, idata->mailbox) == 0
       || (ascii_strcasecmp (mbox_unquoted, "INBOX") == 0
-          && safe_strcasecmp (mbox_unquoted, idata->mailbox) == 0)) {
+          && str_casecmp (mbox_unquoted, idata->mailbox) == 0)) {
     strfcpy (buf, "NOOP", sizeof (buf));
   }
   else if (mutt_bit_isset (idata->capabilities, IMAP4REV1) ||
@@ -1197,8 +1197,8 @@ int imap_mailbox_check (char *path, int new)
       /* The mailbox name may or may not be quoted here. We could try to 
        * munge the server response and compare with quoted (or vise versa)
        * but it is probably more efficient to just strncmp against both. */
-      if (safe_strncmp (mbox_unquoted, s, mutt_strlen (mbox_unquoted)) == 0
-          || safe_strncmp (mbox, s, mutt_strlen (mbox)) == 0) {
+      if (str_ncmp (mbox_unquoted, s, str_len (mbox_unquoted)) == 0
+          || str_ncmp (mbox, s, str_len (mbox)) == 0) {
         s = imap_next_word (s);
         s = imap_next_word (s);
         if (isdigit ((unsigned char) *s)) {
@@ -1353,12 +1353,12 @@ static int imap_complete_hosts (char *dest, size_t len) {
   int matchlen;
   int i = 0;
 
-  matchlen = mutt_strlen (dest);
+  matchlen = str_len (dest);
   if (list_empty (Incoming))
     return (-1);
   for (i = 0; i < Incoming->length; i++) {
     mailbox = (BUFFY*) Incoming->data[i];
-    if (!safe_strncmp (dest, mailbox->path, matchlen)) {
+    if (!str_ncmp (dest, mailbox->path, matchlen)) {
       if (rc) {
         strfcpy (dest, mailbox->path, len);
         rc = 0;
@@ -1379,7 +1379,7 @@ static int imap_complete_hosts (char *dest, size_t len) {
     url.user = NULL;
     url.path = NULL;
     url_ciss_tostring (&url, urlstr, sizeof (urlstr), 0);
-    if (!safe_strncmp (dest, urlstr, matchlen)) {
+    if (!str_ncmp (dest, urlstr, matchlen)) {
       if (rc) {
         strfcpy (dest, urlstr, len);
         rc = 0;
@@ -1447,14 +1447,14 @@ int imap_complete (char *dest, size_t dlen, char *path) {
       /* if the folder isn't selectable, append delimiter to force browse
        * to enter it on second tab. */
       if (noselect) {
-        clen = mutt_strlen (list_word);
+        clen = str_len (list_word);
         list_word[clen++] = delim;
         list_word[clen] = '\0';
       }
       /* copy in first word */
       if (!completions) {
         strfcpy (completion, list_word, sizeof (completion));
-        matchlen = mutt_strlen (completion);
+        matchlen = str_len (completion);
         completions++;
         continue;
       }

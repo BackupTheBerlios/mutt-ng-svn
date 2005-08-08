@@ -386,7 +386,7 @@ int mutt_is_application_smime (BODY * m)
 
     /* no .p7c, .p10 support yet. */
 
-    len = mutt_strlen (t) - 4;
+    len = str_len (t) - 4;
     if (len > 0 && *(t + len) == '.') {
       len++;
       if (!ascii_strcasecmp ((t + len), "p7m"))
@@ -528,7 +528,7 @@ void convert_to_7bit (BODY * a)
         convert_to_7bit (a->parts);
     }
     else if (a->type == TYPEMESSAGE &&
-             safe_strcasecmp (a->subtype, "delivery-status")) {
+             str_casecmp (a->subtype, "delivery-status")) {
       if (a->encoding != ENC7BIT)
         mutt_message_to_7bit (a, NULL);
     }
@@ -755,7 +755,7 @@ void mutt_signed_handler (BODY * a, STATE * s)
   /* consistency check */
 
   if (!(a && a->next && a->next->type == protocol_major &&
-        !safe_strcasecmp (a->next->subtype, protocol_minor))) {
+        !str_casecmp (a->next->subtype, protocol_minor))) {
     state_attach_puts (_("[-- Error: "
                          "Inconsistent multipart/signed structure! --]\n\n"),
                        s);
@@ -766,13 +766,13 @@ void mutt_signed_handler (BODY * a, STATE * s)
 
   if ((WithCrypto & APPLICATION_PGP)
       && protocol_major == TYPEAPPLICATION
-      && !safe_strcasecmp (protocol_minor, "pgp-signature"));
+      && !str_casecmp (protocol_minor, "pgp-signature"));
   else if ((WithCrypto & APPLICATION_SMIME)
            && protocol_major == TYPEAPPLICATION
-           && !(safe_strcasecmp (protocol_minor, "x-pkcs7-signature")
-                && safe_strcasecmp (protocol_minor, "pkcs7-signature")));
+           && !(str_casecmp (protocol_minor, "x-pkcs7-signature")
+                && str_casecmp (protocol_minor, "pkcs7-signature")));
   else if (protocol_major == TYPEMULTIPART
-           && !safe_strcasecmp (protocol_minor, "mixed"));
+           && !str_casecmp (protocol_minor, "mixed"));
   else {
     state_printf (s, _("[-- Error: "
                        "Unknown multipart/signed protocol %s! --]\n\n"),
@@ -791,7 +791,7 @@ void mutt_signed_handler (BODY * a, STATE * s)
         for (i = 0; i < sigcnt; i++) {
           if ((WithCrypto & APPLICATION_PGP)
               && signatures[i]->type == TYPEAPPLICATION
-              && !safe_strcasecmp (signatures[i]->subtype, "pgp-signature")) {
+              && !str_casecmp (signatures[i]->subtype, "pgp-signature")) {
             if (crypt_pgp_verify_one (signatures[i], s, tempfile) != 0)
               goodsig = 0;
 
@@ -801,8 +801,8 @@ void mutt_signed_handler (BODY * a, STATE * s)
           if ((WithCrypto & APPLICATION_SMIME)
               && signatures[i]->type == TYPEAPPLICATION
               &&
-              (!safe_strcasecmp (signatures[i]->subtype, "x-pkcs7-signature")
-               || !safe_strcasecmp (signatures[i]->subtype,
+              (!str_casecmp (signatures[i]->subtype, "x-pkcs7-signature")
+               || !str_casecmp (signatures[i]->subtype,
                                     "pkcs7-signature"))) {
             if (crypt_smime_verify_one (signatures[i], s, tempfile) != 0)
               goodsig = 0;

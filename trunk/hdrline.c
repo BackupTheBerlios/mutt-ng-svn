@@ -587,7 +587,7 @@ static const char *hdr_format_str (char *dest,
     snprintf (dest, destlen, fmt,
               (Tochars
                && ((i = mutt_user_is_recipient (hdr))) <
-               mutt_strlen (Tochars)) ? Tochars[i] : ' ');
+               str_len (Tochars)) ? Tochars[i] : ' ');
     break;
 
   case 'u':
@@ -659,7 +659,7 @@ static const char *hdr_format_str (char *dest,
                                                     ((i =
                                                       mutt_user_is_recipient
                                                       (hdr)) <
-                                                     mutt_strlen (Tochars)) ?
+                                                     str_len (Tochars)) ?
                                                     Tochars[i] : ' ')));
     mutt_format_s (dest, destlen, prefix, buf2);
     break;
@@ -683,7 +683,7 @@ static const char *hdr_format_str (char *dest,
                && (hdr->thread->parent && hdr->thread->parent->message
                    && hdr->thread->parent->message->env->x_label))
         htmp = hdr->thread->parent->message;
-      if (htmp && safe_strcasecmp (hdr->env->x_label,
+      if (htmp && str_casecmp (hdr->env->x_label,
                                    htmp->env->x_label) == 0)
         i = 0;
     }

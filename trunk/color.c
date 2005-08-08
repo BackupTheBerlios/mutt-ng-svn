@@ -295,13 +295,13 @@ parse_color_name (const char *s, int *col, int *attr, int brite, BUFFER * err)
 {
   char *eptr;
 
-  if (safe_strncasecmp (s, "bright", 6) == 0) {
+  if (str_ncasecmp (s, "bright", 6) == 0) {
     *attr |= brite;
     s += 6;
   }
 
   /* allow aliases for xterm color resources */
-  if (safe_strncasecmp (s, "color", 5) == 0) {
+  if (str_ncasecmp (s, "color", 5) == 0) {
     s += 5;
     *col = strtol (s, &eptr, 10);
     if (!*s || *eptr || *col < 0 ||
@@ -361,7 +361,7 @@ _mutt_parse_uncolor (BUFFER * buf, BUFFER * s, unsigned long data,
     return (-1);
   }
 
-  if (safe_strncmp (buf->data, "index", 5) != 0) {
+  if (str_ncmp (buf->data, "index", 5) != 0) {
     snprintf (err->data, err->dsize,
               _("%s: command valid only for index object"),
               parse_uncolor ? "uncolor" : "unmono");
@@ -399,7 +399,7 @@ _mutt_parse_uncolor (BUFFER * buf, BUFFER * s, unsigned long data,
 
   do {
     mutt_extract_token (buf, s, 0);
-    if (!mutt_strcmp ("*", buf->data)) {
+    if (!str_cmp ("*", buf->data)) {
       for (tmp = ColorIndexList; tmp;) {
         if (!do_cache)
           do_cache = 1;
@@ -412,7 +412,7 @@ _mutt_parse_uncolor (BUFFER * buf, BUFFER * s, unsigned long data,
     else {
       for (last = NULL, tmp = ColorIndexList; tmp;
            last = tmp, tmp = tmp->next) {
-        if (!mutt_strcmp (buf->data, tmp->pattern)) {
+        if (!str_cmp (buf->data, tmp->pattern)) {
           if (!do_cache)
             do_cache = 1;
           debug_print (1, ("Freeing pattern \"%s\" from ColorIndexList\n", tmp->pattern));
@@ -454,11 +454,11 @@ add_pattern (COLOR_LINE ** top, const char *s, int sensitive,
 
   while (tmp) {
     if (sensitive) {
-      if (mutt_strcmp (s, tmp->pattern) == 0)
+      if (str_cmp (s, tmp->pattern) == 0)
         break;
     }
     else {
-      if (safe_strcasecmp (s, tmp->pattern) == 0)
+      if (str_casecmp (s, tmp->pattern) == 0)
         break;
     }
     tmp = tmp->next;
@@ -507,7 +507,7 @@ add_pattern (COLOR_LINE ** top, const char *s, int sensitive,
       return (-1);
     }
     tmp->next = *top;
-    tmp->pattern = safe_strdup (s);
+    tmp->pattern = str_dup (s);
 #ifdef HAVE_COLOR
     if (fg != -1 && bg != -1) {
       tmp->fg = fg;
@@ -534,7 +534,7 @@ parse_object (BUFFER * buf, BUFFER * s, int *o, int *ql, BUFFER * err)
   }
 
   mutt_extract_token (buf, s, 0);
-  if (!safe_strncmp (buf->data, "quoted", 6)) {
+  if (!str_ncmp (buf->data, "quoted", 6)) {
     if (buf->data[6]) {
       *ql = strtol (buf->data + 6, &eptr, 10);
       if (*eptr || q_level < 0) {

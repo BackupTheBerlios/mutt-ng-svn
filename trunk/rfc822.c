@@ -205,11 +205,11 @@ static const char *parse_address (const char *s,
   }
 
   terminate_string (token, *tokenlen, tokenmax);
-  addr->mailbox = safe_strdup (token);
+  addr->mailbox = str_dup (token);
 
   if (*commentlen && !addr->personal) {
     terminate_string (comment, *commentlen, commentmax);
-    addr->personal = safe_strdup (comment);
+    addr->personal = str_dup (comment);
   }
 
   return s;
@@ -254,7 +254,7 @@ static const char *parse_route_addr (const char *s,
   }
 
   if (!addr->mailbox)
-    addr->mailbox = safe_strdup ("@");
+    addr->mailbox = str_dup ("@");
 
   s++;
   return s;
@@ -322,7 +322,7 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS * top, const char *s)
       }
       else if (commentlen && last && !last->personal) {
         terminate_buffer (comment, commentlen);
-        last->personal = safe_strdup (comment);
+        last->personal = str_dup (comment);
       }
 
       commentlen = 0;
@@ -345,7 +345,7 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS * top, const char *s)
     else if (*s == ':') {
       cur = rfc822_new_address ();
       terminate_buffer (phrase, phraselen);
-      cur->mailbox = safe_strdup (phrase);
+      cur->mailbox = str_dup (phrase);
       cur->group = 1;
 
       if (last)
@@ -368,7 +368,7 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS * top, const char *s)
       }
       else if (commentlen && last && !last->personal) {
         terminate_buffer (comment, commentlen);
-        last->personal = safe_strdup (comment);
+        last->personal = str_dup (comment);
       }
 
       /* add group terminator */
@@ -392,7 +392,7 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS * top, const char *s)
           FREE (&cur->personal);
         /* if we get something like "Michael R. Elkins" remove the quotes */
         rfc822_dequote_comment (phrase);
-        cur->personal = safe_strdup (phrase);
+        cur->personal = str_dup (phrase);
       }
       if ((ps =
            parse_route_addr (s + 1, comment, &commentlen,
@@ -434,7 +434,7 @@ ADDRESS *rfc822_parse_adrlist (ADDRESS * top, const char *s)
   }
   else if (commentlen && last && !last->personal) {
     terminate_buffer (comment, commentlen);
-    last->personal = safe_strdup (comment);
+    last->personal = str_dup (comment);
   }
 
   return top;
@@ -446,7 +446,7 @@ void rfc822_qualify (ADDRESS * addr, const char *host)
 
   for (; addr; addr = addr->next)
     if (!addr->group && addr->mailbox && strchr (addr->mailbox, '@') == NULL) {
-      p = safe_malloc (mutt_strlen (addr->mailbox) + mutt_strlen (host) + 2);
+      p = safe_malloc (str_len (addr->mailbox) + str_len (host) + 2);
       sprintf (p, "%s@%s", addr->mailbox, host);        /* __SPRINTF_CHECKED__ */
       FREE (&addr->mailbox);
       addr->mailbox = p;
@@ -516,7 +516,7 @@ void rfc822_write_address_single (char *buf, size_t buflen, ADDRESS * addr,
       if (!buflen)
         goto done;
       strfcpy (pbuf, addr->personal, buflen);
-      len = mutt_strlen (pbuf);
+      len = str_len (pbuf);
       pbuf += len;
       buflen -= len;
     }
@@ -539,11 +539,11 @@ void rfc822_write_address_single (char *buf, size_t buflen, ADDRESS * addr,
       goto done;
     if (ascii_strcmp (addr->mailbox, "@") && !display) {
       strfcpy (pbuf, addr->mailbox, buflen);
-      len = mutt_strlen (pbuf);
+      len = str_len (pbuf);
     }
     else if (ascii_strcmp (addr->mailbox, "@") && display) {
       strfcpy (pbuf, mutt_addr_for_display (addr), buflen);
-      len = mutt_strlen (pbuf);
+      len = str_len (pbuf);
     }
     else {
       *pbuf = '\0';
@@ -587,7 +587,7 @@ void rfc822_write_address (char *buf, size_t buflen, ADDRESS * addr,
                            int display)
 {
   char *pbuf = buf;
-  size_t len = mutt_strlen (buf);
+  size_t len = str_len (buf);
 
   buflen--;                     /* save room for the terminal nul */
 
@@ -614,7 +614,7 @@ void rfc822_write_address (char *buf, size_t buflen, ADDRESS * addr,
 
     /* this should be safe since we always have at least 1 char passed into
        the above call, which means `pbuf' should always be nul terminated */
-    len = mutt_strlen (pbuf);
+    len = str_len (pbuf);
     pbuf += len;
     buflen -= len;
 
@@ -640,8 +640,8 @@ ADDRESS *rfc822_cpy_adr_real (ADDRESS * addr)
 {
   ADDRESS *p = rfc822_new_address ();
 
-  p->personal = safe_strdup (addr->personal);
-  p->mailbox = safe_strdup (addr->mailbox);
+  p->personal = str_dup (addr->personal);
+  p->mailbox = str_dup (addr->mailbox);
   p->group = addr->group;
   return p;
 }

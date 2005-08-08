@@ -16,7 +16,7 @@
 rx_t *rx_compile (const char *s, int flags) {
   rx_t *pp = safe_calloc (1, sizeof (rx_t));
 
-  pp->pattern = safe_strdup (s);
+  pp->pattern = str_dup (s);
   pp->rx = safe_calloc (1, sizeof (regex_t));
   if (REGCOMP(pp->rx, NONULL (s), flags) != 0)
     rx_free (&pp);
@@ -32,7 +32,7 @@ void rx_free (rx_t** p) {
 }
 
 int rx_compare (const rx_t* r1, const rx_t* r2) {
-  return (mutt_strcmp (r1->pattern, r2->pattern));
+  return (str_cmp (r1->pattern, r2->pattern));
 }
 
 int rx_list_match (list2_t* l, const char* pat) {
@@ -50,7 +50,7 @@ int rx_lookup (list2_t* l, const char* pat) {
   if (!pat || !*pat || list_empty(l))
     return (-1);
   for (i = 0; i < l->length; i++)
-    if (mutt_strcmp (((rx_t*) l->data[i])->pattern, pat) == 0)
+    if (str_cmp (((rx_t*) l->data[i])->pattern, pat) == 0)
       return (i);
   return (-1);
 }

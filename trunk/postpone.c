@@ -328,10 +328,10 @@ int mutt_get_postponed (CONTEXT * ctx, HEADER * hdr, HEADER ** cur, char *fcc,
       tmp = next;
     }
     else if ((WithCrypto & APPLICATION_PGP)
-             && (safe_strncmp ("Pgp:", tmp->data, 4) == 0       /* this is generated
+             && (str_ncmp ("Pgp:", tmp->data, 4) == 0       /* this is generated
                                                                  * by old mutt versions
                                                                  */
-                 || safe_strncmp ("X-Mutt-PGP:", tmp->data, 11) == 0)) {
+                 || str_ncmp ("X-Mutt-PGP:", tmp->data, 11) == 0)) {
       hdr->security = mutt_parse_crypt_hdr (strchr (tmp->data, ':') + 1, 1);
       hdr->security |= APPLICATION_PGP;
 
@@ -346,7 +346,7 @@ int mutt_get_postponed (CONTEXT * ctx, HEADER * hdr, HEADER ** cur, char *fcc,
       tmp = next;
     }
     else if ((WithCrypto & APPLICATION_SMIME)
-             && safe_strncmp ("X-Mutt-SMIME:", tmp->data, 13) == 0) {
+             && str_ncmp ("X-Mutt-SMIME:", tmp->data, 13) == 0) {
       hdr->security = mutt_parse_crypt_hdr (strchr (tmp->data, ':') + 1, 1);
       hdr->security |= APPLICATION_SMIME;
 
@@ -362,7 +362,7 @@ int mutt_get_postponed (CONTEXT * ctx, HEADER * hdr, HEADER ** cur, char *fcc,
     }
 
 #ifdef MIXMASTER
-    else if (safe_strncmp ("X-Mutt-Mix:", tmp->data, 11) == 0) {
+    else if (str_ncmp ("X-Mutt-Mix:", tmp->data, 11) == 0) {
       char *t;
 
       mutt_free_list (&hdr->chain);
@@ -606,7 +606,7 @@ int mutt_prepare_template (FILE * fp, CONTEXT * ctx, HEADER * newhdr,
     file[0] = '\0';
     if (b->filename) {
       strfcpy (file, b->filename, sizeof (file));
-      b->d_filename = safe_strdup (b->filename);
+      b->d_filename = str_dup (b->filename);
     }
     else {
       /* avoid Content-Disposition: header with temporary filename */

@@ -124,7 +124,7 @@ static int fetch_uidl (char *line, void *data)
 
   sscanf (line, "%d %s", &index, line);
   for (i = 0; i < ctx->msgcount; i++)
-    if (!mutt_strcmp (line, ctx->hdrs[i]->data))
+    if (!str_cmp (line, ctx->hdrs[i]->data))
       break;
 
   if (i == ctx->msgcount) {
@@ -135,7 +135,7 @@ static int fetch_uidl (char *line, void *data)
 
     ctx->msgcount++;
     ctx->hdrs[i] = mutt_new_header ();
-    ctx->hdrs[i]->data = safe_strdup (line);
+    ctx->hdrs[i]->data = str_dup (line);
   }
   else if (ctx->hdrs[i]->index != index - 1)
     pop_data->clear_cache = 1;
@@ -241,7 +241,7 @@ int pop_open_mailbox (CONTEXT * ctx)
     return -1;
 
   FREE (&ctx->path);
-  ctx->path = safe_strdup (buf);
+  ctx->path = str_dup (buf);
 
   pop_data = safe_calloc (1, sizeof (POP_DATA));
   pop_data->conn = conn;
@@ -396,7 +396,7 @@ int pop_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
    * portion of the headers, those required for the main display.
    */
   cache->index = h->index;
-  cache->path = safe_strdup (path);
+  cache->path = str_dup (path);
   rewind (msg->fp);
   uidl = h->data;
   mutt_free_envelope (&h->env);

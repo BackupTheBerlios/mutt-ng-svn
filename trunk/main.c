@@ -799,7 +799,7 @@ int main (int argc, char **argv)
       }
 
       if (subject)
-        msg->env->subject = safe_strdup (subject);
+        msg->env->subject = str_dup (subject);
 
       if (includeFile)
         infile = includeFile;
@@ -807,7 +807,7 @@ int main (int argc, char **argv)
 
     if (infile || bodytext) {
       if (infile) {
-        if (mutt_strcmp ("-", infile) == 0)
+        if (str_cmp ("-", infile) == 0)
           fin = stdin;
         else {
           char path[_POSIX_PATH_MAX];
@@ -826,7 +826,7 @@ int main (int argc, char **argv)
         fin = NULL;
 
       mutt_mktemp (buf);
-      tempfile = safe_strdup (buf);
+      tempfile = str_dup (buf);
 
       if (draftFile)
         msg->env = mutt_read_rfc822_header (fin, NULL, 1, 0);

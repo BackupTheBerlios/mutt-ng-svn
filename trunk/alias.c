@@ -29,7 +29,7 @@ ADDRESS *mutt_lookup_alias (const char *s)
   ALIAS *t = Aliases;
 
   for (; t; t = t->next)
-    if (!safe_strcasecmp (s, t->name))
+    if (!str_casecmp (s, t->name))
       return (t->addr);
   return (NULL);                /* no such alias */
 }
@@ -49,7 +49,7 @@ static ADDRESS *mutt_expand_aliases_r (ADDRESS * a, LIST ** expn)
       if (t) {
         i = 0;
         for (u = *expn; u; u = u->next) {
-          if (mutt_strcmp (a->mailbox, u->data) == 0) { /* alias already found */
+          if (str_cmp (a->mailbox, u->data) == 0) { /* alias already found */
             debug_print(1, ("loop in alias found for '%s'\n", a->mailbox));
             i = 1;
             break;
@@ -58,7 +58,7 @@ static ADDRESS *mutt_expand_aliases_r (ADDRESS * a, LIST ** expn)
 
         if (!i) {
           u = safe_malloc (sizeof (LIST));
-          u->data = safe_strdup (a->mailbox);
+          u->data = str_dup (a->mailbox);
           u->next = *expn;
           *expn = u;
           w = rfc822_cpy_adr (t);
@@ -240,7 +240,7 @@ retry_name:
 
   new = safe_calloc (1, sizeof (ALIAS));
   new->self = new;
-  new->name = safe_strdup (buf);
+  new->name = str_dup (buf);
 
   mutt_addrlist_to_local (adr);
 
@@ -276,7 +276,7 @@ retry_name:
     mutt_free_alias (&new);
     return;
   }
-  new->addr->personal = safe_strdup (buf);
+  new->addr->personal = str_dup (buf);
 
   buf[0] = 0;
   rfc822_write_address (buf, sizeof (buf), new->addr, 1);
@@ -392,7 +392,7 @@ int mutt_alias_complete (char *s, size_t buflen)
       if (a->name && strstr (a->name, s) == a->name) {
         if (!bestname[0])       /* init */
           strfcpy (bestname, a->name,
-                   min (mutt_strlen (a->name) + 1, sizeof (bestname)));
+                   min (str_len (a->name) + 1, sizeof (bestname)));
         else {
           for (i = 0; a->name[i] && a->name[i] == bestname[i]; i++);
           bestname[i] = 0;
@@ -402,9 +402,9 @@ int mutt_alias_complete (char *s, size_t buflen)
     }
 
     if (bestname[0] != 0) {
-      if (mutt_strcmp (bestname, s) != 0) {
+      if (str_cmp (bestname, s) != 0) {
         /* we are adding something to the completion */
-        strfcpy (s, bestname, mutt_strlen (bestname) + 1);
+        strfcpy (s, bestname, str_len (bestname) + 1);
         return 1;
       }
 

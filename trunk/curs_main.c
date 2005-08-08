@@ -957,7 +957,7 @@ int mutt_index_menu (void)
           unset_option (OPTHIDEREAD);
         }
         FREE (&Context->pattern);
-        Context->pattern = safe_strdup (buf);
+        Context->pattern = str_dup (buf);
       }
       if ((op == OP_TOGGLE_READ && mutt_pattern_func (M_LIMIT, NULL) == 0) ||
           mutt_pattern_func (M_LIMIT, _("Limit to messages matching: ")) == 0)
@@ -2165,7 +2165,7 @@ int mutt_index_menu (void)
         sleep (2);
       }
       else if (op != OP_FOLLOWUP || !CURHDR->env->followup_to ||
-               safe_strcasecmp (CURHDR->env->followup_to, "poster") ||
+               str_casecmp (CURHDR->env->followup_to, "poster") ||
                query_quadoption (OPT_FOLLOWUPTOPOSTER,
                                  _("Reply by mail as poster prefers?")) !=
                M_YES) {

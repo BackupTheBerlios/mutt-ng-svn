@@ -42,7 +42,7 @@ static int imap_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr)
     mutt_perror (tmp);
     return (-1);
   }
-  msg->path = safe_strdup (tmp);
+  msg->path = str_dup (tmp);
   return 0;
 }
 

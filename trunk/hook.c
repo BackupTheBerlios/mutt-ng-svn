@@ -88,7 +88,7 @@ int mutt_parse_hook (BUFFER * buf, BUFFER * s, unsigned long data,
     _mutt_expand_path (path, sizeof (path), 1);
     FREE (&pattern.data);
     memset (&pattern, 0, sizeof (pattern));
-    pattern.data = safe_strdup (path);
+    pattern.data = str_dup (path);
   }
 #ifdef USE_COMPRESSED
   else if (data & (M_APPENDHOOK | M_OPENHOOK | M_CLOSEHOOK)) {
@@ -107,7 +107,7 @@ int mutt_parse_hook (BUFFER * buf, BUFFER * s, unsigned long data,
     mutt_check_simple (tmp, sizeof (tmp), DefaultHook);
     FREE (&pattern.data);
     memset (&pattern, 0, sizeof (pattern));
-    pattern.data = safe_strdup (tmp);
+    pattern.data = str_dup (tmp);
   }
 
   if (data & (M_MBOXHOOK | M_SAVEHOOK | M_FCCHOOK)) {
@@ -115,20 +115,20 @@ int mutt_parse_hook (BUFFER * buf, BUFFER * s, unsigned long data,
     mutt_expand_path (path, sizeof (path));
     FREE (&command.data);
     memset (&command, 0, sizeof (command));
-    command.data = safe_strdup (path);
+    command.data = str_dup (path);
   }
 
   /* check to make sure that a matching hook doesn't already exist */
   for (ptr = Hooks; ptr; ptr = ptr->next) {
     if (ptr->type == data &&
-        ptr->rx.not == not && !mutt_strcmp (pattern.data, ptr->rx.pattern)) {
+        ptr->rx.not == not && !str_cmp (pattern.data, ptr->rx.pattern)) {
       if (data &
           (M_FOLDERHOOK | M_SENDHOOK | M_SEND2HOOK | M_MESSAGEHOOK |
            M_ACCOUNTHOOK | M_REPLYHOOK)) {
         /* these hooks allow multiple commands with the same
          * pattern, so if we've already seen this pattern/command pair, just
          * ignore it instead of creating a duplicate */
-        if (!mutt_strcmp (ptr->command, command.data)) {
+        if (!str_cmp (ptr->command, command.data)) {
           FREE (&command.data);
           FREE (&pattern.data);
           return 0;
@@ -240,7 +240,7 @@ int mutt_parse_unhook (BUFFER * buf, BUFFER * s, unsigned long data,
 {
   while (MoreArgs (s)) {
     mutt_extract_token (buf, s, 0);
-    if (mutt_strcmp ("*", buf->data) == 0) {
+    if (str_cmp ("*", buf->data) == 0) {
       if (current_hook_type) {
         snprintf (err->data, err->dsize,
                   _("unhook: Can't do unhook * from within a hook."));

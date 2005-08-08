@@ -155,7 +155,7 @@ static REMAILER **mix_type2_list (size_t * l)
   /* first, generate the "random" remailer */
 
   p = mix_new_remailer ();
-  p->shortname = safe_strdup ("<random>");
+  p->shortname = str_dup ("<random>");
   mix_add_entry (&type2_list, p, &slots, &used);
 
   while (fgets (line, sizeof (line), fp)) {
@@ -164,12 +164,12 @@ static REMAILER **mix_type2_list (size_t * l)
     if (!(t = strtok (line, " \t\n")))
       goto problem;
 
-    p->shortname = safe_strdup (t);
+    p->shortname = str_dup (t);
 
     if (!(t = strtok (NULL, " \t\n")))
       goto problem;
 
-    p->addr = safe_strdup (t);
+    p->addr = str_dup (t);
 
     if (!(t = strtok (NULL, " \t\n")))
       goto problem;
@@ -177,7 +177,7 @@ static REMAILER **mix_type2_list (size_t * l)
     if (!(t = strtok (NULL, " \t\n")))
       goto problem;
 
-    p->ver = safe_strdup (t);
+    p->ver = str_dup (t);
 
     if (!(t = strtok (NULL, " \t\n")))
       goto problem;
@@ -234,7 +234,7 @@ static void mix_screen_coordinates (REMAILER ** type2_list,
 
   if (i) {
     c =
-      coords[i - 1].c + mutt_strlen (type2_list[chain->ch[i - 1]]->shortname) + 2;
+      coords[i - 1].c + str_len (type2_list[chain->ch[i - 1]]->shortname) + 2;
     r = coords[i - 1].r;
   }
   else {
@@ -245,7 +245,7 @@ static void mix_screen_coordinates (REMAILER ** type2_list,
 
   for (; i < chain->cl; i++) {
     oc = c;
-    c += mutt_strlen (type2_list[chain->ch[i]]->shortname) + 2;
+    c += str_len (type2_list[chain->ch[i]]->shortname) + 2;
 
     if (c >= COLS) {
       oc = c = MIX_HOFFSET;
@@ -431,7 +431,7 @@ static int mix_chain_add (MIXCHAIN * chain, const char *s,
   if (chain->cl >= MAXMIXES)
     return -1;
 
-  if (!mutt_strcmp (s, "0") || !ascii_strcasecmp (s, "<random>")) {
+  if (!str_cmp (s, "0") || !ascii_strcasecmp (s, "<random>")) {
     chain->ch[chain->cl++] = 0;
     return 0;
   }

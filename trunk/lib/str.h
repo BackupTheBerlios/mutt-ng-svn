@@ -7,7 +7,6 @@
  * It's licensed under the GNU General Public License,
  * please see the file GPL in the top level source directory.
  */
-
 #ifndef _LIB_STR_H
 #define _LIB_STR_H
 
@@ -42,15 +41,15 @@
  * safety wrappers/replacements
  * (mostly only difference: safely handle NULL strings)
  */
-char *safe_strdup (const char*);
-char *safe_strcat (char*, size_t, const char*);
-char *safe_strncat (char*, size_t, const char*, size_t);
-int mutt_strcmp (const char*, const char*);
-int safe_strcasecmp (const char*, const char*);
-int safe_strncmp (const char*, const char*, size_t);
-int safe_strncasecmp (const char*, const char*, size_t);
-int safe_strcoll (const char*, const char*);
-size_t mutt_strlen (const char*);
+char *str_dup (const char*);
+char *str_cat (char*, size_t, const char*);
+char *str_ncat (char*, size_t, const char*, size_t);
+int str_cmp (const char*, const char*);
+int str_casecmp (const char*, const char*);
+int str_ncmp (const char*, const char*, size_t);
+int str_ncasecmp (const char*, const char*, size_t);
+int str_coll (const char*, const char*);
+size_t str_len (const char*);
 
 /*
  * tools

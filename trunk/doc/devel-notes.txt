@@ -78,8 +78,11 @@ the GNU gettext library's developpers.
 Style Guide
 -----------
 
-- global functions should have the prefix "mutt_".  All
-  other functions should be declared "static".
+- global functions outside the library directory should have the prefix
+  "mutt_". All other functions should be declared "static". All global
+  functions defined within the library directory should have the the
+  prefix according to their source file, i.e. "str_" for everything in
+  lib/str.[ch] etc.
 
 - avoid global vars where possible.  If one is required,
   try to contain it to a single source file and declare it
@@ -92,12 +95,10 @@ Style Guide
   in ELM and PINE is the tremendous duplication of code...
   Help keep Mutt small!
 
-- when adding new options, make the old behaviour the
-  default.
+- When adding new options, make the old behaviour the default. Also,
+  add them to UPGRADING in the top-level source directory.
 
 - try to keep Mutt-ng as portable as possible.
-
-- do not use C++-style comments (i.e. "// Comment")
 
 Documentation
 -------------

@@ -501,7 +501,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
           goto bye;
         } else if (flags & M_COMMAND) {
           my_wcstombs (buf, buflen, state->wbuf, state->curpos);
-          i = mutt_strlen (buf);
+          i = str_len (buf);
           if (i && buf[i - 1] == '=' &&
               mutt_var_value_complete (buf, buflen, i))
             state->tabs = 0;
@@ -637,7 +637,7 @@ int _mutt_enter_string (char *buf, size_t buflen, int y, int x,
           *numfiles = 1;
           tfiles = safe_calloc (*numfiles, sizeof (char *));
           mutt_expand_path (buf, buflen);
-          tfiles[0] = safe_strdup (buf);
+          tfiles[0] = str_dup (buf);
           *files = tfiles;
         }
         rv = 0;

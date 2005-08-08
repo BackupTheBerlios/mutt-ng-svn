@@ -486,8 +486,8 @@ char *smime_get_field_from_db (char *mailbox, char *query, short public,
   if (!mailbox && !query)
     return (NULL);
 
-  addr_len = mailbox ? mutt_strlen (mailbox) : 0;
-  query_len = query ? mutt_strlen (query) : 0;
+  addr_len = mailbox ? str_len (mailbox) : 0;
+  query_len = query ? str_len (query) : 0;
 
   *key = '\0';
 
@@ -509,7 +509,7 @@ char *smime_get_field_from_db (char *mailbox, char *query, short public,
     }
 
     while (fgets (buf, sizeof (buf) - 1, fp) != NULL)
-      if (mailbox && !(safe_strncasecmp (mailbox, buf, addr_len))) {
+      if (mailbox && !(str_ncasecmp (mailbox, buf, addr_len))) {
         numFields = sscanf (buf,
                             MUTT_FORMAT (STRING) " " MUTT_FORMAT (STRING) " "
                             MUTT_FORMAT (STRING) " " MUTT_FORMAT (STRING) " "
@@ -571,13 +571,13 @@ char *smime_get_field_from_db (char *mailbox, char *query, short public,
 
         /* query = label: return certificate. */
         if (numFields >= 3 &&
-            !(safe_strncasecmp (query, fields[2], query_len))) {
+            !(str_ncasecmp (query, fields[2], query_len))) {
           ask = 0;
           strfcpy (key, fields[1], sizeof (key));
         }
         /* query = certificate: return intermediate certificate. */
         else if (numFields >= 4 &&
-                 !(safe_strncasecmp (query, fields[1], query_len))) {
+                 !(str_ncasecmp (query, fields[1], query_len))) {
           ask = 0;
           strfcpy (key, fields[3], sizeof (key));
         }
@@ -619,8 +619,8 @@ char *smime_get_field_from_db (char *mailbox, char *query, short public,
 
   }
 
-  /* Note: safe_strdup ("") returns NULL. */
-  return safe_strdup (key);
+  /* Note: str_dup ("") returns NULL. */
+  return str_dup (key);
 }
 
 
@@ -646,7 +646,7 @@ void _smime_getkeys (char *mailbox)
   if (k) {
     /* the key used last time. */
     if (*SmimeKeyToUse &&
-        !safe_strcasecmp (k, SmimeKeyToUse + mutt_strlen (SmimeKeys) + 1)) {
+        !str_casecmp (k, SmimeKeyToUse + str_len (SmimeKeys) + 1)) {
       FREE (&k);
       return;
     }
@@ -659,7 +659,7 @@ void _smime_getkeys (char *mailbox)
     snprintf (SmimeCertToUse, sizeof (SmimeCertToUse), "%s/%s",
               NONULL (SmimeCertificates), k);
 
-    if (safe_strcasecmp (k, SmimeDefaultKey))
+    if (str_casecmp (k, SmimeDefaultKey))
       smime_void_passphrase ();
 
     FREE (&k);
@@ -667,8 +667,8 @@ void _smime_getkeys (char *mailbox)
   }
 
   if (*SmimeKeyToUse) {
-    if (!safe_strcasecmp (SmimeDefaultKey,
-                          SmimeKeyToUse + mutt_strlen (SmimeKeys) + 1))
+    if (!str_casecmp (SmimeDefaultKey,
+                          SmimeKeyToUse + str_len (SmimeKeys) + 1))
       return;
 
     smime_void_passphrase ();
@@ -770,10 +770,10 @@ char *smime_findKeys (ADDRESS * to, ADDRESS * cc, ADDRESS * bcc)
       return NULL;
     }
 
-    keylist_size += mutt_strlen (keyID) + 2;
+    keylist_size += str_len (keyID) + 2;
     safe_realloc (&keylist, keylist_size);
     sprintf (keylist + keylist_used, "%s\n", keyID);    /* __SPRINTF_CHECKED__ */
-    keylist_used = mutt_strlen (keylist);
+    keylist_used = str_len (keylist);
 
     rfc822_free_address (&addr);
 
@@ -830,8 +830,8 @@ static int smime_handle_cert_email (char *certificate, char *mailbox,
 
 
   while ((fgets (email, sizeof (email), fpout))) {
-    *(email + mutt_strlen (email) - 1) = '\0';
-    if (safe_strncasecmp (email, mailbox, mutt_strlen (mailbox)) == 0)
+    *(email + str_len (email) - 1) = '\0';
+    if (str_ncasecmp (email, mailbox, str_len (mailbox)) == 0)
       ret = 1;
 
     ret = ret < 0 ? 0 : ret;
@@ -857,9 +857,9 @@ static int smime_handle_cert_email (char *certificate, char *mailbox,
 
     rewind (fpout);
     while ((fgets (email, sizeof (email), fpout))) {
-      *(email + mutt_strlen (email) - 1) = '\0';
-      (*buffer)[count] = safe_calloc (1, mutt_strlen (email) + 1);
-      strncpy ((*buffer)[count], email, mutt_strlen (email));
+      *(email + str_len (email) - 1) = '\0';
+      (*buffer)[count] = safe_calloc (1, str_len (email) + 1);
+      strncpy ((*buffer)[count], email, str_len (email));
       count++;
     }
   }
@@ -975,7 +975,7 @@ static char *smime_extract_certificate (char *infile)
   fclose (fpout);
   fclose (fperr);
 
-  return safe_strdup (certfile);
+  return str_dup (certfile);
 }
 
 static char *smime_extract_signer_certificate (char *infile)
@@ -1037,7 +1037,7 @@ static char *smime_extract_signer_certificate (char *infile)
   fclose (fpout);
   fclose (fperr);
 
-  return safe_strdup (certfile);
+  return str_dup (certfile);
 }
 
 
@@ -1239,7 +1239,7 @@ BODY *smime_build_smime_entity (BODY * a, char *certlist)
 
   *certfile = '\0';
   while (1) {
-    int off = mutt_strlen (certfile);
+    int off = str_len (certfile);
 
     while (*++cert_end && *cert_end != '\n');
     if (!*cert_end)
@@ -1302,14 +1302,14 @@ BODY *smime_build_smime_entity (BODY * a, char *certlist)
 
   t = mutt_new_body ();
   t->type = TYPEAPPLICATION;
-  t->subtype = safe_strdup ("x-pkcs7-mime");
+  t->subtype = str_dup ("x-pkcs7-mime");
   mutt_set_parameter ("name", "smime.p7m", &t->parameter);
   mutt_set_parameter ("smime-type", "enveloped-data", &t->parameter);
   t->encoding = ENCBASE64;      /* The output of OpenSSL SHOULD be binary */
   t->use_disp = 1;
   t->disposition = DISPATTACH;
-  t->d_filename = safe_strdup ("smime.p7m");
-  t->filename = safe_strdup (tempfile);
+  t->d_filename = str_dup ("smime.p7m");
+  t->filename = str_dup (tempfile);
   t->unlink = 1;                /*delete after sending the message */
   t->parts = 0;
   t->next = 0;
@@ -1418,7 +1418,7 @@ BODY *smime_sign_message (BODY * a)
 
   t = mutt_new_body ();
   t->type = TYPEMULTIPART;
-  t->subtype = safe_strdup ("signed");
+  t->subtype = str_dup ("signed");
   t->encoding = ENC7BIT;
   t->use_disp = 0;
   t->disposition = DISPINLINE;
@@ -1435,9 +1435,9 @@ BODY *smime_sign_message (BODY * a)
   t->parts->next = mutt_new_body ();
   t = t->parts->next;
   t->type = TYPEAPPLICATION;
-  t->subtype = safe_strdup ("x-pkcs7-signature");
-  t->filename = safe_strdup (signedfile);
-  t->d_filename = safe_strdup ("smime.p7s");
+  t->subtype = str_dup ("x-pkcs7-signature");
+  t->filename = str_dup (signedfile);
+  t->d_filename = str_dup ("smime.p7s");
   t->use_disp = 1;
   t->disposition = DISPATTACH;
   t->encoding = ENCBASE64;
@@ -1562,7 +1562,7 @@ int smime_verify_one (BODY * sigbdy, STATE * s, const char *tempfile)
       rewind (smimeerr);
 
       line = mutt_read_line (line, &linelen, smimeerr, &lineno);
-      if (linelen && !safe_strcasecmp (line, "verification successful"))
+      if (linelen && !str_casecmp (line, "verification successful"))
         badsig = 0;
 
       FREE (&line);
@@ -1725,7 +1725,7 @@ static BODY *smime_handle_entity (BODY * m, STATE * s, FILE * outFile)
       }
     }
     while (fgets (buf, sizeof (buf) - 1, smimeout) != NULL) {
-      len = mutt_strlen (buf);
+      len = str_len (buf);
       if (len > 1 && buf[len - 2] == '\r') {
         buf[len - 2] = '\n';
         buf[len - 1] = '\0';
@@ -1776,7 +1776,7 @@ static BODY *smime_handle_entity (BODY * m, STATE * s, FILE * outFile)
     rewind (smimeerr);
 
     line = mutt_read_line (line, &linelen, smimeerr, &lineno);
-    if (linelen && !safe_strcasecmp (line, "verification successful"))
+    if (linelen && !str_casecmp (line, "verification successful"))
       m->goodsig = 1;
     FREE (&line);
   }
@@ -1921,7 +1921,7 @@ int smime_send_menu (HEADER * msg, int *redraw)
   case 4:                      /* sign (a)s */
 
     if ((p = smime_ask_for_key (_("Sign as: "), NULL, 0))) {
-      p[mutt_strlen (p) - 1] = '\0';
+      p[str_len (p) - 1] = '\0';
       str_replace (&SmimeDefaultKey, p);
 
       msg->security |= SIGN;

@@ -123,7 +123,7 @@ static int iptostring (const struct sockaddr *addr, socklen_t addrlen,
   if (ret)
     return getnameinfo_err (ret);
 
-  if (outlen < mutt_strlen (hbuf) + mutt_strlen (pbuf) + 2)
+  if (outlen < str_len (hbuf) + str_len (pbuf) + 2)
     return SASL_BUFOVER;
 
   snprintf (out, outlen, "%s;%s", hbuf, pbuf);
@@ -363,7 +363,7 @@ int mutt_sasl_interact (sasl_interact_t * interaction)
     if (mutt_get_field (prompt, resp, sizeof (resp), 0))
       return SASL_FAIL;
 
-    interaction->len = mutt_strlen (resp) + 1;
+    interaction->len = str_len (resp) + 1;
     interaction->result = safe_malloc (interaction->len);
     memcpy ((char*) interaction->result, resp, interaction->len);
 
@@ -467,7 +467,7 @@ static int mutt_sasl_cb_authname (void *context, int id, const char **result,
   }
 
   if (len)
-    *len = mutt_strlen (*result);
+    *len = str_len (*result);
 
   return SASL_OK;
 }
@@ -487,7 +487,7 @@ static int mutt_sasl_cb_pass (sasl_conn_t * conn, void *context, int id,
   if (mutt_account_getpass (account))
     return SASL_FAIL;
 
-  len = mutt_strlen (account->pass);
+  len = str_len (account->pass);
 
   *psecret = (sasl_secret_t *) safe_malloc (sizeof (sasl_secret_t) + len);
   (*psecret)->len = len;

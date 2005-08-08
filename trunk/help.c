@@ -71,7 +71,7 @@ char *mutt_compile_help (char *buf, size_t buflen, int menu,
       buflen -= 2;
     }
     mutt_make_help (pbuf, buflen, _(items[i].name), menu, items[i].value);
-    len = mutt_strlen (pbuf);
+    len = str_len (pbuf);
     pbuf += len;
     buflen -= len;
   }
@@ -84,7 +84,7 @@ static int print_macro (FILE * f, int maxwidth, const char **macro)
   wchar_t wc;
   int w;
   size_t k;
-  size_t len = mutt_strlen (*macro);
+  size_t len = str_len (*macro);
   mbstate_t mbstate1, mbstate2;
 
   memset (&mbstate1, 0, sizeof (mbstate1));
@@ -167,18 +167,18 @@ static void format_line (FILE * f, int ismacro,
   else {
     col_a = COLS > 83 ? (COLS - 32) >> 2 : 12;
     col_b = COLS > 49 ? (COLS - 10) >> 1 : 19;
-    col = pad (f, mutt_strlen (t1), col_a);
+    col = pad (f, str_len (t1), col_a);
   }
 
   if (ismacro > 0) {
-    if (!mutt_strcmp (Pager, "builtin"))
+    if (!str_cmp (Pager, "builtin"))
       fputs ("_\010", f);
     fputs ("M ", f);
     col += 2;
 
     if (!split) {
       col += print_macro (f, col_b - col - 4, &t2);
-      if (mutt_strlen (t2) > col_b - col)
+      if (str_len (t2) > col_b - col)
         t2 = "...";
     }
   }
@@ -201,7 +201,7 @@ static void format_line (FILE * f, int ismacro,
         SKIPWS (t3);
 
         /* FIXME: this is completely wrong */
-        if ((n = mutt_strlen (t3)) > COLS - col) {
+        if ((n = str_len (t3)) > COLS - col) {
           n = COLS - col;
           for (col_a = n; col_a > 0 && t3[col_a] != ' '; col_a--);
           if (col_a)
@@ -212,7 +212,7 @@ static void format_line (FILE * f, int ismacro,
       print_macro (f, n, &t3);
 
       if (*t3) {
-        if (mutt_strcmp (Pager, "builtin")) {
+        if (str_cmp (Pager, "builtin")) {
           fputc ('\n', f);
           n = 0;
         }

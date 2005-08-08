@@ -116,11 +116,11 @@ static void encode_quoted (FGETCONV * fc, FILE * fout, int istext)
     }
 
     /* Escape lines that begin with/only contain "the message separator". */
-    if (linelen == 4 && !safe_strncmp ("From", line, 4)) {
+    if (linelen == 4 && !str_ncmp ("From", line, 4)) {
       strfcpy (line, "=46rom", sizeof (line));
       linelen = 6;
     }
-    else if (linelen == 4 && !safe_strncmp ("from", line, 4)) {
+    else if (linelen == 4 && !str_ncmp ("from", line, 4)) {
       strfcpy (line, "=66rom", sizeof (line));
       linelen = 6;
     }
@@ -291,7 +291,7 @@ int mutt_write_mime_header (BODY * a, FILE * f)
   fprintf (f, "Content-Type: %s/%s", TYPE (a), a->subtype);
 
   if (a->parameter) {
-    len = 25 + mutt_strlen (a->subtype);        /* approximate len. of content-type */
+    len = 25 + str_len (a->subtype);        /* approximate len. of content-type */
 
     for (p = a->parameter; p; p = p->next) {
       char *tmp;
@@ -302,7 +302,7 @@ int mutt_write_mime_header (BODY * a, FILE * f)
       fputc (';', f);
 
       buffer[0] = 0;
-      tmp = safe_strdup (p->value);
+      tmp = str_dup (p->value);
       encode = rfc2231_encode_string (&tmp);
       rfc822_cat (buffer, sizeof (buffer), tmp, MimeSpecials);
 
@@ -317,7 +317,7 @@ int mutt_write_mime_header (BODY * a, FILE * f)
 
       FREE (&tmp);
 
-      tmplen = mutt_strlen (buffer) + mutt_strlen (p->attribute) + 1;
+      tmplen = str_len (buffer) + str_len (p->attribute) + 1;
 
       if (len + tmplen + 2 > 76) {
         fputs ("\n\t", f);
@@ -354,7 +354,7 @@ int mutt_write_mime_header (BODY * a, FILE * f)
         t = fn;
 
       buffer[0] = 0;
-      tmp = safe_strdup (t);
+      tmp = str_dup (t);
       encode = rfc2231_encode_string (&tmp);
       rfc822_cat (buffer, sizeof (buffer), tmp, MimeSpecials);
       FREE (&tmp);
@@ -408,7 +408,7 @@ int mutt_write_mime_body (BODY * a, FILE * f)
   /* This is pretty gross, but it's the best solution for now... */
   if ((WithCrypto & APPLICATION_PGP)
       && a->type == TYPEAPPLICATION
-      && mutt_strcmp (a->subtype, "pgp-encrypted") == 0) {
+      && str_cmp (a->subtype, "pgp-encrypted") == 0) {
     fputs ("Version: 1\n", f);
     return 0;
   }
@@ -887,7 +887,7 @@ int mutt_lookup_mime_type (BODY * att, const char *path)
   type = TYPEOTHER;
   cur_sze = 0;
 
-  szf = mutt_strlen (path);
+  szf = str_len (path);
 
   for (count = 0; count < 3; count++) {
     /*
@@ -927,9 +927,9 @@ int mutt_lookup_mime_type (BODY * att, const char *path)
 
         /* cycle through the file extensions */
         while ((p = strtok (p, " \t\n"))) {
-          sze = mutt_strlen (p);
+          sze = str_len (p);
           if ((sze > cur_sze) && (szf >= sze) &&
-              (safe_strcasecmp (path + szf - sze, p) == 0
+              (str_casecmp (path + szf - sze, p) == 0
                || ascii_strcasecmp (path + szf - sze, p) == 0) && (szf == sze
                                                                    || path[szf
                                                                            -
@@ -1028,7 +1028,7 @@ cleanup:
   a->d_filename = a->filename;
   if (a->filename && a->unlink)
     unlink (a->filename);
-  a->filename = safe_strdup (temp);
+  a->filename = str_dup (temp);
   a->unlink = 1;
   if (stat (a->filename, &sb) == -1) {
     mutt_perror ("stat");
@@ -1069,7 +1069,7 @@ static void transform_to_7bit (BODY * a, FILE * fpin)
       mutt_decode_attachment (a, &s);
       fclose (s.fpout);
       a->d_filename = a->filename;
-      a->filename = safe_strdup (buff);
+      a->filename = str_dup (buff);
       a->unlink = 1;
       if (stat (a->filename, &sb) == -1) {
         mutt_perror ("stat");
@@ -1206,8 +1206,8 @@ BODY *mutt_make_message_attach (CONTEXT * ctx, HEADER * hdr, int attach_msg)
 
   body = mutt_new_body ();
   body->type = TYPEMESSAGE;
-  body->subtype = safe_strdup ("rfc822");
-  body->filename = safe_strdup (buffer);
+  body->subtype = str_dup ("rfc822");
+  body->filename = str_dup (buffer);
   body->unlink = 1;
   body->use_disp = 0;
   body->disposition = DISPINLINE;
@@ -1273,7 +1273,7 @@ BODY *mutt_make_file_attach (const char *path)
   CONTENT *info;
 
   att = mutt_new_body ();
-  att->filename = safe_strdup (path);
+  att->filename = str_dup (path);
 
   /* Attempt to determine the appropriate content-type based on the filename
    * suffix.
@@ -1285,8 +1285,8 @@ BODY *mutt_make_file_attach (const char *path)
        mutt_lookup_mime_type (buf, sizeof (buf), xbuf, sizeof (xbuf),
                               path)) != TYPEOTHER || *xbuf != '\0') {
     att->type = n;
-    att->subtype = safe_strdup (buf);
-    att->xtype = safe_strdup (xbuf);
+    att->subtype = str_dup (buf);
+    att->xtype = str_dup (xbuf);
   }
 
 #else
@@ -1308,11 +1308,11 @@ BODY *mutt_make_file_attach (const char *path)
        * chars if this is really a binary file...
        */
       att->type = TYPETEXT;
-      att->subtype = safe_strdup ("plain");
+      att->subtype = str_dup ("plain");
     }
     else {
       att->type = TYPEAPPLICATION;
-      att->subtype = safe_strdup ("octet-stream");
+      att->subtype = str_dup ("octet-stream");
     }
   }
 
@@ -1340,7 +1340,7 @@ BODY *mutt_make_multipart (BODY * b)
 
   new = mutt_new_body ();
   new->type = TYPEMULTIPART;
-  new->subtype = safe_strdup ("mixed");
+  new->subtype = str_dup ("mixed");
   new->encoding = get_toplevel_encoding (b);
   mutt_generate_boundary (&new->parameter);
   new->use_disp = 0;
@@ -1394,7 +1394,7 @@ void mutt_write_address_list (ADDRESS * adr, FILE * fp, int linelen,
     adr->next = NULL;
     buf[0] = 0;
     rfc822_write_address (buf, sizeof (buf), adr, display);
-    len = mutt_strlen (buf);
+    len = str_len (buf);
     if (count && linelen + len > 74) {
       fputs ("\n\t", fp);
       linelen = len + 8;        /* tab is usually about 8 spaces... */
@@ -1631,14 +1631,14 @@ static void encode_headers (LIST * h)
     i = p - h->data;
     ++p;
     SKIPWS (p);
-    tmp = safe_strdup (p);
+    tmp = str_dup (p);
 
     if (!tmp)
       continue;
 
     rfc2047_encode_string (&tmp);
     safe_realloc (&h->data,
-                  mutt_strlen (h->data) + 2 + mutt_strlen (tmp) + 1);
+                  str_len (h->data) + 2 + str_len (tmp) + 1);
 
     sprintf (h->data + i, ": %s", NONULL (tmp));        /* __SPRINTF_CHECKED__ */
 
@@ -1696,62 +1696,62 @@ static void mutt_gen_localpart (char *buf, unsigned int len, char *fmt)
         return;
       case 'd':
         snprintf (tmp, sizeof (tmp), "%02d", tm->tm_mday);
-        safe_strncat (buf, len, tmp, 2);
+        str_ncat (buf, len, tmp, 2);
         break;
       case 'h':
         snprintf (tmp, sizeof (tmp), "%02d", tm->tm_hour);
-        safe_strncat (buf, len, tmp, 2);
+        str_ncat (buf, len, tmp, 2);
         break;
       case 'm':
         snprintf (tmp, sizeof (tmp), "%02d", tm->tm_mon + 1);
-        safe_strncat (buf, len, tmp, 2);
+        str_ncat (buf, len, tmp, 2);
         break;
       case 'M':
         snprintf (tmp, sizeof (tmp), "%02d", tm->tm_min);
-        safe_strncat (buf, len, tmp, 2);
+        str_ncat (buf, len, tmp, 2);
         break;
       case 'O':
         snprintf (tmp, sizeof (tmp), "%lo", (unsigned long) now);
-        safe_strncat (buf, len, tmp, mutt_strlen (tmp));
+        str_ncat (buf, len, tmp, str_len (tmp));
         break;
       case 'p':
         snprintf (tmp, sizeof (tmp), "%u", (unsigned int) getpid ());
-        safe_strncat (buf, len, tmp, mutt_strlen (tmp));
+        str_ncat (buf, len, tmp, str_len (tmp));
         break;
       case 'P':
         snprintf (tmp, sizeof (tmp), "%c", MsgIdPfx);
         MsgIdPfx = (MsgIdPfx == 'Z') ? 'A' : MsgIdPfx + 1;
-        safe_strncat (buf, len, tmp, 1);
+        str_ncat (buf, len, tmp, 1);
         break;
       case 'r':
         snprintf (tmp, sizeof (tmp), "%u", (unsigned int) rand ());
-        safe_strncat (buf, len, tmp, mutt_strlen (tmp));
+        str_ncat (buf, len, tmp, str_len (tmp));
         break;
       case 'R':
         snprintf (tmp, sizeof (tmp), "%x", (unsigned int) rand ());
-        safe_strncat (buf, len, tmp, mutt_strlen (tmp));
+        str_ncat (buf, len, tmp, str_len (tmp));
         break;
       case 's':
         snprintf (tmp, sizeof (tmp), "%02d", tm->tm_sec);
-        safe_strncat (buf, len, tmp, 2);
+        str_ncat (buf, len, tmp, 2);
         break;
       case 'T':
         snprintf (tmp, sizeof (tmp), "%u", (unsigned int) now);
-        safe_strncat (buf, len, tmp, mutt_strlen (tmp));
+        str_ncat (buf, len, tmp, str_len (tmp));
         break;
       case 'X':
         snprintf (tmp, sizeof (tmp), "%x", (unsigned int) now);
-        safe_strncat (buf, len, tmp, mutt_strlen (tmp));
+        str_ncat (buf, len, tmp, str_len (tmp));
         break;
       case 'Y':
         snprintf (tmp, sizeof (tmp), "%04d", tm->tm_year + 1900);       /* this will break in the year 10000 ;-) */
-        safe_strncat (buf, len, tmp, 4);
+        str_ncat (buf, len, tmp, 4);
         break;
       case '%':
-        safe_strncat (buf, len, "%", 1);
+        str_ncat (buf, len, "%", 1);
         break;
       default:
-        safe_strncat (buf, len, ".", 1);        /* invalid formats are replaced by '.' */
+        str_ncat (buf, len, ".", 1);        /* invalid formats are replaced by '.' */
       }                         /* switch */
       ++fmt;
     }
@@ -1759,7 +1759,7 @@ static void mutt_gen_localpart (char *buf, unsigned int len, char *fmt)
       char c;
 
       c = mutt_normalized_char (*fmt);  /* @todo: filter out invalid characters */
-      safe_strncat (buf, len, &c, 1);
+      str_ncat (buf, len, &c, 1);
     }
   }
 }
@@ -1774,12 +1774,12 @@ char *mutt_gen_msgid (void)
   if (!(fqdn = mutt_fqdn (0)))
     fqdn = NONULL (Hostname);
 
-  localpart_length = sizeof (buf) - mutt_strlen (fqdn) - 4;  /* the 4 characters are '<', '@', '>' and '\0' */
+  localpart_length = sizeof (buf) - str_len (fqdn) - 4;  /* the 4 characters are '<', '@', '>' and '\0' */
 
   mutt_gen_localpart (localpart, localpart_length, MsgIdFormat);
 
   snprintf (buf, sizeof (buf), "<%s@%s>", localpart, fqdn);
-  return (safe_strdup (buf));
+  return (str_dup (buf));
 }
 
 static RETSIGTYPE alarm_handler (int sig)
@@ -1812,7 +1812,7 @@ send_msg (const char *path, char **args, const char *msg, char **tempfile)
     char tmp[_POSIX_PATH_MAX];
 
     mutt_mktemp (tmp);
-    *tempfile = safe_strdup (tmp);
+    *tempfile = str_dup (tmp);
   }
 
   if ((pid = fork ()) == 0) {
@@ -1978,11 +1978,11 @@ static int mutt_invoke_sendmail (ADDRESS * from,        /* the sender */
       return i;
     }
 
-    s = safe_strdup (cmd);
+    s = str_dup (cmd);
   }
   else
 #endif
-    s = safe_strdup (Sendmail);
+    s = str_dup (Sendmail);
 
   ps = s;
   i = 0;
@@ -1993,7 +1993,7 @@ static int mutt_invoke_sendmail (ADDRESS * from,        /* the sender */
     if (i)
       args[argslen++] = ps;
     else {
-      path = safe_strdup (ps);
+      path = str_dup (ps);
       ps = strrchr (ps, '/');
       if (ps)
         ps++;
@@ -2086,9 +2086,9 @@ int mutt_invoke_mta (ADDRESS * from,    /* the sender */
    string. */
 char *mutt_append_string (char *a, const char *b)
 {
-  size_t la = mutt_strlen (a);
+  size_t la = str_len (a);
 
-  safe_realloc (&a, la + mutt_strlen (b) + 1);
+  safe_realloc (&a, la + str_len (b) + 1);
   strcpy (a + la, b);           /* __STRCPY_CHECKED__ */
   return (a);
 }
@@ -2116,7 +2116,7 @@ char *mutt_quote_string (const char *s)
   char *r, *pr;
   size_t rlen;
 
-  rlen = mutt_strlen (s) + 3;
+  rlen = str_len (s) + 3;
   pr = r = (char *) safe_malloc (rlen);
   *pr++ = '"';
   while (*s) {
@@ -2153,7 +2153,7 @@ void mutt_prepare_envelope (ENVELOPE * env, int final)
       rfc822_cat (buffer, sizeof (buffer), "undisclosed-recipients",
                   RFC822Specials);
 
-      env->to->mailbox = safe_strdup (buffer);
+      env->to->mailbox = str_dup (buffer);
     }
 
     mutt_set_followup_to (env);

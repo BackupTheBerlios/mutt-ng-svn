@@ -19,9 +19,9 @@ char *strdup (const char *s)
   if (s == NULL)
     return NULL;
 
-  if ((d = malloc (mutt_strlen (s) + 1)) == NULL)    /* __MEM_CHECKED__ */
+  if ((d = malloc (str_len (s) + 1)) == NULL)    /* __MEM_CHECKED__ */
     return NULL;
 
-  memcpy (d, s, mutt_strlen (s) + 1);
+  memcpy (d, s, str_len (s) + 1);
   return d;
 }

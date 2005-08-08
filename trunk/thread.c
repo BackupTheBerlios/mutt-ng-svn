@@ -338,7 +338,7 @@ static LIST *make_subject_list (THREAD * cur, time_t * dateptr)
         ((env->real_subj != env->subject) || (!option (OPTSORTRE)))) {
       for (curlist = subjects, oldlist = NULL;
            curlist; oldlist = curlist, curlist = curlist->next) {
-        rc = mutt_strcmp (env->real_subj, curlist->data);
+        rc = str_cmp (env->real_subj, curlist->data);
         if (rc >= 0)
           break;
       }
@@ -398,7 +398,7 @@ static THREAD *find_subject (CONTEXT * ctx, THREAD * cur)
             (last->message->received < tmp->message->received) :
             (last->message->date_sent < tmp->message->date_sent))) &&
           tmp->message->env->real_subj &&
-          mutt_strcmp (subjects->data, tmp->message->env->real_subj) == 0)
+          str_cmp (subjects->data, tmp->message->env->real_subj) == 0)
         last = tmp;             /* best match so far */
     }
 
@@ -471,7 +471,7 @@ static void pseudo_threads (CONTEXT * ctx)
          * parent, since otherwise they rightly belong to the message
          * we're attaching. */
         if (tmp == cur
-            || !mutt_strcmp (tmp->message->env->real_subj,
+            || !str_cmp (tmp->message->env->real_subj,
                              parent->message->env->real_subj)) {
           tmp->message->subject_changed = 0;
 
@@ -669,7 +669,7 @@ static void check_subjects (CONTEXT * ctx, int init)
     if (!tmp)
       cur->subject_changed = 1;
     else if (cur->env->real_subj && tmp->message->env->real_subj)
-      cur->subject_changed = mutt_strcmp (cur->env->real_subj,
+      cur->subject_changed = str_cmp (cur->env->real_subj,
                                           tmp->message->env->
                                           real_subj) ? 1 : 0;
     else
@@ -821,7 +821,7 @@ void mutt_sort_threads (CONTEXT * ctx, int init)
         if (!cur->env->references)
           ref = ref->next;
         else {
-          if (mutt_strcmp (ref->data, cur->env->references->data))
+          if (str_cmp (ref->data, cur->env->references->data))
             ref = cur->env->references;
           else
             ref = cur->env->references->next;
@@ -1250,7 +1250,7 @@ static void clean_references (THREAD * brk, THREAD * cur)
     for (p = brk; !done && p; p = p->parent)
       for (ref = cur->message->env->references; p->message && ref;
            ref = ref->next)
-        if (!safe_strcasecmp (ref->data, p->message->env->message_id)) {
+        if (!str_casecmp (ref->data, p->message->env->message_id)) {
           done = 1;
           break;
         }
@@ -1282,7 +1282,7 @@ static int link_threads (HEADER * parent, HEADER * child, CONTEXT * ctx)
   mutt_break_thread (child);
 
   child->env->in_reply_to = mutt_new_list ();
-  child->env->in_reply_to->data = safe_strdup (parent->env->message_id);
+  child->env->in_reply_to->data = str_dup (parent->env->message_id);
 
   mutt_set_flag (ctx, child, M_TAG, 0);
 

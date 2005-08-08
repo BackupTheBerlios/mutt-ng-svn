@@ -214,7 +214,7 @@ static int edit_envelope (ENVELOPE * en, int flags)
     if (mutt_get_field ("Newsgroups: ", buf, sizeof (buf), 0) != 0)
       return (-1);
     FREE (&en->newsgroups);
-    en->newsgroups = safe_strdup (buf);
+    en->newsgroups = str_dup (buf);
 
     if (en->followup_to)
       strfcpy (buf, en->followup_to, sizeof (buf));
@@ -224,7 +224,7 @@ static int edit_envelope (ENVELOPE * en, int flags)
         && mutt_get_field ("Followup-To: ", buf, sizeof (buf), 0) != 0)
       return (-1);
     FREE (&en->followup_to);
-    en->followup_to = safe_strdup (buf);
+    en->followup_to = str_dup (buf);
 
     if (en->x_comment_to)
       strfcpy (buf, en->x_comment_to, sizeof (buf));
@@ -234,7 +234,7 @@ static int edit_envelope (ENVELOPE * en, int flags)
         && mutt_get_field ("X-Comment-To: ", buf, sizeof (buf), 0) != 0)
       return (-1);
     FREE (&en->x_comment_to);
-    en->x_comment_to = safe_strdup (buf);
+    en->x_comment_to = str_dup (buf);
   }
   else
 #endif
@@ -300,7 +300,7 @@ static int edit_envelope (ENVELOPE * en, int flags)
 char *nntp_get_header (const char *s)
 {
   SKIPWS (s);
-  return safe_strdup (s);
+  return str_dup (s);
 }
 #endif
 
@@ -363,7 +363,7 @@ static void process_user_header (ENVELOPE * env)
       }
       else
         last = env->userhdrs = mutt_new_list ();
-      last->data = safe_strdup (uh->data);
+      last->data = str_dup (uh->data);
     }
   }
 }
@@ -374,7 +374,7 @@ LIST *mutt_copy_list (LIST * p)
 
   for (; p; p = p->next) {
     t = (LIST *) safe_malloc (sizeof (LIST));
-    t->data = safe_strdup (p->data);
+    t->data = str_dup (p->data);
     t->next = NULL;
     if (l) {
       r->next = t;
@@ -617,7 +617,7 @@ LIST *mutt_make_references (ENVELOPE * e)
 
   if (e->message_id) {
     t = mutt_new_list ();
-    t->data = safe_strdup (e->message_id);
+    t->data = str_dup (e->message_id);
     t->next = l;
     l = t;
   }
@@ -660,15 +660,15 @@ void mutt_make_misc_reply_headers (ENVELOPE * env, CONTEXT * ctx,
    */
   if (curenv->real_subj) {
     FREE (&env->subject);
-    env->subject = safe_malloc (mutt_strlen (curenv->real_subj) + 5);
+    env->subject = safe_malloc (str_len (curenv->real_subj) + 5);
     sprintf (env->subject, "Re: %s", curenv->real_subj);        /* __SPRINTF_CHECKED__ */
   }
   else if (!env->subject)
-    env->subject = safe_strdup ("Re: your mail");
+    env->subject = str_dup ("Re: your mail");
 
 #ifdef USE_NNTP
   if (option (OPTNEWSSEND) && option (OPTXCOMMENTTO) && curenv->from)
-    env->x_comment_to = safe_strdup (mutt_get_name (curenv->from));
+    env->x_comment_to = str_dup (mutt_get_name (curenv->from));
 #endif
 }
 
@@ -696,7 +696,7 @@ void mutt_add_to_reference_headers (ENVELOPE * env, ENVELOPE * curenv,
 
   if (curenv->message_id) {
     *q = mutt_new_list ();
-    (*q)->data = safe_strdup (curenv->message_id);
+    (*q)->data = str_dup (curenv->message_id);
   }
 
   if (pp)
@@ -759,8 +759,8 @@ envelope_defaults (ENVELOPE * env, CONTEXT * ctx, HEADER * cur, int flags)
     if ((flags & SENDNEWS)) {
       /* in case followup set Newsgroups: with Followup-To: if it present */
       if (!env->newsgroups && curenv &&
-          safe_strcasecmp (curenv->followup_to, "poster"))
-        env->newsgroups = safe_strdup (curenv->followup_to);
+          str_casecmp (curenv->followup_to, "poster"))
+        env->newsgroups = str_dup (curenv->followup_to);
     }
     else
 #endif
@@ -903,7 +903,7 @@ void mutt_set_followup_to (ENVELOPE * e)
 #ifdef USE_NNTP
   if (option (OPTNEWSSEND)) {
     if (!e->followup_to && e->newsgroups && (strrchr (e->newsgroups, ',')))
-      e->followup_to = safe_strdup (e->newsgroups);
+      e->followup_to = str_dup (e->newsgroups);
     return;
   }
 #endif
@@ -976,7 +976,7 @@ static ADDRESS *set_reverse_name (ENVELOPE * env)
     if (!option (OPTREVREAL))
       FREE (&tmp->personal);
     if (!tmp->personal)
-      tmp->personal = safe_strdup (Realname);
+      tmp->personal = str_dup (Realname);
   }
   return (tmp);
 }
@@ -996,12 +996,12 @@ ADDRESS *mutt_default_from (void)
   else if (option (OPTUSEDOMAIN)) {
     adr = rfc822_new_address ();
     adr->mailbox =
-      safe_malloc (mutt_strlen (Username) + mutt_strlen (fqdn) + 2);
+      safe_malloc (str_len (Username) + str_len (fqdn) + 2);
     sprintf (adr->mailbox, "%s@%s", NONULL (Username), NONULL (fqdn));  /* __SPRINTF_CHECKED__ */
   }
   else {
     adr = rfc822_new_address ();
-    adr->mailbox = safe_strdup (NONULL (Username));
+    adr->mailbox = str_dup (NONULL (Username));
   }
 
   return (adr);
@@ -1135,7 +1135,7 @@ int ci_send_message (int flags, /* send mode */
 
 
   if ((WithCrypto & APPLICATION_PGP) && (flags & SENDPOSTPONED))
-    signas = safe_strdup (PgpSignAs);
+    signas = str_dup (PgpSignAs);
 
   /* Delay expansion of aliases until absolutely necessary--shouldn't
    * be necessary unless we are prompting the user or about to execute a
@@ -1201,11 +1201,11 @@ int ci_send_message (int flags, /* send mode */
     if (!tempfile) {
       mutt_mktemp (buffer);
       tempfp = safe_fopen (buffer, "w+");
-      msg->content->filename = safe_strdup (buffer);
+      msg->content->filename = str_dup (buffer);
     }
     else {
       tempfp = safe_fopen (tempfile, "a+");
-      msg->content->filename = safe_strdup (tempfile);
+      msg->content->filename = str_dup (tempfile);
     }
 
     if (!tempfp) {
@@ -1259,7 +1259,7 @@ int ci_send_message (int flags, /* send mode */
 #ifdef USE_NNTP
     if ((flags & SENDNEWS) && ctx && ctx->magic == M_NNTP
         && !msg->env->newsgroups)
-      msg->env->newsgroups = safe_strdup (((NNTP_DATA *) ctx->data)->group);
+      msg->env->newsgroups = str_dup (((NNTP_DATA *) ctx->data)->group);
 #endif
 
     if (!(flags & SENDMAILX) &&
@@ -1314,7 +1314,7 @@ int ci_send_message (int flags, /* send mode */
 
     if (option (OPTSIGONTOP)
         && (!(flags & (SENDMAILX | SENDKEY)) && Editor
-            && mutt_strcmp (Editor, "builtin") != 0))
+            && str_cmp (Editor, "builtin") != 0))
       append_signature (tempfp);
 
     /* include replies/forwarded messages, unless we are given a template */
@@ -1324,7 +1324,7 @@ int ci_send_message (int flags, /* send mode */
 
     if (!option (OPTSIGONTOP)
         && (!(flags & (SENDMAILX | SENDKEY)) && Editor
-            && mutt_strcmp (Editor, "builtin") != 0))
+            && str_cmp (Editor, "builtin") != 0))
       append_signature (tempfp);
 
     /* 
@@ -1404,7 +1404,7 @@ int ci_send_message (int flags, /* send mode */
      that $realname can be set in a send-hook */
   if (msg->env->from && !msg->env->from->personal
       && !(flags & (SENDRESEND | SENDPOSTPONED)))
-    msg->env->from->personal = safe_strdup (Realname);
+    msg->env->from->personal = str_dup (Realname);
 
   if (!((WithCrypto & APPLICATION_PGP) && (flags & SENDKEY)))
     safe_fclose (&tempfp);
@@ -1437,7 +1437,7 @@ int ci_send_message (int flags, /* send mode */
       /* If the this isn't a text message, look for a mailcap edit command */
       if (mutt_needs_mailcap (msg->content))
         mutt_edit_attachment (msg->content);
-      else if (!Editor || mutt_strcmp ("builtin", Editor) == 0)
+      else if (!Editor || str_cmp ("builtin", Editor) == 0)
         mutt_builtin_editor (msg->content->filename, msg, cur);
       else if (option (OPTEDITHDRS)) {
         mutt_env_to_local (msg->env);
@@ -1665,7 +1665,7 @@ int ci_send_message (int flags, /* send mode */
     fcc[0] = '\0';
 #endif
 
-  if (*fcc && mutt_strcmp ("/dev/null", fcc) != 0) {
+  if (*fcc && str_cmp ("/dev/null", fcc) != 0) {
     BODY *tmpbody = msg->content;
     BODY *save_sig = NULL;
     BODY *save_parts = NULL;
@@ -1676,8 +1676,8 @@ int ci_send_message (int flags, /* send mode */
     /* check to see if the user wants copies of all attachments */
     if (!option (OPTFCCATTACH) && msg->content->type == TYPEMULTIPART) {
       if (WithCrypto
-          && (mutt_strcmp (msg->content->subtype, "encrypted") == 0 ||
-              mutt_strcmp (msg->content->subtype, "signed") == 0)) {
+          && (str_cmp (msg->content->subtype, "encrypted") == 0 ||
+              str_cmp (msg->content->subtype, "signed") == 0)) {
         if (clear_content->type == TYPEMULTIPART) {
           if (!(msg->security & ENCRYPT) && (msg->security & SIGN)) {
             /* save initial signature and attachments */

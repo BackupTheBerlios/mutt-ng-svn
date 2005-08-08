@@ -22,7 +22,7 @@ int ascii_tolower (int c);
 int ascii_strcasecmp (const char *a, const char *b);
 int ascii_strncasecmp (const char *a, const char *b, int n);
 
-#define ascii_strcmp(a,b) mutt_strcmp(a,b)
-#define ascii_strncmp(a,b,c) safe_strncmp(a,b,c)
+#define ascii_strcmp(a,b) str_cmp(a,b)
+#define ascii_strncmp(a,b,c) str_ncmp(a,b,c)
 
 #endif

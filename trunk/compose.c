@@ -221,14 +221,14 @@ static void redraw_mix_line (LIST * chain)
     if (t && t[0] == '0' && t[1] == '\0')
       t = "<random>";
 
-    if (c + mutt_strlen (t) + 2 >= COLS - SidebarWidth)
+    if (c + str_len (t) + 2 >= COLS - SidebarWidth)
       break;
 
     addstr (NONULL (t));
     if (chain->next)
       addstr (", ");
 
-    c += mutt_strlen (t) + 2;
+    c += str_len (t) + 2;
   }
 }
 #endif /* MIXMASTER */
@@ -619,7 +619,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
             && buf[0]) {
           FREE (&msg->env->newsgroups);
           str_skip_trailws (buf);
-          msg->env->newsgroups = safe_strdup (str_skip_initws (buf));
+          msg->env->newsgroups = str_dup (str_skip_initws (buf));
           move (HDR_TO, HDR_XOFFSET);
           clrtoeol ();
           if (msg->env->newsgroups)
@@ -637,7 +637,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
             && buf[0]) {
           FREE (&msg->env->followup_to);
           str_skip_trailws (buf);
-          msg->env->followup_to = safe_strdup (str_skip_initws (buf));
+          msg->env->followup_to = str_dup (str_skip_initws (buf));
           move (HDR_CC, HDR_XOFFSET);
           clrtoeol ();
           if (msg->env->followup_to)
@@ -654,7 +654,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
         if (mutt_get_field ("X-Comment-To: ", buf, sizeof (buf), 0) == 0
             && buf[0]) {
           FREE (&msg->env->x_comment_to);
-          msg->env->x_comment_to = safe_strdup (buf);
+          msg->env->x_comment_to = str_dup (buf);
           move (HDR_BCC, HDR_XOFFSET);
           clrtoeol ();
           if (msg->env->x_comment_to)
@@ -694,7 +694,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
       mutt_message_hook (NULL, msg, M_SEND2HOOK);
       break;
     case OP_COMPOSE_EDIT_MESSAGE:
-      if (Editor && (mutt_strcmp ("builtin", Editor) != 0)
+      if (Editor && (str_cmp ("builtin", Editor) != 0)
           && !option (OPTEDITHDRS)) {
         mutt_edit_file (Editor, msg->content->filename);
         mutt_update_encoding (msg->content);
@@ -704,7 +704,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
       }
       /* fall through */
     case OP_COMPOSE_EDIT_HEADERS:
-      if (mutt_strcmp ("builtin", Editor) != 0 &&
+      if (str_cmp ("builtin", Editor) != 0 &&
           (op == OP_COMPOSE_EDIT_HEADERS ||
            (op == OP_COMPOSE_EDIT_MESSAGE && option (OPTEDITHDRS)))) {
         char *tag = NULL, *err = NULL;

@@ -103,7 +103,7 @@ int mutt_socket_write_d (CONNECTION * conn, const char *buf, int dbg)
     return -1;
   }
 
-  len = mutt_strlen (buf);
+  len = str_len (buf);
   if ((rc = conn->conn_write (conn, buf, len)) < 0) {
     debug_print (1, ("error writing, closing socket\n"));
     mutt_socket_close (conn);
@@ -169,7 +169,7 @@ int mutt_socket_readln_d (char *buf, size_t buflen, CONNECTION * conn,
 
   debug_print (dbg, ("< %s\n", buf));
 
-  /* number of bytes read, not mutt_strlen */
+  /* number of bytes read, not str_len */
   return i + 1;
 }
 
@@ -268,7 +268,7 @@ static int socket_preconnect (void)
   int rc;
   int save_errno;
 
-  if (mutt_strlen (Preconnect)) {
+  if (str_len (Preconnect)) {
     debug_print (2, ("Executing preconnect: %s\n", Preconnect));
     rc = mutt_system (Preconnect);
     debug_print (2, ("Preconnect result: %d\n", rc));

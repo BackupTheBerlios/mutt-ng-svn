@@ -40,7 +40,7 @@ int pop_parse_path (const char *path, ACCOUNT * acct)
   acct->port = POP_PORT;
   acct->type = M_ACCT_TYPE_POP;
 
-  c = safe_strdup (path);
+  c = str_dup (path);
   url_parse_ciss (&url, c);
 
   if (url.scheme == U_POP || url.scheme == U_POPS) {
@@ -65,7 +65,7 @@ void pop_error (POP_DATA * pop_data, char *msg)
   t = strchr (pop_data->err_msg, '\0');
   c = msg;
 
-  if (!safe_strncmp (msg, "-ERR ", 5)) {
+  if (!str_ncmp (msg, "-ERR ", 5)) {
     c2 = msg + 5;
     SKIPWS (c2);
 
@@ -87,7 +87,7 @@ static int fetch_capa (char *line, void *data)
     FREE (&pop_data->auth_list);
     c = line + 4;
     SKIPWS (c);
-    pop_data->auth_list = safe_strdup (c);
+    pop_data->auth_list = str_dup (c);
   }
 
   else if (!ascii_strncasecmp (line, "STLS", 4))
@@ -221,7 +221,7 @@ pop_query_status pop_connect (POP_DATA * pop_data)
 
   pop_data->status = POP_CONNECTED;
 
-  if (safe_strncmp (buf, "+OK", 3)) {
+  if (str_ncmp (buf, "+OK", 3)) {
     *pop_data->err_msg = '\0';
     pop_error (pop_data, buf);
     mutt_error ("%s", pop_data->err_msg);
@@ -412,7 +412,7 @@ pop_query_status pop_query_d (POP_DATA * pop_data, char *buf, size_t buflen, cha
     pop_data->status = POP_DISCONNECTED;
     return PQ_NOT_CONNECTED;
   }
-  if (!safe_strncmp (buf, "+OK", 3))
+  if (!str_ncmp (buf, "+OK", 3))
     return PQ_OK;
 
   pop_error (pop_data, buf);
@@ -492,7 +492,7 @@ static int check_uidl (char *line, void *data)
 
   sscanf (line, "%u %s", &index, line);
   for (i = 0; i < ctx->msgcount; i++) {
-    if (!mutt_strcmp (ctx->hdrs[i]->data, line)) {
+    if (!str_cmp (ctx->hdrs[i]->data, line)) {
       ctx->hdrs[i]->refno = index;
       break;
     }

@@ -86,7 +86,7 @@ void mutt_adv_mktemp (char *s, size_t l)
     mktemp (s);
     if (period != NULL) {
       *period = '.';
-      sl = mutt_strlen (s);
+      sl = str_len (s);
       strfcpy (s + sl, period, l - sl);
     }
   }
@@ -123,19 +123,19 @@ int mutt_copy_body (FILE * fp, BODY ** tgt, BODY * src)
   b->parts = NULL;
   b->next = NULL;
 
-  b->filename = safe_strdup (tmp);
+  b->filename = str_dup (tmp);
   b->use_disp = use_disp;
   b->unlink = 1;
 
   if (mutt_is_text_part (b))
     b->noconv = 1;
 
-  b->xtype = safe_strdup (b->xtype);
-  b->subtype = safe_strdup (b->subtype);
-  b->form_name = safe_strdup (b->form_name);
-  b->filename = safe_strdup (b->filename);
-  b->d_filename = safe_strdup (b->d_filename);
-  b->description = safe_strdup (b->description);
+  b->xtype = str_dup (b->xtype);
+  b->subtype = str_dup (b->subtype);
+  b->form_name = str_dup (b->form_name);
+  b->filename = str_dup (b->filename);
+  b->d_filename = str_dup (b->d_filename);
+  b->description = str_dup (b->description);
 
   /* 
    * we don't seem to need the HEADER structure currently.
@@ -149,8 +149,8 @@ int mutt_copy_body (FILE * fp, BODY ** tgt, BODY * src)
   for (par = b->parameter, ppar = &b->parameter; par;
        ppar = &(*ppar)->next, par = par->next) {
     *ppar = mutt_new_parameter ();
-    (*ppar)->attribute = safe_strdup (par->attribute);
-    (*ppar)->value = safe_strdup (par->value);
+    (*ppar)->attribute = str_dup (par->attribute);
+    (*ppar)->value = str_dup (par->value);
   }
 
   mutt_stamp_attachment (b);
@@ -215,7 +215,7 @@ void mutt_free_parameter (PARAMETER ** p)
 }
 
 LIST *mutt_add_list (LIST * head, const char *data) {
-  size_t len = mutt_strlen (data);
+  size_t len = str_len (data);
   return (mutt_add_list_n (head, data, len ? len + 1 : 0));
 }
 
@@ -282,7 +282,7 @@ void mutt_free_header (HEADER ** h)
 int mutt_matches_ignore (const char *s, LIST * t)
 {
   for (; t; t = t->next) {
-    if (!ascii_strncasecmp (s, t->data, mutt_strlen (t->data))
+    if (!ascii_strncasecmp (s, t->data, str_len (t->data))
         || *t->data == '*')
       return 1;
   }
@@ -370,7 +370,7 @@ char *_mutt_expand_path (char *s, size_t slen, int rx)
 #ifdef USE_IMAP
         /* if folder = imap[s]://host/: don't append slash */
         if (imap_is_magic (NONULL (Maildir), NULL) == M_IMAP && 
-            Maildir[mutt_strlen (Maildir) - 1] == '/')
+            Maildir[str_len (Maildir) - 1] == '/')
           strfcpy (p, NONULL (Maildir), sizeof (p));
         else
 #endif
@@ -495,7 +495,7 @@ char *mutt_gecos_name (char *dest, size_t destlen, struct passwd *pw)
   else
     strfcpy (dest, pw->pw_gecos, destlen);
 
-  pwnl = mutt_strlen (pw->pw_name);
+  pwnl = str_len (pw->pw_name);
 
   for (idx = 0; dest[idx]; idx++) {
     if (dest[idx] == '&') {
@@ -537,8 +537,8 @@ void mutt_set_parameter (const char *attribute, const char *value,
   }
 
   q = mutt_new_parameter ();
-  q->attribute = safe_strdup (attribute);
-  q->value = safe_strdup (value);
+  q->attribute = str_dup (attribute);
+  q->value = str_dup (value);
   q->next = *p;
   *p = q;
 }
@@ -751,15 +751,15 @@ void mutt_pretty_mailbox (char *s)
   }
   *q = 0;
 
-  if (safe_strncmp (s, Maildir, (len = mutt_strlen (Maildir))) == 0 &&
+  if (str_ncmp (s, Maildir, (len = str_len (Maildir))) == 0 &&
       s[len] == '/') {
     *s++ = '=';
-    memmove (s, s + len, mutt_strlen (s + len) + 1);
+    memmove (s, s + len, str_len (s + len) + 1);
   }
-  else if (safe_strncmp (s, Homedir, (len = mutt_strlen (Homedir))) == 0 &&
+  else if (str_ncmp (s, Homedir, (len = str_len (Homedir))) == 0 &&
            s[len] == '/') {
     *s++ = '~';
-    memmove (s, s + len - 1, mutt_strlen (s + len - 1) + 1);
+    memmove (s, s + len - 1, str_len (s + len - 1) + 1);
   }
 }
 
@@ -799,7 +799,7 @@ void mutt_expand_fmt (char *dest, size_t destlen, const char *fmt,
   size_t slen;
   int found = 0;
 
-  slen = mutt_strlen (src);
+  slen = str_len (src);
   destlen--;
 
   for (p = fmt, d = dest; destlen && *p; p++) {
@@ -831,8 +831,8 @@ void mutt_expand_fmt (char *dest, size_t destlen, const char *fmt,
   *d = '\0';
 
   if (!found && destlen > 0) {
-    safe_strcat (dest, destlen, " ");
-    safe_strcat (dest, destlen, src);
+    str_cat (dest, destlen, " ");
+    str_cat (dest, destlen, src);
   }
 
 }
@@ -951,7 +951,7 @@ int mutt_skipchars (const char *s, const char *c)
     ret++;
     s++;
   }
-  return (mutt_strlen (p));
+  return (str_len (p));
 }
 
 void mutt_FormatString (char *dest,     /* output buffer */
@@ -1051,7 +1051,7 @@ void mutt_FormatString (char *dest,     /* output buffer */
         if (count > col) {
           count -= col;         /* how many columns left on this line */
           mutt_FormatString (buf, sizeof (buf), src, callback, data, flags);
-          wid = mutt_strlen (buf);
+          wid = str_len (buf);
           if (count > wid) {
             count -= wid;       /* how many chars to pad */
             memset (wptr, ch, count);
@@ -1109,7 +1109,7 @@ void mutt_FormatString (char *dest,     /* output buffer */
               *p = '_';
         }
 
-        if ((len = mutt_strlen (buf)) + wlen > destlen)
+        if ((len = str_len (buf)) + wlen > destlen)
           len = (destlen - wlen > 0) ? (destlen - wlen) : 0;
 
         memcpy (wptr, buf, len);
@@ -1180,12 +1180,12 @@ FILE *mutt_open_read (const char *path, pid_t * thepid)
   FILE *f;
   struct stat s;
 
-  int len = mutt_strlen (path);
+  int len = str_len (path);
 
   if (path[len - 1] == '|') {
     /* read from a pipe */
 
-    char *s = safe_strdup (path);
+    char *s = str_dup (path);
 
     s[len - 1] = 0;
     mutt_endwin (NULL);
@@ -1233,7 +1233,7 @@ int mutt_save_confirm (const char *s, struct stat *st)
 
   if (magic > 0 && !mx_access (s, W_OK)) {
     if (option (OPTCONFIRMAPPEND) &&
-        (!TrashPath || (mutt_strcmp (s, TrashPath) != 0))) {
+        (!TrashPath || (str_cmp (s, TrashPath) != 0))) {
       /* if we're appending to the trash, there's no point in asking */
       snprintf (tmp, sizeof (tmp), _("Append messages to %s?"), s);
       if ((rc = mutt_yesorno (tmp, M_YES)) == M_NO)
@@ -1282,7 +1282,7 @@ void state_prefix_putc (char c, STATE * s)
   if (s->flags & M_PENDINGPREFIX) {
     int i;
 
-    i = mutt_strlen (Quotebuf);
+    i = str_len (Quotebuf);
     Quotebuf[i++] = c;
     Quotebuf[i] = '\0';
     if (i == sizeof (Quotebuf) - 1 || c == '\n') {
@@ -1336,7 +1336,7 @@ int state_printf (STATE * s, const char *fmt, ...)
 
 void state_mark_attach (STATE * s)
 {
-  if ((s->flags & M_DISPLAY) && !mutt_strcmp (Pager, "builtin"))
+  if ((s->flags & M_DISPLAY) && !str_cmp (Pager, "builtin"))
     state_puts (AttachmentMarker, s);
 }
 
@@ -1403,15 +1403,15 @@ BUFFER *mutt_buffer_from (BUFFER * b, char *seed)
     return NULL;
 
   b = mutt_buffer_init (b);
-  b->data = safe_strdup (seed);
-  b->dsize = mutt_strlen (seed);
+  b->data = str_dup (seed);
+  b->dsize = str_len (seed);
   b->dptr = (char *) b->data + b->dsize;
   return b;
 }
 
 void mutt_buffer_addstr (BUFFER * buf, const char *s)
 {
-  mutt_buffer_add (buf, s, mutt_strlen (s));
+  mutt_buffer_add (buf, s, str_len (s));
 }
 
 void mutt_buffer_addch (BUFFER * buf, char c)
@@ -1570,8 +1570,8 @@ int mutt_cmp_header (const HEADER * h1, const HEADER * h2) {
 int mutt_cmp_addr (const ADDRESS * a, const ADDRESS * b)
 {
   while (a && b) {
-    if (mutt_strcmp (a->mailbox, b->mailbox) ||
-        mutt_strcmp (a->personal, b->personal))
+    if (str_cmp (a->mailbox, b->mailbox) ||
+        str_cmp (a->personal, b->personal))
       return (0);
 
     a = a->next;
@@ -1586,7 +1586,7 @@ int mutt_cmp_addr (const ADDRESS * a, const ADDRESS * b)
 int mutt_cmp_list (const LIST * a, const LIST * b)
 {
   while (a && b) {
-    if (mutt_strcmp (a->data, b->data))
+    if (str_cmp (a->data, b->data))
       return (0);
 
     a = a->next;
@@ -1601,8 +1601,8 @@ int mutt_cmp_list (const LIST * a, const LIST * b)
 int mutt_cmp_env (const ENVELOPE * e1, const ENVELOPE * e2)
 {
   if (e1 && e2) {
-    if (mutt_strcmp (e1->message_id, e2->message_id) ||
-        mutt_strcmp (e1->subject, e2->subject) ||
+    if (str_cmp (e1->message_id, e2->message_id) ||
+        str_cmp (e1->subject, e2->subject) ||
         !mutt_cmp_list (e1->references, e2->references) ||
         !mutt_cmp_addr (e1->from, e2->from) ||
         !mutt_cmp_addr (e1->sender, e2->sender) ||
@@ -1625,8 +1625,8 @@ int mutt_cmp_env (const ENVELOPE * e1, const ENVELOPE * e2)
 int mutt_cmp_param (const PARAMETER * p1, const PARAMETER * p2)
 {
   while (p1 && p2) {
-    if (mutt_strcmp (p1->attribute, p2->attribute) ||
-        mutt_strcmp (p1->value, p2->value))
+    if (str_cmp (p1->attribute, p2->attribute) ||
+        str_cmp (p1->value, p2->value))
       return (0);
 
     p1 = p1->next;
@@ -1642,8 +1642,8 @@ int mutt_cmp_body (const BODY * b1, const BODY * b2)
 {
   if (b1->type != b2->type ||
       b1->encoding != b2->encoding ||
-      mutt_strcmp (b1->subtype, b2->subtype) ||
-      mutt_strcmp (b1->description, b2->description) ||
+      str_cmp (b1->subtype, b2->subtype) ||
+      str_cmp (b1->description, b2->description) ||
       !mutt_cmp_param (b1->parameter, b2->parameter) ||
       b1->length != b2->length)
     return (0);

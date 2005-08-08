@@ -217,7 +217,7 @@ int safe_symlink (const char *oldpath, const char *newpath)
     char abs_oldpath[_POSIX_PATH_MAX];
 
     if ((getcwd (abs_oldpath, sizeof abs_oldpath) == NULL) ||
-        (mutt_strlen (abs_oldpath) + 1 + mutt_strlen (oldpath) + 1 >
+        (str_len (abs_oldpath) + 1 + str_len (oldpath) + 1 >
          sizeof abs_oldpath))
       return -1;
 
@@ -478,7 +478,7 @@ char *mutt_concat_path (char *d, const char *dir, const char *fname, size_t l)
 {
   const char *fmt = "%s/%s";
 
-  if (!*fname || (*dir && dir[mutt_strlen (dir) - 1] == '/'))
+  if (!*fname || (*dir && dir[str_len (dir) - 1] == '/'))
     fmt = "%s%s";
 
   snprintf (d, l, fmt, dir, fname);

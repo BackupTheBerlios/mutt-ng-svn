@@ -246,7 +246,7 @@ static pgp_key_t pgp_parse_pgp2_key (unsigned char *buff, size_t l)
               "%08lX", id);
   }
 
-  p->keyid = safe_strdup ((char *) scratch);
+  p->keyid = str_dup ((char *) scratch);
 
   return p;
 
@@ -348,7 +348,7 @@ static pgp_key_t pgp_parse_pgp3_key (unsigned char *buff, size_t l)
               id);
   }
 
-  p->keyid = safe_strdup ((char *) scratch);
+  p->keyid = str_dup ((char *) scratch);
 
   return p;
 }
@@ -743,7 +743,7 @@ static void pgpring_find_candidates (char *ringfile, const char *hints[],
     char *error_buf;
     size_t error_buf_len;
 
-    error_buf_len = sizeof ("fopen: ") - 1 + mutt_strlen (ringfile) + 1;
+    error_buf_len = sizeof ("fopen: ") - 1 + str_len (ringfile) + 1;
     error_buf = safe_malloc (error_buf_len);
     snprintf (error_buf, error_buf_len, "fopen: %s", ringfile);
     perror (error_buf);

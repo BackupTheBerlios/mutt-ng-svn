@@ -73,7 +73,7 @@ static list2_t* MailboxFormats = NULL;
 #define MX_COMMAND(idx,cmd) ((mx_t*) MailboxFormats->data[idx])->cmd
 #define MX_IDX(idx) (idx >= 0 && idx < MailboxFormats->length)
 
-#define mutt_is_spool(s)  (mutt_strcmp (Spoolfile, s) == 0)
+#define mutt_is_spool(s)  (str_cmp (Spoolfile, s) == 0)
 
 #ifdef USE_DOTLOCK
 /* parameters: 
@@ -342,7 +342,7 @@ void mx_unlink_empty (const char *path)
 int mx_get_magic (const char *path) {
   int i = 0;
 
-  if (mutt_strlen (path) == 0)
+  if (str_len (path) == 0)
     return (-1);
   if ((i = mx_get_idx (path)) >= 0)
     return (MX_COMMAND(i,type));
@@ -520,7 +520,7 @@ CONTEXT *mx_open_mailbox (const char *path, int flags, CONTEXT * pctx)
   if (!ctx)
     ctx = safe_malloc (sizeof (CONTEXT));
   memset (ctx, 0, sizeof (CONTEXT));
-  ctx->path = safe_strdup (path);
+  ctx->path = str_dup (path);
 
   ctx->msgnotreadyet = -1;
   ctx->collapsed = 0;

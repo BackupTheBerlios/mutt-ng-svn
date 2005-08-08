@@ -36,7 +36,7 @@ static void print_enriched_string (int attr, unsigned char *s, int do_color)
 {
   wchar_t wc;
   size_t k;
-  size_t n = mutt_strlen ((char *) s);
+  size_t n = str_len ((char *) s);
   mbstate_t mbstate;
 
   memset (&mbstate, 0, sizeof (mbstate));
@@ -155,7 +155,7 @@ void menu_pad_string (char *s, size_t n)
     cols = COLS - shift - SidebarWidth;
   else
     cols = COLS - shift;
-  mutt_format_string (tmpbuf, n, cols, cols, 0, ' ', s, mutt_strlen (s), 1);
+  mutt_format_string (tmpbuf, n, cols, cols, 0, ' ', s, str_len (s), 1);
   tmpbuf[n - 1] = 0;
   snprintf (s, n, "%s", tmpbuf);        /* overkill */
   FREE (&tmpbuf);

@@ -157,11 +157,11 @@ static void mh_read_sequences (struct mh_sequences *mhs, const char *path)
     if (!(t = strtok (buff, " \t:")))
       continue;
 
-    if (!mutt_strcmp (t, MhUnseen))
+    if (!str_cmp (t, MhUnseen))
       f = MH_SEQ_UNSEEN;
-    else if (!mutt_strcmp (t, MhFlagged))
+    else if (!str_cmp (t, MhFlagged))
       f = MH_SEQ_FLAGGED;
-    else if (!mutt_strcmp (t, MhReplied))
+    else if (!str_cmp (t, MhReplied))
       f = MH_SEQ_REPLIED;
     else                        /* unknown sequence */
       continue;
@@ -208,7 +208,7 @@ static int mh_mkstemp (CONTEXT * dest, FILE ** fp, char **tgt)
       }
     }
     else {
-      *tgt = safe_strdup (path);
+      *tgt = str_dup (path);
       break;
     }
   }
@@ -304,11 +304,11 @@ void mh_update_sequences (CONTEXT * ctx)
   /* first, copy unknown sequences */
   if ((ofp = fopen (sequences, "r"))) {
     while ((buff = mutt_read_line (buff, &s, ofp, &l))) {
-      if (!safe_strncmp (buff, seq_unseen, mutt_strlen (seq_unseen)))
+      if (!str_ncmp (buff, seq_unseen, str_len (seq_unseen)))
         continue;
-      if (!safe_strncmp (buff, seq_flagged, mutt_strlen (seq_flagged)))
+      if (!str_ncmp (buff, seq_flagged, str_len (seq_flagged)))
         continue;
-      if (!safe_strncmp (buff, seq_replied, mutt_strlen (seq_replied)))
+      if (!str_ncmp (buff, seq_replied, str_len (seq_replied)))
         continue;
 
       fprintf (nfp, "%s\n", buff);
@@ -395,17 +395,17 @@ static void mh_sequences_add_one (CONTEXT * ctx, int n, short unseen,
   snprintf (sequences, sizeof (sequences), "%s/.mh_sequences", ctx->path);
   if ((ofp = fopen (sequences, "r"))) {
     while ((buff = mutt_read_line (buff, &sz, ofp, &line))) {
-      if (unseen && !strncmp (buff, seq_unseen, mutt_strlen (seq_unseen))) {
+      if (unseen && !strncmp (buff, seq_unseen, str_len (seq_unseen))) {
         fprintf (nfp, "%s %d\n", buff, n);
         unseen_done = 1;
       }
       else if (flagged
-               && !strncmp (buff, seq_flagged, mutt_strlen (seq_flagged))) {
+               && !strncmp (buff, seq_flagged, str_len (seq_flagged))) {
         fprintf (nfp, "%s %d\n", buff, n);
         flagged_done = 1;
       }
       else if (replied
-               && !strncmp (buff, seq_replied, mutt_strlen (seq_replied))) {
+               && !strncmp (buff, seq_replied, str_len (seq_replied))) {
         fprintf (nfp, "%s %d\n", buff, n);
         replied_done = 1;
       }
@@ -488,7 +488,7 @@ static void maildir_parse_flags (HEADER * h, const char *path)
   h->read = 0;
   h->replied = 0;
 
-  if ((p = strrchr (path, ':')) != NULL && safe_strncmp (p + 1, "2,", 2) == 0) {
+  if ((p = strrchr (path, ':')) != NULL && str_ncmp (p + 1, "2,", 2) == 0) {
     p += 3;
 
     str_replace (&h->maildir_flags, p);
@@ -637,10 +637,10 @@ static int maildir_parse_entry (CONTEXT * ctx, struct maildir ***last,
 
     if (subdir) {
       snprintf (buf, sizeof (buf), "%s/%s", subdir, fname);
-      h->path = safe_strdup (buf);
+      h->path = str_dup (buf);
     }
     else
-      h->path = safe_strdup (fname);
+      h->path = str_dup (fname);
 
     entry = safe_calloc (sizeof (struct maildir), 1);
     entry->h = h;
@@ -683,7 +683,7 @@ static int maildir_parse_dir (CONTEXT * ctx, struct maildir ***last,
 
   if (subdir) {
     snprintf (buf, sizeof (buf), "%s/%s", ctx->path, subdir);
-    is_old = (mutt_strcmp ("cur", subdir) == 0);
+    is_old = (str_cmp ("cur", subdir) == 0);
   }
   else
     strfcpy (buf, ctx->path, sizeof (buf));
@@ -835,7 +835,7 @@ static size_t maildir_hcache_keylen (const char *fn)
 {
   const char *p = strchr (fn, ':');
 
-  return p ? (size_t) (p - fn) : mutt_strlen (fn);
+  return p ? (size_t) (p - fn) : str_len (fn);
 }
 #endif
 
@@ -1001,7 +1001,7 @@ static void maildir_flags (char *dest, size_t destlen, HEADER * hdr)
               hdr->read ? "S" : "", hdr->deleted ? "T" : "",
               NONULL (hdr->maildir_flags));
     if (hdr->maildir_flags)
-      qsort (tmp, mutt_strlen (tmp), 1, ch_compar);
+      qsort (tmp, str_len (tmp), 1, ch_compar);
     snprintf (dest, destlen, ":2,%s", tmp);
   }
 }
@@ -1055,7 +1055,7 @@ static int maildir_open_new_message (MESSAGE * msg, CONTEXT * dest, HEADER * hdr
     }
     else {
       debug_print (2, ("success.\n"));
-      msg->path = safe_strdup (path);
+      msg->path = str_dup (path);
       break;
     }
   }
@@ -1356,7 +1356,7 @@ static int maildir_sync_message (CONTEXT * ctx, int msgno)
     snprintf (fullpath, sizeof (fullpath), "%s/%s", ctx->path, partpath);
     snprintf (oldpath, sizeof (oldpath), "%s/%s", ctx->path, h->path);
 
-    if (mutt_strcmp (fullpath, oldpath) == 0) {
+    if (str_cmp (fullpath, oldpath) == 0) {
       /* message hasn't really changed */
       return 0;
     }
@@ -1605,7 +1605,7 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint, int unused)
 
   for (p = md; p; p = p->next) {
     maildir_canon_filename (buf, p->h->path, sizeof (buf));
-    p->canon_fname = safe_strdup (buf);
+    p->canon_fname = str_dup (buf);
     hash_insert (fnames, p->canon_fname, p, 0);
   }
 
@@ -1621,7 +1621,7 @@ static int maildir_check_mailbox (CONTEXT * ctx, int *index_hint, int unused)
       /* check to see if the message has moved to a different
        * subdirectory.  If so, update the associated filename.
        */
-      if (mutt_strcmp (ctx->hdrs[i]->path, p->h->path))
+      if (str_cmp (ctx->hdrs[i]->path, p->h->path))
         str_replace (&ctx->hdrs[i]->path, p->h->path);
 
       /* if the user hasn't modified the flags on this message, update
@@ -1806,7 +1806,7 @@ FILE *_maildir_open_find_message (const char *folder, const char *unique,
   while ((de = readdir (dp))) {
     maildir_canon_filename (tunique, de->d_name, sizeof (tunique));
 
-    if (!mutt_strcmp (tunique, unique)) {
+    if (!str_cmp (tunique, unique)) {
       snprintf (fname, sizeof (fname), "%s/%s/%s", folder, subfolder,
                 de->d_name);
       fp = fopen (fname, "r");  /* __FOPEN_CHECKED__ */

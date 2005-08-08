@@ -194,14 +194,14 @@ static int rfc1524_mailcap_parse (BODY * a,
       /* check type */
       ch = get_field (buf);
       if (ascii_strcasecmp (buf, type) && (ascii_strncasecmp (buf, type, btlen) || (buf[btlen] != 0 &&  /* implicit wild */
-                                                                                    mutt_strcmp (buf + btlen, "/*"))))  /* wildsubtype */
+                                                                                    str_cmp (buf + btlen, "/*"))))  /* wildsubtype */
         continue;
 
       /* next field is the viewcommand */
       field = ch;
       ch = get_field (ch);
       if (entry)
-        entry->command = safe_strdup (field);
+        entry->command = str_dup (field);
 
       /* parse the optional fields */
       found = TRUE;
@@ -265,7 +265,7 @@ static int rfc1524_mailcap_parse (BODY * a,
 
           if (get_field_text (field + 4, &test_command, type, filename, line)
               && test_command) {
-            len = mutt_strlen (test_command) + STRING;
+            len = str_len (test_command) + STRING;
             safe_realloc (&test_command, len);
             rfc1524_expand_command (a, a->filename, type, test_command, len);
             if (mutt_system (test_command)) {
@@ -473,8 +473,8 @@ int rfc1524_expand_filename (char *nametemplate,
 
       rmatch = 1;
 
-      for (r = 0, j = mutt_strlen (oldfile) - 1, k =
-           mutt_strlen (nametemplate) - 1;
+      for (r = 0, j = str_len (oldfile) - 1, k =
+           str_len (nametemplate) - 1;
            j >= (lmatch ? i : 0) && k >= i + 2; j--, k--) {
         if (nametemplate[k] != oldfile[j]) {
           rmatch = 0;
