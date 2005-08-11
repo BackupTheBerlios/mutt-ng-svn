@@ -277,11 +277,7 @@ int mutt_invoke_libesmtp (ADDRESS * from,       /* the sender */
   if (SmtpAuthUser) {
     if ((authctx = auth_create_context ()) == NULL)
       MSGFAIL ("auth_create_context failed");
-#if defined (USE_SSL) || (defined (USE_GNUTLS) && defined (HAVE_GNUTLS_OPENSSL_H))
-    auth_set_mechanism_flags (authctx, AUTH_PLUGIN_EXTERNAL, 0);
-#else
     auth_set_mechanism_flags (authctx, AUTH_PLUGIN_PLAIN, 0);
-#endif
     auth_set_interact_cb (authctx, _mutt_libesmtp_auth_interact, NULL);
 
     if (!smtp_auth_set_context (session, authctx))
