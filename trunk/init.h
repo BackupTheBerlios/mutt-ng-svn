@@ -2391,13 +2391,16 @@ struct option_t MuttVars[] = {
   {"smtp_use_tls", DT_STR, R_NONE, UL &SmtpUseTLS, 0},
   /*
    ** .pp
-   ** Availability: SMTP
+   ** Availability: SMTP (and SSL)
    **
    ** .pp
-   ** Defines wether to use STARTTLS. If this option is set to ``required''
+   ** Defines wether to use STARTTLS. If this option is set to ``\fIrequired\fP''
    ** and the server does not support STARTTLS or there is an error in the
-   ** TLS Handshake, the connection will fail. Setting this to ``enabled''
+   ** TLS Handshake, the connection will fail. Setting this to ``\fIenabled\fP''
    ** will try to start TLS and continue without TLS in case of an error.
+   **
+   **.pp
+   ** Muttng still needs to have SSL support enabled in order to use it.
    */
 #endif
 #if defined(USE_SSL) || defined(USE_GNUTLS)
