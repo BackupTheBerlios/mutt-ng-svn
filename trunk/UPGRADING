@@ -12,7 +12,9 @@ sources of information.
 
 2005-08-11:
 
-  The $imap_check_subscribed option has been added.
+  The $smtp_use_tls option has been added.
+
+  The $imap_check_subscribed option has been added in muttng and mutt.
 
 2005-08-08:
 

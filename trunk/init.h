@@ -2388,6 +2388,17 @@ struct option_t MuttVars[] = {
    ** Defaults to 25, the standard SMTP port, but RFC 2476-compliant SMTP
    ** servers will probably desire 587, the mail submission port.
    */
+  {"smtp_use_tls", DT_STR, R_NONE, UL &SmtpUseTLS, 0},
+  /*
+   ** .pp
+   ** Availability: SMTP
+   **
+   ** .pp
+   ** Defines wether to use STARTTLS. If this option is set to ``required''
+   ** and the server does not support STARTTLS or there is an error in the
+   ** TLS Handshake, the connection will fail. Setting this to ``enabled''
+   ** will try to start TLS and continue without TLS in case of an error.
+   */
 #endif
 #if defined(USE_SSL) || defined(USE_GNUTLS)
 #ifdef USE_SSL

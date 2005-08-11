@@ -11,12 +11,19 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
+#include "enter.h"
 
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
 
+#if defined (USE_SSL) || (defined (USE_GNUTLS) && defined (HAVE_GNUTLS_OPENSSL_H))
+#include <openssl/ssl.h>
+#endif
+
 #include <errno.h>
+
 #include <auth-client.h>
 #include <libesmtp.h>
 
@@ -118,7 +125,8 @@ _mutt_libesmtp_auth_interact (auth_client_request_t request,
           snprintf (prompt, sizeof (prompt), "%s%s: ", request[i].prompt,
                     (request[i].
                      flags & AUTH_CLEARTEXT) ? " (not encrypted)" : "");
-          mutt_get_password (prompt, authpass, sizeof (authpass));
+          mutt_get_field_unbuffered (prompt, authpass, sizeof (authpass),
+                                     M_PASS);
         }
         result[i] = authpass;
       }
@@ -160,6 +168,71 @@ static const char *_mutt_libesmtp_messagefp_cb (void **buf, int *len,
   return *buf;
 }
 
+#if defined (USE_SSL) || (defined (USE_GNUTLS) && defined (HAVE_GNUTLS_OPENSSL_H))
+static int handle_invalid_peer_certificate (long vfy_result) {
+  mutt_error (_("Error verifying certificate: %s"),
+              NONULL (X509_verify_cert_error_string (vfy_result)));
+  sleep(2);
+  return 1; /* Accept the problem */
+}
+#endif
+
+void event_cb (smtp_session_t session, int event_no, void *arg,...)
+{ 
+  va_list alist;
+  int *ok;
+
+  va_start(alist, arg);
+  switch(event_no) {
+  case SMTP_EV_CONNECT:
+  case SMTP_EV_MAILSTATUS:
+  case SMTP_EV_RCPTSTATUS:
+  case SMTP_EV_MESSAGEDATA:
+  case SMTP_EV_MESSAGESENT:
+  case SMTP_EV_DISCONNECT: break;
+  case SMTP_EV_WEAK_CIPHER: {
+    int bits;
+    bits = va_arg(alist, long); ok = va_arg(alist, int*);
+    mutt_message (_("SMTP_EV_WEAK_CIPHER, bits=%d - accepted."), bits);
+    sleep(1);
+    *ok = 1; break;
+  } 
+  case SMTP_EV_STARTTLS_OK:
+    mutt_message (_("Using TLS"));
+    sleep(1);
+    break;
+  case SMTP_EV_INVALID_PEER_CERTIFICATE: {
+    long vfy_result;
+    vfy_result = va_arg(alist, long); ok = va_arg(alist, int*);
+    *ok = handle_invalid_peer_certificate(vfy_result);
+    sleep(1);
+    break;
+  } 
+  case SMTP_EV_NO_PEER_CERTIFICATE: {
+    ok = va_arg(alist, int*); 
+    mutt_message (_("SMTP_EV_NO_PEER_CERTIFICATE - accepted."));
+    sleep(1);
+    *ok = 1; break;
+  }
+  case SMTP_EV_WRONG_PEER_CERTIFICATE: {
+    ok = va_arg(alist, int*);
+    mutt_message (_("SMTP_EV_WRONG_PEER_CERTIFICATE - accepted."));
+    sleep(1);
+    *ok = 1; break;
+  }
+  case SMTP_EV_NO_CLIENT_CERTIFICATE: {
+    ok = va_arg(alist, int*);
+    mutt_message (_("SMTP_EV_NO_CLIENT_CERTIFICATE - accepted."));
+    sleep(1);
+    *ok = 1; break;
+  }
+  default:
+    mutt_message(_("Got event: %d - ignored."), event_no);
+    sleep(1);
+  }
+  va_end(alist);
+}
+
 /*
  * mutt_invoke_libesmtp
  *   Sends a mail message to the provided recipients using libesmtp.
@@ -185,6 +258,14 @@ int mutt_invoke_libesmtp (ADDRESS * from,       /* the sender */
   if ((session = smtp_create_session ()) == NULL)
     SMTPFAIL ("smtp_create_session");
 
+#if defined (USE_SSL) || (defined (USE_GNUTLS) && defined (HAVE_GNUTLS_OPENSSL_H))
+  if (SmtpUseTLS != NULL && ascii_strncasecmp("enabled", SmtpUseTLS, 7) == 0) {
+    smtp_starttls_enable(session, Starttls_ENABLED);
+  } else if (SmtpUseTLS != NULL && ascii_strncasecmp("required", SmtpUseTLS, 8) == 0) {
+    smtp_starttls_enable(session, Starttls_REQUIRED);
+  }
+#endif
+
   /* Create hostname:port string and tell libesmtp */
   /* len = SmtpHost len + colon + max port (65536 => 5 chars) + terminator */
   hostportlen = str_len (SmtpHost) + 7;
@@ -196,12 +277,21 @@ int mutt_invoke_libesmtp (ADDRESS * from,       /* the sender */
   if (SmtpAuthUser) {
     if ((authctx = auth_create_context ()) == NULL)
       MSGFAIL ("auth_create_context failed");
+#if defined (USE_SSL) || (defined (USE_GNUTLS) && defined (HAVE_GNUTLS_OPENSSL_H))
+    auth_set_mechanism_flags (authctx, AUTH_PLUGIN_EXTERNAL, 0);
+#else
     auth_set_mechanism_flags (authctx, AUTH_PLUGIN_PLAIN, 0);
+#endif
     auth_set_interact_cb (authctx, _mutt_libesmtp_auth_interact, NULL);
 
     if (!smtp_auth_set_context (session, authctx))
       SMTPFAIL ("smtp_auth_set_context");
   }
+
+#if defined (USE_SSL) || (defined (USE_GNUTLS) && defined (HAVE_GNUTLS_OPENSSL_H))
+  smtp_starttls_set_ctx (session, NULL);
+#endif
+  smtp_set_eventcb (session, event_cb, NULL);
 
   if ((message = smtp_add_message (session)) == NULL)
     SMTPFAIL ("smtp_add_message");

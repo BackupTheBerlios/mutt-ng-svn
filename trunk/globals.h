@@ -146,6 +146,7 @@ WHERE char *SmtpAuthUser;
 WHERE char *SmtpAuthPass;
 WHERE char *SmtpHost;
 WHERE unsigned short SmtpPort;
+WHERE char *SmtpUseTLS;
 #endif
 WHERE char *Spoolfile;
 WHERE char *SpamSep;

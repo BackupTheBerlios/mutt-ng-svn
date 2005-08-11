@@ -1,5 +1,9 @@
 Changes specific to mutt-ng:
 
+2005-08-11:
+  * Christian Gall <cg@cgall.de> kindly contributed a patch to add support
+    for using TLS via the libESMTP library
+
 2005-07-24:
   * restoring xterm's title is possible (with some shell magic, see manual)
 
