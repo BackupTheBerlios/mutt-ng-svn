@@ -895,7 +895,7 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
   int bytes = a->length;
   char buf[LONG_STRING];
   char *curline = strdup ("");
-  char *t;
+  char *t = NULL;
   unsigned int curline_len = 1;
   unsigned int quotelevel = 0, newql = 0;
   int first_line = 1;
@@ -906,8 +906,9 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
 
     newql = get_quote_level (buf);
 
-    if ((t = strrchr (buf, '\n')) || (t = strrchr (buf, '\r'))) {
-      *t = '\0';
+    if (bytes == 0 || ((t = strrchr (buf, '\n')) || (t = strrchr (buf, '\r')))) {
+      if (t)
+        *t = '\0';
       if (str_len (curline) > 0 && curline[str_len (curline) - 1] == ' '
           && newql == quotelevel
           && strcmp (curline + quotelevel, "-- ") != 0) {
@@ -937,19 +938,6 @@ static void text_plain_flowed_handler (BODY * a, STATE * s)
         str_ncat (curline, curline_len, buf, str_len (buf));
         quotelevel = newql;
       }
-    }
-    else if (bytes == 0) {
-      /* in case there's no line end it's likely the last line
-       * so append to current (if any) */
-      if (buf[newql] == ' ')
-        curline[str_len (curline) - 1] = '\0';
-      curline = realloc (curline, curline_len + str_len (buf));
-      if (curline_len == 1)
-        *curline = '\0';
-      curline_len += str_len (buf);
-      str_ncat (curline, curline_len, buf + newql,
-                    str_len (buf + newql));
-      break;
     }
   }
   if (curline) {
