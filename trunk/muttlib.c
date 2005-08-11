@@ -215,43 +215,6 @@ void mutt_free_parameter (PARAMETER ** p)
   *p = 0;
 }
 
-LIST *mutt_add_list (LIST * head, const char *data) {
-  size_t len = str_len (data);
-  return (mutt_add_list_n (head, data, len ? len + 1 : 0));
-}
-
-LIST *mutt_add_list_n (LIST *head, const void *data, size_t len) {
-  LIST *tmp;
-
-  for (tmp = head; tmp && tmp->next; tmp = tmp->next);
-
-  if (tmp) {
-    tmp->next = mem_malloc (sizeof (LIST));
-    tmp = tmp->next;
-  } else
-    head = tmp = mem_malloc (sizeof (LIST));
-
-  tmp->data = mem_malloc (len);
-  if (len)
-    memcpy (tmp->data, data, len);
-  tmp->next = NULL;
-  return head;
-}
-
-void mutt_free_list (LIST ** list)
-{
-  LIST *p;
-
-  if (!list)
-    return;
-  while (*list) {
-    p = *list;
-    *list = (*list)->next;
-    mem_free (&p->data);
-    mem_free (&p);
-  }
-}
-
 HEADER *mutt_dup_header (HEADER * h)
 {
   HEADER *hnew;

@@ -42,6 +42,7 @@
 #include <grp.h>
 
 #include "rfc822.h"
+#include "list.h"
 #include "hash.h"
 #include "charset.h"
 #include "lib/rx.h"
@@ -559,11 +560,6 @@ enum {
 #define toggle_option(x) mutt_bit_toggle(Options,x)
 #define option(x) mutt_bit_isset(Options,x)
 
-typedef struct list_t {
-  char *data;
-  struct list_t *next;
-} LIST;
-
 typedef struct spam_list_t {
   rx_t *rx;
   int nmatch;
@@ -572,16 +568,10 @@ typedef struct spam_list_t {
 } SPAM_LIST;
 
 
-#define mutt_new_list() mem_calloc (1, sizeof (LIST))
 #define mutt_new_spam_list() mem_calloc (1, sizeof (SPAM_LIST))
-void mutt_free_list (LIST **);
 void mutt_free_spam_list (SPAM_LIST **);
-LIST *mutt_copy_list (LIST *);
-int mutt_matches_ignore (const char *, LIST *);
 
-/* add an element to a list */
-LIST *mutt_add_list (LIST*, const char*);
-LIST *mutt_add_list_n (LIST*, const void*, size_t len);
+int mutt_matches_ignore (const char *, LIST *);
 
 void mutt_init (int, LIST *);
 

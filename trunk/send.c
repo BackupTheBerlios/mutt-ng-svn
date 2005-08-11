@@ -369,24 +369,6 @@ static void process_user_header (ENVELOPE * env)
   }
 }
 
-LIST *mutt_copy_list (LIST * p)
-{
-  LIST *t, *r = NULL, *l = NULL;
-
-  for (; p; p = p->next) {
-    t = (LIST *) mem_malloc (sizeof (LIST));
-    t->data = str_dup (p->data);
-    t->next = NULL;
-    if (l) {
-      r->next = t;
-      r = r->next;
-    }
-    else
-      l = r = t;
-  }
-  return (l);
-}
-
 void mutt_forward_intro (FILE * fp, HEADER * cur)
 {
   char buffer[STRING];
