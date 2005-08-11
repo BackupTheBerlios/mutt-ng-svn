@@ -362,14 +362,13 @@ void pgp_application_pgp_handler (BODY * m, STATE * s)
             state_attach_puts (_("[-- End of PGP output --]\n\n"), s);
           }
         }
-      }
 
-      /* treat empty result as sign of failure */
-      if (pgpout !=NULL)
-        if (! ftell(pgpout)) {
-          mutt_error _("Could not decrypt PGP message");
-          goto out;
+        /* treat empty result as sign of failure */
+        if (!(pgpout && ftell (pgpout))) {
+            mutt_error _("Could not decrypt PGP message");
+            goto out;
         }
+      }
 
       /*
        * Now, copy cleartext to the screen.  NOTE - we expect that PGP

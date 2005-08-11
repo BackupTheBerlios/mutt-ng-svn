@@ -10,6 +10,10 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-08-11:
+
+  The $imap_check_subscribed option has been added.
+
 2005-08-08:
 
   The $imap_force_ssl option has been replaced with the more generic

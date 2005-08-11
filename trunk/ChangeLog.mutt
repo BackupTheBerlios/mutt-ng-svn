@@ -1,4 +1,66 @@
-2005-08-08 03:30:59  Brendan Cully  <brendan@kublai.com>  (brendan)
+2005-08-09 20:13:03  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* doc/Makefile.in, doc/manual.sgml.tail: Replace raw latin1
+	characters with entities, and enable latin output for
+	manual.txt. I'm not sure this is ideal for non-latin (eg
+	utf8) environments, but hopefully docbook will resolve this
+	anyway. Closes: #2029.
+
+2005-08-09 19:59:46  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* doc/manual.sgml.head: Replace free ~ with &tilde;. Closes:
+	#2030.
+
+	* pgp.c: Move pgp failure check inside the if (invoke pgp)
+	block. Really Closes: 2032.
+
+	* pgp.c: Don't ftell pgp output file if there isn't one. Closes:
+	#2032.
+
+2005-08-09 16:24:15  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (brendan)
+
+	* crypt-gpgme.c: Improve translatability of crypt-gpgme. Closes:
+	#2020.
+
+2005-08-09 16:10:40  Mads Martin Joergensen  <mmj@suse.de>  (brendan)
+
+	* copy.c: Remove an unneeded cast, which introduces
+	type-punning. Modified to use FREE instead of safe_free, since
+	that seems to be the convention. I personally don't see the
+	point.
+
+2005-08-08 18:59:43  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* mutt_socket.c: Pause for a moment when a hostname fails to
+	resolve. Closes #1942.	There are a number of cases where mutt
+	cascades error messages. It might be nice if there were an error
+	stack so that low level functions could push_error instead of
+	displaying it right away, and the higher level ones could eg
+	mutt_message(_("Failed to write FCC: %s"), pop_error ())...
+
+	* main.c: Document -d option in mutt -h output. Closes #2027.
+
+	* init.h: Remove undefined reference to unmailboxes
+	command. Closes #2028.
+
+2005-08-08 06:44:01  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* imap/imap.c: Fix edge case where we might have to wait two
+	timeouts to check for IMAP mail.
+
+	* imap/command.c, imap/imap.c, init.h: Fix bug just introduced in
+	lsub parsing that could cause mutt to loop indefinitely. Don't
+	recheck subscriptions at every mailbox change, just the initial
+	connection.
+
+	* imap/imap.c: If imap_check_subscribed is set, mailbox or
+	unmailbox folders in response to subscribe/unsubscribe commands in
+	the browser.
+
+	* imap/browse.c, imap/command.c, imap/imap.c, init.h, mutt.h: New
+	option: $imap_check_subscribed. If set, mutt will fetch the set of
+	subscribed mailboxes from the server and add them to the buffy
+	list.
 
 	* browser.c: Avoid a segfault attempting to browse an invalid IMAP
 	URL.
@@ -114,7 +176,7 @@
 	* account.c: Fix password prompt for POP (more authentication ID
 	fallout).
 
-         * doc/manual.sgml.head: Document <backtab> key.
+	* doc/manual.sgml.head: Document <backtab> key.
                                  
 	* pgp.c: Automatically forget PGP passphrase on sign or decrypt
 	error. (closes #1025). Display "successfully decrypted" message

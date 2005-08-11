@@ -333,6 +333,7 @@ IMAP_DATA *imap_conn_find (const ACCOUNT * account, int flags)
   CONNECTION *conn;
   IMAP_DATA *idata;
   ACCOUNT *creds;
+  int new = 0;
 
   if (!(conn = mutt_conn_find (NULL, account)))
     return NULL;
@@ -369,6 +370,7 @@ IMAP_DATA *imap_conn_find (const ACCOUNT * account, int flags)
 
     conn->data = idata;
     idata->conn = conn;
+    new = 1;
   }
 
   if (idata->state == IMAP_DISCONNECTED)
@@ -384,8 +386,13 @@ IMAP_DATA *imap_conn_find (const ACCOUNT * account, int flags)
 
     mem_free (&idata->capstr);
   }
-  if (idata->state == IMAP_AUTHENTICATED)
+  if (new && idata->state == IMAP_AUTHENTICATED) {
     imap_get_delim (idata);
+    if (option (OPTIMAPCHECKSUBSCRIBED)) {
+      mutt_message _("Checking mailbox subscriptions");
+      imap_exec (idata, "LSUB \"\" \"*\"", 0);
+    }
+  }
 
   return idata;
 }
@@ -1108,7 +1115,7 @@ int imap_check_mailbox (CONTEXT * ctx, int *index_hint, int force)
 
   idata = (IMAP_DATA *) ctx->data;
 
-  if ((force || time (NULL) > idata->lastread + Timeout)
+  if ((force || time (NULL) >= idata->lastread + Timeout)
       && imap_exec (idata, "NOOP", 0) != 0)
     return -1;
 
@@ -1297,6 +1304,8 @@ int imap_subscribe (char *path, int subscribe)
   IMAP_DATA *idata;
   char buf[LONG_STRING];
   char mbox[LONG_STRING];
+  char errstr[STRING];
+  BUFFER err, token;
   IMAP_MBOX mx;
 
   if (mx_get_magic (path) == M_IMAP || imap_parse_path (path, &mx)) {
@@ -1304,21 +1313,31 @@ int imap_subscribe (char *path, int subscribe)
     return -1;
   }
 
-
   if (!(idata = imap_conn_find (&(mx.account), 0)))
     goto fail;
 
   conn = idata->conn;
 
   imap_fix_path (idata, mx.mbox, buf, sizeof (buf));
+
+  if (option (OPTIMAPCHECKSUBSCRIBED)) {
+    memset (&token, 0, sizeof (token));
+    err.data = errstr;
+    err.dsize = sizeof (errstr);
+    snprintf (mbox, sizeof (mbox), "%smailboxes \"%s\"",
+              subscribe ? "" : "un", path);
+    if (mutt_parse_rc_line (mbox, &token, &err))
+      debug_print (1, ("Error adding subscribed mailbox: %s\n", errstr));
+    mem_free (&token.data);
+  }
+
   if (subscribe)
     mutt_message (_("Subscribing to %s..."), buf);
   else
     mutt_message (_("Unsubscribing to %s..."), buf);
   imap_munge_mbox_name (mbox, sizeof (mbox), buf);
 
-  snprintf (buf, sizeof (buf), "%s %s", subscribe ? "SUBSCRIBE" :
-            "UNSUBSCRIBE", mbox);
+  snprintf (buf, sizeof (buf), "%sSUBSCRIBE %s", subscribe ? "" : "UN", mbox);
 
   if (imap_exec (idata, buf, 0) < 0)
     goto fail;

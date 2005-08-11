@@ -120,7 +120,11 @@ options:\n\
   -a <file>\tattach a file to the message\n\
   -b <address>\tspecify a blind carbon-copy (BCC) address\n\
   -c <address>\tspecify a carbon-copy (CC) address\n\
-  -D\t\tprint the value of all variables to stdout\n\
+  -D\t\tprint the value of all variables to stdout");
+#if DEBUG
+  puts _("  -d <level>\tlog debugging output to ~/.muttngdebug0");
+#endif
+  puts _("\
   -e <command>\tspecify a command to be executed after initialization\n\
   -f <file>\tspecify which mailbox to read\n\
   -F <file>\tspecify an alternate muttrc file\n\

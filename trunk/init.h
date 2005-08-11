@@ -939,6 +939,14 @@ struct option_t MuttVars[] = {
    ** the previous methods are unavailable. If a method is available but
    ** authentication fails, Mutt-ng will not connect to the IMAP server.
    */
+  { "imap_check_subscribed",  DT_BOOL, R_NONE, OPTIMAPCHECKSUBSCRIBED, 0 },
+  /*
+   ** .pp
+   ** When \fIset\fP, mutt will fetch the set of subscribed folders from
+   ** your server on connection, and add them to the set of mailboxes
+   ** it polls for new mail. See also the ``$mailboxes'' command.
+   */
+  
   {"imap_delim_chars", DT_STR, R_NONE, UL &ImapDelimChars, UL "/."},
   /*
    ** .pp
@@ -1258,7 +1266,7 @@ struct option_t MuttVars[] = {
    ** \fBDON'T CHANGE THIS SETTING UNLESS YOU ARE REALLY SURE WHAT YOU ARE
    ** DOING!\fP
    */
-#if USE_HCACHE
+#ifdef USE_HCACHE
 
   {"header_cache", DT_PATH, R_NONE, UL &HeaderCache, 0},
   /*

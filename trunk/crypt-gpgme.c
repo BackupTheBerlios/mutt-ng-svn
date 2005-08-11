@@ -2753,7 +2753,8 @@ static void print_key_info (gpgme_key_t key, FILE * fp)
       continue;
 
     s = uid->uid;
-    fprintf (fp, "%s ......: ", idx ? _(" aka") : _("Name"));
+    fputs (idx ? _(" aka ......: ") :_("Name ......: "), fp);
+
     if (uid->invalid) {
       fputs (_("[Invalid]"), fp);
       putc (' ', fp);
@@ -2774,7 +2775,7 @@ static void print_key_info (gpgme_key_t key, FILE * fp)
 #else
     strftime (shortbuf, sizeof shortbuf, "%c", tm);
 #endif
-    fprintf (fp, "Valid From : %s\n", shortbuf);
+    fprintf (fp, _("Valid From : %s\n"), shortbuf);
   }
 
   if (key->subkeys && (key->subkeys->expires > 0)) {
@@ -2786,7 +2787,7 @@ static void print_key_info (gpgme_key_t key, FILE * fp)
 #else
     strftime (shortbuf, sizeof shortbuf, "%c", tm);
 #endif
-    fprintf (fp, "Valid To ..: %s\n", shortbuf);
+    fprintf (fp, _("Valid To ..: %s\n"), shortbuf);
   }
 
   if (key->subkeys)
@@ -2799,22 +2800,22 @@ static void print_key_info (gpgme_key_t key, FILE * fp)
   if (key->subkeys)
     aval = key->subkeys->length;
 
-  fprintf (fp, "Key Type ..: %s, %lu bit %s\n", s2, aval, s);
+  fprintf (fp, _("Key Type ..: %s, %lu bit %s\n"), s2, aval, s);
 
-  fprintf (fp, "Key Usage .: ");
+  fprintf (fp, _("Key Usage .: "));
   delim = "";
 
   if (key_check_cap (key, KEY_CAP_CAN_ENCRYPT)) {
     fprintf (fp, "%s%s", delim, _("encryption"));
-    delim = ", ";
+    delim = _(", ");
   }
   if (key_check_cap (key, KEY_CAP_CAN_SIGN)) {
     fprintf (fp, "%s%s", delim, _("signing"));
-    delim = ", ";
+    delim = _(", ");
   }
   if (key_check_cap (key, KEY_CAP_CAN_CERTIFY)) {
     fprintf (fp, "%s%s", delim, _("certification"));
-    delim = ", ";
+    delim = _(", ");
   }
   putc ('\n', fp);
 
@@ -2847,13 +2848,13 @@ static void print_key_info (gpgme_key_t key, FILE * fp)
   if (key->issuer_serial) {
     s = key->issuer_serial;
     if (s)
-      fprintf (fp, "Serial-No .: 0x%s\n", s);
+      fprintf (fp, _("Serial-No .: 0x%s\n"), s);
   }
 
   if (key->issuer_name) {
     s = key->issuer_name;
     if (s) {
-      fprintf (fp, "Issued By .: ");
+      fprintf (fp, _("Issued By .: "));
       parse_and_print_user_id (fp, s);
       putc ('\n', fp);
     }
@@ -2869,7 +2870,7 @@ static void print_key_info (gpgme_key_t key, FILE * fp)
       putc ('\n', fp);
       if (str_len (s) == 16)
         s += 8;                 /* display only the short keyID */
-      fprintf (fp, "Subkey ....: 0x%s", s);
+      fprintf (fp, _("Subkey ....: 0x%s"), s);
       if (subkey->revoked) {
         putc (' ', fp);
         fputs (_("[Revoked]"), fp);
@@ -2897,7 +2898,7 @@ static void print_key_info (gpgme_key_t key, FILE * fp)
 #else
         strftime (shortbuf, sizeof shortbuf, "%c", tm);
 #endif
-        fprintf (fp, "Valid From : %s\n", shortbuf);
+        fprintf (fp, _("Valid From : %s\n"), shortbuf);
       }
 
       if (subkey->expires > 0) {
@@ -2909,7 +2910,7 @@ static void print_key_info (gpgme_key_t key, FILE * fp)
 #else
         strftime (shortbuf, sizeof shortbuf, "%c", tm);
 #endif
-        fprintf (fp, "Valid To ..: %s\n", shortbuf);
+        fprintf (fp, _("Valid To ..: %s\n"), shortbuf);
       }
 
       if (subkey)
@@ -2922,22 +2923,22 @@ static void print_key_info (gpgme_key_t key, FILE * fp)
       else
         aval = 0;
 
-      fprintf (fp, "Key Type ..: %s, %lu bit %s\n", "PGP", aval, s);
+      fprintf (fp, _("Key Type ..: %s, %lu bit %s\n"), "PGP", aval, s);
 
-      fprintf (fp, "Key Usage .: ");
+      fprintf (fp, _("Key Usage .: "));
       delim = "";
 
       if (subkey->can_encrypt) {
         fprintf (fp, "%s%s", delim, _("encryption"));
-        delim = ", ";
+        delim = _(", ");
       }
       if (subkey->can_sign) {
         fprintf (fp, "%s%s", delim, _("signing"));
-        delim = ", ";
+        delim = _(", ");
       }
       if (subkey->can_certify) {
         fprintf (fp, "%s%s", delim, _("certification"));
-        delim = ", ";
+        delim = _(", ");
       }
       putc ('\n', fp);
     }
