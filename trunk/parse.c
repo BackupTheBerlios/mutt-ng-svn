@@ -12,6 +12,10 @@
 #endif
 
 #include "mutt.h"
+#include "buffer.h"
+#include "enter.h"
+#include "ascii.h"
+#include "recvattach.h"
 #include "mx.h"
 #include "mime.h"
 #include "rfc2047.h"

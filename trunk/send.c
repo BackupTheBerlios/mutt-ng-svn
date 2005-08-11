@@ -12,6 +12,8 @@
 #endif
 
 #include "mutt.h"
+#include "enter.h"
+#include "ascii.h"
 #include "mutt_curses.h"
 #include "rfc2047.h"
 #include "keymap.h"

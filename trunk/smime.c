@@ -14,6 +14,8 @@
 #endif
 
 #include "mutt.h"
+#include "enter.h"
+#include "handler.h"
 #include "mutt_curses.h"
 #include "mutt_menu.h"
 #include "smime.h"

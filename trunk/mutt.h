@@ -827,11 +827,6 @@ typedef struct {
   unsigned int counting:1;      /* do we just want to cound? */
 } CONTEXT;
 
-#include "ascii.h"
-#include "alias.h"
-#include "buffer.h"
-#include "state.h"
-#include "enter.h"
 #include "protos.h"
 #include "lib.h"
 #include "globals.h"

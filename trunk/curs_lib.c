@@ -16,6 +16,7 @@
 #endif
 
 #include "mutt.h"
+#include "enter.h"
 #include "mutt_menu.h"
 #include "mutt_curses.h"
 #include "pager.h"

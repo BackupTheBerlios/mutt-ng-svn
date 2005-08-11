@@ -14,6 +14,8 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
+#include "enter.h"
 #include "mutt_curses.h"
 #include "mutt_idna.h"
 

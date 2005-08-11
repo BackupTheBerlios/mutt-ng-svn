@@ -12,6 +12,7 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
 #include "mx.h"
 #include "url.h"
 #include "pop.h"

@@ -16,14 +16,15 @@
 # include "config.h"
 #endif
 
-#include "mutt.h"
-#include "imap_private.h"
-#include "message.h"
-#include "mx.h"
-
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/debug.h"
+
+#include "mutt.h"
+#include "message.h"
+#include "mx.h"
+#include "ascii.h"
+#include "imap_private.h"
 
 #include <ctype.h>
 #include <stdlib.h>

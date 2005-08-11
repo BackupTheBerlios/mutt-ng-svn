@@ -12,6 +12,10 @@
 #endif
 
 #include "mutt.h"
+#include "enter.h"
+#include "state.h"
+#include "handler.h"
+#include "recvattach.h"
 #include "mutt_curses.h"
 #include "mutt_menu.h"
 #include "rfc1524.h"

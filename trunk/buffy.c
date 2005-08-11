@@ -16,6 +16,7 @@
 
 #include "mutt.h"
 #include "buffy.h"
+#include "buffer.h"
 #include "mx.h"
 #include "mh.h"
 #include "sidebar.h"

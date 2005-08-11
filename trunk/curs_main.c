@@ -20,9 +20,11 @@
 #include "mutt_menu.h"
 #include "mapping.h"
 #include "sort.h"
+#include "recvattach.h"
 #include "buffy.h"
 #include "mx.h"
 #include "sidebar.h"
+#include "thread.h"
 #include "xterm.h"
 
 #ifdef USE_POP

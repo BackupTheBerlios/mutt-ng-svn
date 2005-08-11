@@ -16,6 +16,7 @@
 #include <stdlib.h>
 
 #include "mutt.h"
+#include "ascii.h"
 #include "mutt_idna.h"
 
 #include "lib/mem.h"

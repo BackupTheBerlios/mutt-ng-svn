@@ -38,7 +38,7 @@ muttng_SOURCES = $(BUILT_SOURCES) \
 	handler.c hash.c hcache.c hdrline.c headers.c help.c history.c hook.c \
 	init.c \
 	keymap.c \
-	lib.c \
+	lib.c list.c \
 	main.c mbox.c mbyte.c md5c.c menu.c mh.c muttlib.c mutt_idna.c mx.c \
 	pager.c parse.c pattern.c postpone.c \
 	query.c \
@@ -83,6 +83,7 @@ EXTRA_muttng_SOURCES = \
 	alias.h \
 	buffer.h browser.h \
 	enter.h \
+	list.h \
 	mbyte.h remailer.h url.h state.h \
 	pgppacket.c mutt_idna.h mutt_libesmtp.c \
 	crypt-mod-pgp-classic.c crypt-mod-smime-classic.c \
@@ -90,11 +91,12 @@ EXTRA_muttng_SOURCES = \
 
 EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	configure acconfig.h \
-	account.h alias.h attach.h \
+	account.h alias.h attach.h recvattach.h handler.h thread.h \
 	buffer.h buffy.h \
 	charset.h compress.h copy.h crypthash.h \
 	dotlock.h functions.h gen_defs \
-	enter.h \
+	enter.h recvattach.h handler.h thread.h \
+	list.h \
 	globals.h hash.h history.h init.h keymap.h mutt_crypt.h \
 	mapping.h md5.h mime.h mutt.h mutt_curses.h mutt_menu.h \
 	mutt_sasl.h mutt_socket.h mutt_ssl.h mutt_tunnel.h \

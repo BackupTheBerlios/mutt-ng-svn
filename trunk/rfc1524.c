@@ -22,6 +22,7 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
 #include "rfc1524.h"
 #include "attach.h"
 

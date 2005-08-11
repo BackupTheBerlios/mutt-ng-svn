@@ -12,6 +12,7 @@
 #endif
 
 #include "mutt.h"
+#include "buffer.h"
 #include "mx.h"
 #include "mutt_crypt.h"
 

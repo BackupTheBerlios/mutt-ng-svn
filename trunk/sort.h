@@ -31,11 +31,8 @@
 typedef int sort_t (const void *, const void *);
 sort_t *mutt_get_sort_func (int);
 
-void mutt_clear_threads (CONTEXT *);
 void mutt_sort_headers (CONTEXT *, int);
-void mutt_sort_threads (CONTEXT *, int);
 int mutt_select_sort (int);
-THREAD *mutt_sort_subthreads (THREAD *, int);
 
 WHERE short BrowserSort INITVAL (SORT_SUBJECT);
 WHERE short Sort INITVAL (SORT_DATE);

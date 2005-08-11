@@ -13,11 +13,15 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
+#include "enter.h"
+#include "handler.h"
 #include "mutt_menu.h"
 #include "rfc1524.h"
 #include "mime.h"
 #include "mapping.h"
 #include "sort.h"
+#include "thread.h"
 #include "mx.h"
 #ifdef USE_IMAP
 #include "imap.h"

@@ -13,6 +13,10 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
+#include "enter.h"
+#include "handler.h"
+#include "recvattach.h"
 #include "mutt_curses.h"
 #include "mutt_menu.h"
 #include "rfc1524.h"
@@ -54,7 +58,7 @@ static struct mapping_t AttachHelp[] = {
   {NULL}
 };
 
-int mutt_extract_path (char *filename, char *path)
+static int mutt_extract_path (char *filename, char *path)
 {
   char *tmp = mem_malloc (sizeof (char) * _POSIX_PATH_MAX);
   char *help_ptr;
@@ -345,7 +349,7 @@ const char *mutt_attach_fmt (char *dest,
   return (src);
 }
 
-void attach_entry (char *b, size_t blen, MUTTMENU * menu, int num)
+static void attach_entry (char *b, size_t blen, MUTTMENU * menu, int num)
 {
   mutt_FormatString (b, blen, NONULL (AttachFormat), mutt_attach_fmt,
                      (unsigned long) (((ATTACHPTR **) menu->data)[num]),
@@ -738,7 +742,7 @@ void mutt_print_attachment_list (FILE * fp, int tag, BODY * top)
     print_attachment_list (fp, tag, top, &state);
 }
 
-void
+static void
 mutt_update_attach_index (BODY * cur, ATTACHPTR *** idxp,
                           short *idxlen, short *idxmax, MUTTMENU * menu)
 {

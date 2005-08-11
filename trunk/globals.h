@@ -9,6 +9,8 @@
 #ifndef _GLOBALS_H
 #define _GLOBALS_H
 
+#include "alias.h"
+
 #include "lib/str.h"
 #include "lib/list.h"
 #include "lib/rx.h"

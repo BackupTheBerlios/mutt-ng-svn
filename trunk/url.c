@@ -16,6 +16,7 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
 #include "mapping.h"
 #include "url.h"
 

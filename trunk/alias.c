@@ -21,6 +21,8 @@
 #include "lib/debug.h"
 
 #include "mutt.h"
+#include "enter.h"
+#include "ascii.h"
 #include "mutt_curses.h"
 #include "mutt_idna.h"
 #include "mutt_menu.h"

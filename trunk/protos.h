@@ -28,20 +28,6 @@ void _mutt_make_string (char *, size_t, const char *, CONTEXT *,
 #define mutt_system(x) _mutt_system(x,0)
 int _mutt_system (const char *, int);
 
-#define mutt_next_thread(x) _mutt_aside_thread(x,1,0)
-#define mutt_previous_thread(x) _mutt_aside_thread(x,0,0)
-#define mutt_next_subthread(x) _mutt_aside_thread(x,1,1)
-#define mutt_previous_subthread(x) _mutt_aside_thread(x,0,1)
-int _mutt_aside_thread (HEADER *, short, short);
-
-#define mutt_collapse_thread(x,y) _mutt_traverse_thread (x,y,M_THREAD_COLLAPSE)
-#define mutt_uncollapse_thread(x,y) _mutt_traverse_thread (x,y,M_THREAD_UNCOLLAPSE)
-#define mutt_get_hidden(x,y)_mutt_traverse_thread (x,y,M_THREAD_GET_HIDDEN)
-#define mutt_thread_contains_unread(x,y) _mutt_traverse_thread (x,y,M_THREAD_UNREAD)
-#define mutt_thread_next_unread(x,y) _mutt_traverse_thread(x,y,M_THREAD_NEXT_UNREAD)
-int _mutt_traverse_thread (CONTEXT * ctx, HEADER * hdr, int flag);
-
-
 #define mutt_new_parameter() mem_calloc (1, sizeof (PARAMETER))
 #define mutt_new_header() mem_calloc (1, sizeof (HEADER))
 #define mutt_new_envelope() mem_calloc (1, sizeof (ENVELOPE))
@@ -80,9 +66,6 @@ BODY *mutt_read_mime_header (FILE *, int);
 
 CONTENT *mutt_get_content_info (const char *fname, BODY * b);
 
-HASH *mutt_make_id_hash (CONTEXT *);
-HASH *mutt_make_subj_hash (CONTEXT *);
-
 LIST *mutt_make_references (ENVELOPE * e);
 LIST *mutt_parse_references (char *, int);
 
@@ -101,16 +84,6 @@ time_t mutt_local_tz (time_t);
 time_t mutt_mktime (struct tm *, int);
 time_t mutt_parse_date (const char *, HEADER *);
 int is_from (const char *, char *, size_t, time_t *);
-
-const char *mutt_attach_fmt (char *dest,
-                             size_t destlen,
-                             char op,
-                             const char *src,
-                             const char *prefix,
-                             const char *ifstring,
-                             const char *elsestring,
-                             unsigned long data, format_flag flags);
-
 
 char *mutt_charset_hook (const char *);
 char *mutt_iconv_hook (const char *);
@@ -134,17 +107,12 @@ void mutt_add_to_reference_headers (ENVELOPE * env, ENVELOPE * curenv,
                                     LIST *** pp, LIST *** qq);
 void mutt_adv_mktemp (char *, size_t);
 void mutt_allow_interrupt (int);
-void mutt_attach_init (BODY *);
 void mutt_block_signals (void);
 void mutt_block_signals_system (void);
-void mutt_body_handler (BODY *, STATE *);
 int mutt_bounce_message (FILE * fp, HEADER *, ADDRESS *);
-void mutt_break_thread (HEADER *);
 void mutt_canonical_charset (char *, size_t, const char *);
 void mutt_check_rescore (CONTEXT *);
 void mutt_clear_error (void);
-void mutt_decode_attachment (BODY *, STATE *);
-void mutt_decode_base64 (STATE * s, long len, int istext, iconv_t cd);
 void mutt_default_save (char *, size_t, HEADER *);
 void mutt_display_address (ENVELOPE *);
 void mutt_display_sanitize (char *);
@@ -221,11 +189,9 @@ void mutt_unblock_signals (void);
 void mutt_unblock_signals_system (int);
 void mutt_update_encoding (BODY * a);
 void mutt_version (void);
-void mutt_view_attachments (HEADER *);
 void mutt_write_references (LIST *, FILE *);
 void mutt_write_address_list (ADDRESS * adr, FILE * fp, int linelen,
                               int display);
-void mutt_set_virtual (CONTEXT *);
 
 int mutt_addwch (wchar_t);
 int mutt_alloc_color (int fg, int bg);
@@ -254,7 +220,6 @@ int mutt_chscmp (const char *s, const char *chs);
 
 #define mutt_is_utf8(a) mutt_chscmp (a, "utf-8")
 #define mutt_is_us_ascii(a) mutt_chscmp (a, "us-ascii")
-int mutt_parent_message (CONTEXT *, HEADER *);
 int mutt_prepare_template (FILE *, CONTEXT *, HEADER *, HEADER *, short);
 int mutt_resend_message (FILE *, CONTEXT *, HEADER *);
 
@@ -270,16 +235,13 @@ int mutt_index_menu (void);
 int mutt_invoke_mta (ADDRESS *, ADDRESS *, ADDRESS *, ADDRESS *, const char *,
                      int);
 int mutt_is_mail_list (ADDRESS *);
-int mutt_is_message_type (int, const char *);
 int mutt_is_list_cc (int, ADDRESS *, ADDRESS *);
 int mutt_is_list_recipient (int, ADDRESS *, ADDRESS *);
 int mutt_is_subscribed_list (ADDRESS *);
 int mutt_is_text_part (BODY *);
 int mutt_is_valid_mailbox (const char *);
-int mutt_link_threads (HEADER *, HEADER *, CONTEXT *);
 int mutt_lookup_mime_type (BODY *, const char *);
 int mutt_match_spam_list (const char *, SPAM_LIST *, char *, int);
-int mutt_messages_in_thread (CONTEXT *, HEADER *, int);
 int mutt_multi_choice (char *prompt, char *letters);
 int mutt_needs_mailcap (BODY *);
 int mutt_num_postponed (int);

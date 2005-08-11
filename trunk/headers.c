@@ -12,6 +12,7 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
 

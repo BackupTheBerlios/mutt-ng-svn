@@ -23,6 +23,8 @@
 #include "lib/debug.h"
 
 #include "mutt.h"
+#include "ascii.h"
+#include "enter.h"
 #include "imap_private.h"
 
 /* -- forward declarations -- */

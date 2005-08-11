@@ -19,6 +19,9 @@
 #include <sys/stat.h>
 
 #include "mutt.h"
+#include "ascii.h"
+#include "recvattach.h"
+#include "handler.h"
 #include "mutt_curses.h"
 #include "rfc1524.h"
 #include "keymap.h"

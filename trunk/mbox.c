@@ -18,6 +18,7 @@
 #include "buffy.h"
 #include "mbox.h"
 #include "sort.h"
+#include "thread.h"
 #include "copy.h"
 
 #ifdef USE_COMPRESSED

@@ -14,6 +14,9 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
+#include "handler.h"
+#include "recvattach.h"
 #include "mutt_curses.h"
 #include "rfc2047.h"
 #include "rfc2231.h"

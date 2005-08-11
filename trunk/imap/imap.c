@@ -16,6 +16,8 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
+#include "buffer.h"
 #include "mutt_curses.h"
 #include "mx.h"
 #include "globals.h"

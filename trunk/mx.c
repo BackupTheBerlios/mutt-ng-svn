@@ -13,11 +13,13 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
 #include "mx.h"
 #include "mbox.h"
 #include "mh.h"
 #include "rfc2047.h"
 #include "sort.h"
+#include "thread.h"
 #include "copy.h"
 #include "keymap.h"
 #include "url.h"

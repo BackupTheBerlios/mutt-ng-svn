@@ -20,6 +20,7 @@
 #include "lib/debug.h"
 
 #include "mutt.h"
+#include "ascii.h"
 #include "imap_private.h"
 #include "auth.h"
 

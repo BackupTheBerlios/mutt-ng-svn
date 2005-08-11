@@ -17,6 +17,8 @@
 #define MUTT_CRYPT_H
 
 #include "mutt.h"               /* Need this to declare BODY, ADDRESS. STATE etc. */
+#include "state.h"
+
 /* FIXME: They should be pointer to anonymous structures for better
    information hiding. */
 

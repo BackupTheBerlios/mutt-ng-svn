@@ -22,6 +22,9 @@
 #endif
 
 #include "mutt.h"
+#include "enter.h"
+#include "ascii.h"
+#include "handler.h"
 #include "mutt_curses.h"
 #include "pgp.h"
 #include "mime.h"

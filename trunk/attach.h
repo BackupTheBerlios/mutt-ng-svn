@@ -9,8 +9,6 @@
 #ifndef _MUTT_ATTACH_H
 #define _MUTT_ATTACH_H
 
-#include "mutt_menu.h"
-
 typedef struct attachptr {
   BODY *content;
   int parent_type;
@@ -20,26 +18,10 @@ typedef struct attachptr {
   unsigned int unowned:1;       /* don't unlink on detach */
 } ATTACHPTR;
 
-int mutt_tag_attach (MUTTMENU * menu, int n, int m);
-int mutt_attach_display_loop (MUTTMENU * menu, int op, FILE * fp,
-                              HEADER * hdr, BODY * cur, ATTACHPTR *** idxp,
-                              short *idxlen, short *idxmax, int recv);
-
-
-void mutt_save_attachment_list (FILE * fp, int tag, BODY * top, HEADER * hdr,
-                                MUTTMENU * menu);
-void mutt_pipe_attachment_list (FILE * fp, int tag, BODY * top, int filter);
-void mutt_print_attachment_list (FILE * fp, int tag, BODY * top);
-
 void mutt_attach_bounce (FILE *, HEADER *, ATTACHPTR **, short, BODY *);
 void mutt_attach_resend (FILE *, HEADER *, ATTACHPTR **, short, BODY *);
 void mutt_attach_forward (FILE *, HEADER *, ATTACHPTR **, short, BODY *, int);
 void mutt_attach_reply (FILE *, HEADER *, ATTACHPTR **, short, BODY *, int);
-
-ATTACHPTR **mutt_gen_attach_list (BODY *, int, ATTACHPTR **, short *, short *,
-                                  int, int);
-
-void mutt_update_tree (ATTACHPTR **, short);
 
 int mutt_print_attachment (FILE *, BODY *);
 int mutt_decode_save_attachment (FILE *, BODY *, char *, int, int);

@@ -14,6 +14,8 @@
 #endif
 
 #include "mutt.h"
+#include "enter.h"
+#include "ascii.h"
 #include "account.h"
 #include "url.h"
 

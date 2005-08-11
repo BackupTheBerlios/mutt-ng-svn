@@ -12,6 +12,10 @@
 #endif
 
 #include "mutt.h"
+#include "buffer.h"
+#include "handler.h"
+#include "enter.h"
+#include "ascii.h"
 #include "mx.h"
 #include "mapping.h"
 #include "keymap.h"

@@ -13,6 +13,9 @@
 #endif
 
 #include "mutt.h"
+#include "enter.h"
+#include "ascii.h"
+#include "recvattach.h"
 #include "mutt_curses.h"
 #include "mutt_menu.h"
 #include "mime.h"

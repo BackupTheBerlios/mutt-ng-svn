@@ -12,10 +12,11 @@
 #endif
 
 #include "mutt.h"
-#include "lib/str.h"
 #include "sort.h"
+#include "thread.h"
 #include "mutt_idna.h"
 
+#include "lib/str.h"
 #include "lib/intl.h"
 
 #include <stdlib.h>

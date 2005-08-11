@@ -16,6 +16,7 @@
 #endif
 
 #include "mutt.h"
+#include "handler.h"
 #include "pgp.h"
 #include "pgppacket.h"
 #include "mime.h"

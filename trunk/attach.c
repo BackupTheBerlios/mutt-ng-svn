@@ -13,6 +13,9 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
+#include "handler.h"
+#include "recvattach.h"
 #include "mutt_menu.h"
 #include "mutt_curses.h"
 #include "keymap.h"

@@ -22,6 +22,7 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
 #include "mime.h"
 #include "charset.h"
 #include "lib/str.h"

@@ -14,6 +14,7 @@
 #include "mutt.h"
 #include "mutt_curses.h"
 #include "sort.h"
+#include "thread.h"
 #include "charset.h"
 #include "mutt_crypt.h"
 #include "mutt_idna.h"

@@ -14,6 +14,7 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
 #include "mutt_sasl.h"
 #include "imap_private.h"
 #include "auth.h"

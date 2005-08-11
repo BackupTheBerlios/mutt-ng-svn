@@ -16,12 +16,14 @@
 #endif
 
 #include "mutt.h"
+#include "enter.h"
 #include "mutt_curses.h"
 #include "mutt_idna.h"
 #include "mutt_menu.h"
 #include "rfc1524.h"
 #include "mime.h"
 #include "attach.h"
+#include "recvattach.h"
 #include "mapping.h"
 #include "sort.h"
 #include "charset.h"

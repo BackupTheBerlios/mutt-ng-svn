@@ -12,6 +12,8 @@
 #endif
 
 #include "mutt.h"
+#include "buffer.h"
+#include "ascii.h"
 #include "mutt_curses.h"
 #include "mapping.h"
 

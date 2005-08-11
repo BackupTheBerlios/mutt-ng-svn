@@ -24,6 +24,7 @@
 
 #include "mutt.h"
 #include "charset.h"
+#include "ascii.h"
 
 #include "lib/mem.h"
 #include "lib/intl.h"

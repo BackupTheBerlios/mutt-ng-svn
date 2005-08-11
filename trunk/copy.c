@@ -12,6 +12,8 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
+#include "handler.h"
 #include "mx.h"
 #include "copy.h"
 #include "rfc2047.h"

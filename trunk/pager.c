@@ -16,6 +16,7 @@
 #endif
 
 #include "mutt.h"
+#include "enter.h"
 #include "mutt_curses.h"
 #include "keymap.h"
 #include "mutt_menu.h"
@@ -23,6 +24,7 @@
 #include "sort.h"
 #include "pager.h"
 #include "attach.h"
+#include "recvattach.h"
 #include "mbyte.h"
 #include "sidebar.h"
 #include "buffy.h"

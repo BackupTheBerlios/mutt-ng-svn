@@ -15,6 +15,7 @@
 
 #include "mutt.h"
 #include "mx.h"                 /* for M_IMAP */
+#include "ascii.h"
 #include "url.h"
 #include "imap_private.h"
 #include "mutt_ssl.h"

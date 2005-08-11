@@ -24,6 +24,7 @@
 #include "copy.h"
 #include "buffy.h"
 #include "sort.h"
+#include "thread.h"
 #include "hcache.h"
 
 #include "lib/mem.h"

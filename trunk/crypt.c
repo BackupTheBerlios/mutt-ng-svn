@@ -17,6 +17,8 @@
 #endif
 
 #include "mutt.h"
+#include "ascii.h"
+#include "handler.h"
 #include "mutt_curses.h"
 #include "mime.h"
 #include "copy.h"
