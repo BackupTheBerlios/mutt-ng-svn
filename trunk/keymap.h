@@ -15,6 +15,9 @@
 /* maximal length of a key binding sequence used for buffer in km_bindkey */
 #define MAX_SEQ 8
 
+/* flags for km_dokey() */
+#define M_KM_UNBUFFERED 1       /* don't read from the key buffer */
+
 /* type for key storage, the rest of mutt works fine with int type */
 typedef short keycode_t;
 

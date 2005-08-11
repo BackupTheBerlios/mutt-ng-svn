@@ -9,6 +9,17 @@
 #ifndef _MUTT_ENTER_H
 #define _MUTT_ENTER_H
 
+/* flags for mutt_enter_string() */
+#define  M_ALIAS   1            /* do alias "completion" by calling up the alias-menu */
+#define  M_FILE    (1<<1)       /* do file completion */
+#define  M_EFILE   (1<<2)       /* do file completion, plus incoming folders */
+#define  M_CMD     (1<<3)       /* do completion on previous word */
+#define  M_PASS    (1<<4)       /* password mode (no echo) */
+#define  M_CLEAR   (1<<5)       /* clear input if printable character is pressed */
+#define  M_COMMAND (1<<6)       /* do command completion */
+#define  M_PATTERN (1<<7)       /* pattern mode - only used for history classes */
+#define  M_LASTFOLDER (1<<8)    /* last-folder mode - hack hack hack */
+
 typedef struct {
   wchar_t *wbuf;
   size_t wbuflen;

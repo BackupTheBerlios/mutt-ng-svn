@@ -65,38 +65,7 @@
 #define INITVAL(x)
 #endif
 
-/* flags for mutt_copy_header() */
-#define CH_UPDATE	1       /* update the status and x-status fields? */
-#define CH_WEED		(1<<1)  /* weed the headers? */
-#define CH_DECODE	(1<<2)  /* do RFC1522 decoding? */
-#define CH_XMIT		(1<<3)  /* transmitting this message? */
-#define CH_FROM		(1<<4)  /* retain the "From " message separator? */
-#define CH_PREFIX	(1<<5)  /* use Prefix string? */
-#define CH_NOSTATUS	(1<<6)  /* supress the status and x-status fields */
-#define CH_REORDER	(1<<7)  /* Re-order output of headers */
-#define CH_NONEWLINE	(1<<8)  /* don't output terminating newline */
-#define CH_MIME		(1<<9)  /* ignore MIME fields */
-#define CH_UPDATE_LEN	(1<<10) /* update Lines: and Content-Length: */
-#define CH_TXTPLAIN	(1<<11) /* generate text/plain MIME headers */
-#define CH_NOLEN	(1<<12) /* don't write Content-Length: and Lines: */
-#define CH_WEED_DELIVERED (1<<13)       /* weed eventual Delivered-To headers */
-#define CH_FORCE_FROM	(1<<14) /* give CH_FROM precedence over CH_WEED? */
-#define CH_NOQFROM	(1<<15) /* give CH_FROM precedence over CH_WEED? */
-#define CH_UPDATE_IRT	(1<<16) /* update In-Reply-To: */
-#define CH_UPDATE_REFS	(1<<17) /* update References: */
-
-/* flags for mutt_enter_string() */
-#define  M_ALIAS   1            /* do alias "completion" by calling up the alias-menu */
-#define  M_FILE    (1<<1)       /* do file completion */
-#define  M_EFILE   (1<<2)       /* do file completion, plus incoming folders */
-#define  M_CMD     (1<<3)       /* do completion on previous word */
-#define  M_PASS    (1<<4)       /* password mode (no echo) */
-#define  M_CLEAR   (1<<5)       /* clear input if printable character is pressed */
-#define  M_COMMAND (1<<6)       /* do command completion */
-#define  M_PATTERN (1<<7)       /* pattern mode - only used for history classes */
-#define  M_LASTFOLDER (1<<8)    /* last-folder mode - hack hack hack */
-
-/* flags for mutt_get_token() */
+/* flags for mutt_extract_token() */
 #define M_TOKEN_EQUAL		1       /* treat '=' as a special */
 #define M_TOKEN_CONDENSE	(1<<1)  /* ^(char) to control chars (macros) */
 #define M_TOKEN_SPACE		(1<<2)  /* don't treat whitespace as a term */
@@ -104,9 +73,6 @@
 #define M_TOKEN_PATTERN		(1<<4)  /* !)|~ are terms (for patterns) */
 #define M_TOKEN_COMMENT		(1<<5)  /* don't reap comments */
 #define M_TOKEN_SEMICOLON	(1<<6)  /* don't treat ; as special */
-
-/* flags for km_dokey() */
-#define M_KM_UNBUFFERED 1       /* don't read from the key buffer */
 
 typedef struct {
   char *data;                   /* pointer to data */
