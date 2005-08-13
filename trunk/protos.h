@@ -271,7 +271,6 @@ int mutt_skipchars (const char *, const char *);
 int mutt_strwidth (const char *);
 int mutt_compose_menu (HEADER *, char *, size_t, HEADER *);
 int mutt_thread_set_flag (HEADER *, int, int, int);
-int mutt_update_list_file (char *, char *, char *, char *);
 int mutt_user_is_recipient (HEADER *);
 void mutt_update_num_postponed (void);
 int mutt_wait_filter (pid_t);

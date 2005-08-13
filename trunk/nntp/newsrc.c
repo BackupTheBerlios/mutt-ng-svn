@@ -627,6 +627,108 @@ void newsrc_gen_entries (CONTEXT * ctx)
   }
 }
 
+static int mutt_update_list_file (char *filename, char *section,
+                                  char *key, char *line) {
+  FILE *ifp;
+  FILE *ofp;
+  char buf[HUGE_STRING];
+  char tmpfile[_POSIX_PATH_MAX];
+  char *c;
+  int ext = 0, done = 0, r = 0;
+
+  /* if file not exist, create it */
+  if ((ifp = safe_fopen (filename, "a")))
+    fclose (ifp);
+  debug_print (1, ("Opening %s\n", filename));
+  if (!(ifp = safe_fopen (filename, "r"))) {
+    mutt_error (_("Unable to open %s for reading"), filename);
+    return -1;
+  }
+  if (mx_lock_file (filename, fileno (ifp), 0, 0, 1)) {
+    fclose (ifp);
+    mutt_error (_("Unable to lock %s"), filename);
+    return -1;
+  }
+  snprintf (tmpfile, sizeof(tmpfile), "%s.tmp", filename);
+  debug_print (1, ("Opening %s\n", tmpfile));
+  if (!(ofp = fopen (tmpfile, "w"))) {
+    fclose (ifp);
+    mutt_error (_("Unable to open %s for writing"), tmpfile);
+    return -1;
+  }
+
+  if (section) {
+    while (r != EOF && !done && fgets (buf, sizeof (buf), ifp)) {
+      r = fputs (buf, ofp);
+      c = buf;
+      while (*c && *c != '\n') c++;
+      c[0] = 0;	/* strip EOL */
+      if (!strncmp (buf, "#: ", 3) && !str_casecmp (buf+3, section))
+        done++;
+    }
+    if (r != EOF && !done) {
+      snprintf (buf, sizeof(buf), "#: %s\n", section);
+      r = fputs (buf, ofp);
+    }
+    done = 0;
+  }
+
+  while (r != EOF && fgets (buf, sizeof (buf), ifp)) {
+    if (ext) {
+      c = buf;
+      while (*c && (*c != '\r') && (*c != '\n')) c++;
+      c--;
+      if (*c != '\\') ext = 0;
+    } else if ((section && !strncmp (buf, "#: ", 3))) {
+      if (!done && line) {
+        fputs (line, ofp);
+        fputc ('\n', ofp);
+      }
+      r = fputs (buf, ofp);
+      done++;
+      break;
+    } else if (key && !strncmp (buf, key, strlen(key)) &&
+               (!*key || buf[strlen(key)] == ' ')) {
+      c = buf;
+      ext = 0;
+      while (*c && (*c != '\r') && (*c != '\n')) c++;
+      c--;
+      if (*c == '\\') ext = 1;
+      if (!done && line) {
+        r = fputs (line, ofp);
+        if (*key)
+          r = fputc ('\n', ofp);
+        done++;
+      }
+    } else {
+      r = fputs (buf, ofp);
+    }
+  }
+
+  while (r != EOF && fgets (buf, sizeof (buf), ifp))
+    r = fputs (buf, ofp);
+
+  /* If there wasn't a line to replace, put it on the end of the file */
+  if (r != EOF && !done && line) {
+    fputs (line, ofp);
+    r = fputc ('\n', ofp);
+  }
+  mx_unlock_file (filename, fileno (ifp), 0);
+  fclose (ofp);
+  fclose (ifp);
+  if (r == EOF) {
+    unlink (tmpfile);
+    mutt_error (_("Can't write %s"), tmpfile);
+    return -1;
+  }
+  if (rename (tmpfile, filename) < 0) {
+    unlink (tmpfile);
+    mutt_error (_("Can't rename %s to %s"), tmpfile, filename);
+    return -1;
+  }
+  return 0;
+}
+
 int mutt_newsrc_update (NNTP_SERVER * news)
 {
   char *buf, *line;

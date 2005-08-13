@@ -162,12 +162,6 @@ static int nntp_attempt_features (NNTP_SERVER * serv)
   char buf[LONG_STRING];
   CONNECTION *conn = serv->conn;
 
-  mutt_socket_write (conn, "LISTGROUP\r\n");
-  if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
-    return (nntp_connect_error (serv));
-  if (str_ncmp ("500", buf, 3))
-    serv->hasLISTGROUP = 1;
-
   mutt_socket_write (conn, "XOVER\r\n");
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
     return nntp_connect_error (serv);
@@ -179,6 +173,12 @@ static int nntp_attempt_features (NNTP_SERVER * serv)
     return nntp_connect_error (serv);
   if (str_ncmp ("500", buf, 3))
     serv->hasXPAT = 1;
+
+  mutt_socket_write (conn, "LISTGROUP\r\n");
+  if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
+    return (nntp_connect_error (serv));
+  if (str_ncmp ("500", buf, 3))
+    serv->hasLISTGROUP = 1;
 
   mutt_socket_write (conn, "XGTITLE +\r\n");
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
@@ -674,19 +674,8 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
     }
   }
   else {
-    /* mutt_nntp_query() issues a 'GROUP nntp_data->group' 
-     * command on its own if !*buf */
-    buf[0] = '\0';
-    mutt_nntp_query (nntp_data, buf, sizeof (buf));
-    if (sscanf (buf + 4, "%d %u %u %s", &num, &fc.first, &fc.last, buf) != 4) {
-      mutt_error (_("GROUP command failed: %s"), buf);
-      mem_free (&fc.messages);
-      return (-1);
-    }
-    else {
-      for (num = fc.first; num < fc.last; num++)
-        _nntp_fetch_numbers (num, &fc);
-    }
+    for (num = 0; num < last - first + 1; num++)
+      fc.messages[num] = 1;
   }
 
   /* CACHE: must be loaded xover cache here */
@@ -1034,24 +1023,20 @@ void nntp_logout_all (void)
 {
   char buf[LONG_STRING];
   CONNECTION *conn;
-  CONNECTION *tmp;
 
   conn = mutt_socket_head ();
 
   while (conn) {
-    tmp = conn;
-
+    CONNECTION* next = conn->next;
     if (conn->account.type == M_ACCT_TYPE_NNTP) {
       mutt_message (_("Closing connection to %s..."), conn->account.host);
       mutt_socket_write (conn, "QUIT\r\n");
       mutt_socket_readln (buf, sizeof (buf), conn);
       mutt_clear_error ();
       mutt_socket_close (conn);
-
-      mutt_socket_free (tmp);
+      mutt_socket_free (conn);
     }
-
-    conn = conn->next;
+    conn = next;
   }
 }
 
