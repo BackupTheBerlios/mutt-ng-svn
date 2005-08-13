@@ -2,6 +2,10 @@
  * Copyright notice from original mutt:
  * [none]
  *
+ * Parts were written/modified by:
+ * Christian Gall <cg@cgall.de>
+ * Rocco Rutte <pdmef@cs.tu-berlin.de>
+ *
  * This file is part of mutt-ng, see http://www.muttng.org/.
  * It's licensed under the GNU General Public License,
  * please see the file GPL in the top level source directory.
@@ -49,6 +53,8 @@ static char authpass[STRING] = "";
     _mutt_libesmtp_perror(msg); \
     FAIL(); \
   } while (0)
+#define extna(msg) { mutt_error (_("SMTP Extension '%s' not supported by MTA."), \
+                                 msg); sleep (1); }
 
 /*
  * _mutt_libesmtp_ensure_init
@@ -177,7 +183,7 @@ static int handle_invalid_peer_certificate (long vfy_result) {
 }
 #endif
 
-void event_cb (smtp_session_t session, int event_no, void *arg,...)
+static void event_cb (smtp_session_t session, int event_no, void *arg,...)
 { 
   va_list alist;
   int *ok;
@@ -226,11 +232,51 @@ void event_cb (smtp_session_t session, int event_no, void *arg,...)
     sleep(1);
     *ok = 1; break;
   }
+  case SMTP_EV_EXTNA_DSN:
+    extna ("DSN");
+    break;
+  case SMTP_EV_EXTNA_STARTTLS:
+    extna ("StartTLS");
+    break;
+  case SMTP_EV_EXTNA_8BITMIME:
+    extna ("8BITMIME");
+    break;
   default:
-    mutt_message(_("Got event: %d - ignored."), event_no);
+    mutt_message(_("Got unhandled event ID = %d - ignored."), event_no);
     sleep(1);
   }
   va_end(alist);
+}
+
+static void do_dsn_notify (smtp_message_t message, const char* from) {
+  int flags = Notify_NOTSET;
+  smtp_recipient_t self = NULL;
+
+  if (!DsnNotify || !*DsnNotify || !message || !from || !*from || 
+      strstr (DsnNotify, "never") != NULL)
+    return;
+
+  if (strstr (DsnNotify, "failure") != NULL)
+    flags |= Notify_FAILURE;
+  if (strstr (DsnNotify, "delay") != NULL)
+    flags |= Notify_DELAY;
+  if (strstr (DsnNotify, "success") != NULL)
+    flags |= Notify_SUCCESS;
+
+  if (flags != Notify_NOTSET) {
+    if (!(self = smtp_add_recipient (message, from)))
+      return;
+    smtp_dsn_set_notify (self, flags);
+  }
+}
+
+static void do_dsn_ret (smtp_message_t message) {
+  if (!DsnReturn || !*DsnReturn || !message)
+    return;
+  if (ascii_strncasecmp (DsnReturn, "hdrs", 4) == 0)
+    smtp_dsn_set_ret (message, Ret_HDRS);
+  else if (ascii_strncasecmp (DsnReturn, "full", 4) == 0)
+    smtp_dsn_set_ret (message, Ret_FULL);
 }
 
 /*
@@ -252,6 +298,7 @@ int mutt_invoke_libesmtp (ADDRESS * from,       /* the sender */
   FILE *fp = NULL;
   auth_context_t authctx = NULL;
   const smtp_status_t *status;
+  char* envfrom = from->mailbox;
 
   _mutt_libesmtp_ensure_init ();
 
@@ -291,9 +338,20 @@ int mutt_invoke_libesmtp (ADDRESS * from,       /* the sender */
 
   if ((message = smtp_add_message (session)) == NULL)
     SMTPFAIL ("smtp_add_message");
+
   /*  Initialize envelope sender */
-  if (!smtp_set_reverse_path (message, from->mailbox))
+  if (SmtpEnvFrom && *SmtpEnvFrom)
+    envfrom = SmtpEnvFrom;
+  if (!smtp_set_reverse_path (message, envfrom))
     SMTPFAIL ("smtp_set_reverse_path");
+
+  /* set up DSN for message */
+  do_dsn_notify (message, envfrom);
+  do_dsn_ret (message);
+
+  /* set up 8bitmime flag */
+  if (eightbit && option (OPTUSE8BITMIME))
+    smtp_8bitmime_set_body (message, E8bitmime_8BITMIME);
 
   if ((fp = fopen (msg, "r")) == NULL)
     LIBCFAIL ("fopen");

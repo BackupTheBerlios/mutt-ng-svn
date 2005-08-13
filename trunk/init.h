@@ -542,7 +542,7 @@ struct option_t MuttVars[] = {
   /*
    ** .pp
    ** \fBNote:\fP you should not enable this unless you are using Sendmail
-   ** 8.8.x or greater.
+   ** 8.8.x or greater or in connection with the SMTP support via libESMTP.
    ** .pp
    ** This variable sets the request for when notification is returned.  The
    ** string consists of a comma separated list (no spaces!) of one or more
@@ -557,7 +557,7 @@ struct option_t MuttVars[] = {
   /*
    ** .pp
    ** \fBNote:\fP you should not enable this unless you are using Sendmail
-   ** 8.8.x or greater.
+   ** 8.8.x or greater or in connection with the SMTP support via libESMTP.
    ** .pp
    ** This variable controls how much of your message is returned in DSN
    ** messages.  It may be set to either \fIhdrs\fP to return just the
@@ -2360,13 +2360,27 @@ struct option_t MuttVars[] = {
    ** Availability: SMTP
    **
    ** .pp
-   ** Defines the password to use with SMTP AUTH.  If ``$$smtp_auth_username''
+   ** Defines the password to use with SMTP AUTH.  If ``$$smtp_user''
    ** is set, but this variable is not, you will be prompted for a password
    ** when sending.
    ** .pp
    ** \fBNote:\fP Storing passwords in a configuration file
    ** presents a security risk since the superuser of your machine may read it
    ** regardless of the file's permissions.  
+   */
+  {"smtp_envelope", DT_STR, R_NONE, UL &SmtpEnvFrom, 0},
+  /*
+   ** .pp
+   ** Availability: SMTP
+   **
+   ** .pp
+   ** If this variable is non-empty, it'll be used as the envelope sender. If it's empty
+   ** (the default), the value of the regular \fTFrom:\fP header will be used.
+   **
+   ** .pp
+   ** This may be necessary as some providers don't allow for arbitrary values
+   ** as the envelope sender but only a particular one which may not be the same as the
+   ** user's desired \fTFrom:\fP header.
    */
   {"smtp_host", DT_STR, R_NONE, UL &SmtpHost, 0},
   /*
@@ -3500,10 +3514,12 @@ struct option_t MuttVars[] = {
    ** .pp
    ** \fBWarning:\fP do not set this variable unless you are using a version
    ** of sendmail which supports the \fT-B8BITMIME\fP flag (such as sendmail
-   ** 8.8.x) or you may not be able to send mail.
+   ** 8.8.x) or in connection with the SMTP support via libESMTP.
+   ** Otherwise you may not be able to send mail.
    ** .pp
-   ** When \fIset\fP, Mutt-ng will invoke ``$$sendmail'' with the \fT-B8BITMIME\fP
-   ** flag when sending 8-bit messages to enable ESMTP negotiation.
+   ** When \fIset\fP, Mutt-ng will either invoke ``$$sendmail'' with the \fT-B8BITMIME\fP
+   ** flag when sending 8-bit messages to enable ESMTP negotiation or tell
+   ** libESMTP to do so.
    */
   {"use_domain", DT_BOOL, R_NONE, OPTUSEDOMAIN, 1},
   /*

@@ -12,6 +12,8 @@ sources of information.
 
 2005-08-13:
 
+  The $smtp_envelope option has been added.
+
   To improve consistency, the following variables were renamed and
   synonyms kept: $smtp_auth_username to $smtp_user and
   $smtp_auth_password to $smtp_pass.

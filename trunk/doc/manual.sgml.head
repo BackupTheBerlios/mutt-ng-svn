@@ -3269,21 +3269,37 @@ current message into a whole different thread.
 
 <!--}}}--> 
 
-<sect>Delivery Status Notification (DSN) Support <!--{{{--> 
+<sect>Delivery Status Notification (DSN) Support<label id="dsn"> <!--{{{--> 
 <p>
 
 RFC1894 defines a set of MIME content types for relaying information
 about the status of electronic mail messages.  These can be thought of as
-``return receipts.'' Berkeley sendmail 8.8.x currently has some command
-line options in which the mail client can make requests as to what type
-of status messages should be returned.
+``return receipts.''
 
-To support this, there are two variables. <ref id="dsn_notify"
-name="&dollar;dsn&lowbar;notify"> is used to request receipts for
-different results (such as failed message, message delivered, etc.).
-<ref id="dsn_return" name="&dollar;dsn&lowbar;return"> requests how much
-of your message should be returned with the receipt (headers or full
-message).  Refer to the man page on sendmail for more details on DSN.
+Users can make use of it in one of the following two ways:
+
+<itemize>
+  <item>Berkeley sendmail 8.8.x currently has some command line options
+    in which the mail client can make requests as to what type of status
+    messages should be returned.
+  <item>The SMTP support via libESMTP supports it, too.
+</itemize>
+
+To support this, there are two variables:
+
+<itemize>
+
+  <item><ref id="dsn_notify" name="&dollar;dsn&lowbar;notify"> is used
+    to request receipts for different results (such as failed message,
+    message delivered, etc.).
+
+  <item><ref id="dsn_return" name="&dollar;dsn&lowbar;return"> requests
+    how much of your message should be returned with the receipt
+    (headers or full message).
+
+</itemize>
+
+Please see the reference chapter for possible values.
 
 <!--}}}--> 
 
@@ -3517,7 +3533,11 @@ score !~* =42
 <p>Mutt-ng can be built using a library called ``libESMTP'' which
 provides SMTP functionality. When <tt/configure/ was called with
 <tt/--with-libesmtp/ or the output <tt>muttng -v</tt> contains
-<tt>+USE_LIBESMTP</tt>, this will be or is the case already.
+<tt>+USE_LIBESMTP</tt>, this will be or is the case already. The SMTP
+support includes support for Delivery Status Notification (see <ref
+id="dsn" name="Delivery Status Notification"> section) as well as
+handling the <tt/8BITMIME/ flag controlled via <ref id="use_8bitmime"
+name="&dollar;use&lowbar;8bitmime">.
 
 <p>To enable sending mail directly via SMTP without an MTA such as
 Postfix or SSMTP and the like, simply set the <ref id="smtp_host"
@@ -3535,6 +3555,12 @@ to ``enabled'' or ``required.'' In both cases, StartTLS will be used if
 the server supports it: for the second case, the connection will fail if
 it doesn't while switching back to unencrypted communication for the
 first one.
+
+<p>Some mail providers require user's to set a particular envelope
+sender, i.e. they allow for only one value which may not be what the
+user wants to send as the <tt/From:/ header. In this case, the variable
+<ref id="smtp_envelope" name="&dollar;smtp&lowbar;envelope"> may be used
+to set the envelope different from the <tt/From:/ header.
 
 <!-- }}} -->
 
