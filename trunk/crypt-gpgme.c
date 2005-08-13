@@ -22,9 +22,13 @@
 #include "mutt_crypt.h"
 #include "mutt_menu.h"
 #include "mutt_curses.h"
+#include "ascii.h"
+#include "handler.h"
+#include "enter.h"
 #include "mime.h"
 #include "copy.h"
 #include "pager.h"
+#include "recvattach.h"
 #include "sort.h"
 
 #include "lib/mem.h"
