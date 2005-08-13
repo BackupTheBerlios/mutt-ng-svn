@@ -3512,6 +3512,32 @@ score !~* =42
 
 <!--}}}--> 
 
+<sect>SMTP Support (OPTIONAL) <!--{{{--> 
+
+<p>Mutt-ng can be built using a library called ``libESMTP'' which
+provides SMTP functionality. When <tt/configure/ was called with
+<tt/--with-libesmtp/ or the output <tt>muttng -v</tt> contains
+<tt>+USE_LIBESMTP</tt>, this will be or is the case already.
+
+<p>To enable sending mail directly via SMTP without an MTA such as
+Postfix or SSMTP and the like, simply set the <ref id="smtp_host"
+name="&dollar;smtp&lowbar;host"> variable pointing to your SMTP server.
+
+<p>Authentication mechanisms are available via the <ref id="smtp_user"
+name="&dollar;smtp&lowbar;user"> and <ref id="smtp_pass"
+name="&dollar;smtp&lowbar;pass"> variables.
+
+<p>Transport Encryption via the StartTLS command is also available. For
+this to work, first of all Mutt-ng must be built with SSL or GNUTLS.
+Secondly, the <ref id="smtp_use_tls"
+name="&dollar;smtp&lowbar;use&lowbar;tls"> variable must be either set
+to ``enabled'' or ``required.'' In both cases, StartTLS will be used if
+the server supports it: for the second case, the connection will fail if
+it doesn't while switching back to unencrypted communication for the
+first one.
+
+<!-- }}} -->
+
 <sect>Managing multiple IMAP/POP/NNTP accounts (OPTIONAL)<label id="account-hook"> <!--{{{--> 
 <p>
 

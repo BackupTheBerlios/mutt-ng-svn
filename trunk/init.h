@@ -2343,7 +2343,8 @@ struct option_t MuttVars[] = {
    ** (S/MIME only)
    */
 #if defined(USE_LIBESMTP)
-  {"smtp_auth_username", DT_STR, R_NONE, UL &SmtpAuthUser, 0},
+  {"smtp_auth_username", DT_SYN, R_NONE, UL "smtp_user", 0},
+  {"smtp_user", DT_STR, R_NONE, UL &SmtpAuthUser, 0},
   /*
    ** .pp
    ** Availability: SMTP
@@ -2352,7 +2353,8 @@ struct option_t MuttVars[] = {
    ** Defines the username to use with SMTP AUTH.  Setting this variable will
    ** cause Mutt-ng to attempt to use SMTP AUTH when sending.
    */
-  {"smtp_auth_password", DT_STR, R_NONE, UL &SmtpAuthPass, 0},
+  {"smtp_auth_password", DT_SYN, R_NONE, UL "smtp_pass", 0},
+  {"smtp_pass", DT_STR, R_NONE, UL &SmtpAuthPass, 0},
   /*
    ** .pp
    ** Availability: SMTP

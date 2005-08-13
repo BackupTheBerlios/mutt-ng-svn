@@ -47,7 +47,10 @@ my %opts = (
   "save_unsubscribed"            => "nntp_save_unsubscribed", 
   "show_new_news"                => "nntp_show_new_news", 
   "show_only_unread"             => "nntp_show_only_unread", 
-  "x_comment_to"                 => "nntp_x_comment_to"
+  "x_comment_to"                 => "nntp_x_comment_to",
+  # libesmtp
+  "smtp_auth_username"           => "smtp_user",
+  "smtp_auth_password"           => "smtp_pass"
 );
 
 if (@ARGV == 0) {
