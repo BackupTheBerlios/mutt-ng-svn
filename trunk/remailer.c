@@ -16,6 +16,7 @@
 #endif
 
 #include "mutt.h"
+#include "recvattach.h"
 #include "mutt_curses.h"
 #include "mutt_menu.h"
 #include "mapping.h"
