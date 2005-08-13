@@ -912,7 +912,7 @@ static int text_plain_flowed_handler (BODY * a, STATE * s)
     newql = get_quote_level (buf);
 
     if (bytes == 0 || ((t = strrchr (buf, '\n')) || (t = strrchr (buf, '\r')))) {
-      if (t)
+      if (bytes > 0)
         *t = '\0';
       if (str_len (curline) > 0 && curline[str_len (curline) - 1] == ' '
           && newql == quotelevel
