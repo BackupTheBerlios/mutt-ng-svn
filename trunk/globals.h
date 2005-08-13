@@ -144,6 +144,7 @@ WHERE char *SimpleSearch;
 #if defined(USE_LIBESMTP)
 WHERE char *SmtpAuthUser;
 WHERE char *SmtpAuthPass;
+WHERE char *SmtpEnvFrom;
 WHERE char *SmtpHost;
 WHERE unsigned short SmtpPort;
 WHERE char *SmtpUseTLS;
