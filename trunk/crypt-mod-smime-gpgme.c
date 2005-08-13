@@ -42,9 +42,9 @@ static int crypt_mod_smime_decrypt_mime (FILE * a, FILE ** b, BODY * c,
   return smime_gpgme_decrypt_mime (a, b, c, d);
 }
 
-static void crypt_mod_smime_application_handler (BODY * m, STATE * s)
+static int crypt_mod_smime_application_handler (BODY * m, STATE * s)
 {
-  smime_gpgme_application_handler (m, s);
+  return smime_gpgme_application_handler (m, s);
 }
 
 static char *crypt_mod_smime_findkeys (ADDRESS * to, ADDRESS * cc,

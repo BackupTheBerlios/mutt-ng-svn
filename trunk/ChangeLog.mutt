@@ -1,3 +1,64 @@
+2005-08-12 23:06:25  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* mutt_ssl_gnutls.c: Turn off input buffering for gnutls SSL
+	certificate menu, as we do in the openssl version.
+
+	* imap/auth_sasl.c: Override SASL initial response if the server
+	spoke first in its continuation response. Closes: #2034.
+
+	* doc/Makefile.in: Degnuify mutt.1 make rule. Imagining a world
+	in which gnu documentation flagged any extensions to standard
+	utilities almost makes me cry.
+
+2005-08-12 12:52:11  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
+
+	* po/ja.po: update
+
+2005-08-12 07:49:37  Vincent Lefevre  <vincent@vinc17.org>  (roessler)
+
+	* po/fr.po: Update.
+
+2005-08-12 03:57:16  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* configure.in: Force configure to depend on VERSION. That's been
+	bugging me for a while.
+
+2005-08-11 21:46:26  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* po/pl.po, po/pt_BR.po, po/ru.po, po/sk.po, po/sv.po, po/tr.po,
+	po/uk.po, po/zh_CN.po, po/zh_TW.po, po/bg.po, po/ca.po, po/cs.po,
+	po/da.po, po/de.po, po/el.po, po/eo.po, po/es.po, po/et.po,
+	po/fr.po, po/gl.po, po/hu.po, po/id.po, po/it.po, po/ja.po,
+	po/ko.po, po/lt.po, po/nl.po: automatic post-release commit for
+	mutt-1.5.10
+
+	* Makefile.am, VERSION, reldate.h: Fix Makefile.am.
+	(VERSION and reldate.h actually are bad commits -- but that
+	doesn't matter.  Release imminent.)
+
+2005-08-11 21:16:38  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* copy.c, crypt-gpgme.c, crypt-gpgme.h, crypt-mod-pgp-classic.c,
+	crypt-mod-pgp-gpgme.c, crypt-mod-smime-classic.c,
+	crypt-mod-smime-gpgme.c, crypt-mod.h, crypt.c, cryptglue.c,
+	handler.c, mutt_crypt.h, pgp.c, pgp.h, protos.h, smime.c, smime.h:
+	Add error results to mutt_body_handlers, and check them when
+	doing decode-save. Closes: #1919.
+
+2005-08-11 21:08:55  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* pgp.c: Fix verification of clearsigned PGP messages.
+	(debugged on IRC, mostly by Brendan)
+
+2005-08-11 02:15:14  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (brendan)
+
+	* configure.in: Don't test against nonexistent cache
+	variable. Spotted by Torsten Veller.
+
+2005-08-11 01:44:49  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* mutt_sasl.c: Silence some compiler warnings.
+
 2005-08-09 20:13:03  Brendan Cully  <brendan@kublai.com>  (brendan)
 
 	* doc/Makefile.in, doc/manual.sgml.tail: Replace raw latin1
@@ -5,8 +66,6 @@
 	manual.txt. I'm not sure this is ideal for non-latin (eg
 	utf8) environments, but hopefully docbook will resolve this
 	anyway. Closes: #2029.
-
-2005-08-09 19:59:46  Brendan Cully  <brendan@kublai.com>  (brendan)
 
 	* doc/manual.sgml.head: Replace free ~ with &tilde;. Closes:
 	#2030.

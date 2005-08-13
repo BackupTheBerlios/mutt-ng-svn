@@ -164,7 +164,7 @@ EDIT=sed -e 's,@sysconfdir\@,$(sysconfdir),g' \
      -e 's,@docdir\@,$(docdir),g'
 
 muttng.1: $(srcdir)/mutt.man
-	$(EDIT) $< > $@
+	$(EDIT) $(srcdir)/mutt.man > $@
 
 muttrc.man stamp-doc-man: ../makedoc$(EXEEXT) $(top_srcdir)/init.h muttrc.man.head muttrc.man.tail
 	$(MAKEDOC_CPP) $(top_srcdir)/init.h | ../makedoc -m | 	    \

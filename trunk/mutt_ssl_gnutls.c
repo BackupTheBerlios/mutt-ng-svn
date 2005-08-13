@@ -747,6 +747,7 @@ static int tls_check_certificate (CONNECTION * conn)
   menu->help = helpstr;
 
   done = 0;
+  set_option (OPTUNBUFFEREDINPUT);
   while (!done) {
     switch (mutt_menuLoop (menu)) {
     case -1:                   /* abort */
@@ -789,6 +790,7 @@ static int tls_check_certificate (CONNECTION * conn)
       break;
     }
   }
+  unset_option (OPTUNBUFFEREDINPUT);
   mutt_menuDestroy (&menu);
   gnutls_x509_crt_deinit (cert);
   return (done == 2);

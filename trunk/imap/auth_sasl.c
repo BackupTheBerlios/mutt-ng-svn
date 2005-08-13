@@ -141,7 +141,10 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
       }
     }
 
-    if (!client_start) {
+    /* client-start is only available with the SASL-IR extension, but
+     * SASL 2.1 seems to want to use it regardless, at least for DIGEST
+     * fast reauth. Override if the server sent an initial continuation */
+    if (!client_start || buf[0]) {
       do {
         rc = sasl_client_step (saslconn, buf, len, &interaction, &pc, &olen);
         if (rc == SASL_INTERACT)

@@ -504,6 +504,7 @@ _mutt_copy_message (FILE * fpout, FILE * fpin, HEADER * hdr, BODY * body,
   char prefix[SHORT_STRING];
   STATE s;
   long new_offset = -1;
+  int rc = 0;
 
   if (flags & M_CM_PREFIX) {
     if (option (OPTTEXTFLOWED))
@@ -610,7 +611,7 @@ _mutt_copy_message (FILE * fpout, FILE * fpin, HEADER * hdr, BODY * body,
     if (WithCrypto && flags & M_CM_VERIFY)
       s.flags |= M_VERIFY;
 
-    mutt_body_handler (body, &s);
+    rc = mutt_body_handler (body, &s);
   }
   else if (WithCrypto
            && (flags & M_CM_DECODE_CRYPT) && (hdr->security & ENCRYPT)) {
@@ -669,7 +670,7 @@ _mutt_copy_message (FILE * fpout, FILE * fpin, HEADER * hdr, BODY * body,
     mutt_free_body (&body->parts);
   }
 
-  return 0;
+  return rc;
 }
 
 int

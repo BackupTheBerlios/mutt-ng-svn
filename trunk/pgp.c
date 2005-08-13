@@ -225,9 +225,10 @@ static void pgp_copy_clearsigned (FILE * fpin, STATE * s, char *charset)
 
 /* Support for the Application/PGP Content Type. */
 
-void pgp_application_pgp_handler (BODY * m, STATE * s)
+int pgp_application_pgp_handler (BODY * m, STATE * s)
 {
   int needpass = -1, pgp_keyblock = 0;
+  int c;
   int clearsign = 0, rv, rc;
   long start_pos = 0;
   long bytes, last_pos, offset;
@@ -235,7 +236,7 @@ void pgp_application_pgp_handler (BODY * m, STATE * s)
   char outfile[_POSIX_PATH_MAX];
   char tmpfname[_POSIX_PATH_MAX];
   FILE *pgpout = NULL, *pgpin = NULL, *pgperr = NULL;
-  FILE *tmpfp;
+  FILE *tmpfp = NULL;
   pid_t thepid;
 
   short maybe_goodsig = 1;
@@ -287,7 +288,7 @@ void pgp_application_pgp_handler (BODY * m, STATE * s)
       mutt_mktemp (tmpfname);
       if ((tmpfp = safe_fopen (tmpfname, "w+")) == NULL) {
         mutt_perror (tmpfname);
-        return;
+        return (-1);
       }
 
       fputs (buf, tmpfp);
@@ -316,7 +317,7 @@ void pgp_application_pgp_handler (BODY * m, STATE * s)
         mutt_mktemp (outfile);
         if ((pgpout = safe_fopen (outfile, "w+")) == NULL) {
           mutt_perror (tmpfname);
-          return;
+          return (-1);
         }
 
         if ((thepid = pgp_invoke_decode (&pgpin, NULL, &pgperr, -1,
@@ -353,12 +354,13 @@ void pgp_application_pgp_handler (BODY * m, STATE * s)
           if (s->flags & M_DISPLAY) {
             if (rc == 0)
               have_any_sigs = 1;
-/*
- * Sig is bad if
- * gpg_good_sign-pattern did not match || pgp_decode_command returned not 0
- * Sig _is_ correct if
- *  gpg_good_sign="" && pgp_decode_command returned 0
- */
+
+            /*
+             * Sig is bad if
+             * gpg_good_sign-pattern did not match || pgp_decode_command returned not 0
+             * Sig _is_ correct if
+             * gpg_good_sign="" && pgp_decode_command returned 0
+             */
             if (rc == -1 || rv)
               maybe_goodsig = 0;
 
@@ -367,10 +369,14 @@ void pgp_application_pgp_handler (BODY * m, STATE * s)
         }
 
         /* treat empty result as sign of failure */
-        if (!(pgpout && ftell (pgpout))) {
+        rewind (pgpout);
+        if ((c = fgetc (pgpout)) == EOF) {
             mutt_error _("Could not decrypt PGP message");
+            pgp_void_passphrase ();
+            rc = -1;
             goto out;
         }
+        ungetc (c, pgpout);
       }
 
       /*
@@ -426,6 +432,8 @@ void pgp_application_pgp_handler (BODY * m, STATE * s)
     }
   }
 
+  rc = 0;
+
 out:
   m->goodsig = (maybe_goodsig && have_any_sigs);
 
@@ -442,8 +450,10 @@ out:
     state_attach_puts (_
                        ("[-- Error: could not find beginning of PGP message! --]\n\n"),
                        s);
-    return;
+    return (-1);
   }
+
+  return (rc);
 }
 
 static int pgp_check_traditional_one_body (FILE * fp, BODY * b,
@@ -774,8 +784,11 @@ BODY *pgp_decrypt_part (BODY * a, STATE * s, FILE * fpout, BODY * p)
   fflush (fpout);
   rewind (fpout);
 
-  if (fgetc (fpout) == EOF)
+  if (fgetc (fpout) == EOF) {
+    mutt_error (_("Decryption failed."));
+    pgp_void_passphrase ();
     return NULL;
+  }
 
   rewind (fpout);
 
@@ -827,12 +840,13 @@ int pgp_decrypt_mime (FILE * fpin, FILE ** fpout, BODY * b, BODY ** cur)
   return (0);
 }
 
-void pgp_encrypted_handler (BODY * a, STATE * s)
+int pgp_encrypted_handler (BODY * a, STATE * s)
 {
   char tempfile[_POSIX_PATH_MAX];
   FILE *fpout, *fpin;
   BODY *tattach;
   BODY *p = a;
+  int rc = 0;
 
   a = a->parts;
   if (!a || a->type != TYPEAPPLICATION || !a->subtype ||
@@ -842,7 +856,7 @@ void pgp_encrypted_handler (BODY * a, STATE * s)
     if (s->flags & M_DISPLAY)
       state_attach_puts (_("[-- Error: malformed PGP/MIME message! --]\n\n"),
                          s);
-    return;
+    return (-1);
   }
 
   /*
@@ -856,7 +870,7 @@ void pgp_encrypted_handler (BODY * a, STATE * s)
       state_attach_puts (_
                          ("[-- Error: could not create temporary file! --]\n"),
                          s);
-    return;
+    return (-1);
   }
 
   if (s->flags & M_DISPLAY)
@@ -870,7 +884,7 @@ void pgp_encrypted_handler (BODY * a, STATE * s)
 
     fpin = s->fpin;
     s->fpin = fpout;
-    mutt_body_handler (tattach, s);
+    rc = mutt_body_handler (tattach, s);
     s->fpin = fpin;
 
     /* 
@@ -891,11 +905,16 @@ void pgp_encrypted_handler (BODY * a, STATE * s)
     mutt_free_body (&tattach);
     /* clear 'Invoking...' message, since there's no error */
     mutt_message _("PGP message successfully decrypted.");
-  } else
+  } else {
     mutt_error _("Could not decrypt PGP message");
+    pgp_void_passphrase ();
+    rc = -1;
+  }
 
   fclose (fpout);
   mutt_unlink (tempfile);
+
+  return (rc);
 }
 
 /* ----------------------------------------------------------------------------

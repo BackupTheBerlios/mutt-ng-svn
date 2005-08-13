@@ -1766,7 +1766,7 @@ static void copy_clearsigned (gpgme_data_t data, STATE * s, char *charset)
 
 
 /* Support for classic_application/pgp */
-void pgp_gpgme_application_handler (BODY * m, STATE * s)
+int pgp_gpgme_application_handler (BODY * m, STATE * s)
 {
   int needpass = -1, pgp_keyblock = 0;
   int clearsign = 0;
@@ -1775,7 +1775,7 @@ void pgp_gpgme_application_handler (BODY * m, STATE * s)
   char buf[HUGE_STRING];
   FILE *pgpout = NULL;
 
-  gpgme_error_t err;
+  gpgme_error_t err = 0;
   gpgme_data_t armored_data = NULL;
 
   short maybe_goodsig = 1;
@@ -1986,9 +1986,10 @@ void pgp_gpgme_application_handler (BODY * m, STATE * s)
   if (needpass == -1) {
     state_attach_puts (_("[-- Error: could not find beginning"
                          " of PGP message! --]\n\n"), s);
-    return;
+    return (-1);
   }
   debug_print (2, ("Leaving pgp_application_pgp handler\n"));
+  return (err);
 }
 
 /* 
@@ -1996,13 +1997,14 @@ void pgp_gpgme_application_handler (BODY * m, STATE * s)
  */
 
 /* MIME handler for pgp/mime encrypted messages. */
-void pgp_gpgme_encrypted_handler (BODY * a, STATE * s)
+int pgp_gpgme_encrypted_handler (BODY * a, STATE * s)
 {
   char tempfile[_POSIX_PATH_MAX];
   FILE *fpout;
   BODY *tattach;
   BODY *orig_body = a;
   int is_signed;
+  int rc = 0;
 
   debug_print (2, ("Entering pgp_encrypted handler\n"));
   a = a->parts;
@@ -2013,7 +2015,7 @@ void pgp_gpgme_encrypted_handler (BODY * a, STATE * s)
     if (s->flags & M_DISPLAY)
       state_attach_puts (_("[-- Error: malformed PGP/MIME message! --]\n\n"),
                          s);
-    return;
+    return (-1);
   }
 
   /* Move forward to the application/pgp-encrypted body. */
@@ -2024,7 +2026,7 @@ void pgp_gpgme_encrypted_handler (BODY * a, STATE * s)
     if (s->flags & M_DISPLAY)
       state_attach_puts (_("[-- Error: could not create temporary file! "
                            "--]\n"), s);
-    return;
+    return (-1);
   }
 
   tattach = decrypt_part (a, s, fpout, 0, &is_signed);
@@ -2034,17 +2036,14 @@ void pgp_gpgme_encrypted_handler (BODY * a, STATE * s)
     if (s->flags & M_DISPLAY)
       state_attach_puts (is_signed ?
                          _
-                         ("[-- The following data is PGP/MIME signed and encrypted --]\n\n")
-                         :
-                         _
-                         ("[-- The following data is PGP/MIME encrypted --]\n\n"),
-                         s);
+                         ("[-- The following data is PGP/MIME signed and encrypted --]\n\n") :
+                         _("[-- The following data is PGP/MIME encrypted --]\n\n"), s);
 
     {
       FILE *savefp = s->fpin;
 
       s->fpin = fpout;
-      mutt_body_handler (tattach, s);
+      rc = mutt_body_handler (tattach, s);
       s->fpin = savefp;
     }
 
@@ -2070,16 +2069,17 @@ void pgp_gpgme_encrypted_handler (BODY * a, STATE * s)
   fclose (fpout);
   mutt_unlink (tempfile);
   debug_print (2, ("Leaving pgp_encrypted handler\n"));
+  return (rc);
 }
 
 /* Support for application/smime */
-void smime_gpgme_application_handler (BODY * a, STATE * s)
+int smime_gpgme_application_handler (BODY * a, STATE * s)
 {
   char tempfile[_POSIX_PATH_MAX];
   FILE *fpout;
   BODY *tattach;
   int is_signed;
-
+  int rc = 0;
 
   debug_print (2, ("Entering smime_encrypted handler\n"));
 
@@ -2089,7 +2089,7 @@ void smime_gpgme_application_handler (BODY * a, STATE * s)
     if (s->flags & M_DISPLAY)
       state_attach_puts (_("[-- Error: could not create temporary file! "
                            "--]\n"), s);
-    return;
+    return (-1);
   }
 
   tattach = decrypt_part (a, s, fpout, 1, &is_signed);
@@ -2098,17 +2098,14 @@ void smime_gpgme_application_handler (BODY * a, STATE * s)
 
     if (s->flags & M_DISPLAY)
       state_attach_puts (is_signed ?
-                         _("[-- The following data is S/MIME signed --]\n\n")
-                         :
-                         _
-                         ("[-- The following data is S/MIME encrypted --]\n\n"),
-                         s);
+                         _("[-- The following data is S/MIME signed --]\n\n") :
+                         _("[-- The following data is S/MIME encrypted --]\n\n"), s);
 
     {
       FILE *savefp = s->fpin;
 
       s->fpin = fpout;
-      mutt_body_handler (tattach, s);
+      rc = mutt_body_handler (tattach, s);
       s->fpin = savefp;
     }
 
@@ -2139,6 +2136,7 @@ void smime_gpgme_application_handler (BODY * a, STATE * s)
   fclose (fpout);
   mutt_unlink (tempfile);
   debug_print (2, ("Leaving smime_encrypted handler\n"));
+  return (rc);
 }
 
 

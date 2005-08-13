@@ -1,5 +1,8 @@
 Changes specific to mutt-ng:
 
+2005-08-13:
+  * Merged in latest mutt changes up to 1.5.10
+
 2005-08-11:
   * Christian Gall <cg@cgall.de> kindly contributed a patch to add support
     for using TLS via the libESMTP library

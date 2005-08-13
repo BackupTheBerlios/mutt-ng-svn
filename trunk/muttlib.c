@@ -1288,7 +1288,7 @@ const char *mutt_make_version (void)
 {
   static char vstring[STRING];
 
-  snprintf (vstring, sizeof (vstring), "Mutt-ng %s (%s) based on Mutt 1.5.9",
+  snprintf (vstring, sizeof (vstring), "Mutt-ng %s (based on Mutt 1.5.10/%s)",
             MUTT_VERSION, ReleaseDate);
   return vstring;
 }

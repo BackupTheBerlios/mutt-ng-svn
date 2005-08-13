@@ -11,7 +11,7 @@
 
 #include "state.h"
 
-void mutt_body_handler (BODY *, STATE *);
+int mutt_body_handler (BODY *, STATE *);
 void mutt_decode_attachment (BODY *, STATE *);
 void mutt_decode_base64 (STATE * s, long len, int istext, iconv_t cd);
 

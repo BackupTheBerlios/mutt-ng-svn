@@ -1,8 +1,8 @@
 account.c
-addrbook.c
 alias.c
 attach.c
 browser.c
+buffer.c
 buffy.c
 charset.c
 color.c
@@ -36,6 +36,7 @@ init.c
 keymap.c
 keymap_alldefs.h
 lib.c
+list.c
 main.c
 mbox.c
 menu.c
