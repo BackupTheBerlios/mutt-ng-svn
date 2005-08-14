@@ -7,12 +7,16 @@
  * please see the file GPL in the top level source directory.
  */
 
-#if !defined(LIBESMTP_H)
-#define LIBESMTP_H
+#ifndef _MUTT_LIBESMTP_H
+#define _MUTT_LIBESMTP_H
 
-int mutt_invoke_libesmtp (ADDRESS * from,       /* the sender */
+#if defined (USE_LIBESMTP) && (defined (USE_SSL) || defined (USE_GNUTLS))
+int mutt_libesmtp_check_usetls (const char*);
+#endif
+
+int mutt_libesmtp_invoke (ADDRESS * from,       /* the sender */
                           ADDRESS * to, ADDRESS * cc, ADDRESS * bcc,    /* recips */
                           const char *msg,      /* file containing message */
                           int eightbit);        /* message contains 8bit chars */
 
-#endif /* !defined(LIBESMTP_H) */
+#endif /* !_MUTT_LIBESMTP_H */

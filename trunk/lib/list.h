@@ -69,4 +69,9 @@ list2_t* list_dup (list2_t*, void* (*dup) (void*));
  */
 int list_lookup (list2_t*, int (*cmp) (const void*, const void*), const void*);
 
+/*
+ * dumb-splits string at boundary characters into list
+ */
+list2_t* list_from_str (const char* str, const char* delim);
+
 #endif /* !_LIB_LIST_H */

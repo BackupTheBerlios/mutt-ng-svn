@@ -279,13 +279,22 @@ static void do_dsn_ret (smtp_message_t message) {
     smtp_dsn_set_ret (message, Ret_FULL);
 }
 
+#if defined (USE_LIBESMTP) && (defined (USE_SSL) || defined (USE_GNUTLS))
+int mutt_libesmtp_check_usetls (const char* val) {
+  if (str_ncmp (val, "enabled", 7) != 0 &&
+      str_ncmp (val, "required", 8) != 0)
+    return (0);
+  return (1);
+}
+#endif
+
 /*
- * mutt_invoke_libesmtp
+ * mutt_libesmtp_invoke
  *   Sends a mail message to the provided recipients using libesmtp.
  *   Returns 0 upon success, -1 upon failure (and prints an error
  *   message).
  */
-int mutt_invoke_libesmtp (ADDRESS * from,       /* the sender */
+int mutt_libesmtp_invoke (ADDRESS * from,       /* the sender */
                           ADDRESS * to, ADDRESS * cc, ADDRESS * bcc,    /* recips */
                           const char *msg,      /* file containing message */
                           int eightbit)

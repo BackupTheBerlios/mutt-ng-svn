@@ -13,6 +13,7 @@
 #include "list.h"
 
 #include "mem.h"
+#include "str.h"
 
 list2_t* list_new (void) {
   return (mem_calloc (1, sizeof (list2_t)));
@@ -109,3 +110,19 @@ int list_lookup (list2_t* l, int (*cmp) (const void*, const void*), const void* 
       return (i);
   return (-1);
 }
+
+list2_t* list_from_str (const char* str, const char* delim) {
+  list2_t* ret = NULL;
+  char* tmp = NULL, *p = NULL;
+
+  if (!str || !*str || !delim || !*delim)
+    return (NULL);
+
+  tmp = str_dup (str);
+  for (p = strtok (tmp, delim); p; p = strtok (NULL, delim)) {
+    list_push_back (&ret, str_dup (p));
+  }
+  mem_free (&tmp);
+  return (ret);
+}
+

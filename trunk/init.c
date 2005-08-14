@@ -27,6 +27,10 @@
 #include "mutt_ssl.h"
 #endif
 
+#if defined (USE_LIBESMTP) && (defined (USE_SSL) || defined (USE_GNUTLS))
+#include "mutt_libesmtp.h"
+#endif
+
 #include "mx.h"
 #include "init.h"
 
@@ -59,6 +63,23 @@ list2_t* Synonyms;
 char* CurRCFile = NULL;
 /* for synonym warning reports: current rc line */
 int CurRCLine = 0;
+
+/* prototypes for checking for special vars */
+static int check_dsn_return (const char*);
+static int check_dsn_notify (const char*);
+
+static struct {
+  const char* name;
+  int (*check) (const char*);
+} SpecialVars[] = {
+  { "dsn_notify", check_dsn_notify },
+  { "dsn_return", check_dsn_return },
+#if defined (USE_LIBESMTP) && (defined (USE_SSL) || defined (USE_GNUTLS))
+  { "smtp_use_tls", mutt_libesmtp_check_usetls },
+#endif
+  /* last */
+  { NULL,         NULL }
+};
 
 /* for synonym warning reports: adds synonym to end of list */
 static void syn_add (int n, int o) {
@@ -976,6 +997,47 @@ static void mutt_restore_default (struct option_t *p)
     set_option (OPTREDRAWTREE);
 }
 
+/* check whether value for $dsn_return would be valid */
+static int check_dsn_return (const char* val) {
+  if (val && *val && str_ncmp (val, "hdrs", 4) != 0 &&
+      str_ncmp (val, "full", 4) != 0)
+    return (0);
+  return (1);
+}
+
+/* check whether value for $dsn_notify would be valid */
+static int check_dsn_notify (const char* val) {
+  list2_t* list = NULL;
+  int i = 0, rc = 1;
+
+  if (!val || !*val)
+    return (1);
+  list = list_from_str (val, ",");
+  if (list_empty (list))
+    return (1);
+
+  for (i = 0; i < list->length; i++)
+    if (str_ncmp (list->data[i], "never", 5) != 0 &&
+        str_ncmp (list->data[i], "failure", 7) != 0 &&
+        str_ncmp (list->data[i], "delay", 5) != 0 &&
+        str_ncmp (list->data[i], "success", 7) != 0) {
+      rc = 0;
+      break;
+    }
+  list_del (&list, (list_del_t*) _mem_free);
+  return (rc);
+}
+
+static int check_special (const char* name, const char* val) {
+  int i = 0;
+
+  for (i = 0; SpecialVars[i].name; i++) {
+    if (str_cmp (SpecialVars[i].name, name) == 0)
+      return (SpecialVars[i].check (val));
+  }
+  return (1);
+}
+
 static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
                       BUFFER * err)
 {
@@ -1110,9 +1172,17 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
           *((char **) MuttVars[idx].data) = str_dup (scratch);
         }
         else if (DTYPE (MuttVars[idx].type) == DT_STR) {
-          *((char **) MuttVars[idx].data) = str_dup (tmp->data);
-          if (str_cmp (MuttVars[idx].option, "charset") == 0)
-            mutt_set_charset (Charset);
+          /* see if the value may only be a certain value... */
+          if (check_special (MuttVars[idx].option, tmp->data)) {
+            *((char **) MuttVars[idx].data) = str_dup (tmp->data);
+            if (str_cmp (MuttVars[idx].option, "charset") == 0)
+              mutt_set_charset (Charset);
+          } else {
+            /* ... and abort if it fails */
+            snprintf (err->data, err->dsize, "'%s' is invalid for $%s",
+                      tmp->data, MuttVars[idx].option);
+            return (-1);
+          }
         }
         else {
           *((ADDRESS **) MuttVars[idx].data) =
