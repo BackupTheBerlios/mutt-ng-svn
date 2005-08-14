@@ -102,7 +102,7 @@ void crypt_invoke_message (int type)
     mutt_message _("Invoking PGP...");
   }
   else if ((WithCrypto & APPLICATION_SMIME) && (type & APPLICATION_SMIME)) {
-    mutt_message _("Invoking SMIME...");
+    mutt_message _("Invoking S/MIME...");
   }
 }
 

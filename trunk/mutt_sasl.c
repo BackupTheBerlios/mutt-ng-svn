@@ -133,7 +133,7 @@ static int iptostring (const struct sockaddr *addr, socklen_t addrlen,
 #endif
 
 /* mutt_sasl_start: called before doing a SASL exchange - initialises library
- *   (if neccessary). */
+ *   (if necessary). */
 int mutt_sasl_start (void)
 {
   static unsigned char sasl_init = 0;
@@ -288,7 +288,6 @@ int mutt_sasl_client_new (CONNECTION * conn, sasl_conn_t ** saslconn)
     return -1;
   }
 
-#if defined(USE_SSL) || defined(USE_GNUTLS)
   if (conn->ssf) {
 #ifdef USE_SASL2                /* I'm not sure this actually has an effect, at least with SASLv2 */
     debug_print (2, ("External SSF: %d\n", conn->ssf));
@@ -312,7 +311,6 @@ int mutt_sasl_client_new (CONNECTION * conn, sasl_conn_t ** saslconn)
     }
 #endif
   }
-#endif
 
   return 0;
 }
