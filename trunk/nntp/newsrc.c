@@ -1065,26 +1065,48 @@ NNTP_DATA *mutt_newsgroup_uncatchup (NNTP_SERVER * news, char *group)
 }
 
 /* this routine gives the first newsgroup with new messages */
-void nntp_buffy (char *s)
-{
+void nntp_buffy (char* dst, size_t dstlen) {
   LIST *list;
+  int count = 0;
 
+  /* forward to current group */
   for (list = CurrentNewsSrv->list; list; list = list->next) {
     NNTP_DATA *data = (NNTP_DATA *) list->data;
-
-    if (data && data->subscribed && data->unread) {
-      if (Context && Context->magic == M_NNTP &&
-          !str_cmp (data->group, ((NNTP_DATA *) Context->data)->group)) {
-        unsigned int i, unread = 0;
-
-        for (i = 0; i < Context->msgcount; i++)
-          if (!Context->hdrs[i]->read && !Context->hdrs[i]->deleted)
-            unread++;
-        if (!unread)
-          continue;
-      }
-      strcpy (s, data->group);
+    if (data && data->subscribed && data->unread && 
+        Context && Context->magic == M_NNTP &&
+        str_cmp (data->group, ((NNTP_DATA *) Context->data)->group) == 0)
       break;
-    }
   }
+
+  *dst = '\0';
+
+  while (count < 2) {
+
+    if (!list)
+      list = CurrentNewsSrv->list;
+
+    for (; list; list = list->next) {
+      NNTP_DATA *data = (NNTP_DATA *) list->data;
+
+      if (data && data->subscribed && data->unread) {
+        if (Context && Context->magic == M_NNTP &&
+            !str_cmp (data->group, ((NNTP_DATA *) Context->data)->group)) {
+          unsigned int i, unread = 0;
+
+          for (i = 0; i < Context->msgcount; i++)
+            if (!Context->hdrs[i]->read && !Context->hdrs[i]->deleted)
+              unread++;
+          if (!unread)
+            continue;
+        }
+        strncpy (dst, data->group, dstlen);
+        break;
+      }
+    }
+    /* done if found */
+    if (dst && *dst)
+      return;
+    count++;
+  }
+  *dst = '\0';
 }

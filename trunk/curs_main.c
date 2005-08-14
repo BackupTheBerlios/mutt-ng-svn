@@ -1187,7 +1187,7 @@ int mutt_index_menu (void)
           cp = _("Open newsgroup in read-only mode");
         else
           cp = _("Open newsgroup");
-        nntp_buffy (buf);
+        nntp_buffy (buf, sizeof (buf));
       }
       else
 #endif

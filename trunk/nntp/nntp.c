@@ -641,6 +641,7 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
 {
   char buf[HUGE_STRING];
   char *msg = _("Fetching message headers...");
+  char *msg2 = _("Fetching headers from cache...");
   NNTP_DATA *nntp_data = ((NNTP_DATA *) ctx->data);
   int ret;
   int num;
@@ -682,10 +683,10 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
   num = nntp_data->lastCached - first + 1;
   if (option (OPTNEWSCACHE) && nntp_data->cache && num > 0) {
     nntp_cache_expand (buf, nntp_data->cache);
-    mutt_message _("Fetching headers from cache...");
+    mutt_message (msg2);
 
     if ((f = safe_fopen (buf, "r"))) {
-      int r = 0;
+      int r = 0, c = 0;
 
       /* counting number of lines */
       while (fgets (buf, sizeof (buf), f) != NULL)
@@ -697,8 +698,11 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
       fc.first = first;
       fc.last = first + num - 1;
       fc.msg = NULL;
-      while (fgets (buf, sizeof (buf), f) != NULL)
+      while (fgets (buf, sizeof (buf), f) != NULL) {
+        if (ReadInc && ((++c) % ReadInc == 0))
+          mutt_message ("%s %d/%d", msg2, c, r);
         add_xover_line (buf, &fc);
+      }
       fclose (f);
       nntp_data->lastLoaded = fc.last;
       first = fc.last + 1;

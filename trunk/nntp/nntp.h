@@ -111,7 +111,7 @@ int nntp_fetch_message (MESSAGE *, CONTEXT *, int);
 int nntp_post (const char *);
 int nntp_check_msgid (CONTEXT *, const char *);
 int nntp_check_children (CONTEXT *, const char *);
-void nntp_buffy (char *);
+void nntp_buffy (char* dst, size_t dstlen);
 void nntp_expand_path (char *, size_t, ACCOUNT *);
 void nntp_logout_all ();
 const char *nntp_format_str (char *, size_t, char, const char *, const char *,
