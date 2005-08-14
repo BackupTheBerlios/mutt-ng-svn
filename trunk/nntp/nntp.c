@@ -22,6 +22,8 @@
 #include "rfc1524.h"
 #include "rfc2047.h"
 #include "nntp.h"
+#include "sidebar.h"
+#include "buffy.h"
 
 #include "mutt_crypt.h"
 
@@ -36,6 +38,44 @@
 #include <stdlib.h>
 
 static unsigned int _checked = 0;
+
+static void update_sidebar (NNTP_DATA* data) {
+  int i = 0;
+  BUFFY* tmp = NULL;
+  char buf[STRING];
+
+  if (list_empty (Incoming))
+    return;
+
+  /* unfortunately, NNTP_DATA::group only is the plain
+   * group name, so for every single update, we need to
+   * compose the full string which must be defined via
+   * mailboxes command ;-((( FIXME
+   */
+  buf[0] = '\0';
+  snprintf (buf, sizeof (buf), "nntp%s://%s%s/%s",
+            (data->nserv->conn->account.flags & M_ACCT_SSL) ? "s" : "",
+            NONULL (data->nserv->conn->account.user),
+            data->nserv->conn->account.host,
+            data->group);
+  debug_print (4, ("group == '%s'\n", buf));
+
+  /* bail out if group not found via mailboxes */
+  if ((i = buffy_lookup (buf)) < 0)
+    return;
+
+  tmp = (BUFFY*) Incoming->data[i];
+  /* copied from browser.c */
+  if (option (OPTMARKOLD) &&
+      data->lastCached >= data->firstMessage &&
+      data->lastCached <= data->lastMessage)
+    tmp->msg_unread = data->lastMessage - data->lastCached;
+  else
+    tmp->msg_unread = data->unread;
+  tmp->new = data->unread > 0;
+  /* this is closest to a "total" count we can get */
+  tmp->msgcount = data->lastMessage - data->firstMessage;
+}
 
 static void nntp_error (const char *where, const char *msg) {
   debug_print (1, ("unexpected response in %s: %s\n", where, msg));
@@ -1095,6 +1135,8 @@ void nntp_fastclose_mailbox (CONTEXT * ctx)
   if ((tmp = hash_find (data->nserv->newsgroups, data->group)) == NULL
       || tmp != data)
     nntp_delete_data (data);
+  else
+    update_sidebar (data);
 }
 
 /* commit changes and terminate connection */
@@ -1181,6 +1223,7 @@ static int _nntp_check_mailbox (CONTEXT * ctx, NNTP_DATA * nntp_data)
       nntp_data->entries[0].first = 1;
       nntp_data->entries[0].last = 0;
     }
+    update_sidebar (nntp_data);
   }
 
   time (&nntp_data->nserv->check_time);

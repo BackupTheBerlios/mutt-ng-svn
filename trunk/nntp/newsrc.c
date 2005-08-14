@@ -1074,8 +1074,10 @@ void nntp_buffy (char* dst, size_t dstlen) {
     NNTP_DATA *data = (NNTP_DATA *) list->data;
     if (data && data->subscribed && data->unread && 
         Context && Context->magic == M_NNTP &&
-        str_cmp (data->group, ((NNTP_DATA *) Context->data)->group) == 0)
+        str_cmp (data->group, ((NNTP_DATA *) Context->data)->group) == 0) {
+      list = list->next;
       break;
+    }
   }
 
   *dst = '\0';
