@@ -838,10 +838,8 @@ static void print_flowed_line (char *line, STATE * s, int ql)
     return;
   }
 
-  pos = line + ql + width;
-  oldpos = line + ql;
-  if (ql > 0 && ISBLANK (*oldpos))
-    ++oldpos;
+  pos = line + width;
+  oldpos = line;
 
   /* fprintf(stderr,"oldpos = %p line+len = %p\n",oldpos,line+len); */
 
@@ -899,56 +897,61 @@ static int text_plain_flowed_handler (BODY * a, STATE * s)
 {
   int bytes = a->length;
   char buf[LONG_STRING];
-  char *curline = strdup ("");
+  char *curline = str_dup ("");
   char *t = NULL;
   unsigned int curline_len = 1;
   unsigned int quotelevel = 0, newql = 0;
-  int first_line = 1;
+  int buf_off, buf_len;
 
   while (bytes > 0 && fgets (buf, sizeof (buf), s->fpin)) {
-
-    bytes -= str_len (buf);
+    buf_len = str_len (buf);
+    bytes -= buf_len;
 
     newql = get_quote_level (buf);
 
-    if (bytes == 0 || ((t = strrchr (buf, '\n')) || (t = strrchr (buf, '\r')))) {
-      if (bytes > 0)
-        *t = '\0';
-      if (str_len (curline) > 0 && curline[str_len (curline) - 1] == ' '
-          && newql == quotelevel
-          && strcmp (curline + quotelevel, "-- ") != 0) {
-        if (buf[newql] == ' ')
-          curline[str_len (curline) - 1] = '\0';
-
-        curline = realloc (curline, curline_len + str_len (buf));
-        if (curline_len == 1)
-          *curline = '\0';
-        curline_len += str_len (buf);
-        str_ncat (curline, curline_len, buf + newql,
-                      str_len (buf + newql));
-      }
-      else {
-        if (first_line) {
-          first_line = 0;
-        }
-        else {
-          print_flowed_line (curline, s, quotelevel);
-        }
-        mem_free (&curline);
-        curline_len = 1;
-        curline = realloc (curline, curline_len + str_len (buf));
-        if (curline_len == 1)
-          *curline = '\0';
-        curline_len += str_len (buf);
-        str_ncat (curline, curline_len, buf, str_len (buf));
-        quotelevel = newql;
-      }
+    /* a change of quoting level in a paragraph - shouldn't happen, 
+     * but has to be handled - see RFC 3676, sec. 4.5.
+     */
+    if (newql != quotelevel && curline && *curline) {
+      print_flowed_line (curline, s, quotelevel);
+      *curline = '\0';
+      curline_len = 1;
     }
+    quotelevel = newql;
+
+    /* XXX - If a line is longer than buf (shouldn't happen), it is split.
+     * This will almost always cause an unintended line break, and 
+     * possibly a change in quoting level. But that's better than not
+     * displaying it at all.
+     */
+    if ((t = strrchr (buf, '\n')) || (t = strrchr (buf, '\r'))) {
+      *t = '\0';
+      buf_len = t - buf;
+    }
+    buf_off = newql;
+    if (buf[buf_off] == ' ')
+      buf_off++;
+
+    /* signature separator also flushes the previous paragraph */
+    if (strcmp(buf + buf_off, "-- ") == 0 && curline && *curline) {
+      print_flowed_line (curline, s, quotelevel);
+      *curline = '\0';
+      curline_len = 1;
+    }
+
+    curline = realloc (curline, curline_len + buf_len - buf_off);
+    strcpy (curline + curline_len - 1, buf + buf_off);
+    curline_len += buf_len - buf_off;
+
+    /* if this was a fixed line the paragraph is finished */
+    if (buf_len == 0 || buf[buf_len - 1] != ' ' || strcmp(buf + buf_off, "-- ") == 0) {
+      print_flowed_line (curline, s, quotelevel);
+      *curline = '\0';
+      curline_len = 1;
+    }
+
   }
-  if (curline) {
-    print_flowed_line (curline, s, quotelevel);
-    mem_free (&curline);
-  }
+  mem_free (&curline);
   return (0);
 }
 
