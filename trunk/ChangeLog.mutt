@@ -1,3 +1,30 @@
+2005-08-16 18:10:11  Paul Walker  <paul@black-sun.demon.co.uk>  (brendan)
+
+	* doc/manual.sgml.head, doc/mutt.man, main.c: -D dumps to stdout,
+	not stderr.
+
+2005-08-15 08:10:48  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* po/id.po: Fix \n mismatch.
+
+2005-08-15 08:07:36  Ronny Haryanto  <ronnylist@haryan.to>  (roessler)
+
+	* po/id.po: update
+
+2005-08-15 08:06:40  Vsevolod Volkov  <vvv@mutt.org.ua>  (roessler)
+
+	* po/ru.po: update
+
+2005-08-14 21:32:17  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (brendan)
+
+	* attach.c, send.c: Don't pass an empty filename to the default
+	text editor when editing non-plain text. Also don't clobber
+	$content_type when parsing it. Closes: #2038.
+
+2005-08-14 12:28:52  Roland Rosenfeld  <roland@spinnaker.de>  (roessler)
+
+	* po/de.po: update
+
 2005-08-14 02:22:47  Bernd Ahlers  <bernd@ba-net.org>  (brendan)
 
 	* cryptglue.c, mutt_sasl.c, smime.c: Fix some S/MIME spelling
