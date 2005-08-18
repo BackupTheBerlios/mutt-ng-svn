@@ -13,6 +13,11 @@
 #       -s YYYY-MM-DD   print only messages since (and including) date
 #       -i string       use string for indentation
 #       -m number       break lines at the latest at number columns
+#       -p string       prefix for filenames in 'svn log -v' output;
+#                       for things like 'A /mutt-ng/trunk/foo' set this
+#                       to 'mutt-ng/', i.e. exclude the leading / from
+#                       it but include everything up to the last char
+#                       before (trunk|tags|branches)
 #       -h              help
 #
 # Note: lines matching ``^([^:]+):?$'' will be ignored if the first
@@ -29,17 +34,24 @@
 # will be interpreted as only 'added l33t c0d3' if 'Foo Bar' is known as
 # an author. This does not count when grouping messages for authors,
 # those lines are just skipped. This is hard-coded, see below.
+#
+# Also, put
+# | From: ...
+# as the first line of log messages when change is only committed by
+# someone with access but the original author is someone else. If
+# there's no such author line, the author's name will be grabbed from
+# the %committers table below.
 
 use strict;
 use POSIX;
 use Getopt::Std;
 
 # hard-coded configuration: this maps user to full names
-my %commiters = (
-  "ak1"         => "Andreas Krennmair",
-  "nion"        => "Nico Golde",
-  "pdmef"       => "Rocco Rutte",
-  "dkg1"        => "Daniel K. Gebhart"
+my %committers = (
+  "ak1"         => "Andreas Krennmair <ak\@synflood.at>",
+  "nion"        => "Nico Golde <nion\@muttng.org>",
+  "pdmef"       => "Rocco Rutte <pdmef\@cs.tu-berlin.de>",
+  "dkg1"        => "Daniel K. Gebhart <dpkg1\@users.berlios.de>"
 );
 
 my %fmap = (
@@ -54,6 +66,7 @@ my $linemax = 70;
 my $today = "";
 my $since = "";
 my $indent = "    ";
+my $pfx = "";
 
 # some stuff we need
 my $currev = 0;
@@ -61,6 +74,7 @@ my $lastrev = 0;
 my @curlog = ();
 my $curentry = "";
 my $curauthor = "";
+my $curcomm = "";
 my $count = 0;
 my %changes = ();
 
@@ -93,22 +107,35 @@ written by Rocco Rutte <pdmef\@cs.tu-berlin.de>
 for use with mutt-ng <http://mutt-ng.berlios.de/>
 
 Usage:
-  Print help:
-  svn log | svnlog2changelog.pl -h
+  svnlog2changelog.pl -h
+  svn log -v | svnlog2changelog.pl [-t] [-i YYYY-MM-DD] [-m number] [-p string]
 
-  Print Subversion's log for today:
-  svn log | svnlog2changelog.pl -t [-i string]
+Options:
+       -t              print only today's messages
+       -s YYYY-MM-DD   print only messages since (and including) date
+       -i string       use string for indentation
+       -m number       break lines at the latest at number columns
+       -p string       prefix for filenames in 'svn log -v' output;
+                       for things like 'A /mutt-ng/trunk/foo' set this
+                       to 'mutt-ng/', i.e. exclude the leading / from
+                       it but include everything up to the last char
+                       before (trunk|tags|branches)
+       -h              help
 
-  Print Subversion's log since (and including) YYYY-MM-DD
-  svn log | svnlog2changelog.pl -s YYYY-MM-DD [-i string]
+Examples:
+  - print Subversion's log for today:
+    svn log -v -r "{`date "+%Y-%m-%d"`}:HEAD" | svnlog2changelog.pl -t [-i string]
+
+  - print Subversion's log since (and including) YYYY-MM-DD
+    svn log -v | svnlog2changelog.pl -s YYYY-MM-DD [-i string]
 EOF
   ;
 }
 
 sub isknown {
   my ($name) = (@_);
-  for my $k (keys %commiters) {
-    if ($commiters{$k} eq $name) {
+  for my $k (keys %committers) {
+    if (substr ($committers{$k}, 0, length ($name)) eq $name) {
       return (1);
     }
   }
@@ -116,7 +143,7 @@ sub isknown {
 }
 
 # get and process options
-getopts ("tm:s:hi:", \%options);
+getopts ("tm:s:hi:p:", \%options);
 if (defined $options{'t'}) {
   $today = strftime ("%Y-%m-%d", localtime (time ()));
 }
@@ -133,6 +160,10 @@ if (defined $options{'h'}) {
 if (defined $options{'i'}) {
   $indent = $options{'i'};
 }
+if (defined $options{'p'}) {
+  $pfx = $options{'p'};
+  $pfx =~ s#/#\\/#g;
+}
 
 # parse log
 while (<STDIN>) {
@@ -145,8 +176,8 @@ while (<STDIN>) {
     my @items = split (/\ \|\ /, $_);
     my @dateinfo = split (/\ /, $items[2]);
     $curentry = $dateinfo[0];
-    ${$changes{$curentry}}{'author'} = $items[1];
     $curauthor = $items[1];
+    $curcomm = $items[1];
     # _keep_ latest rev. number for day
     if (not defined ${$changes{$curentry}}{'rev'}) {
       ${$changes{$curentry}}{'rev'} = substr ($items[0], 1);
@@ -155,37 +186,41 @@ while (<STDIN>) {
     if (not defined ${$changes{$curentry}}{'time'}) {
       ${$changes{$curentry}}{'time'} = "$dateinfo[1] $dateinfo[2]";
     }
-    $count++;
     next;
   }
+  $count++;
   if ($count > 0) {
-    # ignore noise
+    # check log line: contains author?
+    if ($_ =~ /^From: (.*)$/) {
+      $curauthor = "$1 ($curcomm)";
+      next;
+    }
+    elsif (defined $committers{$curauthor}) {
+      $curauthor = "$committers{$curcomm} ($curcomm)";
+    }
+    # check log line: contains noise?
     if (length ($_) == 0 or $_ =~ /^[-]+$/ or 
         $_ =~ /^([^:]+):?$/ and &isknown ($1) or
         $_ eq "Changed paths:") {
       next;
     }
-    if ($_ =~ /([A-Z]) \/((trunk|branches|tags).*)$/) {
+    # check log line: contains list of changes/deleted/added files?
+    if ((length ($pfx) > 0 and $_ =~ /([AMD]) \/($pfx?.*)?$/) or
+        (length ($pfx) == 0 and $_ =~ /([AMD]) \/(.*)?$/)) {
       my $what = $1;
-      my $target = $2;
+      my $target = "";
+      if (defined $2) {
+        $target = $2;
+      }
+      $target =~ s#$pfx##g;
       ${${$changes{$curentry}}{"files$what"}}{$target} = 1;
     } else {
+      # here the line really contains the log message
       # try to be smart and remove itemizations people make
       my $clean = $_;
       $clean =~ s/^[- \t*]*//;
       if (length ($clean) > 0) {
-        # _pre_pend space for continued log and newline for
-        # new log lines for new revisions
-#        if (defined ${${$changes{$curentry}}{'log'}}{$curauthor} and
-#            length (${${$changes{$curentry}}{'log'}}{$curauthor}) > 0) {
-#          if ($lastrev eq $currev) {
-#            ${${$changes{$curentry}}{'log'}}{$curauthor} .= " ";
-#          } else {
-#            ${${$changes{$curentry}}{'log'}}{$curauthor} .= "\n";
-#          }
-#        }
-#        ${${$changes{$curentry}}{'log'}}{$curauthor} .= "$clean";
-        ${${$changes{$curentry}}{'log'}}{$curauthor} .= "$clean\n";
+        ${${$changes{$curentry}}{'log'}}{$curauthor} .= "$clean (r$currev)\n";
         $lastrev = $currev;
       }
     }
@@ -211,8 +246,8 @@ for my $k (sort { $b cmp $a } (keys (%changes))) {
   # with smart line-breaking and indentation
   for my $a (keys %{${$changes{$k}}{'log'}}) {
     print "$first2$indent";
-    if (defined $commiters{$a}) {
-      print $commiters{$a};
+    if (defined $committers{$a}) {
+      print $committers{$a};
     } else {
       print $a;
     }
