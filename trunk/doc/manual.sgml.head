@@ -4298,6 +4298,161 @@ muttrc.
 
 <!--}}}--> 
 
+<chapt>Security Considerations <!--{{{--> 
+
+  <p>First of all, mutt-ng contains no security holes included by
+  intention but may contain unknown security holes. As a consequence,
+  please run mutt-ng only with as few permissions as possible.
+
+  <p>Please do not run mutt-ng as the super user.
+
+  <p>When configuring mutt-ng, there're some points to note about secure
+  setups.
+
+  <p>In practice, mutt-ng can be easily made as vulnerable as even the
+  most insecure mail user agents (in their default configuration) just
+  by changing mutt-ng's configuration files: it then can execute
+  arbitrary programs and scripts attached to messages, send out private
+  data on its own, etc. Although this is not believed to the common type
+  of setup, please read this chapter carefully.
+
+  <sect>Passwords <!--{{{--> 
+
+    <p>Although mutt-ng can be told the various passwords for accounts,
+    please never store passwords in configuration files. Besides the
+    fact that the system's operator can always read them, you could
+    forget to replace the actual password with asterisks when reporting
+    a bug or asking for help via, for example, a mailing list so that
+    your mail including your password could be archived by internet
+    search engines, etc. Please never store passwords on disk.
+
+  <!--}}}-->
+
+  <sect>Temporary Files <!--{{{--> 
+
+    <p>Mutt-ng uses many temporary files for viewing messages, verifying
+    digital signatures, etc. The <ref id="umask" name="&dollar;umask">
+    variable can be used to change the default permissions of these
+    files. Please only change it if you really know what you are doing.
+    Also, a different location for these files may be desired which can
+    be changed via the <ref id="tmpdir" name="&dollar;tmpdir"> variable.
+
+  <!--}}}-->
+
+  <sect>Information Leaks <!--{{{--> 
+
+  <sect1>Message-ID: headers <!--{{{--> 
+
+    <p>In the default configuration, mutt-ng will leak some information
+    to the outside world when sending messages: the generation of
+    <tt/Message-ID:/ headers includes a step counter which is increased
+    (and rotated) with every message sent. If you'd like to hide this
+    information probably telling others how many mail you sent in which
+    time, you at least need to remove the <tt/%P/ expando from the
+    default setting of the <ref id="msgid_format"
+    name="&dollar;msgid&lowbar;format"> variable. Please make sure that
+    you really know how local parts of these <tt/Message-ID:/ headers
+    are composed.
+
+  <!--}}}-->
+
+  <sect1>mailto:-style links <!--{{{--> 
+
+    <p>As mutt-ng be can be set up to be the mail client to handle
+    <tt/mailto:/ style links in websites, there're security
+    considerations, too. To keep the old behavior by default, mutt-ng
+    will be strict in interpreting them which means that arbitrary
+    header fields can be embedded in these links which could override
+    existing header fields or attach arbitrary files. This may be
+    problematic if the <ref id="edit_headers"
+    name="&dollar;edit&lowbar;headers"> variable is <em/unset/, i.e. the
+    user doesn't want to see header fields while editing the message.
+
+    <p>For example, following a link like
+
+    <verb>
+mailto:joe@host?Attach=~/.gnupg/secring.gpg</verb>
+
+    will send out the user's private gnupg keyring to <tt/joe@host/ if
+    the user doesn't follow the information on screen carefully
+    enough.
+
+    <p>When <em/unsetting/ the <ref id="strict_mailto"
+    name="&dollar;strict&lowbar;mailto"> variable, mutt-ng will
+
+    <itemize>
+
+      <item>be less strict when interpreting these links by
+        prepending a <tt/X-Mailto-/ string to all header fields
+        embedded in such a link <em/and/
+
+      <item>turn on the <ref id="edit_headers"
+        name="&dollar;edit&lowbar;headers"> variable by
+        force to let the user see all the headers
+        (because they still may leak information.)
+
+    </itemize>
+
+  <!--}}}-->
+
+  <!--}}}-->
+
+  <sect>External applications <!--{{{--> 
+
+    <p>Mutt-ng in many places has to rely on external applications or
+    for convenience supports mechanisms involving external
+    applications.
+
+    <sect1>mailcap <!--{{{--> 
+
+      <p>One of these is the <tt/mailcap/ mechanism as defined by RfC
+      1524. Mutt-ng can be set up to <em/automatically/ execute any
+      given utility as listed in one of the mailcap files (see the
+      <ref id="mailcap_path" name="&dollar;mailcap&lowbar;path">
+      variable for details.) These utilities may have security issues
+      like overriding arbitrary files, contain exploitable bugs or just
+      leak information which is a bad in combination with running them
+      without prompting. When using mutt-ng's autoview mechanism
+      involing use of mailcap files, please make sure that
+
+      <itemize>
+
+        <item>you manually select trustworthy applications with a
+          reasonable calling sequence
+
+        <item>you check the contents of mailcap files from time to time
+          (for example after doing software installations/upgrades)
+
+        <item>you, if you're the system's operator, always keep the
+          software packages involved up-to-date
+
+        <item>you never ever change the default value of the
+          <ref id="mailcap_sanitize"
+          name="&dollar;mailcap&lowbar;sanitize"> variable
+
+      </itemize>
+
+    <!--}}}-->
+
+    <sect1>Other <!--{{{--> 
+
+      <p>Besides the mailcap mechanism, mutt-ng uses a number of other
+      external utilities for operation.
+
+      <p>The same security considerations apply for these as for tools
+      involved via mailcap (for example, mutt-ng is vulnerable to Denial
+      of Service Attacks with compressed folders support if the
+      uncompressed mailbox is too large for the disk it is saved to.)
+
+      <p>As already noted, most of these problems are not built in but
+      caused by wrong configuration, so please check your configuration.
+
+    <!--}}}-->
+
+  <!--}}}-->
+
+<!--}}}-->
+
 <chapt>Reference <!--{{{--> 
 
 <sect>Command line options<label id="commandline"> <!--{{{--> 
