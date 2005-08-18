@@ -3970,25 +3970,27 @@
        One of these is the mailcap mechanism as defined by RfC 1524. Mutt-ng can be
        set up to _a_u_t_o_m_a_t_i_c_a_l_l_y execute any given utility as listed in one of the mail-
        cap files (see the _$_m_a_i_l_c_a_p___p_a_t_h (section 7.4.116  , page 114) variable for
-       details.) These utilities may have security issues like overriding arbitrary
-       files, contain exploitable bugs or just leak information which is a bad in com-
-       bination with running them without prompting. When using mutt-ng's autoview
+       details.)
+
+       These utilities may have a variety of security vulnerabilities, including
 
        The Mutt Next Generation E-Mail Client                                       79
 
-       mechanism involing use of mailcap files, please make sure that
+       overwriting of arbitrary files, information leaks or other exploitable bugs.
+       These vulnerabilities may go unnoticed by the user, especially when they are
+       called automatically (and without interactive prompting) from the mailcap
+       file(s). When using mutt-ng's autoview mechanism in combination with mailcap
+       files, please be sure to...
 
-          +o you manually select trustworthy applications with a reasonable calling
-            sequence
+          +o manually select trustworth applications with a reasonable calling sequence
 
-          +o you check the contents of mailcap files from time to time (for example
-            after doing software installations/upgrades)
+          +o periodically check the contents of mailcap files, especially after soft-
+            ware installations or upgrades
 
-          +o you, if you're the system's operator, always keep the software packages
-            involved up-to-date
+          +o keep the software packages referenced in the mailcap file up to date
 
-          +o you never ever change the default value of the _$_m_a_i_l_c_a_p___s_a_n_i_t_i_z_e (section
-            7.4.117  , page 115) variable
+          +o leave the _$_m_a_i_l_c_a_p___s_a_n_i_t_i_z_e (section 7.4.117  , page 115) variable in its
+            default state to restrict mailcap expandos to a safe set of characters
 
        _6_._4_._2  _O_t_h_e_r
 
@@ -4013,7 +4015,7 @@
 
        The Mutt Next Generation E-Mail Client                                       80
 
-            -A   expand an alias
+            -A      expand an alias
             -a      attach a file to a message
             -b      specify a blind carbon-copy (BCC) address
             -c      specify a carbon-copy (Cc) address

@@ -4409,26 +4409,29 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</verb>
       1524. Mutt-ng can be set up to <em/automatically/ execute any
       given utility as listed in one of the mailcap files (see the
       <ref id="mailcap_path" name="&dollar;mailcap&lowbar;path">
-      variable for details.) These utilities may have security issues
-      like overriding arbitrary files, contain exploitable bugs or just
-      leak information which is a bad in combination with running them
-      without prompting. When using mutt-ng's autoview mechanism
-      involing use of mailcap files, please make sure that
+      variable for details.) 
+
+      These utilities may have a variety of security vulnerabilities,
+      including overwriting of arbitrary files, information leaks or
+      other exploitable bugs.  These vulnerabilities may go unnoticed by
+      the user, especially when they are called automatically (and
+      without interactive prompting) from the mailcap file(s). When
+      using mutt-ng's autoview mechanism in combination with mailcap
+      files, please be sure to...
 
       <itemize>
 
-        <item>you manually select trustworthy applications with a
-          reasonable calling sequence
+        <item>manually select trustworth applications with a reasonable
+        calling sequence
 
-        <item>you check the contents of mailcap files from time to time
-          (for example after doing software installations/upgrades)
+        <item>periodically check the contents of mailcap files,
+        especially after software installations or upgrades
 
-        <item>you, if you're the system's operator, always keep the
-          software packages involved up-to-date
+        <item>keep the software packages referenced in the mailcap file up to date
 
-        <item>you never ever change the default value of the
-          <ref id="mailcap_sanitize"
-          name="&dollar;mailcap&lowbar;sanitize"> variable
+        <item>leave the <ref id="mailcap_sanitize"
+        name="&dollar;mailcap&lowbar;sanitize"> variable in its default
+        state to restrict mailcap expandos to a safe set of characters
 
       </itemize>
 
@@ -4462,7 +4465,7 @@ mailbox.  However, it is possible to read other mailboxes and
 to send messages from the command line as well.
 
 <tscreen><verb>
--A	expand an alias
+-A      expand an alias
 -a      attach a file to a message
 -b      specify a blind carbon-copy (BCC) address
 -c      specify a carbon-copy (Cc) address
