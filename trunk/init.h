@@ -1235,7 +1235,15 @@ struct option_t MuttVars[] = {
    ** from (instead to the author only). Setting this option to ``\fIask-yes\fP'' or
    ** ``\fIask-no\fP'' will ask if you really intended to reply to the author only.
    */
-  {"max_line_length", DT_NUM, R_NONE, UL &MaxLineLength, 0},
+  {"max_display_recips", DT_NUM, R_PAGER, UL &MaxDispRecips, 0},
+  /*
+   ** .pp
+   ** When set non-zero, this specifies the maximum number of recipient header
+   ** lines (\fTTo:\fP, \fTCc:\fP and \fTBcc:\fP) to display in the pager if header
+   ** weeding is turned on. In case the number of lines exeeds its value, the
+   ** last line will have 3 dots appended.
+   */
+  {"max_line_length", DT_NUM, R_PAGER, UL &MaxLineLength, 0},
   /*
    ** .pp
    ** When \fIset\fP, the maximum line length for displaying ``format = flowed'' messages is limited

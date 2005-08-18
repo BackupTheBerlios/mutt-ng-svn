@@ -52,6 +52,7 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
   int x;
   char *this_one = NULL;
   int error;
+  int curline = 0;
 
   if (ftell (in) != off_start)
     fseek (in, off_start, 0);
@@ -138,6 +139,12 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
 
     /* Is it the begining of a header? */
     if (nl && buf[0] != ' ' && buf[0] != '\t') {
+
+      /* set curline to 1 for To:/Cc:/Bcc: and 0 otherwise */
+      curline = (flags & CH_WEED) && (ascii_strncmp ("To:", buf, 3) == 0 ||
+                                      ascii_strncmp ("Cc:", buf, 3) == 0 ||
+                                      ascii_strncmp ("Bcc:", buf, 4) == 0);
+
       /* Do we have anything pending? */
       if (this_one) {
         if (flags & CH_DECODE) {
@@ -214,11 +221,19 @@ mutt_copy_hdr (FILE * in, FILE * out, long off_start, long off_end, int flags,
       debug_print (2, ("Reorder: x = %d; hdr_count = %d\n", x, hdr_count));
       if (!this_one)
         this_one = str_dup (buf);
-      else {
+      /* we do want to see all lines if this header doesn't feature
+       * abbreviations (curline is 0), $max_display_recips is 0 and
+       * while the number hasn't reached $max_display_recips yet */
+      else if (curline == 0 || MaxDispRecips == 0 || ++curline <= MaxDispRecips) {
         mem_realloc (&this_one,
                       str_len (this_one) + str_len (buf) +
                       sizeof (char));
         strcat (this_one, buf); /* __STRCAT_CHECKED__ */
+      /* only for the first line which doesn't exeeds
+       * $max_display_recips: abbreviate it */
+      } else if (curline == MaxDispRecips+1) {
+        mem_realloc (&this_one, str_len (this_one) + 5);
+        strcat (this_one, " ...");
       }
     }
   }                             /* while (ftell (in) < off_end) */
