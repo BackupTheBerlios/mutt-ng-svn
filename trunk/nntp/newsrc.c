@@ -337,6 +337,8 @@ NNTP_SERVER *mutt_select_newsserver (char *server)
   NNTP_SERVER *serv;
   CONNECTION *conn;
 
+  memset (&acct, 0, sizeof (ACCOUNT));
+
   if (!server || !*server) {
     mutt_error _("No newsserver defined!");
 

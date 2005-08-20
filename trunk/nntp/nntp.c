@@ -39,7 +39,7 @@
 
 static unsigned int _checked = 0;
 
-static void update_sidebar (NNTP_DATA* data) {
+void nntp_sync_sidebar (NNTP_DATA* data) {
   int i = 0;
   BUFFY* tmp = NULL;
   char buf[STRING];
@@ -53,9 +53,11 @@ static void update_sidebar (NNTP_DATA* data) {
    * mailboxes command ;-((( FIXME
    */
   buf[0] = '\0';
-  snprintf (buf, sizeof (buf), "nntp%s://%s%s/%s",
+  snprintf (buf, sizeof (buf), "nntp%s://%s%s%s%s/%s",
             (data->nserv->conn->account.flags & M_ACCT_SSL) ? "s" : "",
             NONULL (data->nserv->conn->account.user),
+            *data->nserv->conn->account.pass ? ":" : "",
+            *data->nserv->conn->account.pass ? data->nserv->conn->account.pass : "",
             data->nserv->conn->account.host,
             data->group);
   debug_print (4, ("group == '%s'\n", buf));
@@ -427,7 +429,7 @@ static void nntp_parse_xref (CONTEXT * ctx, char *group, char *xref,
     if (colon) {
       *colon = '\0';
       colon++;
-      nntp_get_status (ctx, h, p, atoi (colon));
+      nntp_get_status (ctx, h, b, atoi (colon));
       if (h && h->article_num == 0 && str_cmp (group, b) == 0)
         h->article_num = atoi (colon);
     }
@@ -832,6 +834,8 @@ int nntp_open_mailbox (CONTEXT * ctx)
   unsigned int first;
   ACCOUNT acct;
 
+  memset (&acct, 0, sizeof (ACCOUNT));
+
   if (nntp_parse_url (ctx->path, &acct, buf, sizeof (buf)) < 0 || !*buf) {
     mutt_error (_("%s is an invalid newsgroup specification!"), ctx->path);
     mutt_sleep (2);
@@ -1136,7 +1140,7 @@ void nntp_fastclose_mailbox (CONTEXT * ctx)
       || tmp != data)
     nntp_delete_data (data);
   else
-    update_sidebar (data);
+    nntp_sync_sidebar (data);
 }
 
 /* commit changes and terminate connection */
@@ -1223,7 +1227,7 @@ static int _nntp_check_mailbox (CONTEXT * ctx, NNTP_DATA * nntp_data)
       nntp_data->entries[0].first = 1;
       nntp_data->entries[0].last = 0;
     }
-    update_sidebar (nntp_data);
+    nntp_sync_sidebar (nntp_data);
   }
 
   time (&nntp_data->nserv->check_time);
@@ -1312,6 +1316,7 @@ int nntp_check_newgroups (NNTP_SERVER * serv, int force)
       if (l->data && ((NNTP_DATA *) l->data)->subscribed)
         _nntp_check_mailbox (NULL, (NNTP_DATA *) l->data);
     }
+    sidebar_draw (CurrentMenu);
   }
   else if (!force)
     return 0;

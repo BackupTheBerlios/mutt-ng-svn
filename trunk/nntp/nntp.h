@@ -117,6 +117,7 @@ void nntp_logout_all ();
 const char *nntp_format_str (char *, size_t, char, const char *, const char *,
                              const char *, const char *, unsigned long,
                              format_flag);
+void nntp_sync_sidebar (NNTP_DATA*);
 
 NNTP_SERVER *CurrentNewsSrv INITVAL (NULL);
 

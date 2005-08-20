@@ -487,6 +487,7 @@ static int examine_directory (MUTTMENU * menu, struct browser_state *state,
     for (tmp = news->list; tmp; tmp = tmp->next) {
       if (!(data = (NNTP_DATA *) tmp->data))
         continue;
+      nntp_sync_sidebar (data);
       if (prefix && *prefix && strncmp (prefix, data->group,
                                         str_len (prefix)) != 0)
         continue;
@@ -494,6 +495,7 @@ static int examine_directory (MUTTMENU * menu, struct browser_state *state,
         continue;
       add_folder (menu, state, data->group, NULL, data, data->new);
     }
+    sidebar_draw (CurrentMenu);
   }
   else
 #endif /* USE_NNTP */
@@ -576,14 +578,14 @@ static int examine_mailboxes (MUTTMENU * menu, struct browser_state *state)
     init_state (state, menu);
 
     for (tmp = news->list; tmp; tmp = tmp->next) {
-      if ((data = (NNTP_DATA *) tmp->data) != NULL && (data->new ||
-                                                       (data->subscribed
-                                                        &&
-                                                        (!option
-                                                         (OPTSHOWONLYUNREAD)
-                                                         || data->unread))))
+      if ((data = (NNTP_DATA*) tmp->data) == NULL)
+        continue;
+      nntp_sync_sidebar (data);
+      if ((data->new || (data->subscribed && 
+                         (!option (OPTSHOWONLYUNREAD)|| data->unread))))
         add_folder (menu, state, data->group, NULL, data, data->new);
     }
+    sidebar_draw (CurrentMenu);
   }
   else
 #endif
