@@ -32,7 +32,7 @@
 #include <ncursesw/ncurses.h>
 #elif HAVE_NCURSES_NCURSES_H
 #include <ncurses/ncurses.h>
-#elif ifdef HAVE_NCURSES_H
+#elif HAVE_NCURSES_H
 #include <ncurses.h>
 #else
 #include <curses.h>
