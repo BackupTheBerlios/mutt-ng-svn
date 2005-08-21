@@ -105,7 +105,7 @@ const char *mutt_fqdn (short);
 void mutt_account_hook (const char *url);
 void mutt_add_to_reference_headers (ENVELOPE * env, ENVELOPE * curenv,
                                     LIST *** pp, LIST *** qq);
-void mutt_adv_mktemp (char *, size_t);
+void mutt_adv_mktemp (const char*, char*, size_t);
 void mutt_allow_interrupt (int);
 void mutt_block_signals (void);
 void mutt_block_signals_system (void);

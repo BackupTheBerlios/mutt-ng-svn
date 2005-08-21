@@ -507,7 +507,7 @@ int rfc1524_expand_filename (char *nametemplate,
     }
   }
 
-  mutt_adv_mktemp (newfile, nflen);
+  mutt_adv_mktemp (NULL, newfile, nflen);
 
   if (rmatch && lmatch)
     return 0;

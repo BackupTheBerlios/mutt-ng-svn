@@ -32,6 +32,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <libgen.h>
 #include <sys/stat.h>
 
 void nntp_add_to_list (NNTP_SERVER * s, NNTP_DATA * d)
@@ -634,9 +635,9 @@ static int mutt_update_list_file (char *filename, char *section,
   FILE *ifp;
   FILE *ofp;
   char buf[HUGE_STRING];
-  char tmpfile[_POSIX_PATH_MAX];
+  char tmpfile[_POSIX_PATH_MAX], link[_POSIX_PATH_MAX];
   char *c;
-  int ext = 0, done = 0, r = 0;
+  int ext = 0, done = 0, r = 0, l = 0;
 
   /* if file not exist, create it */
   if ((ifp = safe_fopen (filename, "a")))
@@ -651,7 +652,14 @@ static int mutt_update_list_file (char *filename, char *section,
     mutt_error (_("Unable to lock %s"), filename);
     return -1;
   }
-  snprintf (tmpfile, sizeof(tmpfile), "%s.tmp", filename);
+  /* use mutt_adv_mktemp() to get a tempfile in the same
+   * directory as filename is so that we can follow symlinks
+   * via rename(2); as dirname(2) may modify its argument,
+   * temporarily use buf as copy of it
+   */
+  strncpy (buf, filename, sizeof (buf));
+  strncpy (tmpfile, basename (filename), sizeof (tmpfile));
+  mutt_adv_mktemp ((const char*) dirname (buf), tmpfile, sizeof (tmpfile));
   debug_print (1, ("Opening %s\n", tmpfile));
   if (!(ofp = fopen (tmpfile, "w"))) {
     fclose (ifp);
@@ -723,9 +731,13 @@ static int mutt_update_list_file (char *filename, char *section,
     mutt_error (_("Can't write %s"), tmpfile);
     return -1;
   }
-  if (rename (tmpfile, filename) < 0) {
+  link[0] = '\0';
+  if ((l = readlink (filename, link, sizeof (link)-1)) > 0)
+    link[l] = '\0';
+  debug_print (1, ("Renaming %s to %s\n",tmpfile, l > 0 ? link : filename));
+  if (rename (tmpfile, l > 0 ? link : filename) < 0) {
     unlink (tmpfile);
-    mutt_error (_("Can't rename %s to %s"), tmpfile, filename);
+    mutt_error (_("Can't rename %s to %s"), tmpfile, l > 0 ? link : filename);
     return -1;
   }
   return 0;

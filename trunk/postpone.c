@@ -633,7 +633,7 @@ int mutt_prepare_template (FILE * fp, CONTEXT * ctx, HEADER * newhdr,
       mutt_delete_parameter ("x-mutt-noconv", &b->parameter);
     }
 
-    mutt_adv_mktemp (file, sizeof (file));
+    mutt_adv_mktemp (NULL, file, sizeof (file));
     if ((s.fpout = safe_fopen (file, "w")) == NULL)
       goto bail;
 

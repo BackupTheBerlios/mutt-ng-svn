@@ -64,7 +64,7 @@ BODY *mutt_new_body (void)
  * Renamed to mutt_adv_mktemp so I only have to change where it's
  * called, and not all possible cases.
  */
-void mutt_adv_mktemp (char *s, size_t l)
+void mutt_adv_mktemp (const char* dir, char *s, size_t l)
 {
   char buf[_POSIX_PATH_MAX];
   char tmp[_POSIX_PATH_MAX];
@@ -72,7 +72,7 @@ void mutt_adv_mktemp (char *s, size_t l)
   size_t sl;
   struct stat sb;
 
-  strfcpy (buf, NONULL (Tempdir), sizeof (buf));
+  strfcpy (buf, dir && *dir ? dir : NONULL (Tempdir), sizeof (buf));
   mutt_expand_path (buf, sizeof (buf));
   if (s[0] == '\0') {
     snprintf (s, l, "%s/muttXXXXXX", buf);
@@ -116,7 +116,7 @@ int mutt_copy_body (FILE * fp, BODY ** tgt, BODY * src)
     tmp[0] = '\0';
   }
 
-  mutt_adv_mktemp (tmp, sizeof (tmp));
+  mutt_adv_mktemp (NULL, tmp, sizeof (tmp));
   if (mutt_save_attachment (fp, src, tmp, 0, NULL) == -1)
     return -1;
 
