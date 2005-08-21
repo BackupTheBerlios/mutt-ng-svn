@@ -218,7 +218,7 @@ static void show_version (void)
 #if HAVE_QDBM
   printf ("  qdbm %s\n", dpversion);
 #elif HAVE_GDBM
-  printf ("  gdbm %s\n", gbdm_version);
+  printf ("  gdbm %s\n", gdbm_version);
 #elif HAVE_DB4
   printf ("  DB4 %d.%d.%d\n", DB_VERSION_MAJOR, DB_VERSION_MINOR,
           DB_VERSION_PATCH);
