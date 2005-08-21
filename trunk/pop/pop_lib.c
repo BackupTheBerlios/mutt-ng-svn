@@ -16,7 +16,7 @@
 #include "mx.h"
 #include "url.h"
 #include "pop.h"
-#ifdef USE_SSL
+#if defined (USE_SSL) || defined (USE_GNUTLS)
 # include "mutt_ssl.h"
 #endif
 

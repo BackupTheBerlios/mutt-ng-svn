@@ -108,6 +108,11 @@ static pop_query_status pop_read_header (POP_DATA * pop_data, HEADER * h)
 
       break;
     }
+  case PQ_NOT_CONNECTED:
+    {
+      mutt_error _("Can't fetch header: Not connected!");
+      break;
+    }
   }
 
   fclose (f);

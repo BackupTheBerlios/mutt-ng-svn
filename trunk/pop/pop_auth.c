@@ -217,10 +217,13 @@ static pop_auth_res_t pop_auth_apop (POP_DATA * pop_data, const char *method)
     return POP_A_SUCCESS;
   case PQ_NOT_CONNECTED:
     return POP_A_SOCKET;
+  case PFD_FUNCT_ERROR:
+  case PQ_ERR:
+  default:
+    break;
   }
 
-  mutt_error _("APOP authentication failed.");
-
+  mutt_error ("%s %s", _("APOP authentication failed."), pop_data->err_msg);
   mutt_sleep (2);
 
   return POP_A_FAILURE;
@@ -271,6 +274,10 @@ static pop_auth_res_t pop_auth_user (POP_DATA * pop_data, const char *method)
     return POP_A_SUCCESS;
   case PQ_NOT_CONNECTED:
     return POP_A_SOCKET;
+  case PFD_FUNCT_ERROR:
+  case PQ_ERR:
+  default:
+    break;
   }
 
   mutt_error ("%s %s", _("Login failed."), pop_data->err_msg);

@@ -609,7 +609,7 @@ int mutt_convert_nonmime_string (char **ps)
 
   for (c = AssumedCharset; c; c = c1 ? c1 + 1 : 0) {
     char *u = *ps;
-    char *s;
+    char *s = NULL;
     char *fromcode;
     size_t m, n;
     size_t ulen = str_len (*ps);
