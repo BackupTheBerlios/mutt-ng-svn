@@ -506,9 +506,6 @@ int buffy_list (void)
   int have_unnotified = BuffyNotify;
   int i = 0;
 
-  if (option (OPTFORCEBUFFYCHECK))
-    buffy_check (1);
-
   pos = 0;
   first = 1;
   buffylist[0] = 0;

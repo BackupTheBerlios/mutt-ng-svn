@@ -1311,6 +1311,8 @@ void _mutt_select_file (char *f, size_t flen, int flags, char ***files,
       break;
 
     case OP_BUFFY_LIST:
+      if (option (OPTFORCEBUFFYCHECK))
+        buffy_check (1);
       buffy_list ();
       break;
 

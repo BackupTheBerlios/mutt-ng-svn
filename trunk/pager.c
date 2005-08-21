@@ -2530,6 +2530,8 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       break;
 
     case OP_BUFFY_LIST:
+      if (option (OPTFORCEBUFFYCHECK))
+        buffy_check (1);
       buffy_list ();
       redraw |= REDRAW_SIDEBAR;
       break;

@@ -2291,6 +2291,8 @@ int mutt_index_menu (void)
       break;
 
     case OP_BUFFY_LIST:
+      if (option (OPTFORCEBUFFYCHECK))
+        buffy_check (1);
       buffy_list ();
       menu->redraw = REDRAW_FULL;
       break;

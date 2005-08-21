@@ -707,7 +707,7 @@ static void print_confline (const char *varname, int type, const char *val)
           || type == DT_PATH) {
         add_s ("\n# set ");
         add_s (varname);
-        add_s ("\"");
+        add_s ("=\"");
         conf_print_strval (val);
         add_s ("\"");
       }
