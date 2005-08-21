@@ -7,13 +7,7 @@ AC_PREREQ([2.50])
 AC_INIT([mutt.h])
 AM_CONFIG_HEADER(config.h)
 
-if test -f "$srcdir/.svn/entries" ; then
-  echo "`cat $srcdir/VERSION.in`-r`grep revision $srcdir/.svn/entries | sort -r | uniq | head -n 1 | cut -d '"' -f 2`" > "$srcdir/VERSION"
-else
-  cp "$srcdir/VERSION.in" "$srcdir/VERSION"
-fi
-
-mutt_cv_version=`cat "$srcdir/VERSION"`
+mutt_cv_version=`cat "$srcdir/VERSION.in"`
 
 AM_INIT_AUTOMAKE(muttng, $mutt_cv_version)
 AC_SUBST([CONFIGURE_DEPENDENCIES], ['$(top_srcdir)/VERSION.in'])
@@ -265,6 +259,7 @@ main ()
                 fi
 		
                 if test "$cf_ncurses" = ncursesw; then
+			AC_CHECK_HEADERS(ncurses/ncurses.h,[cf_cv_ncurses_header="ncurses/ncurses.h"])
 			AC_CHECK_HEADERS(ncursesw/ncurses.h,[cf_cv_ncurses_header="ncursesw/ncurses.h"])
 		else
 			AC_CHECK_HEADERS(ncurses.h,[cf_cv_ncurses_header="ncurses.h"])

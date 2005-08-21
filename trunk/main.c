@@ -52,6 +52,28 @@
 #include "nntp/nntp.h"
 #endif
 
+#ifdef USE_LIBESMTP
+#include <libesmtp.h>
+#endif
+
+#if USE_HCACHE
+#if HAVE_QDBM
+#include <depot.h>
+#elif HAVE_GDBM
+#include <gdbm.h>
+#elif HAVE_DB4
+#include <db.h>
+#endif
+#endif
+
+#ifdef USE_GNUTLS
+#include <gnutls/gnutls.h>
+#endif
+
+#ifdef CRYPT_BACKEND_GPGME
+#include <gpgme/gpgme.h>
+#endif
+
 static const char *ReachingUs = N_("\
 To contact the developers, please mail to <mutt-ng-devel@lists.berlios.de>.\n\
 To visit the Mutt-ng homepage go to http://www.muttng.org.\n\
@@ -152,6 +174,9 @@ options:\n\
 static void show_version (void)
 {
   struct utsname uts;
+#ifdef USE_LIBESMTP
+  char buf[STRING];
+#endif
 
   puts (mutt_make_version ());
   puts (_(Notice));
@@ -159,52 +184,68 @@ static void show_version (void)
   uname (&uts);
 
 #ifdef _AIX
-  printf ("System: %s %s.%s", uts.sysname, uts.version, uts.release);
+  printf ("System:\n  %s %s.%s", uts.sysname, uts.version, uts.release);
 #elif defined (SCO)
-  printf ("System: SCO %s", uts.release);
+  printf ("System:\n  SCO %s", uts.release);
 #else
-  printf ("System: %s %s", uts.sysname, uts.release);
+  printf ("System:\n  %s %s", uts.sysname, uts.release);
 #endif
 
-  printf (" (%s)", uts.machine);
+  printf (" (%s)\nExternal Libraries:\n", uts.machine);
 
 #ifdef NCURSES_VERSION
-  printf (" [using ncurses %s]", NCURSES_VERSION);
+  printf ("  ncurses %s\n", NCURSES_VERSION);
 #elif defined(USE_SLANG_CURSES)
-  printf (" [using slang %d]", SLANG_VERSION);
+  printf ("  slang %d\n", SLANG_VERSION);
 #endif
 
 #ifdef _LIBICONV_VERSION
-  printf (" [using libiconv %d.%d]", _LIBICONV_VERSION >> 8,
+  printf ("  libiconv %d.%d\n", _LIBICONV_VERSION >> 8,
           _LIBICONV_VERSION & 0xff);
 #endif
 
 #ifdef HAVE_LIBIDN
-  printf (" [using libidn %s (compiled with %s)]",
+  printf ("  libidn %s (compiled with %s)\n",
           stringprep_check_version (NULL), STRINGPREP_VERSION);
 #endif
 
-  puts (_("\nCompile options:"));
-
-#ifdef DOMAIN
-  printf ("DOMAIN=\"%s\"\n", DOMAIN);
-#else
-  puts ("-DOMAIN");
+#ifdef USE_LIBESMTP
+  smtp_version (buf, sizeof (buf), 0);
+  printf ("  libESMTP %s\n", buf);
 #endif
+
+#if USE_HCACHE
+#if HAVE_QDBM
+  printf ("  qdbm %s\n", dpversion);
+#elif HAVE_GDBM
+  printf ("  gdbm %s\n", gbdm_version);
+#elif HAVE_DB4
+  printf ("  DB4 %d.%d.%d\n", DB_VERSION_MAJOR, DB_VERSION_MINOR,
+          DB_VERSION_PATCH);
+#endif
+#endif
+
+#ifdef USE_GNUTLS
+  printf ("  gnutls %s\n", LIBGNUTLS_VERSION);
+#endif
+
+#ifdef CRYPT_BACKEND_GPGME
+  printf ("  gpgme %s\n", GPGME_VERSION);
+#endif
+
+  puts (_("Compile Options:"));
 
 #ifdef DEBUG
-  puts ("+DEBUG");
+  puts ("  +DEBUG");
 #else
-  puts ("-DEBUG");
+  puts ("  -DEBUG");
 #endif
-
-
 
   puts (
 #ifdef HOMESPOOL
-         "+HOMESPOOL  "
+         "  +HOMESPOOL  "
 #else
-         "-HOMESPOOL  "
+         "  -HOMESPOOL  "
 #endif
 #ifdef USE_SETGID
          "+USE_SETGID  "
@@ -221,7 +262,7 @@ static void show_version (void)
 #else
          "-DL_STANDALONE  "
 #endif
-         "\n"
+         "\n  "
 #ifdef USE_FCNTL
          "+USE_FCNTL  "
 #else
@@ -245,9 +286,9 @@ static void show_version (void)
     );
   puts (
 #ifdef USE_POP
-         "+USE_POP  "
+         "  +USE_POP  "
 #else
-         "-USE_POP  "
+         "  -USE_POP  "
 #endif
 #ifdef USE_NNTP
          "+USE_NNTP  "
@@ -289,7 +330,7 @@ static void show_version (void)
 #else
          "-USE_LIBESMTP  "
 #endif
-         "\n"
+         "\n  "
 #ifdef HAVE_REGCOMP
          "+HAVE_REGCOMP  "
 #else
@@ -305,7 +346,7 @@ static void show_version (void)
 #else
          "-COMPRESSED  "
 #endif
-         "\n"
+         "\n  "
 #ifdef HAVE_COLOR
          "+HAVE_COLOR  "
 #else
@@ -326,7 +367,7 @@ static void show_version (void)
 #else
          "-HAVE_BKGDSET  "
 #endif
-         "\n"
+         "\n  "
 #ifdef HAVE_CURS_SET
          "+HAVE_CURS_SET  "
 #else
@@ -346,9 +387,9 @@ static void show_version (void)
 
   puts (
 #ifdef CRYPT_BACKEND_CLASSIC_PGP
-         "+CRYPT_BACKEND_CLASSIC_PGP  "
+         "  +CRYPT_BACKEND_CLASSIC_PGP  "
 #else
-         "-CRYPT_BACKEND_CLASSIC_PGP  "
+         "  -CRYPT_BACKEND_CLASSIC_PGP  "
 #endif
 #ifdef CRYPT_BACKEND_CLASSIC_SMIME
          "+CRYPT_BACKEND_CLASSIC_SMIME  "
@@ -370,7 +411,7 @@ static void show_version (void)
 #else
          "-SUN_ATTACHMENT  "
 #endif
-         "\n"
+         "\n  "
 #ifdef ENABLE_NLS
          "+ENABLE_NLS  "
 #else
@@ -396,7 +437,7 @@ static void show_version (void)
 #else
          "-HAVE_LANGINFO_YESEXPR  "
 #endif
-         "\n"
+         "\n  "
 #if HAVE_ICONV
          "+HAVE_ICONV  "
 #else
@@ -424,21 +465,29 @@ static void show_version (void)
 #endif
     );
 
-#ifdef ISPELL
-  printf ("ISPELL=\"%s\"\n", ISPELL);
+  puts (_("Built-In Defaults:"));
+
+#ifdef DOMAIN
+  printf ("  +DOMAIN=\"%s\"\n", DOMAIN);
 #else
-  puts ("-ISPELL");
+  puts ("  -DOMAIN");
 #endif
 
-  printf ("SENDMAIL=\"%s\"\n", SENDMAIL);
-  printf ("MAILPATH=\"%s\"\n", MAILPATH);
-  printf ("PKGDATADIR=\"%s\"\n", PKGDATADIR);
-  printf ("SYSCONFDIR=\"%s\"\n", SYSCONFDIR);
-  printf ("EXECSHELL=\"%s\"\n", EXECSHELL);
-#ifdef MIXMASTER
-  printf ("MIXMASTER=\"%s\"\n", MIXMASTER);
+#ifdef ISPELL
+  printf ("  +ISPELL=\"%s\"\n", ISPELL);
 #else
-  puts ("-MIXMASTER");
+  puts ("  -ISPELL");
+#endif
+
+  printf ("  +SENDMAIL=\"%s\"\n", SENDMAIL);
+  printf ("  +MAILPATH=\"%s\"\n", MAILPATH);
+  printf ("  +PKGDATADIR=\"%s\"\n", PKGDATADIR);
+  printf ("  +SYSCONFDIR=\"%s\"\n", SYSCONFDIR);
+  printf ("  +EXECSHELL=\"%s\"\n", EXECSHELL);
+#ifdef MIXMASTER
+  printf ("  +MIXMASTER=\"%s\"\n\n", MIXMASTER);
+#else
+  puts ("  -MIXMASTER\n");
 #endif
 
   puts (_(ReachingUs));
