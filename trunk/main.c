@@ -127,7 +127,7 @@ options:\n\
   puts _("\
   -e <command>\tspecify a command to be executed after initialization\n\
   -f <file>\tspecify which mailbox to read\n\
-  -F <file>\tspecify an alternate muttrc file\n\
+  -F <file>\tspecify an alternate muttrngc file\n\
   -g <server>\tspecify a newsserver (if compiled with NNTP)\n\
   -G\t\tselect a newsgroup (if compiled with NNTP)\n\
   -H <file>\tspecify a draft file to read header and body from\n\
