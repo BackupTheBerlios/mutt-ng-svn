@@ -587,6 +587,15 @@ static int nntp_parse_xover (CONTEXT * ctx, char *buf, HEADER * hdr)
       rfc822_free_address (&hdr->env->from);
       hdr->env->from = rfc822_parse_adrlist (hdr->env->from, b);
       rfc2047_decode_adrlist (hdr->env->from);
+      /* same as for mutt_parse_rfc822_line():
+       * don't leave from info NULL if there's an invalid address (or
+       * whatever) in From: field; mutt would just display it as empty
+       * and mark mail/(esp.) news article as your own. aaargh! this
+       * bothered me for _years_ */
+      if (!hdr->env->from) {
+        hdr->env->from = rfc822_new_address ();
+        hdr->env->from->personal = str_dup (b);
+      }
       break;
     case 3:
       hdr->date_sent = mutt_parse_date (b, hdr);

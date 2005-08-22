@@ -27,6 +27,7 @@
 #include "charset.h"
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
+#include "svnrev.h"
 
 #include "lib/mem.h"
 #include "lib/str.h"
@@ -1615,7 +1616,7 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
       }
     }
     /* Add a vanity header */
-    fprintf (fp, "User-Agent: mutt-ng/%s (%s)\n", MUTT_VERSION, os);
+    fprintf (fp, "User-Agent: %s (%s)\n", mutt_make_version (0), os);
   }
 
   return (ferror (fp) == 0 ? 0 : -1);

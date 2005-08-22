@@ -125,7 +125,7 @@ void mutt_exit (int code)
 
 static void mutt_usage (void)
 {
-  puts (mutt_make_version ());
+  puts (mutt_make_version (1));
 
   puts
     _
@@ -178,7 +178,7 @@ static void show_version (void)
   char buf[STRING];
 #endif
 
-  puts (mutt_make_version ());
+  puts (mutt_make_version (1));
   puts (_(Notice));
 
   uname (&uts);
@@ -732,7 +732,7 @@ int main (int argc, char **argv)
     show_version ();
     break;
   default:
-    puts (mutt_make_version ());
+    puts (mutt_make_version (1));
     puts (_(Copyright));
     puts (_(ReachingUs));
     exit (0);

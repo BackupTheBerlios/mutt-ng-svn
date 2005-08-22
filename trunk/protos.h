@@ -98,7 +98,7 @@ char *mutt_get_parameter (const char *, PARAMETER *);
 char *mutt_crypt_hook (ADDRESS *);
 char *mutt_make_date (char *, size_t);
 
-const char *mutt_make_version (void);
+const char *mutt_make_version (int full);
 
 const char *mutt_fqdn (short);
 

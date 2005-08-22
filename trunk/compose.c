@@ -479,8 +479,7 @@ static const char *compose_format_str (char *buf, size_t buflen, char op,
     break;
 
   case 'v':
-    snprintf (fmt, sizeof (fmt), "Mutt-ng %%s");
-    snprintf (buf, buflen, fmt, MUTT_VERSION);
+    strncpy (buf, mutt_make_version (0), buflen);
     break;
 
   case 0:

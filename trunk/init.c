@@ -2150,14 +2150,18 @@ void mutt_init (int skip_sys_rc, LIST * commands)
 
 
   if (!Muttrc) {
+#if 0
     snprintf (buffer, sizeof (buffer), "%s/.muttngrc-%s", NONULL (Homedir),
               MUTT_VERSION);
     if (access (buffer, F_OK) == -1)
+#endif
       snprintf (buffer, sizeof (buffer), "%s/.muttngrc", NONULL (Homedir));
     if (access (buffer, F_OK) == -1)
+#if 0
       snprintf (buffer, sizeof (buffer), "%s/.muttng/muttngrc-%s",
                 NONULL (Homedir), MUTT_VERSION);
     if (access (buffer, F_OK) == -1)
+#endif
       snprintf (buffer, sizeof (buffer), "%s/.muttng/muttngrc",
                 NONULL (Homedir));
 

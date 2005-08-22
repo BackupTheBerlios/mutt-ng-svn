@@ -1285,12 +1285,17 @@ time_t mutt_decrease_mtime (const char *f, struct stat *st)
   return mtime;
 }
 
-const char *mutt_make_version (void)
+const char *mutt_make_version (int full)
 {
   static char vstring[STRING];
 
-  snprintf (vstring, sizeof (vstring), "Mutt-ng %s-%s (based on Mutt 1.5.10/%s)",
-            MUTT_VERSION, MUTTNG_SVNREV, ReleaseDate);
+  if (full)
+    snprintf (vstring, sizeof (vstring), "Mutt-ng %s-%s (based "
+              "on Mutt 1.5.10/%s)", MUTT_VERSION, MUTTNG_SVNREV,
+              ReleaseDate);
+  else
+    snprintf (vstring, sizeof (vstring), "mutt-ng/%s-%s",
+              MUTT_VERSION, MUTTNG_SVNREV);
   return vstring;
 }
 

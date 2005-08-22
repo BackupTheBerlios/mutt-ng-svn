@@ -1034,7 +1034,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
        * bothered me for _years_ */
       if (!e->from) {
         e->from = rfc822_new_address ();
-        e->from->personal = str_dup (line + 6);
+        e->from->personal = str_dup (p);
       }
       matched = 1;
     }

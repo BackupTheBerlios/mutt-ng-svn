@@ -825,7 +825,7 @@ int mutt_save_message (HEADER * h, int delete,
 
 void mutt_version (void)
 {
-  mutt_message (mutt_make_version ());
+  mutt_message (mutt_make_version (1));
 }
 
 void mutt_edit_content_type (HEADER * h, BODY * b, FILE * fp)

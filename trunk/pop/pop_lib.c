@@ -161,6 +161,7 @@ static pop_query_status pop_capabilities (POP_DATA * pop_data, int mode)
         pop_data->cmd_capa = CMD_AVAILABLE;
         break;
       }
+    case PFD_FUNCT_ERROR:
     case PQ_ERR:
       {
         pop_data->cmd_capa = CMD_NOT_AVAILABLE;
