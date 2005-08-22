@@ -17,3 +17,5 @@ void rfc2047_encode_adrlist (ADDRESS *, const char *);
 
 void rfc2047_decode (char **);
 void rfc2047_decode_adrlist (ADDRESS *);
+
+void rfc2047_decode_envelope (ENVELOPE* e);

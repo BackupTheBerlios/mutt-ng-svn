@@ -1393,31 +1393,11 @@ ENVELOPE *mutt_read_rfc822_header (FILE * f, HEADER * hdr, short user_hdrs,
   if (hdr) {
     hdr->content->hdr_offset = hdr->offset;
     hdr->content->offset = ftell (f);
-
-    /* do RFC2047 decoding */
-    rfc2047_decode_adrlist (e->from);
-    rfc2047_decode_adrlist (e->to);
-    rfc2047_decode_adrlist (e->cc);
-    rfc2047_decode_adrlist (e->bcc);
-    rfc2047_decode_adrlist (e->reply_to);
-    rfc2047_decode_adrlist (e->mail_followup_to);
-    rfc2047_decode_adrlist (e->return_path);
-    rfc2047_decode_adrlist (e->sender);
-
-    if (e->subject) {
-      regmatch_t pmatch[1];
-
-      rfc2047_decode (&e->subject);
-
-      if (regexec (ReplyRegexp.rx, e->subject, 1, pmatch, 0) == 0)
-        e->real_subj = e->subject + pmatch[0].rm_eo;
-      else
-        e->real_subj = e->subject;
-    }
-
+    rfc2047_decode_envelope (e);
     /* check for missing or invalid date */
     if (hdr->date_sent <= 0) {
-      debug_print (1, ("no date found, using received time from msg separator\n"));
+      debug_print (1, ("no date found, using received "
+                       "time from msg separator\n"));
       hdr->date_sent = hdr->received;
     }
   }

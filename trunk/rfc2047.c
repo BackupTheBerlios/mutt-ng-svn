@@ -801,3 +801,30 @@ void rfc2047_decode_adrlist (ADDRESS * a)
     a = a->next;
   }
 }
+
+void rfc2047_decode_envelope (ENVELOPE* e) {
+
+  if (!e)
+    return;
+
+  /* do RFC2047 decoding */
+  rfc2047_decode_adrlist (e->from);
+  rfc2047_decode_adrlist (e->to);
+  rfc2047_decode_adrlist (e->cc);
+  rfc2047_decode_adrlist (e->bcc);
+  rfc2047_decode_adrlist (e->reply_to);
+  rfc2047_decode_adrlist (e->mail_followup_to);
+  rfc2047_decode_adrlist (e->return_path);
+  rfc2047_decode_adrlist (e->sender);
+
+  if (e->subject) {
+    regmatch_t pmatch[1];
+
+    rfc2047_decode (&e->subject);
+
+    if (regexec (ReplyRegexp.rx, e->subject, 1, pmatch, 0) == 0)
+      e->real_subj = e->subject + pmatch[0].rm_eo;
+    else
+      e->real_subj = e->subject;
+  }
+}

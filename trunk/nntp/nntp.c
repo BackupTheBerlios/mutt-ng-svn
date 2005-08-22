@@ -570,23 +570,10 @@ static int nntp_parse_xover (CONTEXT * ctx, char *buf, HEADER * hdr)
       break;
     case 1:
       hdr->env->subject = str_dup (b);
-      /* Now we need to do the things which would normally be done in 
-       * mutt_read_rfc822_header() */
-      if (hdr->env->subject) {
-        regmatch_t pmatch[1];
-
-        rfc2047_decode (&hdr->env->subject);
-
-        if (regexec (ReplyRegexp.rx, hdr->env->subject, 1, pmatch, 0) == 0)
-          hdr->env->real_subj = hdr->env->subject + pmatch[0].rm_eo;
-        else
-          hdr->env->real_subj = hdr->env->subject;
-      }
       break;
     case 2:
       rfc822_free_address (&hdr->env->from);
       hdr->env->from = rfc822_parse_adrlist (hdr->env->from, b);
-      rfc2047_decode_adrlist (hdr->env->from);
       /* same as for mutt_parse_rfc822_line():
        * don't leave from info NULL if there's an invalid address (or
        * whatever) in From: field; mutt would just display it as empty
@@ -622,6 +609,7 @@ static int nntp_parse_xover (CONTEXT * ctx, char *buf, HEADER * hdr)
       hdr->env->xref = str_dup (b);
       nntp_parse_xref (ctx, nntp_data->group, b, hdr);
     }
+    rfc2047_decode_envelope (hdr->env);
     if (!*p)
       return -1;
     b = p;
