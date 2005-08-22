@@ -179,7 +179,8 @@ while (<STDIN>) {
     $curauthor = $items[1];
     $curcomm = $items[1];
     # _keep_ latest rev. number for day
-    if (not defined ${$changes{$curentry}}{'rev'}) {
+    if (not defined ${$changes{$curentry}}{'rev'} or
+        ${$changes{$curentry}}{'rev'} lt substr ($items[0], 1)) {
       ${$changes{$curentry}}{'rev'} = substr ($items[0], 1);
     }
     # _keep_ latest commit time for day
