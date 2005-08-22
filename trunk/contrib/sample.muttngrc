@@ -156,7 +156,7 @@ set ask_follow_up=yes
 
 # If set, Mutt will prompt you for x-comment-to field before editing the
 # body of an outgoing message.
-#set ask_x_comment_to
+#set nntp_ask_x_comment_to
 
 # This  variable  describes the format of the 'attachment' menu.
 # (see "man muttngrc for details).
@@ -182,7 +182,7 @@ set bounce=ask-no
 
 # Get asked if Mutt mark all articles in newsgroup as read when you quit the 
 # newsgroup. Default-NO
-set catchup_newsgroup=ask-no
+set nntp_catchup=ask-no
 
 # Character set your terminal uses
 set charset="iso-8859-15"
@@ -227,7 +227,7 @@ set folder=~/.mutt/Mail
 set folder_format="%2C %N %-40.40f %d"
 
 # Ask me by a follow-up2poster
-set followup_to_poster=ask-yes
+set nntp_followup_to_poster=ask-yes
 
 # This  variable  describes the format of the subject when forwarding 
 # a message.
@@ -235,7 +235,7 @@ set forward_format="(Weiterleitung) %s [%a]"
 
 # This  variable  describes the display of the newsgroup-browser.
 # (see "man muttngrc" for details).
-set group_index_format="%4C %M%N %5s  %-45.45f %d"
+set nntp_group_index_format="%4C %M%N %5s  %-45.45f %d"
 
 # This  variable controls the size of the history-buffer.
 set history=100
@@ -280,10 +280,10 @@ set message_format="%-.16n: %s"
 set msgid_format="%Y-%m-%dT%h-%M-%s.G%P%p"
 
 # In this directory muttng will save cached news articles headers.
-set news_cache_dir="~/.mutt/newsspool"
+set nntp_cache_dir="~/.mutt/newsspool"
 
 # In this file muttng write information about subscribed newsgroups.
-set newsrc="~/.mutt/newsrc"
+set nntp_newsrc="~/.mutt/newsrc"
 
 # This variable define the format of the "status"-line in the pager.
 set pager_format="%> [%b]"
@@ -363,10 +363,10 @@ set send_charset="us-ascii:iso-8859-1:iso-8859-15:utf-8"
 set smtp_host="mail.gmx.de"
 
 # Set the username for authentication on mail.gmx.de
-set smtp_auth_username="......."
+set smtp_user="......."
 
 # Set the password for authentication on mail.gmx.de
-set smtp_auth_password="......."
+set smtp_pass="......."
 
 
 # NO sendmail. I deliver via "smtp_host"!
@@ -380,10 +380,10 @@ set smtp_auth_password="......."
 #set sendmail_wait=-1
 
 # Asked the newsserver for new newsgroups when entering the browser.
-set show_new_news
+set nntp_show_new_news
 
 # Show only unread and subscribed newsgroups
-#set show_only_unread
+#set nntp_show_only_unread
 
 # 30 chars width for the left sidebar
 set sidebar_width=30
