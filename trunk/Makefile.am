@@ -151,8 +151,12 @@ keymap_alldefs.h: $(srcdir)/OPS $(srcdir)/OPS.PGP $(srcdir)/OPS.MIX $(srcdir)/OP
 		$(srcdir)/OPS.MIX $(srcdir)/OPS.CRYPT $(srcdir)/OPS.SMIME \
 			> keymap_alldefs.h
 
-svnrev.h: $(srcdir)/.dummy
-	echo "#define MUTTNG_SVNREV \"`awk '{print $$2}' < $(srcdir)/.dummy`\"" > svnrev.h
+svnrev.h:
+	if test -f "$(srcdir)/.svn/entries" ; then \
+	  echo "#define MUTTNG_SVNREV \"r`grep revision $(srcdir)/.svn/entries | sort -r | uniq | head -n 1 | cut -d '"' -f 2`\"" > svnrev.h ; \
+	else \
+	  echo "#define MUTTNG_SVNREV \"`date "+%Y%m%d"`\"" > svnrev.h ; \
+	fi
 
 reldate:
 	echo 'const char *ReleaseDate = "'`date +%Y-%m-%d`'";' > $(srcdir)/reldate.h
