@@ -1,3 +1,3 @@
 #!/bin/sh
-echo "\$Revision\$ `date`" > ./dummy
-echo svn commit
+echo "\$Revision\$ `date`" > ./.dummy
+svn commit
