@@ -12,6 +12,10 @@ sources of information.
 
 2005-08-22:
 
+  The $signoff_string variable now is a synonym for
+  $post_indent_string which was there first and provides the
+  same functionality.
+
   Reading configurations from ~/.muttngrc-$version and
   ~/.muttng/muttngrc-$version is no longer supported;
   ~/.muttngrc and ~/.muttng/muttngrc remain.

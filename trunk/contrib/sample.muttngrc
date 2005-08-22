@@ -399,7 +399,7 @@ unset signature
 
 # Set these string at the bottom of all messages (and about the 
 # signature, if you have one).
-set signoff_string="Regards,\nAndreas"
+set post_indent_string="Regards,\nAndreas"
 
 # First sort messages by threads...
 set sort=threads

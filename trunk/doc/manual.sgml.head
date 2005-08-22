@@ -4689,7 +4689,9 @@ The following are the commands understood by mutt.
 <tt><ref id="unhook" name="unhook"></tt> <em/hook-type/
 </itemize>
 
-<sect>Configuration variables<label id="variables">
+<!--}}}-->
+
+<sect>Configuration variables<label id="variables"> <!--{{{--> 
 
 <p>The following list contains all variables which, in the process of
 providing more consistency, have been renamed and are partially even
@@ -4738,6 +4740,7 @@ show_only_unread        nntp_show_only_unread
 x_comment_to            nntp_x_comment_to
 smtp_auth_username      smtp_user
 smtp_auth_password      smtp_pass
+signoff_string          post_indent_string
 </verb></tscreen>
 
 The <tt/contrib/ subdirectory contains a script named
@@ -4747,3 +4750,4 @@ A complete list of current variables follows.
 
 <p>
 
+<!--}}}-->
