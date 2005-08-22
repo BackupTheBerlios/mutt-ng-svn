@@ -58,11 +58,11 @@ typedef struct {
 } syn_t;
 
 /* for synonym warning reports: list of synonyms found */
-list2_t* Synonyms;
+static list2_t* Synonyms;
 /* for synonym warning reports: current rc file */
-char* CurRCFile = NULL;
+static const char* CurRCFile = NULL;
 /* for synonym warning reports: current rc line */
-int CurRCLine = 0;
+static int CurRCLine = 0;
 
 /* prototypes for checking for special vars */
 static int check_dsn_return (const char*);
@@ -1461,8 +1461,6 @@ static int source_rc (const char *rcfile, BUFFER * err)
   pid_t pid;
 
   debug_print (2, ("reading configuration file '%s'.\n", rcfile));
-  str_replace (&CurRCFile, rcfile);
-  CurRCLine = 0;
 
   if ((f = mutt_open_read (rcfile, &pid)) == NULL) {
     snprintf (err->data, err->dsize, "%s: %s", rcfile, strerror (errno));
@@ -1471,7 +1469,6 @@ static int source_rc (const char *rcfile, BUFFER * err)
 
   memset (&token, 0, sizeof (token));
   while ((linebuf = mutt_read_line (linebuf, &buflen, f, &line)) != NULL) {
-    CurRCLine++;
     conv = ConfigCharset && (*ConfigCharset) && Charset;
     if (conv) {
       currentline = str_dup (linebuf);
@@ -1481,6 +1478,9 @@ static int source_rc (const char *rcfile, BUFFER * err)
     }
     else
       currentline = linebuf;
+
+    CurRCLine = line;
+    CurRCFile = rcfile;
 
     if (mutt_parse_rc_line (currentline, &token, err) == -1) {
       mutt_error (_("Error in %s, line %d: %s"), rcfile, line, err->data);
@@ -2228,12 +2228,10 @@ void mutt_init (int skip_sys_rc, LIST * commands)
                MuttVars[((syn_t*) Synonyms->data[i])->n].option,
                NONULL(((syn_t*) Synonyms->data[i])->f),
                ((syn_t*) Synonyms->data[i])->l);
-    fprintf (stderr, _("Warning: Synonym variables are scheduled for removal.\n"));
+    fprintf (stderr, _("Warning: synonym variables are scheduled for removal.\n"));
     list_del (&Synonyms, syn_del);
     need_pause = 1;
   }
-  /* this is not needed during runtime */
-  mem_free(&CurRCFile);
 
   if (need_pause && !option (OPTNOCURSES)) {
     if (mutt_any_key_to_continue (NULL) == -1)
