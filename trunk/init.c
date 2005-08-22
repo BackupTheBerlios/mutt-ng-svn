@@ -2289,7 +2289,7 @@ int mutt_dump_variables (void) {
       snprintf (command, sizeof (command), "set ?%s\n",
                 ((struct option_t*) tmp->data[i])->option);
       if (mutt_parse_rc_line (command, &token, &err) == -1) {
-        fprintf (stderr, "%s\n", err.data);
+        printf ("%s\n", err.data);
         mem_free (&token.data);
         list_del (&tmp, NULL);
         return 1;
