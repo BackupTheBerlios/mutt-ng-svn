@@ -138,6 +138,7 @@ WHERE char *SidebarDelim;
 WHERE char *SidebarNumberFormat;
 WHERE char *SidebarBoundary;
 WHERE char *Signature;
+WHERE char *SignOffString;
 WHERE char *SimpleSearch;
 
 #if defined(USE_LIBESMTP)

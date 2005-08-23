@@ -56,9 +56,15 @@ static void append_signature (FILE * f)
   FILE *tmpfp;
   pid_t thepid;
 
+  if (SignOffString) {
+    fprintf (f, "\n%s", SignOffString);
+  }
+
   if (Signature && (tmpfp = mutt_open_read (Signature, &thepid))) {
     if (option (OPTSIGDASHES))
       fputs ("\n-- \n", f);
+    else if (SignOffString)
+      fputs ("\n", f);
     mutt_copy_stream (tmpfp, f);
     fclose (tmpfp);
     if (thepid != -1)
@@ -429,6 +435,7 @@ void mutt_make_post_indent (CONTEXT * ctx, HEADER * cur, FILE * out)
   if (PostIndentString) {
     mutt_make_string (buffer, sizeof (buffer), PostIndentString, ctx, cur);
     fputs (buffer, out);
+    fputc ('\n', out);
   }
 }
 

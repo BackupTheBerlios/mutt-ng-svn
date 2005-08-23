@@ -3124,7 +3124,16 @@ struct option_t MuttVars[] = {
    ** assumed that filename is a shell command and input should be read from
    ** its stdout.
    */
-  {"signoff_string", DT_SYN, R_NONE, UL "post_indent_string", 0},
+  {"signoff_string", DT_STR, R_NONE, UL &SignOffString, UL 0},
+  /*
+   ** .pp
+   ** If \fIset\fP, this string will be inserted before the signature. This is useful
+   ** for people that want to sign off every message they send with their name.
+   ** .pp
+   ** If you want to insert your website's URL, additional contact information or 
+   ** witty quotes into your mails, better use a signature file instead of
+   ** the signoff string.
+   */
   {"simple_search", DT_STR, R_NONE, UL &SimpleSearch, UL "~f %s | ~s %s"},
   /*
    ** .pp
