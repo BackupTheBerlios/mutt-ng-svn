@@ -507,6 +507,19 @@ struct option_t MuttVars[] = {
    ** deleting will automatically be purged without prompting.  If set to
    ** \fIno\fP, messages marked for deletion will be kept in the mailbox.
    */
+  {"delete_space", DT_BOOL, R_NONE, OPTDELSP, 0},
+  /*
+   ** .pp
+   ** When sending messages with \fTformat=flowed\fP by \fIsetting\fP the
+   ** $$$text_flowed variable, this variable specifies whether to also
+   ** set the \fTDelSp\fP parameter to \fTyes\fP. If this is \fIunset\fP,
+   ** no additional parameter will be send as a value of \fTno\fP already
+   ** is the default behavior.
+   **
+   ** .pp
+   ** \fBNote:\fP this variable only has an effect on \fIoutgoing\fP messages
+   ** (if $$$text_flowed is \fIset\fP) but not on incomming.
+   */
   {"delete_untag", DT_BOOL, R_NONE, OPTDELETEUNTAG, 1},
   /*
    ** .pp
@@ -593,6 +606,13 @@ struct option_t MuttVars[] = {
    ** they contain the string ``\fTFrom \fP'' (note the trailing space)
    ** in the beginning of a line. Useful to avoid the tampering certain mail
    ** delivery and transport agents tend to do with messages.
+   **
+   ** .pp
+   ** \fBNote:\fP as mutt-ng currently violates RfC3676 defining
+   ** \fTformat=flowed\fP, it's <em/strongly/ advised to \fIset\fP
+   ** this option although discouraged by the standard. Alternatively,
+   ** you must take care of space-stuffing <tt/From / lines (with a trailing
+   ** space) yourself.
    */
   {"envelope_from", DT_BOOL, R_NONE, OPTENVFROM, 0},
   /*

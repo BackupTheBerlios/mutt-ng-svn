@@ -1184,8 +1184,11 @@ int ci_send_message (int flags, /* send mode */
     msg->content->use_disp = 0;
     msg->content->disposition = DISPINLINE;
     if (option (OPTTEXTFLOWED) && msg->content->type == TYPETEXT
-        && !ascii_strcasecmp (msg->content->subtype, "plain"))
+        && !ascii_strcasecmp (msg->content->subtype, "plain")) {
       mutt_set_parameter ("format", "flowed", &msg->content->parameter);
+      if (option (OPTDELSP))
+        mutt_set_parameter ("delsp", "yes", &msg->content->parameter);
+    }
 
     if (!tempfile) {
       mutt_mktemp (buffer);

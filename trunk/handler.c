@@ -24,6 +24,7 @@
 #include "handler.h"
 #include "mutt_curses.h"
 #include "rfc1524.h"
+#include "rfc3676.h"
 #include "keymap.h"
 #include "mime.h"
 #include "copy.h"
@@ -781,180 +782,6 @@ int text_enriched_handler (BODY * a, STATE * s)
   return (0);
 }
 
-/*
- * An implementation of RFC 2646.
- *
- * NOTE: This still has to be made UTF-8 aware.
- *
- */
-
-#define FLOWED_MAX 77
-
-static int get_quote_level (char *line)
-{
-  int quoted;
-
-  for (quoted = 0; line[quoted] == '>'; quoted++);
-  return quoted;
-}
-
-static void print_flowed_line (char *line, STATE * s, int ql)
-{
-  int width;
-  char *pos, *oldpos;
-  int len = str_len (line);
-  int i;
-
-  if (MaxLineLength > 0) {
-    width = MaxLineLength - WrapMargin - ql - 1;
-    if (option (OPTSTUFFQUOTED))
-      --width;
-    if (width < 0)
-      width = MaxLineLength;
-  }
-  else {
-    if (option (OPTMBOXPANE))
-      width = COLS - SidebarWidth - WrapMargin - ql - 1;
-    else
-      width = COLS - WrapMargin - ql - 1;
-
-    if (option (OPTSTUFFQUOTED))
-      --width;
-    if (width < 0)
-      width = COLS;
-  }
-
-  /* fprintf(stderr,"print_flowed_line will print `%s' with ql = %d\n",line,ql); */
-
-  if (str_len (line) == 0) {
-    if (option (OPTQUOTEEMPTY)) {
-      if (s->prefix)
-        state_puts(s->prefix,s);
-      for (i=0;i<ql;++i) state_putc('>',s);
-      if (option(OPTSTUFFQUOTED))
-        state_putc(' ',s);
-    }
-    state_putc('\n',s);
-    return;
-  }
-
-  pos = line + width;
-  oldpos = line;
-
-  /* fprintf(stderr,"oldpos = %p line+len = %p\n",oldpos,line+len); */
-
-  for (; oldpos < line + len; pos += width) {
-    /* fprintf(stderr,"outer for loop\n"); */
-    if (pos < line + len) {     /* only search a new position when we're not over the end of the string w/ pos */
-      /* fprintf(stderr,"if 1\n"); */
-      if (*pos == ' ') {
-        /* fprintf(stderr,"if 2: good luck! found a space\n"); */
-        *pos = '\0';
-        ++pos;
-      }
-      else {
-        /* fprintf(stderr,"if 2: else\n"); */
-        char *save = pos;
-
-        while (pos >= oldpos && !isspace (*pos)) {
-          /* fprintf(stderr,"pos(%p) > oldpos(%p)\n",pos,oldpos); */
-          --pos;
-        }
-        if (pos < oldpos) {
-          /* fprintf(stderr,"wow, no space found, searching the other direction\n"); */
-          pos = save;
-          while (pos < line + len && *pos && !isspace (*pos)) {
-            /* fprintf(stderr,"pos(%p) < line+len(%p)\n",pos,line+len); */
-            ++pos;
-          }
-          /* fprintf(stderr,"found a space pos = %p\n",pos); */
-        }
-        *pos = '\0';
-        ++pos;
-      }
-    }
-    else {
-      /* fprintf(stderr,"if 1 else\n"); */
-    }
-    if (s->prefix)
-      state_puts (s->prefix, s);
-    for (i = 0; i < ql; ++i)
-      state_putc ('>', s);
-    if (option (OPTSTUFFQUOTED) && (ql > 0 || s->prefix))
-      state_putc (' ', s);
-    state_puts (oldpos, s);
-    /* fprintf(stderr,"print_flowed_line: `%s'\n",oldpos); */
-    if (pos < line + len)
-      state_putc (' ', s);
-    state_putc ('\n', s);
-    oldpos = pos;
-  }
-  /*state_puts(line,s);
-     state_putc('\n',s); */
-}
-
-static int text_plain_flowed_handler (BODY * a, STATE * s)
-{
-  int bytes = a->length;
-  char buf[LONG_STRING];
-  char *curline = str_dup ("");
-  char *t = NULL;
-  unsigned int curline_len = 1;
-  unsigned int quotelevel = 0, newql = 0;
-  int buf_off, buf_len;
-
-  while (bytes > 0 && fgets (buf, sizeof (buf), s->fpin)) {
-    buf_len = str_len (buf);
-    bytes -= buf_len;
-
-    newql = get_quote_level (buf);
-
-    /* a change of quoting level in a paragraph - shouldn't happen, 
-     * but has to be handled - see RFC 3676, sec. 4.5.
-     */
-    if (newql != quotelevel && curline && *curline) {
-      print_flowed_line (curline, s, quotelevel);
-      *curline = '\0';
-      curline_len = 1;
-    }
-    quotelevel = newql;
-
-    /* XXX - If a line is longer than buf (shouldn't happen), it is split.
-     * This will almost always cause an unintended line break, and 
-     * possibly a change in quoting level. But that's better than not
-     * displaying it at all.
-     */
-    if ((t = strrchr (buf, '\n')) || (t = strrchr (buf, '\r'))) {
-      *t = '\0';
-      buf_len = t - buf;
-    }
-    buf_off = newql;
-    if (buf[buf_off] == ' ')
-      buf_off++;
-
-    /* signature separator also flushes the previous paragraph */
-    if (strcmp(buf + buf_off, "-- ") == 0 && curline && *curline) {
-      print_flowed_line (curline, s, quotelevel);
-      *curline = '\0';
-      curline_len = 1;
-    }
-
-    curline = realloc (curline, curline_len + buf_len - buf_off);
-    strcpy (curline + curline_len - 1, buf + buf_off);
-    curline_len += buf_len - buf_off;
-
-    /* if this was a fixed line the paragraph is finished */
-    if (buf_len == 0 || buf[buf_len - 1] != ' ' || strcmp(buf + buf_off, "-- ") == 0) {
-      print_flowed_line (curline, s, quotelevel);
-      *curline = '\0';
-      curline_len = 1;
-    }
-
-  }
-  mem_free (&curline);
-  return (0);
-}
-
 #define TXTHTML     1
 #define TXTPLAIN    2
 #define TXTENRICHED 3
@@ -1530,7 +1357,7 @@ int mutt_body_handler (BODY * b, STATE * s)
       else
         if (ascii_strcasecmp
             ("flowed", mutt_get_parameter ("format", b->parameter)) == 0)
-        handler = text_plain_flowed_handler;
+        handler = rfc3676_handler;
       else
         plaintext = 1;
     }

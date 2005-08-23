@@ -1664,82 +1664,132 @@ is ``*'', <em/all entries/ on <tt/alternates/ will be removed.
 
 <sect>Format = Flowed <!--{{{--> 
 
-<p>Mutt-ng contains support for so-called <tt/format=flowed/ messages.
-In the beginning of email, each message had a fixed line width, and
-it was enough for displaying them on fixed-size terminals. But times
-changed, and nowadays hardly anybody still uses fixed-size terminals:
-more people nowaydays use graphical user interfaces, with dynamically
-resizable windows. This led to the demand of a new email format that
-makes it possible for the email client to make the email look nice
-in a resizable window without breaking quoting levels and creating
-an incompatible email format that can also be displayed nicely on
-old fixed-size terminals.
+  <sect1>Introduction <!--{{{--> 
 
-<p>For introductory information on <tt/format=flowed/ messages, see
-<htmlurl url="http://www.joeclark.org/ffaq.html"
-name="&lt;http://www.joeclark.org/ffaq.html&gt;">.
+    <p>Mutt-ng contains support for so-called <tt/format=flowed/ messages.
+    In the beginning of email, each message had a fixed line width, and
+    it was enough for displaying them on fixed-size terminals. But times
+    changed, and nowadays hardly anybody still uses fixed-size terminals:
+    more people nowaydays use graphical user interfaces, with dynamically
+    resizable windows. This led to the demand of a new email format that
+    makes it possible for the email client to make the email look nice
+    in a resizable window without breaking quoting levels and creating
+    an incompatible email format that can also be displayed nicely on
+    old fixed-size terminals.
 
-<p>When you receive emails that are marked as <tt/format=flowed/
-messages, and is formatted correctly, mutt-ng will try to reformat
-the message to optimally fit on your terminal. If you want a fixed
-margin on the right side of your terminal, you can set the
-following:
+    <p>For introductory information on <tt/format=flowed/ messages, see
+    <htmlurl url="http://www.joeclark.org/ffaq.html"
+    name="&lt;http://www.joeclark.org/ffaq.html&gt;">.
 
-<verb>
-set wrapmargin = 10
-</verb>
+  <!--}}}-->
 
-<p>The code above makes the line break 10 columns before the right
-side of the terminal.
+  <sect1>Receiving: Display Setup <!--{{{--> 
 
-<p>If your terminal is so wide that the lines are embarrassingly long,
-you can also set a maximum line length:
+    <p>When you receive emails that are marked as <tt/format=flowed/
+    messages, and is formatted correctly, mutt-ng will try to reformat
+    the message to optimally fit on your terminal. If you want a fixed
+    margin on the right side of your terminal, you can set the
+    following:
 
-<verb>
-set max_line_length = 120
-</verb>
+    <verb>
+    set wrapmargin = 10
+    </verb>
 
-<p>The example above will give you lines not longer than 120
-characters.
+    <p>The code above makes the line break 10 columns before the right
+    side of the terminal.
 
-<p>When you view at <tt/format=flowed/ messages, you will often see
-the quoting hierarchy like in the following example:
+    <p>If your terminal is so wide that the lines are embarrassingly long,
+    you can also set a maximum line length:
 
-<verb>
-&gt;Bill, can you please send last month's progress report to Mr. 
-&gt;Morgan? We also urgently need the cost estimation for the new 
-&gt;production server that we want to set up before our customer's 
-&gt;project will go live.
-</verb>
+    <verb>
+    set max_line_length = 120
+    </verb>
 
-<p>This obviously doesn't look very nice, and it makes it very
-hard to differentiate between text and quoting character. The
-solution is to configure mutt-ng to "stuff" the quoting:
+    <p>The example above will give you lines not longer than 120
+    characters.
 
-<verb>
-set stuff_quoted
-</verb>
+    <p>When you view at <tt/format=flowed/ messages, you will often see
+    the quoting hierarchy like in the following example:
 
-<p>This will lead to a nicer result that is easier to read:
+    <verb>
+    &gt;Bill, can you please send last month's progress report to Mr. 
+    &gt;Morgan? We also urgently need the cost estimation for the new 
+    &gt;production server that we want to set up before our customer's 
+    &gt;project will go live.
+    </verb>
 
-<verb>
-&gt; Bill, can you please send last month's progress report to Mr. 
-&gt; Morgan? We also urgently need the cost estimation for the new 
-&gt; production server that we want to set up before our customer's 
-&gt; project will go live.
-</verb>
+    <p>This obviously doesn't look very nice, and it makes it very
+    hard to differentiate between text and quoting character. The
+    solution is to configure mutt-ng to "stuff" the quoting:
 
-<p>If you want mutt-ng to send emails with <tt/format=flowed/ set, you
-need to explicitly set it:
+    <verb>
+    set stuff_quoted
+    </verb>
 
-<verb>
-set text_flowed
-</verb>
+    <p>This will lead to a nicer result that is easier to read:
 
-<p>Additionally, you have to use an editor which supports writing
-<tt/format=flowed/-conforming emails. For vim, this is done by
-adding <tt/w/ to the formatoptions (see <tt/:h formatoptions/ and
-<tt/:h fo-table/) when writing emails.
+    <verb>
+    &gt; Bill, can you please send last month's progress report to Mr. 
+    &gt; Morgan? We also urgently need the cost estimation for the new 
+    &gt; production server that we want to set up before our customer's 
+    &gt; project will go live.
+    </verb>
+
+  <!--}}}-->
+
+  <sect1>Sending <!--{{{--> 
+
+    <p>If you want mutt-ng to send emails with <tt/format=flowed/ set, you
+    need to explicitly set it:
+
+    <verb>
+    set text_flowed
+    </verb>
+
+    <p>Additionally, you have to use an editor which supports writing
+    <tt/format=flowed/-conforming emails. For vim, this is done by
+    adding <tt/w/ to the formatoptions (see <tt/:h formatoptions/ and
+    <tt/:h fo-table/) when writing emails.
+
+    <p>Also note that <em/format=flowed/ knows about ``space-stuffing'',
+    that is, when sending messages, some kinds of lines have to be
+    indented with a single space on the sending side. On the receiving
+    side, the first space (if any) is removed. As a consequence and in
+    addition to the above simple setting, please keep this in mind when
+    making manual formattings within the editor. Also note that mutt-ng
+    currently violates the standard (RfC 3676) as it does not
+    space-stuff lines starting with:
+
+    <itemize>
+
+      <item><tt/&gt;/ This is <em/not/ the quote character but a right
+        angle used for other reasons
+
+      <item><tt/From/ with a trailing space.
+
+      <item>just a space for formatting reasons
+
+    </itemize>
+
+    Please make sure that you manually prepend a space to each of them.
+
+  <!--}}}-->
+
+  <sect1>Additional Notes <!--{{{-->
+
+    <p> For completeness, the <ref id="delete_space"
+    name="&dollar;delete&lowbar;space"> variable provides the mechanism
+    to generate a <tt/DelSp=yes/ parameter on <em/outgoing/ messages.
+    According to the standard, clients receiving a <tt/format=flowed/
+    messages should delete the last space of a flowed line but still
+    interpret the line as flowed. Because flowed lines usually contain
+    only one space at the end, this parameter would make the receiving
+    client concatenate the last word of the previous with the first of
+    the current line <em/without/ a space. This makes ordinary text
+    unreadable and is intended for languages rarely using spaces. So
+    please use this setting only if you're sure what you're doing.
+
+  <!--}}}-->
 
 <!--}}}--> 
 

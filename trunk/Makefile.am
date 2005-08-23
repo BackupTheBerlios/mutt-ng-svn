@@ -42,7 +42,7 @@ muttng_SOURCES = $(BUILT_SOURCES) \
 	main.c mbox.c mbyte.c md5c.c menu.c mh.c muttlib.c mutt_idna.c mx.c \
 	pager.c parse.c pattern.c postpone.c \
 	query.c \
-	recvattach.c recvcmd.c rfc822.c rfc1524.c rfc2047.c rfc2231.c \
+	recvattach.c recvcmd.c rfc822.c rfc1524.c rfc2047.c rfc2231.c rfc3676.c \
 	score.c send.c sendlib.c sidebar.c signal.c sort.c state.c status.c system.c \
 	thread.c \
 	url.c utf8.c \
@@ -101,7 +101,8 @@ EXTRA_DIST = COPYRIGHT GPL OPS OPS.PGP OPS.CRYPT OPS.SMIME TODO \
 	mapping.h md5.h mime.h mutt.h mutt_curses.h mutt_menu.h \
 	mutt_sasl.h mutt_socket.h mutt_ssl.h mutt_tunnel.h \
 	mbox.h mh.h mx.h pager.h pgp.h protos.h reldate.h rfc1524.h rfc2047.h \
-	rfc2231.h rfc822.h sha1.h sort.h mime.types VERSION autogen.sh \
+	rfc2231.h rfc822.h rfc3676.h \
+	sha1.h sort.h mime.types VERSION autogen.sh \
 	_regex.h OPS.MIX remailer.c remailer.h browser.h state.h \
 	mbyte.h lib.h extlib.c pgpewrap.c smime_keys.pl pgplib.h Muttngrc.head Muttngrc \
 	makedoc.c stamp-doc-rc README.SSL smime.h\
