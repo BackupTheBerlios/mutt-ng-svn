@@ -1,0 +1,26 @@
+This document lists bug known to exist in mutt-ng.
+
+RfC 3676 defining format=flowed
+===============================
+
+This RfC specifies quote chars to be '>' and due to space-stuffing lines
+there're no spaces withing the quote prefix of a line allowed.
+Currently, the implementation does:
+
+- Change all quote characters by force to '>'. This is plain wrong in
+  some cases where a character from $quote_regexp (even with the default
+  setting) may appear at the beginning of a line but actually doesn't
+  represent a quoted line. For example, someone may quote parts of
+  muttng configs with comments. However, _if_ this _is_ a quoted line
+  using e.g. '#' as $indent_string, we need to change the '#' prefix to
+  '>'.
+
+- Compress the complete quote, i.e. remove any spaces within the
+  complete quote prefix of a line. This, too, is just plain wrong. For
+  example, some people may have $indent_string set to '> ' and this gets
+  quoted several times to something like '>> >>'. However this
+  semanticly has a quote level of 3 as the second poster space-stuffed
+  that line. IMHO it's more common that people use spaces in
+  $indent_string (which the implementation removes right now) than
+  people space-stuffing lines which start '>' to ' >' when composing new
+  messages.

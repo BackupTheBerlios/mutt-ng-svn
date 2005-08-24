@@ -15,6 +15,9 @@
 
 #include "mutt.h"
 #include "state.h"
+#include "rfc3676.h"
+
+#include "lib/debug.h"
 
 static void state_prefix_put (const char *d, size_t dlen, STATE * s)
 {
@@ -74,6 +77,9 @@ void state_prefix_putc (char c, STATE * s)
       char buf[2 * SHORT_STRING];
       int j = 0, offset = 0;
       regmatch_t pmatch[1];
+#ifdef DEBUG
+      unsigned char save = '\0';
+#endif
 
       state_reset_prefix (s);
       while (regexec
@@ -84,7 +90,8 @@ void state_prefix_putc (char c, STATE * s)
       if (!option (OPTQUOTEEMPTY) && Quotebuf[offset] == '\n') {
         buf[0] = '\n';
         buf[1] = '\0';
-      }
+      } else if (option (OPTTEXTFLOWED))
+        rfc3676_quote_line (s, buf, sizeof (buf), Quotebuf);
       else if (option (OPTQUOTEQUOTED) && offset) {
         for (i = 0; i < offset; i++)
           if (Quotebuf[i] != ' ')
@@ -94,6 +101,15 @@ void state_prefix_putc (char c, STATE * s)
       }
       else
         snprintf (buf, sizeof (buf), "%s%s", NONULL (s->prefix), Quotebuf);
+
+#ifdef DEBUG
+      if (str_len (buf) >= 2) {
+        save = buf[str_len (buf) - 1];
+        buf[str_len (buf) - 1] = '\0';
+        debug_print (2, ("buf = '%s'\n", buf));
+        buf[str_len (buf)] = save;
+      }
+#endif
 
       state_puts (buf, s);
     }

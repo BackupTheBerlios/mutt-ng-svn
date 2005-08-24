@@ -32,9 +32,6 @@
 #include "lib/str.h"
 #include "lib/debug.h"
 
-typedef int handler_f (BODY *, STATE *);
-typedef handler_f *handler_t;
-
 #define FLOWED_MAX 77
 
 static int get_quote_level (char *line)
@@ -91,36 +88,35 @@ static void print_flowed_line (char *line, STATE * s,
     /* only search a new position when we're not over
      * the end of the string w/ pos */
     if (pos < line + len) {
-      /* fprintf(stderr,"if 1\n"); */
       if (*pos == ' ') {
-        /* fprintf(stderr,"if 2: good luck! found a space\n"); */
+        debug_print (4, ("f=f: found space directly at width\n"));
         *pos = '\0';
         ++pos;
       }
       else {
-        /* fprintf(stderr,"if 2: else\n"); */
         char *save = pos;
+        debug_print (4, ("f=f: need to search for space\n"));
 
         while (pos >= oldpos && *pos != ' ') {
-          /* fprintf(stderr,"pos(%p) > oldpos(%p)\n",pos,oldpos); */
           --pos;
         }
         if (pos < oldpos) {
-          /* fprintf(stderr,"wow, no space found,
-           * searching the other direction\n"); */
+          debug_print (4, ("f=f: no space found while searching "
+                           "to left; going right\n"));
           pos = save;
           while (pos < line + len && *pos && *pos != ' ') {
-            /* fprintf(stderr,"pos(%p) < line+len(%p)\n",pos,line+len); */
             ++pos;
           }
-          /* fprintf(stderr,"found a space pos = %p\n",pos); */
+          debug_print (4, ("f=f: found space at pos %d\n", pos-line));
+        } else {
+          debug_print (4, ("f=f: found space while searching to left\n"));
         }
         *pos = '\0';
         ++pos;
       }
     }
     else {
-      /* fprintf(stderr,"if 1 else\n"); */
+      debug_print (4, ("f=f: line completely fits on screen\n"));
     }
     if (s->prefix)
       state_puts (s->prefix, s);
@@ -135,7 +131,7 @@ static void print_flowed_line (char *line, STATE * s,
        * to eliminate all spaces which were trailing due to DelSp */
       for (i = 0; i < str_len (oldpos); i++) {
         if (oldpos[i] == ' ' && spaces[&(oldpos[i])-line] != 0) {
-          debug_print (4, ("DelSp: spaces[%d] forces space removal\n",
+          debug_print (4, ("f=f: DelSp: spaces[%d] forces space removal\n",
                            &(oldpos[i])-line));
           continue;
         }
@@ -170,7 +166,7 @@ int rfc3676_handler (BODY * a, STATE * s) {
     t = NULL;
   }
 
-  debug_print (2, ("DelSp: %s\n", delsp ? "yes" : "no"));
+  debug_print (2, ("f=f: DelSp: %s\n", delsp ? "yes" : "no"));
 
   while (bytes > 0 && fgets (buf, sizeof (buf), s->fpin)) {
     buf_len = str_len (buf);
@@ -232,7 +228,7 @@ int rfc3676_handler (BODY * a, STATE * s) {
        */
       if (delsp && curline && *curline && curline_len-2 >= 0 &&
           curline[curline_len-2] == ' ') {
-        debug_print (4, ("DelSp: marking spaces[%d] for later removal\n",
+        debug_print (4, ("f=f: DelSp: marking spaces[%d] for later removal\n",
                          curline_len-2));
         spaces[curline_len-2] = 1;
       }
@@ -242,4 +238,40 @@ int rfc3676_handler (BODY * a, STATE * s) {
   mem_free (&spaces);
   mem_free (&curline);
   return (0);
+}
+
+void rfc3676_quote_line (STATE* s, char* dst, size_t dstlen,
+                         const char* line) {
+  char quote[SHORT_STRING];
+  int offset = 0, i = 0, count = 0;
+  regmatch_t pmatch[1];
+
+  quote[0] = '\0';
+
+  while (regexec ((regex_t *) QuoteRegexp.rx, &line[offset],
+                  1, pmatch, 0) == 0)
+    offset += pmatch->rm_eo;
+
+  if (offset > 0) {
+    /* first count number of real quoting characters;
+     * read: non-spaces
+     * this maybe just plain wrong, but leaving spaces
+     * within quoting characters is what I consider
+     * more plain wrong...
+     */
+    for (i = 0; i < offset; i++)
+      if (line[i] != ' ')
+        count++;
+    /* just make sure we're inside quote althoug we
+     * likely won't have more than SHORT_STRING quote levels... */
+    i = (count > SHORT_STRING-1) ? SHORT_STRING-1 : count;
+    memset (quote, '>', i);
+    quote[i] = '\0';
+  }
+  debug_print (4, ("f=f: quotelevel = %d, new prefix = '%s'\n",
+                   i, NONULL (quote)));
+  /* if we changed prefix, make sure we respect $stuff_quoted */
+  snprintf (dst, dstlen, "%s%s%s%s", NONULL (s->prefix), NONULL (quote),
+            option (OPTSTUFFQUOTED) && line[offset] != ' ' ? " " : "",
+            &line[offset]);
 }
