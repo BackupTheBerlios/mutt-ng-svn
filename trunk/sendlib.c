@@ -27,7 +27,6 @@
 #include "charset.h"
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
-#include "svnrev.h"
 
 #include "lib/mem.h"
 #include "lib/str.h"

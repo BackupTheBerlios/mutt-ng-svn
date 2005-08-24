@@ -23,7 +23,7 @@ SUBDIRS = m4 po intl doc contrib lib $(IMAP_SUBDIR) $(POP_SUBDIR) $(NNTP_SUBDIR)
 
 bin_SCRIPTS = muttngbug fleang
 
-BUILT_SOURCES = keymap_defs.h patchlist.c svnrev.h
+BUILT_SOURCES = keymap_defs.h patchlist.c version.h
 
 bin_PROGRAMS = muttng @DOTLOCK_TARGET@ @PGPAUX_TARGET@ @SMIMEAUX_TARGET@
 muttng_SOURCES = $(BUILT_SOURCES) \
@@ -126,7 +126,7 @@ mutt_dotlock.c: dotlock.c
 	cp $(srcdir)/dotlock.c mutt_dotlock.c
 
 CLEANFILES = mutt_dotlock.c stamp-doc-rc makedoc \
-	keymap_alldefs.h keymap_defs.h patchlist.c svnrev.h
+	keymap_alldefs.h keymap_defs.h patchlist.c version.h
 
 ACLOCAL_AMFLAGS = -I m4
 
@@ -152,11 +152,12 @@ keymap_alldefs.h: $(srcdir)/OPS $(srcdir)/OPS.PGP $(srcdir)/OPS.MIX $(srcdir)/OP
 		$(srcdir)/OPS.MIX $(srcdir)/OPS.CRYPT $(srcdir)/OPS.SMIME \
 			> keymap_alldefs.h
 
-svnrev.h:
+version.h:
+	echo "#undef MUTT_VERSION" > version.h
 	if test -f "$(srcdir)/.svn/entries" ; then \
-	  echo "#define MUTTNG_SVNREV \"r`grep revision $(srcdir)/.svn/entries | sort -r | uniq | head -n 1 | cut -d '"' -f 2`\"" > svnrev.h ; \
+	  echo "#define MUTT_VERSION \"`cat $(srcdir)/VERSION.in`-r`grep revision $(srcdir)/.svn/entries | sort -r | uniq | head -n 1 | cut -d '"' -f 2`\"" >> version.h ; \
 	else \
-	  echo "#define MUTTNG_SVNREV \"`date "+%Y%m%d"`\"" > svnrev.h ; \
+	  echo "#define MUTT_VERSION \"`cat $(srcdir)/VERSION.in`-`cat $(srcdir)/VERSION.date`\"" >> version.h ; \
 	fi
 
 reldate:

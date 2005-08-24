@@ -23,7 +23,7 @@
 #include "attach.h"
 
 #include "reldate.h"
-#include "svnrev.h"
+#include "version.h"
 
 #ifdef USE_IMAP
 #include "imap.h"
@@ -1290,12 +1290,10 @@ const char *mutt_make_version (int full)
   static char vstring[STRING];
 
   if (full)
-    snprintf (vstring, sizeof (vstring), "Mutt-ng %s-%s (based "
-              "on Mutt 1.5.10/%s)", MUTT_VERSION, MUTTNG_SVNREV,
-              ReleaseDate);
+    snprintf (vstring, sizeof (vstring), "Mutt-ng %s (based "
+              "on Mutt 1.5.10/%s)", MUTT_VERSION, ReleaseDate);
   else
-    snprintf (vstring, sizeof (vstring), "mutt-ng/%s-%s",
-              MUTT_VERSION, MUTTNG_SVNREV);
+    snprintf (vstring, sizeof (vstring), "mutt-ng/%s", MUTT_VERSION);
   return vstring;
 }
 
