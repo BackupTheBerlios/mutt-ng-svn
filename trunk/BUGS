@@ -1,4 +1,5 @@
-This document lists bug known to exist in mutt-ng.
+This document lists bug known to exist in mutt-ng which are more less
+difficult to fix.
 
 RfC 3676 defining format=flowed
 ===============================
@@ -24,3 +25,10 @@ Currently, the implementation does:
   $indent_string (which the implementation removes right now) than
   people space-stuffing lines which start '>' to ' >' when composing new
   messages.
+
+- Altough the standard enforces space-stuffing as a MUST, muttng
+  currently violates it. Space-stuffing is done once after initially
+  editing the message. The routine only handles '^From ' and '^ ' cases,
+  '^>' is ignored. (Once because an already space-stuffed line still has
+  a leading space so that it would get space-stuffed everytime the user
+  edits a message.)
