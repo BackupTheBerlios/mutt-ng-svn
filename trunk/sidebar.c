@@ -189,6 +189,7 @@ int make_sidebar_entry (char* box, int idx, size_t len)
 #if USE_IMAP
   int l = str_len (ImapHomeNamespace);
 #endif
+  int l_m = str_len (Maildir);
 
   if (SidebarWidth > COLS)
     SidebarWidth = COLS;
@@ -211,6 +212,10 @@ int make_sidebar_entry (char* box, int idx, size_t len)
     box += l + 1;
   else
 #endif
+  if (l_m > 0 && str_ncmp (box, Maildir, l_m) == 0 && 
+      str_len (box) > l_m)
+    box += l_m + 1;
+  else
     box = basename (box);
 
   if (option (OPTSHORTENHIERARCHY) && str_len (box) > len-lencnt-1) {
