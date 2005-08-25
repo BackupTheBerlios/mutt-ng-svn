@@ -16,6 +16,7 @@
 #include "ascii.h"
 #include "mutt_curses.h"
 #include "rfc2047.h"
+#include "rfc3676.h"
 #include "keymap.h"
 #include "mime.h"
 #include "copy.h"
@@ -1439,6 +1440,9 @@ int ci_send_message (int flags, /* send mode */
       }
       else
         mutt_edit_file (Editor, msg->content->filename);
+
+      if (option (OPTTEXTFLOWED))
+        rfc3676_space_stuff (msg);
 
       mutt_message_hook (NULL, msg, M_SEND2HOOK);
     }

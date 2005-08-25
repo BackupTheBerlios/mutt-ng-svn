@@ -275,3 +275,49 @@ void rfc3676_quote_line (STATE* s, char* dst, size_t dstlen,
             option (OPTSTUFFQUOTED) && line[offset] != ' ' ? " " : "",
             &line[offset]);
 }
+
+void rfc3676_space_stuff (HEADER* hdr) {
+#if DEBUG
+  int lc = 0;
+  size_t len = 0;
+  unsigned char c = '\0';
+#endif
+  FILE* in = NULL, *out = NULL;
+  char buf[LONG_STRING];
+  char tmpfile[_POSIX_PATH_MAX];
+
+  if (!hdr || !hdr->content || !hdr->content->filename)
+    return;
+
+  debug_print (2, ("f=f: postprocess %s\n", hdr->content->filename));
+  if ((in = safe_fopen (hdr->content->filename, "r")) == NULL)
+    return;
+  mutt_mktemp (tmpfile);
+  if ((out = safe_fopen (tmpfile, "w+")) == NULL) {
+    fclose (in);
+    return;
+  }
+
+  while (fgets (buf, sizeof (buf), in)) {
+    if (ascii_strncmp ("From ", buf, 4) == 0 || buf[0] == ' ') {
+      fputc (' ', out);
+#if DEBUG
+      lc++;
+      len = str_len (buf);
+      if (len > 0) {
+        c = buf[len-1];
+        buf[len-1] = '\0';
+      }
+      debug_print (4, ("f=f: line %d needs space-stuffing: '%s'\n",
+                       lc, buf));
+      if (len > 0)
+        buf[len-1] = c;
+#endif
+    }
+    fputs (buf, out);
+  }
+  fclose (in);
+  unlink (hdr->content->filename);
+  fclose (out);
+  str_replace (&hdr->content->filename, tmpfile);
+}
