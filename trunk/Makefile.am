@@ -154,7 +154,7 @@ keymap_alldefs.h: $(srcdir)/OPS $(srcdir)/OPS.PGP $(srcdir)/OPS.MIX $(srcdir)/OP
 
 version.h: $(srcdir)/VERSION.svn
 	echo "#undef MUTT_VERSION" > version.h
-	echo "#define MUTT_VERSION \"`cat $(srcdir)/VERSION.in`-r`cat $(srcdir)/VERSION.svn`\"" >> version.h ; \
+	echo "#define MUTT_VERSION \"`cat $(srcdir)/VERSION.in`-r`cat $(srcdir)/VERSION.svn`\"" >> version.h
 
 reldate:
 	echo 'const char *ReleaseDate = "'`date +%Y-%m-%d`'";' > $(srcdir)/reldate.h
