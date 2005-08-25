@@ -152,13 +152,9 @@ keymap_alldefs.h: $(srcdir)/OPS $(srcdir)/OPS.PGP $(srcdir)/OPS.MIX $(srcdir)/OP
 		$(srcdir)/OPS.MIX $(srcdir)/OPS.CRYPT $(srcdir)/OPS.SMIME \
 			> keymap_alldefs.h
 
-version.h:
+version.h: $(srcdir)/VERSION.svn
 	echo "#undef MUTT_VERSION" > version.h
-	if test -f "$(srcdir)/.svn/entries" ; then \
-	  echo "#define MUTT_VERSION \"`cat $(srcdir)/VERSION.in`-r`grep revision $(srcdir)/.svn/entries | sort -r | uniq | head -n 1 | cut -d '"' -f 2`\"" >> version.h ; \
-	else \
-	  echo "#define MUTT_VERSION \"`cat $(srcdir)/VERSION.in`-`cat $(srcdir)/VERSION.date`\"" >> version.h ; \
-	fi
+	echo "#define MUTT_VERSION \"`cat $(srcdir)/VERSION.in`-r`cat $(srcdir)/VERSION.svn`\"" >> version.h ; \
 
 reldate:
 	echo 'const char *ReleaseDate = "'`date +%Y-%m-%d`'";' > $(srcdir)/reldate.h
