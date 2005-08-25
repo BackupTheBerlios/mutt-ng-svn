@@ -34,4 +34,8 @@ int mutt_edit_attachment (BODY *);
 int mutt_compose_attachment (BODY * a);
 int mutt_get_tmp_attachment (BODY *);
 
+/* this checks whether at least one text line matches
+ * AttachRemindRegexp and returns 1 if so and 0 otherwise */
+int mutt_attach_check (HEADER* hdr);
+
 #endif /* !_MUTT_ATTACH_H */

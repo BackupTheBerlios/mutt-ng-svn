@@ -124,6 +124,24 @@ struct feature_t {
 
 struct option_t MuttVars[] = {
   /*++*/
+  {"abort_noattach", DT_QUAD, R_NONE, OPT_ATTACH, M_NO},
+  /*
+   ** .pp
+   ** This variable specifies whether to abort sending if no attachment
+   ** was made but the content references them, i.e. the content
+   ** matches the regular expression given in
+   ** $$$attach_remind_regexp. If a match was found and this
+   ** variable is set to \fIyes\fP, message sending will be aborted
+   ** but the mail will be send nevertheless if set to \fIno\fP.
+   **
+   ** .pp
+   ** This variable and $$$attach_remind_regexp are intended to
+   ** remind the user to attach files if the message's text
+   ** references them.
+   **
+   ** .pp
+   ** See also the $$$attach_remind_regexp variable.
+   */
   {"abort_nosubject", DT_QUAD, R_NONE, OPT_SUBJECT, M_ASKYES},
   /*
    ** .pp
@@ -270,6 +288,16 @@ struct option_t MuttVars[] = {
    ** .dt %>X .dd right justify the rest of the string and pad with character "X"
    ** .dt %|X .dd pad to the end of the line with character "X"
    ** .de
+   */
+  {"attach_remind_regexp", DT_RX, R_NONE, UL &AttachRemindRegexp, UL "attach"},
+  /*
+   ** .pp
+   ** If this variable is non-empty, muttng will scan a message's contents
+   ** before sending for this regular expression. If it is found, it will
+   ** ask for what to do depending on the setting of $$$abort_noattach.
+   ** .pp
+   ** This variable and $$$abort_noattach are intended to remind the user
+   ** to attach files if the message's text references them.
    */
   {"attach_sep", DT_STR, R_NONE, UL &AttachSep, UL "\n"},
   /*

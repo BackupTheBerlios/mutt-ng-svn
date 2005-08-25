@@ -83,6 +83,7 @@ WHERE char *MhUnseen;
 WHERE char *MsgFmt;
 WHERE char *MsgIdFormat;
 
+WHERE rx_t AttachRemindRegexp;
 WHERE rx_t Mask;
 WHERE rx_t QuoteRegexp;
 WHERE rx_t ReplyRegexp;

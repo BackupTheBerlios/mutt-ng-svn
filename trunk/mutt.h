@@ -233,6 +233,7 @@ enum {
 /* quad-option vars */
 enum {
   OPT_ABORT,
+  OPT_ATTACH,
   OPT_BOUNCE,
   OPT_COPY,
   OPT_DELETE,

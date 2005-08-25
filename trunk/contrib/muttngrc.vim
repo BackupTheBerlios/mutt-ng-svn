@@ -61,15 +61,15 @@ syn match   muttrcKeyName	contained "<\(BackSpace\|Delete\|Down\|End\|Enter\|Esc
 syn keyword muttrcVarBool	contained allow_8bit allow_ansi arrow_cursor ascii_chars askbcc askcc attach_split
 syn keyword muttrcVarBool	contained auto_tag autoedit beep beep_new bounce_delivered check_new collapse_unread
 syn keyword muttrcVarBool	contained confirmappend confirmcreate delete_untag digest_collapse duplicate_threads
-syn keyword muttrcVarBool	contained edit_hdrs edit_headers encode_from envelope_from fast_reply fcc_attach
-syn keyword muttrcVarBool	contained fcc_clear followup_to force_name forw_decode forw_decrypt forw_quote
+syn keyword muttrcVarBool	contained edit_headers edit_headers encode_from envelope_from fast_reply fcc_attach
+syn keyword muttrcVarBool	contained fcc_clear followup_to force_name forward_decode forward_decrypt forward_quote
 syn keyword muttrcVarBool	contained forward_decode forward_decrypt forward_quote hdrs header help hidden_host
 syn keyword muttrcVarBool	contained hide_limited hide_missing hide_top_limited hide_top_missing ignore_list_reply_to
 syn keyword muttrcVarBool	contained imap_force_ssl imap_list_subscribed imap_passive imap_peek imap_servernoise
 syn keyword muttrcVarBool	contained implicit_autoview keep_flagged mailcap_sanitize maildir_trash mark_old markers
-syn keyword muttrcVarBool	contained menu_scroll meta_key metoo mh_purge mime_forward_decode pager_stop pgp_autoencrypt
-syn keyword muttrcVarBool	contained pgp_autosign pgp_ignore_subkeys pgp_long_ids pgp_replyencrypt pgp_replysign
-syn keyword muttrcVarBool	contained pgp_replysignencrypted pgp_retainable_sigs pgp_show_unusable pgp_strict_enc
+syn keyword muttrcVarBool	contained menu_scroll meta_key metoo mh_purge mime_forward_decode pager_stop crypt_autoencrypt
+syn keyword muttrcVarBool	contained crypt_autosign pgp_ignore_subkeys pgp_long_ids crypt_replyencrypt crypt_replysign
+syn keyword muttrcVarBool	contained crypt_replysignencrypted pgp_retainable_sigs pgp_show_unusable pgp_strict_enc
 syn keyword muttrcVarBool	contained pipe_decode pipe_split pop_auth_try_all pop_last print_decode print_split
 syn keyword muttrcVarBool	contained prompt_after read_only reply_self resolve reverse_alias reverse_name
 syn keyword muttrcVarBool	contained reverse_realname rfc2047_parameters save_address save_empty save_name score
@@ -125,14 +125,14 @@ syn keyword muttrcVarBool	contained invthread_received invtilde invuncollapse_ju
 syn keyword muttrcVarBool	contained invuse_ipv6 invuser_agent invwait_key invweed invwrap_search invwrite_bcc
 
 " start mutt-ng specific keywords
-syn keyword muttrcVarBool	contained ask_follow_up ask_x_comment_to maildir_header_cache_verify nntp_load_description
-syn keyword muttrcVarBool	contained quote_empty quote_quoted save_unsubscribed shorten_hierarchy show_new_news
-syn keyword muttrcVarBool	contained show_only_unread sidebar_visible strict_mime stuff_quoted trash x_comment_to
+syn keyword muttrcVarBool	contained ask_follow_up nntp_ask_x_comment_to maildir_header_cache_verify nntp_load_description
+syn keyword muttrcVarBool	contained quote_empty quote_quoted nntp_save_unsubscribed sidebar_shorten_hierarchy nntp_show_new_news
+syn keyword muttrcVarBool	contained nntp_show_only_unread sidebar_visible strict_mime stuff_quoted trash nntp_x_comment_to
 syn keyword muttrcVarBool	contained xterm_set_titles
 " end mutt-ng specific keywords
 
 syn keyword muttrcVarQuad	contained abort_nosubject abort_unmodified copy delete honor_followup_to include mime_forward
-syn keyword muttrcVarQuad	contained mime_forward_rest mime_fwd move pgp_create_traditional pgp_verify_sig pop_delete
+syn keyword muttrcVarQuad	contained mime_forward_rest mime_forward move pgp_autoinline crypt_verify_sig pop_delete
 syn keyword muttrcVarQuad	contained pop_reconnect postpone print quit recall reply_to ssl_starttls
 
 syn keyword muttrcVarQuad	contained noabort_nosubject noabort_unmodified nocopy nodelete nohonor_followup_to
@@ -146,37 +146,37 @@ syn keyword muttrcVarQuad	contained invpgp_create_traditional invpgp_verify_sig 
 syn keyword muttrcVarQuad	contained invpostpone invprint invquit invrecall invreply_to invssl_starttls
 
 " start mutt-ng specific keywords
-syn keyword muttrcVarQuad	contained catchup_newsgroup followup_to_poster imap_reconnect nntp_reconnect post_moderated
+syn keyword muttrcVarQuad	contained nntp_catchup nntp_followup_to_poster imap_reconnect nntp_reconnect nntp_post_moderated
 " end mutt-ng specific keywords
 
 syn keyword muttrcVarNum	contained connect_timeout history imap_keepalive mail_check pager_context pager_index_lines
-syn keyword muttrcVarNum	contained pgp_timeout pop_checkinterval read_inc score_threshold_delete score_threshold_flag
+syn keyword muttrcVarNum	contained pgp_timeout pop_mail_check read_inc score_threshold_delete score_threshold_flag
 syn keyword muttrcVarNum	contained score_threshold_read sendmail_wait sleep_time timeout wrapmargin write_inc
 
 " start mutt-ng specific keywords
-syn keyword muttrcVarNum        contained max_line_length nntp_context nntp_poll sidebar_width smtp_port umask
+syn keyword muttrcVarNum        contained max_line_length nntp_context nntp_mail_check sidebar_width smtp_port umask
 " end mutt-ng specific keywords
 
 syn keyword muttrcVarStr	contained alias_file alias_format alternates attach_format attach_sep attribution certificate_file
 syn keyword muttrcVarStr	contained charset compose_format date_format default_hook display_filter dotlock_program dsn_notify
-syn keyword muttrcVarStr	contained dsn_return editor entropy_file escape folder folder_format forw_format forward_format
-syn keyword muttrcVarStr	contained from gecos_mask hdr_format hostname imap_authenticators imap_delim_chars
-syn keyword muttrcVarStr	contained imap_home_namespace imap_pass imap_user indent_str indent_string index_format ispell
+syn keyword muttrcVarStr	contained dsn_return editor entropy_file escape folder folder_format forward_format forward_format
+syn keyword muttrcVarStr	contained from gecos_mask index_format hostname imap_authenticators imap_delim_chars
+syn keyword muttrcVarStr	contained imap_home_namespace imap_pass imap_user indent_string indent_string index_format ispell
 syn keyword muttrcVarStr	contained locale mailcap_path mask mbox mbox_type message_format mh_seq_flagged mh_seq_replied
-syn keyword muttrcVarStr	contained mh_seq_unseen mix_entry_format mixmaster msg_format pager pager_format
+syn keyword muttrcVarStr	contained mh_seq_unseen mix_entry_format mixmaster message_format pager pager_format
 syn keyword muttrcVarStr	contained pgp_clearsign_command pgp_decode_command pgp_decrypt_command pgp_encrypt_only_command
 syn keyword muttrcVarStr	contained pgp_encrypt_sign_command pgp_entry_format pgp_export_command pgp_getkeys_command
 syn keyword muttrcVarStr	contained pgp_good_sign pgp_import_command pgp_list_pubring_command pgp_list_secring_command
 syn keyword muttrcVarStr	contained pgp_sign_as pgp_sign_command pgp_sort_keys pgp_verify_command pgp_verify_key_command
-syn keyword muttrcVarStr	contained pipe_sep pop_authenticators pop_host pop_pass pop_user post_indent_str post_indent_string
-syn keyword muttrcVarStr	contained postponed preconnect print_cmd print_command query_command quote_regexp realname record
+syn keyword muttrcVarStr	contained pipe_sep pop_authenticators pop_host pop_pass pop_user post_indent_string post_indent_string
+syn keyword muttrcVarStr	contained postponed preconnect print_command print_command query_command quote_regexp realname record
 syn keyword muttrcVarStr	contained reply_regexp send_charset sendmail shell signature simple_search smileys sort sort_alias
 syn keyword muttrcVarStr	contained sort_aux sort_browser spoolfile status_chars status_format tmpdir to_chars tunnel visual
 
 " start mutt-ng specific keywords
-syn keyword muttrcVarStr	contained assumed_charset file_charset group_index_format header_cache indent_string inews
-syn keyword muttrcVarStr	contained msgid_format nntp_pass news_cache_dir news_server newsrc nntp_user operating_system
-syn keyword muttrcVarStr	contained sidebar_delim signoff_string smtp_auth_password smtp_auth_username smtp_host xterm_icon
+syn keyword muttrcVarStr	contained assumed_charset file_charset nntp_group_index_format header_cache indent_stringing nntp_inews
+syn keyword muttrcVarStr	contained msgid_format nntp_pass nntp_cache_dir nntp_host nntp_newsrc nntp_user operating_system
+syn keyword muttrcVarStr	contained sidebar_delim signoff_string smtp_pass smtp_user smtp_host xterm_icon
 syn keyword muttrcVarStr	contained xterm_title
 " end mutt-ng specific keywords
 

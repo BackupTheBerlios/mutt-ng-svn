@@ -1252,6 +1252,12 @@ example,
 set record=+sent_on_$HOSTNAME
 </verb></tscreen>
 
+This also applies for all configuration variables known to mutt-ng,
+for example
+<tscreen><verb>
+set imap_home_namespace = $folder
+</verb></tscreen>
+
 The commands understood by mutt are explained in the next paragraphs.
 For a complete list, see the <ref id="commands" name="command reference">.
 

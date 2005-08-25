@@ -10,6 +10,15 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-08-25:
+
+  Instead of only supporting to expand environment variables via
+  $NAME, it's now possible to query for all variables, too, e.g.
+  'set imap_home_namespace = $folder'.
+
+  The $abort_noattach and $attach_remind_regexp options have been
+  added to remind users of possibly forgotten attachments.
+
 2005-08-23:
 
   The $delete_space option has been added.

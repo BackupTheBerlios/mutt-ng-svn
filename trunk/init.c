@@ -49,6 +49,12 @@
 #include <errno.h>
 #include <sys/wait.h>
 
+/*
+ * prototypes
+ */
+static int mutt_option_index (char*);
+static const struct mapping_t* get_sortmap (int idx);
+
 /* for synonym warning reports: synonym found during parsing */
 typedef struct {
   char* f;      /* file */
@@ -68,6 +74,7 @@ static int CurRCLine = 0;
 static int check_dsn_return (const char*);
 static int check_dsn_notify (const char*);
 
+/* variable <-> sanity check function mappings */
 static struct {
   const char* name;
   int (*check) (const char*);
@@ -80,6 +87,138 @@ static struct {
   /* last */
   { NULL,         NULL }
 };
+
+/* protos for config type handles */
+static void bool_to_string  (char* dst, size_t dstlen, int idx);
+static void num_to_string   (char* dst, size_t dstlen, int idx);
+static void str_to_string   (char* dst, size_t dstlen, int idx);
+static void quad_to_string  (char* dst, size_t dstlen, int idx);
+static void sort_to_string  (char* dst, size_t dstlen, int idx);
+static void rx_to_string    (char* dst, size_t dstlen, int idx);
+static void magic_to_string (char* dst, size_t dstlen, int idx);
+static void syn_to_string   (char* dst, size_t dstlen, int idx);
+static void addr_to_string  (char* dst, size_t dstlen, int idx);
+
+static struct {
+  unsigned short type;
+  void (*opt_to_string) (char* dst, size_t dstlen, int idx);
+} FuncTable[] = {
+  { 0,          NULL            }, /* there's no DT_ type with 0 */
+  { DT_BOOL,    bool_to_string  },
+  { DT_NUM,     num_to_string   },
+  { DT_STR,     str_to_string   },
+  { DT_PATH,    str_to_string   },
+  { DT_QUAD,    quad_to_string  },
+  { DT_SORT,    sort_to_string  },
+  { DT_RX,      rx_to_string    },
+  { DT_MAGIC,   magic_to_string },
+  { DT_SYN,     syn_to_string   },
+  { DT_ADDR,    addr_to_string  }
+};
+
+static void bool_to_string (char* dst, size_t dstlen, int idx) {
+  snprintf (dst, dstlen, "%s=%s", MuttVars[idx].option,
+            MuttVars[idx].data ? "yes" : "no");
+}
+
+static void num_to_string (char* dst, size_t dstlen, int idx) {
+  /* XXX puke */
+  const char* fmt = (idx == mutt_option_index ("umask")) ? "%s=%04o" : "%s=%d";
+  snprintf (dst, dstlen, fmt, MuttVars[idx].option,
+            *((short*) MuttVars[idx].data));
+}
+
+static void str_to_string (char* dst, size_t dstlen, int idx) {
+  snprintf (dst, dstlen, "%s=\"%s\"", MuttVars[idx].option,
+            NONULL (*((char**) MuttVars[idx].data)));
+}
+
+static void quad_to_string (char* dst, size_t dstlen, int idx) {
+  char *vals[] = { "no", "yes", "ask-no", "ask-yes" };
+  snprintf (dst, dstlen, "%s=%s", MuttVars[idx].option,
+            vals[quadoption (MuttVars[idx].data)]);
+}
+
+static void sort_to_string (char* dst, size_t dstlen, int idx) {
+  const struct mapping_t *map = get_sortmap (idx);
+  char* p = NULL;
+
+  if (!map) {
+    snprintf (dst, sizeof (dst), "%s=unknown", MuttVars[idx].option);
+    return;
+  }
+
+  p = mutt_getnamebyvalue (*((short *) MuttVars[idx].data) & SORT_MASK,
+                           map);
+
+  snprintf (dst, dstlen, "%s=%s%s%s", MuttVars[idx].option,
+            (*((short *) MuttVars[idx].data) & SORT_REVERSE) ?
+            "reverse-" : "",
+            (*((short *) MuttVars[idx].data) & SORT_LAST) ? "last-" :
+            "", NONULL (p));
+}
+
+static void rx_to_string (char* dst, size_t dstlen, int idx) {
+  rx_t* p = (rx_t*) MuttVars[idx].data;
+  snprintf (dst, dstlen, "%s=\"%s\"", MuttVars[idx].option,
+            NONULL (p->pattern));
+}
+
+static void magic_to_string (char* dst, size_t dstlen, int idx) {
+  const char* s = NULL;
+  switch (MuttVars[idx].data) {
+    case M_MBOX:    s = "mbox"; break;
+    case M_MMDF:    s = "MMDF"; break;
+    case M_MH:      s = "MH"; break;
+    case M_MAILDIR: s = "Maildir"; break;
+    default:        s = "unknown"; break;
+  }
+  snprintf (dst, dstlen, "%s=%s", MuttVars[idx].option, s);
+}
+
+static void syn_to_string (char* dst, size_t dstlen, int idx) {
+  int i = mutt_option_index ((char*) MuttVars[idx].data);
+  FuncTable[MuttVars[i].type].opt_to_string (dst, dstlen, i);
+}
+
+static void addr_to_string (char* dst, size_t dstlen, int idx) {
+  char s[STRING];
+  s[0] = '\0';
+  rfc822_write_address (s, sizeof (s), *((ADDRESS**) MuttVars[idx].data), 0);
+  snprintf (dst, dstlen, "%s=\"%s\"", MuttVars[idx].option, NONULL (s));
+}
+
+int mutt_option_value (const char* val, char* dst, size_t dstlen) {
+  int i = mutt_option_index ((char*) val);
+  char* tmp = NULL, *t = NULL;
+  size_t l = 0;
+
+  if (i < 0) {
+    debug_print (1, ("var '%s' not found, i = %d\n", val, i));
+    *dst = '\0';
+    return (0);
+  }
+  tmp = mem_malloc (dstlen+1);
+  FuncTable[DTYPE (MuttVars[i].type)].opt_to_string (tmp, dstlen, i);
+
+  /* as we get things of type $var=value and don't want to bloat the
+   * above "just" for expansion, we do the stripping here */
+  debug_print (1, ("orig == '%s'\n", tmp));
+  t = strchr (tmp, '=');
+  t++;
+  l = str_len (t);
+  if (l >= 2) {
+    if (t[l-1] == '"' && *t == '"') {
+      t[l-1] = '\0';
+      t++;
+    }
+  }
+  memcpy (dst, t, l+1);
+  mem_free (&tmp);
+  debug_print (1, ("stripped == '%s'\n", dst));
+
+  return (1);
+}
 
 /* for synonym warning reports: adds synonym to end of list */
 static void syn_add (int n, int o) {
@@ -142,7 +281,7 @@ int query_quadoption (int opt, const char *prompt)
 
 /* given the variable ``s'', return the index into the rc_vars array which
    matches, or -1 if the variable is not found.  */
-int mutt_option_index (char *s)
+static int mutt_option_index (char *s)
 {
   int i;
 
@@ -1038,6 +1177,30 @@ static int check_special (const char* name, const char* val) {
   return (1);
 }
 
+static const struct mapping_t* get_sortmap (int idx) {
+  const struct mapping_t* map = NULL;
+
+  switch (MuttVars[idx].type & DT_SUBTYPE_MASK) {
+  case DT_SORT_ALIAS:
+    map = SortAliasMethods;
+    break;
+  case DT_SORT_BROWSER:
+    map = SortBrowserMethods;
+    break;
+  case DT_SORT_KEYS:
+    if ((WithCrypto & APPLICATION_PGP))
+      map = SortKeyMethods;
+    break;
+  case DT_SORT_AUX:
+    map = SortAuxMethods;
+    break;
+  default:
+    map = SortMethods;
+    break;
+  }
+  return (map);
+}
+
 static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
                       BUFFER * err)
 {
@@ -1117,8 +1280,7 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
       }
 
       if (query) {
-        snprintf (err->data, err->dsize, option (MuttVars[idx].data)
-                  ? _("%s is set") : _("%s is unset"), tmp->data);
+        bool_to_string (err->data, err->dsize, idx);
         return 0;
       }
 
@@ -1139,21 +1301,7 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
           mem_free ((void *) MuttVars[idx].data);
       }
       else if (query || *s->dptr != '=') {
-        char _tmp[STRING];
-        char *val = NULL;
-
-        if (DTYPE (MuttVars[idx].type) == DT_ADDR) {
-          _tmp[0] = '\0';
-          rfc822_write_address (_tmp, sizeof (_tmp),
-                                *((ADDRESS **) MuttVars[idx].data), 0);
-          val = _tmp;
-        }
-        else
-          val = *((char **) MuttVars[idx].data);
-
-        /* user requested the value of this variable */
-        snprintf (err->data, err->dsize, "%s=\"%s\"", MuttVars[idx].option,
-                  NONULL (val));
+        FuncTable[DTYPE (MuttVars[idx].type)].opt_to_string (err->data, err->dsize, idx);
         break;
       }
       else {
@@ -1196,9 +1344,7 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
       int e, flags = 0;
 
       if (query || *s->dptr != '=') {
-        /* user requested the value of this variable */
-        snprintf (err->data, err->dsize, "%s=\"%s\"", MuttVars[idx].option,
-                  NONULL (ptr->pattern));
+        rx_to_string (err->data, err->dsize, idx);
         break;
       }
 
@@ -1270,25 +1416,9 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
       }
     }
     else if (DTYPE (MuttVars[idx].type) == DT_MAGIC) {
+
       if (query || *s->dptr != '=') {
-        switch (DefaultMagic) {
-        case M_MBOX:
-          p = "mbox";
-          break;
-        case M_MMDF:
-          p = "MMDF";
-          break;
-        case M_MH:
-          p = "MH";
-          break;
-        case M_MAILDIR:
-          p = "Maildir";
-          break;
-        default:
-          p = "unknown";
-          break;
-        }
-        snprintf (err->data, err->dsize, "%s=%s", MuttVars[idx].option, p);
+        magic_to_string (err->data, err->dsize, idx);
         break;
       }
 
@@ -1309,8 +1439,7 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
       char *t;
 
       if (query || *s->dptr != '=') {
-        /* user requested the value of this variable */
-        snprintf (err->data, err->dsize, "%s=%d", MuttVars[idx].option, *ptr);
+        num_to_string (err->data, err->dsize, idx);
         break;
       }
 
@@ -1339,11 +1468,9 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
       }
     }
     else if (DTYPE (MuttVars[idx].type) == DT_QUAD) {
-      if (query) {
-        char *vals[] = { "no", "yes", "ask-no", "ask-yes" };
 
-        snprintf (err->data, err->dsize, "%s=%s", MuttVars[idx].option,
-                  vals[quadoption (MuttVars[idx].data)]);
+      if (query) {
+        quad_to_string (err->data, err->dsize, idx);
         break;
       }
 
@@ -1376,44 +1503,19 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
     else if (DTYPE (MuttVars[idx].type) == DT_SORT) {
       const struct mapping_t *map = NULL;
 
-      switch (MuttVars[idx].type & DT_SUBTYPE_MASK) {
-      case DT_SORT_ALIAS:
-        map = SortAliasMethods;
-        break;
-      case DT_SORT_BROWSER:
-        map = SortBrowserMethods;
-        break;
-      case DT_SORT_KEYS:
-        if ((WithCrypto & APPLICATION_PGP))
-          map = SortKeyMethods;
-        break;
-      case DT_SORT_AUX:
-        map = SortAuxMethods;
-        break;
-      default:
-        map = SortMethods;
-        break;
+      if (query || *s->dptr != '=') {
+        sort_to_string (err->data, err->dsize, idx);
+        return 0;
       }
 
-      if (!map) {
+      /* do this here so we don't ordinarily do it twice for queries */
+      if (!(map = get_sortmap (idx))) {
         snprintf (err->data, err->dsize, _("%s: Unknown type."),
                   MuttVars[idx].option);
         r = -1;
         break;
       }
 
-      if (query || *s->dptr != '=') {
-        p =
-          mutt_getnamebyvalue (*((short *) MuttVars[idx].data) & SORT_MASK,
-                               map);
-
-        snprintf (err->data, err->dsize, "%s=%s%s%s", MuttVars[idx].option,
-                  (*((short *) MuttVars[idx].data) & SORT_REVERSE) ?
-                  "reverse-" : "",
-                  (*((short *) MuttVars[idx].data) & SORT_LAST) ? "last-" :
-                  "", p);
-        return 0;
-      }
       s->dptr++;
       mutt_extract_token (tmp, s, 0);
 
@@ -2260,19 +2362,9 @@ static int opt_cmp (const void* a, const void* b) {
 
 /* dump out the value of all the variables we have */
 int mutt_dump_variables (void) {
-  int i;
-
-  char errbuff[STRING];
-  char command[STRING];
+  int i = 0, idx = 0;
+  char outbuf[STRING];
   list2_t* tmp = NULL;
-
-  BUFFER err, token;
-
-  memset (&err, 0, sizeof (err));
-  memset (&token, 0, sizeof (token));
-
-  err.data = errbuff;
-  err.dsize = sizeof (errbuff);
 
   /* get all non-synonyms into list... */
   for (i = 0; MuttVars[i].option; i++) {
@@ -2284,18 +2376,11 @@ int mutt_dump_variables (void) {
     /* ...and dump list sorted */
     qsort (tmp->data, tmp->length, sizeof (void*), opt_cmp);
     for (i = 0; i < tmp->length; i++) {
-      snprintf (command, sizeof (command), "set ?%s\n",
-                ((struct option_t*) tmp->data[i])->option);
-      if (mutt_parse_rc_line (command, &token, &err) == -1) {
-        printf ("%s\n", err.data);
-        mem_free (&token.data);
-        list_del (&tmp, NULL);
-        return 1;
-      }
-      printf("%s\n", err.data);
+      idx = mutt_option_index (((struct option_t*) tmp->data[i])->option);
+      FuncTable[DTYPE (MuttVars[idx].type)].opt_to_string (outbuf, sizeof (outbuf), idx);
+      printf ("%s\n", outbuf);
     }
   }
-  mem_free (&token.data);
   list_del (&tmp, NULL);
   return 0;
 }

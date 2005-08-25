@@ -1582,6 +1582,20 @@ int ci_send_message (int flags, /* send mode */
   if (msg->content->next)
     msg->content = mutt_make_multipart (msg->content);
 
+  if (mutt_attach_check (msg) &&
+      !msg->content->next &&
+      query_quadoption (OPT_ATTACH,
+                        _("No attachments made but indicator found in text. "
+                          "Cancel sending?")) == M_YES) {
+    if (quadoption (OPT_ATTACH) == M_YES) {
+      mutt_message _("No attachments made but indicator found in text. "
+                     "Abort sending.");
+      sleep (2);
+    }
+    mutt_message (_("Mail not sent."));
+    goto main_loop;
+  }
+
   /* 
    * Ok, we need to do it this way instead of handling all fcc stuff in
    * one place in order to avoid going to main_loop with encoded "env"

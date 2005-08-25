@@ -257,8 +257,12 @@ int mutt_extract_token (BUFFER * dest, BUFFER * tok, int flags)
         var = str_substrdup (tok->dptr, pc);
         tok->dptr = pc;
       }
-      if (var && (env = getenv (var)))
-        mutt_buffer_addstr (dest, env);
+      if (var) {
+        char tmp[STRING];
+        if ((env = getenv (var)) || 
+            (mutt_option_value (var, tmp, sizeof (tmp)) && (env = tmp)))
+          mutt_buffer_addstr (dest, env);
+      }
       mem_free (&var);
     }
     else

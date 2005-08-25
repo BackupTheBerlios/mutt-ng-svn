@@ -1013,3 +1013,30 @@ int mutt_print_attachment (FILE * fp, BODY * a)
     return 0;
   }
 }
+
+int mutt_attach_check (HEADER* hdr) {
+  int found = 0;
+  char buf[LONG_STRING];
+  char *p = NULL;
+  FILE* fp = NULL;
+  regmatch_t pmatch[1];
+
+  if (!hdr || !hdr->content || !((regex_t*) AttachRemindRegexp.rx) ||
+      (fp = safe_fopen (hdr->content->filename, "r")) == NULL)
+    return (0);
+
+  while (!found && fgets (buf, sizeof (buf), fp)) {
+    p = buf;
+    while (p && *p) {
+      if (regexec ((regex_t*) AttachRemindRegexp.rx, p, 1,
+                  pmatch, 0) == 0) {
+        found = 1;
+        break;
+      }
+      p++;
+    }
+  }
+  fclose (fp);
+
+  return (found);
+}

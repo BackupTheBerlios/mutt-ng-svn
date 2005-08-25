@@ -44,12 +44,13 @@ void mutt_generate_boundary (PARAMETER **);
 void mutt_delete_parameter (const char *attribute, PARAMETER ** p);
 void mutt_set_parameter (const char *, const char *, PARAMETER **);
 
-
 FILE *mutt_open_read (const char *, pid_t *);
 
 void set_quadoption (int, int);
 int query_quadoption (int, const char *);
 int quadoption (int);
+
+int mutt_option_value (const char* val, char* dst, size_t dstlen);
 
 ADDRESS *mutt_default_from (void);
 ADDRESS *mutt_remove_duplicates (ADDRESS *);
