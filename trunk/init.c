@@ -79,135 +79,410 @@ static const char* CurRCFile = NULL;
 static int CurRCLine = 0;
 
 /* prototypes for checking for special vars */
-static int check_dsn_return (const char*);
-static int check_dsn_notify (const char*);
+static int check_dsn_return (const char* option, unsigned long val,
+                             char* errbuf, size_t errlen);
+static int check_dsn_notify (const char* option, unsigned long val,
+                             char* errbuf, size_t errlen);
+static int check_history    (const char* option, unsigned long val,
+                             char* errbuf, size_t errlen);
+/* this checks that numbers are >= 0 */
+static int check_num        (const char* option, unsigned long val,
+                             char* errbuf, size_t errlen);
 
-/* variable <-> sanity check function mappings */
+/* use this to check only */
+static int check_special (const char* option, unsigned long val,
+                          char* errbuf, size_t errlen);
+
+/* variable <-> sanity check function mappings
+ * when changing these, make sure the proper _from_string handler
+ * does this checking!
+ */
 static struct {
   const char* name;
-  int (*check) (const char*);
+  int (*check) (const char* option, unsigned long val,
+                char* errbuf, size_t errlen);
 } SpecialVars[] = {
-  { "dsn_notify", check_dsn_notify },
-  { "dsn_return", check_dsn_return },
+  { "dsn_notify",               check_dsn_notify },
+  { "dsn_return",               check_dsn_return },
 #if defined (USE_LIBESMTP) && (defined (USE_SSL) || defined (USE_GNUTLS))
-  { "smtp_use_tls", mutt_libesmtp_check_usetls },
+  { "smtp_use_tls",             mutt_libesmtp_check_usetls },
 #endif
+  { "history",                  check_history },
+  { "pager_index_lines",        check_num },
   /* last */
   { NULL,         NULL }
 };
 
-/* protos for config type handles */
-static void bool_to_string  (char* dst, size_t dstlen, int idx);
-static void num_to_string   (char* dst, size_t dstlen, int idx);
-static void str_to_string   (char* dst, size_t dstlen, int idx);
-static void quad_to_string  (char* dst, size_t dstlen, int idx);
-static void sort_to_string  (char* dst, size_t dstlen, int idx);
-static void rx_to_string    (char* dst, size_t dstlen, int idx);
-static void magic_to_string (char* dst, size_t dstlen, int idx);
-static void syn_to_string   (char* dst, size_t dstlen, int idx);
-static void addr_to_string  (char* dst, size_t dstlen, int idx);
+/* protos for config type handles: convert value to string */
+static void bool_to_string  (char* dst, size_t dstlen, struct option_t* option);
+static void num_to_string   (char* dst, size_t dstlen, struct option_t* option);
+static void str_to_string   (char* dst, size_t dstlen, struct option_t* option);
+static void quad_to_string  (char* dst, size_t dstlen, struct option_t* option);
+static void sort_to_string  (char* dst, size_t dstlen, struct option_t* option);
+static void rx_to_string    (char* dst, size_t dstlen, struct option_t* option);
+static void magic_to_string (char* dst, size_t dstlen, struct option_t* option);
+static void addr_to_string  (char* dst, size_t dstlen, struct option_t* option);
+static void user_to_string  (char* dst, size_t dstlen, struct option_t* option);
+
+/* protos for config type handles: convert to value from string */
+static int bool_from_string  (struct option_t* dst, const char* val,
+                              char* errbuf, size_t errlen);
+static int num_from_string   (struct option_t* dst, const char* val,
+                              char* errbuf, size_t errlen);
+static int str_from_string   (struct option_t* dst, const char* val,
+                              char* errbuf, size_t errlen);
+static int path_from_string  (struct option_t* dst, const char* val,
+                              char* errbuf, size_t errlen);
+static int quad_from_string  (struct option_t* dst, const char* val,
+                              char* errbuf, size_t errlen);
+static int sort_from_string  (struct option_t* dst, const char* val,
+                              char* errbuf, size_t errlen);
+static int rx_from_string    (struct option_t* dst, const char* val,
+                              char* errbuf, size_t errlen);
+static int magic_from_string (struct option_t* dst, const char* val,
+                              char* errbuf, size_t errlen);
+static int addr_from_string  (struct option_t* dst, const char* val,
+                              char* errbuf, size_t errlen);
+static int user_from_string  (struct option_t* dst, const char* val,
+                              char* errbuf, size_t errlen);
 
 static struct {
   unsigned short type;
-  void (*opt_to_string) (char* dst, size_t dstlen, int idx);
+  void (*opt_to_string) (char* dst, size_t dstlen, struct option_t* option);
+  int (*opt_from_string) (struct option_t* dst, const char* val,
+                          char* errbuf, size_t errlen);
 } FuncTable[] = {
-  { 0,          NULL            }, /* there's no DT_ type with 0 */
-  { DT_BOOL,    bool_to_string  },
-  { DT_NUM,     num_to_string   },
-  { DT_STR,     str_to_string   },
-  { DT_PATH,    str_to_string   },
-  { DT_QUAD,    quad_to_string  },
-  { DT_SORT,    sort_to_string  },
-  { DT_RX,      rx_to_string    },
-  { DT_MAGIC,   magic_to_string },
-  { DT_SYN,     syn_to_string   },
-  { DT_ADDR,    addr_to_string  }
+  { 0,          NULL,             NULL }, /* there's no DT_ type with 0 */
+  { DT_BOOL,    bool_to_string,   bool_from_string },
+  { DT_NUM,     num_to_string,    num_from_string },
+  { DT_STR,     str_to_string,    str_from_string },
+  { DT_PATH,    str_to_string,    path_from_string },
+  { DT_QUAD,    quad_to_string,   quad_from_string },
+  { DT_SORT,    sort_to_string,   sort_from_string },
+  { DT_RX,      rx_to_string,     rx_from_string },
+  { DT_MAGIC,   magic_to_string,  magic_from_string },
+  /* synonyms should be resolved already so we don't need this
+   * but must define it as DT_ is used for indexing */
+  { DT_SYN,     NULL,             NULL },
+  { DT_ADDR,    addr_to_string,   addr_from_string },
+  { DT_USER,    user_to_string,   user_from_string },
 };
 
-static void bool_to_string (char* dst, size_t dstlen, int idx) {
-  snprintf (dst, dstlen, "%s=%s", MuttVars[idx].option,
-            option (MuttVars[idx].data) ? "yes" : "no");
+static void bool_to_string (char* dst, size_t dstlen,
+                            struct option_t* option) {
+  snprintf (dst, dstlen, "%s=%s", option->option,
+            option (option->data) ? "yes" : "no");
 }
 
-static void num_to_string (char* dst, size_t dstlen, int idx) {
+static int bool_from_string (struct option_t* dst, const char* val,
+                             char* errbuf, size_t errlen) {
+  int flag = -1;
+
+  if (!dst)
+    return (0);
+  if (ascii_strncasecmp (val, "yes", 3) == 0)
+    flag = 1;
+  else if (ascii_strncasecmp (val, "no", 2) == 0)
+    flag = 0;
+
+  if (flag < 0)
+    return (0);
+  if (flag)
+    set_option (dst->data);
+  else
+    unset_option (dst->data);
+  return (0);
+}
+
+static void num_to_string (char* dst, size_t dstlen,
+                           struct option_t* option) {
   /* XXX puke */
-  const char* fmt = (idx == mutt_option_index ("umask")) ? "%s=%04o" : "%s=%d";
-  snprintf (dst, dstlen, fmt, MuttVars[idx].option,
-            *((short*) MuttVars[idx].data));
+  const char* fmt = (str_cmp (option->option, "umask") == 0) ? 
+                    "%s=%04o" : "%s=%d";
+  snprintf (dst, dstlen, fmt, option->option,
+            *((short*) option->data));
 }
 
-static void str_to_string (char* dst, size_t dstlen, int idx) {
-  snprintf (dst, dstlen, "%s=\"%s\"", MuttVars[idx].option,
-            NONULL (*((char**) MuttVars[idx].data)));
+static int num_from_string (struct option_t* dst, const char* val,
+                            char* errbuf, size_t errlen) {
+  int num = 0, old = 0;
+  char* t = NULL;
+
+  if (!dst)
+    return (0);
+
+  num = strtol (val, &t, 0);
+
+  if (!*val || *t || (short) num != num) {
+    if (errbuf) {
+      snprintf (errbuf, errlen, _("'%s' is invalid for $%s"),
+                val, dst->option);
+    }
+    return (0);
+  }
+
+  /* just temporarily accept new val so that check_special for
+   * $history already has it when doing history's init() */
+  old = *((short*) dst->data);
+  *((short*) dst->data) = (short) num;
+
+  if (!check_special (dst->option, (unsigned long) num, errbuf, errlen)) {
+    *((short*) dst->data) = old;
+    return (0);
+  }
+
+  return (1);
 }
 
-static void quad_to_string (char* dst, size_t dstlen, int idx) {
+static void str_to_string (char* dst, size_t dstlen,
+                           struct option_t* option) {
+  snprintf (dst, dstlen, "%s=\"%s\"", option->option,
+            NONULL (*((char**) option->data)));
+}
+
+static void user_to_string (char* dst, size_t dstlen,
+                            struct option_t* option) {
+  snprintf (dst, dstlen, "%s=\"%s\"", option->option,
+            NONULL (((char*) option->data)));
+}
+
+static int path_from_string (struct option_t* dst, const char* val,
+                             char* errbuf, size_t errlen) {
+  char path[_POSIX_PATH_MAX];
+
+  if (!dst)
+    return (0);
+
+  if (!val || !*val) {
+    mem_free ((char**) dst->data);
+    return (1);
+  }
+
+  path[0] = '\0';
+  strfcpy (path, val, sizeof (path));
+  mutt_expand_path (path, sizeof (path));
+  str_replace ((char **) dst->data, path);
+  return (1);
+}
+
+static int str_from_string (struct option_t* dst, const char* val,
+                            char* errbuf, size_t errlen) {
+  if (!dst)
+    return (0);
+
+  if (!check_special (dst->option, (unsigned long) val, errbuf, errlen))
+    return (0);
+
+  str_replace ((char**) dst->data, val);
+  return (1);
+}
+
+static int user_from_string (struct option_t* dst, const char* val,
+                             char* errbuf, size_t errlen) {
+  if (!dst)
+    return (0);
+  if (str_len ((char*) dst->data) == 0)
+    dst->data = (unsigned long) str_dup (val);
+  else {
+    char* s = (char*) dst->data;
+    str_replace (&s, val);
+  }
+  return (1);
+}
+
+static void quad_to_string (char* dst, size_t dstlen,
+                            struct option_t* option) {
   char *vals[] = { "no", "yes", "ask-no", "ask-yes" };
-  snprintf (dst, dstlen, "%s=%s", MuttVars[idx].option,
-            vals[quadoption (MuttVars[idx].data)]);
+  snprintf (dst, dstlen, "%s=%s", option->option,
+            vals[quadoption (option->data)]);
 }
 
-static void sort_to_string (char* dst, size_t dstlen, int idx) {
-  const struct mapping_t *map = get_sortmap (idx);
+static int quad_from_string (struct option_t* dst, const char* val,
+                             char* errbuf, size_t errlen) {
+  int flag = -1;
+
+  if (!dst)
+    return (0);
+  if (ascii_strncasecmp (val, "yes", 3) == 0)
+    flag = M_YES;
+  else if (ascii_strncasecmp (val, "no", 2) == 0)
+    flag = M_NO;
+  else if (ascii_strncasecmp (val, "ask-yes", 7) == 0)
+    flag = M_ASKYES;
+  else if (ascii_strncasecmp (val, "ask-no", 6) == 0)
+    flag = M_ASKNO;
+
+  if (flag < 0)
+    return (0);
+
+  set_quadoption (dst->data, flag);
+  return (1);
+}
+
+static void sort_to_string (char* dst, size_t dstlen,
+                            struct option_t* option) {
+  const struct mapping_t *map = get_sortmap (option);
   char* p = NULL;
 
   if (!map) {
-    snprintf (dst, sizeof (dst), "%s=unknown", MuttVars[idx].option);
+    snprintf (dst, sizeof (dst), "%s=unknown", option->option);
     return;
   }
 
-  p = mutt_getnamebyvalue (*((short *) MuttVars[idx].data) & SORT_MASK,
+  p = mutt_getnamebyvalue (*((short *) option->data) & SORT_MASK,
                            map);
 
-  snprintf (dst, dstlen, "%s=%s%s%s", MuttVars[idx].option,
-            (*((short *) MuttVars[idx].data) & SORT_REVERSE) ?
+  snprintf (dst, dstlen, "%s=%s%s%s", option->option,
+            (*((short *) option->data) & SORT_REVERSE) ?
             "reverse-" : "",
-            (*((short *) MuttVars[idx].data) & SORT_LAST) ? "last-" :
+            (*((short *) option->data) & SORT_LAST) ? "last-" :
             "", NONULL (p));
 }
 
-static void rx_to_string (char* dst, size_t dstlen, int idx) {
-  rx_t* p = (rx_t*) MuttVars[idx].data;
-  snprintf (dst, dstlen, "%s=\"%s\"", MuttVars[idx].option,
+static int sort_from_string (struct option_t* dst, const char* val,
+                             char* errbuf, size_t errlen) {
+  const struct mapping_t *map = NULL;
+  if (!(map = get_sortmap (dst))) {
+    if (errbuf)
+      snprintf (errbuf, errlen, _("%s: Unknown type."),
+                dst->option);
+    return (0);
+  }
+  if (parse_sort (dst, val, map, errbuf, errlen) == -1)
+    return (0);
+  return (1);
+}
+
+static void rx_to_string (char* dst, size_t dstlen,
+                          struct option_t* option) {
+  rx_t* p = (rx_t*) option->data;
+  snprintf (dst, dstlen, "%s=\"%s\"", option->option,
             NONULL (p->pattern));
 }
 
-static void magic_to_string (char* dst, size_t dstlen, int idx) {
+static int rx_from_string (struct option_t* dst, const char* val,
+                           char* errbuf, size_t errlen) {
+  rx_t* p = NULL;
+  regex_t* rx = NULL;
+  int flags = 0, e = 0, not = 0;
+  char* s = NULL;
+
+  if (!dst)
+    return (0);
+
+  if (option (OPTATTACHMSG) && !str_cmp (dst->option, "reply_regexp")) {
+    if (errbuf)
+      snprintf (errbuf, errlen,
+                "Operation not permitted when in attach-message mode.");
+    return (0);
+  }
+
+  if (!((rx_t*) dst->data))
+    *((rx_t**) dst->data) = mem_calloc (1, sizeof (rx_t));
+
+  p = (rx_t*) dst->data;
+
+  /* something to do? */
+  if (!val || !*val || (p->pattern && str_cmp (p->pattern, val) == 0))
+    return (1);
+
+  if (str_cmp (dst->option, "mask") != 0)
+    flags |= mutt_which_case (val);
+
+  s = (char*) val;
+  if (str_cmp (dst->option, "mask") == 0 && *s == '!') {
+    not = 1;
+    s++;
+  }
+
+  rx = mem_malloc (sizeof (regex_t));
+
+  if ((e = REGCOMP (rx, s, flags)) != 0) {
+    regerror (e, rx, errbuf, errlen);
+    regfree (rx);
+    mem_free (&rx);
+  }
+
+  if (p->pattern) {
+    regfree (p->rx);
+    mem_free (&p->rx);
+  }
+
+  str_replace (&p->pattern, val);
+  p->rx = rx;
+  p->not = not;
+
+  if (str_cmp (dst->option, "reply_regexp") == 0)
+    mutt_adjust_all_subjects ();
+
+  return (1);
+}
+
+static void magic_to_string (char* dst, size_t dstlen,
+                             struct option_t* option) {
   const char* s = NULL;
-  switch (MuttVars[idx].data) {
+  switch (option->data) {
     case M_MBOX:    s = "mbox"; break;
     case M_MMDF:    s = "MMDF"; break;
     case M_MH:      s = "MH"; break;
     case M_MAILDIR: s = "Maildir"; break;
     default:        s = "unknown"; break;
   }
-  snprintf (dst, dstlen, "%s=%s", MuttVars[idx].option, s);
+  snprintf (dst, dstlen, "%s=%s", option->option, s);
 }
 
-static void syn_to_string (char* dst, size_t dstlen, int idx) {
-  int i = mutt_option_index ((char*) MuttVars[idx].data);
-  FuncTable[MuttVars[i].type].opt_to_string (dst, dstlen, i);
+static int magic_from_string (struct option_t* dst, const char* val,
+                              char* errbuf, size_t errlen) {
+  int flag = -1;
+
+  if (!dst || !val || !*val)
+    return (0);
+  if (ascii_strncasecmp (val, "mbox", 4) == 0)
+    flag = M_MBOX;
+  else if (ascii_strncasecmp (val, "mmdf", 4) == 0)
+    flag = M_MMDF;
+  else if (ascii_strncasecmp (val, "mh", 2) == 0)
+    flag = M_MH;
+  else if (ascii_strncasecmp (val, "maildir", 7) == 0)
+    flag = M_MAILDIR;
+
+  if (flag < 0)
+    return (0);
+
+  *((short*) dst->data) = flag;
+  return (1);
+
 }
 
-static void addr_to_string (char* dst, size_t dstlen, int idx) {
+static void addr_to_string (char* dst, size_t dstlen,
+                            struct option_t* option) {
   char s[STRING];
   s[0] = '\0';
-  rfc822_write_address (s, sizeof (s), *((ADDRESS**) MuttVars[idx].data), 0);
-  snprintf (dst, dstlen, "%s=\"%s\"", MuttVars[idx].option, NONULL (s));
+  rfc822_write_address (s, sizeof (s), *((ADDRESS**) option->data), 0);
+  snprintf (dst, dstlen, "%s=\"%s\"", option->option, NONULL (s));
+}
+
+static int addr_from_string (struct option_t* dst, const char* val,
+                             char* errbuf, size_t errlen) {
+  if (!dst || !val || !*val)
+    return (0);
+  rfc822_free_address ((ADDRESS**) dst->data);
+  *((ADDRESS**) dst->data) = rfc822_parse_adrlist (NULL, val);
+  return (1);
 }
 
 int mutt_option_value (const char* val, char* dst, size_t dstlen) {
-  int i = mutt_option_index ((char*) val);
+  struct option_t* option = NULL;
   char* tmp = NULL, *t = NULL;
   size_t l = 0;
 
-  if (i < 0) {
-    debug_print (1, ("var '%s' not found, i = %d\n", val, i));
+  if (!(option = hash_find (ConfigOptions, val))) {
+    debug_print (1, ("var '%s' not found\n", val));
     *dst = '\0';
     return (0);
   }
   tmp = mem_malloc (dstlen+1);
-  FuncTable[DTYPE (MuttVars[i].type)].opt_to_string (tmp, dstlen, i);
+  FuncTable[DTYPE (option->type)].opt_to_string (tmp, dstlen, option);
 
   /* as we get things of type $var=value and don't want to bloat the
    * above "just" for expansion, we do the stripping here */
@@ -1288,7 +1563,7 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
         if (unset) {
           if (DTYPE (option->type) == DT_ADDR)
             rfc822_free_address ((ADDRESS **) option->data);
-          else if (DTYPE (option->type == DT_USER)) {
+          else if (DTYPE (option->type) == DT_USER) {
             void* p = (void*) option->data;
             mem_free (&p);
           } else
