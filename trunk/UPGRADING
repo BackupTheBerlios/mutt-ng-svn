@@ -12,6 +12,8 @@ sources of information.
 
 2005-08-27:
 
+  The $debug_level option has been added.
+
   It's now possible to define and use arbitrary self-defined
   variables as long as prefixed with user_.
 

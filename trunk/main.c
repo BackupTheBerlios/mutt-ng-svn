@@ -132,7 +132,8 @@ static void mutt_usage (void)
     ("usage: muttng [ -nRyzZ ] [ -e <cmd> ] [ -F <file> ] [ -m <type> ] [ -f <file> ]\n\
        muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -Q <query> [ -Q <query> ] [...]\n\
        muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -A <alias> [ -A <alias> ] [...]\n\
-       muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -D\n\
+       muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -t\n\
+       muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -T\n\
        muttng [ -nx ] [ -e <cmd> ] [ -a <file> ] [ -F <file> ] [ -H <file> ] [ -i <file> ] [ -s <subj> ] [ -b <addr> ] [ -c <addr> ] <addr> [ ... ]\n\
        muttng [ -n ] [ -e <cmd> ] [ -F <file> ] -p\n\
        muttng -v[v]\n\
@@ -141,8 +142,7 @@ options:\n\
   -A <alias>\texpand the given alias\n\
   -a <file>\tattach a file to the message\n\
   -b <address>\tspecify a blind carbon-copy (BCC) address\n\
-  -c <address>\tspecify a carbon-copy (CC) address\n\
-  -D\t\tprint the value of all variables to stdout");
+  -c <address>\tspecify a carbon-copy (CC) address");
 #if DEBUG
   puts _("  -d <level>\tlog debugging output to ~/.muttngdebug0");
 #endif
@@ -161,6 +161,8 @@ options:\n\
   -Q <variable>\tquery a configuration variable\n\
   -R\t\topen mailbox in read-only mode\n\
   -s <subj>\tspecify a subject (must be in quotes if it has spaces)\n\
+  -t\t\tprint the value of all variables to stdout\n\
+  -T\t\tprint the value of all changed variables to stdout\n\
   -v\t\tshow version and compile-time definitions\n\
   -x\t\tsimulate the mailx send mode\n\
   -y\t\tselect a mailbox specified in your `mailboxes' list\n\
@@ -558,7 +560,7 @@ int main (int argc, char **argv)
   int version = 0;
   int i;
   int explicit_folder = 0;
-  int dump_variables = 0;
+  int dump_variables = -1;
   extern char *optarg;
   extern int optind;
 
@@ -592,10 +594,10 @@ int main (int argc, char **argv)
 #ifdef USE_NNTP
   while ((i =
           getopt (argc, argv,
-                  "A:a:b:F:f:c:Dd:e:g:GH:s:i:hm:npQ:RvxyzZ")) != EOF)
+                  "A:a:b:F:f:c:d:e:g:GH:s:i:hm:npQ:RTtvxyzZ")) != EOF)
 #else
   while ((i =
-          getopt (argc, argv, "A:a:b:F:f:c:Dd:e:H:s:i:hm:npQ:RvxyzZ")) != EOF)
+          getopt (argc, argv, "A:a:b:F:f:c:d:e:H:s:i:hm:npQ:RTtvxyzZ")) != EOF)
 #endif
     switch (i) {
     case 'A':
@@ -633,20 +635,16 @@ int main (int argc, char **argv)
 
     case 'd':
       debug_setlevel(atoi(optarg));
-#ifdef DEBUG
-      if (atoi(optarg) <= DEBUG_MAX_LEVEL && atoi(optarg) >= DEBUG_MIN_LEVEL)
-        printf (_("Debugging at level %d.\n"), atoi(optarg));
-      else {
-        printf(_("Please specify a valid debugging level ("
-                 DEBUG_MIN_LEVEL_S "-" DEBUG_MAX_LEVEL_S ").\n"));
-        return 1;
-      }
-#else
+#ifndef DEBUG
       printf _("DEBUG was not defined during compilation.  Ignored.\n");
 #endif
       break;
 
-    case 'D':
+    case 't':
+      dump_variables = 2;
+      break;
+
+    case 'T':
       dump_variables = 1;
       break;
 
@@ -739,7 +737,7 @@ int main (int argc, char **argv)
   }
 
   /* Check for a batch send. */
-  if (!isatty (0) || queries || alias_queries || dump_variables) {
+  if (!isatty (0) || queries || alias_queries || dump_variables > 0) {
     set_option (OPTNOCURSES);
     sendflags = SENDBATCH;
   }
@@ -759,8 +757,8 @@ int main (int argc, char **argv)
 
   if (queries)
     return mutt_query_variables (queries);
-  if (dump_variables)
-    return (mutt_dump_variables ());
+  if (dump_variables > 0)
+    return (mutt_dump_variables (dump_variables-1));
 
   if (alias_queries) {
     int rv = 0;

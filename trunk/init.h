@@ -18,6 +18,7 @@
 #endif
 
 #include "buffy.h"
+#include "lib/debug.h"
 
 #ifndef _MAKEDOC
 #define DT_MASK         0x0f
@@ -514,6 +515,24 @@ struct option_t MuttVars[] = {
    ** rest of the string are expanded in the \fIC\fP locale (that is in US
    ** English).
    */
+#ifdef DEBUG
+  {"debug_level", DT_NUM, R_NONE, UL &DebugLevel, "0" },
+  /*
+   ** .pp
+   ** Availability: debug
+   **
+   ** .pp
+   ** This variable specifies the current debug level and
+   ** may be used to increase or decrease the verbosity level
+   ** during runtime. It overrides the level given with the
+   ** \fT-d\fP command line option.
+   **
+   ** .pp
+   ** Currently, this number must be >= 0 and <= 5 and muttng
+   ** must be started with \fT-d\fP to enable debugging at all;
+   ** enabling at runtime is not possible.
+   */
+#endif
   {"default_hook", DT_STR, R_NONE, UL &DefaultHook, "~f %s !~P | (~P ~C %s)"},
   /*
    ** .pp

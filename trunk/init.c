@@ -88,6 +88,10 @@ static int check_history    (const char* option, unsigned long val,
 /* this checks that numbers are >= 0 */
 static int check_num        (const char* option, unsigned long val,
                              char* errbuf, size_t errlen);
+#ifdef DEBUG
+static int check_debug      (const char* option, unsigned long val,
+                             char* errbuf, size_t errlen);
+#endif
 
 /* use this to check only */
 static int check_special (const char* option, unsigned long val,
@@ -109,6 +113,9 @@ static struct {
 #endif
   { "history",                  check_history },
   { "pager_index_lines",        check_num },
+#ifdef DEBUG
+  { "debug_level",              check_debug },
+#endif
   /* last */
   { NULL,         NULL }
 };
@@ -1411,6 +1418,19 @@ static int check_num (const char* option, unsigned long p,
   }
   return (1);
 }
+
+#ifdef DEBUG
+static int check_debug (const char* option, unsigned long p,
+                        char* errbuf, size_t errlen) {
+  if ((int) p <= DEBUG_MAX_LEVEL &&
+      (int) p >= DEBUG_MIN_LEVEL)
+    return (1);
+
+  if (errbuf)
+    snprintf (errbuf, errlen, _("'%d' is invalid for $%s"), (int) p, option);
+  return (0);
+}
+#endif
 
 static int check_history (const char* option, unsigned long p,
                           char* errbuf, size_t errlen) {
