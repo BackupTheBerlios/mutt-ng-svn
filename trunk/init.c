@@ -118,7 +118,7 @@ static struct {
 
 static void bool_to_string (char* dst, size_t dstlen, int idx) {
   snprintf (dst, dstlen, "%s=%s", MuttVars[idx].option,
-            MuttVars[idx].data ? "yes" : "no");
+            option (MuttVars[idx].data) ? "yes" : "no");
 }
 
 static void num_to_string (char* dst, size_t dstlen, int idx) {
