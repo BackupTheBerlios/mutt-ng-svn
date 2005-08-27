@@ -52,7 +52,7 @@ static void print_flowed_line (char *line, STATE * s,
 
   if (MaxLineLength > 0) {
     width = MaxLineLength - WrapMargin - ql - 1;
-    if (option (OPTSTUFFQUOTED))
+    if (!(s->flags & M_REPLYING) && option (OPTSTUFFQUOTED))
       --width;
     if (width < 0)
       width = MaxLineLength;
@@ -63,7 +63,7 @@ static void print_flowed_line (char *line, STATE * s,
     else
       width = COLS - WrapMargin - ql - 1;
 
-    if (option (OPTSTUFFQUOTED))
+    if (!(s->flags & M_REPLYING) && option (OPTSTUFFQUOTED))
       --width;
     if (width < 0)
       width = COLS;
@@ -74,7 +74,7 @@ static void print_flowed_line (char *line, STATE * s,
       if (s->prefix)
         state_puts(s->prefix,s);
       for (i=0;i<ql;++i) state_putc('>',s);
-      if (option(OPTSTUFFQUOTED))
+      if (!(s->flags & M_REPLYING) && option(OPTSTUFFQUOTED))
         state_putc(' ',s);
     }
     state_putc('\n',s);
@@ -123,7 +123,8 @@ static void print_flowed_line (char *line, STATE * s,
 
     for (i = 0; i < ql; ++i)
       state_putc ('>', s);
-    if (option (OPTSTUFFQUOTED) && (ql > 0 || s->prefix))
+    if (!(s->flags & M_REPLYING) && option (OPTSTUFFQUOTED) &&
+        (ql > 0 || s->prefix))
       state_putc (' ', s);
 
     if (delsp && spaces && space_len > 0) {
@@ -270,9 +271,7 @@ void rfc3676_quote_line (STATE* s, char* dst, size_t dstlen,
   }
   debug_print (4, ("f=f: quotelevel = %d, new prefix = '%s'\n",
                    i, NONULL (quote)));
-  /* if we changed prefix, make sure we respect $stuff_quoted */
-  snprintf (dst, dstlen, "%s%s%s%s", NONULL (s->prefix), NONULL (quote),
-            option (OPTSTUFFQUOTED) && line[offset] != ' ' ? " " : "",
+  snprintf (dst, dstlen, "%s%s%s", NONULL (s->prefix), NONULL (quote),
             &line[offset]);
 }
 

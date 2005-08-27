@@ -155,8 +155,16 @@ int mutt_display_message (HEADER * cur)
       mutt_wait_filter (filterpid);
       safe_fclose (&fpfilterout);
     }
+#if 0
+    /* this is maybe just plain wrong but it makes the pager display
+     * what we have; i.e. for the crypto stuff we only get
+     * 'Could not copy message' for invalid passphrases, no PGP output
+     * not nothing; so just display what we have...
+     * - pdmef
+     */
     mutt_unlink (tempfile);
     return 0;
+#endif
   }
 
   if (fpfilterout != NULL && mutt_wait_filter (filterpid) != 0)
