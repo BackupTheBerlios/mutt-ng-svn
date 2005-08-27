@@ -38,4 +38,9 @@ HASH *mutt_make_subj_hash (CONTEXT *);
 int mutt_link_threads (HEADER *, HEADER *, CONTEXT *);
 void mutt_break_thread (HEADER *);
 
+/* computes an envelope's real_subj from subj */
+void mutt_adjust_subject (ENVELOPE* e);
+/* does mutt_adjust_subject() for messages in Context */
+void mutt_adjust_all_subjects (void);
+
 #endif /* !_MUTT_THREAD_H */

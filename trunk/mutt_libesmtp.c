@@ -280,10 +280,17 @@ static void do_dsn_ret (smtp_message_t message) {
 }
 
 #if defined (USE_LIBESMTP) && (defined (USE_SSL) || defined (USE_GNUTLS))
-int mutt_libesmtp_check_usetls (const char* val) {
+int mutt_libesmtp_check_usetls (const char* option, unsigned long p,
+                                char* errbuf, size_t errlen) {
+  char* val = (char*) p;
+  if (!val || !*val)
+    return (1);
   if (str_ncmp (val, "enabled", 7) != 0 &&
-      str_ncmp (val, "required", 8) != 0)
+      str_ncmp (val, "required", 8) != 0) {
+    if (errbuf)
+      snprintf (errbuf, errlen, _("'%s' is invalid for %s"), val, option);
     return (0);
+  }
   return (1);
 }
 #endif

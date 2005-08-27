@@ -426,7 +426,7 @@ set tilde
 set trash=+papierkorb
 
 # Set the User-Agent-Header.
-set user_agent
+set agent_string
 
 # Do not wait for a keypress, if I use a commando like "pipe-message".
 unset wait_key

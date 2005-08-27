@@ -168,3 +168,17 @@ void hash_destroy (HASH ** ptr, void (*destroy) (void *))
   mem_free (&pptr->table);
   mem_free (ptr);
 }
+
+void hash_map (HASH* table, void (*mapfunc) (const char* key, void* data,
+                                             unsigned long more),
+               unsigned long more) {
+  int i = 0;
+  struct hash_elem* elem = NULL;
+
+  if (!table || !mapfunc)
+    return;
+
+  for (i = 0; i < table->nelem; i++)
+    for (elem = table->table[i]; elem; elem = elem->next)
+      mapfunc (elem->key, elem->data, more);
+}

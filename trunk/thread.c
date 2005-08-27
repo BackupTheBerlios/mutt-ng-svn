@@ -1305,3 +1305,24 @@ int mutt_link_threads (HEADER * cur, HEADER * last, CONTEXT * ctx)
 
   return changed;
 }
+
+void mutt_adjust_subject (ENVELOPE* e) {
+  regmatch_t pmatch[1];
+
+  if (e && e->subject) {
+    if (regexec (ReplyRegexp.rx, e->subject, 1, pmatch, 0) == 0)
+      e->real_subj = e->subject + pmatch[0].rm_eo;
+    else
+      e->real_subj = e->subject;
+  }
+}
+
+void mutt_adjust_all_subjects (void) {
+  int i = 0;
+
+  if (!Context || !Context->msgcount)
+    return;
+
+  for (i = 0; i < Context->msgcount; i++)
+    mutt_adjust_subject (Context->hdrs[i]->env);
+}

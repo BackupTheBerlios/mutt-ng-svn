@@ -20,49 +20,50 @@
 #include "buffy.h"
 
 #ifndef _MAKEDOC
-#define DT_MASK		0x0f
-#define DT_BOOL		1       /* boolean option */
-#define DT_NUM		2       /* a number */
-#define DT_STR		3       /* a string */
-#define DT_PATH		4       /* a pathname */
-#define DT_QUAD		5       /* quad-option (yes/no/ask-yes/ask-no) */
-#define DT_SORT		6       /* sorting methods */
-#define DT_RX		7       /* regular expressions */
-#define DT_MAGIC	8       /* mailbox type */
-#define DT_SYN		9       /* synonym for another variable */
-#define DT_ADDR	       10       /* e-mail address */
+#define DT_MASK         0x0f
+#define DT_BOOL         1       /* boolean option */
+#define DT_NUM          2       /* a number */
+#define DT_STR          3       /* a string */
+#define DT_PATH         4       /* a pathname */
+#define DT_QUAD         5       /* quad-option (yes/no/ask-yes/ask-no) */
+#define DT_SORT         6       /* sorting methods */
+#define DT_RX           7       /* regular expressions */
+#define DT_MAGIC        8       /* mailbox type */
+#define DT_SYN          9       /* synonym for another variable */
+#define DT_ADDR         10      /* e-mail address */
+#define DT_USER         11      /* user defined viar $user_ */
 
 #define DTYPE(x) ((x) & DT_MASK)
 
 /* subtypes */
-#define DT_SUBTYPE_MASK	0xf0
-#define DT_SORT_ALIAS	0x10
+#define DT_SUBTYPE_MASK 0xf0
+#define DT_SORT_ALIAS   0x10
 #define DT_SORT_BROWSER 0x20
-#define DT_SORT_KEYS	0x40
-#define DT_SORT_AUX	0x80
+#define DT_SORT_KEYS    0x40
+#define DT_SORT_AUX     0x80
 
 /* flags to parse_set() */
-#define M_SET_INV	(1<<0)  /* default is to invert all vars */
-#define M_SET_UNSET	(1<<1)  /* default is to unset all vars */
-#define M_SET_RESET	(1<<2)  /* default is to reset all vars to default */
+#define M_SET_INV       (1<<0)  /* default is to invert all vars */
+#define M_SET_UNSET     (1<<1)  /* default is to unset all vars */
+#define M_SET_RESET     (1<<2)  /* default is to reset all vars to default */
 
 /* forced redraw/resort types */
-#define R_NONE		0
-#define R_INDEX		(1<<0)
-#define R_PAGER		(1<<1)
-#define R_RESORT	(1<<2)  /* resort the mailbox */
-#define R_RESORT_SUB	(1<<3)  /* resort subthreads */
-#define R_RESORT_INIT	(1<<4)  /* resort from scratch */
-#define R_TREE		(1<<5)  /* redraw the thread tree */
-#define R_BOTH		(R_INDEX|R_PAGER)
-#define R_RESORT_BOTH	(R_RESORT|R_RESORT_SUB)
+#define R_NONE          0
+#define R_INDEX         (1<<0)
+#define R_PAGER         (1<<1)
+#define R_RESORT        (1<<2)  /* resort the mailbox */
+#define R_RESORT_SUB    (1<<3)  /* resort subthreads */
+#define R_RESORT_INIT   (1<<4)  /* resort from scratch */
+#define R_TREE          (1<<5)  /* redraw the thread tree */
+#define R_BOTH          (R_INDEX|R_PAGER)
+#define R_RESORT_BOTH   (R_RESORT|R_RESORT_SUB)
 
 struct option_t {
   char *option;
   short type;
   short flags;
   unsigned long data;
-  unsigned long init;           /* initial value */
+  char* init;
 };
 
 struct feature_t {
@@ -124,25 +125,25 @@ struct feature_t {
 
 struct option_t MuttVars[] = {
   /*++*/
-  {"abort_noattach", DT_QUAD, R_NONE, OPT_ATTACH, M_NO},
+  {"abort_noattach", DT_QUAD, R_NONE, OPT_ATTACH, "no" },
   /*
    ** .pp
    ** This variable specifies whether to abort sending if no attachment
    ** was made but the content references them, i.e. the content
    ** matches the regular expression given in
-   ** $$$attach_remind_regexp. If a match was found and this
+   ** $$attach_remind_regexp. If a match was found and this
    ** variable is set to \fIyes\fP, message sending will be aborted
    ** but the mail will be send nevertheless if set to \fIno\fP.
    **
    ** .pp
-   ** This variable and $$$attach_remind_regexp are intended to
+   ** This variable and $$attach_remind_regexp are intended to
    ** remind the user to attach files if the message's text
    ** references them.
    **
    ** .pp
-   ** See also the $$$attach_remind_regexp variable.
+   ** See also the $$attach_remind_regexp variable.
    */
-  {"abort_nosubject", DT_QUAD, R_NONE, OPT_SUBJECT, M_ASKYES},
+  {"abort_nosubject", DT_QUAD, R_NONE, OPT_SUBJECT, "ask-yes" },
   /*
    ** .pp
    ** If set to \fIyes\fP, when composing messages and no subject is given
@@ -150,7 +151,7 @@ struct option_t MuttVars[] = {
    ** \fIno\fP, composing messages with no subject given at the subject
    ** prompt will never be aborted.
    */
-  {"abort_unmodified", DT_QUAD, R_NONE, OPT_ABORT, M_YES},
+  {"abort_unmodified", DT_QUAD, R_NONE, OPT_ABORT, "yes" },
   /*
    ** .pp
    ** If set to \fIyes\fP, composition will automatically abort after
@@ -158,7 +159,7 @@ struct option_t MuttVars[] = {
    ** check only happens after the \fIfirst\fP edit of the file).  When set
    ** to \fIno\fP, composition will never be aborted.
    */
-  {"alias_file", DT_PATH, R_NONE, UL &AliasFile, UL "~/.muttngrc"},
+  {"alias_file", DT_PATH, R_NONE, UL &AliasFile, "~/.muttngrc"},
   /*
    ** .pp
    ** The default file in which to save aliases created by the 
@@ -167,7 +168,7 @@ struct option_t MuttVars[] = {
    ** \fBNote:\fP Mutt-ng will not automatically source this file; you must
    ** explicitly use the ``$source'' command for it to be executed.
    */
-  {"alias_format", DT_STR, R_NONE, UL &AliasFmt, UL "%4n %2f %t %-10a   %r"},
+  {"alias_format", DT_STR, R_NONE, UL &AliasFmt, "%4n %2f %t %-10a   %r"},
   /*
    ** .pp
    ** Specifies the format of the data displayed for the ``alias'' menu. The
@@ -181,13 +182,13 @@ struct option_t MuttVars[] = {
    ** .dt %t .dd character which indicates if the alias is tagged for inclusion
    ** .de
    */
-  {"allow_8bit", DT_BOOL, R_NONE, OPTALLOW8BIT, 1},
+  {"allow_8bit", DT_BOOL, R_NONE, OPTALLOW8BIT, "yes" },
   /*
    ** .pp
    ** Controls whether 8-bit data is converted to 7-bit using either
    ** \fTquoted-printable\fP or \fTbase64\fP encoding when sending mail.
    */
-  {"allow_ansi", DT_BOOL, R_NONE, OPTALLOWANSI, 0},
+  {"allow_ansi", DT_BOOL, R_NONE, OPTALLOWANSI, "no" },
   /*
    ** .pp
    ** Controls whether ANSI color codes in messages (and color tags in 
@@ -198,7 +199,7 @@ struct option_t MuttVars[] = {
    ** message could include a line like ``\fT[-- PGP output follows ...\fP" and
    ** give it the same color as your attachment color.
    */
-  {"arrow_cursor", DT_BOOL, R_BOTH, OPTARROWCURSOR, 0},
+  {"arrow_cursor", DT_BOOL, R_BOTH, OPTARROWCURSOR, "no" },
   /*
    ** .pp
    ** When \fIset\fP, an arrow (``\fT->\fP'') will be used to indicate the current entry
@@ -207,25 +208,25 @@ struct option_t MuttVars[] = {
    ** be redrawn on the screen when moving to the next or previous entries
    ** in the menu.
    */
-  {"ascii_chars", DT_BOOL, R_BOTH, OPTASCIICHARS, 0},
+  {"ascii_chars", DT_BOOL, R_BOTH, OPTASCIICHARS, "no" },
   /*
    ** .pp
    ** If \fIset\fP, Mutt-ng will use plain ASCII characters when displaying thread
    ** and attachment trees, instead of the default \fTACS\fP characters.
    */
-  {"askbcc", DT_BOOL, R_NONE, OPTASKBCC, 0},
+  {"askbcc", DT_BOOL, R_NONE, OPTASKBCC, "no" },
   /*
    ** .pp
    ** If \fIset\fP, Mutt-ng will prompt you for blind-carbon-copy (Bcc) recipients
    ** before editing an outgoing message.
    */
-  {"askcc", DT_BOOL, R_NONE, OPTASKCC, 0},
+  {"askcc", DT_BOOL, R_NONE, OPTASKCC, "no" },
   /*
    ** .pp
    ** If \fIset\fP, Mutt-ng will prompt you for carbon-copy (Cc) recipients before
    ** editing the body of an outgoing message.
    */
-  {"assumed_charset", DT_STR, R_NONE, UL &AssumedCharset, UL "us-ascii"},
+  {"assumed_charset", DT_STR, R_NONE, UL &AssumedCharset, "us-ascii"},
   /*
    ** .pp
    ** This variable is a colon-separated list of character encoding
@@ -244,7 +245,7 @@ struct option_t MuttVars[] = {
    */
 #ifdef USE_NNTP
   {"ask_followup_to", DT_SYN, R_NONE, UL "nntp_ask_followup_to", 0},
-  {"nntp_ask_followup_to", DT_BOOL, R_NONE, OPTASKFOLLOWUP, 0},
+  {"nntp_ask_followup_to", DT_BOOL, R_NONE, OPTASKFOLLOWUP, "no" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -254,7 +255,7 @@ struct option_t MuttVars[] = {
    ** field before editing the body of an outgoing news article.
    */
   {"ask_x_comment_to", DT_SYN, R_NONE, UL "nntp_ask_x_comment_to", 0},
-  {"nntp_ask_x_comment_to", DT_BOOL, R_NONE, OPTASKXCOMMENTTO, 0},
+  {"nntp_ask_x_comment_to", DT_BOOL, R_NONE, OPTASKXCOMMENTTO, "no" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -264,7 +265,7 @@ struct option_t MuttVars[] = {
    ** field before editing the body of an outgoing news article.
    */
 #endif
-  {"attach_format", DT_STR, R_NONE, UL &AttachFormat, UL "%u%D%I %t%4n %T%.40d%> [%.7m/%.10M, %.6e%?C?, %C?, %s] "},
+  {"attach_format", DT_STR, R_NONE, UL &AttachFormat, "%u%D%I %t%4n %T%.40d%> [%.7m/%.10M, %.6e%?C?, %C?, %s] "},
   /*
    ** .pp
    ** This variable describes the format of the ``attachment'' menu.  The
@@ -289,23 +290,23 @@ struct option_t MuttVars[] = {
    ** .dt %|X .dd pad to the end of the line with character "X"
    ** .de
    */
-  {"attach_remind_regexp", DT_RX, R_NONE, UL &AttachRemindRegexp, UL "attach"},
+  {"attach_remind_regexp", DT_RX, R_NONE, UL &AttachRemindRegexp, "attach"},
   /*
    ** .pp
    ** If this variable is non-empty, muttng will scan a message's contents
    ** before sending for this regular expression. If it is found, it will
-   ** ask for what to do depending on the setting of $$$abort_noattach.
+   ** ask for what to do depending on the setting of $$abort_noattach.
    ** .pp
-   ** This variable and $$$abort_noattach are intended to remind the user
+   ** This variable and $$abort_noattach are intended to remind the user
    ** to attach files if the message's text references them.
    */
-  {"attach_sep", DT_STR, R_NONE, UL &AttachSep, UL "\n"},
+  {"attach_sep", DT_STR, R_NONE, UL &AttachSep, "\n"},
   /*
    ** .pp
    ** The separator to add between attachments when operating (saving,
    ** printing, piping, etc) on a list of tagged attachments.
    */
-  {"attach_split", DT_BOOL, R_NONE, OPTATTACHSPLIT, 1},
+  {"attach_split", DT_BOOL, R_NONE, OPTATTACHSPLIT, "yes" },
   /*
    ** .pp
    ** If this variable is \fIunset\fP, when operating (saving, printing, piping,
@@ -314,14 +315,14 @@ struct option_t MuttVars[] = {
    ** ``$$attach_sep'' separator is added after each attachment. When \fIset\fP,
    ** Mutt-ng will operate on the attachments one by one.
    */
-  {"attribution", DT_STR, R_NONE, UL &Attribution, UL "On %d, %n wrote:"},
+  {"attribution", DT_STR, R_NONE, UL &Attribution, "On %d, %n wrote:"},
   /*
    ** .pp
    ** This is the string that will precede a message which has been included
    ** in a reply.  For a full listing of defined \fTprintf(3)\fP-like sequences see
    ** the section on ``$$index_format''.
    */
-  {"autoedit", DT_BOOL, R_NONE, OPTAUTOEDIT, 0},
+  {"autoedit", DT_BOOL, R_NONE, OPTAUTOEDIT, "no" },
   /*
    ** .pp
    ** When \fIset\fP along with ``$$edit_headers'', Mutt-ng will skip the initial
@@ -331,7 +332,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** Also see ``$$fast_reply''.
    */
-  {"auto_tag", DT_BOOL, R_NONE, OPTAUTOTAG, 0},
+  {"auto_tag", DT_BOOL, R_NONE, OPTAUTOTAG, "no" },
   /*
    ** .pp
    ** When \fIset\fP, functions in the \fIindex\fP menu which affect a message
@@ -339,19 +340,19 @@ struct option_t MuttVars[] = {
    ** unset, you must first use the ``tag-prefix'' function (default: "\fT;\fP") to
    ** make the next function apply to all tagged messages.
    */
-  {"beep", DT_BOOL, R_NONE, OPTBEEP, 1},
+  {"beep", DT_BOOL, R_NONE, OPTBEEP, "yes" },
   /*
    ** .pp
    ** When this variable is \fIset\fP, Mutt-ng will beep when an error occurs.
    */
-  {"beep_new", DT_BOOL, R_NONE, OPTBEEPNEW, 0},
+  {"beep_new", DT_BOOL, R_NONE, OPTBEEPNEW, "no" },
   /*
    ** .pp
    ** When this variable is \fIset\fP, Mutt-ng will beep whenever it prints a message
    ** notifying you of new mail.  This is independent of the setting of the
    ** ``$$beep'' variable.
    */
-  {"bounce", DT_QUAD, R_NONE, OPT_BOUNCE, M_ASKYES},
+  {"bounce", DT_QUAD, R_NONE, OPT_BOUNCE, "ask-yes" },
   /*
    ** .pp
    ** Controls whether you will be asked to confirm bouncing messages.
@@ -359,14 +360,14 @@ struct option_t MuttVars[] = {
    ** message. Setting this variable to \fIno\fP is not generally useful,
    ** and thus not recommended, because you are unable to bounce messages.
    */
-  {"bounce_delivered", DT_BOOL, R_NONE, OPTBOUNCEDELIVERED, 1},
+  {"bounce_delivered", DT_BOOL, R_NONE, OPTBOUNCEDELIVERED, "yes" },
   /*
    ** .pp
    ** When this variable is \fIset\fP, Mutt-ng will include 
    ** \fTDelivered-To:\fP header fields when bouncing messages.
    ** Postfix users may wish to \fIunset\fP this variable.
    */
-  { "braille_friendly", DT_BOOL, R_NONE, OPTBRAILLEFRIENDLY, 0 },
+  { "braille_friendly", DT_BOOL, R_NONE, OPTBRAILLEFRIENDLY, "no" },
   /*
    ** .pp
    ** When this variable is set, mutt will place the cursor at the beginning
@@ -377,7 +378,7 @@ struct option_t MuttVars[] = {
    */
 #ifdef USE_NNTP
   {"catchup_newsgroup", DT_SYN, R_NONE, UL "nntp_catchup", 0},
-  {"nntp_catchup", DT_QUAD, R_NONE, OPT_CATCHUP, M_ASKYES},
+  {"nntp_catchup", DT_QUAD, R_NONE, OPT_CATCHUP, "ask-yes" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -387,12 +388,12 @@ struct option_t MuttVars[] = {
    ** as read when you leaving it.
    */
 #endif
-  {"charset", DT_STR, R_NONE, UL &Charset, UL 0},
+  {"charset", DT_STR, R_NONE, UL &Charset, "" },
   /*
    ** .pp
    ** Character set your terminal uses to display and enter textual data.
    */
-  {"check_new", DT_BOOL, R_NONE, OPTCHECKNEW, 1},
+  {"check_new", DT_BOOL, R_NONE, OPTCHECKNEW, "yes" },
   /*
    ** .pp
    ** \fBNote:\fP this option only affects \fImaildir\fP and \fIMH\fP style
@@ -404,19 +405,19 @@ struct option_t MuttVars[] = {
    ** checking each file to see if it has already been looked at.  If it's
    ** \fIunset\fP, no check for new mail is performed while the mailbox is open.
    */
-  {"collapse_unread", DT_BOOL, R_NONE, OPTCOLLAPSEUNREAD, 1},
+  {"collapse_unread", DT_BOOL, R_NONE, OPTCOLLAPSEUNREAD, "yes" },
   /*
    ** .pp
    ** When \fIunset\fP, Mutt-ng will not collapse a thread if it contains any
    ** unread messages.
    */
-  {"uncollapse_jump", DT_BOOL, R_NONE, OPTUNCOLLAPSEJUMP, 0},
+  {"uncollapse_jump", DT_BOOL, R_NONE, OPTUNCOLLAPSEJUMP, "no" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will jump to the next unread message, if any,
    ** when the current thread is \fIun\fPcollapsed.
    */
-  {"compose_format", DT_STR, R_BOTH, UL &ComposeFormat, UL "-- Mutt-ng: Compose  [Approx. msg size: %l   Atts: %a]%>-"},
+  {"compose_format", DT_STR, R_BOTH, UL &ComposeFormat, "-- Mutt-ng: Compose  [Approx. msg size: %l   Atts: %a]%>-"},
   /*
    ** .pp
    ** Controls the format of the status line displayed in the ``compose''
@@ -433,38 +434,38 @@ struct option_t MuttVars[] = {
    ** See the text describing the ``$$status_format'' option for more 
    ** information on how to set ``$$compose_format''.
    */
-  {"config_charset", DT_STR, R_NONE, UL &ConfigCharset, UL 0},
+  {"config_charset", DT_STR, R_NONE, UL &ConfigCharset, "" },
   /*
    ** .pp
    ** When defined, Mutt-ng will recode commands in rc files from this
    ** encoding.
    */
-  {"confirmappend", DT_BOOL, R_NONE, OPTCONFIRMAPPEND, 1},
+  {"confirmappend", DT_BOOL, R_NONE, OPTCONFIRMAPPEND, "yes" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will prompt for confirmation when appending messages to
    ** an existing mailbox.
    */
-  {"confirmcreate", DT_BOOL, R_NONE, OPTCONFIRMCREATE, 1},
+  {"confirmcreate", DT_BOOL, R_NONE, OPTCONFIRMCREATE, "yes" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will prompt for confirmation when saving messages to a
    ** mailbox which does not yet exist before creating it.
    */
-  {"connect_timeout", DT_NUM, R_NONE, UL &ConnectTimeout, 30},
+  {"connect_timeout", DT_NUM, R_NONE, UL &ConnectTimeout, "30" },
   /*
    ** .pp
    ** Causes Mutt-ng to timeout a network connection (for IMAP or POP) after this
    ** many seconds if the connection is not able to be established.  A negative
    ** value causes Mutt-ng to wait indefinitely for the connection to succeed.
    */
-  {"content_type", DT_STR, R_NONE, UL &ContentType, UL "text/plain"},
+  {"content_type", DT_STR, R_NONE, UL &ContentType, "text/plain"},
   /*
    ** .pp
    ** Sets the default \fTContent-Type:\fP header field for the body
    ** of newly composed messages.
    */
-  {"copy", DT_QUAD, R_NONE, OPT_COPY, M_YES},
+  {"copy", DT_QUAD, R_NONE, OPT_COPY, "yes" },
   /*
    ** .pp
    ** This variable controls whether or not copies of your outgoing messages
@@ -472,7 +473,7 @@ struct option_t MuttVars[] = {
    ** ``$$save_name'', ``$$force_name'' and ``$fcc-hook''.
    */
 
-  {"crypt_use_gpgme", DT_BOOL, R_NONE, OPTCRYPTUSEGPGME, 0},
+  {"crypt_use_gpgme", DT_BOOL, R_NONE, OPTCRYPTUSEGPGME, "no" },
   /*
    ** .pp
    ** This variable controls the use the GPGME enabled crypto backends.
@@ -483,7 +484,7 @@ struct option_t MuttVars[] = {
    ** file as it won't have any effect when used interactively.
    */
 
-  {"crypt_autopgp", DT_BOOL, R_NONE, OPTCRYPTAUTOPGP, 1},
+  {"crypt_autopgp", DT_BOOL, R_NONE, OPTCRYPTAUTOPGP, "yes" },
   /*
    ** .pp
    ** This variable controls whether or not Mutt-ng may automatically enable
@@ -491,7 +492,7 @@ struct option_t MuttVars[] = {
    ** ``$$crypt_replyencrypt'',
    ** ``$$crypt_autosign'', ``$$crypt_replysign'' and ``$$smime_is_default''.
    */
-  {"crypt_autosmime", DT_BOOL, R_NONE, OPTCRYPTAUTOSMIME, 1},
+  {"crypt_autosmime", DT_BOOL, R_NONE, OPTCRYPTAUTOSMIME, "yes" },
   /*
    ** .pp
    ** This variable controls whether or not Mutt-ng may automatically enable
@@ -499,7 +500,7 @@ struct option_t MuttVars[] = {
    ** ``$$crypt_replyencrypt'',
    ** ``$$crypt_autosign'', ``$$crypt_replysign'' and ``$$smime_is_default''.
    */
-  {"date_format", DT_STR, R_BOTH, UL &DateFmt, UL "!%a, %b %d, %Y at %I:%M:%S%p %Z"},
+  {"date_format", DT_STR, R_BOTH, UL &DateFmt, "!%a, %b %d, %Y at %I:%M:%S%p %Z"},
   /*
    ** .pp
    ** This variable controls the format of the date printed by the ``\fT%d\fP''
@@ -513,7 +514,7 @@ struct option_t MuttVars[] = {
    ** rest of the string are expanded in the \fIC\fP locale (that is in US
    ** English).
    */
-  {"default_hook", DT_STR, R_NONE, UL &DefaultHook, UL "~f %s !~P | (~P ~C %s)"},
+  {"default_hook", DT_STR, R_NONE, UL &DefaultHook, "~f %s !~P | (~P ~C %s)"},
   /*
    ** .pp
    ** This variable controls how send-hooks, message-hooks, save-hooks,
@@ -527,7 +528,7 @@ struct option_t MuttVars[] = {
    ** ``alternates'') and is to or cc'ed to a user matching the given
    ** regular expression.
    */
-  {"delete", DT_QUAD, R_NONE, OPT_DELETE, M_ASKYES},
+  {"delete", DT_QUAD, R_NONE, OPT_DELETE, "ask-yes" },
   /*
    ** .pp
    ** Controls whether or not messages are really deleted when closing or
@@ -535,33 +536,33 @@ struct option_t MuttVars[] = {
    ** deleting will automatically be purged without prompting.  If set to
    ** \fIno\fP, messages marked for deletion will be kept in the mailbox.
    */
-  {"delete_space", DT_BOOL, R_NONE, OPTDELSP, 0},
+  {"delete_space", DT_BOOL, R_NONE, OPTDELSP, "no" },
   /*
    ** .pp
    ** When sending messages with \fTformat=flowed\fP by \fIsetting\fP the
-   ** $$$text_flowed variable, this variable specifies whether to also
+   ** $$text_flowed variable, this variable specifies whether to also
    ** set the \fTDelSp\fP parameter to \fTyes\fP. If this is \fIunset\fP,
    ** no additional parameter will be send as a value of \fTno\fP already
    ** is the default behavior.
    **
    ** .pp
    ** \fBNote:\fP this variable only has an effect on \fIoutgoing\fP messages
-   ** (if $$$text_flowed is \fIset\fP) but not on incomming.
+   ** (if $$text_flowed is \fIset\fP) but not on incomming.
    */
-  {"delete_untag", DT_BOOL, R_NONE, OPTDELETEUNTAG, 1},
+  {"delete_untag", DT_BOOL, R_NONE, OPTDELETEUNTAG, "yes" },
   /*
    ** .pp
    ** If this option is \fIset\fP, Mutt-ng will untag messages when marking them
    ** for deletion.  This applies when you either explicitly delete a message,
    ** or when you save it to another folder.
    */
-  {"digest_collapse", DT_BOOL, R_NONE, OPTDIGESTCOLLAPSE, 1},
+  {"digest_collapse", DT_BOOL, R_NONE, OPTDIGESTCOLLAPSE, "yes" },
   /*
    ** .pp
    ** If this option is \fIset\fP, Mutt-ng's received-attachments menu will not show the subparts of
    ** individual messages in a multipart/digest.  To see these subparts, press 'v' on that menu.
    */
-  {"display_filter", DT_PATH, R_PAGER, UL &DisplayFilter, UL ""},
+  {"display_filter", DT_PATH, R_PAGER, UL &DisplayFilter, ""},
   /*
    ** .pp
    ** When \fIset\fP, specifies a command used to filter messages.  When a message
@@ -569,7 +570,7 @@ struct option_t MuttVars[] = {
    ** filtered message is read from the standard output.
    */
 #if defined(DL_STANDALONE) && defined(USE_DOTLOCK)
-  {"dotlock_program", DT_PATH, R_NONE, UL &MuttDotlock, UL BINDIR "/muttng_dotlock"},
+  {"dotlock_program", DT_PATH, R_NONE, UL &MuttDotlock, BINDIR "/muttng_dotlock"},
   /*
    ** .pp
    ** Availability: Standalone and Dotlock
@@ -579,7 +580,7 @@ struct option_t MuttVars[] = {
    ** Mutt-ng.
    */
 #endif
-  {"dsn_notify", DT_STR, R_NONE, UL &DsnNotify, UL ""},
+  {"dsn_notify", DT_STR, R_NONE, UL &DsnNotify, ""},
   /*
    ** .pp
    ** \fBNote:\fP you should not enable this unless you are using Sendmail
@@ -594,7 +595,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** Example: \fTset dsn_notify="failure,delay"\fP
    */
-  {"dsn_return", DT_STR, R_NONE, UL &DsnReturn, UL ""},
+  {"dsn_return", DT_STR, R_NONE, UL &DsnReturn, ""},
   /*
    ** .pp
    ** \fBNote:\fP you should not enable this unless you are using Sendmail
@@ -606,7 +607,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** Example: \fTset dsn_return=hdrs\fP
    */
-  {"duplicate_threads", DT_BOOL, R_RESORT|R_RESORT_INIT|R_INDEX, OPTDUPTHREADS, 1},
+  {"duplicate_threads", DT_BOOL, R_RESORT|R_RESORT_INIT|R_INDEX, OPTDUPTHREADS, "yes" },
   /*
    ** .pp
    ** This variable controls whether Mutt-ng, when sorting by threads, threads
@@ -614,20 +615,20 @@ struct option_t MuttVars[] = {
    ** If it is \fIset\fP, it will indicate that it thinks they are duplicates
    ** of each other with an equals sign in the thread diagram.
    */
-  {"edit_headers", DT_BOOL, R_NONE, OPTEDITHDRS, 0},
+  {"edit_headers", DT_BOOL, R_NONE, OPTEDITHDRS, "no" },
   /*
    ** .pp
    ** This option allows you to edit the header of your outgoing messages
    ** along with the body of your message.
    */
-  {"editor", DT_PATH, R_NONE, UL &Editor, 0},
+  {"editor", DT_PATH, R_NONE, UL &Editor, "" },
   /*
    ** .pp
    ** This variable specifies which editor is used by Mutt-ng.
    ** It defaults to the value of the \fT$$$VISUAL\fP, or \fT$$$EDITOR\fP, environment
    ** variable, or to the string "\fTvi\fP" if neither of those are set.
    */
-  {"encode_from", DT_BOOL, R_NONE, OPTENCODEFROM, 0},
+  {"encode_from", DT_BOOL, R_NONE, OPTENCODEFROM, "no" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will \fTquoted-printable\fP encode messages when
@@ -642,7 +643,7 @@ struct option_t MuttVars[] = {
    ** you must take care of space-stuffing <tt/From / lines (with a trailing
    ** space) yourself.
    */
-  {"envelope_from", DT_BOOL, R_NONE, OPTENVFROM, 0},
+  {"envelope_from", DT_BOOL, R_NONE, OPTENVFROM, "no" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will try to derive the message's \fIenvelope\fP
@@ -652,12 +653,12 @@ struct option_t MuttVars[] = {
    ** or if the sendmail on your machine doesn't support that command
    ** line switch.
    */
-  {"escape", DT_STR, R_NONE, UL &EscChar, UL "~"},
+  {"escape", DT_STR, R_NONE, UL &EscChar, "~"},
   /*
    ** .pp
    ** Escape character to use for functions in the builtin editor.
    */
-  {"fast_reply", DT_BOOL, R_NONE, OPTFASTREPLY, 0},
+  {"fast_reply", DT_BOOL, R_NONE, OPTFASTREPLY, "no" },
   /*
    ** .pp
    ** When \fIset\fP, the initial prompt for recipients and subject are skipped
@@ -667,13 +668,13 @@ struct option_t MuttVars[] = {
    ** \fBNote:\fP this variable has no effect when the ``$$autoedit''
    ** variable is \fIset\fP.
    */
-  {"fcc_attach", DT_BOOL, R_NONE, OPTFCCATTACH, 1},
+  {"fcc_attach", DT_BOOL, R_NONE, OPTFCCATTACH, "yes" },
   /*
    ** .pp
    ** This variable controls whether or not attachments on outgoing messages
    ** are saved along with the main body of your message.
    */
-  {"fcc_clear", DT_BOOL, R_NONE, OPTFCCCLEAR, 0},
+  {"fcc_clear", DT_BOOL, R_NONE, OPTFCCCLEAR, "no" },
   /*
    ** .pp
    ** When this variable is \fIset\fP, FCCs will be stored unencrypted and
@@ -681,7 +682,7 @@ struct option_t MuttVars[] = {
    ** signed.
    ** (PGP only)
    */
-  {"file_charset", DT_STR, R_NONE, UL &FileCharset, UL 0},
+  {"file_charset", DT_STR, R_NONE, UL &FileCharset, "" },
   /*
    ** .pp
    ** This variable is a colon-separated list of character encoding
@@ -695,7 +696,7 @@ struct option_t MuttVars[] = {
    ** Note: ``\fTiso-2022-*\fP'' must be put at the head of the value as shown above
    ** if included.
    */
-  {"folder", DT_PATH, R_NONE, UL &Maildir, UL "~/Mail"},
+  {"folder", DT_PATH, R_NONE, UL &Maildir, "~/Mail"},
   /*
    ** .pp
    ** Specifies the default location of your mailboxes.  A ``\fT+\fP'' or ``\fT=\fP'' at the
@@ -705,7 +706,7 @@ struct option_t MuttVars[] = {
    ** you use ``+'' or ``='' for any other variables since expansion takes place
    ** during the ``set'' command.
    */
-  {"folder_format", DT_STR, R_INDEX, UL &FolderFormat, UL "%2C %t %N %F %2l %-8.8u %-8.8g %8s %d %f"},
+  {"folder_format", DT_STR, R_INDEX, UL &FolderFormat, "%2C %t %N %F %2l %-8.8u %-8.8g %8s %d %f"},
   /*
    ** .pp
    ** This variable allows you to customize the file browser display to your
@@ -727,7 +728,7 @@ struct option_t MuttVars[] = {
    ** .dt %|X .dd pad to the end of the line with character "X"
    ** .de
    */
-  {"followup_to", DT_BOOL, R_NONE, OPTFOLLOWUPTO, 1},
+  {"followup_to", DT_BOOL, R_NONE, OPTFOLLOWUPTO, "yes" },
   /*
    ** .pp
    ** Controls whether or not the \fTMail-Followup-To:\fP header field is
@@ -749,7 +750,7 @@ struct option_t MuttVars[] = {
    */
 #ifdef USE_NNTP
   {"followup_to_poster", DT_SYN, R_NONE, UL "nntp_followup_to_poster", 0},
-  {"nntp_followup_to_poster", DT_QUAD, R_NONE, OPT_FOLLOWUPTOPOSTER, M_ASKYES},
+  {"nntp_followup_to_poster", DT_QUAD, R_NONE, OPT_FOLLOWUPTOPOSTER, "ask-yes" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -761,7 +762,7 @@ struct option_t MuttVars[] = {
    ** message via mail.
    */
 #endif
-  {"force_name", DT_BOOL, R_NONE, OPTFORCENAME, 0},
+  {"force_name", DT_BOOL, R_NONE, OPTFORCENAME, "no" },
   /*
    ** .pp
    ** This variable is similar to ``$$save_name'', except that Mutt-ng will
@@ -770,7 +771,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** Also see the ``$$record'' variable.
    */
-  {"force_buffy_check", DT_BOOL, R_NONE, OPTFORCEBUFFYCHECK, 0},
+  {"force_buffy_check", DT_BOOL, R_NONE, OPTFORCEBUFFYCHECK, "no" },
   /*
    ** .pp
    ** When \fIset\fP, it causes Mutt-ng to check for new mail when the
@@ -780,7 +781,7 @@ struct option_t MuttVars[] = {
    ** Also see the following variables: ``$$timeout'', ``$$mail_check'' and
    ** ``$$imap_mail_check''.
    */
-  {"forward_decode", DT_BOOL, R_NONE, OPTFORWDECODE, 1},
+  {"forward_decode", DT_BOOL, R_NONE, OPTFORWDECODE, "yes" },
   /*
    ** .pp
    ** Controls the decoding of complex MIME messages into \fTtext/plain\fP when
@@ -788,27 +789,27 @@ struct option_t MuttVars[] = {
    ** This variable is only used, if ``$$mime_forward'' is \fIunset\fP,
    ** otherwise ``$$mime_forward_decode'' is used instead.
    */
-  {"forward_edit", DT_QUAD, R_NONE, OPT_FORWEDIT, M_YES},
+  {"forward_edit", DT_QUAD, R_NONE, OPT_FORWEDIT, "yes" },
   /*
    ** .pp
    ** This quadoption controls whether or not the user is automatically
    ** placed in the editor when forwarding messages.  For those who always want
    ** to forward with no modification, use a setting of \fIno\fP.
    */
-  {"forward_format", DT_STR, R_NONE, UL &ForwFmt, UL "[%a: %s]"},
+  {"forward_format", DT_STR, R_NONE, UL &ForwFmt, "[%a: %s]"},
   /*
    ** .pp
    ** This variable controls the default subject when forwarding a message.
    ** It uses the same format sequences as the ``$$index_format'' variable.
    */
-  {"forward_quote", DT_BOOL, R_NONE, OPTFORWQUOTE, 0},
+  {"forward_quote", DT_BOOL, R_NONE, OPTFORWQUOTE, "no" },
   /*
    ** .pp
    ** When \fIset\fP forwarded messages included in the main body of the
    ** message (when ``$$mime_forward'' is \fIunset\fP) will be quoted using
    ** ``$$indent_string''.
    */
-  {"from", DT_ADDR, R_NONE, UL &From, UL 0},
+  {"from", DT_ADDR, R_NONE, UL &From, "" },
   /*
    ** .pp
    ** This variable contains a default from address.  It
@@ -822,7 +823,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** Defaults to the contents of the environment variable \fT$$$EMAIL\fP.
    */
-  {"gecos_mask", DT_RX, R_NONE, UL &GecosMask, UL "^[^,]*"},
+  {"gecos_mask", DT_RX, R_NONE, UL &GecosMask, "^[^,]*"},
   /*
    ** .pp
    ** A regular expression used by Mutt-ng to parse the GECOS field of a password
@@ -839,7 +840,7 @@ struct option_t MuttVars[] = {
    */
 #ifdef USE_NNTP
   {"group_index_format", DT_SYN, R_NONE, UL "nntp_group_index_format", 0},
-  {"nntp_group_index_format", DT_STR, R_BOTH, UL &GroupFormat, UL "%4C %M%N %5s  %-45.45f %d"},
+  {"nntp_group_index_format", DT_STR, R_BOTH, UL &GroupFormat, "%4C %M%N %5s  %-45.45f %d"},
   /*
    ** .pp
    ** Availability: NNTP
@@ -862,7 +863,7 @@ struct option_t MuttVars[] = {
    ** .te
    */
 #endif
-  {"hdrs", DT_BOOL, R_NONE, OPTHDRS, 1},
+  {"hdrs", DT_BOOL, R_NONE, OPTHDRS, "yes" },
   /*
    ** .pp
    ** When \fIunset\fP, the header fields normally added by the ``$my_hdr''
@@ -870,14 +871,14 @@ struct option_t MuttVars[] = {
    ** composing a new message or replying in order to take effect.  If \fIset\fP,
    ** the user defined header fields are added to every new message.
    */
-  {"header", DT_BOOL, R_NONE, OPTHEADER, 0},
+  {"header", DT_BOOL, R_NONE, OPTHEADER, "no" },
   /*
    ** .pp
    ** When \fIset\fP, this variable causes Mutt-ng to include the header
    ** of the message you are replying to into the edit buffer.
    ** The ``$$weed'' setting applies.
    */
-  {"help", DT_BOOL, R_BOTH, OPTHELP, 1},
+  {"help", DT_BOOL, R_BOTH, OPTHELP, "yes" },
   /*
    ** .pp
    ** When \fIset\fP, help lines describing the bindings for the major functions
@@ -889,7 +890,7 @@ struct option_t MuttVars[] = {
    ** running.  Since this variable is primarily aimed at new users, neither
    ** of these should present a major problem.
    */
-  {"hidden_host", DT_BOOL, R_NONE, OPTHIDDENHOST, 0},
+  {"hidden_host", DT_BOOL, R_NONE, OPTHIDDENHOST, "no" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will skip the host name part of ``$$hostname'' variable
@@ -897,53 +898,53 @@ struct option_t MuttVars[] = {
    ** affect the generation of \fTMessage-ID:\fP header fields, and it will not lead to the 
    ** cut-off of first-level domains.
    */
-  {"hide_limited", DT_BOOL, R_TREE|R_INDEX, OPTHIDELIMITED, 0},
+  {"hide_limited", DT_BOOL, R_TREE|R_INDEX, OPTHIDELIMITED, "no" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will not show the presence of messages that are hidden
    ** by limiting, in the thread tree.
    */
-  {"hide_missing", DT_BOOL, R_TREE|R_INDEX, OPTHIDEMISSING, 1},
+  {"hide_missing", DT_BOOL, R_TREE|R_INDEX, OPTHIDEMISSING, "yes" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will not show the presence of missing messages in the
    ** thread tree.
    */
-  {"hide_thread_subject", DT_BOOL, R_TREE|R_INDEX, OPTHIDETHREADSUBJECT, 1},
+  {"hide_thread_subject", DT_BOOL, R_TREE|R_INDEX, OPTHIDETHREADSUBJECT, "yes" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will not show the subject of messages in the thread
    ** tree that have the same subject as their parent or closest previously
    ** displayed sibling.
    */
-  {"hide_top_limited", DT_BOOL, R_TREE|R_INDEX, OPTHIDETOPLIMITED, 0},
+  {"hide_top_limited", DT_BOOL, R_TREE|R_INDEX, OPTHIDETOPLIMITED, "no" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will not show the presence of messages that are hidden
    ** by limiting, at the top of threads in the thread tree.  Note that when
    ** $$hide_missing is set, this option will have no effect.
    */
-  {"hide_top_missing", DT_BOOL, R_TREE|R_INDEX, OPTHIDETOPMISSING, 1},
+  {"hide_top_missing", DT_BOOL, R_TREE|R_INDEX, OPTHIDETOPMISSING, "yes" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will not show the presence of missing messages at the
    ** top of threads in the thread tree.  Note that when $$hide_limited is
    ** \fIset\fP, this option will have no effect.
    */
-  {"history", DT_NUM, R_NONE, UL &HistSize, 10},
+  {"history", DT_NUM, R_NONE, UL &HistSize, "10" },
   /*
    ** .pp
    ** This variable controls the size (in number of strings remembered) of
    ** the string history buffer. The buffer is cleared each time the
    ** variable is changed.
    */
-  {"honor_followup_to", DT_QUAD, R_NONE, OPT_MFUPTO, M_YES},
+  {"honor_followup_to", DT_QUAD, R_NONE, OPT_MFUPTO, "yes" },
   /*
    ** .pp
    ** This variable controls whether or not a \fTMail-Followup-To:\fP header field is
    ** honored when group-replying to a message.
    */
-  {"hostname", DT_STR, R_NONE, UL &Fqdn, 0},
+  {"hostname", DT_STR, R_NONE, UL &Fqdn, "" },
   /*
    ** .pp
    ** Specifies the hostname to use after the ``\fT@\fP'' in local e-mail
@@ -952,7 +953,7 @@ struct option_t MuttVars[] = {
    ** Please be sure to really know what you are doing when changing this variable
    ** to configure a custom domain part of Message-IDs.
    */
-  {"ignore_list_reply_to", DT_BOOL, R_NONE, OPTIGNORELISTREPLYTO, 0},
+  {"ignore_list_reply_to", DT_BOOL, R_NONE, OPTIGNORELISTREPLYTO, "no" },
   /*
    ** .pp
    ** Affects the behaviour of the \fIreply\fP function when replying to
@@ -965,7 +966,7 @@ struct option_t MuttVars[] = {
    ** list.
    */
 #ifdef USE_IMAP
-  {"imap_authenticators", DT_STR, R_NONE, UL &ImapAuthenticators, UL 0},
+  {"imap_authenticators", DT_STR, R_NONE, UL &ImapAuthenticators, "" },
   /*
    ** .pp
    ** Availability: IMAP
@@ -987,7 +988,7 @@ struct option_t MuttVars[] = {
    ** the previous methods are unavailable. If a method is available but
    ** authentication fails, Mutt-ng will not connect to the IMAP server.
    */
-  { "imap_check_subscribed",  DT_BOOL, R_NONE, OPTIMAPCHECKSUBSCRIBED, 0 },
+  { "imap_check_subscribed",  DT_BOOL, R_NONE, OPTIMAPCHECKSUBSCRIBED, "no" },
   /*
    ** .pp
    ** When \fIset\fP, mutt will fetch the set of subscribed folders from
@@ -995,7 +996,7 @@ struct option_t MuttVars[] = {
    ** it polls for new mail. See also the ``$mailboxes'' command.
    */
   
-  {"imap_delim_chars", DT_STR, R_NONE, UL &ImapDelimChars, UL "/."},
+  {"imap_delim_chars", DT_STR, R_NONE, UL &ImapDelimChars, "/."},
   /*
    ** .pp
    ** Availability: IMAP
@@ -1005,7 +1006,7 @@ struct option_t MuttVars[] = {
    ** as folder separators for displaying IMAP paths. In particular it
    ** helps in using the '\fT=\fP' shortcut for your $$folder variable.
    */
-  {"imap_headers", DT_STR, R_INDEX, UL &ImapHeaders, UL 0},
+  {"imap_headers", DT_STR, R_INDEX, UL &ImapHeaders, "" },
   /*
    ** .pp
    ** Availability: IMAP
@@ -1019,7 +1020,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** \fBNote:\fP This is a space separated list.
    */
-  {"imap_home_namespace", DT_STR, R_NONE, UL &ImapHomeNamespace, UL 0},
+  {"imap_home_namespace", DT_STR, R_NONE, UL &ImapHomeNamespace, "" },
   /*
    ** .pp
    ** Availability: IMAP
@@ -1029,7 +1030,7 @@ struct option_t MuttVars[] = {
    ** your \fTINBOX\fP in the IMAP browser. If you see something else, you may set
    ** this variable to the IMAP path to your folders.
    */
-  {"imap_keepalive", DT_NUM, R_NONE, UL &ImapKeepalive, 900},
+  {"imap_keepalive", DT_NUM, R_NONE, UL &ImapKeepalive, "900" },
   /*
    ** .pp
    ** Availability: IMAP
@@ -1047,7 +1048,7 @@ struct option_t MuttVars[] = {
    ** Reduce this number if you find yourself
    ** getting disconnected from your IMAP server due to inactivity.
    */
-  {"imap_login", DT_STR, R_NONE, UL &ImapLogin, 0 },
+  {"imap_login", DT_STR, R_NONE, UL &ImapLogin, "" },
   /*
    ** .pp
    ** Availability: IMAP
@@ -1057,7 +1058,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** This variable defaults to the value of ``$$imap_user.''
    */
-  {"imap_list_subscribed", DT_BOOL, R_NONE, OPTIMAPLSUB, 0},
+  {"imap_list_subscribed", DT_BOOL, R_NONE, OPTIMAPLSUB, "no" },
   /*
    ** .pp
    ** Availability: IMAP
@@ -1067,14 +1068,14 @@ struct option_t MuttVars[] = {
    ** only subscribed folders or all folders.  This can be toggled in the
    ** IMAP browser with the \fItoggle-subscribed\fP function.
    */
-  {"imap_mail_check", DT_NUM, R_NONE, UL &ImapBuffyTimeout, 300},
+  {"imap_mail_check", DT_NUM, R_NONE, UL &ImapBuffyTimeout, "300" },
   /*
    ** .pp
    ** This variable configures how often (in seconds) Mutt-ng should look for
    ** new mail in IMAP folders. This is split from the ``$mail_check'' variable
    ** to generate less traffic and get more accurate information for local folders.
    */
-  {"imap_pass", DT_STR, R_NONE, UL &ImapPass, UL 0},
+  {"imap_pass", DT_STR, R_NONE, UL &ImapPass, "" },
   /*
    ** .pp
    ** Availability: IMAP
@@ -1087,7 +1088,7 @@ struct option_t MuttVars[] = {
    ** fairly secure machine, because the superuser can read your configuration even
    ** if you are the only one who can read the file.
    */
-  {"imap_passive", DT_BOOL, R_NONE, OPTIMAPPASSIVE, 1},
+  {"imap_passive", DT_BOOL, R_NONE, OPTIMAPPASSIVE, "yes" },
   /*
    ** .pp
    ** Availability: IMAP
@@ -1099,7 +1100,7 @@ struct option_t MuttVars[] = {
    ** user/password pairs on Mutt-ng invocation, or if opening the connection
    ** is slow.
    */
-  {"imap_peek", DT_BOOL, R_NONE, OPTIMAPPEEK, 1},
+  {"imap_peek", DT_BOOL, R_NONE, OPTIMAPPEEK, "yes" },
   /*
    ** .pp
    ** Availability: IMAP
@@ -1110,7 +1111,7 @@ struct option_t MuttVars[] = {
    ** but can make closing an IMAP folder somewhat slower. This option
    ** exists to appease speed freaks.
    */
-  {"imap_reconnect", DT_QUAD, R_NONE, OPT_IMAPRECONNECT, M_ASKYES},
+  {"imap_reconnect", DT_QUAD, R_NONE, OPT_IMAPRECONNECT, "ask-yes" },
   /*
    ** .pp
    ** Availability: IMAP
@@ -1119,7 +1120,7 @@ struct option_t MuttVars[] = {
    ** Controls whether or not Mutt-ng will try to reconnect to IMAP server when
    ** the connection is lost.
    */
-  {"imap_servernoise", DT_BOOL, R_NONE, OPTIMAPSERVERNOISE, 1},
+  {"imap_servernoise", DT_BOOL, R_NONE, OPTIMAPSERVERNOISE, "yes" },
   /*
    ** .pp
    ** Availability: IMAP
@@ -1131,7 +1132,7 @@ struct option_t MuttVars[] = {
    ** server which are out of the users' hands, you may wish to suppress
    ** them at some point.
    */
-  {"imap_user", DT_STR, R_NONE, UL &ImapUser, UL 0},
+  {"imap_user", DT_STR, R_NONE, UL &ImapUser, "" },
   /*
    ** .pp
    ** Availability: IMAP
@@ -1143,7 +1144,7 @@ struct option_t MuttVars[] = {
    ** This variable defaults to your user name on the local machine.
    */
 #endif
-  {"implicit_autoview", DT_BOOL, R_NONE, OPTIMPLICITAUTOVIEW, 0},
+  {"implicit_autoview", DT_BOOL, R_NONE, OPTIMPLICITAUTOVIEW, "no" },
   /*
    ** .pp
    ** If \fIset\fP, Mutt-ng will look for a mailcap entry with the
@@ -1152,26 +1153,26 @@ struct option_t MuttVars[] = {
    ** use the viewer defined in that entry to convert the body part to text
    ** form.
    */
-  {"include", DT_QUAD, R_NONE, OPT_INCLUDE, M_ASKYES},
+  {"include", DT_QUAD, R_NONE, OPT_INCLUDE, "ask-yes" },
   /*
    ** .pp
    ** Controls whether or not a copy of the message(s) you are replying to
    ** is included in your reply.
    */
-  {"include_onlyfirst", DT_BOOL, R_NONE, OPTINCLUDEONLYFIRST, 0},
+  {"include_onlyfirst", DT_BOOL, R_NONE, OPTINCLUDEONLYFIRST, "no" },
   /*
    ** .pp
    ** Controls whether or not Mutt-ng includes only the first attachment
    ** of the message you are replying.
    */
-  {"indent_string", DT_STR, R_NONE, UL &Prefix, UL "> "},
+  {"indent_string", DT_STR, R_NONE, UL &Prefix, "> "},
   /*
    ** .pp
    ** Specifies the string to prepend to each line of text quoted in a
    ** message to which you are replying.  You are strongly encouraged not to
    ** change this value, as it tends to agitate the more fanatical netizens.
    */
-  {"index_format", DT_STR, R_BOTH, UL &HdrFmt, UL "%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"},
+  {"index_format", DT_STR, R_BOTH, UL &HdrFmt, "%4C %Z %{%b %d} %-15.15L (%?l?%4l&%4c?) %s"},
   /*
    ** .pp
    ** This variable allows you to customize the message index display to
@@ -1241,7 +1242,7 @@ struct option_t MuttVars[] = {
    */
 #ifdef USE_NNTP
   {"inews", DT_SYN, R_NONE, UL "nntp_inews", 0},
-  {"nntp_inews", DT_PATH, R_NONE, UL &Inews, UL ""},
+  {"nntp_inews", DT_PATH, R_NONE, UL &Inews, ""},
   /*
    ** .pp
    ** Availability: NNTP
@@ -1258,32 +1259,32 @@ struct option_t MuttVars[] = {
    ** Example: \fTset inews="/usr/local/bin/inews -hS"\fP
    */
 #endif
-  {"ispell", DT_PATH, R_NONE, UL &Ispell, UL ISPELL},
+  {"ispell", DT_PATH, R_NONE, UL &Ispell, ISPELL},
   /*
    ** .pp
    ** How to invoke ispell (GNU's spell-checking software).
    */
-  {"keep_flagged", DT_BOOL, R_NONE, OPTKEEPFLAGGED, 0},
+  {"keep_flagged", DT_BOOL, R_NONE, OPTKEEPFLAGGED, "no" },
   /*
    ** .pp
    ** If \fIset\fP, read messages marked as flagged will not be moved
    ** from your spool mailbox to your ``$$mbox'' mailbox, or as a result of
    ** a ``$mbox-hook'' command.
    */
-  {"locale", DT_STR, R_BOTH, UL &Locale, UL "C"},
+  {"locale", DT_STR, R_BOTH, UL &Locale, "C"},
   /*
    ** .pp
    ** The locale used by \fTstrftime(3)\fP to format dates. Legal values are
    ** the strings your system accepts for the locale variable \fTLC_TIME\fP.
    */
-  {"list_reply", DT_QUAD, R_NONE, OPT_LISTREPLY, M_NO},
+  {"list_reply", DT_QUAD, R_NONE, OPT_LISTREPLY, "no" },
   /*
    ** .pp
    ** When \fIset\fP, address replies to the mailing list the original message came
    ** from (instead to the author only). Setting this option to ``\fIask-yes\fP'' or
    ** ``\fIask-no\fP'' will ask if you really intended to reply to the author only.
    */
-  {"max_display_recips", DT_NUM, R_PAGER, UL &MaxDispRecips, 0},
+  {"max_display_recips", DT_NUM, R_PAGER, UL &MaxDispRecips, "0" },
   /*
    ** .pp
    ** When set non-zero, this specifies the maximum number of recipient header
@@ -1291,14 +1292,14 @@ struct option_t MuttVars[] = {
    ** weeding is turned on. In case the number of lines exeeds its value, the
    ** last line will have 3 dots appended.
    */
-  {"max_line_length", DT_NUM, R_PAGER, UL &MaxLineLength, 0},
+  {"max_line_length", DT_NUM, R_PAGER, UL &MaxLineLength, "0" },
   /*
    ** .pp
    ** When \fIset\fP, the maximum line length for displaying ``format = flowed'' messages is limited
    ** to this length. A value of 0 (which is also the default) means that the
    ** maximum line length is determined by the terminal width and $$wrapmargin.
    */
-  {"mail_check", DT_NUM, R_NONE, UL &BuffyTimeout, 5},
+  {"mail_check", DT_NUM, R_NONE, UL &BuffyTimeout, "5" },
   /*
    ** .pp
    ** This variable configures how often (in seconds) Mutt-ng should look for
@@ -1306,13 +1307,13 @@ struct option_t MuttVars[] = {
    ** .pp
    ** \fBNote:\fP This does not apply to IMAP mailboxes, see $$imap_mail_check.
    */
-  {"mailcap_path", DT_STR, R_NONE, UL &MailcapPath, 0},
+  {"mailcap_path", DT_STR, R_NONE, UL &MailcapPath, "" },
   /*
    ** .pp
    ** This variable specifies which files to consult when attempting to
    ** display MIME bodies not directly supported by Mutt-ng.
    */
-  {"mailcap_sanitize", DT_BOOL, R_NONE, OPTMAILCAPSANITIZE, 1},
+  {"mailcap_sanitize", DT_BOOL, R_NONE, OPTMAILCAPSANITIZE, "yes" },
   /*
    ** .pp
    ** If \fIset\fP, Mutt-ng will restrict possible characters in mailcap \fT%\fP expandos
@@ -1324,7 +1325,7 @@ struct option_t MuttVars[] = {
    */
 #ifdef USE_HCACHE
 
-  {"header_cache", DT_PATH, R_NONE, UL &HeaderCache, 0},
+  {"header_cache", DT_PATH, R_NONE, UL &HeaderCache, "" },
   /*
    ** .pp
    ** Availability: Header Cache
@@ -1337,7 +1338,7 @@ struct option_t MuttVars[] = {
    ** be a single global header cache. By default it is \fIunset\fP so no
    ** header caching will be used.
    */
-  {"maildir_header_cache_verify", DT_BOOL, R_NONE, OPTHCACHEVERIFY, 1},
+  {"maildir_header_cache_verify", DT_BOOL, R_NONE, OPTHCACHEVERIFY, "yes" },
   /*
    ** .pp
    ** Availability: Header Cache
@@ -1348,7 +1349,7 @@ struct option_t MuttVars[] = {
    ** message every time the folder is opened.
    */
 #if HAVE_GDBM || HAVE_DB4
-  {"header_cache_pagesize", DT_STR, R_NONE, UL &HeaderCachePageSize, UL "16384"},
+  {"header_cache_pagesize", DT_STR, R_NONE, UL &HeaderCachePageSize, "16384"},
   /*
    ** .pp
    ** Availability: Header Cache
@@ -1364,7 +1365,7 @@ struct option_t MuttVars[] = {
    */
 #endif /* HAVE_GDBM || HAVE_DB 4 */
 #if HAVE_QDBM
-  { "header_cache_compress", DT_BOOL, R_NONE, OPTHCACHECOMPRESS, 0 },
+  { "header_cache_compress", DT_BOOL, R_NONE, OPTHCACHECOMPRESS, "no" },
   /*
   ** .pp
   ** If enabled the header cache will be compressed. So only one fifth of the usual
@@ -1373,7 +1374,7 @@ struct option_t MuttVars[] = {
   */
 #endif /* HAVE_QDBM */
 #endif /* USE_HCACHE */
-  {"maildir_trash", DT_BOOL, R_NONE, OPTMAILDIRTRASH, 0},
+  {"maildir_trash", DT_BOOL, R_NONE, OPTMAILDIRTRASH, "no" },
   /*
    ** .pp
    ** If \fIset\fP, messages marked as deleted will be saved with the maildir
@@ -1385,7 +1386,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** It is similiar to the trash option.
    */
-  {"mark_old", DT_BOOL, R_BOTH, OPTMARKOLD, 1},
+  {"mark_old", DT_BOOL, R_BOTH, OPTMARKOLD, "yes" },
   /*
    ** .pp
    ** Controls whether or not Mutt-ng marks \fInew\fP \fBunread\fP
@@ -1395,27 +1396,27 @@ struct option_t MuttVars[] = {
    ** will show up with an "O" next to them in the ``index'' menu,
    ** indicating that they are old.
    */
-  {"markers", DT_BOOL, R_PAGER, OPTMARKERS, 1},
+  {"markers", DT_BOOL, R_PAGER, OPTMARKERS, "yes" },
   /*
    ** .pp
    ** Controls the display of wrapped lines in the internal pager. If set, a
    ** ``\fT+\fP'' marker is displayed at the beginning of wrapped lines. Also see
    ** the ``$$smart_wrap'' variable.
    */
-  {"mask", DT_RX, R_NONE, UL &Mask, UL "!^\\.[^.]"},
+  {"mask", DT_RX, R_NONE, UL &Mask, "!^\\.[^.]"},
   /*
    ** .pp
    ** A regular expression used in the file browser, optionally preceded by
    ** the \fInot\fP operator ``\fT!\fP''.  Only files whose names match this mask
    ** will be shown. The match is always case-sensitive.
    */
-  {"mbox", DT_PATH, R_BOTH, UL &Inbox, UL "~/mbox"},
+  {"mbox", DT_PATH, R_BOTH, UL &Inbox, "~/mbox"},
   /*
    ** .pp
    ** This specifies the folder into which read mail in your ``$$spoolfile''
    ** folder will be appended.
    */
-  {"operating_system", DT_STR, R_NONE, UL &OperatingSystem, 0},
+  {"operating_system", DT_STR, R_NONE, UL &OperatingSystem, "" },
   /*
    ** .pp
    ** This specifies the operating system name for the \fTUser-Agent:\fP header field. If
@@ -1424,36 +1425,36 @@ struct option_t MuttVars[] = {
    ** .pp
    ** It may, for example, look as: ``\fTmutt-ng 1.5.9i (Linux)\fP''.
    */
-  {"sidebar_boundary", DT_STR, R_BOTH, UL &SidebarBoundary, UL "." },
+  {"sidebar_boundary", DT_STR, R_BOTH, UL &SidebarBoundary, "." },
   /*
    ** .pp
    ** When the sidebar is displayed and $$sidebar_shorten_hierarchy is \fIset\fP, this
    ** variable specifies the characters at which to split a folder name into
    ** ``hierarchy items.''
    */
-  {"sidebar_delim", DT_STR, R_BOTH, UL &SidebarDelim, UL "|"},
+  {"sidebar_delim", DT_STR, R_BOTH, UL &SidebarDelim, "|"},
   /*
    ** .pp
    ** This specifies the delimiter between the sidebar (if visible) and 
    ** other screens.
    */
-  {"sidebar_visible", DT_BOOL, R_BOTH, OPTMBOXPANE, 0},
+  {"sidebar_visible", DT_BOOL, R_BOTH, OPTMBOXPANE, "no" },
   /*
    ** .pp
    ** This specifies whether or not to show the sidebar (a list of folders specified
    ** with the ``mailboxes'' command).
    */
-  {"sidebar_width", DT_NUM, R_BOTH, UL &SidebarWidth, 0},
+  {"sidebar_width", DT_NUM, R_BOTH, UL &SidebarWidth, "0" },
   /*
    ** .pp
    ** The width of the sidebar.
    */
-  {"sidebar_newmail_only", DT_BOOL, R_BOTH, OPTSIDEBARNEWMAILONLY, 0},
+  {"sidebar_newmail_only", DT_BOOL, R_BOTH, OPTSIDEBARNEWMAILONLY, "no" },
   /*
    ** .pp
    ** If \fIset\fP, only folders with new mail will be shown in the sidebar.
    */
-  {"sidebar_number_format", DT_STR, R_BOTH, UL &SidebarNumberFormat, UL "%m%?n?(%n)?%?f?[%f]?"},
+  {"sidebar_number_format", DT_STR, R_BOTH, UL &SidebarNumberFormat, "%m%?n?(%n)?%?f?[%f]?"},
   /*
    ** .pp
    ** This variable controls how message counts are printed when the sidebar
@@ -1476,7 +1477,7 @@ struct option_t MuttVars[] = {
    ** 1) These expandos only have a non-zero value for the current mailbox and
    ** will always be zero otherwise.
    */
-  {"sidebar_shorten_hierarchy", DT_BOOL, R_NONE, OPTSHORTENHIERARCHY, 0},
+  {"sidebar_shorten_hierarchy", DT_BOOL, R_NONE, OPTSHORTENHIERARCHY, "no" },
   /*
    ** .pp
    ** When \fIset\fP, the ``hierarchy'' of the sidebar entries will be shortened
@@ -1489,32 +1490,32 @@ struct option_t MuttVars[] = {
    ** At which characters this compression is done is controled via the
    ** $$sidebar_boundary variable.
    */
-  {"mbox_type", DT_MAGIC, R_NONE, UL &DefaultMagic, M_MBOX},
+  {"mbox_type", DT_MAGIC, R_NONE, UL &DefaultMagic, "mbox" },
   /*
    ** .pp
    ** The default mailbox type used when creating new folders. May be any of
    ** \fTmbox\fP, \fTMMDF\fP, \fTMH\fP and \fTMaildir\fP.
    */
-  {"metoo", DT_BOOL, R_NONE, OPTMETOO, 0},
+  {"metoo", DT_BOOL, R_NONE, OPTMETOO, "no" },
   /*
    ** .pp
    ** If \fIunset\fP, Mutt-ng will remove your address (see the ``alternates''
    ** command) from the list of recipients when replying to a message.
    */
-  {"menu_context", DT_NUM, R_NONE, UL &MenuContext, 0},
+  {"menu_context", DT_NUM, R_NONE, UL &MenuContext, "0" },
   /*
    ** .pp
    ** This variable controls the number of lines of context that are given
    ** when scrolling through menus. (Similar to ``$$pager_context''.)
    */
-  {"menu_move_off", DT_BOOL, R_NONE, OPTMENUMOVEOFF, 1},
+  {"menu_move_off", DT_BOOL, R_NONE, OPTMENUMOVEOFF, "yes" },
   /*
    ** .pp
    ** When \fIunset\fP, the bottom entry of menus will never scroll up past
    ** the bottom of the screen, unless there are less entries than lines.
    ** When \fIset\fP, the bottom entry may move off the bottom.
    */
-  {"menu_scroll", DT_BOOL, R_NONE, OPTMENUSCROLL, 0},
+  {"menu_scroll", DT_BOOL, R_NONE, OPTMENUSCROLL, "no" },
   /*
    ** .pp
    ** When \fIset\fP, menus will be scrolled up or down one line when you
@@ -1522,7 +1523,7 @@ struct option_t MuttVars[] = {
    ** is cleared and the next or previous page of the menu is displayed
    ** (useful for slow links to avoid many redraws).
    */
-  {"meta_key", DT_BOOL, R_NONE, OPTMETAKEY, 0},
+  {"meta_key", DT_BOOL, R_NONE, OPTMETAKEY, "no" },
   /*
    ** .pp
    ** If \fIset\fP, forces Mutt-ng to interpret keystrokes with the high bit (bit 8)
@@ -1533,7 +1534,7 @@ struct option_t MuttVars[] = {
    ** high bit from ``\fT0xf4\fP'' is ``\fT0x74\fP'', which is the ASCII character
    ** ``\fTx\fP''.
    */
-  {"mh_purge", DT_BOOL, R_NONE, OPTMHPURGE, 0},
+  {"mh_purge", DT_BOOL, R_NONE, OPTMHPURGE, "no" },
   /*
    ** .pp
    ** When \fIunset\fP, Mutt-ng will mimic mh's behaviour and rename deleted messages
@@ -1541,22 +1542,22 @@ struct option_t MuttVars[] = {
    ** them.  If the variable is set, the message files will simply be
    ** deleted.
    */
-  {"mh_seq_flagged", DT_STR, R_NONE, UL &MhFlagged, UL "flagged"},
+  {"mh_seq_flagged", DT_STR, R_NONE, UL &MhFlagged, "flagged"},
   /*
    ** .pp
    ** The name of the MH sequence used for flagged messages.
    */
-  {"mh_seq_replied", DT_STR, R_NONE, UL &MhReplied, UL "replied"},
+  {"mh_seq_replied", DT_STR, R_NONE, UL &MhReplied, "replied"},
   /*
    ** .pp
    ** The name of the MH sequence used to tag replied messages.
    */
-  {"mh_seq_unseen", DT_STR, R_NONE, UL &MhUnseen, UL "unseen"},
+  {"mh_seq_unseen", DT_STR, R_NONE, UL &MhUnseen, "unseen"},
   /*
    ** .pp
    ** The name of the MH sequence used for unseen messages.
    */
-  {"mime_forward", DT_QUAD, R_NONE, OPT_MIMEFWD, M_NO},
+  {"mime_forward", DT_QUAD, R_NONE, OPT_MIMEFWD, "no" },
   /*
    ** .pp
    ** When \fIset\fP, the message you are forwarding will be attached as a
@@ -1570,14 +1571,14 @@ struct option_t MuttVars[] = {
    ** .pp
    ** Also see ``$$forward_decode'' and ``$$mime_forward_decode''.
    */
-  {"mime_forward_decode", DT_BOOL, R_NONE, OPTMIMEFORWDECODE, 0},
+  {"mime_forward_decode", DT_BOOL, R_NONE, OPTMIMEFORWDECODE, "no" },
   /*
    ** .pp
    ** Controls the decoding of complex MIME messages into \fTtext/plain\fP when
    ** forwarding a message while ``$$mime_forward'' is \fIset\fP. Otherwise
    ** ``$$forward_decode'' is used instead.
    */
-  {"mime_forward_rest", DT_QUAD, R_NONE, OPT_MIMEFWDREST, M_YES},
+  {"mime_forward_rest", DT_QUAD, R_NONE, OPT_MIMEFWDREST, "yes" },
   /*
    ** .pp
    ** When forwarding multiple attachments of a MIME message from the recvattach
@@ -1587,7 +1588,7 @@ struct option_t MuttVars[] = {
 
 #ifdef USE_NNTP
   {"mime_subject", DT_SYN, R_NONE, UL "nntp_mime_subject", 0},
-  {"nntp_mime_subject", DT_BOOL, R_NONE, OPTMIMESUBJECT, 1},
+  {"nntp_mime_subject", DT_BOOL, R_NONE, OPTMIMESUBJECT, "yes" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -1601,7 +1602,7 @@ struct option_t MuttVars[] = {
 #endif
 
 #ifdef MIXMASTER
-  {"mix_entry_format", DT_STR, R_NONE, UL &MixEntryFormat, UL "%4n %c %-16s %a"},
+  {"mix_entry_format", DT_STR, R_NONE, UL &MixEntryFormat, "%4n %c %-16s %a"},
   /*
    ** .pp
    ** Availability: Mixmaster
@@ -1618,7 +1619,7 @@ struct option_t MuttVars[] = {
    ** .dt %a .dd The remailer's e-mail address.
    ** .de
    */
-  {"mixmaster", DT_PATH, R_NONE, UL &Mixmaster, UL MIXMASTER},
+  {"mixmaster", DT_PATH, R_NONE, UL &Mixmaster, MIXMASTER},
   /*
    ** .pp
    ** Availability: Mixmaster
@@ -1630,21 +1631,21 @@ struct option_t MuttVars[] = {
    ** mixmaster chain.
    */
 #endif
-  {"move", DT_QUAD, R_NONE, OPT_MOVE, M_ASKNO},
+  {"move", DT_QUAD, R_NONE, OPT_MOVE, "ask-no" },
   /*
    ** .pp
    ** Controls whether or not Mutt-ng will move read messages
    ** from your spool mailbox to your ``$$mbox'' mailbox, or as a result of
    ** a ``$mbox-hook'' command.
    */
-  {"message_format", DT_STR, R_NONE, UL &MsgFmt, UL "%s"},
+  {"message_format", DT_STR, R_NONE, UL &MsgFmt, "%s"},
   /*
    ** .pp
    ** This is the string displayed in the ``attachment'' menu for
    ** attachments of type \fTmessage/rfc822\fP.  For a full listing of defined
    ** \fTprintf(3)\fP-like sequences see the section on ``$$index_format''.
    */
-  {"msgid_format", DT_STR, R_NONE, UL &MsgIdFormat, UL "%Y%m%d%h%M%s.G%P%p"},
+  {"msgid_format", DT_STR, R_NONE, UL &MsgIdFormat, "%Y%m%d%h%M%s.G%P%p"},
   /*
    ** .pp
    ** This is the format for the ``local part'' of the \fTMessage-Id:\fP header
@@ -1674,7 +1675,7 @@ struct option_t MuttVars[] = {
    ** \fBNote:\fP Please only change this setting if you know what you are doing.
    ** Also make sure to consult RFC2822 to produce technically \fIvalid\fP strings.
    */
-  {"narrow_tree", DT_BOOL, R_TREE|R_INDEX, OPTNARROWTREE, 0},
+  {"narrow_tree", DT_BOOL, R_TREE|R_INDEX, OPTNARROWTREE, "no" },
   /*
    ** .pp
    ** This variable, when \fIset\fP, makes the thread tree narrower, allowing
@@ -1682,7 +1683,7 @@ struct option_t MuttVars[] = {
    */
 #ifdef USE_NNTP
   {"news_cache_dir", DT_SYN, R_NONE, UL "nntp_cache_dir", 0},
-  {"nntp_cache_dir", DT_PATH, R_NONE, UL &NewsCacheDir, UL "~/.muttng"},
+  {"nntp_cache_dir", DT_PATH, R_NONE, UL &NewsCacheDir, "~/.muttng"},
   /*
    ** .pp
    ** Availability: NNTP
@@ -1695,8 +1696,8 @@ struct option_t MuttVars[] = {
    ** As for the header caching in connection with IMAP and/or Maildir,
    ** this drastically increases speed and lowers traffic.
    */
-  {"news_server", DT_SYN, R_NONE, UL "nntp_host", 0},
-  {"nntp_host", DT_STR, R_NONE, UL &NewsServer, 0},
+  {"news_server", DT_SYN, R_NONE, UL "nntp_host", 0 },
+  {"nntp_host", DT_STR, R_NONE, UL &NewsServer, "" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -1718,7 +1719,7 @@ struct option_t MuttVars[] = {
    ** regardless of the file's permissions.
    */
   {"newsrc", DT_SYN, R_NONE, UL "nntp_newsrc", 0},
-  {"nntp_newsrc", DT_PATH, R_NONE, UL &NewsRc, UL "~/.newsrc"},
+  {"nntp_newsrc", DT_PATH, R_NONE, UL &NewsRc, "~/.newsrc"},
   /*
    ** .pp
    ** Availability: NNTP
@@ -1734,7 +1735,7 @@ struct option_t MuttVars[] = {
    ** %s      newsserver name
    ** .te
    */
-  {"nntp_context", DT_NUM, R_NONE, UL &NntpContext, 1000},
+  {"nntp_context", DT_NUM, R_NONE, UL &NntpContext, "1000" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -1747,7 +1748,7 @@ struct option_t MuttVars[] = {
    ** If there're more articles than defined with $$nntp_context, all older ones
    ** will be removed/not shown in the index.
    */
-  {"nntp_load_description", DT_BOOL, R_NONE, OPTLOADDESC, 1},
+  {"nntp_load_description", DT_BOOL, R_NONE, OPTLOADDESC, "yes" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -1756,7 +1757,7 @@ struct option_t MuttVars[] = {
    ** This variable controls whether or not descriptions for newsgroups
    ** are to be loaded when subscribing to a newsgroup.
    */
-  {"nntp_user", DT_STR, R_NONE, UL &NntpUser, UL ""},
+  {"nntp_user", DT_STR, R_NONE, UL &NntpUser, ""},
   /*
    ** .pp
    ** Availability: NNTP
@@ -1765,7 +1766,7 @@ struct option_t MuttVars[] = {
    ** Your login name on the NNTP server.  If \fIunset\fP and the server requires
    ** authentification, Mutt-ng will prompt you for your account name.
    */
-  {"nntp_pass", DT_STR, R_NONE, UL &NntpPass, UL ""},
+  {"nntp_pass", DT_STR, R_NONE, UL &NntpPass, ""},
   /*
    ** .pp
    ** Availability: NNTP
@@ -1778,7 +1779,7 @@ struct option_t MuttVars[] = {
    ** regardless of the file's permissions.
    */
   {"nntp_poll", DT_SYN, R_NONE, UL "nntp_mail_check", 0},
-  {"nntp_mail_check", DT_NUM, R_NONE, UL &NewsPollTimeout, 60},
+  {"nntp_mail_check", DT_NUM, R_NONE, UL &NewsPollTimeout, "60" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -1788,7 +1789,7 @@ struct option_t MuttVars[] = {
    ** article will cause a recheck for new news. If set to 0, Mutt-ng will
    ** recheck on each operation in index (stepping, read article, etc.).
    */
-  {"nntp_reconnect", DT_QUAD, R_NONE, OPT_NNTPRECONNECT, M_ASKYES},
+  {"nntp_reconnect", DT_QUAD, R_NONE, OPT_NNTPRECONNECT, "ask-yes" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -1798,7 +1799,7 @@ struct option_t MuttVars[] = {
    ** was connection lost.
    */
 #endif
-  {"pager", DT_PATH, R_NONE, UL &Pager, UL "builtin"},
+  {"pager", DT_PATH, R_NONE, UL &Pager, "builtin"},
   /*
    ** .pp
    ** This variable specifies which pager you would like to use to view
@@ -1811,7 +1812,7 @@ struct option_t MuttVars[] = {
    ** directly from the pager, and screen resizes cause lines longer than
    ** the screen width to be badly formatted in the help menu.
    */
-  {"pager_context", DT_NUM, R_NONE, UL &PagerContext, 0},
+  {"pager_context", DT_NUM, R_NONE, UL &PagerContext, "0" },
   /*
    ** .pp
    ** This variable controls the number of lines of context that are given
@@ -1819,7 +1820,7 @@ struct option_t MuttVars[] = {
    ** default, Mutt-ng will display the line after the last one on the screen
    ** at the top of the next page (0 lines of context).
    */
-  {"pager_format", DT_STR, R_PAGER, UL &PagerFmt, UL "-%Z- %C/%m: %-20.20n   %s"},
+  {"pager_format", DT_STR, R_PAGER, UL &PagerFmt, "-%Z- %C/%m: %-20.20n   %s"},
   /*
    ** .pp
    ** This variable controls the format of the one-line message ``status''
@@ -1827,7 +1828,7 @@ struct option_t MuttVars[] = {
    ** pager.  The valid sequences are listed in the ``$$index_format''
    ** section.
    */
-  {"pager_index_lines", DT_NUM, R_PAGER, UL &PagerIndexLines, 0},
+  {"pager_index_lines", DT_NUM, R_PAGER, UL &PagerIndexLines, "0" },
   /*
    ** .pp
    ** Determines the number of lines of a mini-index which is shown when in
@@ -1842,14 +1843,14 @@ struct option_t MuttVars[] = {
    ** is less than \fIpager_index_lines\fP, then the index will only use as
    ** many lines as it needs.
    */
-  {"pager_stop", DT_BOOL, R_NONE, OPTPAGERSTOP, 0},
+  {"pager_stop", DT_BOOL, R_NONE, OPTPAGERSTOP, "no" },
   /*
    ** .pp
    ** When \fIset\fP, the internal-pager will \fBnot\fP move to the next message
    ** when you are at the end of a message and invoke the \fInext-page\fP
    ** function.
    */
-  {"crypt_autosign", DT_BOOL, R_NONE, OPTCRYPTAUTOSIGN, 0},
+  {"crypt_autosign", DT_BOOL, R_NONE, OPTCRYPTAUTOSIGN, "no" },
   /*
    ** .pp
    ** Setting this variable will cause Mutt-ng to always attempt to
@@ -1860,7 +1861,7 @@ struct option_t MuttVars[] = {
    ** be overridden by use of the \fIsmime-menu\fP.
    ** (Crypto only)
    */
-  {"crypt_autoencrypt", DT_BOOL, R_NONE, OPTCRYPTAUTOENCRYPT, 0},
+  {"crypt_autoencrypt", DT_BOOL, R_NONE, OPTCRYPTAUTOENCRYPT, "no" },
   /*
    ** .pp
    ** Setting this variable will cause Mutt-ng to always attempt to PGP
@@ -1872,7 +1873,7 @@ struct option_t MuttVars[] = {
    ** settings can be overridden by use of the \fIsmime-menu\fP.
    ** (Crypto only)
    */
-  {"pgp_ignore_subkeys", DT_BOOL, R_NONE, OPTPGPIGNORESUB, 1},
+  {"pgp_ignore_subkeys", DT_BOOL, R_NONE, OPTPGPIGNORESUB, "yes" },
   /*
    ** .pp
    ** Setting this variable will cause Mutt-ng to ignore OpenPGP subkeys. Instead,
@@ -1880,14 +1881,14 @@ struct option_t MuttVars[] = {
    ** if you want to play interesting key selection games.
    ** (PGP only)
    */
-  {"crypt_replyencrypt", DT_BOOL, R_NONE, OPTCRYPTREPLYENCRYPT, 1},
+  {"crypt_replyencrypt", DT_BOOL, R_NONE, OPTCRYPTREPLYENCRYPT, "yes" },
   /*
    ** .pp
    ** If \fIset\fP, automatically PGP or OpenSSL encrypt replies to messages which are
    ** encrypted.
    ** (Crypto only)
    */
-  {"crypt_replysign", DT_BOOL, R_NONE, OPTCRYPTREPLYSIGN, 0},
+  {"crypt_replysign", DT_BOOL, R_NONE, OPTCRYPTREPLYSIGN, "no" },
   /*
    ** .pp
    ** If \fIset\fP, automatically PGP or OpenSSL sign replies to messages which are
@@ -1896,7 +1897,7 @@ struct option_t MuttVars[] = {
    ** \fBNote:\fP this does not work on messages that are encrypted \fBand\fP signed!
    ** (Crypto only)
    */
-  {"crypt_replysignencrypted", DT_BOOL, R_NONE, OPTCRYPTREPLYSIGNENCRYPTED, 0},
+  {"crypt_replysignencrypted", DT_BOOL, R_NONE, OPTCRYPTREPLYSIGNENCRYPTED, "no" },
   /*
    ** .pp
    ** If \fIset\fP, automatically PGP or OpenSSL sign replies to messages
@@ -1907,7 +1908,7 @@ struct option_t MuttVars[] = {
    ** to find out whether an encrypted message is also signed.
    ** (Crypto only)
    */
-  {"crypt_timestamp", DT_BOOL, R_NONE, OPTCRYPTTIMESTAMP, 1},
+  {"crypt_timestamp", DT_BOOL, R_NONE, OPTCRYPTTIMESTAMP, "yes" },
   /*
    ** .pp
    ** If \fIset\fP, Mutt-ng will include a time stamp in the lines surrounding
@@ -1916,13 +1917,13 @@ struct option_t MuttVars[] = {
    ** you may \fIunset\fP this setting.
    ** (Crypto only)
    */
-  {"pgp_use_gpg_agent", DT_BOOL, R_NONE, OPTUSEGPGAGENT, 0},
+  {"pgp_use_gpg_agent", DT_BOOL, R_NONE, OPTUSEGPGAGENT, "no" },
   /*
    ** .pp
    ** If \fIset\fP, Mutt-ng will use a possibly-running gpg-agent process.
    ** (PGP only)
    */
-  {"crypt_verify_sig", DT_QUAD, R_NONE, OPT_VERIFYSIG, M_YES},
+  {"crypt_verify_sig", DT_QUAD, R_NONE, OPT_VERIFYSIG, "yes" },
   /*
    ** .pp
    ** If ``\fIyes\fP'', always attempt to verify PGP or S/MIME signatures.
@@ -1930,7 +1931,7 @@ struct option_t MuttVars[] = {
    ** If ``\fIno\fP'', never attempt to verify cryptographic signatures.
    ** (Crypto only)
    */
-  {"smime_is_default", DT_BOOL, R_NONE, OPTSMIMEISDEFAULT, 0},
+  {"smime_is_default", DT_BOOL, R_NONE, OPTSMIMEISDEFAULT, "no" },
   /*
    ** .pp
    ** The default behaviour of Mutt-ng is to use PGP on all auto-sign/encryption
@@ -1943,7 +1944,7 @@ struct option_t MuttVars[] = {
    ** (Note that this variable can be overridden by unsetting $$crypt_autosmime.)
    ** (S/MIME only)
    */
-  {"smime_ask_cert_label", DT_BOOL, R_NONE, OPTASKCERTLABEL, 1},
+  {"smime_ask_cert_label", DT_BOOL, R_NONE, OPTASKCERTLABEL, "yes" },
   /*
    ** .pp
    ** This flag controls whether you want to be asked to enter a label
@@ -1951,7 +1952,7 @@ struct option_t MuttVars[] = {
    ** \fIset\fP by default.
    ** (S/MIME only)
    */
-  {"smime_decrypt_use_default_key", DT_BOOL, R_NONE, OPTSDEFAULTDECRYPTKEY, 1},
+  {"smime_decrypt_use_default_key", DT_BOOL, R_NONE, OPTSDEFAULTDECRYPTKEY, "yes" },
   /*
    ** .pp
    ** If \fIset\fP (default) this tells Mutt-ng to use the default key for decryption. Otherwise,
@@ -1959,7 +1960,7 @@ struct option_t MuttVars[] = {
    ** to determine the key to use. It will ask you to supply a key, if it can't find one.
    ** (S/MIME only)
    */
-  {"pgp_entry_format", DT_STR, R_NONE, UL &PgpEntryFormat, UL "%4n %t%f %4l/0x%k %-4a %2c %u"},
+  {"pgp_entry_format", DT_STR, R_NONE, UL &PgpEntryFormat, "%4n %t%f %4l/0x%k %-4a %2c %u"},
   /*
    ** .pp
    ** This variable allows you to customize the PGP key selection menu to
@@ -1980,7 +1981,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** (PGP only)
    */
-  {"pgp_good_sign", DT_RX, R_NONE, UL &PgpGoodSign, 0},
+  {"pgp_good_sign", DT_RX, R_NONE, UL &PgpGoodSign, "" },
   /*
    ** .pp
    ** If you assign a text to this variable, then a PGP signature is only
@@ -1989,7 +1990,7 @@ struct option_t MuttVars[] = {
    ** even for bad signatures.
    ** (PGP only)
    */
-  {"pgp_check_exit", DT_BOOL, R_NONE, OPTPGPCHECKEXIT, 1},
+  {"pgp_check_exit", DT_BOOL, R_NONE, OPTPGPCHECKEXIT, "yes" },
   /*
    ** .pp
    ** If \fIset\fP, Mutt-ng will check the exit code of the PGP subprocess when
@@ -1997,13 +1998,13 @@ struct option_t MuttVars[] = {
    ** subprocess failed.
    ** (PGP only)
    */
-  {"pgp_long_ids", DT_BOOL, R_NONE, OPTPGPLONGIDS, 0},
+  {"pgp_long_ids", DT_BOOL, R_NONE, OPTPGPLONGIDS, "no" },
   /*
    ** .pp
    ** If \fIset\fP, use 64 bit PGP key IDs. \fIUnset\fP uses the normal 32 bit Key IDs.
    ** (PGP only)
    */
-  {"pgp_retainable_sigs", DT_BOOL, R_NONE, OPTPGPRETAINABLESIG, 0},
+  {"pgp_retainable_sigs", DT_BOOL, R_NONE, OPTPGPRETAINABLESIG, "no" },
   /*
    ** .pp
    ** If \fIset\fP, signed and encrypted messages will consist of nested
@@ -2014,7 +2015,7 @@ struct option_t MuttVars[] = {
    ** removed, while the inner multipart/signed part is retained.
    ** (PGP only)
    */
-  {"pgp_autoinline", DT_BOOL, R_NONE, OPTPGPAUTOINLINE, 0},
+  {"pgp_autoinline", DT_BOOL, R_NONE, OPTPGPAUTOINLINE, "no" },
   /*
    ** .pp
    ** This option controls whether Mutt-ng generates old-style inline
@@ -2032,7 +2033,7 @@ struct option_t MuttVars[] = {
    ** \fBdeprecated\fP.
    ** (PGP only)
    */
-  {"pgp_replyinline", DT_BOOL, R_NONE, OPTPGPREPLYINLINE, 0},
+  {"pgp_replyinline", DT_BOOL, R_NONE, OPTPGPREPLYINLINE, "no" },
   /*
    ** .pp
    ** Setting this variable will cause Mutt-ng to always attempt to
@@ -2054,7 +2055,7 @@ struct option_t MuttVars[] = {
    ** (PGP only)
    ** 
    */
-  {"pgp_show_unusable", DT_BOOL, R_NONE, OPTPGPSHOWUNUSABLE, 1},
+  {"pgp_show_unusable", DT_BOOL, R_NONE, OPTPGPSHOWUNUSABLE, "yes" },
   /*
    ** .pp
    ** If \fIset\fP, Mutt-ng will display non-usable keys on the PGP key selection
@@ -2062,7 +2063,7 @@ struct option_t MuttVars[] = {
    ** have been marked as ``disabled'' by the user.
    ** (PGP only)
    */
-  {"pgp_sign_as", DT_STR, R_NONE, UL &PgpSignAs, 0},
+  {"pgp_sign_as", DT_STR, R_NONE, UL &PgpSignAs, "" },
   /*
    ** .pp
    ** If you have more than one key pair, this option allows you to specify
@@ -2070,7 +2071,7 @@ struct option_t MuttVars[] = {
    ** keyid form to specify your key (e.g., ``\fT0x00112233\fP'').
    ** (PGP only)
    */
-  {"pgp_strict_enc", DT_BOOL, R_NONE, OPTPGPSTRICTENC, 1},
+  {"pgp_strict_enc", DT_BOOL, R_NONE, OPTPGPSTRICTENC, "yes" },
   /*
    ** .pp
    ** If \fIset\fP, Mutt-ng will automatically encode PGP/MIME signed messages as
@@ -2079,14 +2080,14 @@ struct option_t MuttVars[] = {
    ** this if you know what you are doing.
    ** (PGP only)
    */
-  {"pgp_timeout", DT_NUM, R_NONE, UL &PgpTimeout, 300},
+  {"pgp_timeout", DT_NUM, R_NONE, UL &PgpTimeout, "300" },
   /*
    ** .pp
    ** The number of seconds after which a cached passphrase will expire if
    ** not used. Default: 300.
    ** (PGP only)
    */
-  {"pgp_sort_keys", DT_SORT|DT_SORT_KEYS, R_NONE, UL &PgpSortKeys, SORT_ADDRESS},
+  {"pgp_sort_keys", DT_SORT|DT_SORT_KEYS, R_NONE, UL &PgpSortKeys, "address" },
   /*
    ** .pp
    ** Specifies how the entries in the ``pgp keys'' menu are sorted. The
@@ -2103,7 +2104,7 @@ struct option_t MuttVars[] = {
    ** ``reverse-''.
    ** (PGP only)
    */
-  {"pgp_mime_auto", DT_QUAD, R_NONE, OPT_PGPMIMEAUTO, M_ASKYES},
+  {"pgp_mime_auto", DT_QUAD, R_NONE, OPT_PGPMIMEAUTO, "ask-yes" },
   /*
    ** .pp
    ** This option controls whether Mutt-ng will prompt you for
@@ -2114,7 +2115,7 @@ struct option_t MuttVars[] = {
    ** \fBdeprecated\fP.
    ** (PGP only)
    */
-  {"pgp_auto_decode", DT_BOOL, R_NONE, OPTPGPAUTODEC, 0},
+  {"pgp_auto_decode", DT_BOOL, R_NONE, OPTPGPAUTODEC, "no" },
   /*
    ** .pp
    ** If \fIset\fP, Mutt-ng will automatically attempt to decrypt traditional PGP
@@ -2127,7 +2128,7 @@ struct option_t MuttVars[] = {
 
   /* XXX Default values! */
 
-  {"pgp_decode_command", DT_STR, R_NONE, UL &PgpDecodeCommand, 0},
+  {"pgp_decode_command", DT_STR, R_NONE, UL &PgpDecodeCommand, "" },
   /*
    ** .pp
    ** This format strings specifies a command which is used to decode 
@@ -2151,26 +2152,26 @@ struct option_t MuttVars[] = {
    ** alongside the documentation.
    ** (PGP only)
    */
-  {"pgp_getkeys_command", DT_STR, R_NONE, UL &PgpGetkeysCommand, 0},
+  {"pgp_getkeys_command", DT_STR, R_NONE, UL &PgpGetkeysCommand, "" },
   /*
    ** .pp
    ** This command is invoked whenever Mutt-ng will need public key information.
    ** \fT%r\fP is the only \fTprintf(3)\fP-like sequence used with this format.
    ** (PGP only)
    */
-  {"pgp_verify_command", DT_STR, R_NONE, UL &PgpVerifyCommand, 0},
+  {"pgp_verify_command", DT_STR, R_NONE, UL &PgpVerifyCommand, "" },
   /*
    ** .pp
    ** This command is used to verify PGP signatures.
    ** (PGP only)
    */
-  {"pgp_decrypt_command", DT_STR, R_NONE, UL &PgpDecryptCommand, 0},
+  {"pgp_decrypt_command", DT_STR, R_NONE, UL &PgpDecryptCommand, "" },
   /*
    ** .pp
    ** This command is used to decrypt a PGP encrypted message.
    ** (PGP only)
    */
-  {"pgp_clearsign_command", DT_STR, R_NONE, UL &PgpClearSignCommand, 0},
+  {"pgp_clearsign_command", DT_STR, R_NONE, UL &PgpClearSignCommand, "" },
   /*
    ** .pp
    ** This format is used to create a old-style ``clearsigned'' PGP message.
@@ -2178,47 +2179,47 @@ struct option_t MuttVars[] = {
    ** Note that the use of this format is \fBstrongly\fP \fBdeprecated\fP.
    ** (PGP only)
    */
-  {"pgp_sign_command", DT_STR, R_NONE, UL &PgpSignCommand, 0},
+  {"pgp_sign_command", DT_STR, R_NONE, UL &PgpSignCommand, "" },
   /*
    ** .pp
    ** This command is used to create the detached PGP signature for a 
    ** multipart/signed PGP/MIME body part.
    ** (PGP only)
    */
-  {"pgp_encrypt_sign_command", DT_STR, R_NONE, UL &PgpEncryptSignCommand, 0},
+  {"pgp_encrypt_sign_command", DT_STR, R_NONE, UL &PgpEncryptSignCommand, "" },
   /*
    ** .pp
    ** This command is used to both sign and encrypt a body part.
    ** (PGP only)
    */
-  {"pgp_encrypt_only_command", DT_STR, R_NONE, UL &PgpEncryptOnlyCommand, 0},
+  {"pgp_encrypt_only_command", DT_STR, R_NONE, UL &PgpEncryptOnlyCommand, "" },
   /*
    ** .pp
    ** This command is used to encrypt a body part without signing it.
    ** (PGP only)
    */
-  {"pgp_import_command", DT_STR, R_NONE, UL &PgpImportCommand, 0},
+  {"pgp_import_command", DT_STR, R_NONE, UL &PgpImportCommand, "" },
   /*
    ** .pp
    ** This command is used to import a key from a message into 
    ** the user's public key ring.
    ** (PGP only)
    */
-  {"pgp_export_command", DT_STR, R_NONE, UL &PgpExportCommand, 0},
+  {"pgp_export_command", DT_STR, R_NONE, UL &PgpExportCommand, "" },
   /*
    ** .pp
    ** This command is used to export a public key from the user's
    ** key ring.
    ** (PGP only)
    */
-  {"pgp_verify_key_command", DT_STR, R_NONE, UL &PgpVerifyKeyCommand, 0},
+  {"pgp_verify_key_command", DT_STR, R_NONE, UL &PgpVerifyKeyCommand, "" },
   /*
    ** .pp
    ** This command is used to verify key information from the key selection
    ** menu.
    ** (PGP only)
    */
-  {"pgp_list_secring_command", DT_STR, R_NONE, UL &PgpListSecringCommand, 0},
+  {"pgp_list_secring_command", DT_STR, R_NONE, UL &PgpListSecringCommand, "" },
   /*
    ** .pp
    ** This command is used to list the secret key ring's contents.  The
@@ -2229,7 +2230,7 @@ struct option_t MuttVars[] = {
    ** with Mutt-ng.
    ** (PGP only)
    */
-  {"pgp_list_pubring_command", DT_STR, R_NONE, UL &PgpListPubringCommand, 0},
+  {"pgp_list_pubring_command", DT_STR, R_NONE, UL &PgpListPubringCommand, "" },
   /*
    ** .pp
    ** This command is used to list the public key ring's contents.  The
@@ -2240,7 +2241,7 @@ struct option_t MuttVars[] = {
    ** with Mutt-ng.
    ** (PGP only)
    */
-  {"forward_decrypt", DT_BOOL, R_NONE, OPTFORWDECRYPT, 1},
+  {"forward_decrypt", DT_BOOL, R_NONE, OPTFORWDECRYPT, "yes" },
   /*
    ** .pp
    ** Controls the handling of encrypted messages when forwarding a message.
@@ -2249,14 +2250,14 @@ struct option_t MuttVars[] = {
    ** ``$$mime_forward_decode'' is \fIunset\fP.
    ** (PGP only)
    */
-  {"smime_timeout", DT_NUM, R_NONE, UL &SmimeTimeout, 300},
+  {"smime_timeout", DT_NUM, R_NONE, UL &SmimeTimeout, "300" },
   /*
    ** .pp
    ** The number of seconds after which a cached passphrase will expire if
    ** not used.
    ** (S/MIME only)
    */
-  {"smime_encrypt_with", DT_STR, R_NONE, UL &SmimeCryptAlg, 0},
+  {"smime_encrypt_with", DT_STR, R_NONE, UL &SmimeCryptAlg, "" },
   /*
    ** .pp
    ** This sets the algorithm that should be used for encryption.
@@ -2266,7 +2267,7 @@ struct option_t MuttVars[] = {
    ** If \fIunset\fP ``\fI3des\fP'' (TripleDES) is used.
    ** (S/MIME only)
    */
-  {"smime_keys", DT_PATH, R_NONE, UL &SmimeKeys, 0},
+  {"smime_keys", DT_PATH, R_NONE, UL &SmimeKeys, "" },
   /*
    ** .pp
    ** Since there is no pubring/secring as with PGP, Mutt-ng has to handle
@@ -2277,14 +2278,14 @@ struct option_t MuttVars[] = {
    ** edited. This one points to the location of the private keys.
    ** (S/MIME only)
    */
-  {"smime_ca_location", DT_PATH, R_NONE, UL &SmimeCALocation, 0},
+  {"smime_ca_location", DT_PATH, R_NONE, UL &SmimeCALocation, "" },
   /*
    ** .pp
    ** This variable contains the name of either a directory, or a file which
    ** contains trusted certificates for use with OpenSSL.
    ** (S/MIME only)
    */
-  {"smime_certificates", DT_PATH, R_NONE, UL &SmimeCertificates, 0},
+  {"smime_certificates", DT_PATH, R_NONE, UL &SmimeCertificates, "" },
   /*
    ** .pp
    ** Since there is no pubring/secring as with PGP, Mutt-ng has to handle
@@ -2296,7 +2297,7 @@ struct option_t MuttVars[] = {
    ** the location of the certificates.
    ** (S/MIME only)
    */
-  {"smime_decrypt_command", DT_STR, R_NONE, UL &SmimeDecryptCommand, 0},
+  {"smime_decrypt_command", DT_STR, R_NONE, UL &SmimeDecryptCommand, "" },
   /*
    ** .pp
    ** This format string specifies a command which is used to decrypt
@@ -2322,27 +2323,27 @@ struct option_t MuttVars[] = {
    ** alongside the documentation.
    ** (S/MIME only)
    */
-  {"smime_verify_command", DT_STR, R_NONE, UL &SmimeVerifyCommand, 0},
+  {"smime_verify_command", DT_STR, R_NONE, UL &SmimeVerifyCommand, "" },
   /*
    ** .pp
    ** This command is used to verify S/MIME signatures of type \fTmultipart/signed\fP.
    ** (S/MIME only)
    */
-  {"smime_verify_opaque_command", DT_STR, R_NONE, UL &SmimeVerifyOpaqueCommand, 0},
+  {"smime_verify_opaque_command", DT_STR, R_NONE, UL &SmimeVerifyOpaqueCommand, "" },
   /*
    ** .pp
    ** This command is used to verify S/MIME signatures of type
    ** \fTapplication/x-pkcs7-mime\fP.
    ** (S/MIME only)
    */
-  {"smime_sign_command", DT_STR, R_NONE, UL &SmimeSignCommand, 0},
+  {"smime_sign_command", DT_STR, R_NONE, UL &SmimeSignCommand, "" },
   /*
    ** .pp
    ** This command is used to created S/MIME signatures of type
    ** \fTmultipart/signed\fP, which can be read by all mail clients.
    ** (S/MIME only)
    */
-  {"smime_sign_opaque_command", DT_STR, R_NONE, UL &SmimeSignOpaqueCommand, 0},
+  {"smime_sign_opaque_command", DT_STR, R_NONE, UL &SmimeSignOpaqueCommand, "" },
   /*
    ** .pp
    ** This command is used to created S/MIME signatures of type
@@ -2350,26 +2351,26 @@ struct option_t MuttVars[] = {
    ** clients supporting the S/MIME extension.
    ** (S/MIME only)
    */
-  {"smime_encrypt_command", DT_STR, R_NONE, UL &SmimeEncryptCommand, 0},
+  {"smime_encrypt_command", DT_STR, R_NONE, UL &SmimeEncryptCommand, "" },
   /*
    ** .pp
    ** This command is used to create encrypted S/MIME messages.
    ** (S/MIME only)
    */
-  {"smime_pk7out_command", DT_STR, R_NONE, UL &SmimePk7outCommand, 0},
+  {"smime_pk7out_command", DT_STR, R_NONE, UL &SmimePk7outCommand, "" },
   /*
    ** .pp
    ** This command is used to extract PKCS7 structures of S/MIME signatures,
    ** in order to extract the public X509 certificate(s).
    ** (S/MIME only)
    */
-  {"smime_get_cert_command", DT_STR, R_NONE, UL &SmimeGetCertCommand, 0},
+  {"smime_get_cert_command", DT_STR, R_NONE, UL &SmimeGetCertCommand, "" },
   /*
    ** .pp
    ** This command is used to extract X509 certificates from a PKCS7 structure.
    ** (S/MIME only)
    */
-  {"smime_get_signer_cert_command", DT_STR, R_NONE, UL &SmimeGetSignerCertCommand, 0},
+  {"smime_get_signer_cert_command", DT_STR, R_NONE, UL &SmimeGetSignerCertCommand, "" },
   /*
    ** .pp
    ** This command is used to extract only the signers X509 certificate from a S/MIME
@@ -2377,13 +2378,13 @@ struct option_t MuttVars[] = {
    ** email's ``\fTFrom:\fP'' header field.
    ** (S/MIME only)
    */
-  {"smime_import_cert_command", DT_STR, R_NONE, UL &SmimeImportCertCommand, 0},
+  {"smime_import_cert_command", DT_STR, R_NONE, UL &SmimeImportCertCommand, "" },
   /*
    ** .pp
    ** This command is used to import a certificate via \fTsmime_keysng\fP.
    ** (S/MIME only)
    */
-  {"smime_get_cert_email_command", DT_STR, R_NONE, UL &SmimeGetCertEmailCommand, 0},
+  {"smime_get_cert_email_command", DT_STR, R_NONE, UL &SmimeGetCertEmailCommand, "" },
   /*
    ** .pp
    ** This command is used to extract the mail address(es) used for storing
@@ -2391,7 +2392,7 @@ struct option_t MuttVars[] = {
    ** certificate was issued for the sender's mailbox).
    ** (S/MIME only)
    */
-  {"smime_default_key", DT_STR, R_NONE, UL &SmimeDefaultKey, 0},
+  {"smime_default_key", DT_STR, R_NONE, UL &SmimeDefaultKey, "" },
   /*
    ** .pp
    ** This is the default key-pair to use for signing. This must be set to the
@@ -2400,7 +2401,7 @@ struct option_t MuttVars[] = {
    */
 #if defined(USE_LIBESMTP)
   {"smtp_auth_username", DT_SYN, R_NONE, UL "smtp_user", 0},
-  {"smtp_user", DT_STR, R_NONE, UL &SmtpAuthUser, 0},
+  {"smtp_user", DT_STR, R_NONE, UL &SmtpAuthUser, "" },
   /*
    ** .pp
    ** Availability: SMTP
@@ -2410,7 +2411,7 @@ struct option_t MuttVars[] = {
    ** cause Mutt-ng to attempt to use SMTP AUTH when sending.
    */
   {"smtp_auth_password", DT_SYN, R_NONE, UL "smtp_pass", 0},
-  {"smtp_pass", DT_STR, R_NONE, UL &SmtpAuthPass, 0},
+  {"smtp_pass", DT_STR, R_NONE, UL &SmtpAuthPass, "" },
   /*
    ** .pp
    ** Availability: SMTP
@@ -2424,7 +2425,7 @@ struct option_t MuttVars[] = {
    ** presents a security risk since the superuser of your machine may read it
    ** regardless of the file's permissions.  
    */
-  {"smtp_envelope", DT_STR, R_NONE, UL &SmtpEnvFrom, 0},
+  {"smtp_envelope", DT_STR, R_NONE, UL &SmtpEnvFrom, "" },
   /*
    ** .pp
    ** Availability: SMTP
@@ -2438,7 +2439,7 @@ struct option_t MuttVars[] = {
    ** as the envelope sender but only a particular one which may not be the same as the
    ** user's desired \fTFrom:\fP header.
    */
-  {"smtp_host", DT_STR, R_NONE, UL &SmtpHost, 0},
+  {"smtp_host", DT_STR, R_NONE, UL &SmtpHost, "" },
   /*
    ** .pp
    ** Availability: SMTP
@@ -2448,7 +2449,7 @@ struct option_t MuttVars[] = {
    ** to invoking the sendmail binary.  Setting this variable overrides the
    ** value of ``$$sendmail'', and any associated variables.
    */
-  {"smtp_port", DT_NUM, R_NONE, UL &SmtpPort, 25},
+  {"smtp_port", DT_NUM, R_NONE, UL &SmtpPort, "25" },
   /*
    ** .pp
    ** Availability: SMTP
@@ -2460,7 +2461,7 @@ struct option_t MuttVars[] = {
    ** Defaults to 25, the standard SMTP port, but RFC 2476-compliant SMTP
    ** servers will probably desire 587, the mail submission port.
    */
-  {"smtp_use_tls", DT_STR, R_NONE, UL &SmtpUseTLS, 0},
+  {"smtp_use_tls", DT_STR, R_NONE, UL &SmtpUseTLS, "" },
   /*
    ** .pp
    ** Availability: SMTP (and SSL)
@@ -2477,7 +2478,7 @@ struct option_t MuttVars[] = {
 #endif
 #if defined(USE_SSL) || defined(USE_GNUTLS)
 #ifdef USE_SSL
-  {"ssl_client_cert", DT_PATH, R_NONE, UL &SslClientCert, 0},
+  {"ssl_client_cert", DT_PATH, R_NONE, UL &SslClientCert, "" },
   /*
    ** .pp
    ** Availability: SSL
@@ -2487,7 +2488,7 @@ struct option_t MuttVars[] = {
    ** key.
    */
 #endif /* USE_SSL */
-  {"ssl_force_tls", DT_BOOL, R_NONE, OPTSSLFORCETLS, 0 },
+  {"ssl_force_tls", DT_BOOL, R_NONE, OPTSSLFORCETLS, "no" },
   /*
    ** .pp
    ** If this variable is \fIset\fP, mutt-ng will require that all connections
@@ -2496,7 +2497,7 @@ struct option_t MuttVars[] = {
    ** since it would otherwise have to abort the connection anyway. This
    ** option supersedes ``$$ssl_starttls''.
    */
-  {"ssl_starttls", DT_QUAD, R_NONE, OPT_SSLSTARTTLS, M_YES},
+  {"ssl_starttls", DT_QUAD, R_NONE, OPT_SSLSTARTTLS, "yes" },
   /*
    ** .pp
    ** Availability: SSL or GNUTLS
@@ -2506,7 +2507,7 @@ struct option_t MuttVars[] = {
    ** advertising the capability. When \fIunset\fP, Mutt-ng will not attempt to
    ** use STARTTLS regardless of the server's capabilities.
    */
-  {"certificate_file", DT_PATH, R_NONE, UL &SslCertFile, UL "~/.mutt_certificates"},
+  {"certificate_file", DT_PATH, R_NONE, UL &SslCertFile, "~/.mutt_certificates"},
   /*
    ** .pp
    ** Availability: SSL or GNUTLS
@@ -2525,7 +2526,7 @@ struct option_t MuttVars[] = {
    ** Example: \fTset certificate_file=~/.muttng/certificates\fP
    */
 # if defined(_MAKEDOC) || !defined (USE_GNUTLS)
-  {"ssl_usesystemcerts", DT_BOOL, R_NONE, OPTSSLSYSTEMCERTS, 1},
+  {"ssl_usesystemcerts", DT_BOOL, R_NONE, OPTSSLSYSTEMCERTS, "yes" },
   /*
    ** .pp
    ** Availability: SSL
@@ -2535,7 +2536,7 @@ struct option_t MuttVars[] = {
    ** system-wide certificate store when checking if server certificate 
    ** is signed by a trusted CA.
    */
-  {"entropy_file", DT_PATH, R_NONE, UL &SslEntropyFile, 0},
+  {"entropy_file", DT_PATH, R_NONE, UL &SslEntropyFile, "" },
   /*
    ** .pp
    ** Availability: SSL
@@ -2544,7 +2545,7 @@ struct option_t MuttVars[] = {
    ** The file which includes random data that is used to initialize SSL
    ** library functions.
    */
-  {"ssl_use_sslv2", DT_BOOL, R_NONE, OPTSSLV2, 1},
+  {"ssl_use_sslv2", DT_BOOL, R_NONE, OPTSSLV2, "yes" },
   /*
    ** .pp
    ** Availability: SSL
@@ -2554,7 +2555,7 @@ struct option_t MuttVars[] = {
    ** SSL authentication process.
    */
 # endif /* _MAKEDOC || !USE_GNUTLS */
-  {"ssl_use_sslv3", DT_BOOL, R_NONE, OPTSSLV3, 1},
+  {"ssl_use_sslv3", DT_BOOL, R_NONE, OPTSSLV3, "yes" },
   /*
    ** .pp
    ** Availability: SSL or GNUTLS
@@ -2563,7 +2564,7 @@ struct option_t MuttVars[] = {
    ** This variables specifies whether to attempt to use SSLv3 in the
    ** SSL authentication process.
    */
-  {"ssl_use_tlsv1", DT_BOOL, R_NONE, OPTTLSV1, 1},
+  {"ssl_use_tlsv1", DT_BOOL, R_NONE, OPTTLSV1, "yes" },
   /*
    ** .pp
    ** Availability: SSL or GNUTLS
@@ -2573,7 +2574,7 @@ struct option_t MuttVars[] = {
    ** SSL authentication process.
    */
 # ifdef USE_GNUTLS
-  {"ssl_min_dh_prime_bits", DT_NUM, R_NONE, UL &SslDHPrimeBits, 0},
+  {"ssl_min_dh_prime_bits", DT_NUM, R_NONE, UL &SslDHPrimeBits, "0" },
   /*
    ** .pp
    ** Availability: GNUTLS
@@ -2583,7 +2584,7 @@ struct option_t MuttVars[] = {
    ** for use in any Diffie-Hellman key exchange. A value of 0 will use
    ** the default from the GNUTLS library.
    */
-  {"ssl_ca_certificates_file", DT_PATH, R_NONE, UL &SslCACertFile, 0},
+  {"ssl_ca_certificates_file", DT_PATH, R_NONE, UL &SslCACertFile, "" },
   /*
    ** .pp
    ** This variable specifies a file containing trusted CA certificates.
@@ -2594,7 +2595,7 @@ struct option_t MuttVars[] = {
    */
 # endif /* USE_GNUTLS */
 # endif /* USE_SSL || USE_GNUTLS */
-  {"pipe_split", DT_BOOL, R_NONE, OPTPIPESPLIT, 0},
+  {"pipe_split", DT_BOOL, R_NONE, OPTPIPESPLIT, "no" },
   /*
    ** .pp
    ** Used in connection with the \fIpipe-message\fP command and the ``tag-
@@ -2605,7 +2606,7 @@ struct option_t MuttVars[] = {
    ** In both cases the messages are piped in the current sorted order,
    ** and the ``$$pipe_sep'' separator is added after each message.
    */
-  {"pipe_decode", DT_BOOL, R_NONE, OPTPIPEDECODE, 0},
+  {"pipe_decode", DT_BOOL, R_NONE, OPTPIPEDECODE, "no" },
   /*
    ** .pp
    ** Used in connection with the \fIpipe-message\fP command.  When \fIunset\fP,
@@ -2613,14 +2614,14 @@ struct option_t MuttVars[] = {
    ** will weed headers and will attempt to PGP/MIME decode the messages
    ** first.
    */
-  {"pipe_sep", DT_STR, R_NONE, UL &PipeSep, UL "\n"},
+  {"pipe_sep", DT_STR, R_NONE, UL &PipeSep, "\n"},
   /*
    ** .pp
    ** The separator to add between messages when piping a list of tagged
    ** messages to an external Unix command.
    */
 #ifdef USE_POP
-  {"pop_authenticators", DT_STR, R_NONE, UL &PopAuthenticators, UL 0},
+  {"pop_authenticators", DT_STR, R_NONE, UL &PopAuthenticators, "" },
   /*
    ** .pp
    ** Availability: POP
@@ -2637,7 +2638,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** Example: \fTset pop_authenticators="digest-md5:apop:user"\fP
    */
-  {"pop_auth_try_all", DT_BOOL, R_NONE, OPTPOPAUTHTRYALL, 1},
+  {"pop_auth_try_all", DT_BOOL, R_NONE, OPTPOPAUTHTRYALL, "yes" },
   /*
    ** .pp
    ** Availability: POP
@@ -2649,7 +2650,7 @@ struct option_t MuttVars[] = {
    ** fails, Mutt-ng will not connect to the POP server.
    */
   {"pop_checkinterval", DT_SYN, R_NONE, UL "pop_mail_check", 0},
-  {"pop_mail_check", DT_NUM, R_NONE, UL &PopCheckTimeout, 60},
+  {"pop_mail_check", DT_NUM, R_NONE, UL &PopCheckTimeout, "60" },
   /*
    ** .pp
    ** Availability: POP
@@ -2658,7 +2659,7 @@ struct option_t MuttVars[] = {
    ** This variable configures how often (in seconds) POP should look for
    ** new mail.
    */
-  {"pop_delete", DT_QUAD, R_NONE, OPT_POPDELETE, M_ASKNO},
+  {"pop_delete", DT_QUAD, R_NONE, OPT_POPDELETE, "ask-no" },
   /*
    ** .pp
    ** Availability: POP
@@ -2668,7 +2669,7 @@ struct option_t MuttVars[] = {
    ** server when using the ``fetch-mail'' function.  When \fIunset\fP, Mutt-ng will
    ** download messages but also leave them on the POP server.
    */
-  {"pop_host", DT_STR, R_NONE, UL &PopHost, UL ""},
+  {"pop_host", DT_STR, R_NONE, UL &PopHost, ""},
   /*
    ** .pp
    ** Availability: POP
@@ -2683,7 +2684,7 @@ struct option_t MuttVars[] = {
    ** presents a security risk since the superuser of your machine may read it
    ** regardless of the file's permissions.
    */
-  {"pop_last", DT_BOOL, R_NONE, OPTPOPLAST, 0},
+  {"pop_last", DT_BOOL, R_NONE, OPTPOPLAST, "no" },
   /*
    ** .pp
    ** Availability: POP
@@ -2693,7 +2694,7 @@ struct option_t MuttVars[] = {
    ** for retrieving only unread messages from the POP server when using
    ** the ``fetch-mail'' function.
    */
-  {"pop_reconnect", DT_QUAD, R_NONE, OPT_POPRECONNECT, M_ASKYES},
+  {"pop_reconnect", DT_QUAD, R_NONE, OPT_POPRECONNECT, "ask-yes" },
   /*
    ** .pp
    ** Availability: POP
@@ -2702,7 +2703,7 @@ struct option_t MuttVars[] = {
    ** Controls whether or not Mutt-ng will try to reconnect to a POP server when the
    ** connection is lost.
    */
-  {"pop_user", DT_STR, R_NONE, UL &PopUser, 0},
+  {"pop_user", DT_STR, R_NONE, UL &PopUser, "" },
   /*
    ** .pp
    ** Availability: POP
@@ -2712,7 +2713,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** This variable defaults to your user name on the local machine.
    */
-  {"pop_pass", DT_STR, R_NONE, UL &PopPass, UL ""},
+  {"pop_pass", DT_STR, R_NONE, UL &PopPass, ""},
   /*
    ** .pp
    ** Availability: POP
@@ -2726,7 +2727,7 @@ struct option_t MuttVars[] = {
    ** regardless of the file's permissions.
    */
 #endif /* USE_POP */
-  {"post_indent_string", DT_STR, R_NONE, UL &PostIndentString, UL ""},
+  {"post_indent_string", DT_STR, R_NONE, UL &PostIndentString, ""},
   /*
    ** .pp
    ** Similar to the ``$$attribution'' variable, Mutt-ng will append this
@@ -2734,7 +2735,7 @@ struct option_t MuttVars[] = {
    */
 #ifdef USE_NNTP
   {"post_moderated", DT_SYN, R_NONE, UL "nntp_post_moderated", 0 },
-  {"nntp_post_moderated", DT_QUAD, R_NONE, OPT_TOMODERATED, M_ASKYES},
+  {"nntp_post_moderated", DT_QUAD, R_NONE, OPT_TOMODERATED, "ask-yes" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -2748,13 +2749,13 @@ struct option_t MuttVars[] = {
    ** posting will not have any effect.
    */
 #endif
-  {"postpone", DT_QUAD, R_NONE, OPT_POSTPONE, M_ASKYES},
+  {"postpone", DT_QUAD, R_NONE, OPT_POSTPONE, "ask-yes" },
   /*
    ** .pp
    ** Controls whether or not messages are saved in the ``$$postponed''
    ** mailbox when you elect not to send immediately.
    */
-  {"postponed", DT_PATH, R_NONE, UL &Postponed, UL "~/postponed"},
+  {"postponed", DT_PATH, R_NONE, UL &Postponed, "~/postponed"},
   /*
    ** .pp
    ** Mutt-ng allows you to indefinitely ``$postpone sending a message'' which
@@ -2763,7 +2764,7 @@ struct option_t MuttVars[] = {
    ** variable.
    */
 #ifdef USE_SOCKET
-  {"preconnect", DT_STR, R_NONE, UL &Preconnect, UL 0},
+  {"preconnect", DT_STR, R_NONE, UL &Preconnect, "" },
   /*
    ** .pp
    ** If \fIset\fP, a shell command to be executed if Mutt-ng fails to establish
@@ -2781,19 +2782,19 @@ struct option_t MuttVars[] = {
    ** remote machine without having to enter a password.
    */
 #endif /* USE_SOCKET */
-  {"print", DT_QUAD, R_NONE, OPT_PRINT, M_ASKNO},
+  {"print", DT_QUAD, R_NONE, OPT_PRINT, "ask-no" },
   /*
    ** .pp
    ** Controls whether or not Mutt-ng really prints messages.
    ** This is set to \fIask-no\fP by default, because some people
    ** accidentally hit ``p'' often.
    */
-  {"print_command", DT_PATH, R_NONE, UL &PrintCmd, UL "lpr"},
+  {"print_command", DT_PATH, R_NONE, UL &PrintCmd, "lpr"},
   /*
    ** .pp
    ** This specifies the command pipe that should be used to print messages.
    */
-  {"print_decode", DT_BOOL, R_NONE, OPTPRINTDECODE, 1},
+  {"print_decode", DT_BOOL, R_NONE, OPTPRINTDECODE, "yes" },
   /*
    ** .pp
    ** Used in connection with the print-message command.  If this
@@ -2804,7 +2805,7 @@ struct option_t MuttVars[] = {
    ** some advanced printer filter which is able to properly format
    ** e-mail messages for printing.
    */
-  {"print_split", DT_BOOL, R_NONE, OPTPRINTSPLIT, 0},
+  {"print_split", DT_BOOL, R_NONE, OPTPRINTSPLIT, "no" },
   /*
    ** .pp
    ** Used in connection with the print-message command.  If this option
@@ -2817,7 +2818,7 @@ struct option_t MuttVars[] = {
    ** Those who use the \fTenscript(1)\fP program's mail-printing mode will
    ** most likely want to set this option.
    */
-  {"prompt_after", DT_BOOL, R_NONE, OPTPROMPTAFTER, 1},
+  {"prompt_after", DT_BOOL, R_NONE, OPTPROMPTAFTER, "yes" },
   /*
    ** .pp
    ** If you use an \fIexternal\fP ``$$pager'', setting this variable will
@@ -2825,7 +2826,7 @@ struct option_t MuttVars[] = {
    ** than returning to the index menu.  If \fIunset\fP, Mutt-ng will return to the
    ** index menu when the external pager exits.
    */
-  {"query_command", DT_PATH, R_NONE, UL &QueryCmd, UL ""},
+  {"query_command", DT_PATH, R_NONE, UL &QueryCmd, ""},
   /*
    ** .pp
    ** This specifies the command that Mutt-ng will use to make external address
@@ -2833,7 +2834,7 @@ struct option_t MuttVars[] = {
    ** with the query string the user types.  See ``$query'' for more
    ** information.
    */
-  {"quit", DT_QUAD, R_NONE, OPT_QUIT, M_YES},
+  {"quit", DT_QUAD, R_NONE, OPT_QUIT, "yes" },
   /*
    ** .pp
    ** This variable controls whether ``quit'' and ``exit'' actually quit
@@ -2841,20 +2842,20 @@ struct option_t MuttVars[] = {
    ** have no effect, and if it is set to \fIask-yes\fP or \fIask-no\fP, you are
    ** prompted for confirmation when you try to quit.
    */
-  {"quote_empty", DT_BOOL, R_NONE, OPTQUOTEEMPTY, 1},
+  {"quote_empty", DT_BOOL, R_NONE, OPTQUOTEEMPTY, "yes" },
   /*
    ** .pp
    ** Controls whether or not empty lines will be quoted using
    ** ``$indent_string''.
    */
-  {"quote_quoted", DT_BOOL, R_NONE, OPTQUOTEQUOTED, 0},
+  {"quote_quoted", DT_BOOL, R_NONE, OPTQUOTEQUOTED, "no" },
   /*
    ** .pp
    ** Controls how quoted lines will be quoted. If \fIset\fP, one quote
    ** character will be added to the end of existing prefix.  Otherwise,
    ** quoted lines will be prepended by ``$indent_string''.
    */
-  {"quote_regexp", DT_RX, R_PAGER, UL &QuoteRegexp, UL "^([ \t]*[|>:}#])+"},
+  {"quote_regexp", DT_RX, R_PAGER, UL &QuoteRegexp, "^([ \t]*[|>:}#])+"},
   /*
    ** .pp
    ** A regular expression used in the internal-pager to determine quoted
@@ -2865,7 +2866,7 @@ struct option_t MuttVars[] = {
    ** matches \fIexactly\fP the quote characters at the beginning of quoted
    ** lines.
    */
-  {"read_inc", DT_NUM, R_NONE, UL &ReadInc, 10},
+  {"read_inc", DT_NUM, R_NONE, UL &ReadInc, "10" },
   /*
    ** .pp
    ** If set to a value greater than 0, Mutt-ng will display which message it
@@ -2879,12 +2880,12 @@ struct option_t MuttVars[] = {
    ** .pp
    ** Also see the ``$$write_inc'' variable.
    */
-  {"read_only", DT_BOOL, R_NONE, OPTREADONLY, 0},
+  {"read_only", DT_BOOL, R_NONE, OPTREADONLY, "no" },
   /*
    ** .pp
    ** If set, all folders are opened in read-only mode.
    */
-  {"realname", DT_STR, R_BOTH, UL &Realname, 0},
+  {"realname", DT_STR, R_BOTH, UL &Realname, "" },
   /*
    ** .pp
    ** This variable specifies what ``real'' or ``personal'' name should be used
@@ -2896,7 +2897,7 @@ struct option_t MuttVars[] = {
    ** variable will \fInot\fP be used when the user has set a real name
    ** in the $$from variable.
    */
-  {"recall", DT_QUAD, R_NONE, OPT_RECALL, M_ASKYES},
+  {"recall", DT_QUAD, R_NONE, OPT_RECALL, "ask-yes" },
   /*
    ** .pp
    ** Controls whether or not Mutt-ng recalls postponed messages
@@ -2905,7 +2906,7 @@ struct option_t MuttVars[] = {
    ** Setting this variable to \fIyes\fP is not generally useful, and thus not
    ** recommended.
    */
-  {"record", DT_PATH, R_NONE, UL &Outbox, UL ""},
+  {"record", DT_PATH, R_NONE, UL &Outbox, ""},
   /*
    ** .pp
    ** This specifies the file into which your outgoing messages should be
@@ -2916,21 +2917,21 @@ struct option_t MuttVars[] = {
    ** The value of \fI$$record\fP is overridden by the ``$$force_name'' and
    ** ``$$save_name'' variables, and the ``$fcc-hook'' command.
    */
-  {"reply_regexp", DT_RX, R_INDEX|R_RESORT, UL &ReplyRegexp, UL "^(re([\\[0-9\\]+])*|aw):[ \t]*"},
+  {"reply_regexp", DT_RX, R_INDEX|R_RESORT, UL &ReplyRegexp, "^(re([\\[0-9\\]+])*|aw):[ \t]*"},
   /*
    ** .pp
    ** A regular expression used to recognize reply messages when threading
    ** and replying. The default value corresponds to the English ``Re:'' and
    ** the German ``Aw:''.
    */
-  {"reply_self", DT_BOOL, R_NONE, OPTREPLYSELF, 0},
+  {"reply_self", DT_BOOL, R_NONE, OPTREPLYSELF, "no" },
   /*
    ** .pp
    ** If \fIunset\fP and you are replying to a message sent by you, Mutt-ng will
    ** assume that you want to reply to the recipients of that message rather
    ** than to yourself.
    */
-  {"reply_to", DT_QUAD, R_NONE, OPT_REPLYTO, M_ASKYES},
+  {"reply_to", DT_QUAD, R_NONE, OPT_REPLYTO, "ask-yes" },
   /*
    ** .pp
    ** If \fIset\fP, when replying to a message, Mutt-ng will use the address listed
@@ -2942,14 +2943,14 @@ struct option_t MuttVars[] = {
    ** header field to the list address and you want to send a private
    ** message to the author of a message.
    */
-  {"resolve", DT_BOOL, R_NONE, OPTRESOLVE, 1},
+  {"resolve", DT_BOOL, R_NONE, OPTRESOLVE, "yes" },
   /*
    ** .pp
    ** When set, the cursor will be automatically advanced to the next
    ** (possibly undeleted) message whenever a command that modifies the
    ** current message is executed.
    */
-  {"reverse_alias", DT_BOOL, R_BOTH, OPTREVALIAS, 0},
+  {"reverse_alias", DT_BOOL, R_BOTH, OPTREVALIAS, "no" },
   /*
    ** .pp
    ** This variable controls whether or not Mutt-ng will display the ``personal''
@@ -2967,7 +2968,7 @@ struct option_t MuttVars[] = {
    ** ``abd30425@somewhere.net.''  This is useful when the person's e-mail
    ** address is not human friendly (like CompuServe addresses).
    */
-  {"reverse_name", DT_BOOL, R_BOTH, OPTREVNAME, 0},
+  {"reverse_name", DT_BOOL, R_BOTH, OPTREVNAME, "no" },
   /*
    ** .pp
    ** It may sometimes arrive that you receive mail to a certain machine,
@@ -2979,7 +2980,7 @@ struct option_t MuttVars[] = {
    ** used doesn't match your alternates, the \fTFrom:\fP line will use
    ** your address on the current machine.
    */
-  {"reverse_realname", DT_BOOL, R_BOTH, OPTREVREAL, 1},
+  {"reverse_realname", DT_BOOL, R_BOTH, OPTREVREAL, "yes" },
   /*
    ** .pp
    ** This variable fine-tunes the behaviour of the $reverse_name feature.
@@ -2987,7 +2988,7 @@ struct option_t MuttVars[] = {
    ** possibly including eventual real names.  When it is \fIunset\fP, Mutt-ng will
    ** override any such real names with the setting of the $realname variable.
    */
-  {"rfc2047_parameters", DT_BOOL, R_NONE, OPTRFC2047PARAMS, 0},
+  {"rfc2047_parameters", DT_BOOL, R_NONE, OPTRFC2047PARAMS, "no" },
   /*
    ** .pp
    ** When this variable is \fIset\fP, Mutt-ng will decode RFC-2047-encoded MIME 
@@ -3007,14 +3008,14 @@ struct option_t MuttVars[] = {
    ** that Mutt-ng \fIgenerates\fP this kind of encoding.  Instead, Mutt-ng will
    ** unconditionally use the encoding specified in RFC 2231.
    */
-  {"save_address", DT_BOOL, R_NONE, OPTSAVEADDRESS, 0},
+  {"save_address", DT_BOOL, R_NONE, OPTSAVEADDRESS, "no" },
   /*
    ** .pp
    ** If \fIset\fP, Mutt-ng will take the sender's full address when choosing a
    ** default folder for saving a mail. If ``$$save_name'' or ``$$force_name''
    ** is \fIset\fP too, the selection of the fcc folder will be changed as well.
    */
-  {"save_empty", DT_BOOL, R_NONE, OPTSAVEEMPTY, 1},
+  {"save_empty", DT_BOOL, R_NONE, OPTSAVEEMPTY, "yes" },
   /*
    ** .pp
    ** When \fIunset\fP, mailboxes which contain no saved messages will be removed
@@ -3024,7 +3025,7 @@ struct option_t MuttVars[] = {
    ** \fBNote:\fP This only applies to mbox and MMDF folders, Mutt-ng does not
    ** delete MH and Maildir directories.
    */
-  {"save_name", DT_BOOL, R_NONE, OPTSAVENAME, 0},
+  {"save_name", DT_BOOL, R_NONE, OPTSAVENAME, "no" },
   /*
    ** .pp
    ** This variable controls how copies of outgoing messages are saved.
@@ -3037,7 +3038,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** Also see the ``$$force_name'' variable.
    */
-  {"score", DT_BOOL, R_NONE, OPTSCORE, 1},
+  {"score", DT_BOOL, R_NONE, OPTSCORE, "yes" },
   /*
    ** .pp
    ** When this variable is \fIunset\fP, scoring is turned off.  This can
@@ -3045,7 +3046,7 @@ struct option_t MuttVars[] = {
    ** ``$$score_threshold_delete'' variable and friends are used.
    **
    */
-  {"score_threshold_delete", DT_NUM, R_NONE, UL &ScoreThresholdDelete, UL -1},
+  {"score_threshold_delete", DT_NUM, R_NONE, UL &ScoreThresholdDelete, "-1" },
   /*
    ** .pp
    ** Messages which have been assigned a score equal to or lower than the value
@@ -3053,13 +3054,13 @@ struct option_t MuttVars[] = {
    ** Mutt-ng scores are always greater than or equal to zero, the default setting
    ** of this variable will never mark a message for deletion.
    */
-  {"score_threshold_flag", DT_NUM, R_NONE, UL &ScoreThresholdFlag, 9999},
+  {"score_threshold_flag", DT_NUM, R_NONE, UL &ScoreThresholdFlag, "9999" },
   /* 
    ** .pp
    ** Messages which have been assigned a score greater than or equal to this 
    ** variable's value are automatically marked ``flagged''.
    */
-  {"score_threshold_read", DT_NUM, R_NONE, UL &ScoreThresholdRead, UL -1},
+  {"score_threshold_read", DT_NUM, R_NONE, UL &ScoreThresholdRead, "-1" },
   /*
    ** .pp
    ** Messages which have been assigned a score equal to or lower than the value
@@ -3067,7 +3068,7 @@ struct option_t MuttVars[] = {
    ** Mutt-ng scores are always greater than or equal to zero, the default setting
    ** of this variable will never mark a message read.
    */
-  {"send_charset", DT_STR, R_NONE, UL &SendCharset, UL "us-ascii:iso-8859-1:utf-8"},
+  {"send_charset", DT_STR, R_NONE, UL &SendCharset, "us-ascii:iso-8859-1:utf-8"},
   /*
    ** .pp
    ** A list of character sets for outgoing messages. Mutt-ng will use the
@@ -3078,14 +3079,14 @@ struct option_t MuttVars[] = {
    ** \fTiso-8859-2\fP, \fTkoi8-r\fP or \fTiso-2022-jp\fP) either
    ** instead of or after \fTiso-8859-1\fP.
    */
-  {"sendmail", DT_PATH, R_NONE, UL &Sendmail, UL SENDMAIL " -oem -oi"},
+  {"sendmail", DT_PATH, R_NONE, UL &Sendmail, SENDMAIL " -oem -oi"},
   /*
    ** .pp
    ** Specifies the program and arguments used to deliver mail sent by Mutt-ng.
    ** Mutt-ng expects that the specified program interprets additional
    ** arguments as recipient addresses.
    */
-  {"sendmail_wait", DT_NUM, R_NONE, UL &SendmailWait, 0},
+  {"sendmail_wait", DT_NUM, R_NONE, UL &SendmailWait, "0" },
   /*
    ** .pp
    ** Specifies the number of seconds to wait for the ``$$sendmail'' process
@@ -3102,7 +3103,7 @@ struct option_t MuttVars[] = {
    ** process will be put in a temporary file.  If there is some error, you
    ** will be informed as to where to find the output.
    */
-  {"shell", DT_PATH, R_NONE, UL &Shell, 0},
+  {"shell", DT_PATH, R_NONE, UL &Shell, "" },
   /*
    ** .pp
    ** Command to use when spawning a subshell.  By default, the user's login
@@ -3110,7 +3111,7 @@ struct option_t MuttVars[] = {
    */
 #ifdef USE_NNTP
   {"save_unsubscribed", DT_SYN, R_NONE, UL "nntp_save_unsubscribed", 0 },
-  {"nntp_save_unsubscribed", DT_BOOL, R_NONE, OPTSAVEUNSUB, 0},
+  {"nntp_save_unsubscribed", DT_BOOL, R_NONE, OPTSAVEUNSUB, "no" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -3122,7 +3123,7 @@ struct option_t MuttVars[] = {
 #endif
 #ifdef USE_NNTP
   {"show_new_news", DT_SYN, R_NONE, UL "nntp_show_new_news", 0 },
-  {"nntp_show_new_news", DT_BOOL, R_NONE, OPTSHOWNEWNEWS, 1},
+  {"nntp_show_new_news", DT_BOOL, R_NONE, OPTSHOWNEWNEWS, "yes" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -3134,7 +3135,7 @@ struct option_t MuttVars[] = {
    ** newsgroups will be checked.
    */
   {"show_only_unread", DT_SYN, R_NONE, UL "nntp_show_only_unread", 0 },
-  {"nntp_show_only_unread", DT_BOOL, R_NONE, OPTSHOWONLYUNREAD, 0},
+  {"nntp_show_only_unread", DT_BOOL, R_NONE, OPTSHOWONLYUNREAD, "no" },
   /*
    ** .pp
    ** Availability: NNTP
@@ -3144,7 +3145,7 @@ struct option_t MuttVars[] = {
    ** will be displayed in the newsgroup browser.
    */
 #endif
-  {"sig_dashes", DT_BOOL, R_NONE, OPTSIGDASHES, 1},
+  {"sig_dashes", DT_BOOL, R_NONE, OPTSIGDASHES, "yes" },
   /*
    ** .pp
    ** If set, a line containing ``\fT-- \fP'' (dash, dash, space)
@@ -3156,7 +3157,7 @@ struct option_t MuttVars[] = {
    ** For example, Mutt-ng has the ability to highlight
    ** the signature in a different color in the builtin pager.
    */
-  {"sig_on_top", DT_BOOL, R_NONE, OPTSIGONTOP, 0},
+  {"sig_on_top", DT_BOOL, R_NONE, OPTSIGONTOP, "no" },
   /*
    ** .pp
    ** If \fIset\fP, the signature will be included before any quoted or forwarded
@@ -3164,7 +3165,7 @@ struct option_t MuttVars[] = {
    ** unless you really know what you are doing, and are prepared to take
    ** some heat from netiquette guardians.
    */
-  {"signature", DT_PATH, R_NONE, UL &Signature, UL "~/.signature"},
+  {"signature", DT_PATH, R_NONE, UL &Signature, "~/.signature"},
   /*
    ** .pp
    ** Specifies the filename of your signature, which is appended to all
@@ -3172,7 +3173,7 @@ struct option_t MuttVars[] = {
    ** assumed that filename is a shell command and input should be read from
    ** its stdout.
    */
-  {"signoff_string", DT_STR, R_NONE, UL &SignOffString, UL 0},
+  {"signoff_string", DT_STR, R_NONE, UL &SignOffString, "" },
   /*
    ** .pp
    ** If \fIset\fP, this string will be inserted before the signature. This is useful
@@ -3182,7 +3183,7 @@ struct option_t MuttVars[] = {
    ** witty quotes into your mails, better use a signature file instead of
    ** the signoff string.
    */
-  {"simple_search", DT_STR, R_NONE, UL &SimpleSearch, UL "~f %s | ~s %s"},
+  {"simple_search", DT_STR, R_NONE, UL &SimpleSearch, "~f %s | ~s %s"},
   /*
    ** .pp
    ** Specifies how Mutt-ng should expand a simple search into a real search
@@ -3195,7 +3196,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** \fT~f joe | ~s joe\fP
    */
-  {"smart_wrap", DT_BOOL, R_PAGER, OPTWRAP, 1},
+  {"smart_wrap", DT_BOOL, R_PAGER, OPTWRAP, "yes" },
   /*
    ** .pp
    ** Controls the display of lines longer than the screen width in the
@@ -3203,14 +3204,14 @@ struct option_t MuttVars[] = {
    ** If \fIunset\fP, lines are simply wrapped at the screen edge. Also see the
    ** ``$$markers'' variable.
    */
-  {"smileys", DT_RX, R_PAGER, UL &Smileys, UL "(>From )|(:[-^]?[][)(><}{|/DP])"},
+  {"smileys", DT_RX, R_PAGER, UL &Smileys, "(>From )|(:[-^]?[][)(><}{|/DP])"},
   /*
    ** .pp
    ** The \fIpager\fP uses this variable to catch some common false
    ** positives of ``$$quote_regexp'', most notably smileys in the beginning
    ** of a line
    */
-  {"sleep_time", DT_NUM, R_NONE, UL &SleepTime, 1},
+  {"sleep_time", DT_NUM, R_NONE, UL &SleepTime, "1" },
   /*
    ** .pp
    ** Specifies time, in seconds, to pause while displaying certain informational
@@ -3218,7 +3219,7 @@ struct option_t MuttVars[] = {
    ** messages from the current folder.  The default is to pause one second, so 
    ** a value of zero for this option suppresses the pause.
    */
-  {"sort", DT_SORT, R_INDEX|R_RESORT, UL &Sort, SORT_DATE},
+  {"sort", DT_SORT, R_INDEX|R_RESORT, UL &Sort, "date" },
   /*
    ** .pp
    ** Specifies how to sort messages in the \fIindex\fP menu.  Valid values
@@ -3240,7 +3241,7 @@ struct option_t MuttVars[] = {
    ** You may optionally use the ``reverse-'' prefix to specify reverse sorting
    ** order (example: \fTset sort=reverse-date-sent\fP).
    */
-  {"sort_alias", DT_SORT|DT_SORT_ALIAS, R_NONE, UL &SortAlias, SORT_ALIAS},
+  {"sort_alias", DT_SORT|DT_SORT_ALIAS, R_NONE, UL &SortAlias, "alias" },
   /*
    ** .pp
    ** Specifies how the entries in the ``alias'' menu are sorted.  The
@@ -3252,7 +3253,7 @@ struct option_t MuttVars[] = {
    ** .  unsorted (leave in order specified in .muttrc)
    ** .te
    */
-  {"sort_aux", DT_SORT|DT_SORT_AUX, R_INDEX|R_RESORT_BOTH, UL &SortAux, SORT_DATE},
+  {"sort_aux", DT_SORT|DT_SORT_AUX, R_INDEX|R_RESORT_BOTH, UL &SortAux, "date" },
   /*
    ** .pp
    ** When sorting by threads, this variable controls how threads are sorted
@@ -3272,7 +3273,7 @@ struct option_t MuttVars[] = {
    ** (which is not the right thing to do, but kept to not break any existing
    ** configuration setting).
    */
-  {"sort_browser", DT_SORT|DT_SORT_BROWSER, R_NONE, UL &BrowserSort, SORT_ALPHA},
+  {"sort_browser", DT_SORT|DT_SORT_BROWSER, R_NONE, UL &BrowserSort, "alpha" },
   /*
    ** .pp
    ** Specifies how to sort entries in the file browser.  By default, the
@@ -3288,7 +3289,7 @@ struct option_t MuttVars[] = {
    ** You may optionally use the ``reverse-'' prefix to specify reverse sorting
    ** order (example: \fTset sort_browser=reverse-date\fP).
    */
-  {"sort_re", DT_BOOL, R_INDEX|R_RESORT|R_RESORT_INIT, OPTSORTRE, 1},
+  {"sort_re", DT_BOOL, R_INDEX|R_RESORT|R_RESORT_INIT, OPTSORTRE, "yes" },
   /*
    ** .pp
    ** This variable is only useful when sorting by threads with
@@ -3300,7 +3301,7 @@ struct option_t MuttVars[] = {
    ** Mutt-ng will attach the message whether or not this is the case,
    ** as long as the non-``$$reply_regexp'' parts of both messages are identical.
    */
-  {"spam_separator", DT_STR, R_NONE, UL &SpamSep, UL ","},
+  {"spam_separator", DT_STR, R_NONE, UL &SpamSep, ","},
   /*
    ** .pp
    ** ``$spam_separator'' controls what happens when multiple spam headers
@@ -3309,7 +3310,7 @@ struct option_t MuttVars[] = {
    ** match will append to the previous, using ``$spam_separator'' as a
    ** separator.
    */
-  {"spoolfile", DT_PATH, R_NONE, UL &Spoolfile, 0},
+  {"spoolfile", DT_PATH, R_NONE, UL &Spoolfile, "" },
   /*
    ** .pp
    ** If your spool mailbox is in a non-default place where Mutt-ng cannot find
@@ -3317,7 +3318,7 @@ struct option_t MuttVars[] = {
    ** automatically set this variable to the value of the environment
    ** variable $$$MAIL if it is not set.
    */
-  {"status_chars", DT_STR, R_BOTH, UL &StChars, UL "-*%A"},
+  {"status_chars", DT_STR, R_BOTH, UL &StChars, "-*%A"},
   /*
    ** .pp
    ** Controls the characters used by the ``\fT%r\fP'' indicator in
@@ -3331,7 +3332,7 @@ struct option_t MuttVars[] = {
    ** opened in attach-message mode (Certain operations like composing
    ** a new mail, replying, forwarding, etc. are not permitted in this mode).
    */
-  {"status_format", DT_STR, R_BOTH, UL &Status, UL "-%r-Mutt-ng: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]---(%s/%S)-%>-(%P)---"},
+  {"status_format", DT_STR, R_BOTH, UL &Status, "-%r-Mutt-ng: %f [Msgs:%?M?%M/?%m%?n? New:%n?%?o? Old:%o?%?d? Del:%d?%?F? Flag:%F?%?t? Tag:%t?%?p? Post:%p?%?b? Inc:%b?%?l? %l?]---(%s/%S)-%>-(%P)---"},
   /*
    ** .pp
    ** Controls the format of the status line displayed in the \fIindex\fP
@@ -3404,13 +3405,13 @@ struct option_t MuttVars[] = {
    ** will replace any dots in the expansion by underscores. This might be helpful 
    ** with IMAP folders that don't like dots in folder names.
    */
-  {"status_on_top", DT_BOOL, R_BOTH, OPTSTATUSONTOP, 0},
+  {"status_on_top", DT_BOOL, R_BOTH, OPTSTATUSONTOP, "no" },
   /*
    ** .pp
    ** Setting this variable causes the ``status bar'' to be displayed on
    ** the first line of the screen rather than near the bottom.
    */
-  {"strict_mailto", DT_BOOL, R_NONE, OPTSTRICTMAILTO, 1},
+  {"strict_mailto", DT_BOOL, R_NONE, OPTSTRICTMAILTO, "yes" },
   /*
    **
    ** .pp
@@ -3424,7 +3425,7 @@ struct option_t MuttVars[] = {
    ** ``X-Mailto-'' and the message including headers will be shown in the editor
    ** regardless of what ``$$edit_headers'' is set to.
    **/
-  {"strict_mime", DT_BOOL, R_NONE, OPTSTRICTMIME, 1},
+  {"strict_mime", DT_BOOL, R_NONE, OPTSTRICTMIME, "yes" },
   /*
    ** .pp
    ** When \fIunset\fP, non MIME-compliant messages that doesn't have any
@@ -3437,7 +3438,7 @@ struct option_t MuttVars[] = {
    ** and *text to a single space to prevent the display of MIME-encoded
    ** ``\fTSubject:\fP'' header field from being devided into multiple lines.
    */
-  {"strict_threads", DT_BOOL, R_RESORT|R_RESORT_INIT|R_INDEX, OPTSTRICTTHREADS, 0},
+  {"strict_threads", DT_BOOL, R_RESORT|R_RESORT_INIT|R_INDEX, OPTSTRICTTHREADS, "no" },
   /*
    ** .pp
    ** If \fIset\fP, threading will only make use of the ``\fTIn-Reply-To:\fP'' and
@@ -3447,35 +3448,35 @@ struct option_t MuttVars[] = {
    ** personal mailbox where you might have several unrelated messages with
    ** the subject ``hi'' which will get grouped together.
    */
-  {"strip_was", DT_BOOL, R_NONE, OPTSTRIPWAS, 0},
+  {"strip_was", DT_BOOL, R_NONE, OPTSTRIPWAS, "no" },
   /**
   ** .pp
   ** When \fIset\fP, mutt-ng will remove the trailing part of the ``\fTSubject:\fP''
   ** line which matches $$strip_was_regex when replying. This is useful to
   ** properly react on subject changes and reduce ``subject noise.'' (esp. in Usenet)
   **/
-  {"strip_was_regex", DT_RX, R_NONE, UL &StripWasRegexp, UL "\\([Ww][Aa][RrSs]: .*\\)[ ]*$"},
+  {"strip_was_regex", DT_RX, R_NONE, UL &StripWasRegexp, "\\([Ww][Aa][RrSs]: .*\\)[ ]*$"},
   /**
   ** .pp
   ** When non-empty and $$strip_was is \fIset\fP, mutt-ng will remove this
   ** trailing part of the ``Subject'' line when replying if it won't be empty
   ** afterwards.
   **/
-  {"stuff_quoted", DT_BOOL, R_BOTH, OPTSTUFFQUOTED, 0},
+  {"stuff_quoted", DT_BOOL, R_BOTH, OPTSTUFFQUOTED, "no" },
   /*
    ** .pp
    ** If \fIset\fP, attachments with flowed format will have their quoting ``stuffed'',
    ** i.e. a space will be inserted between the quote characters and the actual
    ** text.
    */
-  {"suspend", DT_BOOL, R_NONE, OPTSUSPEND, 1},
+  {"suspend", DT_BOOL, R_NONE, OPTSUSPEND, "yes" },
   /*
    ** .pp
    ** When \fIunset\fP, Mutt-ng won't stop when the user presses the terminal's
    ** \fIsusp\fP key, usually \fTCTRL+Z\fP. This is useful if you run Mutt-ng
    ** inside an xterm using a command like ``\fTxterm -e muttng\fP.''
    */
-  {"text_flowed", DT_BOOL, R_NONE, OPTTEXTFLOWED, 0},
+  {"text_flowed", DT_BOOL, R_NONE, OPTTEXTFLOWED, "no" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will generate \fTtext/plain; format=flowed\fP attachments.
@@ -3485,13 +3486,13 @@ struct option_t MuttVars[] = {
    ** .pp
    ** Note that $$indent_string is ignored when this option is set.
    */
-  {"thread_received", DT_BOOL, R_RESORT|R_RESORT_INIT|R_INDEX, OPTTHREADRECEIVED, 0},
+  {"thread_received", DT_BOOL, R_RESORT|R_RESORT_INIT|R_INDEX, OPTTHREADRECEIVED, "no" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng uses the date received rather than the date sent
    ** to thread messages by subject.
    */
-  {"thorough_search", DT_BOOL, R_NONE, OPTTHOROUGHSRC, 0},
+  {"thorough_search", DT_BOOL, R_NONE, OPTTHOROUGHSRC, "no" },
   /*
    ** .pp
    ** Affects the \fT~b\fP and \fT~h\fP search operations described in
@@ -3499,13 +3500,13 @@ struct option_t MuttVars[] = {
    ** messages to be searched are decoded before searching.  If \fIunset\fP,
    ** messages are searched as they appear in the folder.
    */
-  {"tilde", DT_BOOL, R_PAGER, OPTTILDE, 0},
+  {"tilde", DT_BOOL, R_PAGER, OPTTILDE, "no" },
   /*
    ** .pp
    ** When \fIset\fP, the internal-pager will pad blank lines to the bottom of the
    ** screen with a tilde (~).
    */
-  {"timeout", DT_NUM, R_NONE, UL &Timeout, 600},
+  {"timeout", DT_NUM, R_NONE, UL &Timeout, "600" },
   /*
    ** .pp
    ** This variable controls the \fInumber of seconds\fP Mutt-ng will wait
@@ -3513,7 +3514,7 @@ struct option_t MuttVars[] = {
    ** checking for new mail.  A value of zero or less will cause Mutt-ng
    ** to never time out.
    */
-  {"tmpdir", DT_PATH, R_NONE, UL &Tempdir, 0},
+  {"tmpdir", DT_PATH, R_NONE, UL &Tempdir, "" },
   /*
    ** .pp
    ** This variable allows you to specify where Mutt-ng will place its
@@ -3521,7 +3522,7 @@ struct option_t MuttVars[] = {
    ** this variable is not set, the environment variable \fT$$$TMPDIR\fP is
    ** used.  If \fT$$$TMPDIR\fP is not set then "\fT/tmp\fP" is used.
    */
-  {"to_chars", DT_STR, R_BOTH, UL &Tochars, UL " +TCFL"},
+  {"to_chars", DT_STR, R_BOTH, UL &Tochars, " +TCFL"},
   /*
    ** .pp
    ** Controls the character used to indicate mail addressed to you.  The
@@ -3535,7 +3536,7 @@ struct option_t MuttVars[] = {
    ** by \fIyou\fP.  The sixth character is used to indicate when a mail
    ** was sent to a mailing-list you're subscribe to (default: L).
    */
-  {"trash", DT_PATH, R_NONE, UL &TrashPath, 0},
+  {"trash", DT_PATH, R_NONE, UL &TrashPath, "" },
   /*
    ** .pp
    ** If \fIset\fP, this variable specifies the path of the trash folder where the
@@ -3546,7 +3547,7 @@ struct option_t MuttVars[] = {
    ** deleted, so that there is no way to recover mail.
    */
 #ifdef USE_SOCKET
-  {"tunnel", DT_STR, R_NONE, UL &Tunnel, UL 0},
+  {"tunnel", DT_STR, R_NONE, UL &Tunnel, "" },
   /*
    ** .pp
    ** Setting this variable will cause Mutt-ng to open a pipe to a command
@@ -3559,13 +3560,13 @@ struct option_t MuttVars[] = {
    ** machine without having to enter a password.
    */
 #endif
-  {"umask", DT_NUM, R_NONE, UL &Umask, 0077},
+  {"umask", DT_NUM, R_NONE, UL &Umask, "0077" },
   /*
    ** .pp
    ** This sets the umask that will be used by Mutt-ng when creating all
    ** kinds of files. If \fIunset\fP, the default value is \fT077\fP.
    */
-  {"use_8bitmime", DT_BOOL, R_NONE, OPTUSE8BITMIME, 0},
+  {"use_8bitmime", DT_BOOL, R_NONE, OPTUSE8BITMIME, "no" },
   /*
    ** .pp
    ** \fBWarning:\fP do not set this variable unless you are using a version
@@ -3577,14 +3578,14 @@ struct option_t MuttVars[] = {
    ** flag when sending 8-bit messages to enable ESMTP negotiation or tell
    ** libESMTP to do so.
    */
-  {"use_domain", DT_BOOL, R_NONE, OPTUSEDOMAIN, 1},
+  {"use_domain", DT_BOOL, R_NONE, OPTUSEDOMAIN, "yes" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will qualify all local addresses (ones without the
    ** @host portion) with the value of ``$$hostname''.  If \fIunset\fP, no
    ** addresses will be qualified.
    */
-  {"use_from", DT_BOOL, R_NONE, OPTUSEFROM, 1},
+  {"use_from", DT_BOOL, R_NONE, OPTUSEFROM, "yes" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will generate the ``\fTFrom:\fP'' header field when
@@ -3593,7 +3594,7 @@ struct option_t MuttVars[] = {
    ** command.
    */
 #ifdef HAVE_LIBIDN
-  {"use_idn", DT_BOOL, R_BOTH, OPTUSEIDN, 1},
+  {"use_idn", DT_BOOL, R_BOTH, OPTUSEIDN, "yes" },
   /*
    ** .pp
    ** Availability: IDN
@@ -3606,7 +3607,7 @@ struct option_t MuttVars[] = {
    */
 #endif /* HAVE_LIBIDN */
 #ifdef HAVE_GETADDRINFO
-  {"use_ipv6", DT_BOOL, R_NONE, OPTUSEIPV6, 1},
+  {"use_ipv6", DT_BOOL, R_NONE, OPTUSEIPV6, "yes" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will look for IPv6 addresses of hosts it tries to
@@ -3614,20 +3615,21 @@ struct option_t MuttVars[] = {
    ** Normally, the default should work.
    */
 #endif /* HAVE_GETADDRINFO */
-  {"user_agent", DT_BOOL, R_NONE, OPTXMAILER, 1},
+  {"user_agent", DT_SYN, R_NONE, UL "agent_string", 0 },
+  {"agent_string", DT_BOOL, R_NONE, OPTXMAILER, "yes" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will add a ``\fTUser-Agent:\fP'' header to outgoing
    ** messages, indicating which version of Mutt-ng was used for composing
    ** them.
    */
-  {"visual", DT_PATH, R_NONE, UL &Visual, 0},
+  {"visual", DT_PATH, R_NONE, UL &Visual, "" },
   /*
    ** .pp
    ** Specifies the visual editor to invoke when the \fI~v\fP command is
    ** given in the builtin editor.
    */
-  {"wait_key", DT_BOOL, R_NONE, OPTWAITKEY, 1},
+  {"wait_key", DT_BOOL, R_NONE, OPTWAITKEY, "yes" },
   /*
    ** .pp
    ** Controls whether Mutt-ng will ask you to press a key after \fIshell-
@@ -3641,13 +3643,13 @@ struct option_t MuttVars[] = {
    ** When \fIset\fP, Mutt-ng will always ask for a key. When \fIunset\fP, Mutt-ng will wait
    ** for a key only if the external command returned a non-zero status.
    */
-  {"weed", DT_BOOL, R_NONE, OPTWEED, 1},
+  {"weed", DT_BOOL, R_NONE, OPTWEED, "yes" },
   /*
    ** .pp
    ** When \fIset\fP, Mutt-ng will weed headers when displaying, forwarding,
    ** printing, or replying to messages.
    */
-  {"wrap_search", DT_BOOL, R_NONE, OPTWRAPSEARCH, 1},
+  {"wrap_search", DT_BOOL, R_NONE, OPTWRAPSEARCH, "yes" },
   /*
    ** .pp
    ** Controls whether searches wrap around the end of the mailbox.
@@ -3655,13 +3657,13 @@ struct option_t MuttVars[] = {
    ** When \fIset\fP, searches will wrap around the first (or last) message. When
    ** \fIunset\fP, searches will not wrap.
    */
-  {"wrapmargin", DT_NUM, R_PAGER, UL &WrapMargin, 0},
+  {"wrapmargin", DT_NUM, R_PAGER, UL &WrapMargin, "0" },
   /*
    ** .pp
    ** Controls the size of the margin remaining at the right side of
    ** the terminal when Mutt-ng's pager does smart wrapping.
    */
-  {"write_inc", DT_NUM, R_NONE, UL &WriteInc, 10},
+  {"write_inc", DT_NUM, R_NONE, UL &WriteInc, "10" },
   /*
    ** .pp
    ** When writing a mailbox, a message will be printed every
@@ -3670,27 +3672,27 @@ struct option_t MuttVars[] = {
    ** .pp
    ** Also see the ``$$read_inc'' variable.
    */
-  {"write_bcc", DT_BOOL, R_NONE, OPTWRITEBCC, 1},
+  {"write_bcc", DT_BOOL, R_NONE, OPTWRITEBCC, "yes" },
   /*
    ** .pp
    ** Controls whether Mutt-ng writes out the Bcc header when preparing
    ** messages to be sent.  Exim users may wish to \fIunset\fP this.
    */
-  {"xterm_icon", DT_STR, R_BOTH, UL &XtermIcon, UL "M%?n?AIL&ail?"},
+  {"xterm_icon", DT_STR, R_BOTH, UL &XtermIcon, "M%?n?AIL&ail?"},
   /*
    ** .pp
    ** Controls the format of the X11 icon title, as long as $$xterm_set_titles
    ** is \fIset\fP. This string is identical in formatting to the one used by
    ** ``$$status_format''.
    */
-  {"xterm_set_titles", DT_BOOL, R_BOTH, OPTXTERMSETTITLES, 0},
+  {"xterm_set_titles", DT_BOOL, R_BOTH, OPTXTERMSETTITLES, "no" },
   /*
    ** .pp
    ** Controls whether Mutt-ng sets the xterm title bar and icon name
    ** (as long as you're in an appropriate terminal). The default must
    ** be \fIunset\fP to force in the validity checking.
    */
-  {"xterm_leave", DT_STR, R_BOTH, UL &XtermLeave, UL "" },
+  {"xterm_leave", DT_STR, R_BOTH, UL &XtermLeave, "" },
   /*
    ** .pp
    ** If $$xterm_set_titles is \fIset\fP, this string will be used to
@@ -3704,7 +3706,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** \fTset xterm_leave = "`test x$$$DISPLAY != x && xprop -id $$$WINDOWID | grep WM_NAME | cut -d '"' -f 2`"\fP
    */
-  {"xterm_title", DT_STR, R_BOTH, UL &XtermTitle, UL "Mutt-ng with %?m?%m messages&no messages?%?n? [%n New]?"},
+  {"xterm_title", DT_STR, R_BOTH, UL &XtermTitle, "Mutt-ng with %?m?%m messages&no messages?%?n? [%n New]?"},
   /*
    ** .pp
    ** Controls the format of the title bar of the xterm provided that
@@ -3713,7 +3715,7 @@ struct option_t MuttVars[] = {
    */
 #ifdef USE_NNTP
   {"x_comment_to", DT_SYN, R_NONE, UL "nntp_x_comment_to", 0},
-  {"nntp_x_comment_to", DT_BOOL, R_NONE, OPTXCOMMENTTO, 0},
+  {"nntp_x_comment_to", DT_BOOL, R_NONE, OPTXCOMMENTTO, "no" },
   /*
    ** .pp
    ** Availability: NNTP

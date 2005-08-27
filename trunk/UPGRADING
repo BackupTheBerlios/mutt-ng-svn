@@ -10,6 +10,16 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-08-27:
+
+  It's now possible to define and use arbitrary self-defined
+  variables as long as prefixed with user_.
+
+  The $user_agent variable had to be renamed to $agent_string.
+
+  To keep consistency, the -D option has been removed again in
+  favor of -T and -t.
+
 2005-08-25:
 
   Instead of only supporting to expand environment variables via

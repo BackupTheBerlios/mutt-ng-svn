@@ -11,7 +11,8 @@
 #define _MUTT_LIBESMTP_H
 
 #if defined (USE_LIBESMTP) && (defined (USE_SSL) || defined (USE_GNUTLS))
-int mutt_libesmtp_check_usetls (const char*);
+int mutt_libesmtp_check_usetls (const char* option, unsigned long p,
+                                char* errbuf, size_t errlen);
 #endif
 
 int mutt_libesmtp_invoke (ADDRESS * from,       /* the sender */

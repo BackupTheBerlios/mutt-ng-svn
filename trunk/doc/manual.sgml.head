@@ -1162,7 +1162,7 @@ usually place your <ref id="commands" name="commands"> to configure Mutt-ng.
 
 <!--}}}--> 
 
-<sect>Syntax of Initialization Files<label id="muttrc-syntax"> <!--{{{--> 
+<sect>Basic Syntax of Initialization Files<label id="muttrc-syntax"> <!--{{{--> 
 <p>
 
 An initialization file consists of a series of <ref id="commands"
@@ -1235,33 +1235,119 @@ line1 ``continues'' until line4. however, the part after the &num; is a
 comment which includes line3 and line4. line5 is a new line of its own and
 thus is interpreted again.
 
-It is also possible to substitute the output of a Unix command in an
-initialization file.  This is accomplished by enclosing the command in
-backquotes (``).  For example,
-<tscreen><verb>
-my_hdr X-Operating-System: `uname -a`
-</verb></tscreen>
-The output of the Unix command ``uname -a'' will be substituted before the
-line is parsed.  Note that since initialization files are line oriented, only
-the first line of output from the Unix command will be substituted.
-
-UNIX environments can be accessed like the way it is done in shells like
-sh and bash: Prepend the name of the environment by a ``&dollar;''.  For
-example,
-<tscreen><verb>
-set record=+sent_on_$HOSTNAME
-</verb></tscreen>
-
-This also applies for all configuration variables known to mutt-ng,
-for example
-<tscreen><verb>
-set imap_home_namespace = $folder
-</verb></tscreen>
-
 The commands understood by mutt are explained in the next paragraphs.
 For a complete list, see the <ref id="commands" name="command reference">.
 
 <!--}}}--> 
+
+<sect>Variable Expansion <!--{{{--> 
+
+  <sect1>Commands' Output 
+
+    <p>It is possible to substitute the output of a Unix command in an
+    initialization file.  This is accomplished by enclosing the command
+    in backquotes (``) as in, for example:
+
+<tscreen><verb>
+my_hdr X-Operating-System: `uname -a`
+</verb></tscreen>
+
+    <p>The output of the Unix command ``uname -a'' will be substituted
+    before the line is parsed. Note that since initialization files are
+    line oriented, only the first line of output from the Unix command
+    will be substituted.
+
+  <sect1>Environment Variables 
+
+    <p>UNIX environments can be accessed like the way it is done in
+    shells like sh and bash: Prepend the name of the environment by a
+    ``&dollar;'' sign. For example,
+
+<tscreen><verb>
+set record=+sent_on_$HOSTNAME
+</verb></tscreen>
+
+    <p>sets the <ref id="record" name="&dollar;record"> variable to the
+    string <em/+sent_on_/ and appends the value of the evironment
+    variable <tt>&dollar;HOSTNAME</tt>.
+
+    <p><bf/Note:/ There will be no warning if an environment variable
+    is not defined. The result will of the expansion will then be empty.
+
+  <sect1>Configuration Variables 
+
+    <p>As for environment variables, the values of all configuration
+    variables as string can be used in the same way, too. For example,
+
+<tscreen><verb>
+set imap_home_namespace = $folder
+</verb></tscreen>
+
+    <p>would set the value of <ref id="imap_home_namespace"
+    name="&dollar;imap&lowbar;home&lowbar;namespace"> to the value to
+    which <ref id="folder" name="&dollar;folder"> is <em/currently/ set
+    to.
+
+    <p><bf/Note:/ There're no logical links established in such cases so
+    that the the value for <ref id="imap_home_namespace"
+    name="&dollar;imap&lowbar;home&lowbar;namespace"> won't change even
+    if <ref id="folder" name="&dollar;folder"> gets changed.
+
+    <p><bf/Note:/ There will be no warning if a configuration variable
+    is not defined or is empty. The result will of the expansion will
+    then be empty.
+
+  <sect1>Self-Defined Variables 
+
+    <p>Mutt-ng flexibly allows users to define their own variables. To
+    avoid conflicts with the standard set and to prevent misleading
+    error messages, there's a reserved namespace for them. All
+    user-defined variables must be prefixed with <tt/user_/ and can be
+    used just like any ordinary configuration or environment
+    variable.
+
+    <p>For example, to view the manual, users can either define three
+    macros like the following
+
+<tscreen><verb>
+macro generic &lt;F1&gt; "!less -r /path/to/manual" "Show manual"
+macro pager &lt;F1&gt; "!less -r /path/to/manual" "Show manual"
+macro index &lt;F1&gt; "!less -r /path/to/manual" "Show manual"
+</verb></tscreen>
+
+    <p>for <tt/generic/, <tt/pager/ and <tt/index/. The alternative is to
+    define a custom variable like so:
+
+<tscreen><verb>
+set user_manualcmd = '!less -r /path/to_manual"
+macro generic &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"
+macro pager &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"
+macro index &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"
+</verb></tscreen>
+
+    <p>Using this feature, arbitrary sequences can be defined once and
+    recalled and reused where necessary. More advanced scenarios could
+    include to save a variable's value at the beginning of macro
+    sequence and restore it at end.
+
+  <sect1>Type Conversions 
+
+    <p>A note about variable's types during conversion: internally
+    values are stored in internal types but for any dump/query or set
+    operation they're converted to and from string. That means that
+    there's no need to worry about types when referencing any variable.
+    As an example, the following can be used without harm (besides
+    makeing muttng very likely behave strange):
+
+<tscreen><verb>
+set read_inc = 100
+set folder = $read_inc
+set $read_inc = $folder
+set user_magic_number = 42
+set folder = $user_magic_number
+</verb></tscreen>
+
+<!--}}}-->
 
 <sect>Defining/Using aliases<label id="alias"> <!--{{{--> 
 <p>
@@ -4525,7 +4611,6 @@ to send messages from the command line as well.
 -a      attach a file to a message
 -b      specify a blind carbon-copy (BCC) address
 -c      specify a carbon-copy (Cc) address
--D      print the value of all variables on stdout
 -e      specify a config command to be run after initialization files are read
 -f      specify a mailbox to load
 -F      specify an alternate file to read initialization commands
@@ -4538,6 +4623,8 @@ to send messages from the command line as well.
 -Q      query a configuration variable
 -R      open mailbox in read-only mode
 -s      specify a subject (enclose in quotes if it contains spaces)
+-t      dump the value of all variables to stdout
+-T      dump the value of all changed variables to stdout
 -v      show version number and compile-time definitions
 -x      simulate the mailx(1) compose mode
 -y      show a menu containing the files specified by the mailboxes command

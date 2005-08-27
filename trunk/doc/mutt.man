@@ -38,7 +38,7 @@ mutt-ng \- The Mutt-ng Mail User Agent
 [-c \fIaddr\fP] \fIaddr\fP [...]
 .PP
 .B muttng
-[-n] [-e \fIcmd\fP] [-F \fIfile\fP] -D
+[-n] [-e \fIcmd\fP] [-F \fIfile\fP] [-t | -T]
 .PP
 .B muttng
 [-n] [-e \fIcmd\fP] [-F \fIfile\fP] -p
@@ -66,8 +66,10 @@ Attach a file to your message using MIME.
 Specify a blind-carbon-copy (BCC) recipient
 .IP "-c \fIaddress\fP"
 Specify a carbon-copy (CC) recipient
-.IP "-D"
+.IP "-t"
 Print the value of all variables to stdout.
+.IP "-T"
+Print the value of all changed variables to stdout.
 .IP "-e \fIcommand\fP"
 Specify a configuration command to be run after processing of initialization
 files.

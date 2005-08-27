@@ -48,7 +48,7 @@ set help			# show the help lines
 #set history=20			# number of lines of history to remember
 #set hostname="mutt.org"	# my DNS domain
 set include			# always include messages when replying
-#set indent_stringing="> "		# how to quote replied text
+#set indent_string="> "		# how to quote replied text
 #set locale="C"			# locale to use for printing time
 #set mailcap_path="~/.mailcap:/usr/local/share/mailcap"
 set nomark_old			# i don't care about whether a message is old
@@ -65,7 +65,7 @@ set pager_index_lines=6		# how many index lines to show in the pager
 #set pager_stop			# don't move to the next message on next-page
 #set pgp_strict_enc		# use Q-P encoding when needed for PGP
 set postponed=+postponed	# mailbox to store postponed messages in
-#set post_indent_stringing='---end quoted text---'
+#set post_indent_string='---end quoted text---'
 #set print=ask-yes		# ask me if I really want to print messages
 set print_command=/bin/false	# how to print things (I like to save trees)
 set noprompt_after	# ask me for a command after the external pager exits

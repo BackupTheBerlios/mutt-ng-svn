@@ -50,7 +50,8 @@ my %opts = (
   " x_comment_to"                 => " nntp_x_comment_to",
   # libesmtp
   " smtp_auth_username"           => " smtp_user",
-  " smtp_auth_password"           => " smtp_pass"
+  " smtp_auth_password"           => " smtp_pass",
+  " user_agent"                   => " agent_string"
 );
 
 if (@ARGV == 0) {

@@ -34,4 +34,8 @@ void hash_delete_hash (HASH * table, int hash, const char *key,
                        const void *data, void (*destroy) (void *));
 void hash_destroy (HASH ** hash, void (*destroy) (void *));
 
+void hash_map (HASH* table,
+               void (*mapfunc) (const char* key, void* data, unsigned long more),
+               unsigned long more);
+
 #endif

@@ -76,7 +76,7 @@ syn keyword muttrcVarBool	contained reverse_realname rfc2047_parameters save_add
 syn keyword muttrcVarBool	contained sig_dashes sig_on_top smart_wrap sort_re ssl_use_sslv2 ssl_use_sslv3 ssl_use_tlsv1
 syn keyword muttrcVarBool	contained ssl_usesystemcerts status_on_top strict_threads suspend text_flowed thorough_search
 syn keyword muttrcVarBool	contained thread_received tilde uncollapse_jump use_8bitmime use_domain use_from use_ipv6
-syn keyword muttrcVarBool	contained user_agent wait_key weed wrap_search write_bcc
+syn keyword muttrcVarBool	contained agent_string wait_key weed wrap_search write_bcc
 
 syn keyword muttrcVarBool	contained noallow_8bit noallow_ansi noarrow_cursor noascii_chars noaskbcc noaskcc
 syn keyword muttrcVarBool	contained noattach_split noauto_tag noautoedit nobeep nobeep_new nobounce_delivered
@@ -174,7 +174,7 @@ syn keyword muttrcVarStr	contained reply_regexp send_charset sendmail shell sign
 syn keyword muttrcVarStr	contained sort_aux sort_browser spoolfile status_chars status_format tmpdir to_chars tunnel visual
 
 " start mutt-ng specific keywords
-syn keyword muttrcVarStr	contained assumed_charset file_charset nntp_group_index_format header_cache indent_stringing nntp_inews
+syn keyword muttrcVarStr	contained assumed_charset file_charset nntp_group_index_format header_cache indent_string nntp_inews
 syn keyword muttrcVarStr	contained msgid_format nntp_pass nntp_cache_dir nntp_host nntp_newsrc nntp_user operating_system
 syn keyword muttrcVarStr	contained sidebar_delim signoff_string smtp_pass smtp_user smtp_host xterm_icon
 syn keyword muttrcVarStr	contained xterm_title

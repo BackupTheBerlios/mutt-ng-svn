@@ -17,6 +17,7 @@
 #include "mime.h"
 #include "charset.h"
 #include "rfc2047.h"
+#include "thread.h"
 
 #include "lib/mem.h"
 #include "lib/str.h"
@@ -818,13 +819,7 @@ void rfc2047_decode_envelope (ENVELOPE* e) {
   rfc2047_decode_adrlist (e->sender);
 
   if (e->subject) {
-    regmatch_t pmatch[1];
-
     rfc2047_decode (&e->subject);
-
-    if (regexec (ReplyRegexp.rx, e->subject, 1, pmatch, 0) == 0)
-      e->real_subj = e->subject + pmatch[0].rm_eo;
-    else
-      e->real_subj = e->subject;
+    mutt_adjust_subject (e);
   }
 }
