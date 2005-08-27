@@ -279,14 +279,19 @@ static int str_from_string (struct option_t* dst, const char* val,
 
 static int user_from_string (struct option_t* dst, const char* val,
                              char* errbuf, size_t errlen) {
+  /* if dst == NULL, we may get here in case the user did unset it,
+   * see parse_set() where item is free()'d before coming here; so
+   * just silently ignore it */
   if (!dst)
-    return (0);
+    return (1);
   if (str_len ((char*) dst->data) == 0)
     dst->data = (unsigned long) str_dup (val);
   else {
     char* s = (char*) dst->data;
     str_replace (&s, val);
   }
+  if (str_len (dst->init) == 0)
+    dst->init = str_dup ((char*) dst->data);
   return (1);
 }
 
@@ -456,7 +461,7 @@ static int magic_from_string (struct option_t* dst, const char* val,
 
 static void addr_to_string (char* dst, size_t dstlen,
                             struct option_t* option) {
-  char s[STRING];
+  char s[HUGE_STRING];
   s[0] = '\0';
   rfc822_write_address (s, sizeof (s), *((ADDRESS**) option->data), 0);
   snprintf (dst, dstlen, "%s=\"%s\"", option->option, NONULL (s));
@@ -1302,8 +1307,28 @@ static void mutt_set_default (const char* name, void* p, unsigned long more) {
     ptr->init = str_dup (buf);
 }
 
+/* creates new option_t* of type DT_USER for $user_ var */
+static struct option_t* add_user_option (const char* name) {
+  struct option_t* option = mem_calloc (1, sizeof (struct option_t));
+  option->option = str_dup (name);
+  option->type = DT_USER;
+  return (option);
+}
+
+/* free()'s option_t* */
+static void del_user_option (void* p) {
+  struct option_t* ptr = (struct option_t*) p;
+  char* s = (char*) ptr->data;
+  debug_print (1, ("removing option '%s' from table\n", NONULL (ptr->option)));
+  mem_free (&ptr->option);
+  mem_free (&s);
+  mem_free (&ptr->init);
+  mem_free (&ptr);
+}
+
 /* if additional data more == 1, we want to resolve synonyms */
-static void mutt_restore_default (const char* name, void* p, unsigned long more) {
+static void mutt_restore_default (const char* name, void* p,
+                                  unsigned long more) {
   char errbuf[STRING];
   struct option_t* ptr = (struct option_t*) p;
 
@@ -1432,14 +1457,6 @@ static const struct mapping_t* get_sortmap (struct option_t* option) {
   return (map);
 }
 
-/* creates new option_t* of type DT_USER for $user_ var */
-static struct option_t* add_user_option (const char* name) {
-  struct option_t* option = mem_calloc (1, sizeof (struct option_t));
-  option->option = str_dup (name);
-  option->type = DT_USER;
-  return (option);
-}
-
 static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
                       BUFFER * err)
 {
@@ -1482,11 +1499,14 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
     }
 
     /* see if we need to add $user_ var */
-    if (!option && !reset && !unset && 
-        ascii_strncasecmp ("user_", tmp->data, 5) == 0) {
-      debug_print (1, ("adding user option '%s'\n", tmp->data));
-      option = add_user_option (tmp->data);
-      hash_insert (ConfigOptions, option->option, option, 0);
+    if (!option && ascii_strncmp ("user_", tmp->data, 5) == 0) {
+      /* there's no option named like this yet so only add one
+       * if the action isn't any of: reset, unset, query */
+      if (!(reset || unset || query || *s->dptr != '=')) {
+        debug_print (1, ("adding user option '%s'\n", tmp->data));
+        option = add_user_option (tmp->data);
+        hash_insert (ConfigOptions, option->option, option, 0);
+      }
     }
 
     if (!option && !(reset && str_cmp ("all", tmp->data) == 0)) {
@@ -1563,10 +1583,11 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
         if (unset) {
           if (DTYPE (option->type) == DT_ADDR)
             rfc822_free_address ((ADDRESS **) option->data);
-          else if (DTYPE (option->type) == DT_USER) {
-            void* p = (void*) option->data;
-            mem_free (&p);
-          } else
+          else if (DTYPE (option->type) == DT_USER)
+            /* to unset $user_ means remove */
+            hash_delete (ConfigOptions, option->option,
+                         option, del_user_option);
+          else
             mem_free ((void *) option->data);
           break;
         }

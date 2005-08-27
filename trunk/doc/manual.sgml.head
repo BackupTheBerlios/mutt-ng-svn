@@ -1301,7 +1301,7 @@ set imap_home_namespace = $folder
 
     <p>Mutt-ng flexibly allows users to define their own variables. To
     avoid conflicts with the standard set and to prevent misleading
-    error messages, there's a reserved namespace for them. All
+    error messages, there's a reserved namespace for them: all
     user-defined variables must be prefixed with <tt/user_/ and can be
     used just like any ordinary configuration or environment
     variable.
@@ -1329,6 +1329,42 @@ macro index &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"
     recalled and reused where necessary. More advanced scenarios could
     include to save a variable's value at the beginning of macro
     sequence and restore it at end.
+
+    <p>When the variable is first defined, the first value it gets
+    assigned is also the initial value to which it can be reset using
+    the <tt/reset/ command.
+
+    <p>The complete removal is done via the <tt/unset/ keyword.
+
+    <p>After the following sequence:
+
+<tscreen><verb>
+set user_foo = 42
+set user_foo = 666
+</verb></tscreen>
+
+    <p>the variable <tt>$user_foo</tt> has a current value of 666 and an
+    initial of 42. The query
+
+<tscreen><verb>
+set ?user_foo
+</verb></tscreen>
+
+    <p>will show 666. After doing the reset via
+
+<tscreen><verb>
+reset user_foo
+</verb></tscreen>
+
+    <p>a following query will give 42 as the result. After unsetting it
+    via
+
+<tscreen><verb>
+unset user_foo
+</verb></tscreen>
+
+    <p>any query or operation (except the noted expansion within other
+    statements) will lead to an error message.
 
   <sect1>Type Conversions 
 
