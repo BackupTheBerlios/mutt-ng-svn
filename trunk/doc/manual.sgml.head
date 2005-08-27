@@ -1378,7 +1378,7 @@ unset user_foo
 <tscreen><verb>
 set read_inc = 100
 set folder = $read_inc
-set $read_inc = $folder
+set read_inc = $folder
 set user_magic_number = 42
 set folder = $user_magic_number
 </verb></tscreen>

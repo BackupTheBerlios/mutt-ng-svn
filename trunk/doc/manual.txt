@@ -4,7 +4,7 @@
                       by Andreas Krennmair <ak@synflood.at> and others
                 originally based on _m_u_t_t by Michael Elkins <me@cs.hmc.edu> and others
 
-                                     version devel-r449
+                                     version devel-r450
 
                                           AAbbssttrraacctt
 
@@ -1219,7 +1219,7 @@
 
             set read_inc = 100
             set folder = $read_inc
-            set $read_inc = $folder
+            set read_inc = $folder
             set user_magic_number = 42
             set folder = $user_magic_number
 
