@@ -4,7 +4,7 @@
                       by Andreas Krennmair <ak@synflood.at> and others
                 originally based on _m_u_t_t by Michael Elkins <me@cs.hmc.edu> and others
 
-                                     version devel-r453
+                                     version devel-r456
 
                                           AAbbssttrraacctt
 
@@ -1162,20 +1162,23 @@
        user_ and can be used just like any ordinary configuration or environment vari-
        able.
 
-       For example, to view the manual, users can either define three macros like the
+       For example, to view the manual, users can either define two macros like the
        following
 
             macro generic <F1> "!less -r /path/to/manual" "Show manual"
             macro pager <F1> "!less -r /path/to/manual" "Show manual"
-            macro index <F1> "!less -r /path/to/manual" "Show manual"
 
        for generic, pager and index. The alternative is to define a custom variable
        like so:
 
-            set user_manualcmd = '!less -r /path/to_manual"
+            set user_manualcmd = '!less -r /path/to_manual'
             macro generic <F1> "$user_manualcmd<enter>" "Show manual"
             macro pager <F1> "$user_manualcmd<enter>" "Show manual"
             macro index <F1> "$user_manualcmd<enter>" "Show manual"
+
+       to re-use the command sequence as in:
+
+            macro index <F2> "$user_manualcmd | grep '\^[ ]\\+~. '" "Show Patterns"
 
        Using this feature, arbitrary sequences can be defined once and recalled and
        reused where necessary. More advanced scenarios could include to save a vari-
@@ -1198,11 +1201,11 @@
 
        will show 666. After doing the reset via
 
+       The Mutt Next Generation E-Mail Client                                       25
+
             reset user_foo
 
        a following query will give 42 as the result. After unsetting it via
-
-       The Mutt Next Generation E-Mail Client                                       25
 
             unset user_foo
 
@@ -1247,13 +1250,14 @@
        have multiple alias files, or you can have all aliases defined in your muttrc.
 
        On the other hand, the _c_r_e_a_t_e_-_a_l_i_a_s (section 2.5.4  , page 11) function can use
+
+       The Mutt Next Generation E-Mail Client                                       26
+
        only one file, the one pointed to by the _$_a_l_i_a_s___f_i_l_e (section 7.4.5  , page 89)
        variable (which is ~/.muttrc by default). This file is not special either, in
        the sense that Mutt-ng will happily append aliases to any file, but in order
        for the new aliases to take effect you need to explicitly _s_o_u_r_c_e (section
        3.29  , page 45) this file too.
-
-       The Mutt Next Generation E-Mail Client                                       26
 
        For example:
 
@@ -1297,14 +1301,15 @@
 
              alias
                    The alias menu is the list of your personal aliases as defined in
+
+       The Mutt Next Generation E-Mail Client                                       27
+
                    your muttrc.  It is the mapping from a short alias name to the full
                    email address(es) of the recipient(s).
 
              attach
                    The attachment menu is used to access the attachments on received
                    messages.
-
-       The Mutt Next Generation E-Mail Client                                       27
 
              browser
                    The browser is used for both browsing the local directory struc-
@@ -2077,8 +2082,8 @@
        Scoring gets especially interesting when combined with the color command and
        the ~n pattern:
 
-            color   black   yellow  "~n 10-"
-            color   red     yellow  "~n 100-"
+            color index  black   yellow  "~n 10-"
+            color index  red     yellow  "~n 100-"
 
        The rules above mark all messages with a score between 10 and 99 with black and
        yellow, and messages with a score greater or equal 100 with red and yellow.

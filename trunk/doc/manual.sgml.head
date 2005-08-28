@@ -1306,23 +1306,28 @@ set imap_home_namespace = $folder
     used just like any ordinary configuration or environment
     variable.
 
-    <p>For example, to view the manual, users can either define three
+    <p>For example, to view the manual, users can either define two
     macros like the following
 
 <tscreen><verb>
 macro generic &lt;F1&gt; "!less -r /path/to/manual" "Show manual"
 macro pager &lt;F1&gt; "!less -r /path/to/manual" "Show manual"
-macro index &lt;F1&gt; "!less -r /path/to/manual" "Show manual"
 </verb></tscreen>
 
     <p>for <tt/generic/, <tt/pager/ and <tt/index/. The alternative is to
     define a custom variable like so:
 
 <tscreen><verb>
-set user_manualcmd = '!less -r /path/to_manual"
+set user_manualcmd = '!less -r /path/to_manual'
 macro generic &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"
 macro pager &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"
 macro index &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"
+</verb></tscreen>
+
+    <p>to re-use the command sequence as in:
+
+<tscreen><verb>
+macro index &lt;F2&gt; "$user_manualcmd | grep '\^[ ]\\+~. '" "Show Patterns"
 </verb></tscreen>
 
     <p>Using this feature, arbitrary sequences can be defined once and
