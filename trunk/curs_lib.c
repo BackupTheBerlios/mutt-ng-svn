@@ -276,7 +276,7 @@ void mutt_query_exit (void)
   if (Timeout)
     timeout (-1);               /* restore blocking operation */
   if (mutt_yesorno (_("Exit Mutt-ng?"), M_YES) == M_YES) {
-    endwin ();
+    mutt_endwin (NULL);
     exit (1);
   }
   mutt_clear_error ();

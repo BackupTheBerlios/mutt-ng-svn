@@ -2439,7 +2439,7 @@ void mutt_init (int skip_sys_rc, LIST * commands)
   /* Read the user's initialization file.  */
   if (access (Muttrc, F_OK) != -1) {
     if (!option (OPTNOCURSES))
-      endwin ();
+      mutt_endwin (NULL);
     if (source_rc (Muttrc, &err) != 0) {
       fputs (err.data, stderr);
       fputc ('\n', stderr);
