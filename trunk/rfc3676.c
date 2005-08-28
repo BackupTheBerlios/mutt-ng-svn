@@ -241,40 +241,6 @@ int rfc3676_handler (BODY * a, STATE * s) {
   return (0);
 }
 
-void rfc3676_quote_line (STATE* s, char* dst, size_t dstlen,
-                         const char* line) {
-  char quote[SHORT_STRING];
-  int offset = 0, i = 0, count = 0;
-  regmatch_t pmatch[1];
-
-  quote[0] = '\0';
-
-  while (regexec ((regex_t *) QuoteRegexp.rx, &line[offset],
-                  1, pmatch, 0) == 0)
-    offset += pmatch->rm_eo;
-
-  if (offset > 0) {
-    /* first count number of real quoting characters;
-     * read: non-spaces
-     * this maybe just plain wrong, but leaving spaces
-     * within quoting characters is what I consider
-     * more plain wrong...
-     */
-    for (i = 0; i < offset; i++)
-      if (line[i] != ' ')
-        count++;
-    /* just make sure we're inside quote althoug we
-     * likely won't have more than SHORT_STRING quote levels... */
-    i = (count > SHORT_STRING-1) ? SHORT_STRING-1 : count;
-    memset (quote, '>', i);
-    quote[i] = '\0';
-  }
-  debug_print (4, ("f=f: quotelevel = %d, new prefix = '%s'\n",
-                   i, NONULL (quote)));
-  snprintf (dst, dstlen, "%s%s%s", NONULL (s->prefix), NONULL (quote),
-            &line[offset]);
-}
-
 void rfc3676_space_stuff (HEADER* hdr) {
 #if DEBUG
   int lc = 0;

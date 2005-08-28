@@ -90,9 +90,8 @@ void state_prefix_putc (char c, STATE * s)
       if (!option (OPTQUOTEEMPTY) && Quotebuf[offset] == '\n') {
         buf[0] = '\n';
         buf[1] = '\0';
-      } else if (option (OPTTEXTFLOWED))
-        rfc3676_quote_line (s, buf, sizeof (buf), Quotebuf);
-      else if (option (OPTQUOTEQUOTED) && offset) {
+      }
+      else if (!option (OPTTEXTFLOWED) && option (OPTQUOTEQUOTED) && offset) {
         for (i = 0; i < offset; i++)
           if (Quotebuf[i] != ' ')
             j = i;

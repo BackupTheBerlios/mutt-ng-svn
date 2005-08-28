@@ -18,14 +18,6 @@
 int rfc3676_handler (BODY * a, STATE * s);
 
 /*
- * this properly ensures correct quoting; correct is:
- * - no spaces within the complete quote prefix of line (sect. 4.5)
- * - change all quoting chars to '>' by force; see BUGS in srcdir
- */
-void rfc3676_quote_line (STATE* s, char* dst, size_t dstlen,
-                         const char* line);
-
-/*
  * this does the space-stuffing required as in 'MUST'
  * this is only used right after editing the initial message's content
  * as elsewhere it's too difficult to catch all circumstances right;
