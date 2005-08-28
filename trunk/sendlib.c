@@ -2078,8 +2078,11 @@ int mutt_invoke_mta (ADDRESS * from,    /* the sender */
                      int eightbit)
 {                               /* message contains 8bit chars */
 #ifdef USE_LIBESMTP
-  if (SmtpHost)
-    return mutt_libesmtp_invoke (from, to, cc, bcc, msg, eightbit);
+#ifdef USE_NNTP
+  if (!option (OPTNEWSSEND))
+#endif
+    if (SmtpHost)
+      return mutt_libesmtp_invoke (from, to, cc, bcc, msg, eightbit);
 #endif
 
   return mutt_invoke_sendmail (from, to, cc, bcc, msg, eightbit);
