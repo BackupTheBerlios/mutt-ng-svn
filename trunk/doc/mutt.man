@@ -207,7 +207,7 @@ GNU General Public License for more details.
 .PP
 Mutt-ng Home Page: http://www.muttng.org
 .PP
-The Mutt-ng manual: http://www.mutt-ng.org/manual
+The Mutt-ng manual: http://www.muttng.org/manual
 .PP
 The GNU General Public License.
 .SH AUTHOR
