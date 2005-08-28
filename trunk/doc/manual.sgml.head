@@ -2309,8 +2309,8 @@ message will ever get marked as read or deleted.
 and the <tt>&tilde;n</tt> pattern:
 
 <verb>
-color   black   yellow  "~n 10-"
-color   red     yellow  "~n 100-"</verb>
+color index  black   yellow  "~n 10-"
+color index  red     yellow  "~n 100-"</verb>
 
 <p>The rules above mark all messages with a score between 10 and 99
 with black and yellow, and messages with a score greater or equal
