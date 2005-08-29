@@ -18,6 +18,7 @@
 #include "charset.h"
 #include "mutt_crypt.h"
 #include "mutt_idna.h"
+#include "mime.h"
 
 #include "lib/str.h"
 #include "lib/rx.h"
@@ -643,7 +644,7 @@ static const char *hdr_format_str (char *dest,
       ch = 'K';
 
     snprintf (buf2, sizeof (buf2),
-              "%c%c%c", (THREAD_NEW ? 'n' : (THREAD_OLD ? 'o' :
+              "%c%c%c%c", (THREAD_NEW ? 'n' : (THREAD_OLD ? 'o' :
                                              ((hdr->read
                                                && (ctx
                                                    && ctx->msgnotreadyet !=
@@ -661,7 +662,9 @@ static const char *hdr_format_str (char *dest,
                                                       mutt_user_is_recipient
                                                       (hdr)) <
                                                      str_len (Tochars)) ?
-                                                    Tochars[i] : ' ')));
+                                                    Tochars[i] : ' ')),
+              (hdr->content && hdr->content->type == TYPEMULTIPART) ?
+              'A' : ' ');
     mutt_format_s (dest, destlen, prefix, buf2);
     break;
 

@@ -67,7 +67,8 @@ list2_t* list_dup (list2_t*, void* (*dup) (void*));
  *      index in data array otherwise
  * the callback must return 0 on equality
  */
-int list_lookup (list2_t*, int (*cmp) (const void*, const void*), const void*);
+typedef int list_lookup_t (const void*, const void*);
+int list_lookup (list2_t*, list_lookup_t* cmp, const void*);
 
 /*
  * dumb-splits string at boundary characters into list

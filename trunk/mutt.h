@@ -435,6 +435,7 @@ enum {
   OPTWRAPSEARCH,
   OPTWRITEBCC,                  /* write out a bcc header? */
   OPTXMAILER,
+  OPTXMAILTO,                   /* 1 if $edit_header is forcebly set */
   OPTXTERMSETTITLES,
 
   OPTCRYPTUSEGPGME,

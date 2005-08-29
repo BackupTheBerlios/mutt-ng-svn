@@ -249,8 +249,10 @@ int url_parse_mailto (ENVELOPE * e, char **body, const char *src)
       mutt_parse_rfc822_line (e, NULL, scratch, value, 1, 0, 0, &last);
       /* if $strict_mailto is set, force editing headers to let
        * users have a look at what we got */
-      if (!option (OPTSTRICTMAILTO))
+      if (!option (OPTSTRICTMAILTO)) {
+        set_option (OPTXMAILTO);
         set_option (OPTEDITHDRS);
+      }
     }
   }
 

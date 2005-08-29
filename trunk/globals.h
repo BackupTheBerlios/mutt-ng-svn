@@ -47,6 +47,7 @@ WHERE char *DisplayFilter;
 WHERE char *DsnNotify;
 WHERE char *DsnReturn;
 WHERE char *Editor;
+WHERE char *EditorHeaders;
 WHERE char *EscChar;
 WHERE char *FileCharset;
 WHERE char *FolderFormat;

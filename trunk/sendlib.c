@@ -1471,12 +1471,15 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
   char *p;
   LIST *tmp = env->userhdrs;
   int has_agent = 0;            /* user defined user-agent header field exists */
+  list2_t* hdrs = list_from_str (EditorHeaders, " ");
 
 #ifdef USE_NNTP
   if (!option (OPTNEWSSEND))
 #endif
     if (mode == 0 && !privacy)
       fputs (mutt_make_date (buffer, sizeof (buffer)), fp);
+
+#define EDIT_HEADER(x) (mode != 1 || option(OPTXMAILTO) || (mode == 1 && list_lookup(hdrs,(list_lookup_t*) ascii_strcasecmp,x) >= 0))
 
   /* OPTUSEFROM is not consulted here so that we can still write a From:
    * field if the user sets it with the `my_hdr' command
@@ -1495,7 +1498,8 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
 #ifdef USE_NNTP
     if (!option (OPTNEWSSEND))
 #endif
-      fputs ("To: \n", fp);
+      if (EDIT_HEADER("To:"))
+        fputs ("To: \n", fp);
 
   if (env->cc) {
     fputs ("Cc: ", fp);
@@ -1505,7 +1509,8 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
 #ifdef USE_NNTP
     if (!option (OPTNEWSSEND))
 #endif
-      fputs ("Cc: \n", fp);
+      if (EDIT_HEADER("Cc:"))
+        fputs ("Cc: \n", fp);
 
   if (env->bcc) {
     if (mode != 0 || option (OPTWRITEBCC)) {
@@ -1517,28 +1522,30 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
 #ifdef USE_NNTP
     if (!option (OPTNEWSSEND))
 #endif
-      fputs ("Bcc: \n", fp);
+      if (EDIT_HEADER("Bcc:"))
+        fputs ("Bcc: \n", fp);
 
 #ifdef USE_NNTP
   if (env->newsgroups)
     fprintf (fp, "Newsgroups: %s\n", env->newsgroups);
-  else if (mode == 1 && option (OPTNEWSSEND))
+  else if (mode == 1 && option (OPTNEWSSEND) && EDIT_HEADER("Newsgroups:"))
     fputs ("Newsgroups: \n", fp);
 
   if (env->followup_to)
     fprintf (fp, "Followup-To: %s\n", env->followup_to);
-  else if (mode == 1 && option (OPTNEWSSEND))
+  else if (mode == 1 && option (OPTNEWSSEND) && EDIT_HEADER("Followup-To:"))
     fputs ("Followup-To: \n", fp);
 
   if (env->x_comment_to)
     fprintf (fp, "X-Comment-To: %s\n", env->x_comment_to);
-  else if (mode == 1 && option (OPTNEWSSEND) && option (OPTXCOMMENTTO))
+  else if (mode == 1 && option (OPTNEWSSEND) && option (OPTXCOMMENTTO) &&
+           EDIT_HEADER("X-Comment-To:"))
     fputs ("X-Comment-To: \n", fp);
 #endif
 
   if (env->subject)
     fprintf (fp, "Subject: %s\n", env->subject);
-  else if (mode == 1)
+  else if (mode == 1 && EDIT_HEADER("Subject:"))
     fputs ("Subject: \n", fp);
 
   /* save message id if the user has set it */
@@ -1549,7 +1556,7 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
     fputs ("Reply-To: ", fp);
     mutt_write_address_list (env->reply_to, fp, 10, 0);
   }
-  else if (mode > 0)
+  else if (mode > 0 && EDIT_HEADER("Reply-To:"))
     fputs ("Reply-To: \n", fp);
 
   if (env->mail_followup_to)
@@ -1578,6 +1585,8 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
     mutt_write_references (env->in_reply_to, fp);
     fputc ('\n', fp);
   }
+
+#undef EDIT_HEADER
 
   /* Add any user defined headers */
   for (; tmp; tmp = tmp->next) {
@@ -1617,6 +1626,8 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
     /* Add a vanity header */
     fprintf (fp, "User-Agent: %s (%s)\n", mutt_make_version (0), os);
   }
+
+  list_del (&hdrs, (list_del_t*) _mem_free);
 
   return (ferror (fp) == 0 ? 0 : -1);
 }

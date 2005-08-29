@@ -639,6 +639,25 @@ struct option_t MuttVars[] = {
    ** .pp
    ** This option allows you to edit the header of your outgoing messages
    ** along with the body of your message.
+   **
+   ** .pp
+   ** Which empty header fields to show is controlled by the
+   ** $$editor_headers option.
+   */
+#ifdef USE_NNTP
+  {"editor_headers", DT_STR, R_NONE, UL &EditorHeaders, "From: To: Cc: Bcc: Subject: Reply-To: Newsgroups: Followup-To: X-Comment-To:" },
+#else
+  {"editor_headers", DT_STR, R_NONE, UL &EditorHeaders, "From: To: Cc: Bcc: Subject: Reply-To:" },
+#endif
+  /*
+   ** .pp
+   ** If $$edit_headers is \fIset\fP, this space-separated list specifies
+   ** which \fInon-empty\fP header fields to edit in addition to
+   ** user-defined headers.
+   **
+   ** .pp
+   ** Note: if $$edit_headers had to be turned on by force because
+   ** $$strict_mailto is \fIunset\fP, this option has no effect.
    */
   {"editor", DT_PATH, R_NONE, UL &Editor, "" },
   /*

@@ -10,6 +10,14 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-08-28:
+
+  The $editor_headers option has been added.
+
+  The %Z expando of $index_format now also includes an 'A'
+  as the last character if a mail has attachments, i.e. is of
+  type multipart and a space otherwise.
+
 2005-08-27:
 
   The $debug_level option has been added.
