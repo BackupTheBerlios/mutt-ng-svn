@@ -12,6 +12,10 @@ sources of information.
 
 2005-08-28:
 
+  Several pre-defined read-only variables named $muttng_ have
+  been added; this feature is maybe subject to change in the near
+  future.
+
   The $editor_headers option has been added.
 
   The %Z expando of $index_format now also includes an 'A'

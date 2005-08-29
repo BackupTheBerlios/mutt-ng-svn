@@ -70,7 +70,7 @@ CPP=@CPP@
 
 DEFS=-DPKGDATADIR=\"$(pkgdatadir)\" -DSYSCONFDIR=\"$(sysconfdir)\" \
 	-DBINDIR=\"$(bindir)\" -DMUTTLOCALEDIR=\"$(datadir)/locale\" \
-	-DHAVE_CONFIG_H=1
+	-DHAVE_CONFIG_H=1 -DPKGDOCDIR=\"$(docdir)\"
 
 INCLUDES=-I. -I$(top_srcdir) $(IMAP_INCLUDES) $(POP_INCLUDES) $(NNTP_INCLUDES) $(LIBGPGME_CFLAGS) -Iintl
 
@@ -153,8 +153,7 @@ keymap_alldefs.h: $(srcdir)/OPS $(srcdir)/OPS.PGP $(srcdir)/OPS.MIX $(srcdir)/OP
 			> keymap_alldefs.h
 
 version.h: $(srcdir)/VERSION.svn
-	echo "#undef MUTT_VERSION" > version.h
-	echo "#define MUTT_VERSION \"`cat $(srcdir)/VERSION.in`-r`cat $(srcdir)/VERSION.svn`\"" >> version.h
+	echo "#define MUTT_REVISION \"`cat $(srcdir)/VERSION.svn`\"" > version.h
 
 reldate:
 	echo 'const char *ReleaseDate = "'`date +%Y-%m-%d`'";' > $(srcdir)/reldate.h

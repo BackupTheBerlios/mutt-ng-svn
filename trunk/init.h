@@ -18,6 +18,8 @@
 #endif
 
 #include "buffy.h"
+#include "mutt.h"
+#include "version.h"
 #include "lib/debug.h"
 
 #ifndef _MAKEDOC
@@ -32,7 +34,8 @@
 #define DT_MAGIC        8       /* mailbox type */
 #define DT_SYN          9       /* synonym for another variable */
 #define DT_ADDR         10      /* e-mail address */
-#define DT_USER         11      /* user defined viar $user_ */
+#define DT_USER         11      /* user defined via $user_ */
+#define DT_SYS          12      /* pre-defined via $muttng_ */
 
 #define DTYPE(x) ((x) & DT_MASK)
 
@@ -589,7 +592,7 @@ struct option_t MuttVars[] = {
    ** filtered message is read from the standard output.
    */
 #if defined(DL_STANDALONE) && defined(USE_DOTLOCK)
-  {"dotlock_program", DT_PATH, R_NONE, UL &MuttDotlock, BINDIR "/muttng_dotlock"},
+  {"dotlock_program", DT_PATH, R_NONE, UL &MuttDotlock, "$muttng_bindir/muttng_dotlock"},
   /*
    ** .pp
    ** Availability: Standalone and Dotlock
@@ -1454,6 +1457,52 @@ struct option_t MuttVars[] = {
    ** This specifies the folder into which read mail in your ``$$spoolfile''
    ** folder will be appended.
    */
+  {"muttng_version", DT_SYS, R_NONE, 0, VERSION },
+  /*
+   ** .pp
+   ** \fIThis is a read-only system property and specifies muttng's
+   ** version string.\fP
+   */
+  {"muttng_revision", DT_SYS, R_NONE, 0, MUTT_REVISION },
+  /*
+   ** .pp
+   ** \fIThis is a read-only system property and specifies muttng's
+   ** subversion revision string.\fP
+   */
+  {"muttng_sysconfdir", DT_SYS, R_NONE, 0, SYSCONFDIR },
+  /*
+   ** .pp
+   ** \fIThis is a read-only system property and specifies the
+   ** directory containing the muttng system-wide configuration.\fP
+   */
+  {"muttng_bindir", DT_SYS, R_NONE, 0, BINDIR },
+  /*
+   ** .pp
+   ** \fIThis is a read-only system property and specifies the
+   ** directory containing the muttng binary.
+   */
+  {"muttng_docdir", DT_SYS, R_NONE, 0, PKGDOCDIR },
+  /*
+   ** .pp
+   ** \fIThis is a read-only system property and specifies the
+   ** directory containing the muttng documentation.\fP
+   */
+#if USE_HCACHE
+#if HAVE_QDBM
+  {"muttng_hcache_backend", DT_SYS, R_NONE, 0, "qdbm" },
+#elif HAVE_GDBM
+  {"muttng_hcache_backend", DT_SYS, R_NONE, 0, "gdbm" },
+#elif HAVE_DB4
+  {"muttng_hcache_backend", DT_SYS, R_NONE, 0, "db4" },
+#else
+  {"muttng_hcache_backend", DT_SYS, R_NONE, 0, "unknown" },
+#endif
+  /*
+   ** .pp
+   ** \fIThis is a read-only system property and specifies the
+   ** header chaching's database backend.\fP
+   */
+#endif
   {"operating_system", DT_STR, R_NONE, UL &OperatingSystem, "" },
   /*
    ** .pp

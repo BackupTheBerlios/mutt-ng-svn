@@ -1240,7 +1240,10 @@ For a complete list, see the <ref id="commands" name="command reference">.
 
 <!--}}}--> 
 
-<sect>Variable Expansion <!--{{{--> 
+<sect>Expansion within variables <!--{{{--> 
+
+  <p>Besides just assign static content to variables, there's plenty of
+  ways of adding external and more or less dynamic content.
 
   <sect1>Commands' Output 
 
@@ -1318,7 +1321,7 @@ macro pager &lt;F1&gt; "!less -r /path/to/manual" "Show manual"
     define a custom variable like so:
 
 <tscreen><verb>
-set user_manualcmd = '!less -r /path/to_manual'
+set user_manualcmd = "!less -r /path/to_manual"
 macro generic &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"
 macro pager &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"
 macro index &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"
@@ -1370,6 +1373,42 @@ unset user_foo
 
     <p>any query or operation (except the noted expansion within other
     statements) will lead to an error message.
+
+  <sect1>Pre-Defined Variables 
+
+    <p>In order to allow users to share one setup over a number of
+    different machines without having to change its contents, there's a
+    number of pre-defined variables. These are prefixed with
+    <tt/muttng_/ and are read-only, i.e. they cannot be set, unset or
+    reset. The reference chapter lists all available variables.
+
+    <p><em> Please consult the local copy of your manual for their
+    values as they may differ from different manual sources.</em> Where
+    the manual is installed in can be queried (already using such a
+    variable) by running:
+
+<tscreen><verb>
+muttng -Q muttng_docdir
+</verb></tscreen>
+
+    <p>To extend the example for viewing the manual via self-defined
+    variables, it can be made more readable and more portable by
+    changing the real path in:
+
+<tscreen><verb>
+set user_manualcmd = '!less -r /path/to_manual'
+</verb></tscreen>
+
+    <p>to:
+
+<tscreen><verb>
+set user_manualcmd = "!less -r $muttng_docdir/manual.txt"
+</verb></tscreen>
+
+    <p>which works everywhere if a manual is installed.
+
+    <p><em>Note: this is a draft feature and maybe subject to change in
+    the near future.</em>
 
   <sect1>Type Conversions 
 

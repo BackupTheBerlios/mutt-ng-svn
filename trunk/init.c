@@ -130,6 +130,7 @@ static void rx_to_string    (char* dst, size_t dstlen, struct option_t* option);
 static void magic_to_string (char* dst, size_t dstlen, struct option_t* option);
 static void addr_to_string  (char* dst, size_t dstlen, struct option_t* option);
 static void user_to_string  (char* dst, size_t dstlen, struct option_t* option);
+static void sys_to_string   (char* dst, size_t dstlen, struct option_t* option);
 
 /* protos for config type handles: convert to value from string */
 static int bool_from_string  (struct option_t* dst, const char* val,
@@ -173,6 +174,7 @@ static struct {
   { DT_SYN,     NULL,             NULL },
   { DT_ADDR,    addr_to_string,   addr_from_string },
   { DT_USER,    user_to_string,   user_from_string },
+  { DT_SYS,     sys_to_string,    NULL },
 };
 
 static void bool_to_string (char* dst, size_t dstlen,
@@ -251,6 +253,11 @@ static void user_to_string (char* dst, size_t dstlen,
                             struct option_t* option) {
   snprintf (dst, dstlen, "%s=\"%s\"", option->option,
             NONULL (((char*) option->data)));
+}
+
+static void sys_to_string (char* dst, size_t dstlen,
+                           struct option_t* option) {
+  snprintf (dst, dstlen, "%s=\"%s\"", option->option, option->init);
 }
 
 static int path_from_string (struct option_t* dst, const char* val,
@@ -1307,23 +1314,33 @@ static void mutt_set_default (const char* name, void* p, unsigned long more) {
       return;
     ptr = hash_find (ConfigOptions, (char*) ptr->data);
   }
-  if (!ptr || *ptr->init)
+  if (!ptr || *ptr->init || !FuncTable[DTYPE (ptr->type)].opt_from_string)
     return;
   mutt_option_value (ptr->option, buf, sizeof (buf));
   if (str_len (ptr->init) == 0 && buf && *buf)
     ptr->init = str_dup (buf);
 }
 
-/* creates new option_t* of type DT_USER for $user_ var */
-static struct option_t* add_user_option (const char* name) {
+static struct option_t* add_option (const char* name, const char* init,
+                                    short type, short dup) {
   struct option_t* option = mem_calloc (1, sizeof (struct option_t));
+
+  debug_print (1, ("adding $%s\n", name));
+
   option->option = str_dup (name);
-  option->type = DT_USER;
+  option->type = type;
+  if (init)
+    option->init = dup ? str_dup (init) : (char*) init;
   return (option);
 }
 
+/* creates new option_t* of type DT_USER for $user_ var */
+static struct option_t* add_user_option (const char* name) {
+  return (add_option (name, NULL, DT_USER, 1));
+}
+
 /* free()'s option_t* */
-static void del_user_option (void* p) {
+static void del_option (void* p) {
   struct option_t* ptr = (struct option_t*) p;
   char* s = (char*) ptr->data;
   debug_print (1, ("removing option '%s' from table\n", NONULL (ptr->option)));
@@ -1346,7 +1363,8 @@ static void mutt_restore_default (const char* name, void* p,
   }
   if (!ptr)
     return;
-  if (FuncTable[DTYPE (ptr->type)].opt_from_string (ptr, ptr->init, errbuf,
+  if (FuncTable[DTYPE (ptr->type)].opt_from_string &&
+      FuncTable[DTYPE (ptr->type)].opt_from_string (ptr, ptr->init, errbuf,
                                                     sizeof (errbuf)) < 0) {
     mutt_endwin (NULL);
     fprintf (stderr, _("Invalid default setting found. Please report this "
@@ -1550,7 +1568,11 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
         hash_map (ConfigOptions, mutt_restore_default, 1);
         return (0);
       }
-      else
+      else if (!FuncTable[DTYPE (option->type)].opt_from_string) {
+        snprintf (err->data, err->dsize, _("$%s is read-only"), option->option);
+        r = -1;
+        break;
+      } else
         mutt_restore_default (NULL, option, 1);
     }
     else if (DTYPE (option->type) == DT_BOOL) {
@@ -1593,20 +1615,27 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
              DTYPE (option->type) == DT_NUM ||
              DTYPE (option->type) == DT_SORT ||
              DTYPE (option->type) == DT_RX ||
-             DTYPE (option->type) == DT_USER) {
+             DTYPE (option->type) == DT_USER ||
+             DTYPE (option->type) == DT_SYS) {
 
       /* XXX maybe we need to get unset into handlers? */
       if (DTYPE (option->type) == DT_STR ||
           DTYPE (option->type) == DT_PATH ||
           DTYPE (option->type) == DT_ADDR ||
-          DTYPE (option->type) == DT_USER) {
+          DTYPE (option->type) == DT_USER ||
+          DTYPE (option->type) == DT_SYS) {
         if (unset) {
-          if (DTYPE (option->type) == DT_ADDR)
+          if (!FuncTable[DTYPE (option->type)].opt_from_string) {
+            snprintf (err->data, err->dsize, _("$%s is read-only"),
+                      option->option);
+            r = -1;
+            break;
+          } else if (DTYPE (option->type) == DT_ADDR)
             rfc822_free_address ((ADDRESS **) option->data);
           else if (DTYPE (option->type) == DT_USER)
             /* to unset $user_ means remove */
             hash_delete (ConfigOptions, option->option,
-                         option, del_user_option);
+                         option, del_option);
           else
             mem_free ((void *) option->data);
           break;
@@ -1619,11 +1648,19 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
         break;
       }
 
-      s->dptr++;
-      mutt_extract_token (tmp, s, 0);
-      if (!FuncTable[DTYPE (option->type)].opt_from_string
-          (option, tmp->data, err->data, err->dsize))
+      /* the $muttng_ variables are read-only */
+      if (!FuncTable[DTYPE (option->type)].opt_from_string) {
+        snprintf (err->data, err->dsize, _("$%s is read-only"),
+                  option->option);
         r = -1;
+        break;
+      } else {
+        s->dptr++;
+        mutt_extract_token (tmp, s, 0);
+        if (!FuncTable[DTYPE (option->type)].opt_from_string
+            (option, tmp->data, err->data, err->dsize))
+          r = -1;
+      }
     }
     else if (DTYPE (option->type) == DT_QUAD) {
 
@@ -2202,10 +2239,17 @@ void mutt_init (int skip_sys_rc, LIST * commands)
   err.data = error;
   err.dsize = sizeof (error);
 
-  /* use 3*sizeof(muttvars) to have some room for $user_ vars */
+  /* use 3*sizeof(muttvars) instead of 2*sizeof() 
+   * to have some room for $user_ vars */
   ConfigOptions = hash_create (sizeof (MuttVars) * 3);
-  for (i = 0; MuttVars[i].option; i++)
-    hash_insert (ConfigOptions, MuttVars[i].option, &MuttVars[i], 0);
+  for (i = 0; MuttVars[i].option; i++) {
+    if (DTYPE (MuttVars[i].type) != DT_SYS)
+      hash_insert (ConfigOptions, MuttVars[i].option, &MuttVars[i], 0);
+    else
+      hash_insert (ConfigOptions, MuttVars[i].option,
+                   add_option (MuttVars[i].option, MuttVars[i].init,
+                               DT_SYS, 0), 0);
+  }
 
   /* 
    * XXX - use something even more difficult to predict?

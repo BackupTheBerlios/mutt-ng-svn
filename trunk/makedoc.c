@@ -396,7 +396,8 @@ enum {
   DT_RX,
   DT_MAGIC,
   DT_SYN,
-  DT_ADDR
+  DT_ADDR,
+  DT_SYS
 };
 
 struct {
@@ -415,6 +416,7 @@ struct {
   "DT_MAGIC", "folder magic"}, {
   "DT_SYN", NULL}, {
   "DT_ADDR", "e-mail address"}, {
+  "DT_SYS", "system property"}, {
   NULL, NULL}
 };
 
@@ -641,6 +643,13 @@ static void print_confline (const char *varname, int type, const char *val)
     /* configuration file */
   case F_CONF:
     {
+      if (type == DT_SYS) {
+        add_s ("\n# set ?");
+        add_s (varname);
+        add_s (" prints ");
+        add_s (val);
+        break;
+      }
       if (type == DT_STR || type == DT_RX || type == DT_ADDR
           || type == DT_PATH) {
         add_s ("\n# set ");
@@ -691,7 +700,7 @@ static void print_confline (const char *varname, int type, const char *val)
         add_s ("\\(rq\n");
       }
       else {
-        add_s ("Default: ");
+        add_s (type == DT_SYS ? "Value: " : "Default: ");
         add_s (val);
         add_c ('\n');
       }
@@ -719,7 +728,9 @@ static void print_confline (const char *varname, int type, const char *val)
         add_s ("&dquot;</tt>");
       }
       else {
-        add_s ("<p>\nDefault: <tt>");
+        add_s ("<p>\n"); 
+        add_s (type == DT_SYS ? "Value: " : "Default: ");
+        add_s ("<tt>");
         add_s (val);
         add_s ("</tt>");
       }

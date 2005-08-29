@@ -1,5 +1,37 @@
 Changes specific to mutt-ng:
 
+2005-08-29:
+  * Mutt-ng now can limit the number of headers to show if
+    $edit_headers is set via $editor_headers
+  * Eventually muttng shows that messages are of type multipart
+    in the index
+  * Mutt-ng now contains a set of pre-defined read-only variables
+    to query for system properties (see manual) (useful in
+    connection with expansion)
+
+2005-08-27:
+  * users now can freely define variables on their own as long as
+    prefixed with $user_ (useful in connection with expansion)
+  * instead of dumping all variables, muttng can dump changed only
+  * debug levels can be tuned at runtime
+
+2005-08-25:
+  * It now expands the current value of configuration variables
+    in addition to environment variables via $foo
+  * It now can remind the user to attach files if promised but not made
+  * All mutt-ng builds eventually contain correct revision numbers
+
+2005-08-18:
+  * Mutt-ng now can limit the number of recipients shown in the pager
+
+2005-08-16:
+  * Peter J. Holzer <hjp@hjp.at> kindly contributed an improved
+    format=flowed handler
+
+2005-08-14:
+  * the sidebar now shows newsgroup article counts if groups are
+    defined via mailboxes
+
 2005-08-13:
   * libESMTP integration has been improved: it now features DSN, the
     8BITMIME flag and an envelope sender differend from From: header

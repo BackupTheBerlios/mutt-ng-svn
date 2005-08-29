@@ -1290,10 +1290,12 @@ const char *mutt_make_version (int full)
   static char vstring[STRING];
 
   if (full)
-    snprintf (vstring, sizeof (vstring), "Mutt-ng %s (based "
-              "on Mutt 1.5.10/%s)", MUTT_VERSION, ReleaseDate);
+    snprintf (vstring, sizeof (vstring), "Mutt-ng %s-r%s (based "
+              "on Mutt 1.5.10/%s)", MUTT_VERSION, MUTT_REVISION,
+              ReleaseDate);
   else
-    snprintf (vstring, sizeof (vstring), "mutt-ng/%s", MUTT_VERSION);
+    snprintf (vstring, sizeof (vstring), "mutt-ng/%s-r%s",
+              MUTT_VERSION, MUTT_REVISION);
   return vstring;
 }
 
