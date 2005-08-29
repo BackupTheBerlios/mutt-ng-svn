@@ -791,7 +791,7 @@ static int parse_ifdef (BUFFER * tmp, BUFFER * s, unsigned long data,
   mutt_extract_token (tmp, s, 0);
 
   /* is the item defined as a variable or a function? */
-  if ((option = hash_find (ConfigOptions, tmp->data)))
+  if ((option = hash_find (ConfigOptions, tmp->data)) != NULL)
     res = 1;
   else {
     for (i = 0; !res && i < MENU_MAX; i++) {
@@ -809,23 +809,16 @@ static int parse_ifdef (BUFFER * tmp, BUFFER * s, unsigned long data,
     }
   }
   /* check for feature_* */
-  if (!res) {
-    char *p = NULL;
-
+  if (!res && ascii_strncasecmp (tmp->data, "feature_", 8) == 0 &&
+      (j = str_len (tmp->data)) > 8) {
     i = 0;
-    j = str_len (tmp->data);
-    /* need at least input of 'feature_X' */
-    if (j >= 7) {
-      p = tmp->data + 7;
-      j -= 7;
-      while (Features[i].name) {
-        if (str_len (Features[i].name) == j &&
-            ascii_strncasecmp (Features[i].name, p, j)) {
-          res = 1;
-          break;
-        }
-        i++;
+    while (Features[i]) {
+      if (str_len (Features[i]) == j-8 &&
+          ascii_strncasecmp (Features[i], tmp->data+8, j-8) == 0) {
+        res = 1;
+        break;
       }
+      i++;
     }
   }
 
@@ -836,9 +829,10 @@ static int parse_ifdef (BUFFER * tmp, BUFFER * s, unsigned long data,
       snprintf (err->data, err->dsize, _("ifndef: too few arguments"));
     return (-1);
   }
+
   mutt_extract_token (tmp, s, M_TOKEN_SPACE);
 
-  if ((data && res) || (!data && !res)) {
+  if (data == res) {
     if (mutt_parse_rc_line (tmp->data, &token, err) == -1) {
       mutt_error ("Error: %s", err->data);
       mem_free (&token.data);

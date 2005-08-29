@@ -70,11 +70,6 @@ struct option_t {
   char* init;
 };
 
-struct feature_t {
-  char *name;
-  short builtin;
-};
-
 #define UL (unsigned long)
 
 #endif /* _MAKEDOC */
@@ -3817,148 +3812,78 @@ struct option_t MuttVars[] = {
   { NULL }
 };
 
-const struct feature_t Features[] = {
-  {"ncurses",
+static const char* Features[] = {
 #ifdef NCURSES_VERSION
-   1
-#else
-   0
+  "ncurses",
 #endif
-   }, {"slang",
 #ifdef USE_SLANG_CURSES
-   1
-#else
-   0
+  "slang",
 #endif
-   }, {"iconv",
 #ifdef _LIBICONV_VERSION
-   1
-#else
-   0
+  "iconv",
 #endif
-   }, {"idn",
 #ifdef HAVE_LIBIDN
-   1
-#else
-   0
+  "idn",
 #endif
-   }, {"dotlock",
 #ifdef USE_DOTLOCK
-   1
-#else
-   0
+  "dotlock",
 #endif
-   }, {"standalone",
 #ifdef DL_STANDALONE
-   1
-#else
-   0
+  "standalone",
 #endif
-   }, {"pop",
 #ifdef USE_POP
-   1
-#else
-   0
+  "pop",
 #endif
-   }, {"nntp",
 #ifdef USE_NNTP
-   1
-#else
-   0
+  "nntp",
 #endif
-   }, {"imap",
 #ifdef USE_IMAP
-   1
-#else
-   0
+  "imap",
 #endif
-   }, {"ssl",
 #ifdef USE_SSL
-   1
-#else
-   0
+  "ssl",
 #endif
-   }, {"gnutls",
 #ifdef USE_GNUTLS
-   1
-#else
-   0
+  "gnutls",
 #endif
-   }, {"sasl",
 #ifdef USE_SASL
-   1
-#else
-   0
+  "sasl",
 #endif
-   }, {"sasl2",
 #ifdef USE_SASL2
-   1
-#else
-   0
+  "sasl2",
 #endif
-   }, {"libesmtp",
 #ifdef USE_LIBESMTP
-   1
-#else
-   0
+  "libesmtp",
 #endif
-   }, {"compressed",
 #ifdef USE_COMPRESSED
-   1
-#else
-   0
+  "compessed",
 #endif
-   }, {"color",
 #ifdef HAVE_COLOR
-   1
-#else
-   0
+  "color",
 #endif
-   }, {"classic_pgp",
 #ifdef CRYPT_BACKEND_CLASSIC_PGP
-   1
-#else
-   0
+  "classic_pgp",
 #endif
-   }, {"classic_smime",
 #ifdef CRYPT_BACKEND_CLASSIC_SMIME
-   1
-#else
-   0
+  "class_smime",
 #endif
-   }, {"gpgme",
 #ifdef CRYPT_BACKEND_GPGME
-   1
-#else
-   0
+  "gpgme",
 #endif
-   }, {"header_cache",
 #ifdef USE_HCACHE
-   1
-#else
-   0
+  "header_cache",
 #endif
-   }, {"qdbm",
 #ifdef HAVE_QDBM
-   1
-#else
-   0
+  "qdbm",
 #endif
-   }, {"gdbm",
 #ifdef HAVE_GDBM
-   1
-#else
-   0
+  "gdbm",
 #endif
-   }, {"db4",
 #ifdef HAVE_DB4
-   1
-#else
-   0
+  "db4",
 #endif
-   },
   /* last */
-  {NULL, 0}
+  NULL
 };
 
 const struct mapping_t SortMethods[] = {
