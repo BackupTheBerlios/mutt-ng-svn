@@ -10,7 +10,7 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
-2005-08-28:
+2005-08-29:
 
   Several pre-defined read-only variables named $muttng_ have
   been added; this feature is maybe subject to change in the near
@@ -20,7 +20,11 @@ sources of information.
 
   The %Z expando of $index_format now also includes an 'A'
   as the last character if a mail has attachments, i.e. is of
-  type multipart and a space otherwise.
+  type multipart and a space otherwise. In addition, the ~M
+  pattern was added to match these messages.
+
+  Many synonym variables pointing to proper $nntp_ ones have
+  been removed.
 
 2005-08-27:
 

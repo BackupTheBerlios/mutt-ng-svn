@@ -243,7 +243,6 @@ struct option_t MuttVars[] = {
    ** This variable is valid only if $$strict_mime is unset.
    */
 #ifdef USE_NNTP
-  {"ask_followup_to", DT_SYN, R_NONE, UL "nntp_ask_followup_to", 0},
   {"nntp_ask_followup_to", DT_BOOL, R_NONE, OPTASKFOLLOWUP, "no" },
   /*
    ** .pp
@@ -253,7 +252,6 @@ struct option_t MuttVars[] = {
    ** If \fIset\fP, Mutt-ng will prompt you for the \fTFollowup-To:\fP header
    ** field before editing the body of an outgoing news article.
    */
-  {"ask_x_comment_to", DT_SYN, R_NONE, UL "nntp_ask_x_comment_to", 0},
   {"nntp_ask_x_comment_to", DT_BOOL, R_NONE, OPTASKXCOMMENTTO, "no" },
   /*
    ** .pp
@@ -376,7 +374,6 @@ struct option_t MuttVars[] = {
    ** visual terminals don't permit making the cursor invisible.
    */
 #ifdef USE_NNTP
-  {"catchup_newsgroup", DT_SYN, R_NONE, UL "nntp_catchup", 0},
   {"nntp_catchup", DT_QUAD, R_NONE, OPT_CATCHUP, "ask-yes" },
   /*
    ** .pp
@@ -785,7 +782,6 @@ struct option_t MuttVars[] = {
    ** of the same email for you.
    */
 #ifdef USE_NNTP
-  {"followup_to_poster", DT_SYN, R_NONE, UL "nntp_followup_to_poster", 0},
   {"nntp_followup_to_poster", DT_QUAD, R_NONE, OPT_FOLLOWUPTOPOSTER, "ask-yes" },
   /*
    ** .pp
@@ -875,7 +871,6 @@ struct option_t MuttVars[] = {
    ** ``Franklin'' to ``Franklin, Steve''.
    */
 #ifdef USE_NNTP
-  {"group_index_format", DT_SYN, R_NONE, UL "nntp_group_index_format", 0},
   {"nntp_group_index_format", DT_STR, R_BOTH, UL &GroupFormat, "%4C %M%N %5s  %-45.45f %d"},
   /*
    ** .pp
@@ -1277,7 +1272,6 @@ struct option_t MuttVars[] = {
    ** See also: ``$$to_chars''.
    */
 #ifdef USE_NNTP
-  {"inews", DT_SYN, R_NONE, UL "nntp_inews", 0},
   {"nntp_inews", DT_PATH, R_NONE, UL &Inews, ""},
   /*
    ** .pp
@@ -1669,7 +1663,6 @@ struct option_t MuttVars[] = {
    */
 
 #ifdef USE_NNTP
-  {"mime_subject", DT_SYN, R_NONE, UL "nntp_mime_subject", 0},
   {"nntp_mime_subject", DT_BOOL, R_NONE, OPTMIMESUBJECT, "yes" },
   /*
    ** .pp
@@ -1764,7 +1757,6 @@ struct option_t MuttVars[] = {
    ** deeper threads to fit on the screen.
    */
 #ifdef USE_NNTP
-  {"news_cache_dir", DT_SYN, R_NONE, UL "nntp_cache_dir", 0},
   {"nntp_cache_dir", DT_PATH, R_NONE, UL &NewsCacheDir, "~/.muttng"},
   /*
    ** .pp
@@ -1778,7 +1770,6 @@ struct option_t MuttVars[] = {
    ** As for the header caching in connection with IMAP and/or Maildir,
    ** this drastically increases speed and lowers traffic.
    */
-  {"news_server", DT_SYN, R_NONE, UL "nntp_host", 0 },
   {"nntp_host", DT_STR, R_NONE, UL &NewsServer, "" },
   /*
    ** .pp
@@ -1800,7 +1791,6 @@ struct option_t MuttVars[] = {
    ** presents a security risk since the superuser of your machine may read it
    ** regardless of the file's permissions.
    */
-  {"newsrc", DT_SYN, R_NONE, UL "nntp_newsrc", 0},
   {"nntp_newsrc", DT_PATH, R_NONE, UL &NewsRc, "~/.newsrc"},
   /*
    ** .pp
@@ -1860,7 +1850,6 @@ struct option_t MuttVars[] = {
    ** presents a security risk since the superuser of your machine may read it
    ** regardless of the file's permissions.
    */
-  {"nntp_poll", DT_SYN, R_NONE, UL "nntp_mail_check", 0},
   {"nntp_mail_check", DT_NUM, R_NONE, UL &NewsPollTimeout, "60" },
   /*
    ** .pp
@@ -2816,7 +2805,6 @@ struct option_t MuttVars[] = {
    ** string after the inclusion of a message which is being replied to.
    */
 #ifdef USE_NNTP
-  {"post_moderated", DT_SYN, R_NONE, UL "nntp_post_moderated", 0 },
   {"nntp_post_moderated", DT_QUAD, R_NONE, OPT_TOMODERATED, "ask-yes" },
   /*
    ** .pp
@@ -3192,7 +3180,6 @@ struct option_t MuttVars[] = {
    ** shell from \fT/etc/passwd\fP is used.
    */
 #ifdef USE_NNTP
-  {"save_unsubscribed", DT_SYN, R_NONE, UL "nntp_save_unsubscribed", 0 },
   {"nntp_save_unsubscribed", DT_BOOL, R_NONE, OPTSAVEUNSUB, "no" },
   /*
    ** .pp
@@ -3204,7 +3191,6 @@ struct option_t MuttVars[] = {
    */
 #endif
 #ifdef USE_NNTP
-  {"show_new_news", DT_SYN, R_NONE, UL "nntp_show_new_news", 0 },
   {"nntp_show_new_news", DT_BOOL, R_NONE, OPTSHOWNEWNEWS, "yes" },
   /*
    ** .pp
@@ -3216,7 +3202,6 @@ struct option_t MuttVars[] = {
    ** Also controls whether or not the number of new articles of subscribed
    ** newsgroups will be checked.
    */
-  {"show_only_unread", DT_SYN, R_NONE, UL "nntp_show_only_unread", 0 },
   {"nntp_show_only_unread", DT_BOOL, R_NONE, OPTSHOWONLYUNREAD, "no" },
   /*
    ** .pp
@@ -3796,7 +3781,6 @@ struct option_t MuttVars[] = {
    ** to the one used by ``$$status_format''.
    */
 #ifdef USE_NNTP
-  {"x_comment_to", DT_SYN, R_NONE, UL "nntp_x_comment_to", 0},
   {"nntp_x_comment_to", DT_BOOL, R_NONE, OPTXCOMMENTTO, "no" },
   /*
    ** .pp

@@ -8,7 +8,7 @@
 use strict;
 
 my %opts = (
-  # left from the first run of cleanup+removal
+  # removed on 2005-06-16
   " edit_hdrs"                   => " edit_headers",
   " forw_decode"                 => " forward_decode",
   " forw_format"                 => " forward_format",
@@ -30,7 +30,7 @@ my %opts = (
   " post_indent_str"             => " post_indent_string",
   " print_cmd"                   => " print_command",
   " shorten_hierarchy"           => " sidebar_shorten_hierarchy",
-  # current run
+  # removed on 2005-08-29
   " ask_followup_to"              => " nntp_ask_followup_to", 
   " ask_x_comment_to"             => " nntp_ask_x_comment_to", 
   " catchup_newsgroup"            => " nntp_catchup", 
@@ -48,9 +48,10 @@ my %opts = (
   " show_new_news"                => " nntp_show_new_news", 
   " show_only_unread"             => " nntp_show_only_unread", 
   " x_comment_to"                 => " nntp_x_comment_to",
-  # libesmtp
+  # renamed for consistency w/ libesmtp
   " smtp_auth_username"           => " smtp_user",
   " smtp_auth_password"           => " smtp_pass",
+  # renamed to free $user_ namespace
   " user_agent"                   => " agent_string"
 );
 
