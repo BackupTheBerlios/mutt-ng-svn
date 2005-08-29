@@ -167,7 +167,6 @@ enum {
   M_LIMIT,
   M_EXPIRED,
   M_SUPERSEDED,
-  M_REALNAME,
 
   /* actions for mutt_pattern_comp/mutt_pattern_exec */
   M_AND,
@@ -204,6 +203,8 @@ enum {
 #ifdef USE_NNTP
   M_NEWSGROUPS,
 #endif
+  M_REALNAME,
+  M_MULTIPART,
 
   /* Options for Mailcap lookup */
   M_EDIT,

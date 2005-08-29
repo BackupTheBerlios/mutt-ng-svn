@@ -20,6 +20,7 @@
 #include "mapping.h"
 #include "keymap.h"
 #include "copy.h"
+#include "mime.h"
 
 #include "lib/mem.h"
 #include "lib/intl.h"
@@ -65,6 +66,7 @@ struct pattern_flags {
   'L', M_ADDRESS, 0, eat_regexp}, {
   'l', M_LIST, 0, NULL}, {
   'm', M_MESSAGE, 0, eat_range}, {
+  'M', M_MULTIPART, 0, NULL}, {
   'n', M_SCORE, 0, eat_range}, {
   'N', M_NEW, 0, NULL}, {
   'O', M_OLD, 0, NULL}, {
@@ -1047,6 +1049,8 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags,
     return (pat->not ^ (h->thread && h->thread->duplicate_thread));
   case M_UNREFERENCED:
     return (pat->not ^ (h->thread && !h->thread->child));
+  case M_MULTIPART:
+    return (pat->not ^ (h->content && h->content->type == TYPEMULTIPART));
   case M_REALNAME:
     /* realname filter:
      * we have a match if

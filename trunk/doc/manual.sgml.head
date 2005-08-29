@@ -4756,6 +4756,7 @@ of the file ``&tilde;/run2.dat''.
 ~L EXPR         message is either originated or received by EXPR
 ~l              message is addressed to a known mailing list
 ~m [MIN]-[MAX]  message in the range MIN to MAX *)
+~M              multipart messages
 ~n [MIN]-[MAX]  messages with a score in the range MIN to MAX *)
 ~N              new messages
 ~O              old messages

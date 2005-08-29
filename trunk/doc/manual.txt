@@ -4,7 +4,7 @@
                       by Andreas Krennmair <ak@synflood.at> and others
                 originally based on _m_u_t_t by Michael Elkins <me@cs.hmc.edu> and others
 
-                                     version devel-r462
+                                     version devel-r465
 
                                           AAbbssttrraacctt
 
@@ -4250,6 +4250,7 @@
             ~L EXPR         message is either originated or received by EXPR
             ~l              message is addressed to a known mailing list
             ~m [MIN]-[MAX]  message in the range MIN to MAX *)
+            ~M              multipart messages
             ~n [MIN]-[MAX]  messages with a score in the range MIN to MAX *)
             ~N              new messages
             ~O              old messages
@@ -6592,7 +6593,7 @@
 
        Type: system property
 
-       Value: 462
+       Value: 465
 
        _T_h_i_s _i_s _a _r_e_a_d_-_o_n_l_y _s_y_s_t_e_m _p_r_o_p_e_r_t_y _a_n_d _s_p_e_c_i_f_i_e_s _m_u_t_t_n_g_'_s _s_u_b_v_e_r_s_i_o_n _r_e_v_i_s_i_o_n
        _s_t_r_i_n_g_.
