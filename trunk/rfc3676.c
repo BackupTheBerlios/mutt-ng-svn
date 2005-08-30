@@ -42,9 +42,7 @@ static int get_quote_level (char *line)
   return quoted;
 }
 
-static void print_flowed_line (char *line, STATE * s,
-                               int ql, int delsp,
-                               int* spaces, int space_len) {
+static void print_flowed_line (char *line, STATE * s, int ql) {
   int width;
   char *pos, *oldpos;
   int len = str_len (line);
@@ -126,22 +124,7 @@ static void print_flowed_line (char *line, STATE * s,
     if (!(s->flags & M_REPLYING) && option (OPTSTUFFQUOTED) &&
         (ql > 0 || s->prefix))
       state_putc (' ', s);
-
-    if (delsp && spaces && space_len > 0) {
-      /* here, we need to character-wise step through the line
-       * to eliminate all spaces which were trailing due to DelSp */
-      for (i = 0; i < str_len (oldpos); i++) {
-        if (oldpos[i] == ' ' && spaces[&(oldpos[i])-line] != 0) {
-          debug_print (4, ("f=f: DelSp: spaces[%d] forces space removal\n",
-                           &(oldpos[i])-line));
-          continue;
-        }
-        /* print space at oldpos[i] if it was non-trailing */
-        state_putc (oldpos[i], s);
-      }
-    } else
-      /* for no DelSp, just do whole line as per usual */
-      state_puts (oldpos, s);
+    state_puts (oldpos, s);
     /* fprintf(stderr,"print_flowed_line: `%s'\n",oldpos); */
     if (pos < line + len)
       state_putc (' ', s);
@@ -155,11 +138,10 @@ int rfc3676_handler (BODY * a, STATE * s) {
   char buf[LONG_STRING];
   char *curline = str_dup ("");
   char *t = NULL;
-  unsigned int curline_len = 1, space_len = 1,
+  unsigned int curline_len = 1,
                quotelevel = 0, newql = 0;
   int buf_off, buf_len;
-  int delsp = 0;
-  int* spaces = NULL;
+  int delsp = 0, fixed = 0;
 
   /* respect DelSP of RfC3676 only with f=f parts */
   if ((t = (char*) mutt_get_parameter ("delsp", a->parameter))) {
@@ -170,6 +152,7 @@ int rfc3676_handler (BODY * a, STATE * s) {
   debug_print (2, ("f=f: DelSp: %s\n", delsp ? "yes" : "no"));
 
   while (bytes > 0 && fgets (buf, sizeof (buf), s->fpin)) {
+
     buf_len = str_len (buf);
     bytes -= buf_len;
 
@@ -179,10 +162,9 @@ int rfc3676_handler (BODY * a, STATE * s) {
      * but has to be handled - see RFC 3676, sec. 4.5.
      */
     if (newql != quotelevel && curline && *curline) {
-      print_flowed_line (curline, s, quotelevel, delsp, spaces, space_len);
+      print_flowed_line (curline, s, quotelevel);
       *curline = '\0';
       curline_len = 1;
-      space_len = 0;
     }
     quotelevel = newql;
 
@@ -195,48 +177,40 @@ int rfc3676_handler (BODY * a, STATE * s) {
       *t = '\0';
       buf_len = t - buf;
     }
+
     buf_off = newql;
     /* respect space-stuffing */
     if (buf[buf_off] == ' ')
       buf_off++;
 
+    /* for DelSp=yes, we need to strip one SP prior to CRLF
+     * which may make the line look like fixed although it wasn't
+     * so keep this in mind for later processing */
+    fixed = buf_len == 0 || buf[buf_len - 1] != ' ' ||
+            (strcmp(buf + buf_off, "-- ") == 0);
+
+    if (delsp && buf_len >= 1 && buf[buf_len-1] == ' ')
+      buf[--buf_len] = '\0';
+
     /* signature separator also flushes the previous paragraph */
     if (strcmp(buf + buf_off, "-- ") == 0 && curline && *curline) {
-      print_flowed_line (curline, s, quotelevel, delsp, spaces, space_len);
+      print_flowed_line (curline, s, quotelevel);
       *curline = '\0';
       curline_len = 1;
-      space_len = 0;
     }
 
     mem_realloc (&curline, curline_len + buf_len - buf_off);
-    mem_realloc (&spaces, (curline_len + buf_len - buf_off)*sizeof (int));
     strcpy (curline + curline_len - 1, buf + buf_off);
-    memset (&spaces[space_len], 0, (buf_len - buf_off)*sizeof (int));
     curline_len += buf_len - buf_off;
-    space_len += buf_len - buf_off;
 
     /* if this was a fixed line the paragraph is finished */
-    if (buf_len == 0 || buf[buf_len - 1] != ' ' || strcmp(buf + buf_off, "-- ") == 0) {
-      print_flowed_line (curline, s, quotelevel, delsp, spaces, space_len);
+    if (fixed) {
+      print_flowed_line (curline, s, quotelevel);
       *curline = '\0';
       curline_len = 1;
-      space_len = 0;
-    } else {
-      /* if last line we appended had a space and we have DelSp=yes,
-       * get a 1 into spaces array at proper position so that
-       * print_flowed_line() can handle it; don't kill the space
-       * right here 'cause we maybe need soft linebreaks to search for break
-       */
-      if (delsp && curline && *curline && curline_len-2 >= 0 &&
-          curline[curline_len-2] == ' ') {
-        debug_print (4, ("f=f: DelSp: marking spaces[%d] for later removal\n",
-                         curline_len-2));
-        spaces[curline_len-2] = 1;
-      }
     }
 
   }
-  mem_free (&spaces);
   mem_free (&curline);
   return (0);
 }
