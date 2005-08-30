@@ -12,6 +12,8 @@
 # include "config.h"
 #endif
 
+#ifdef USE_GNUTLS
+
 #include <gnutls/gnutls.h>
 #include <gnutls/x509.h>
 #ifdef HAVE_GNUTLS_OPENSSL_H
@@ -65,7 +67,7 @@ static int tls_init (void)
   return 0;
 }
 
-int mutt_gnutls_socket_setup (CONNECTION * conn)
+int mutt_ssl_socket_setup (CONNECTION * conn)
 {
   if (tls_init () < 0)
     return -1;
@@ -131,7 +133,7 @@ static int tls_socket_open (CONNECTION * conn)
   return 0;
 }
 
-int mutt_gnutls_starttls (CONNECTION * conn)
+int mutt_ssl_starttls (CONNECTION * conn)
 {
   if (tls_init () < 0)
     return -1;
@@ -795,3 +797,5 @@ static int tls_check_certificate (CONNECTION * conn)
   gnutls_x509_crt_deinit (cert);
   return (done == 2);
 }
+
+#endif /* USE_GNUTLS */

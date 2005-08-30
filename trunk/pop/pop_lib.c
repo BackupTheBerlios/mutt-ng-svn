@@ -285,10 +285,8 @@ pop_query_status pop_open_connection (POP_DATA * pop_data)
         mutt_error ("%s", pop_data->err_msg);
         mutt_sleep (2);
       }
-#ifdef USE_SSL
+#if defined (USE_SSL) || defined (USE_GNUTLS)
       else if (mutt_ssl_starttls (pop_data->conn))
-#elif USE_GNUTLS
-      else if (mutt_gnutls_starttls (pop_data->conn))
 #endif
       {
         mutt_error (_("Could not negotiate TLS connection"));

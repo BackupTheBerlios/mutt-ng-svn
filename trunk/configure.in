@@ -607,6 +607,10 @@ then
   then
     AC_MSG_ERROR([SSL support is only useful with POP or IMAP support])
   fi
+  if test x"$need_ssl" = x"yes"
+  then
+    AC_MSG_ERROR([Only either OpenSSL or GNUTLS may be used])
+  fi
   MUTT_AM_PATH_GNUTLS([$gnutls_prefix],
     [dnl GNUTLS found
     CPPFLAGS="$CPPFLAGS $LIBGNUTLS_CFLAGS"

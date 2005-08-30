@@ -237,10 +237,8 @@ CONNECTION *mutt_conn_find (const CONNECTION * start, const ACCOUNT * account)
   if (Tunnel && *Tunnel)
     mutt_tunnel_socket_setup (conn);
   else if (account->flags & M_ACCT_SSL) {
-#ifdef USE_SSL
-    ssl_socket_setup (conn);
-#elif USE_GNUTLS
-    if (mutt_gnutls_socket_setup (conn) < 0) {
+#if defined (USE_SSL) || defined (USE_GNUTLS)
+    if (mutt_ssl_socket_setup (conn) < 0) {
       mutt_socket_free (conn);
       return NULL;
     }

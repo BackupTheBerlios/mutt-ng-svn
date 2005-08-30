@@ -433,10 +433,8 @@ int imap_open_connection (IMAP_DATA * idata)
         if ((rc = imap_exec (idata, "STARTTLS", IMAP_CMD_FAIL_OK)) == -1)
           goto bail;
         if (rc != -2) {
-#ifdef USE_SSL
+#if defined (USE_SSL) || defined (USE_GNUTLS)
           if (mutt_ssl_starttls (idata->conn))
-#elif USE_GNUTLS
-          if (mutt_gnutls_starttls (idata->conn))
 #endif
           {
             mutt_error (_("Could not negotiate TLS connection"));

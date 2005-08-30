@@ -11,6 +11,8 @@
 # include "config.h"
 #endif
 
+#ifdef USE_SSL
+
 #include <openssl/ssl.h>
 #include <openssl/x509.h>
 #include <openssl/err.h>
@@ -137,7 +139,7 @@ bail:
  * versions also. (That's the reason for the ugly #ifdefs and macros,
  * otherwise I could have simply #ifdef'd the whole ssl_init funcion)
  */
-int ssl_init (void)
+static int ssl_init (void)
 {
   char path[_POSIX_PATH_MAX];
   static unsigned char init_complete = 0;
@@ -219,7 +221,7 @@ static int ssl_socket_open_err (CONNECTION * conn)
 }
 
 
-int ssl_socket_setup (CONNECTION * conn)
+int mutt_ssl_socket_setup (CONNECTION * conn)
 {
   if (ssl_init () < 0) {
     conn->conn_open = ssl_socket_open_err;
@@ -707,3 +709,5 @@ static int ssl_passwd_cb (char *buf, int size, int rwflag, void *userdata)
 
   return snprintf (buf, size, "%s", account->pass);
 }
+
+#endif /* USE_SSL */
