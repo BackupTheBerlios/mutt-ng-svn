@@ -256,7 +256,8 @@ void rfc3676_space_stuff (HEADER* hdr) {
     fputs (buf, out);
   }
   fclose (in);
-  unlink (hdr->content->filename);
   fclose (out);
+  mutt_set_mtime (hdr->content->filename, tmpfile);
+  unlink (hdr->content->filename);
   str_replace (&hdr->content->filename, tmpfile);
 }

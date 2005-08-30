@@ -1262,7 +1262,6 @@ void mutt_sleep (short s)
 }
 
 /* Decrease a file's modification time by 1 second */
-
 time_t mutt_decrease_mtime (const char *f, struct stat *st)
 {
   struct utimbuf utim;
@@ -1283,6 +1282,18 @@ time_t mutt_decrease_mtime (const char *f, struct stat *st)
   }
 
   return mtime;
+}
+
+/* sets mtime of 'to' to mtime of 'from' */
+void mutt_set_mtime (const char* from, const char* to) {
+  struct utimbuf utim;
+  struct stat st;
+
+  if (stat (from, &st) != -1) {
+    utim.actime = st.st_mtime;
+    utim.modtime = st.st_mtime;
+    utime (to, &utim);
+  }
 }
 
 const char *mutt_make_version (int full)

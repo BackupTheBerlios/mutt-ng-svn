@@ -81,6 +81,7 @@ int mutt_cmp_param (const PARAMETER * p1, const PARAMETER * p2);
 int mutt_cmp_body (const BODY * b1, const BODY * b2);
 
 time_t mutt_decrease_mtime (const char *, struct stat *);
+void mutt_set_mtime (const char*, const char*);
 time_t mutt_local_tz (time_t);
 time_t mutt_mktime (struct tm *, int);
 time_t mutt_parse_date (const char *, HEADER *);
