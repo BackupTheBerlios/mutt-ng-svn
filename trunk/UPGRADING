@@ -10,6 +10,11 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-08-31:
+
+  The following pre-defined read-only variables were added:
+  $muttng_pwd, $muttng_folder_name, $muttng_folder_path.
+
 2005-08-29:
 
   Several pre-defined read-only variables named $muttng_ have

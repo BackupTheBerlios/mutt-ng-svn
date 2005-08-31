@@ -257,7 +257,29 @@ static void user_to_string (char* dst, size_t dstlen,
 
 static void sys_to_string (char* dst, size_t dstlen,
                            struct option_t* option) {
-  snprintf (dst, dstlen, "%s=\"%s\"", option->option, option->init);
+  char* val = NULL, *t = NULL;
+  int clean = 0;
+
+  /* get some $muttng_ values dynamically */
+  if (ascii_strcmp ("muttng_pwd", option->option) == 0) {
+    val = mem_malloc (_POSIX_PATH_MAX);
+    val = getcwd (val, _POSIX_PATH_MAX-1);
+    clean = 1;
+  } else if (ascii_strcmp ("muttng_folder_path", option->option) == 0 &&
+             CurrentFolder && *CurrentFolder) {
+    val = CurrentFolder;
+  } else if (ascii_strcmp ("muttng_folder_name", option->option) == 0 &&
+             CurrentFolder && *CurrentFolder) {
+    if ((t = strrchr (CurrentFolder, '/')) != NULL)
+      val = t+1;
+    else
+      val = CurrentFolder;
+  } else
+    val = option->init;
+
+  snprintf (dst, dstlen, "%s=\"%s\"", option->option, NONULL (val));
+  if (clean)
+    mem_free (&val);
 }
 
 static int path_from_string (struct option_t* dst, const char* val,
@@ -1824,6 +1846,8 @@ int mutt_parse_rc_line ( /* const */ char *line, BUFFER * token, BUFFER * err)
   expn.dsize = str_len (line);
 
   *err->data = 0;
+
+  debug_print (1, ("expand '%s'\n", line));
 
   SKIPWS (expn.dptr);
   while (*expn.dptr) {

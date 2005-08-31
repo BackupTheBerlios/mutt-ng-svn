@@ -1407,8 +1407,43 @@ set user_manualcmd = "!less -r $muttng_docdir/manual.txt"
 
     <p>which works everywhere if a manual is installed.
 
-    <p><em>Note: this is a draft feature and maybe subject to change in
-    the near future.</em>
+    <p>Please note that by the type of quoting, muttng determines when
+    to expand these values: when it finds double quotes, the value will
+    be expanded during reading the setup files but when it finds single
+    quotes, it'll expand it at runtime as needed.
+
+    <p>For example, the statement
+
+<tscreen><verb>
+folder-hook . "set user_current_folder = $muttng_folder_name"
+</verb></tscreen>
+
+    <p>will be already be translated to the following when reading the
+    startup files:
+
+<tscreen><verb>
+folder-hook . "set user_current_folder = some_folder"
+</verb></tscreen>
+
+    <p>with <tt/some_folder/ being the name of the first folder muttng
+    opens. On the contrary,
+
+<tscreen><verb>
+folder-hook . 'set user_current_folder = $muttng_folder_name'
+</verb></tscreen>
+
+    <p>will be executed at runtime because of the single quotes so that
+    <tt/user_current_folder/ will always have the value of the currently
+    opened folder.
+
+    <p>A more practical example is:
+
+<tscreen><verb>
+folder-hook . 'source ~/.mutt/score-$muttng_folder_name'
+</verb></tscreen>
+
+    <p>which can be used to source files containing score commands
+    depending on the folder the user enters.
 
   <sect1>Type Conversions 
 

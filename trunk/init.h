@@ -1492,6 +1492,28 @@ struct option_t MuttVars[] = {
    ** header chaching's database backend.\fP
    */
 #endif
+  {"muttng_folder_path", DT_SYS, R_NONE, 0, "" },
+  /*
+   ** .pp
+   ** \fIThis is a read-only system property and, at runtime,
+   ** specifies the full path or URI of the folder currently
+   ** open (if any).\fP
+   */
+  {"muttng_folder_name", DT_SYS, R_NONE, 0, "" },
+  /*
+   ** .pp
+   ** \fIThis is a read-only system property and, at runtime,
+   ** specifies the last part of the full path or URI of the
+   ** folder currently open (if any), i.e. everything after
+   ** the last ``/''.\fP
+   */
+  {"muttng_pwd", DT_SYS, R_NONE, 0, "" },
+  /*
+   ** .pp
+   ** \fIThis is a read-only system property and, at runtime,
+   ** specifies the current working directory of the muttng
+   ** binary.\fP
+   */
   {"operating_system", DT_STR, R_NONE, UL &OperatingSystem, "" },
   /*
    ** .pp
