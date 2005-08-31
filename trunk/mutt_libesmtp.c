@@ -174,14 +174,16 @@ static const char *_mutt_libesmtp_messagefp_cb (void **buf, int *len,
   return *buf;
 }
 
-#if defined (USE_SSL) || (defined (USE_GNUTLS) && defined (HAVE_GNUTLS_OPENSSL_H))
 static int handle_invalid_peer_certificate (long vfy_result) {
+#if defined (USE_SSL) || (defined (USE_GNUTLS) && defined (HAVE_GNUTLS_OPENSSL_H))
   mutt_error (_("Error verifying certificate: %s"),
               NONULL (X509_verify_cert_error_string (vfy_result)));
+#else
+  mutt_error (_("Error verifying certificate. Error Code: %lu"), vfy_result);
+#endif
   sleep(2);
   return 1; /* Accept the problem */
 }
-#endif
 
 static void event_cb (smtp_session_t session, int event_no, void *arg,...)
 { 
