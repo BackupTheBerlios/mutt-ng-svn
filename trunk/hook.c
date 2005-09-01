@@ -31,6 +31,8 @@
 #include <ctype.h>
 #include <unistd.h>
 
+#define ERROR_STOP      0
+
 typedef struct hook {
   int type;                     /* hook type */
   rx_t rx;                      /* regular expression */
@@ -288,10 +290,12 @@ void mutt_folder_hook (char *path)
       if ((regexec (tmp->rx.rx, path, 0, NULL, 0) == 0) ^ tmp->rx.not) {
         if (mutt_parse_rc_line (tmp->command, &token, &err) == -1) {
           mutt_error ("%s", err.data);
-          mem_free (&token.data);
           mutt_sleep (1);       /* pause a moment to let the user see the error */
-          current_hook_type = 0;
-          return;
+          if (ERROR_STOP) {
+            mem_free (&token.data);
+            current_hook_type = 0;
+            return;
+          }
         }
       }
     }
@@ -331,11 +335,13 @@ void mutt_message_hook (CONTEXT * ctx, HEADER * hdr, int type)
     if (hook->type & type)
       if ((mutt_pattern_exec (hook->pattern, 0, ctx, hdr) > 0) ^ hook->rx.not)
         if (mutt_parse_rc_line (hook->command, &token, &err) != 0) {
-          mem_free (&token.data);
           mutt_error ("%s", err.data);
           mutt_sleep (1);
-          current_hook_type = 0;
-          return;
+          if (ERROR_STOP) {
+            mem_free (&token.data);
+            current_hook_type = 0;
+            return;
+          }
         }
   }
   mem_free (&token.data);
@@ -456,11 +462,13 @@ void mutt_account_hook (const char *url)
 
     if ((regexec (hook->rx.rx, url, 0, NULL, 0) == 0) ^ hook->rx.not) {
       if (mutt_parse_rc_line (hook->command, &token, &err) == -1) {
-        mem_free (&token.data);
         mutt_error ("%s", err.data);
         mutt_sleep (1);
-
-        return;
+        if (ERROR_STOP) {
+          mem_free (&token.data);
+          current_hook_type = 0;
+          return;
+        }
       }
     }
   }
