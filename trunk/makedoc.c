@@ -82,12 +82,15 @@ enum output_formats_t {
 #define D_INIT          (1 << 6)
 #define D_DL            (1 << 7)
 #define D_DT            (1 << 8)
+#define D_DD            (1 << 9)
+#define D_PA            (1 << 10)
 
 enum {
   SP_START_EM,
   SP_START_BF,
   SP_START_TT,
   SP_END_FT,
+  SP_END_PAR,
   SP_NEWLINE,
   SP_NEWPAR,
   SP_STR,
@@ -96,7 +99,9 @@ enum {
   SP_START_DL,
   SP_DT,
   SP_DD,
+  SP_END_DD,
   SP_END_DL,
+  SP_END_SECT,
   SP_REFER
 };
 
@@ -116,6 +121,7 @@ static void handle_confline (char *);
 static void makedoc (FILE *, FILE *);
 static int sgml_fputc (int);
 static int sgml_fputs (const char *);
+static int sgml_id_fputs (const char *);
 static void add_var (const char *);
 static int add_s (const char *);
 static int add_c (int);
@@ -613,7 +619,7 @@ static int sgml_fputc (int c)
   case '\\':
     return add_s ("&bsol;");
   case '"':
-    return add_s ("&dquot;");
+    return add_s ("&quot;");
   case '[':
     return add_s ("&lsqb;");
   case ']':
@@ -632,6 +638,21 @@ static int sgml_fputs (const char *s)
       return EOF;
 
   return 0;
+}
+
+/* reduce CDATA to ID */
+static int sgml_id_fputs (const char *s) {
+ char id;
+
+ for (; *s; s++) {
+   if (*s == '_')
+     id = '-';
+   else
+     id = *s;
+   if (sgml_fputc ((unsigned int) id) == EOF)
+     return EOF;
+ }
+ return 0;
 }
 
 static void print_confline (const char *varname, int type, const char *val)
@@ -712,28 +733,28 @@ static void print_confline (const char *varname, int type, const char *val)
     /* SGML based manual */
   case F_SGML:
     {
-      add_s ("\n<sect1>");
+      add_s ("\n<sect1 id=\"");
+      sgml_id_fputs (varname);
+      add_s ("\">\n<title>");
       sgml_fputs (varname);
-      add_s ("<label id=\"");
-      add_s (varname);
-      add_s ("\">");
-      add_s ("\n<p>\nType: <tt>");
+      add_s ("</title>\n<para>Type: <literal>");
       add_s (type2human (type));
-      add_s ("</tt>\n\n");
+      add_s ("</literal></para>\n\n");
 
       if (type == DT_STR || type == DT_RX || type == DT_ADDR
           || type == DT_PATH) {
-        add_s ("<p>\nDefault: <tt>&dquot;");
+        add_s ("<para>\nDefault: <literal>&quot;");
         sgml_print_strval (val);
-        add_s ("&dquot;</tt>");
+        add_s ("&quot;</literal>");
       }
       else {
-        add_s ("<p>\n"); 
+        add_s ("<para>\n"); 
         add_s (type == DT_SYS ? "Value: " : "Default: ");
-        add_s ("<tt>");
+        add_s ("<literal>");
         add_s (val);
-        add_s ("</tt>");
+        add_s ("</literal>");
       }
+      add_s ("</para>\n");
       break;
     }
     /* make gcc happy */
@@ -784,6 +805,9 @@ static int flush_doc (int docstat)
     exit (1);
   }
 
+  if (docstat & (D_PA))
+    docstat = print_it (SP_END_PAR, NULL, docstat);
+
   if (docstat & (D_TAB))
     docstat = print_it (SP_END_TAB, NULL, docstat);
 
@@ -792,6 +816,8 @@ static int flush_doc (int docstat)
 
   if (docstat & (D_EM | D_BF | D_TT))
     docstat = print_it (SP_END_FT, NULL, docstat);
+
+  docstat = print_it (SP_END_SECT, NULL, docstat);
 
   docstat = print_it (SP_NEWLINE, NULL, 0);
 
@@ -1029,31 +1055,31 @@ static int print_it (int special, char *str, int docstat)
       case SP_END_FT:
         {
           if (docstat & D_EM)
-            add_s ("</em>");
+            add_s ("</emphasis>");
           if (docstat & D_BF)
-            add_s ("</bf>");
+            add_s ("</emphasis>");
           if (docstat & D_TT)
-            add_s ("</tt>");
+            add_s ("</literal>");
           docstat &= ~(D_EM | D_BF | D_TT);
           break;
         }
       case SP_START_BF:
         {
-          add_s ("<bf>");
+          add_s ("<emphasis role=\"bold\">");
           docstat |= D_BF;
           docstat &= ~(D_EM | D_TT);
           break;
         }
       case SP_START_EM:
         {
-          add_s ("<em>");
+          add_s ("<emphasis>");
           docstat |= D_EM;
           docstat &= ~(D_BF | D_TT);
           break;
         }
       case SP_START_TT:
         {
-          add_s ("<tt>");
+          add_s ("<literal>");
           docstat |= D_TT;
           docstat &= ~(D_EM | D_BF);
           break;
@@ -1077,44 +1103,65 @@ static int print_it (int special, char *str, int docstat)
 
           if (!(onl & D_NL))
             add_s ("\n");
-          add_s ("\n<p>\n");
+          if (docstat & D_PA)
+            add_s ("</para>\n");
+          add_s ("<para>\n");
 
           docstat |= D_NP;
+          docstat |= D_PA;
           break;
         }
       case SP_START_TAB:
         {
-          add_s ("\n<tscreen><verb>\n");
+          add_s ("\n<screen>\n");
           docstat |= D_TAB | D_NL;
           break;
         }
       case SP_END_TAB:
         {
-          add_s ("\n</verb></tscreen>");
+          add_s ("\n</screen>");
           docstat &= ~D_TAB;
           docstat |= D_NL;
           break;
         }
       case SP_START_DL:
         {
-          add_s ("\n<descrip>\n");
+          add_s ("\n<variablelist>\n");
           docstat |= D_DL;
           break;
         }
       case SP_DT:
         {
-          add_s ("<tag>");
+          add_s ("<varlistentry><term>");
           break;
         }
       case SP_DD:
         {
-          add_s ("</tag>");
+          add_s ("</term>\n<listitem><para>\n");
+          docstat |= D_DD;
           break;
         }
       case SP_END_DL:
         {
-          add_s ("</descrip>\n");
-          docstat &= ~D_DL;
+          add_s ("</para></listitem></varlistentry></variablelist>\n");
+          docstat &= ~(D_DL|D_DD);
+          break;
+        }
+      case SP_END_PAR:
+        {
+          add_s ("</para>\n");
+          docstat &= ~D_PA;
+          break;
+        }
+      case SP_END_DD:
+        {
+          add_s ("</para></listitem></varlistentry>\n");
+          docstat &= ~D_DD;
+          break;
+        }
+      case SP_END_SECT:
+        {
+          add_s ("</sect1>\n");
           break;
         }
       case SP_STR:
@@ -1147,13 +1194,13 @@ void print_ref (int output_dollar, const char *ref)
     break;
 
   case F_SGML:
-    add_s ("<ref id=\"");
-    add_s (ref);
-    add_s ("\" name=\"");
+    add_s ("<link linkend=\"");
+    sgml_id_fputs (ref);
+    add_s ("\">\n");
     if (output_dollar)
       add_s ("&dollar;");
     sgml_fputs (ref);
-    add_s ("\">");
+    add_s ("</link>");
     break;
 
   default:
@@ -1225,6 +1272,10 @@ static int handle_docline (char *l, int docstat)
       s += 2;
     }
     else if (!strncmp (s, ".dt", 3)) {
+      if (docstat & D_DD) {
+        docstat = commit_buff (buff, &d, docstat);
+        docstat = print_it (SP_END_DD, NULL, docstat);
+      }
       docstat = commit_buff (buff, &d, docstat);
       docstat = print_it (SP_DT, NULL, docstat);
       s += 3;

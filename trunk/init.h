@@ -1468,7 +1468,7 @@ struct option_t MuttVars[] = {
   /*
    ** .pp
    ** \fIThis is a read-only system property and specifies the
-   ** directory containing the muttng binary.
+   ** directory containing the muttng binary.\fP
    */
   {"muttng_docdir", DT_SYS, R_NONE, 0, PKGDOCDIR },
   /*
