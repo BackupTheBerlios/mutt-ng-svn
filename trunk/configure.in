@@ -1157,14 +1157,22 @@ then
 fi
 AC_SUBST(DSLROOT)
 
-AC_MSG_CHECKING([for lynx])
-AC_PATH_PROG([HTML2TXT_CMD], [lynx], [none])
+AC_MSG_CHECKING([for elinks])
+AC_PATH_PROG([HTML2TXT_CMD], [elinks], [none])
+if test x"$HTML2TXT_CMD" = x"none"
+then
+  AC_MSG_CHECKING([for lynx])
+  AC_PATH_PROG([HTML2TXT_CMD], [lynx], [none])
+fi
 if test x"$HTML2TXT_CMD" = x"none"
 then
   AC_MSG_CHECKING([for w3m])
   AC_PATH_PROG([HTML2TXT_CMD], [w3m], [none])
 fi
 case "$HTML2TXT_CMD" in
+  *elinks*)
+    HTML2TXT_CMD="$HTML2TXT_CMD -dump -no-numbering -no-references \$^ > \$@"
+    ;;
   *lynx*)
     HTML2TXT_CMD="$HTML2TXT_CMD -dump -nolist -with_backspaces \$^ > \$@"
     ;;
