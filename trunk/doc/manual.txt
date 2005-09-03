@@ -1262,7 +1262,6 @@ Chapter 2. Getting Started
 
  To:
 
-
    After you've finished entering the recipient(s), press return. If you want
    to send an email to more than one recipient, separate the email addresses
    using the comma ",". Mutt-ng then asks you for the email subject. Again,
@@ -1276,7 +1275,6 @@ Chapter 2. Getting Started
  set editor = "vim +/^$/ -c ':set tw=72'"
  set editor = "nano"
  set editor = "emacs"
-
 
    If you don't set your preferred editor in your configuration, mutt-ng
    first looks whether the environment variable $VISUAL is set, and if so, it
@@ -1311,7 +1309,6 @@ Chapter 2. Getting Started
    the following to your configuration:
 
  set edit_headers
-
 
    Once you have finished editing the body of your mail message, you are
    returned to the compose menu. The following options are available:
@@ -1387,7 +1384,6 @@ Chapter 2. Getting Started
  > production server that we want to set up before our customer's
  > project will go live.
 
-
    You can start editing the email message. It is strongly recommended to put
    your answer below the quoted text and to only quote what is really
    necessary and that you refer to. Putting your answer on top of the quoted
@@ -1398,11 +1394,9 @@ Chapter 2. Getting Started
 
  set attribution = "On %d, %n wrote:"
 
-
    It can also be set to something more compact, e.g.
 
  set attribution = "attribution="* %n <%a> [%(%y-%m-%d %H:%M)]:"
-
 
    The example above results in the following attribution:
 
@@ -1411,7 +1405,6 @@ Chapter 2. Getting Started
  > Morgan? We also urgently need the cost estimation for the new
  > production server that we want to set up before our customer's
  > project will go live.
-
 
    Generally, try to keep your attribution short yet information-rich. It is
    not the right place for witty quotes, long "attribution" novels or
@@ -1446,7 +1439,6 @@ Chapter 2. Getting Started
    reply address.
 
  lists linuxevent@luga\.at vuln-dev@ mutt-ng-users@
-
 
    Nowadays, most mailing list software like GNU Mailman adds a
    Mail-Followup-To: header to their emails anyway, so setting lists is
@@ -1590,7 +1582,6 @@ Chapter 2. Getting Started
  a horrible death.
 
  ----- End forwarded message -----
-
 
    When you're done with editing the mail, save and quit the editor, and you
    will return to the compose menu, the same menu you also encounter when
@@ -1750,13 +1741,11 @@ Chapter 3. Configuration
 
  set realname='Mutt-ng user' ; ignore x-
 
-
    The hash mark, or pound sign (``#''), is used as a ``comment'' character.
    You can use it to annotate your initialization file. All text after the
    comment character to the end of the line is ignored. For example,
 
  my_hdr X-Disclaimer: Why are you listening to me? # This is a comment
-
 
    Single quotes (') and double quotes (") can be used to quote strings which
    contain spaces or other special characters. The difference between the two
@@ -1774,7 +1763,6 @@ Chapter 3. Configuration
 
  set realname="Michael \"MuttDude\" Elkins"
 
-
    ``\\'' means to insert a literal ``\'' into the line. ``\n'' and ``\r''
    have their usual C meanings of linefeed and carriage-return, respectively.
 
@@ -1788,7 +1776,6 @@ Chapter 3. Configuration
 
  # folder-hook . \
  set realname="Michael \"MuttDude\" Elkins"
-
 
    When testing your config files, beware the following caveat. The backslash
    at the end of the commented line extends the current line with the next
@@ -1804,7 +1791,6 @@ Chapter 3. Configuration
  line3\
  line4
  line5
-
 
    line1 ``continues'' until line4. however, the part after the # is a
    comment which includes line3 and line4. line5 is a new line of its own and
@@ -1826,7 +1812,6 @@ Chapter 3. Configuration
 
  my_hdr X-Operating-System: `uname -a`
 
-
    The output of the Unix command ``uname -a'' will be substituted before the
    line is parsed. Note that since initialization files are line oriented,
    only the first line of output from the Unix command will be substituted.
@@ -1838,7 +1823,6 @@ Chapter 3. Configuration
    example,
 
  set record=+sent_on_$HOSTNAME
-
 
    sets the record variable to the string +sent_on_ and appends the value of
    the evironment variable $HOSTNAME.
@@ -1852,7 +1836,6 @@ Chapter 3. Configuration
    string can be used in the same way, too. For example,
 
  set imap_home_namespace = $folder
-
 
    would set the value of imap-home-namespace to the value to which folder is
    currently set to.
@@ -1877,7 +1860,6 @@ Chapter 3. Configuration
  macro generic <F1> "!less -r /path/to/manual" "Show manual"
  macro pager <F1> "!less -r /path/to/manual" "Show manual"
 
-
    for generic, pager and index .The alternative is to define a custom
    variable like so:
 
@@ -1886,11 +1868,9 @@ Chapter 3. Configuration
  macro pager <F1> "$user_manualcmd<enter>" "Show manual"
  macro index <F1> "$user_manualcmd<enter>" "Show manual"
 
-
    to re-use the command sequence as in:
 
  macro index <F2> "$user_manualcmd | grep '\^[ ]\\+~. '" "Show Patterns"
-
 
    Using this feature, arbitrary sequences can be defined once and recalled
    and reused where necessary. More advanced scenarios could include to save
@@ -1907,22 +1887,18 @@ Chapter 3. Configuration
  set user_foo = 42
  set user_foo = 666
 
-
    the variable $user_foo has a current value of 666 and an initial of 42.
    The query
 
  set ?user_foo
 
-
    will show 666. After doing the reset via
 
  reset user_foo
 
-
    a following query will give 42 as the result. After unsetting it via
 
  unset user_foo
-
 
    any query or operation (except the noted expansion within other
    statements) will lead to an error message.
@@ -1941,18 +1917,15 @@ Chapter 3. Configuration
 
  muttng -Q muttng_docdir
 
-
    To extend the example for viewing the manual via self-defined variables,
    it can be made more readable and more portable by changing the real path
    in:
 
  set user_manualcmd = '!less -r /path/to_manual'
 
-
    to:
 
  set user_manualcmd = "!less -r $muttng_docdir/manual.txt"
-
 
    which works everywhere if a manual is installed.
 
@@ -1965,18 +1938,15 @@ Chapter 3. Configuration
 
  folder-hook . "set user_current_folder = $muttng_folder_name"
 
-
    will be already be translated to the following when reading the startup
    files:
 
  folder-hook . "set user_current_folder = some_folder"
 
-
    with some_folder being the name of the first folder muttng opens. On the
    contrary,
 
  folder-hook . 'set user_current_folder = $muttng_folder_name'
-
 
    will be executed at runtime because of the single quotes so that
    user_current_folder will always have the value of the currently opened
@@ -1985,7 +1955,6 @@ Chapter 3. Configuration
    A more practical example is:
 
  folder-hook . 'source ~/.mutt/score-$muttng_folder_name'
-
 
    which can be used to source files containing score commands depending on
    the folder the user enters.
@@ -2005,7 +1974,6 @@ Chapter 3. Configuration
  set user_magic_number = 42
  set folder = $user_magic_number
 
-
 4. Defining/Using aliases
 
    Usage: alias key address [ , address, ... ]
@@ -2024,7 +1992,6 @@ Chapter 3. Configuration
  alias muttdude me@cs.hmc.edu (Michael Elkins)
  alias theguys manny, moe, jack
 
-
    Unlike other mailers, Mutt-ng doesn't require aliases to be defined in a
    special file. The alias command can appear anywhere in a configuration
    file, as long as this file is source .Consequently, you can have multiple
@@ -2041,7 +2008,6 @@ Chapter 3. Configuration
  source /usr/local/share/Mutt-ng.aliases
  source ~/.mail_aliases
  set alias_file=~/.mail_aliases
-
 
    To use aliases, you merely use the alias at any place in mutt where
    muttprompts for addresses, such as the To: or Cc: prompt. You can also
@@ -2225,13 +2191,11 @@ Chapter 3. Configuration
 
  folder-hook mutt set sort=threads
 
-
    However, the sorting method is not restored to its previous value when
    reading a different mailbox. To specify a default command, use the pattern
    ``.'':
 
  folder-hook . set sort=date-sent
-
 
 8. Keyboard macros
 
@@ -2351,7 +2315,6 @@ Chapter 3. Configuration
  set COLORFGBG="green;black"
  export COLORFGBG
 
-
    Note: The S-Lang library requires you to use the lightgray and brown
    keywords instead of white and yellow when setting this variable.
 
@@ -2412,7 +2375,6 @@ Chapter 3. Configuration
  unignore organization organisation x-mailer: x-newsreader: x-mailing-list:
  unignore posted-to:
 
-
 11. Alternative addresses
 
    Usage: [un]alternates regexp [ regexp ... ]
@@ -2456,7 +2418,7 @@ Chapter 3. Configuration
    format that can also be displayed nicely on old fixed-size terminals.
 
    For introductory information on format=flowed messages, see
-   <http://www.joeclark.org/ffaq.html> .
+   <http://www.joeclark.org/ffaq.html>.
 
   12.2. Receiving: Display Setup
 
@@ -2467,7 +2429,6 @@ Chapter 3. Configuration
 
  set wrapmargin = 10
 
-
    The code above makes the line break 10 columns before the right side of
    the terminal.
 
@@ -2475,7 +2436,6 @@ Chapter 3. Configuration
    can also set a maximum line length:
 
  set max_line_length = 120
-
 
    The example above will give you lines not longer than 120 characters.
 
@@ -2487,13 +2447,11 @@ Chapter 3. Configuration
  >production server that we want to set up before our customer's
  >project will go live.
 
-
    This obviously doesn't look very nice, and it makes it very hard to
    differentiate between text and quoting character. The solution is to
    configure mutt-ng to "stuff" the quoting:
 
  set stuff_quoted
-
 
    This will lead to a nicer result that is easier to read:
 
@@ -2502,14 +2460,12 @@ Chapter 3. Configuration
  > production server that we want to set up before our customer's
  > project will go live.
 
-
   12.3. Sending
 
    If you want mutt-ng to send emails with format=flowed set, you need to
    explicitly set it:
 
  set text_flowed
-
 
    Additionally, you have to use an editor which supports writing
    format=flowed-conforming emails. For vim, this is done by adding w to the
@@ -2642,7 +2598,6 @@ Chapter 3. Configuration
 
  my_hdr Organization: A Really Big Company, Anytown, USA
 
-
    in your .muttrc.
 
    Note: space characters are not allowed between the keyword and the colon
@@ -2661,7 +2616,6 @@ Chapter 3. Configuration
 
  unmy_hdr to cc
 
-
 17. Defining the order of headers when viewing messages
 
    Usage: hdr_order header1 header2 header3
@@ -2674,7 +2628,6 @@ Chapter 3. Configuration
    file.
 
  hdr_order From Date: From: To: Cc: Subject:
-
 
 18. Specify default save filename
 
@@ -2691,7 +2644,6 @@ Chapter 3. Configuration
 
  save-hook me@(turing\\.)?cs\\.hmc\\.edu$ +elkins
  save-hook aol\\.com$ +spam
-
 
    Also see the fcc-save-hook command.
 
@@ -2774,7 +2726,6 @@ Chapter 3. Configuration
  message-hook ~A 'set pager=builtin'
  message-hook '~f freshmeat-news' 'set pager="less \"+/^  subject:.*\""'
 
-
 23. Choosing the cryptographic key of the recipient
 
    Usage: crypt-hook pattern keyid
@@ -2826,12 +2777,10 @@ Chapter 3. Configuration
  score "~f nion@muttng\.org" 50
  score "~f @sco\.com" -100
 
-
    If the pattern matches, it is also possible to set the score value of the
    current message to a certain value and then stop evaluation:
 
  score "~f santaclaus@northpole\.int" =666
-
 
    What is important to note is that negative score values will be rounded up
    to 0.
@@ -2860,7 +2809,6 @@ Chapter 3. Configuration
 
  color index  black   yellow  "~n 10-"
  color index  red     yellow  "~n 100-"
-
 
    The rules above mark all messages with a score between 10 and 99 with
    black and yellow, and messages with a score greater or equal 100 with red
@@ -2906,7 +2854,6 @@ Chapter 3. Configuration
  spam "X-Spam-Status: Yes"                     "90+/SA"
  spam "X-PerlMX-Spam: .*Probability=([0-9]+)%" "%1/PM"
  set spam_separator=", "
-
 
    If I then received a message that DCC registered with ``many'' hits under
    the ``Fuz2'' checksum, and that PureMessage registered with a 97%
@@ -2959,7 +2906,6 @@ Chapter 3. Configuration
 
  spam "^From: .*MAILER-DAEMON"       "999"
 
-
 28. Setting variables
 
    Usage: set [no|inv]variable [=value] [ variable ... ] Usage: toggle
@@ -3001,7 +2947,6 @@ Chapter 3. Configuration
    mark:
 
  set ?allow_8bit
-
 
    The question mark is actually only required for boolean and quadoption
    variables.
@@ -3054,13 +2999,11 @@ Chapter 3. Configuration
 
  set config_charset = "..."
 
-
    and replacing the dots with the actual character set. To avoid problems
    while maintaining the setup, vim user's may want to use modelines as show
    in:
 
  # vim:fileencoding=...:
-
 
    while, again, replacing the dots with the appropriate name. This tells vim
    as which character set to read and save the file.
@@ -3085,7 +3028,6 @@ Chapter 3. Configuration
  ifdef <item> <command>
  ifndef <item> <command>
 
-
    ...whereby <item> can be one of:
 
      o a function name
@@ -3109,7 +3051,6 @@ Chapter 3. Configuration
  ifdef feature_pop  'source ~/.mutt-ng/setup-pop'
  ifdef feature_nntp 'source ~/.mutt-ng/setup-nntp'
 
-
    ...to only source ˜/.mutt-ng/setup-imap if IMAP support is built in, only
    source ˜/.mutt-ng/setup-pop if POP support is built in and only source
    ˜/.mutt-ng/setup-nntp if NNTP support is built in.
@@ -3120,12 +3061,10 @@ Chapter 3. Configuration
 
  ifdef imap_mail_check 'set imap_mail_check = 300'
 
-
    Provided for completeness is the test for menu names. To set
    pager-index-lines only if the pager menu is available, use:
 
  ifdef pager 'set pager_index_lines = 10'
-
 
    For completeness, too, the opposite of ifdef is provided: ifndef which
    only executes the command if the test fails. For example, the following
@@ -3134,12 +3073,10 @@ Chapter 3. Configuration
  ifdef feature_ncurses 'source ~/.mutt-ng/setup-ncurses'
  ifndef feature_ncurses 'source ~/.mutt-ng/setup-slang'
 
-
    ...and...
 
  ifdef feature_slang 'source ~/.mutt-ng/setup-slang'
  ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'
-
 
 32. Obsolete Variables
 
@@ -3435,9 +3372,8 @@ Chapter 4. Advanced Usage
    grouped, ORed, and negated. For a complete listing of these patterns,
    please refer to table patterns in the Reference chapter.
 
-   It must be noted that in this table, EXPR, USER , ID and SUBJECT are
-   regular expressions. For ranges, the forms <[MAX], >>[MIN], [MIN]- and
-   -[MAX] are also possible.
+   It must be noted that in this table, EXPR is a regular expression. For
+   ranges, the forms <[MAX], >>[MIN], [MIN]- and -[MAX] are also possible.
 
   2.1. Complex Patterns
 
@@ -3446,7 +3382,6 @@ Chapter 4. Advanced Usage
    stringing them together:
 
  ~s 'SPAM' ~U
-
 
    The pattern above matches all messages that contain ``SPAM'' in the
    subject and are unread.
@@ -3457,7 +3392,6 @@ Chapter 4. Advanced Usage
  ~f ("nion@muttng\.org"|"ak@muttng\.org"|"pdmef@muttng\.org")
  (~b mutt-ng|~s Mutt-ng)
  !~x '@synflood\.at'
-
 
    The first pattern matches all messages that were sent by one of the
    mutt-ng maintainers, while the seconds pattern matches all messages that
@@ -3487,7 +3421,6 @@ Chapter 4. Advanced Usage
  ~d 18/10/2004-2w
  ~d 28/12/2004*1d
 
-
    The first pattern matches all dates between January 1st, 2005 and January
    1st 2006. The second pattern matches all dates between October 18th, 2004
    and October 4th 2004 (2 weeks before 18/10/2004), while the third pattern
@@ -3501,7 +3434,6 @@ Chapter 4. Advanced Usage
  ~d >2w # messages older than two weeks
  ~d <3d # messages newer than 3 days
  ~d =1m # messages that are exactly one month old
-
 
 3. Format Strings
 
@@ -3530,13 +3462,11 @@ Chapter 4. Advanced Usage
 
  set status_format = "%v on %h: ..."
 
-
    mutt-ng will replace the sequence %v with the version string and %h with
    the host's name. When you are, for example, running mutt-ng version 1.5.9i
    on host mailhost, you'll see the following when you're in the index:
 
  Mutt-ng 1.5.9i on mailhost: ...
-
 
    In the index, there're more useful information one could want to see:
 
@@ -3550,11 +3480,9 @@ Chapter 4. Advanced Usage
 
  set status_format = "%v on %h: %B: ...
 
-
    When the currently opened mailbox is Inbox, this will be expanded to:
 
  Mutt-ng 1.5.9i on mailhost: Inbox: ...
-
 
    For the number of certain types of messages, one more feature of the
    format strings is extremely useful. If there aren't messages of a certain
@@ -3568,14 +3496,12 @@ Chapter 4. Advanced Usage
 
  set status_format = "%v on %h: %B %?n?%n new? ...
 
-
    This feature is called nonzero-printing and works as this: some expandos
    may be optionally printed nonzero, i.e. a portion of the format string is
    only evaluated if the value of the expando is different from zero. The
    basic syntax is:
 
  %?<item>?<string if nonzero>?
-
 
    which tells mutt-ng to only look at <string if nonzero> if the value of
    the %<item%gt; expando is different from zero. In our example, we used n
@@ -3589,7 +3515,6 @@ Chapter 4. Advanced Usage
 
  %?<item>?<string if nonzero>&<string if zero>?
 
-
    Using this we can make mutt-ng to do the following:
 
      o make it print ``n new messages'' whereby n is the count but only if
@@ -3601,12 +3526,10 @@ Chapter 4. Advanced Usage
 
  set status_format = "%v on %h: %B: %?n?%n new messages&no new messages? ...
 
-
    This doubles the use of the ``new messages'' string because it'll get
    always printed. Thus, it can be shortened to:
 
  set status_format = "%v on %h: %B: %?n?%n&no? new messages ...
-
 
    As you might see from this rather simple example, one can create very
    complex but fancy status messages. Please see the reference chapter for
@@ -3634,7 +3557,6 @@ Chapter 4. Advanced Usage
 
  set status_format = "%v on %h: %B: %?n?%n&no? new messages %|-"
 
-
    %>X
 
            Since the previous expando stops at the end of line, there must be
@@ -3646,7 +3568,6 @@ Chapter 4. Advanced Usage
            after %>):
 
  set status_format = "%B: %?n?%n&no? new messages %> (%v on %h)"
-
 
 4. Using Tags
 
@@ -3706,7 +3627,6 @@ Chapter 4. Advanced Usage
  send-hook . 'unmy_hdr From:'
  send-hook ~C'^b@b\.b$' my_hdr from: c@c.c
 
-
   5.1. Message Matching in Hooks
 
    Hooks that act upon messages (send-hook, save-hook, fcc-hook,message-hook
@@ -3725,7 +3645,6 @@ Chapter 4. Advanced Usage
    mail to a specific address, you could do something like:
 
  send-hook '~t ^me@cs\.hmc\.edu$' 'my_hdr From: Mutt-ng User <user@host>'
-
 
    which would execute the given command when sending mail to me@cs.hmc.edu.
 
@@ -3748,7 +3667,6 @@ Chapter 4. Advanced Usage
  set sidebar_visible="yes"
  set sidebar_width=25
 
-
    If you want to specify the mailboxes you can do so with:
 
  set mbox='=INBOX'
@@ -3757,12 +3675,10 @@ Chapter 4. Advanced Usage
  MBOX2 \
  ...
 
-
    You can also specify the colors for mailboxes with new mails by using:
 
  color sidebar_new red black
  color sidebar white black
-
 
    The available functions are:
 
@@ -3796,7 +3712,6 @@ Chapter 4. Advanced Usage
  macro index B ':toggle sidebar_visible^M'
  macro pager B ':toggle sidebar_visible^M'
 
-
    You can then go up and down by pressing Ctrl-P and Ctrl-N, and switch on
    and off the sidebar simply by pressing 'B'.
 
@@ -3808,7 +3723,6 @@ Chapter 4. Advanced Usage
    wrapper command to use. For example:
 
  set query_command = "mutt_ldap_query.pl '%s'"
-
 
    The wrapper script should accept the query on the command-line. It should
    return a one line message, then each matching response on a single line,
@@ -3822,7 +3736,6 @@ Chapter 4. Advanced Usage
  me@cs.hmc.edu           Michael Elkins  mutt dude
  blong@fiction.net       Brandon Long    mutt and more
  roessler@guug.de        Thomas Roessler mutt pgp
-
 
    There are two mechanisms for accessing the query function of mutt. One is
    to do a query from the index menu using the query function (default: Q).
@@ -3853,7 +3766,6 @@ Chapter 4. Advanced Usage
    are stored in a single file. Each message has a line of the form:
 
  From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST
-
 
    to denote the start of a new message (this is often referred to as the
    ``From_'' line).
@@ -4187,12 +4099,10 @@ Chapter 4. Advanced Usage
 
  score ~* =42
 
-
    This tells mutt-ng to apply a score of 42 to all messages whose sender
    specified a valid realname and a valid email address. Using
 
  score !~* =42
-
 
    on the contrary applies a score of 42 to all messages not matching those
    criteria which are very strict:
@@ -4250,7 +4160,6 @@ Chapter 4. Advanced Usage
  account-hook imap://host1/ 'set imap_user=me1 imap_pass=foo'
  account-hook imap://host2/ 'set tunnel="ssh host2 /usr/libexec/imapd"'
 
-
 18. Start a WWW Browser on URLs (EXTERNAL)
 
    If a message contains URLs (unified resource locator = address in the WWW
@@ -4261,7 +4170,6 @@ Chapter 4. Advanced Usage
 
  macro index \cb |urlview\n
  macro pager \cb |urlview\n
-
 
 19. Compressed folders Support (OPTIONAL)
 
@@ -4287,7 +4195,6 @@ Chapter 4. Advanced Usage
  open-hook \\.gz$ "gzip -cd %f > %t"
  close-hook \\.gz$ "gzip -c %t > %f"
  append-hook \\.gz$ "gzip -c %t >> %f"
-
 
    You do not have to specify all of the commands. If you omit append-hook
    ,the folder will be open and closed again each time you will add to it. If
@@ -4328,7 +4235,6 @@ Chapter 4. Advanced Usage
 
  open-hook \\.gz$ "gzip -cd %f > %t"
 
-
    If the command is empty, this operation is disabled for this file type.
 
   19.2. Write a compressed mailbox
@@ -4349,7 +4255,6 @@ Chapter 4. Advanced Usage
    Example:
 
  close-hook \\.gz$ "gzip -c %t > %f"
-
 
    If the command is empty, this operation is disabled for this file type,
    and the file can only be open in the readonly mode.
@@ -4374,7 +4279,6 @@ Chapter 4. Advanced Usage
 
  append-hook \\.gz$ "gzip -c %t >> %f"
 
-
    When append-hook is used, the folder is not opened, which saves time, but
    this means that we can not find out what the folder type is. Thus the
    default ( mbox-type )type is always supposed (i.e. this is the format used
@@ -4395,7 +4299,6 @@ Chapter 4. Advanced Usage
 
  open-hook  \\.pgp$ "pgp -f < %f > %t"
  close-hook \\.pgp$ "pgp -fe YourPgpUserIdOrKeyId < %t > %f"
-
 
    Please note, that PGP does not support appending to an encrypted folder,
    so there is no append-hook defined.
@@ -4463,7 +4366,6 @@ Chapter 5. Mutt-ng's MIME Support
  [-- Attachment #1: Description --]
  [-- Type: text/plain, Encoding: 7bit, Size: 10000 --]
 
-
    Where the Description is the description or filename given for the
    attachment, and the Encoding is one of
    7bit/8bit/quoted-printable/base64/binary.
@@ -4471,7 +4373,6 @@ Chapter 5. Mutt-ng's MIME Support
    If Mutt-ng cannot deal with a MIME type, it will display a message like:
 
  [-- image/gif is unsupported (use 'v' to view this part) --]
-
 
   1.2. The Attachment Menu
 
@@ -4506,7 +4407,6 @@ Chapter 5. Mutt-ng's MIME Support
  1 [text/plain, 7bit, 1K]             /tmp/mutt-euler-8082-0 <no description>
  2 [applica/x-gunzip, base64, 422K]   ~/src/mutt-0.85.tar.gz <no description>
 
-
    The '-' denotes that Mutt-ng will delete the file after sending (or
    postponing, or canceling) the message. It can be toggled with the
    toggle-unlink command (default: u). The next field is the MIME
@@ -4531,7 +4431,6 @@ Chapter 5. Mutt-ng's MIME Support
  application/postscript          ps eps
  application/pgp                 pgp
  audio/x-aiff                    aif aifc aiff
-
 
    A sample mime.types file comes with the Mutt-ng distribution, and should
    contain most of the MIME types you are likely to use.
@@ -4567,7 +4466,6 @@ Chapter 5. Mutt-ng's MIME Support
    colon delimited list set to
 
  ${HOME}/.mailcap:/usr/local/share/mutt/mailcap:/etc/mailcap:/etc/mailcap:/usr/etc/mailcap:/usr/local/etc/mailcap
-
 
    where $HOME is your home directory.
 
@@ -4609,17 +4507,14 @@ Chapter 5. Mutt-ng's MIME Support
 
  text/plain; more
 
-
    Or, you could send the message as a file:
 
  text/plain; more %s
-
 
    Perhaps you would like to use lynx to interactively view a text/html
    message:
 
  text/html; lynx %s
-
 
    In this case, lynx does not support viewing a file from stdin, so you must
    use the %s syntax. Note: Some older versions of lynx contain a bug where
@@ -4632,13 +4527,11 @@ Chapter 5. Mutt-ng's MIME Support
 
  text/html; lynx -dump %s | more
 
-
    Perhaps you wish to use lynx to view text/html files, and a pager on all
    other text formats, then you would use the following:
 
  text/html; lynx %s
  text/*; more
-
 
    This is the simplest form of a mailcap file.
 
@@ -4669,7 +4562,6 @@ Chapter 5. Mutt-ng's MIME Support
  text/test-mailcap-bug; cat %s; copiousoutput; test=charset=%{charset} \
  && test "`echo $charset | tr '[A-Z]' '[a-z]'`" != iso-8859-1
 
-
   3.3. Advanced mailcap Usage
 
     3.3.1. Optional Fields
@@ -4689,7 +4581,6 @@ Chapter 5. Mutt-ng's MIME Support
            the Basic section:
 
  text/html; lynx -dump %s ; copiousoutput
-
 
            This will cause lynx to format the text/html output as text/plain
            and Mutt-ng will use your standard pager to display the results.
@@ -4743,7 +4634,6 @@ Chapter 5. Mutt-ng's MIME Support
 
  text/html; lynx %s; nametemplate=%s.html
 
-
    test=<command>
 
            This field specifies a command to run to test whether this mailcap
@@ -4756,7 +4646,6 @@ Chapter 5. Mutt-ng's MIME Support
 
  text/html; netscape -remote 'openURL(%s)' ; test=RunningX
  text/html; lynx %s
-
 
            In this example, Mutt-ng will run the program RunningX which will
            return 0 if the X Window manager is running, and non-zero if it
@@ -4776,7 +4665,6 @@ Chapter 5. Mutt-ng's MIME Support
  image/gif;      ; print= anytopnm %s | pnmtops | lpr; \
  nametemplate=%s.gif
 
-
    Mutt-ng will skip the image/* entry and use the image/gif entry with the
    print command.
 
@@ -4789,7 +4677,6 @@ Chapter 5. Mutt-ng's MIME Support
  text/html;      netscape -remote 'openURL(%s)' ; test=RunningX
  text/html;      lynx %s; nametemplate=%s.html
  text/html;      lynx -dump %s; nametemplate=%s.html; copiousoutput
-
 
    For auto-view, Mutt-ng will choose the third entry because of the
    copiousoutput tag. For interactive viewing, Mutt will run the program
@@ -4827,7 +4714,6 @@ Chapter 5. Mutt-ng's MIME Support
 
  Content-Type: text/plain; charset=iso-8859-1
 
-
            then Mutt-ng will expand %{charset} to iso-8859-1. The default
            metamail mailcap file uses this feature to test the charset to
            spawn an xterm using the right charset to view the message.
@@ -4851,7 +4737,6 @@ Chapter 5. Mutt-ng's MIME Support
 
  # I'm always running netscape (if my computer had more memory, maybe)
  text/html;      netscape -remote 'openURL(%s)'
-
 
    This mailcap file shows quite a number of examples:
 
@@ -4889,7 +4774,6 @@ Chapter 5. Mutt-ng's MIME Support
  # Send excel spreadsheets to my NT box
  application/ms-excel; open.pl %s
 
-
 4. MIME Autoview
 
    In addition to explicitly telling Mutt-ng to view an attachment with
@@ -4909,7 +4793,6 @@ Chapter 5. Mutt-ng's MIME Support
  auto_view text/html application/x-gunzip application/postscript
  image/gif application/x-tar-gz
 
-
    Mutt-ng could use the following mailcap entries to automatically view
    attachments of these types.
 
@@ -4918,7 +4801,6 @@ Chapter 5. Mutt-ng's MIME Support
  application/x-gunzip;   gzcat; copiousoutput
  application/x-tar-gz; gunzip -c %s | tar -tf - ; copiousoutput
  application/postscript; ps2ascii %s; copiousoutput
-
 
    ``unauto_view'' can be used to remove previous entries from the autoview
    list. This can be used with message-hook to autoview messages based on
@@ -4935,7 +4817,6 @@ Chapter 5. Mutt-ng's MIME Support
 
  alternative_order text/enriched text/plain text
  application/postscript image/*
-
 
    Next, mutt will check if any of the types have a defined auto-view, and
    use that. Failing that, Mutt-ng will look for any text type. As a last
@@ -4957,7 +4838,6 @@ Chapter 5. Mutt-ng's MIME Support
    specified. Common usage would be:
 
  mime_lookup application/octet-stream application/X-Lotus-Manuscript
-
 
    In addition, the unmime_lookup command may be used to disable this feature
    for any particular mime-type if it had been set, for example, in a global
@@ -5043,7 +4923,6 @@ Chapter 6. Security Considerations
    For example, following a link like
 
  mailto:joe@host?Attach=~/.gnupg/secring.gpg
-
 
    will send out the user's private gnupg keyring to joe@host if the user
    doesn't follow the information on screen carefully enough.
@@ -5228,7 +5107,7 @@ Chapter 7. Reference
    | ~B               | EXPR        | messages which contain EXPR in the    |
    |                  |             | whole message                         |
    |------------------+-------------+---------------------------------------|
-   | ~c               | USER        | messages carbon-copied to USER        |
+   | ~c               | EXPR        | messages carbon-copied to EXPR        |
    |------------------+-------------+---------------------------------------|
    | ~C               | EXPR        | message is either to: or cc: EXPR     |
    |------------------+-------------+---------------------------------------|
@@ -5244,7 +5123,7 @@ Chapter 7. Reference
    |------------------+-------------+---------------------------------------|
    | ~F               |             | flagged messages                      |
    |------------------+-------------+---------------------------------------|
-   | ~f               | USER        | messages originating from USER        |
+   | ~f               | EXPR        | messages originating from EXPR        |
    |------------------+-------------+---------------------------------------|
    | ~g               |             | cryptographically signed messages     |
    |------------------+-------------+---------------------------------------|
@@ -5258,7 +5137,7 @@ Chapter 7. Reference
    |------------------+-------------+---------------------------------------|
    | ~k               |             | message contains PGP key material     |
    |------------------+-------------+---------------------------------------|
-   | ~i               | ID          | message which match ID in the         |
+   | ~i               | EXPR        | message which match ID in the         |
    |                  |             | ``Message-ID'' field                  |
    |------------------+-------------+---------------------------------------|
    | ~L               | EXPR        | message is either originated or       |
@@ -5293,14 +5172,17 @@ Chapter 7. Reference
    |------------------+-------------+---------------------------------------|
    | ~S               |             | superseded messages                   |
    |------------------+-------------+---------------------------------------|
-   | ~s               | SUBJECT     | messages having SUBJECT in the        |
+   | ~s               | EXPR        | messages having EXPR in the           |
    |                  |             | ``Subject'' field.                    |
    |------------------+-------------+---------------------------------------|
    | ~T               |             | tagged messages                       |
    |------------------+-------------+---------------------------------------|
-   | ~t               | USER        | messages addressed to USER            |
+   | ~t               | EXPR        | messages addressed to EXPR            |
    |------------------+-------------+---------------------------------------|
    | ~U               |             | unread messages                       |
+   |------------------+-------------+---------------------------------------|
+   | ~u               |             | message is addressed to a subscribed  |
+   |                  |             | mailing list                          |
    |------------------+-------------+---------------------------------------|
    | ~v               |             | message is part of a collapsed        |
    |                  |             | thread.                               |
@@ -5332,12 +5214,11 @@ Chapter 7. Reference
    |                  |             | against alternates or any alias)      |
    +------------------------------------------------------------------------+
 
-   Where EXPR, USER, ID, and SUBJECT are regexp. Special attention has to be
-   made when using regular expressions inside of patterns. Specifically,
-   Mutt-ng's parser for these patterns will strip one level of backslash (\),
-   which is normally used for quoting. If it is your intention to use a
-   backslash in the regular expression, you will need to use two backslashes
-   instead (\\).
+   Where EXPR are regexp. Special attention has to be made when using regular
+   expressions inside of patterns. Specifically, Mutt-ng's parser for these
+   patterns will strip one level of backslash (\), which is normally used for
+   quoting. If it is your intention to use a backslash in the regular
+   expression, you will need to use two backslashes instead (\\).
 
    *) The forms <[MAX], >[MIN] , [MIN]- and -[MAX] are allowed, too.
 
@@ -7721,7 +7602,7 @@ Chapter 7. Reference
 
    Type: system property
 
-   Value: 475
+   Value: 477
 
    This is a read-only system property and specifies muttng's subversion
    revision string.
