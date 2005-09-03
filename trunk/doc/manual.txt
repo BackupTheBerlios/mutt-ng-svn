@@ -1,14 +1,21 @@
                      The Mutt Next Generation E-Mail Client
 
-  by Andreas Krennmair and others originally based on mutt by Michael Elkins and
-  others
+  Andreas Krennmair
+
+   <ak@synflood.at>
+
+  Michael Elkins
+
+   <me@cs.hmc.edu>
 
    version devel-r473
 
    Abstract
 
    Michael Elinks on mutt, circa 1995: ``All mail clients suck. This one just
-   sucks less.'' - Sven Guckes on mutt, ca. 2003: ``But it still sucks!''
+   sucks less.''
+
+   Sven Guckes on mutt, ca. 2003: ``But it still sucks!''
 
    --------------------------------------------------------------------------
 
@@ -343,6 +350,38 @@
 
                 1. Acknowledgments
 
+   List of Tables
+
+   2.1. Default Menu Movement Keys
+
+   2.2. Built-In Editor Functions
+
+   2.3. Default Index Menu Bindings
+
+   2.4. Default Pager Menu Bindings
+
+   2.5. ANSI Escape Sequences
+
+   2.6. ANSI Colors
+
+   2.7. Default Thread Function Bindings
+
+   2.8. Default Mail Composition Bindings
+
+   2.9. Default Compose Menu Bindings
+
+   2.10. PGP Key Menu Flags
+
+   3.1. Alternative Key Names
+
+   4.1. Default Sidebar Function Bindings
+
+   7.1. Mutt-NG Command Line Options
+
+   7.2. Patterns
+
+   7.3. Obsolete Variables
+
 Chapter 1. Introduction
 
    Table of Contents
@@ -369,7 +408,7 @@ Chapter 1. Introduction
    regular expression searches and a powerful pattern matching language for
    selecting groups of messages.
 
-   This documentation additionally contains documentation to Mutt-NG, a fork
+   This documentation additionally contains documentation to Mutt-NG ,a fork
    from Mutt with the goal to fix all the little annoyances of Mutt, to
    integrate all the Mutt patches that are floating around in the web, and to
    add other new features. Features specific to Mutt-ng will be discussed in
@@ -383,10 +422,10 @@ Chapter 1. Introduction
 
 3. Mailing Lists
 
-     o mutt-ng-users@lists.berlios.de -- This is where the mutt-ng user
+     o <mutt-ng-users@lists.berlios.de>: This is where the mutt-ng user
        support happens.
 
-     o mutt-ng-devel@lists.berlios.de -- The development mailing list for
+     o <mutt-ng-devel@lists.berlios.de>: The development mailing list for
        mutt-ng
 
 4. Software Distribution Sites
@@ -683,17 +722,31 @@ Chapter 2. Getting Started
 
 3. Moving Around in Menus
 
-   Information is presented in menus, very similar to ELM. Here is a table
-   showing the common keys used to navigate menus in Mutt-ng.
+   Information is presented in menus, very similar to ELM. Here is a
+   tableshowing the common keys used to navigate menus in Mutt-ng.
 
- j or Down       next-entry      move to the next entry
- k or Up         previous-entry  move to the previous entry
- z or PageDn     page-down       go to the next page
- Z or PageUp     page-up         go to the previous page
- = or Home       first-entry     jump to the first entry
- * or End        last-entry      jump to the last entry
- q               quit            exit the current menu
- ?               help            list all key bindings for the current menu
+   Table 2.1. Default Menu Movement Keys
+
+   +------------------------------------------------------------------------+
+   | Key         | Function       | Description                             |
+   |-------------+----------------+-----------------------------------------|
+   | j or Down   | next-entry     | move to the next entry                  |
+   |-------------+----------------+-----------------------------------------|
+   | k or Up     | previous-entry | move to the previous entry              |
+   |-------------+----------------+-----------------------------------------|
+   | z or PageDn | page-down      | go to the next page                     |
+   |-------------+----------------+-----------------------------------------|
+   | Z or PageUp | page-up        | go to the previous page                 |
+   |-------------+----------------+-----------------------------------------|
+   | = or Home   | first-entry    | jump to the first entry                 |
+   |-------------+----------------+-----------------------------------------|
+   | * or End    | last-entry     | jump to the last entry                  |
+   |-------------+----------------+-----------------------------------------|
+   | q           | quit           | exit the current menu                   |
+   |-------------+----------------+-----------------------------------------|
+   | ?           | help           | list all key bindings for the current   |
+   |             |                | menu                                    |
+   +------------------------------------------------------------------------+
 
 4. Editing Input Fields
 
@@ -701,28 +754,57 @@ Chapter 2. Getting Started
    input textual data such as email addresses or filenames. The keys used to
    move around while editing are very similar to those of Emacs.
 
- ^A or <Home>    bol             move to the start of the line
- ^B or <Left>    backward-char   move back one char
- Esc B           backward-word   move back one word
- ^D or <Delete>  delete-char     delete the char under the cursor
- ^E or <End>     eol             move to the end of the line
- ^F or <Right>   forward-char    move forward one char
- Esc F           forward-word    move forward one word
- <Tab>           complete        complete filename or alias
- ^T              complete-query  complete address with query
- ^K              kill-eol        delete to the end of the line
- ESC d           kill-eow        delete to the end of the word
- ^W              kill-word       kill the word in front of the cursor
- ^U              kill-line       delete entire line
- ^V              quote-char      quote the next typed key
- <Up>            history-up      recall previous string from history
- <Down>          history-down    recall next string from history
- <BackSpace>     backspace       kill the char in front of the cursor
- Esc u           upcase-word     convert word to upper case
- Esc l           downcase-word   convert word to lower case
- Esc c           capitalize-word capitalize the word
- ^G              n/a             abort
- <Return>        n/a             finish editing
+   Table 2.2. Built-In Editor Functions
+
+   +------------------------------------------------------------------------+
+   | Key            | Function        | Description                         |
+   |----------------+-----------------+-------------------------------------|
+   | ^A or <Home>   | bol             | move to the start of the line       |
+   |----------------+-----------------+-------------------------------------|
+   | ^B or <Left>   | backward-char   | move back one char                  |
+   |----------------+-----------------+-------------------------------------|
+   | Esc B          | backward-word   | move back one word                  |
+   |----------------+-----------------+-------------------------------------|
+   | ^D or <Delete> | delete-char     | delete the char under the cursor    |
+   |----------------+-----------------+-------------------------------------|
+   | ^E or <End>    | eol             | move to the end of the line         |
+   |----------------+-----------------+-------------------------------------|
+   | ^F or <Right>  | forward-char    | move forward one char               |
+   |----------------+-----------------+-------------------------------------|
+   | Esc F          | forward-word    | move forward one word               |
+   |----------------+-----------------+-------------------------------------|
+   | <Tab>          | complete        | complete filename or alias          |
+   |----------------+-----------------+-------------------------------------|
+   | ^T             | complete-query  | complete address with query         |
+   |----------------+-----------------+-------------------------------------|
+   | ^K             | kill-eol        | delete to the end of the line       |
+   |----------------+-----------------+-------------------------------------|
+   | ESC d          | kill-eow        | delete to the end of the word       |
+   |----------------+-----------------+-------------------------------------|
+   | ^W             | kill-word       | kill the word in front of the       |
+   |                |                 | cursor                              |
+   |----------------+-----------------+-------------------------------------|
+   | ^U             | kill-line       | delete entire line                  |
+   |----------------+-----------------+-------------------------------------|
+   | ^V             | quote-char      | quote the next typed key            |
+   |----------------+-----------------+-------------------------------------|
+   | <Up>           | history-up      | recall previous string from history |
+   |----------------+-----------------+-------------------------------------|
+   | <Down>         | history-down    | recall next string from history     |
+   |----------------+-----------------+-------------------------------------|
+   | <BackSpace>    | backspace       | kill the char in front of the       |
+   |                |                 | cursor                              |
+   |----------------+-----------------+-------------------------------------|
+   | Esc u          | upcase-word     | convert word to upper case          |
+   |----------------+-----------------+-------------------------------------|
+   | Esc l          | downcase-word   | convert word to lower case          |
+   |----------------+-----------------+-------------------------------------|
+   | Esc c          | capitalize-word | capitalize the word                 |
+   |----------------+-----------------+-------------------------------------|
+   | ^G             | n/a             | abort                               |
+   |----------------+-----------------+-------------------------------------|
+   | <Return>       | n/a             | finish editing                      |
+   +------------------------------------------------------------------------+
 
    You can remap the editor functions using the bind command. For example, to
    make the Delete key delete the character in front of the cursor rather
@@ -732,45 +814,79 @@ Chapter 2. Getting Started
 
 5. Reading Mail - The Index and Pager
 
-   Similar to many other mail clients, there are two modes in which mail is
-   read in Mutt-ng. The first is the index of messages in the mailbox, which
-   is called the ``index'' in Mutt-ng. The second mode is the display of the
-   message contents. This is called the ``pager.''
+   Similar to many other mail clients, there are two modes in which mail
+   isread in Mutt-ng. The first is the index of messages in the mailbox,
+   which is called the ``index'' in Mutt-ng. The second mode is the display
+   of the message contents. This is called the ``pager.''
 
    The next few sections describe the functions provided in each of these
    modes.
 
   5.1. The Message Index
 
- c               change to a different mailbox
- ESC c           change to a folder in read-only mode
- C               copy the current message to another mailbox
- ESC C           decode a message and copy it to a folder
- ESC s           decode a message and save it to a folder
- D               delete messages matching a pattern
- d               delete the current message
- F               mark as important
- l               show messages matching a pattern
- N               mark message as new
- o               change the current sort method
- O               reverse sort the mailbox
- q               save changes and exit
- s               save-message
- T               tag messages matching a pattern
- t               toggle the tag on a message
- ESC t           toggle tag on entire message thread
- U               undelete messages matching a pattern
- u               undelete-message
- v               view-attachments
- x               abort changes and exit
- <Return>        display-message
- <Tab>           jump to the next new message
- @               show the author's full e-mail address
- $               save changes to mailbox
- /               search
- ESC /           search-reverse
- ^L              clear and redraw the screen
- ^T              untag messages matching a pattern
+   Table 2.3. Default Index Menu Bindings
+
+   +-------------------------------------------------------------------+
+   | Key      | Function | Description                                 |
+   |----------+----------+---------------------------------------------|
+   | c        |          | change to a different mailbox               |
+   |----------+----------+---------------------------------------------|
+   | ESC c    |          | change to a folder in read-only mode        |
+   |----------+----------+---------------------------------------------|
+   | C        |          | copy the current message to another mailbox |
+   |----------+----------+---------------------------------------------|
+   | ESC C    |          | decode a message and copy it to a folder    |
+   |----------+----------+---------------------------------------------|
+   | ESC s    |          | decode a message and save it to a folder    |
+   |----------+----------+---------------------------------------------|
+   | D        |          | delete messages matching a pattern          |
+   |----------+----------+---------------------------------------------|
+   | d        |          | delete the current message                  |
+   |----------+----------+---------------------------------------------|
+   | F        |          | mark as important                           |
+   |----------+----------+---------------------------------------------|
+   | l        |          | show messages matching a pattern            |
+   |----------+----------+---------------------------------------------|
+   | N        |          | mark message as new                         |
+   |----------+----------+---------------------------------------------|
+   | o        |          | change the current sort method              |
+   |----------+----------+---------------------------------------------|
+   | O        |          | reverse sort the mailbox                    |
+   |----------+----------+---------------------------------------------|
+   | q        |          | save changes and exit                       |
+   |----------+----------+---------------------------------------------|
+   | s        |          | save-message                                |
+   |----------+----------+---------------------------------------------|
+   | T        |          | tag messages matching a pattern             |
+   |----------+----------+---------------------------------------------|
+   | t        |          | toggle the tag on a message                 |
+   |----------+----------+---------------------------------------------|
+   | ESC t    |          | toggle tag on entire message thread         |
+   |----------+----------+---------------------------------------------|
+   | U        |          | undelete messages matching a pattern        |
+   |----------+----------+---------------------------------------------|
+   | u        |          | undelete-message                            |
+   |----------+----------+---------------------------------------------|
+   | v        |          | view-attachments                            |
+   |----------+----------+---------------------------------------------|
+   | x        |          | abort changes and exit                      |
+   |----------+----------+---------------------------------------------|
+   | <Return> |          | display-message                             |
+   |----------+----------+---------------------------------------------|
+   | <Tab>    |          | jump to the next new message                |
+   |----------+----------+---------------------------------------------|
+   | @        |          | show the author's full e-mail address       |
+   |----------+----------+---------------------------------------------|
+   | $        |          | save changes to mailbox                     |
+   |----------+----------+---------------------------------------------|
+   | /        |          | search                                      |
+   |----------+----------+---------------------------------------------|
+   | ESC /    |          | search-reverse                              |
+   |----------+----------+---------------------------------------------|
+   | ^L       |          | clear and redraw the screen                 |
+   |----------+----------+---------------------------------------------|
+   | ^T       |          | untag messages matching a pattern           |
+   +-------------------------------------------------------------------+
 
     5.1.1. Status Flags
 
@@ -857,25 +973,42 @@ Chapter 2. Getting Started
    messages. The pager is very similar to the Unix program less though not
    nearly as featureful.
 
- <Return>        go down one line
- <Space>         display the next page (or next message if at the end of a message)
- -               go back to the previous page
- n               search for next match
- S               skip beyond quoted text
- T               toggle display of quoted text
- ?               show key bindings
- /               search for a regular expression (pattern)
- ESC /           search backwards for a regular expression
- \               toggle search pattern coloring
- ^               jump to the top of the message
+   Table 2.4. Default Pager Menu Bindings
+
+   +------------------------------------------------------------------------+
+   | Key      | Function | Description                                      |
+   |----------+----------+--------------------------------------------------|
+   | <Return> |          | go down one line                                 |
+   |----------+----------+--------------------------------------------------|
+   | <Space>  |          | display the next page (or next message if at the |
+   |          |          | end of a message)                                |
+   |----------+----------+--------------------------------------------------|
+   | -        |          | go back to the previous page                     |
+   |----------+----------+--------------------------------------------------|
+   | n        |          | search for next match                            |
+   |----------+----------+--------------------------------------------------|
+   | S        |          | skip beyond quoted text                          |
+   |----------+----------+--------------------------------------------------|
+   | T        |          | toggle display of quoted text                    |
+   |----------+----------+--------------------------------------------------|
+   | ?        |          | show key bindings                                |
+   |----------+----------+--------------------------------------------------|
+   | /        |          | search for a regular expression (pattern)        |
+   |----------+----------+--------------------------------------------------|
+   | ESC /    |          | search backwards for a regular expression        |
+   |----------+----------+--------------------------------------------------|
+   | \        |          | toggle search pattern coloring                   |
+   |----------+----------+--------------------------------------------------|
+   | ^        |          | jump to the top of the message                   |
+   +------------------------------------------------------------------------+
 
    In addition, many of the functions from the index are available in the
    pager, such as delete-message or copy-message (this is one advantage over
    using an external pager to view messages).
 
    Also, the internal pager supports a couple other advanced features. For
-   one, it will accept and translate the ``standard'' nroff sequences for
-   bold and underline. These sequences are a series of either the letter,
+   one, it will accept and translate the ``standard'' nroff sequences forbold
+   and underline. These sequences are a series of either the letter,
    backspace (^H), the letter again for bold or the letter, backspace, ``_''
    for denoting underline. Mutt-ng will attempt to display these in bold and
    underline respectively if your terminal supports them. If not, you can use
@@ -884,27 +1017,50 @@ Chapter 2. Getting Started
 
    Additionally, the internal pager supports the ANSI escape sequences for
    character attributes. Mutt-ng translates them into the correct color and
-   character settings. The sequences Mutt-ng supports are:
+   character settings. The sequences Mutt-ng supports are: ESC [
+   Ps;Ps;Ps;...;Ps m (see table below for possible values for Ps).
 
- ESC [ Ps;Ps;Ps;...;Ps m
- where Ps =
- 0    All Attributes Off
- 1    Bold on
- 4    Underline on
- 5    Blink on
- 7    Reverse video on
- 3x   Foreground color is x
- 4x   Background color is x
+   Table 2.5. ANSI Escape Sequences
 
- Colors are
- 0    black
- 1    red
- 2    green
- 3    yellow
- 4    blue
- 5    magenta
- 6    cyan
- 7    white
+   +-------------------------------------------------+
+   | Value | Attribute                               |
+   |-------+-----------------------------------------|
+   | 0     | All Attributes Off                      |
+   |-------+-----------------------------------------|
+   | 1     | Bold on                                 |
+   |-------+-----------------------------------------|
+   | 4     | Underline on                            |
+   |-------+-----------------------------------------|
+   | 5     | Blink on                                |
+   |-------+-----------------------------------------|
+   | 7     | Reverse video on                        |
+   |-------+-----------------------------------------|
+   | 3x    | Foreground color is x (see table below) |
+   |-------+-----------------------------------------|
+   | 4x    | Background color is x (see table below) |
+   +-------------------------------------------------+
+
+   Table 2.6. ANSI Colors
+
+   +------------------+
+   | Number | Color   |
+   |--------+---------|
+   | 0      | black   |
+   |--------+---------|
+   | 1      | red     |
+   |--------+---------|
+   | 2      | green   |
+   |--------+---------|
+   | 3      | yellow  |
+   |--------+---------|
+   | 4      | blue    |
+   |--------+---------|
+   | 5      | magenta |
+   |--------+---------|
+   | 6      | cyan    |
+   |--------+---------|
+   | 7      | white   |
+   +------------------+
 
    Mutt-ng uses these attributes for handling text/enriched messages, and
    they can also be used by an external autoview script for highlighting
@@ -914,28 +1070,51 @@ Chapter 2. Getting Started
 
   5.3. Threaded Mode
 
-   When the mailbox is sorted by threads, there are a few additional
+   When the mailbox is sorted by threads ,there are a few additional
    functions available in the index and pager modes.
 
- ^D      delete-thread           delete all messages in the current thread
- ^U      undelete-thread         undelete all messages in the current thread
- ^N      next-thread             jump to the start of the next thread
- ^P      previous-thread         jump to the start of the previous thread
- ^R      read-thread             mark the current thread as read
- ESC d   delete-subthread        delete all messages in the current subthread
- ESC u   undelete-subthread      undelete all messages in the current subthread
- ESC n   next-subthread          jump to the start of the next subthread
- ESC p   previous-subthread      jump to the start of the previous subthread
- ESC r   read-subthread          mark the current subthread as read
- ESC t   tag-thread              toggle the tag on the current thread
- ESC v   collapse-thread         toggle collapse for the current thread
- ESC V   collapse-all            toggle collapse for all threads
- P       parent-message          jump to parent message in thread
+   Table 2.7. Default Thread Function Bindings
+
+   +------------------------------------------------------------------------+
+   | Key   | Function           | Description                               |
+   |-------+--------------------+-------------------------------------------|
+   | ^D    | delete-thread      | delete all messages in the current thread |
+   |-------+--------------------+-------------------------------------------|
+   | ^U    | undelete-thread    | undelete all messages in the current      |
+   |       |                    | thread                                    |
+   |-------+--------------------+-------------------------------------------|
+   | ^N    | next-thread        | jump to the start of the next thread      |
+   |-------+--------------------+-------------------------------------------|
+   | ^P    | previous-thread    | jump to the start of the previous thread  |
+   |-------+--------------------+-------------------------------------------|
+   | ^R    | read-thread        | mark the current thread as read           |
+   |-------+--------------------+-------------------------------------------|
+   | ESC d | delete-subthread   | delete all messages in the current        |
+   |       |                    | subthread                                 |
+   |-------+--------------------+-------------------------------------------|
+   | ESC u | undelete-subthread | undelete all messages in the current      |
+   |       |                    | subthread                                 |
+   |-------+--------------------+-------------------------------------------|
+   | ESC n | next-subthread     | jump to the start of the next subthread   |
+   |-------+--------------------+-------------------------------------------|
+   | ESC p | previous-subthread | jump to the start of the previous         |
+   |       |                    | subthread                                 |
+   |-------+--------------------+-------------------------------------------|
+   | ESC r | read-subthread     | mark the current subthread as read        |
+   |-------+--------------------+-------------------------------------------|
+   | ESC t | tag-thread         | toggle the tag on the current thread      |
+   |-------+--------------------+-------------------------------------------|
+   | ESC v | collapse-thread    | toggle collapse for the current thread    |
+   |-------+--------------------+-------------------------------------------|
+   | ESC V | collapse-all       | toggle collapse for all threads           |
+   |-------+--------------------+-------------------------------------------|
+   | P     | parent-message     | jump to parent message in thread          |
+   +------------------------------------------------------------------------+
 
    Note: Collapsing a thread displays only the first message in the thread
    and hides the others. This is useful when threads contain so many messages
-   that you can only see a handful of threads on the screen. See %M in
-   index-format. For example, you could use "%?M?(#%03M)&(%4l)?" in
+   that you can only see a handful of threads onthe screen. See %M in
+   index-format . For example, you could use "%?M?(#%03M)&(%4l)?" in
    index-format to optionally display the number of hidden messages if the
    thread is collapsed.
 
@@ -980,7 +1159,7 @@ Chapter 2. Getting Started
    attachment's content type. These changes are not persistent, and get lost
    upon changing folders.
 
-   Note that this command is also available on the compose-menu. There, it's
+   Note that this command is also available on the compose-menu .There, it's
    used to fine-tune the properties of attachments you are going to send.
 
    enter-command (default: ``:'')
@@ -1011,7 +1190,7 @@ Chapter 2. Getting Started
    pipe-message (default: |)
 
    Asks for an external Unix command and pipes the current or tagged
-   message(s) to it. The variables pipe-decode, pipe-split, pipe-sep and
+   message(s) to it. The variables pipe-decode ,pipe-split, pipe-sep and
    wait-key control the exact behavior of this function.
 
    resend-message (default: ESC e)
@@ -1036,7 +1215,7 @@ Chapter 2. Getting Started
    toggle-quoted (default: T)
 
    The pager uses the quote-regexp variable to detect quoted text when
-   displaying the body of the message. This function toggles the display of
+   displaying the body of the message. This function toggles the displayof
    the quoted material in the message. It is particularly useful when are
    interested in just the response and there is a large amount of quoted text
    in the way.
@@ -1050,18 +1229,30 @@ Chapter 2. Getting Started
 
    The following bindings are available in the index for sending messages.
 
- m       compose         compose a new message
- r       reply           reply to sender
- g       group-reply     reply to all recipients
- L       list-reply      reply to mailing list address
- f       forward         forward message
- b       bounce          bounce (remail) message
- ESC k   mail-key        mail a PGP public key to someone
+   Table 2.8. Default Mail Composition Bindings
+
+   +--------------------------------------------------------+
+   | Key   | Function    | Description                      |
+   |-------+-------------+----------------------------------|
+   | m     | compose     | compose a new message            |
+   |-------+-------------+----------------------------------|
+   | r     | reply       | reply to sender                  |
+   |-------+-------------+----------------------------------|
+   | g     | group-reply | reply to all recipients          |
+   |-------+-------------+----------------------------------|
+   | L     | list-reply  | reply to mailing list address    |
+   |-------+-------------+----------------------------------|
+   | f     | forward     | forward message                  |
+   |-------+-------------+----------------------------------|
+   | b     | bounce      | bounce (remail) message          |
+   |-------+-------------+----------------------------------|
+   | ESC k | mail-key    | mail a PGP public key to someone |
+   +--------------------------------------------------------+
 
    Bouncing a message sends the message as is to the recipient you specify.
    Forwarding a message allows you to add comments or modify the message you
    are forwarding. These items are discussed in greater detail in the next
-   chapter forwarding-mail.
+   chapter forwarding-mail .
 
   6.1. Composing new messages
 
@@ -1070,6 +1261,7 @@ Chapter 2. Getting Started
    line:
 
  To:
+
 
    After you've finished entering the recipient(s), press return. If you want
    to send an email to more than one recipient, separate the email addresses
@@ -1084,6 +1276,7 @@ Chapter 2. Getting Started
  set editor = "vim +/^$/ -c ':set tw=72'"
  set editor = "nano"
  set editor = "emacs"
+
 
    If you don't set your preferred editor in your configuration, mutt-ng
    first looks whether the environment variable $VISUAL is set, and if so, it
@@ -1119,33 +1312,60 @@ Chapter 2. Getting Started
 
  set edit_headers
 
+
    Once you have finished editing the body of your mail message, you are
    returned to the compose menu. The following options are available:
 
- a       attach-file             attach a file
- A       attach-message          attach message(s) to the message
- ESC k   attach-key              attach a PGP public key
- d       edit-description        edit description on attachment
- D       detach-file             detach a file
- t       edit-to                 edit the To field
- ESC f   edit-from               edit the From field
- r       edit-reply-to           edit the Reply-To field
- c       edit-cc                 edit the Cc field
- b       edit-bcc                edit the Bcc field
- y       send-message            send the message
- s       edit-subject            edit the Subject
- S       smime-menu              select S/MIME options
- f       edit-fcc                specify an ``Fcc'' mailbox
- p       pgp-menu                select PGP options
- P       postpone-message        postpone this message until later
- q       quit                    quit (abort) sending the message
- w       write-fcc               write the message to a folder
- i       ispell                  check spelling (if available on your system)
- ^F      forget-passphrase       wipe passphrase(s) from memory
+   Table 2.9. Default Compose Menu Bindings
+
+   +------------------------------------------------------------------------+
+   | Key   | Function          | Description                                |
+   |-------+-------------------+--------------------------------------------|
+   | a     | attach-file       | attach a file                              |
+   |-------+-------------------+--------------------------------------------|
+   | A     | attach-message    | attach message(s) to the message           |
+   |-------+-------------------+--------------------------------------------|
+   | ESC k | attach-key        | attach a PGP public key                    |
+   |-------+-------------------+--------------------------------------------|
+   | d     | edit-description  | edit description on attachment             |
+   |-------+-------------------+--------------------------------------------|
+   | D     | detach-file       | detach a file                              |
+   |-------+-------------------+--------------------------------------------|
+   | t     | edit-to           | edit the To field                          |
+   |-------+-------------------+--------------------------------------------|
+   | ESC f | edit-from         | edit the From field                        |
+   |-------+-------------------+--------------------------------------------|
+   | r     | edit-reply-to     | edit the Reply-To field                    |
+   |-------+-------------------+--------------------------------------------|
+   | c     | edit-cc           | edit the Cc field                          |
+   |-------+-------------------+--------------------------------------------|
+   | b     | edit-bcc          | edit the Bcc field                         |
+   |-------+-------------------+--------------------------------------------|
+   | y     | send-message      | send the message                           |
+   |-------+-------------------+--------------------------------------------|
+   | s     | edit-subject      | edit the Subject                           |
+   |-------+-------------------+--------------------------------------------|
+   | S     | smime-menu        | select S/MIME options                      |
+   |-------+-------------------+--------------------------------------------|
+   | f     | edit-fcc          | specify an ``Fcc'' mailbox                 |
+   |-------+-------------------+--------------------------------------------|
+   | p     | pgp-menu          | select PGP options                         |
+   |-------+-------------------+--------------------------------------------|
+   | P     | postpone-message  | postpone this message until later          |
+   |-------+-------------------+--------------------------------------------|
+   | q     | quit              | quit (abort) sending the message           |
+   |-------+-------------------+--------------------------------------------|
+   | w     | write-fcc         | write the message to a folder              |
+   |-------+-------------------+--------------------------------------------|
+   | i     | ispell            | check spelling (if available on your       |
+   |       |                   | system)                                    |
+   |-------+-------------------+--------------------------------------------|
+   | ^F    | forget-passphrase | wipe passphrase(s) from memory             |
+   +------------------------------------------------------------------------+
 
    Note: The attach-message function will prompt you for a folder to attach
-   messages from. You can now tag messages in that folder and they will be
-   attached to the message you are sending. Note that certain operations like
+   messages from. You can now tag messages in that folder and theywill be
+   attached to the message you are sending. Note that certainoperations like
    composing a new mail, replying, forwarding, etc. are not permitted when
    you are in that folder. The %r in status-format will change to a 'A' to
    indicate that you are in attach-message mode.
@@ -1206,7 +1426,7 @@ Chapter 2. Getting Started
 
    In the situation where a group of people uses email as a discussion, most
    of the emails will have one or more recipients, and probably several "Cc:"
-   recipients. The group reply functionality ensures that when you press g
+   recipients. The group reply functionalityensures that when you press g
    instead of r to do a reply, each and every recipient that is contained in
    the original message will receive a copy of the message, either as normal
    recipient or as "Cc:" recipient.
@@ -1276,23 +1496,31 @@ Chapter 2. Getting Started
    encrypted using the selected public keys, and sent out.
 
    Most fields of the entries in the key selection menu (see also
-   pgp-entry-format) have obvious meanings. But some explanations on the
+   pgp-entry-format ) have obvious meanings. But some explanations on the
    capabilities, flags, and validity fields are in order.
 
    The flags sequence (%f) will expand to one of the following flags:
 
- R            The key has been revoked and can't be used.
- X            The key is expired and can't be used.
- d            You have marked the key as disabled.
- c            There are unknown critical self-signature
-              packets.
+   Table 2.10. PGP Key Menu Flags
 
-   The capabilities field (%c) expands to a two-character sequence
-   representing a key's capabilities. The first character gives the key's
-   encryption capabilities: A minus sign (-) means that the key cannot be
-   used for encryption. A dot (.) means that it's marked as a signature key
-   in one of the user IDs, but may also be used for encryption. The letter e
-   indicates that this key can be used for encryption.
+   +-----------------------------------------------------------+
+   | Flag | Description                                        |
+   |------+----------------------------------------------------|
+   | R    | The key has been revoked and can't be used.        |
+   |------+----------------------------------------------------|
+   | X    | The key is expired and can't be used.              |
+   |------+----------------------------------------------------|
+   | d    | You have marked the key as disabled.               |
+   |------+----------------------------------------------------|
+   | c    | There are unknown critical self-signature packets. |
+   +-----------------------------------------------------------+
+
+   The capabilities field (%c) expands to a two-character
+   sequencerepresenting a key's capabilities. The first character gives the
+   key's encryption capabilities: A minus sign (- )means that the key cannot
+   be used for encryption. A dot (. )means that it's marked as a signature
+   key in one of the user IDs, but may also be used for encryption. The
+   letter e indicates that this key can be used for encryption.
 
    The second character indicates the key's signing capabilities. Once again,
    a ``-'' implies ``not for signing'', ``.'' implies that the key is marked
@@ -1302,7 +1530,8 @@ Chapter 2. Getting Started
    Finally, the validity field (%t) indicates how well-certified a user-id
    is. A question mark (?) indicates undefined validity, a minus character
    (-) marks an untrusted association, a space character means a partially
-   trusted association, and a plus character (+) indicates complete validity.
+   trusted association, and a plus character (+ ) indicates complete
+   validity.
 
   6.5. Sending anonymous messages via mixmaster
 
@@ -1326,7 +1555,7 @@ Chapter 2. Getting Started
    functions, which are by default bound to the left and right arrows and to
    the h and l keys (think vi keyboard bindings). To insert a remailer at the
    current chain position, use the insert function. To append a remailer
-   behind the current chain position, use select-entry or append. You can
+   behind the current chain position, use select-entry or append . You can
    also delete entries from the chain, using the corresponding function.
    Finally, to abandon your changes, leave the menu, or accept them pressing
    (by default) the Return key.
@@ -1360,8 +1589,8 @@ Chapter 2. Getting Started
  Pay me EUR 50,000.- cash or your favorite stuffed animal will die
  a horrible death.
 
-
  ----- End forwarded message -----
+
 
    When you're done with editing the mail, save and quit the editor, and you
    will return to the compose menu, the same menu you also encounter when
@@ -1503,29 +1732,31 @@ Chapter 3. Configuration
    own tastes. When Mutt-ng is first invoked, it will attempt to read the
    ``system'' configuration file (defaults set by your local system
    administrator), unless the ``-n'' commandline option is specified. This
-   file is typically /usr/local/share/muttng/Muttngrc or /etc/Muttngrc,
+   file is typically /usr/local/share/muttng/Muttngrc or /etc/Muttngrc ,
    Mutt-ng users will find this file in /usr/local/share/muttng/Muttrc or
    /etc/Muttngrc. Mutt will next look for a file named .muttrc in your home
    directory, Mutt-ng will look for .muttngrc. If this file does not exist
-   and your home directory has a subdirectory named .mutt, mutt try to load a
-   file named .muttng/muttngrc.
+   and your home directory has a subdirectory named .mutt , mutt try to load
+   a file named .muttng/muttngrc.
 
    .muttrc (or .muttngrc for Mutt-ng) is the file where you will usually
    place your commands to configure Mutt-ng.
 
 2. Basic Syntax of Initialization Files
 
-   An initialization file consists of a series of commands. Each line of the
+   An initialization file consists of a series of commands .Each line of the
    file may contain one or more commands. When multiple commands are used,
    they must be separated by a semicolon (;).
 
  set realname='Mutt-ng user' ; ignore x-
+
 
    The hash mark, or pound sign (``#''), is used as a ``comment'' character.
    You can use it to annotate your initialization file. All text after the
    comment character to the end of the line is ignored. For example,
 
  my_hdr X-Disclaimer: Why are you listening to me? # This is a comment
+
 
    Single quotes (') and double quotes (") can be used to quote strings which
    contain spaces or other special characters. The difference between the two
@@ -1543,6 +1774,7 @@ Chapter 3. Configuration
 
  set realname="Michael \"MuttDude\" Elkins"
 
+
    ``\\'' means to insert a literal ``\'' into the line. ``\n'' and ``\r''
    have their usual C meanings of linefeed and carriage-return, respectively.
 
@@ -1555,7 +1787,8 @@ Chapter 3. Configuration
    split over multiple lines with only one ``#''.
 
  # folder-hook . \
-   set realname="Michael \"MuttDude\" Elkins"
+ set realname="Michael \"MuttDude\" Elkins"
+
 
    When testing your config files, beware the following caveat. The backslash
    at the end of the commented line extends the current line with the next
@@ -1571,6 +1804,7 @@ Chapter 3. Configuration
  line3\
  line4
  line5
+
 
    line1 ``continues'' until line4. however, the part after the # is a
    comment which includes line3 and line4. line5 is a new line of its own and
@@ -1592,6 +1826,7 @@ Chapter 3. Configuration
 
  my_hdr X-Operating-System: `uname -a`
 
+
    The output of the Unix command ``uname -a'' will be substituted before the
    line is parsed. Note that since initialization files are line oriented,
    only the first line of output from the Unix command will be substituted.
@@ -1603,6 +1838,7 @@ Chapter 3. Configuration
    example,
 
  set record=+sent_on_$HOSTNAME
+
 
    sets the record variable to the string +sent_on_ and appends the value of
    the evironment variable $HOSTNAME.
@@ -1616,6 +1852,7 @@ Chapter 3. Configuration
    string can be used in the same way, too. For example,
 
  set imap_home_namespace = $folder
+
 
    would set the value of imap-home-namespace to the value to which folder is
    currently set to.
@@ -1640,7 +1877,8 @@ Chapter 3. Configuration
  macro generic <F1> "!less -r /path/to/manual" "Show manual"
  macro pager <F1> "!less -r /path/to/manual" "Show manual"
 
-   for generic, pager and index. The alternative is to define a custom
+
+   for generic, pager and index .The alternative is to define a custom
    variable like so:
 
  set user_manualcmd = "!less -r /path/to_manual"
@@ -1648,9 +1886,11 @@ Chapter 3. Configuration
  macro pager <F1> "$user_manualcmd<enter>" "Show manual"
  macro index <F1> "$user_manualcmd<enter>" "Show manual"
 
+
    to re-use the command sequence as in:
 
  macro index <F2> "$user_manualcmd | grep '\^[ ]\\+~. '" "Show Patterns"
+
 
    Using this feature, arbitrary sequences can be defined once and recalled
    and reused where necessary. More advanced scenarios could include to save
@@ -1667,18 +1907,22 @@ Chapter 3. Configuration
  set user_foo = 42
  set user_foo = 666
 
+
    the variable $user_foo has a current value of 666 and an initial of 42.
    The query
 
  set ?user_foo
 
+
    will show 666. After doing the reset via
 
  reset user_foo
 
+
    a following query will give 42 as the result. After unsetting it via
 
  unset user_foo
+
 
    any query or operation (except the noted expansion within other
    statements) will lead to an error message.
@@ -1697,15 +1941,18 @@ Chapter 3. Configuration
 
  muttng -Q muttng_docdir
 
+
    To extend the example for viewing the manual via self-defined variables,
    it can be made more readable and more portable by changing the real path
    in:
 
  set user_manualcmd = '!less -r /path/to_manual'
 
+
    to:
 
  set user_manualcmd = "!less -r $muttng_docdir/manual.txt"
+
 
    which works everywhere if a manual is installed.
 
@@ -1718,15 +1965,18 @@ Chapter 3. Configuration
 
  folder-hook . "set user_current_folder = $muttng_folder_name"
 
+
    will be already be translated to the following when reading the startup
    files:
 
  folder-hook . "set user_current_folder = some_folder"
 
+
    with some_folder being the name of the first folder muttng opens. On the
    contrary,
 
  folder-hook . 'set user_current_folder = $muttng_folder_name'
+
 
    will be executed at runtime because of the single quotes so that
    user_current_folder will always have the value of the currently opened
@@ -1735,6 +1985,7 @@ Chapter 3. Configuration
    A more practical example is:
 
  folder-hook . 'source ~/.mutt/score-$muttng_folder_name'
+
 
    which can be used to source files containing score commands depending on
    the folder the user enters.
@@ -1754,6 +2005,7 @@ Chapter 3. Configuration
  set user_magic_number = 42
  set folder = $user_magic_number
 
+
 4. Defining/Using aliases
 
    Usage: alias key address [ , address, ... ]
@@ -1772,9 +2024,10 @@ Chapter 3. Configuration
  alias muttdude me@cs.hmc.edu (Michael Elkins)
  alias theguys manny, moe, jack
 
+
    Unlike other mailers, Mutt-ng doesn't require aliases to be defined in a
    special file. The alias command can appear anywhere in a configuration
-   file, as long as this file is source. Consequently, you can have multiple
+   file, as long as this file is source .Consequently, you can have multiple
    alias files, or you can have all aliases defined in your muttrc.
 
    On the other hand, the create-alias function can use only one file, the
@@ -1789,9 +2042,10 @@ Chapter 3. Configuration
  source ~/.mail_aliases
  set alias_file=~/.mail_aliases
 
-   To use aliases, you merely use the alias at any place in mutt where mutt
-   prompts for addresses, such as the To: or Cc: prompt. You can also enter
-   aliases in your editor at the appropriate headers if you have the
+
+   To use aliases, you merely use the alias at any place in mutt where
+   muttprompts for addresses, such as the To: or Cc: prompt. You can also
+   enter aliases in your editor at the appropriate headers if you have the
    edit-headers variable set.
 
    In addition, at the various address prompts, you can use the tab character
@@ -1813,8 +2067,8 @@ Chapter 3. Configuration
    invoked when pressing a key).
 
    map specifies in which menu the binding belongs. Multiple maps may be
-   specified by separating them with commas (no additional whitespace is
-   allowed). The currently defined maps are:
+   specified by separating them with commas (no additional whitespace
+   isallowed). The currently defined maps are:
 
    generic
 
@@ -1879,35 +2133,63 @@ Chapter 3. Configuration
 
    In addition, key may consist of:
 
- \t              tab
- <tab>           tab
- <backtab>       backtab / shift-tab
- \r              carriage return
- \n              newline
- \e              escape
- <esc>           escape
- <up>            up arrow
- <down>          down arrow
- <left>          left arrow
- <right>         right arrow
- <pageup>        Page Up
- <pagedown>      Page Down
- <backspace>     Backspace
- <delete>        Delete
- <insert>        Insert
- <enter>         Enter
- <return>        Return
- <home>          Home
- <end>           End
- <space>         Space bar
- <f1>            function key 1
- <f10>           function key 10
+   Table 3.1. Alternative Key Names
+
+   +-----------------------------------+
+   | Sequence    | Description         |
+   |-------------+---------------------|
+   | \t          | tab                 |
+   |-------------+---------------------|
+   | <tab>       | tab                 |
+   |-------------+---------------------|
+   | <backtab>   | backtab / shift-tab |
+   |-------------+---------------------|
+   | \r          | carriage return     |
+   |-------------+---------------------|
+   | \n          | newline             |
+   |-------------+---------------------|
+   | \e          | escape              |
+   |-------------+---------------------|
+   | <esc>       | escape              |
+   |-------------+---------------------|
+   | <up>        | up arrow            |
+   |-------------+---------------------|
+   | <down>      | down arrow          |
+   |-------------+---------------------|
+   | <left>      | left arrow          |
+   |-------------+---------------------|
+   | <right>     | right arrow         |
+   |-------------+---------------------|
+   | <pageup>    | Page Up             |
+   |-------------+---------------------|
+   | <pagedown>  | Page Down           |
+   |-------------+---------------------|
+   | <backspace> | Backspace           |
+   |-------------+---------------------|
+   | <delete>    | Delete              |
+   |-------------+---------------------|
+   | <insert>    | Insert              |
+   |-------------+---------------------|
+   | <enter>     | Enter               |
+   |-------------+---------------------|
+   | <return>    | Return              |
+   |-------------+---------------------|
+   | <home>      | Home                |
+   |-------------+---------------------|
+   | <end>       | End                 |
+   |-------------+---------------------|
+   | <space>     | Space bar           |
+   |-------------+---------------------|
+   | <f1>        | function key 1      |
+   |-------------+---------------------|
+   | <f10>       | function key 10     |
+   +-----------------------------------+
 
    key does not need to be enclosed in quotes unless it contains a space (``
    '').
 
    function specifies which action to take when key is pressed. For a
-   complete list of functions, see the functions. The special function noop
+   complete list of functions, see the functions .The special function noop
    unbinds the specified key sequence.
 
 6. Defining aliases for character sets
@@ -1938,10 +2220,11 @@ Chapter 3. Configuration
    distinguish it from the logical not operator for the expression.
 
    Note that the settings are not restored when you leave the mailbox. For
-   example, a command action to perform is to change the sorting method based
+   example, a command action to perform is to change the sorting methodbased
    upon the mailbox being read:
 
  folder-hook mutt set sort=threads
+
 
    However, the sorting method is not restored to its previous value when
    reading a different mailbox. To specify a default command, use the pattern
@@ -1949,32 +2232,33 @@ Chapter 3. Configuration
 
  folder-hook . set sort=date-sent
 
+
 8. Keyboard macros
 
    Usage: macro menu key sequence [ description ]
 
    Macros are useful when you would like a single key to perform a series of
-   actions. When you press key in menu menu, Mutt-ng will behave as if you
+   actions. When you press key in menu menu ,Mutt-ng will behave as if you
    had typed sequence. So if you have a common sequence of commands you type,
-   you can create a macro to execute those commands with a single key.
+   you can create a macro to execute those commands with a singlekey.
 
    menu is the maps which the macro will be bound. Multiple maps may be
    specified by separating multiple menu arguments by commas. Whitespace may
-   not be used in between the menu arguments and the commas separating them.
+   not be used in between the menu arguments and thecommas separating them.
 
    key and sequence are expanded by the same rules as the bind. There are
    some additions however. The first is that control characters in sequence
    can also be specified as ^x. In order to get a caret (`^'') you need to
    use ^^. Secondly, to specify a certain key such as up or to invoke a
-   function directly, you can use the format <key name> and <function name>.
-   For a listing of key names see the section on bind. Functions are listed
+   function directly, you can use the format <key name> and <function name>
+   .For a listing of key names see the section on bind. Functions are listed
    in the functions.
 
-   The advantage with using function names directly is that the macros will
-   work regardless of the current key bindings, so they are not dependent on
-   the user having particular key definitions. This makes them more robust
-   and portable, and also facilitates defining of macros in files used by
-   more than one user (eg. the system Muttngrc).
+   The advantage with using function names directly is that the macros
+   willwork regardless of the current key bindings, so they are not dependent
+   on the user having particular key definitions. This makes them more
+   robustand portable, and also facilitates defining of macros in files used
+   by more than one user (eg. the system Muttngrc).
 
    Optionally you can specify a descriptive text after sequence, which is
    shown in the help screens.
@@ -2067,6 +2351,7 @@ Chapter 3. Configuration
  set COLORFGBG="green;black"
  export COLORFGBG
 
+
    Note: The S-Lang library requires you to use the lightgray and brown
    keywords instead of white and yellow when setting this variable.
 
@@ -2075,7 +2360,7 @@ Chapter 3. Configuration
    in the color command for it to be removed. The pattern ``*'' is a special
    token which means to clear the color index list of all entries.
 
-   Mutt-ng also recognizes the keywords color0, color1, …, colorN-1 (N
+   Mutt-ng also recognizes the keywords color0, color1 ,…, colorN-1 (N
    being the number of colors supported by your terminal). This is useful
    when you remap the colors for your display (for example by changing the
    color associated with color2 for your xterm), since color names may then
@@ -2127,6 +2412,7 @@ Chapter 3. Configuration
  unignore organization organisation x-mailer: x-newsreader: x-mailing-list:
  unignore posted-to:
 
+
 11. Alternative addresses
 
    Usage: [un]alternates regexp [ regexp ... ]
@@ -2136,7 +2422,7 @@ Chapter 3. Configuration
    instance, when replying to a message that you sent to a different party,
    mutt will automatically suggest to send the response to the original
    message's recipients -- responding to yourself won't make much sense in
-   many cases. (See reply-to.)
+   many cases. (See reply-to .)
 
    Many users receive e-mail under a number of different addresses. To fully
    use mutt's features here, the program must be able to recognize what
@@ -2150,9 +2436,9 @@ Chapter 3. Configuration
    pattern under an unalternates command.
 
    To remove a regular expression from the alternates list, use the
-   unalternates command with exactly the same regexp. Likewise, if the regexp
-   for a alternates command matches an entry on the unalternates list, that
-   unalternates entry will be removed. If the regexp for unalternates is
+   unalternates command with exactly the same regexp . Likewise, if the
+   regexp for a alternates command matches an entry on the unalternates list,
+   that unalternates entry will be removed. If the regexp for unalternates is
    ``*'', all entries on alternates will be removed.
 
 12. Format = Flowed
@@ -2170,7 +2456,7 @@ Chapter 3. Configuration
    format that can also be displayed nicely on old fixed-size terminals.
 
    For introductory information on format=flowed messages, see
-   <http://www.joeclark.org/ffaq.html>.
+   <http://www.joeclark.org/ffaq.html> .
 
   12.2. Receiving: Display Setup
 
@@ -2179,7 +2465,7 @@ Chapter 3. Configuration
    fit on your terminal. If you want a fixed margin on the right side of your
    terminal, you can set the following:
 
-     set wrapmargin = 10
+ set wrapmargin = 10
 
 
    The code above makes the line break 10 columns before the right side of
@@ -2188,7 +2474,7 @@ Chapter 3. Configuration
    If your terminal is so wide that the lines are embarrassingly long, you
    can also set a maximum line length:
 
-     set max_line_length = 120
+ set max_line_length = 120
 
 
    The example above will give you lines not longer than 120 characters.
@@ -2196,25 +2482,25 @@ Chapter 3. Configuration
    When you view at format=flowed messages, you will often see the quoting
    hierarchy like in the following example:
 
-     >Bill, can you please send last month's progress report to Mr.
-     >Morgan? We also urgently need the cost estimation for the new
-     >production server that we want to set up before our customer's
-     >project will go live.
+ >Bill, can you please send last month's progress report to Mr.
+ >Morgan? We also urgently need the cost estimation for the new
+ >production server that we want to set up before our customer's
+ >project will go live.
 
 
    This obviously doesn't look very nice, and it makes it very hard to
    differentiate between text and quoting character. The solution is to
    configure mutt-ng to "stuff" the quoting:
 
-     set stuff_quoted
+ set stuff_quoted
 
 
    This will lead to a nicer result that is easier to read:
 
-     > Bill, can you please send last month's progress report to Mr.
-     > Morgan? We also urgently need the cost estimation for the new
-     > production server that we want to set up before our customer's
-     > project will go live.
+ > Bill, can you please send last month's progress report to Mr.
+ > Morgan? We also urgently need the cost estimation for the new
+ > production server that we want to set up before our customer's
+ > project will go live.
 
 
   12.3. Sending
@@ -2222,7 +2508,7 @@ Chapter 3. Configuration
    If you want mutt-ng to send emails with format=flowed set, you need to
    explicitly set it:
 
-     set text_flowed
+ set text_flowed
 
 
    Additionally, you have to use an editor which supports writing
@@ -2263,7 +2549,7 @@ Chapter 3. Configuration
    Usage: [un]lists regexp [ regexp ... ] Usage: [un]subscribe regexp [
    regexp ... ]
 
-   Mutt-ng has a few nice features for using-lists. In order to take
+   Mutt-ng has a few nice features for using-lists .In order to take
    advantage of them, you must specify which addresses belong to mailing
    lists, and which mailing lists you are subscribed to. Once you have done
    this, the list-reply function will work for all known lists. Additionally,
@@ -2306,8 +2592,8 @@ Chapter 3. Configuration
 
    Usage: mbox-hook [!]pattern mailbox
 
-   This command is used to move read messages from a specified mailbox to a
-   different mailbox automatically when you quit or change folders. pattern
+   This command is used to move read messages from a specified mailbox to
+   adifferent mailbox automatically when you quit or change folders. pattern
    is a regular expression specifying the mailbox to treat as a ``spool''
    mailbox and mailbox specifies where mail should be saved when read.
 
@@ -2356,6 +2642,7 @@ Chapter 3. Configuration
 
  my_hdr Organization: A Really Big Company, Anytown, USA
 
+
    in your .muttrc.
 
    Note: space characters are not allowed between the keyword and the colon
@@ -2374,6 +2661,7 @@ Chapter 3. Configuration
 
  unmy_hdr to cc
 
+
 17. Defining the order of headers when viewing messages
 
    Usage: hdr_order header1 header2 header3
@@ -2387,6 +2675,7 @@ Chapter 3. Configuration
 
  hdr_order From Date: From: To: Cc: Subject:
 
+
 18. Specify default save filename
 
    Usage: save-hook [!]pattern filename
@@ -2394,7 +2683,7 @@ Chapter 3. Configuration
    This command is used to override the default filename used when saving
    messages. filename will be used as the default filename if the message is
    From: an address matching regexp or if you are the author and the message
-   is addressed to: something matching regexp.
+   is addressed to: something matching regexp .
 
    See pattern-hook for information on the exact format of pattern.
 
@@ -2402,6 +2691,7 @@ Chapter 3. Configuration
 
  save-hook me@(turing\\.)?cs\\.hmc\\.edu$ +elkins
  save-hook aol\\.com$ +spam
+
 
    Also see the fcc-save-hook command.
 
@@ -2439,13 +2729,13 @@ Chapter 3. Configuration
    recipients of the message.
 
    reply-hook is matched against the message you are replying to, instead of
-   the message you are sending. send-hook is matched against all messages,
-   both new and replies. Note: reply-hooks are matched before the send-hook,
-   regardless of the order specified in the users's configuration file.
+   the message you are sending .send-hook is matched against all messages,
+   both new and replies .Note: reply-hooks are matched before the send-hook
+   ,regardless of the order specified in the users's configuration file.
 
    send2-hook is matched every time a message is changed, either by editing
    it, or by using the compose menu to change its recipients or subject.
-   send2-hook is executed after send-hook, and can, e.g., be used to set
+   send2-hook is executed after send-hook ,and can, e.g., be used to set
    parameters such as the sendmail variable depending on the message's sender
    address.
 
@@ -2482,7 +2772,8 @@ Chapter 3. Configuration
    Example:
 
  message-hook ~A 'set pager=builtin'
- message-hook '~f freshmeat-news' 'set pager="less \"+/^  subject: .*\""'
+ message-hook '~f freshmeat-news' 'set pager="less \"+/^  subject:.*\""'
+
 
 23. Choosing the cryptographic key of the recipient
 
@@ -2491,10 +2782,10 @@ Chapter 3. Configuration
    When encrypting messages with PGP or OpenSSL, you may want to associate a
    certain key with a given e-mail address automatically, either because the
    recipient's public key can't be deduced from the destination address, or
-   because, for some reasons, you need to override the key Mutt-ng would
-   normally use. The crypt-hook command provides a method by which you can
-   specify the ID of the public key to be used when encrypting messages to a
-   certain recipient.
+   because, for some reasons, you need to override the key Mutt-ng
+   wouldnormally use. The crypt-hook command provides a method by which you
+   can specify the ID of the public key to be used when encrypting messages
+   to a certain recipient.
 
    The meaning of "key id" is to be taken broadly in this context: You can
    either put a numerical key ID here, an e-mail address, or even just a real
@@ -2535,10 +2826,12 @@ Chapter 3. Configuration
  score "~f nion@muttng\.org" 50
  score "~f @sco\.com" -100
 
+
    If the pattern matches, it is also possible to set the score value of the
    current message to a certain value and then stop evaluation:
 
  score "~f santaclaus@northpole\.int" =666
+
 
    What is important to note is that negative score values will be rounded up
    to 0.
@@ -2556,8 +2849,8 @@ Chapter 3. Configuration
      o delete threshold: when a message has a score value equal or lower than
        the delete threshold, it will be marked as deleted.
 
-   These three thresholds can be set via the variables score-threshold-flag,
-   score-threshold-read, score-threshold-delete and. By default,
+   These three thresholds can be set via the variables score-threshold-flag
+   ,score-threshold-read, score-threshold-delete and. By default,
    score-threshold-read and score-threshold-delete are set to -1, which means
    that in the default threshold configuration no message will ever get
    marked as read or deleted.
@@ -2567,6 +2860,7 @@ Chapter 3. Configuration
 
  color index  black   yellow  "~n 10-"
  color index  red     yellow  "~n 100-"
+
 
    The rules above mark all messages with a score between 10 and 99 with
    black and yellow, and messages with a score greater or equal 100 with red
@@ -2613,11 +2907,12 @@ Chapter 3. Configuration
  spam "X-PerlMX-Spam: .*Probability=([0-9]+)%" "%1/PM"
  set spam_separator=", "
 
+
    If I then received a message that DCC registered with ``many'' hits under
    the ``Fuz2'' checksum, and that PureMessage registered with a 97%
-   probability of being spam, that message's spam tag would read
-   90+/DCC-Fuz2, 97/PM. (The four characters before ``=many'' in a DCC report
-   indicate the checksum used -- in this case, ``Fuz2''.)
+   probability of being spam, that message's spam tag would read90+/DCC-Fuz2,
+   97/PM. (The four characters before ``=many'' in a DCC report indicate the
+   checksum used -- in this case, ``Fuz2''.)
 
    If the $spam_separator variable is unset, then each spam pattern match
    supersedes the previous one. Instead of getting joined format strings,
@@ -2639,14 +2934,14 @@ Chapter 3. Configuration
    no spam attributes at all -- that is, one that didn't match any of your
    spam patterns -- is sorted at lowest priority. Numbers are sorted next,
    beginning with 0 and ranging upward. Finally, non-numeric strings are
-   sorted, with ``a'' taking lower priority than ``z''. Clearly, in general,
+   sorted, with ``a'' taking lowerpriority than ``z''. Clearly, in general,
    sorting by spam tags is most effective when you can coerce your filter to
    give you a raw number. But in case you can't, mutt can still do something
    useful.
 
    The nospam command can be used to write exceptions to spam patterns. If a
    header pattern matches something in a spam command, but you nonetheless do
-   not want it to receive a spam tag, you can list a more precise pattern
+   not want it to receive a spam tag, you can list amore precise pattern
    under a nospam command.
 
    If the pattern given to nospam is exactly the same as the pattern on an
@@ -2655,7 +2950,7 @@ Chapter 3. Configuration
    spam command matches an entry on the nospam list, that nospam entry will
    be removed. If the pattern for nospam is ``*'', all entries on both lists
    will be removed. This might be the default action if you use spam and
-   nospam in conjunction with a folder-hook.
+   nospam in conjunction with a folder-hook .
 
    You can have as many spam or nospam commands as you like. You can even do
    your own primitive spam detection within mutt -- for example, if you
@@ -2664,13 +2959,14 @@ Chapter 3. Configuration
 
  spam "^From: .*MAILER-DAEMON"       "999"
 
+
 28. Setting variables
 
-   Usage: set [no|inv]variable[=value] [ variable ... ] Usage: toggle
+   Usage: set [no|inv]variable [=value] [ variable ... ] Usage: toggle
    variable [variable ... ] Usage: unset variable [variable ... ] Usage:
    reset variable [variable ... ]
 
-   This command is used to set (and unset) variables. There are four basic
+   This command is used to set (and unset) variables .There are four basic
    types of variables: boolean, number, string and quadoption. boolean
    variables can be set (true) or unset (false). number variables can be
    assigned a positive integer value.
@@ -2688,7 +2984,7 @@ Chapter 3. Configuration
    prompt with a default answer of ``yes'' and ask-no will provide a default
    answer of ``no.''
 
-   Prefixing a variable with ``no'' will unset it. Example: set noaskbcc.
+   Prefixing a variable with ``no'' will unset it. Example: set noaskbcc .
 
    For boolean variables, you may optionally prefix the variable name with
    inv to toggle the value (on or off). This is useful when writing macros.
@@ -2705,6 +3001,7 @@ Chapter 3. Configuration
    mark:
 
  set ?allow_8bit
+
 
    The question mark is actually only required for boolean and quadoption
    variables.
@@ -2757,11 +3054,13 @@ Chapter 3. Configuration
 
  set config_charset = "..."
 
+
    and replacing the dots with the actual character set. To avoid problems
    while maintaining the setup, vim user's may want to use modelines as show
    in:
 
  # vim:fileencoding=...:
+
 
    while, again, replacing the dots with the appropriate name. This tells vim
    as which character set to read and save the file.
@@ -2786,6 +3085,7 @@ Chapter 3. Configuration
  ifdef <item> <command>
  ifndef <item> <command>
 
+
    ...whereby <item> can be one of:
 
      o a function name
@@ -2798,11 +3098,10 @@ Chapter 3. Configuration
 
    All available functions, variables and menus are documented elsewhere in
    this manual but ``features'' is specific to these two commands. To test
-   for one, prefix one of the following keywords with feature_:
-
- ncurses, slang, iconv, idn, dotlock, standalone, pop, nntp, imap, ssl,
- gnutls, sasl, sasl2, libesmtp, compressed, color, classic_pgp,
- classic_smime, gpgme, header_cache
+   for one, prefix one of the following keywords with feature_: ncurses,
+   slang, iconv, idn, dotlock, standalone, pop, nntp, imap, ssl, gnutls,
+   sasl, sasl2, libesmtp, compressed, color, classic_pgp, classic_smime,
+   gpgme, header_cache
 
    As an example, one can use the following in ˜/.muttngrc:
 
@@ -2810,20 +3109,23 @@ Chapter 3. Configuration
  ifdef feature_pop  'source ~/.mutt-ng/setup-pop'
  ifdef feature_nntp 'source ~/.mutt-ng/setup-nntp'
 
+
    ...to only source ˜/.mutt-ng/setup-imap if IMAP support is built in, only
    source ˜/.mutt-ng/setup-pop if POP support is built in and only source
    ˜/.mutt-ng/setup-nntp if NNTP support is built in.
 
    An example for testing for variable names can be used if users use
    different revisions of mutt-ng whereby the older one may not have a
-   certain variable. To test for the availability of imap-mail-check, use:
+   certain variable. To test for the availability of imap-mail-check , use:
 
  ifdef imap_mail_check 'set imap_mail_check = 300'
+
 
    Provided for completeness is the test for menu names. To set
    pager-index-lines only if the pager menu is available, use:
 
  ifdef pager 'set pager_index_lines = 10'
+
 
    For completeness, too, the opposite of ifdef is provided: ifndef which
    only executes the command if the test fails. For example, the following
@@ -2832,10 +3134,12 @@ Chapter 3. Configuration
  ifdef feature_ncurses 'source ~/.mutt-ng/setup-ncurses'
  ifndef feature_ncurses 'source ~/.mutt-ng/setup-slang'
 
+
    ...and...
 
  ifdef feature_slang 'source ~/.mutt-ng/setup-slang'
  ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'
+
 
 32. Obsolete Variables
 
@@ -2943,7 +3247,7 @@ Chapter 4. Advanced Usage
    regular expressions that match themselves. Any metacharacter with special
    meaning may be quoted by preceding it with a backslash.
 
-   The period ``.'' matches any single character. The caret ``^'' and the
+   The period ``.'' matches any single character. The caret ``^'' andthe
    dollar sign ``$'' are metacharacters that respectively match the empty
    string at the beginning and end of a line.
 
@@ -3018,10 +3322,10 @@ Chapter 4. Advanced Usage
    equivalent to [0-9].
 
    Two additional special sequences can appear in character lists. These
-   apply to non-ASCII character sets, which can have single symbols (called
-   collating elements) that are represented with more than one character, as
-   well as several characters that are equivalent for collating or sorting
-   purposes:
+   apply to non-ASCII character sets, which can have single symbols
+   (calledcollating elements) that are represented with more than one
+   character, as well as several characters that are equivalent for collating
+   or sorting purposes:
 
    Collating Symbols
 
@@ -3131,7 +3435,7 @@ Chapter 4. Advanced Usage
    grouped, ORed, and negated. For a complete listing of these patterns,
    please refer to table patterns in the Reference chapter.
 
-   It must be noted that in this table, EXPR, USER, ID and SUBJECT are
+   It must be noted that in this table, EXPR, USER , ID and SUBJECT are
    regular expressions. For ranges, the forms <[MAX], >>[MIN], [MIN]- and
    -[MAX] are also possible.
 
@@ -3143,6 +3447,7 @@ Chapter 4. Advanced Usage
 
  ~s 'SPAM' ~U
 
+
    The pattern above matches all messages that contain ``SPAM'' in the
    subject and are unread.
 
@@ -3152,6 +3457,7 @@ Chapter 4. Advanced Usage
  ~f ("nion@muttng\.org"|"ak@muttng\.org"|"pdmef@muttng\.org")
  (~b mutt-ng|~s Mutt-ng)
  !~x '@synflood\.at'
+
 
    The first pattern matches all messages that were sent by one of the
    mutt-ng maintainers, while the seconds pattern matches all messages that
@@ -3174,12 +3480,13 @@ Chapter 4. Advanced Usage
    margin needs to contain the information whether it goes ``forth'' or
    ``back'' in time, by using + and -. Then follows a number and a unit, i.e.
    y for years, m for months, w for weeks and d for days. If you use the
-   special * sign, it means that the error margin goes to both ``directions''
+   special * sign, it means that the error margin goes to both``directions''
    in time.
 
  ~d 01/01/2005+1y
  ~d 18/10/2004-2w
  ~d 28/12/2004*1d
+
 
    The first pattern matches all dates between January 1st, 2005 and January
    1st 2006. The second pattern matches all dates between October 18th, 2004
@@ -3194,6 +3501,7 @@ Chapter 4. Advanced Usage
  ~d >2w # messages older than two weeks
  ~d <3d # messages newer than 3 days
  ~d =1m # messages that are exactly one month old
+
 
 3. Format Strings
 
@@ -3222,11 +3530,13 @@ Chapter 4. Advanced Usage
 
  set status_format = "%v on %h: ..."
 
+
    mutt-ng will replace the sequence %v with the version string and %h with
    the host's name. When you are, for example, running mutt-ng version 1.5.9i
    on host mailhost, you'll see the following when you're in the index:
 
  Mutt-ng 1.5.9i on mailhost: ...
+
 
    In the index, there're more useful information one could want to see:
 
@@ -3240,9 +3550,11 @@ Chapter 4. Advanced Usage
 
  set status_format = "%v on %h: %B: ...
 
+
    When the currently opened mailbox is Inbox, this will be expanded to:
 
  Mutt-ng 1.5.9i on mailhost: Inbox: ...
+
 
    For the number of certain types of messages, one more feature of the
    format strings is extremely useful. If there aren't messages of a certain
@@ -3256,12 +3568,14 @@ Chapter 4. Advanced Usage
 
  set status_format = "%v on %h: %B %?n?%n new? ...
 
+
    This feature is called nonzero-printing and works as this: some expandos
    may be optionally printed nonzero, i.e. a portion of the format string is
    only evaluated if the value of the expando is different from zero. The
    basic syntax is:
 
  %?<item>?<string if nonzero>?
+
 
    which tells mutt-ng to only look at <string if nonzero> if the value of
    the %<item%gt; expando is different from zero. In our example, we used n
@@ -3275,6 +3589,7 @@ Chapter 4. Advanced Usage
 
  %?<item>?<string if nonzero>&<string if zero>?
 
+
    Using this we can make mutt-ng to do the following:
 
      o make it print ``n new messages'' whereby n is the count but only if
@@ -3286,10 +3601,12 @@ Chapter 4. Advanced Usage
 
  set status_format = "%v on %h: %B: %?n?%n new messages&no new messages? ...
 
+
    This doubles the use of the ``new messages'' string because it'll get
    always printed. Thus, it can be shortened to:
 
  set status_format = "%v on %h: %B: %?n?%n&no? new messages ...
+
 
    As you might see from this rather simple example, one can create very
    complex but fancy status messages. Please see the reference chapter for
@@ -3307,7 +3624,7 @@ Chapter 4. Advanced Usage
        all dots in the expansion of <item> to underscores (_).
 
    Also, there's a feature called Padding supplied by the following two
-   expandos: %|X and %>X.
+   expandos: %|X and %>X .
 
    %|X
 
@@ -3316,6 +3633,7 @@ Chapter 4. Advanced Usage
            dashes is done by setting:
 
  set status_format = "%v on %h: %B: %?n?%n&no? new messages %|-"
+
 
    %>X
 
@@ -3328,6 +3646,7 @@ Chapter 4. Advanced Usage
            after %>):
 
  set status_format = "%B: %?n?%n&no? new messages %> (%v on %h)"
+
 
 4. Using Tags
 
@@ -3349,9 +3668,9 @@ Chapter 4. Advanced Usage
 
    In macro or push commands, you can use the ``tag-prefix-cond'' operator.
    If there are no tagged messages, mutt will "eat" the rest of the macro to
-   abort it's execution. Mutt-ng will stop "eating" the macro when it
+   abort it's execution.Mutt-ng will stop "eating" the macro when it
    encounters the ``end-cond'' operator; after this operator the rest of the
-   macro will be executed as normal.
+   macro will be executed asnormal.
 
 5. Using Hooks
 
@@ -3387,17 +3706,18 @@ Chapter 4. Advanced Usage
  send-hook . 'unmy_hdr From:'
  send-hook ~C'^b@b\.b$' my_hdr from: c@c.c
 
+
   5.1. Message Matching in Hooks
 
-   Hooks that act upon messages (send-hook, save-hook, fcc-hook,
-   message-hook) are evaluated in a slightly different manner. For the other
-   types of hooks, a regexp is sufficient. But in dealing with messages a
-   finer grain of control is needed for matching since for different purposes
-   you want to match different criteria.
+   Hooks that act upon messages (send-hook, save-hook, fcc-hook,message-hook
+   )are evaluated in a slightly different manner. For the other types of
+   hooks, a regexp is sufficient. But in dealing with messages a finer grain
+   of control is needed for matching since for different purposes you want to
+   match different criteria.
 
    Mutt-ng allows the use of the patterns language for matching messages in
    hook commands. This works in exactly the same way as it would when
-   limiting or searching the mailbox, except that you are restricted to those
+   limiting orsearching the mailbox, except that you are restricted to those
    operators which match information mutt extracts from the header of the
    message (i.e. from, to, cc, date, subject, etc.).
 
@@ -3405,6 +3725,7 @@ Chapter 4. Advanced Usage
    mail to a specific address, you could do something like:
 
  send-hook '~t ^me@cs\.hmc\.edu$' 'my_hdr From: Mutt-ng User <user@host>'
+
 
    which would execute the given command when sending mail to me@cs.hmc.edu.
 
@@ -3427,27 +3748,41 @@ Chapter 4. Advanced Usage
  set sidebar_visible="yes"
  set sidebar_width=25
 
+
    If you want to specify the mailboxes you can do so with:
 
  set mbox='=INBOX'
  mailboxes INBOX \
-           MBOX1 \
-           MBOX2 \
-           ...
+ MBOX1 \
+ MBOX2 \
+ ...
+
 
    You can also specify the colors for mailboxes with new mails by using:
 
  color sidebar_new red black
  color sidebar white black
 
+
    The available functions are:
 
- sidebar-scroll-up      Scrolls the mailbox list up 1 page
- sidebar-scroll-down    Scrolls the mailbox list down 1 page
- sidebar-next           Highlights the next mailbox
- sidebar-next-new       Highlights the next mailbox with new mail
- sidebar-previous       Highlights the previous mailbox
- sidebar-open           Opens the currently highlighted mailbox
+   Table 4.1. Default Sidebar Function Bindings
+
+   +------------------------------------------------------------------------+
+   | Key  | Function            | Description                               |
+   |------+---------------------+-------------------------------------------|
+   | none | sidebar-scroll-up   | Scrolls the mailbox list up 1 page        |
+   |------+---------------------+-------------------------------------------|
+   | none | sidebar-scroll-down | Scrolls the mailbox list down 1 page      |
+   |------+---------------------+-------------------------------------------|
+   | none | sidebar-next        | Highlights the next mailbox               |
+   |------+---------------------+-------------------------------------------|
+   | none | sidebar-next-new    | Highlights the next mailbox with new mail |
+   |------+---------------------+-------------------------------------------|
+   | none | sidebar-previous    | Highlights the previous mailbox           |
+   |------+---------------------+-------------------------------------------|
+   | none | sidebar-open        | Opens the currently highlighted mailbox   |
+   +------------------------------------------------------------------------+
 
    Reasonable key bindings look e.g. like this:
 
@@ -3461,6 +3796,7 @@ Chapter 4. Advanced Usage
  macro index B ':toggle sidebar_visible^M'
  macro pager B ':toggle sidebar_visible^M'
 
+
    You can then go up and down by pressing Ctrl-P and Ctrl-N, and switch on
    and off the sidebar simply by pressing 'B'.
 
@@ -3473,9 +3809,10 @@ Chapter 4. Advanced Usage
 
  set query_command = "mutt_ldap_query.pl '%s'"
 
+
    The wrapper script should accept the query on the command-line. It should
    return a one line message, then each matching response on a single line,
-   each line containing a tab separated address then name then some other
+   each line containing a tab separated address then name thensome other
    optional information. On error, or if there are no matching addresses,
    return a non-zero exit code and a one line error message.
 
@@ -3486,12 +3823,13 @@ Chapter 4. Advanced Usage
  blong@fiction.net       Brandon Long    mutt and more
  roessler@guug.de        Thomas Roessler mutt pgp
 
+
    There are two mechanisms for accessing the query function of mutt. One is
    to do a query from the index menu using the query function (default: Q).
    This will prompt for a query, then bring up the query menu which will list
    the matching responses. From the query menu, you can select addresses to
-   create aliases, or to mail. You can tag multiple addresses to mail, start
-   a new query, or have a new query appended to the current responses.
+   create aliases, or to mail. You can tag multiple addressesto mail, start a
+   new query, or have a new query appended to the current responses.
 
    The other mechanism for accessing the query function is for address
    completion, similar to the alias completion. In any prompt for address
@@ -3499,7 +3837,7 @@ Chapter 4. Advanced Usage
    query based on the current address you have typed. Like aliases, mutt will
    look for what you have typed back to the last space or comma. If there is
    a single response for that query, mutt will expand the address in place.
-   If there are multiple responses, mutt will activate the query menu. At the
+   If there are multiple responses, mutt will activate the querymenu. At the
    query menu, you can select one or more addresses to be added to the
    prompt.
 
@@ -3507,13 +3845,15 @@ Chapter 4. Advanced Usage
 
    Mutt-ng supports reading and writing of four different mailbox formats:
    mbox, MMDF, MH and Maildir. The mailbox type is autodetected, so there is
-   no need to use a flag for different mailbox types. When creating new
-   mailboxes, Mutt-ng uses the default specified with the mbox-type variable.
+   no need to use a flag for different mailbox types. When creating
+   newmailboxes, Mutt-ng uses the default specified with the mbox-type
+   variable.
 
    mbox. This is the most widely used mailbox format for UNIX. All messages
    are stored in a single file. Each message has a line of the form:
 
  From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST
+
 
    to denote the start of a new message (this is often referred to as the
    ``From_'' line).
@@ -3524,15 +3864,15 @@ Chapter 4. Advanced Usage
    MH. A radical departure from mbox and MMDF, a mailbox consists of a
    directory and each message is stored in a separate file. The filename
    indicates the message number (however, this is may not correspond to the
-   message number Mutt-ng displays). Deleted messages are renamed with a
-   comma (,) prepended to the filename. Note: Mutt detects this type of
-   mailbox by looking for either .mh_sequences or .xmhcache (needed to
-   distinguish normal directories from MH mailboxes).
+   message number Mutt-ng displays). Deleted messages arerenamed with a comma
+   (,) prepended to the filename. Note: Mutt detects this type of mailbox by
+   looking for either .mh_sequences or .xmhcache (needed to distinguish
+   normal directories from MH mailboxes).
 
    Maildir. The newest of the mailbox formats, used by the Qmail MTA (a
    replacement for sendmail). Similar to MH, except that it adds three
-   subdirectories of the mailbox: tmp, new and cur. Filenames for the
-   messages are chosen in such a way they are unique, even when two programs
+   subdirectories of the mailbox: tmp, new and cur .Filenames for the
+   messages are chosen in such a way they are unique, even when twoprograms
    are writing the mailbox over NFS, which means that no file locking is
    needed.
 
@@ -3612,7 +3952,7 @@ Chapter 4. Advanced Usage
    automatically reply to the address given in the ``Reply-To'' field.
    Mutt-ng uses the reply-to variable to help decide which address to use. If
    set to ask-yes or ask-no, you will be prompted as to whether or not you
-   would like to use the address given in the ``Reply-To'' field, or reply
+   would like to use the address given inthe ``Reply-To'' field, or reply
    directly to the address given in the ``From'' field. When set to yes, the
    ``Reply-To'' field will be used when present.
 
@@ -3622,13 +3962,13 @@ Chapter 4. Advanced Usage
    expand ``X-Label:'' fields in the index, and Mutt-ng's pattern-matcher can
    match regular expressions to ``X-Label:'' fields with the ``˜y''
    selector. ``X-Label:'' is not a standard message header field, but it can
-   easily be inserted by procmail and other mail filtering agents.
+   easily be inserted by procmailand other mail filtering agents.
 
    Lastly, Mutt-ng has the ability to sort the mailbox into threads. A thread
    is a group of messages which all relate to the same subject. This is
    usually organized into a tree-like structure where a message and all of
    its replies are represented graphically. If you've ever used a threaded
-   news client, this is the same concept. It makes dealing with large volume
+   news client, this is the same concept. It makes dealingwith large volume
    mailing lists easier because you can easily delete uninteresting threads
    and quickly find topics of value.
 
@@ -3656,7 +3996,7 @@ Chapter 4. Advanced Usage
    On mailing lists, some people are in the bad habit of starting a new
    discussion by hitting "reply" to any message from the list and changing
    the subject to a totally unrelated one. You can fix such threads by using
-   the ``break-thread'' function (bound by default to #), which will turn the
+   the ``break-thread'' function (boundby default to #), which will turn the
    subthread starting from the current message into a whole different thread.
 
 12. Delivery Status Notification (DSN) Support
@@ -3676,7 +4016,7 @@ Chapter 4. Advanced Usage
    To support this, there are two variables:
 
      o dsn-notify is used to request receipts for different results (such as
-       failed message, message delivered, etc.).
+       failed message,message delivered, etc.).
 
      o dsn-return requests how much of your message should be returned with
        the receipt (headers or full message).
@@ -3710,7 +4050,7 @@ Chapter 4. Advanced Usage
    prefix, ie: pops://[username@]popserver[:port]/.
 
    Another way to access your POP3 mail is the fetch-mail function (default:
-   G). It allows to connect to pop-host, fetch all your new mail and place it
+   G). It allows to connect to pop-host ,fetch all your new mail and place it
    in the local spoolfile. After this point, Mutt-ng runs exactly as if the
    mail had always been local.
 
@@ -3746,8 +4086,8 @@ Chapter 4. Advanced Usage
    {[username@]imapserver[:port][/ssl]}path/to/folder
 
    Note that not all servers use / as the hierarchy separator. Mutt-ng should
-   correctly notice which separator is being used by the server and convert
-   paths accordingly.
+   correctly notice which separator is being used by the server and
+   convertpaths accordingly.
 
    When browsing folders on an IMAP server, you can toggle whether to look at
    only the folders you are subscribed to, or all folders with the
@@ -3756,8 +4096,8 @@ Chapter 4. Advanced Usage
    Polling for new mail on an IMAP server can cause noticeable delays. So,
    you'll want to carefully tune the imap-mail-check and timeout variables.
 
-   Note that if you are using mbox as the mail store on UW servers prior to
-   v12.250, the server has been reported to disconnect a client if another
+   Note that if you are using mbox as the mail store on UW servers prior
+   tov12.250, the server has been reported to disconnect a client if another
    client selects the same folder.
 
   14.1. The Folder Browser
@@ -3777,7 +4117,7 @@ Chapter 4. Advanced Usage
        folder, you must use view-file instead (bound to space by default).
 
      o You can create, delete and rename mailboxes with the create-mailbox,
-       delete-mailbox, and rename-mailbox commands (default bindings: C, d
+       delete-mailbox, and rename-mailbox commands (default bindings: C , d
        and r, respectively). You may also subscribe and unsubscribe to
        mailboxes (normally these are bound to s and u, respectively).
 
@@ -3797,7 +4137,7 @@ Chapter 4. Advanced Usage
    methods (including DIGEST-MD5 and possibly GSSAPI), your entire session
    will be encrypted and invisible to those teeming network snoops. It is the
    best option if you have it. To use it, you must have the Cyrus SASL
-   library installed on your system and compile mutt with the --with-sasl
+   libraryinstalled on your system and compile mutt with the --with-sasl
    flag.
 
    Mutt-ng will try whichever methods are compiled in and available on the
@@ -3861,11 +4201,11 @@ Chapter 4. Advanced Usage
        <ftp://ftp.rfc-editor.org/in-notes/rfc2822.txt>
 
      o the name must consist of at least 2 fields whereby a field must not
-       end in a dot. This means that ``Joe User'' and ``Joe A. User'' are
+       end in a dot. This means that ``Joe User'' and ``Joe A.User'' are
        valid while ``J. User'' and ``J. A. User'' aren't.
 
      o it's assumed that users are interested in reading their own mail and
-       mail from people who they have defined an alias for so that those 2
+       mail from people who they have defined an alias forso that those 2
        groups of messages are excluded from the strict rules.
 
 16. SMTP Support (OPTIONAL)
@@ -3875,7 +4215,7 @@ Chapter 4. Advanced Usage
    output muttng -v contains +USE_LIBESMTP, this will be or is the case
    already. The SMTP support includes support for Delivery Status
    Notification (see dsn section) as well as handling the 8BITMIME flag
-   controlled via use-8bitmime.
+   controlled via use-8bitmime .
 
    To enable sending mail directly via SMTP without an MTA such as Postfix or
    SSMTP and the like, simply set the smtp-host variable pointing to your
@@ -3888,7 +4228,7 @@ Chapter 4. Advanced Usage
    to work, first of all Mutt-ng must be built with SSL or GNUTLS. Secondly,
    the smtp-use-tls variable must be either set to ``enabled'' or
    ``required.'' In both cases, StartTLS will be used if the server supports
-   it: for the second case, the connection will fail if it doesn't while
+   it: for the second case, the connection will fail ifit doesn't while
    switching back to unencrypted communication for the first one.
 
    Some mail providers require user's to set a particular envelope sender,
@@ -3910,16 +4250,18 @@ Chapter 4. Advanced Usage
  account-hook imap://host1/ 'set imap_user=me1 imap_pass=foo'
  account-hook imap://host2/ 'set tunnel="ssh host2 /usr/libexec/imapd"'
 
+
 18. Start a WWW Browser on URLs (EXTERNAL)
 
    If a message contains URLs (unified resource locator = address in the WWW
    space like http://www.mutt.org/), it is efficient to get a menu with all
    the URLs and start a WWW browser on one of them. This functionality is
    provided by the external urlview program which can be retrieved at
-   ftp://ftp.mutt.org/mutt/contrib/ and the configuration commands:
+   ftp://ftp.mutt.org/mutt/contrib/ > and the configuration commands:
 
  macro index \cb |urlview\n
  macro pager \cb |urlview\n
+
 
 19. Compressed folders Support (OPTIONAL)
 
@@ -3936,8 +4278,8 @@ Chapter 4. Advanced Usage
    accepted format, appending to it and converting back to the user-defined
    format.
 
-   There are three hooks defined (open-hook, close-hook and append-hook)
-   which define commands to uncompress and compress a folder and to append
+   There are three hooks defined (open-hook, close-hook and append-hook
+   )which define commands to uncompress and compress a folder and to append
    messages to an existing compressed folder respectively.
 
    For example:
@@ -3946,8 +4288,9 @@ Chapter 4. Advanced Usage
  close-hook \\.gz$ "gzip -c %t > %f"
  append-hook \\.gz$ "gzip -c %t >> %f"
 
-   You do not have to specify all of the commands. If you omit append-hook,
-   the folder will be open and closed again each time you will add to it. If
+
+   You do not have to specify all of the commands. If you omit append-hook
+   ,the folder will be open and closed again each time you will add to it. If
    you omit close-hook (or give empty command) , the folder will be open in
    the mode. If you specify append-hook though you'll be able to append to
    the folder.
@@ -3957,7 +4300,7 @@ Chapter 4. Advanced Usage
    it is not compressed. This is important because it allows the use of
    programs that do not have well defined extensions. Just use "." as a
    regexp. But this may be surprising if your compressing script produces
-   empty files. In this situation, unset save-empty, so that the compressed
+   empty files. In this situation, unset save-empty ,so that the compressed
    file will be removed if you delete all of the messages.
 
   19.1. Open a compressed mailbox for reading
@@ -3985,6 +4328,7 @@ Chapter 4. Advanced Usage
 
  open-hook \\.gz$ "gzip -cd %f > %t"
 
+
    If the command is empty, this operation is disabled for this file type.
 
   19.2. Write a compressed mailbox
@@ -3997,7 +4341,7 @@ Chapter 4. Advanced Usage
    The command string is the command that can be used for closing the folders
    whose names match regexp. It has the same format as in the open-hook
    command. Temporary folder in this case is the folder previously produced
-   by the <open-hook command.
+   by the < open-hook command.
 
    The command should not remove the decompressed file. The command should
    return non-zero exit status if it fails, so mutt knows something's wrong.
@@ -4005,6 +4349,7 @@ Chapter 4. Advanced Usage
    Example:
 
  close-hook \\.gz$ "gzip -c %t > %f"
+
 
    If the command is empty, this operation is disabled for this file type,
    and the file can only be open in the readonly mode.
@@ -4019,8 +4364,8 @@ Chapter 4. Advanced Usage
    This command is used for saving to an existing compressed folder. The
    command is the command that can be used for appending to the folders whose
    names match regexp. It has the same format as in the open-hook command.
-   The temporary folder in this case contains the messages that are being
-   appended.
+   The temporary folder in this case contains the messages that are
+   beingappended.
 
    The command should not remove the decompressed file. The command should
    return non-zero exit status if it fails, so mutt knows something's wrong.
@@ -4029,9 +4374,10 @@ Chapter 4. Advanced Usage
 
  append-hook \\.gz$ "gzip -c %t >> %f"
 
+
    When append-hook is used, the folder is not opened, which saves time, but
    this means that we can not find out what the folder type is. Thus the
-   default (mbox-type) type is always supposed (i.e. this is the format used
+   default ( mbox-type )type is always supposed (i.e. this is the format used
    for the temporary folder).
 
    If the file does not exist when you save to it, close-hook is called, and
@@ -4039,22 +4385,23 @@ Chapter 4. Advanced Usage
 
    If the command is empty, this operation is disabled for this file type. In
    this case, the folder will be open and closed again (using open-hook and
-   close-hookrespectively) each time you will add to it.
+   close-hook respectively) each time you will add to it.
 
   19.4. Encrypted folders
 
    The compressed folders support can also be used to handle encrypted
-   folders. If you want to encrypt a folder with PGP, you may want to use the
+   folders. If you want to encrypt a folder with PGP, you may want to usethe
    following hooks:
 
  open-hook  \\.pgp$ "pgp -f < %f > %t"
  close-hook \\.pgp$ "pgp -fe YourPgpUserIdOrKeyId < %t > %f"
 
+
    Please note, that PGP does not support appending to an encrypted folder,
    so there is no append-hook defined.
 
    Note: the folder is temporary stored decrypted in the /tmp directory,
-   where it can be read by your system administrator. So think about the
+   where it can be read by your system administrator. So thinkabout the
    security aspects of this.
 
 Chapter 5. Mutt-ng's MIME Support
@@ -4090,11 +4437,11 @@ Chapter 5. Mutt-ng's MIME Support
    Quite a bit of effort has been made to make Mutt-ng the premier text-mode
    MIME MUA. Every effort has been made to provide the functionality that the
    discerning MIME user requires, and the conformance to the standards
-   wherever possible. When configuring Mutt-ng for MIME, there are two extra
-   types of configuration files which Mutt-ng uses. One is the mime.types
-   file, which contains the mapping of file extensions to IANA MIME types.
-   The other is the mailcap file, which specifies the external commands to
-   use for handling specific MIME types.
+   wherever possible. When configuring Mutt-ng for MIME, there are two
+   extratypes of configuration files which Mutt-ng uses. One is the
+   mime.types file, which contains the mapping of file extensions to IANA
+   MIME types. The other is the mailcap file, which specifies the external
+   commands to use for handling specific MIME types.
 
 1. Using MIME in Mutt
 
@@ -4106,7 +4453,7 @@ Chapter 5. Mutt-ng's MIME Support
    When you select a message from the index and view it in the pager, Mutt
    decodes the message to a text representation. Mutt-ng internally supports
    a number of MIME types, including text/plain, text/enriched,
-   message/rfc822, and message/news. In addition, the export controlled
+   message/rfc822, and message/news .In addition, the export controlled
    version of Mutt-ng recognizes a variety of PGP MIME types, including
    PGP/MIME and application/pgp.
 
@@ -4116,6 +4463,7 @@ Chapter 5. Mutt-ng's MIME Support
  [-- Attachment #1: Description --]
  [-- Type: text/plain, Encoding: 7bit, Size: 10000 --]
 
+
    Where the Description is the description or filename given for the
    attachment, and the Encoding is one of
    7bit/8bit/quoted-printable/base64/binary.
@@ -4124,10 +4472,11 @@ Chapter 5. Mutt-ng's MIME Support
 
  [-- image/gif is unsupported (use 'v' to view this part) --]
 
+
   1.2. The Attachment Menu
 
    The default binding for view-attachments is `v', which displays the
-   attachment menu for a message. The attachment menu displays a list of the
+   attachment menu for a message. The attachment menu displays a list ofthe
    attachments in a message. From the attachment menu, you can save, print,
    pipe, delete, and view attachments. You can apply these operations to a
    group of attachments at once, by tagging the attachments and by using the
@@ -4154,8 +4503,9 @@ Chapter 5. Mutt-ng's MIME Support
 
    Attachments appear as follows:
 
- -   1 [text/plain, 7bit, 1K]             /tmp/mutt-euler-8082-0 <no description>
-     2 [applica/x-gunzip, base64, 422K]   ~/src/mutt-0.85.tar.gz <no description>
+ 1 [text/plain, 7bit, 1K]             /tmp/mutt-euler-8082-0 <no description>
+ 2 [applica/x-gunzip, base64, 422K]   ~/src/mutt-0.85.tar.gz <no description>
+
 
    The '-' denotes that Mutt-ng will delete the file after sending (or
    postponing, or canceling) the message. It can be toggled with the
@@ -4169,10 +4519,10 @@ Chapter 5. Mutt-ng's MIME Support
    R). The final field is the description of the attachment, and can be
    changed with the edit-description command (default: d).
 
-2. MIME Type configuration with mime.types
+2.  MIME Type configuration with mime.types
 
    When you add an attachment to your mail message, Mutt-ng searches your
-   personal mime.types file at ${HOME}/.mime.types, and then the system
+   personal mime.types file at ${HOME}/.mime.types ,and then the system
    mime.types file at /usr/local/share/mutt/mime.types or /etc/mime.types
 
    The mime.types file consist of lines containing a MIME type and a space
@@ -4181,6 +4531,7 @@ Chapter 5. Mutt-ng's MIME Support
  application/postscript          ps eps
  application/pgp                 pgp
  audio/x-aiff                    aif aifc aiff
+
 
    A sample mime.types file comes with the Mutt-ng distribution, and should
    contain most of the MIME types you are likely to use.
@@ -4201,7 +4552,7 @@ Chapter 5. Mutt-ng's MIME Support
    molecular viewers. Non-recognised mime types should only be used if the
    recipient of the message is likely to be expecting such attachments.
 
-3. MIME Viewer configuration with mailcap
+3.  MIME Viewer configuration with mailcap
 
    Mutt-ng supports RFC 1524 MIME Configuration, in particular the Unix
    specific format specified in Appendix A of RFC 1524. This file format is
@@ -4216,6 +4567,7 @@ Chapter 5. Mutt-ng's MIME Support
    colon delimited list set to
 
  ${HOME}/.mailcap:/usr/local/share/mutt/mailcap:/etc/mailcap:/etc/mailcap:/usr/etc/mailcap:/usr/local/etc/mailcap
+
 
    where $HOME is your home directory.
 
@@ -4232,14 +4584,14 @@ Chapter 5. Mutt-ng's MIME Support
    A blank line is blank.
 
    A definition line consists of a content type, a view command, and any
-   number of optional fields. Each field of a definition line is divided by a
+   number of optional fields. Each field of a definition line is dividedby a
    semicolon ';' character.
 
    The content type is specified in the MIME standard type/subtype method.
    For example, text/plain, text/html, image/gif, etc. In addition, the
    mailcap format includes two formats for wildcards, one using the special
    '*' subtype, the other is the implicit wild, where you only include the
-   major type. For example, image/*, or video, will match all image types and
+   major type. For example, image/* ,or video, will match all image types and
    video types, respectively.
 
    The view command is a Unix command for viewing the type specified. There
@@ -4257,14 +4609,17 @@ Chapter 5. Mutt-ng's MIME Support
 
  text/plain; more
 
+
    Or, you could send the message as a file:
 
  text/plain; more %s
+
 
    Perhaps you would like to use lynx to interactively view a text/html
    message:
 
  text/html; lynx %s
+
 
    In this case, lynx does not support viewing a file from stdin, so you must
    use the %s syntax. Note: Some older versions of lynx contain a bug where
@@ -4272,17 +4627,18 @@ Chapter 5. Mutt-ng's MIME Support
    find the line which calls lynx, and run it. This causes lynx to
    continuously spawn itself to view the object.
 
-   On the other hand, maybe you don't want to use lynx interactively, you
-   just want to have it convert the text/html to text/plain, then you can
-   use:
+   On the other hand, maybe you don't want to use lynx interactively, youjust
+   want to have it convert the text/html to text/plain, then you can use:
 
  text/html; lynx -dump %s | more
+
 
    Perhaps you wish to use lynx to view text/html files, and a pager on all
    other text formats, then you would use the following:
 
  text/html; lynx %s
  text/*; more
+
 
    This is the simplest form of a mailcap file.
 
@@ -4311,7 +4667,8 @@ Chapter 5. Mutt-ng's MIME Support
    itself subject to any further expansion):
 
  text/test-mailcap-bug; cat %s; copiousoutput; test=charset=%{charset} \
-         && test "`echo $charset | tr '[A-Z]' '[a-z]'`" != iso-8859-1
+ && test "`echo $charset | tr '[A-Z]' '[a-z]'`" != iso-8859-1
+
 
   3.3. Advanced mailcap Usage
 
@@ -4333,19 +4690,20 @@ Chapter 5. Mutt-ng's MIME Support
 
  text/html; lynx -dump %s ; copiousoutput
 
+
            This will cause lynx to format the text/html output as text/plain
            and Mutt-ng will use your standard pager to display the results.
 
    needsterminal
 
-           Mutt-ng uses this flag when viewing attachments with auto-view, in
+           Mutt-ng uses this flag when viewing attachments with auto-view ,in
            order to decide whether it should honor the setting of the
            wait-key variable or not. When an attachment is viewed using an
            interactive program, and the corresponding mailcap entry has a
-           needsterminal flag, Mutt-ng will use wait-key and the exit status
-           of the program to decide if it will ask you to press a key after
-           the external program has exited. In all other situations it will
-           not prompt you for a key.
+           needsterminal flag, Mutt-ng will use wait-key and the exit
+           statusof the program to decide if it will ask you to press a key
+           after the external program has exited. In all other situations it
+           will not prompt you for a key.
 
    compose=<command>
 
@@ -4385,6 +4743,7 @@ Chapter 5. Mutt-ng's MIME Support
 
  text/html; lynx %s; nametemplate=%s.html
 
+
    test=<command>
 
            This field specifies a command to run to test whether this mailcap
@@ -4397,6 +4756,7 @@ Chapter 5. Mutt-ng's MIME Support
 
  text/html; netscape -remote 'openURL(%s)' ; test=RunningX
  text/html; lynx %s
+
 
            In this example, Mutt-ng will run the program RunningX which will
            return 0 if the X Window manager is running, and non-zero if it
@@ -4414,7 +4774,8 @@ Chapter 5. Mutt-ng's MIME Support
 
  image/*;        xv %s
  image/gif;      ; print= anytopnm %s | pnmtops | lpr; \
-                 nametemplate=%s.gif
+ nametemplate=%s.gif
+
 
    Mutt-ng will skip the image/* entry and use the image/gif entry with the
    print command.
@@ -4428,6 +4789,7 @@ Chapter 5. Mutt-ng's MIME Support
  text/html;      netscape -remote 'openURL(%s)' ; test=RunningX
  text/html;      lynx %s; nametemplate=%s.html
  text/html;      lynx -dump %s; nametemplate=%s.html; copiousoutput
+
 
    For auto-view, Mutt-ng will choose the third entry because of the
    copiousoutput tag. For interactive viewing, Mutt will run the program
@@ -4465,6 +4827,7 @@ Chapter 5. Mutt-ng's MIME Support
 
  Content-Type: text/plain; charset=iso-8859-1
 
+
            then Mutt-ng will expand %{charset} to iso-8859-1. The default
            metamail mailcap file uses this feature to test the charset to
            spawn an xterm using the right charset to view the message.
@@ -4489,6 +4852,7 @@ Chapter 5. Mutt-ng's MIME Support
  # I'm always running netscape (if my computer had more memory, maybe)
  text/html;      netscape -remote 'openURL(%s)'
 
+
    This mailcap file shows quite a number of examples:
 
  # Use xanim to view all videos   Xanim produces a header on startup,
@@ -4497,7 +4861,6 @@ Chapter 5. Mutt-ng's MIME Support
 
  # Send html to a running netscape by remote
  text/html;      netscape -remote 'openURL(%s)'; test=RunningNetscape
-
  # If I'm not running netscape but I am running X, start netscape on the
  # object
  text/html;      netscape %s; test=RunningX
@@ -4517,8 +4880,7 @@ Chapter 5. Mutt-ng's MIME Support
  # Use xv to view images if I'm running X
  # In addition, this uses the \ to extend the line and set my editor
  # for images
- image/*;xv %s; test=RunningX; \
-         edit=xpaint %s
+ image/*;xv %s; test=RunningX; edit=xpaint %s
 
  # Convert images to text using the netpbm tools
  image/*;  (anytopnm %s | pnmscale -xysize 80 46 | ppmtopgm | pgmtopbm |
@@ -4527,10 +4889,11 @@ Chapter 5. Mutt-ng's MIME Support
  # Send excel spreadsheets to my NT box
  application/ms-excel; open.pl %s
 
+
 4. MIME Autoview
 
-   In addition to explicitly telling Mutt-ng to view an attachment with the
-   MIME viewer defined in the mailcap file, Mutt-ng has support for
+   In addition to explicitly telling Mutt-ng to view an attachment with
+   theMIME viewer defined in the mailcap file, Mutt-ng has support for
    automatically viewing MIME attachments while in the pager.
 
    To work, you must define a viewer in the mailcap file which uses the
@@ -4543,7 +4906,9 @@ Chapter 5. Mutt-ng's MIME Support
 
    For instance, if you set auto_view to:
 
- auto_view text/html application/x-gunzip application/postscript image/gif application/x-tar-gz
+ auto_view text/html application/x-gunzip application/postscript
+ image/gif application/x-tar-gz
+
 
    Mutt-ng could use the following mailcap entries to automatically view
    attachments of these types.
@@ -4554,6 +4919,7 @@ Chapter 5. Mutt-ng's MIME Support
  application/x-tar-gz; gunzip -c %s | tar -tf - ; copiousoutput
  application/postscript; ps2ascii %s; copiousoutput
 
+
    ``unauto_view'' can be used to remove previous entries from the autoview
    list. This can be used with message-hook to autoview messages based on
    size, etc. ``unauto_view *'' will remove all previous entries.
@@ -4562,16 +4928,18 @@ Chapter 5. Mutt-ng's MIME Support
 
    Mutt-ng has some heuristics for determining which attachment of a
    multipart/alternative type to display. First, mutt will check the
-   alternative_order list to determine if one of the available types is
+   alternative_order list to determine if one of the available typesis
    preferred. The alternative_order list consists of a number of MIME types
    in order, including support for implicit and explicit wildcards, for
    example:
 
- alternative_order text/enriched text/plain text application/postscript image/*
+ alternative_order text/enriched text/plain text
+ application/postscript image/*
+
 
    Next, mutt will check if any of the types have a defined auto-view, and
    use that. Failing that, Mutt-ng will look for any text type. As a last
-   attempt, mutt will look for any type it knows how to handle.
+   attempt, mutt willlook for any type it knows how to handle.
 
    To remove a MIME type from the alternative_order list, use the
    unalternative_order command.
@@ -4579,8 +4947,8 @@ Chapter 5. Mutt-ng's MIME Support
 6. MIME Lookup
 
    Mutt-ng's mime_lookup list specifies a list of mime-types that should not
-   be treated according to their mailcap entry. This option is designed to
-   deal with binary types such as application/octet-stream. When an
+   be treated according to their mailcap entry. This option is designed
+   todeal with binary types such as application/octet-stream. When an
    attachment's mime-type is listed in mime_lookup, then the extension of the
    filename will be compared to the list of extensions in the mime.types
    file. The mime-type associated with this extension will then be used to
@@ -4589,6 +4957,7 @@ Chapter 5. Mutt-ng's MIME Support
    specified. Common usage would be:
 
  mime_lookup application/octet-stream application/X-Lotus-Manuscript
+
 
    In addition, the unmime_lookup command may be used to disable this feature
    for any particular mime-type if it had been set, for example, in a global
@@ -4674,6 +5043,7 @@ Chapter 6. Security Considerations
    For example, following a link like
 
  mailto:joe@host?Attach=~/.gnupg/secring.gpg
+
 
    will send out the user's private gnupg keyring to joe@host if the user
    doesn't follow the information on screen carefully enough.
@@ -4770,29 +5140,60 @@ Chapter 7. Reference
    spool mailbox. However, it is possible to read other mailboxes and to send
    messages from the command line as well.
 
- -A      expand an alias
- -a      attach a file to a message
- -b      specify a blind carbon-copy (BCC) address
- -c      specify a carbon-copy (Cc) address
- -e      specify a config command to be run after initialization files are read
- -f      specify a mailbox to load
- -F      specify an alternate file to read initialization commands
- -h      print help on command line options
- -H      specify a draft file from which to read a header and body
- -i      specify a file to include in a message composition
- -m      specify a default mailbox type
- -n      do not read the system Muttngrc
- -p      recall a postponed message
- -Q      query a configuration variable
- -R      open mailbox in read-only mode
- -s      specify a subject (enclose in quotes if it contains spaces)
- -t      dump the value of all variables to stdout
- -T      dump the value of all changed variables to stdout
- -v      show version number and compile-time definitions
- -x      simulate the mailx(1) compose mode
- -y      show a menu containing the files specified by the mailboxes command
- -z      exit immediately if there are no messages in the mailbox
- -Z      open the first folder with new message,exit immediately if none
+   Table 7.1. Mutt-NG Command Line Options
+
+   +------------------------------------------------------------------------+
+   | Option | Description                                                   |
+   |--------+---------------------------------------------------------------|
+   | -A     | expand an alias                                               |
+   |--------+---------------------------------------------------------------|
+   | -a     | attach a file to a message                                    |
+   |--------+---------------------------------------------------------------|
+   | -b     | specify a blind carbon-copy (BCC) address                     |
+   |--------+---------------------------------------------------------------|
+   | -c     | specify a carbon-copy (Cc) address                            |
+   |--------+---------------------------------------------------------------|
+   | -e     | specify a config command to be run after initialization files |
+   |        | are read                                                      |
+   |--------+---------------------------------------------------------------|
+   | -f     | specify a mailbox to load                                     |
+   |--------+---------------------------------------------------------------|
+   | -F     | specify an alternate file to read initialization commands     |
+   |--------+---------------------------------------------------------------|
+   | -h     | print help on command line options                            |
+   |--------+---------------------------------------------------------------|
+   | -H     | specify a draft file from which to read a header and body     |
+   |--------+---------------------------------------------------------------|
+   | -i     | specify a file to include in a message composition            |
+   |--------+---------------------------------------------------------------|
+   | -m     | specify a default mailbox type                                |
+   |--------+---------------------------------------------------------------|
+   | -n     | do not read the system Muttngrc                               |
+   |--------+---------------------------------------------------------------|
+   | -p     | recall a postponed message                                    |
+   |--------+---------------------------------------------------------------|
+   | -Q     | query a configuration variable                                |
+   |--------+---------------------------------------------------------------|
+   | -R     | open mailbox in read-only mode                                |
+   |--------+---------------------------------------------------------------|
+   | -s     | specify a subject (enclose in quotes if it contains spaces)   |
+   |--------+---------------------------------------------------------------|
+   | -t     | dump the value of all variables to stdout                     |
+   |--------+---------------------------------------------------------------|
+   | -T     | dump the value of all changed variables to stdout             |
+   |--------+---------------------------------------------------------------|
+   | -v     | show version number and compile-time definitions              |
+   |--------+---------------------------------------------------------------|
+   | -x     | simulate the mailx(1) compose mode                            |
+   |--------+---------------------------------------------------------------|
+   | -y     | show a menu containing the files specified by the mailboxes   |
+   |        | command                                                       |
+   |--------+---------------------------------------------------------------|
+   | -z     | exit immediately if there are no messages in the mailbox      |
+   |--------+---------------------------------------------------------------|
+   | -Z     | open the first folder with new message,exit immediately if    |
+   |        | none                                                          |
+   +------------------------------------------------------------------------+
 
    To read messages in a mailbox
 
@@ -4814,52 +5215,122 @@ Chapter 7. Reference
 
 2. Patterns
 
- ~A              all messages
- ~b EXPR         messages which contain EXPR in the message body
- ~B EXPR         messages which contain EXPR in the whole message
- ~c USER         messages carbon-copied to USER
- ~C EXPR         message is either to: or cc: EXPR
- ~D              deleted messages
- ~d [MIN]-[MAX]  messages with ``date-sent'' in a Date range
- ~E              expired messages
- ~e EXPR         message which contains EXPR in the ``Sender'' field
- ~F              flagged messages
- ~f USER         messages originating from USER
- ~g              cryptographically signed messages
- ~G              cryptographically encrypted messages
- ~H EXPR         messages with a spam attribute matching EXPR
- ~h EXPR         messages which contain EXPR in the message header
- ~k              message contains PGP key material
- ~i ID           message which match ID in the ``Message-ID'' field
- ~L EXPR         message is either originated or received by EXPR
- ~l              message is addressed to a known mailing list
- ~m [MIN]-[MAX]  message in the range MIN to MAX *)
- ~M              multipart messages
- ~n [MIN]-[MAX]  messages with a score in the range MIN to MAX *)
- ~N              new messages
- ~O              old messages
- ~p              message is addressed to you (consults alternates)
- ~P              message is from you (consults alternates)
- ~Q              messages which have been replied to
- ~R              read messages
- ~r [MIN]-[MAX]  messages with ``date-received'' in a Date range
- ~S              superseded messages
- ~s SUBJECT      messages having SUBJECT in the ``Subject'' field.
- ~T              tagged messages
- ~t USER         messages addressed to USER
- ~U              unread messages
- ~v              message is part of a collapsed thread.
- ~V              cryptographically verified messages
- ~w EXPR         messages which contain EXPR in the `Newsgroups' field
-                 (if compiled with NNTP support)
- ~x EXPR         messages which contain EXPR in the `References' field
- ~y EXPR         messages which contain EXPR in the `X-Label' field
- ~z [MIN]-[MAX]  messages with a size in the range MIN to MAX *)
- ~=              duplicated messages (see $duplicate_threads)
- ~$              unreferenced messages (requires threaded view)
- ~*              ``From'' contains realname and (syntactically) valid
-                 address (excluded are addresses matching against
-                 alternates or any alias)
+   Table 7.2. Patterns
+
+   +------------------------------------------------------------------------+
+   | Pattern Modifier | Argument    | Description                           |
+   |------------------+-------------+---------------------------------------|
+   | ~A               |             | all messages                          |
+   |------------------+-------------+---------------------------------------|
+   | ~b               | EXPR        | messages which contain EXPR in the    |
+   |                  |             | message body                          |
+   |------------------+-------------+---------------------------------------|
+   | ~B               | EXPR        | messages which contain EXPR in the    |
+   |                  |             | whole message                         |
+   |------------------+-------------+---------------------------------------|
+   | ~c               | USER        | messages carbon-copied to USER        |
+   |------------------+-------------+---------------------------------------|
+   | ~C               | EXPR        | message is either to: or cc: EXPR     |
+   |------------------+-------------+---------------------------------------|
+   | ~D               |             | deleted messages                      |
+   |------------------+-------------+---------------------------------------|
+   | ~d               | [MIN]-[MAX] | messages with ``date-sent'' in a Date |
+   |                  |             | range                                 |
+   |------------------+-------------+---------------------------------------|
+   | ~E               |             | expired messages                      |
+   |------------------+-------------+---------------------------------------|
+   | ~e               | EXPR        | message which contains EXPR in the    |
+   |                  |             | ``Sender'' field                      |
+   |------------------+-------------+---------------------------------------|
+   | ~F               |             | flagged messages                      |
+   |------------------+-------------+---------------------------------------|
+   | ~f               | USER        | messages originating from USER        |
+   |------------------+-------------+---------------------------------------|
+   | ~g               |             | cryptographically signed messages     |
+   |------------------+-------------+---------------------------------------|
+   | ~G               |             | cryptographically encrypted messages  |
+   |------------------+-------------+---------------------------------------|
+   | ~H               | EXPR        | messages with a spam attribute        |
+   |                  |             | matching EXPR                         |
+   |------------------+-------------+---------------------------------------|
+   | ~h               | EXPR        | messages which contain EXPR in the    |
+   |                  |             | message header                        |
+   |------------------+-------------+---------------------------------------|
+   | ~k               |             | message contains PGP key material     |
+   |------------------+-------------+---------------------------------------|
+   | ~i               | ID          | message which match ID in the         |
+   |                  |             | ``Message-ID'' field                  |
+   |------------------+-------------+---------------------------------------|
+   | ~L               | EXPR        | message is either originated or       |
+   |                  |             | received by EXPR                      |
+   |------------------+-------------+---------------------------------------|
+   | ~l               |             | message is addressed to a known       |
+   |                  |             | mailing list                          |
+   |------------------+-------------+---------------------------------------|
+   | ~m               | [MIN]-[MAX] | message in the range MIN to MAX *)    |
+   |------------------+-------------+---------------------------------------|
+   | ~M               |             | multipart messages                    |
+   |------------------+-------------+---------------------------------------|
+   | ~n               | [MIN]-[MAX] | messages with a score in the range    |
+   |                  |             | MIN to MAX *)                         |
+   |------------------+-------------+---------------------------------------|
+   | ~N               |             | new messages                          |
+   |------------------+-------------+---------------------------------------|
+   | ~O               |             | old messages                          |
+   |------------------+-------------+---------------------------------------|
+   | ~p               |             | message is addressed to you (consults |
+   |                  |             | alternates)                           |
+   |------------------+-------------+---------------------------------------|
+   | ~P               |             | message is from you (consults         |
+   |                  |             | alternates)                           |
+   |------------------+-------------+---------------------------------------|
+   | ~Q               |             | messages which have been replied to   |
+   |------------------+-------------+---------------------------------------|
+   | ~R               |             | read messages                         |
+   |------------------+-------------+---------------------------------------|
+   | ~r               | [MIN]-[MAX] | messages with ``date-received'' in a  |
+   |                  |             | Date range                            |
+   |------------------+-------------+---------------------------------------|
+   | ~S               |             | superseded messages                   |
+   |------------------+-------------+---------------------------------------|
+   | ~s               | SUBJECT     | messages having SUBJECT in the        |
+   |                  |             | ``Subject'' field.                    |
+   |------------------+-------------+---------------------------------------|
+   | ~T               |             | tagged messages                       |
+   |------------------+-------------+---------------------------------------|
+   | ~t               | USER        | messages addressed to USER            |
+   |------------------+-------------+---------------------------------------|
+   | ~U               |             | unread messages                       |
+   |------------------+-------------+---------------------------------------|
+   | ~v               |             | message is part of a collapsed        |
+   |                  |             | thread.                               |
+   |------------------+-------------+---------------------------------------|
+   | ~V               |             | cryptographically verified messages   |
+   |------------------+-------------+---------------------------------------|
+   |                  |             | messages which contain EXPR in the    |
+   | ~w               | EXPR        | `Newsgroups' field (if compiled with  |
+   |                  |             | NNTP support)                         |
+   |------------------+-------------+---------------------------------------|
+   | ~x               | EXPR        | messages which contain EXPR in the    |
+   |                  |             | `References' field                    |
+   |------------------+-------------+---------------------------------------|
+   | ~y               | EXPR        | messages which contain EXPR in the    |
+   |                  |             | `X-Label' field                       |
+   |------------------+-------------+---------------------------------------|
+   | ~z               | [MIN]-[MAX] | messages with a size in the range MIN |
+   |                  |             | to MAX *)                             |
+   |------------------+-------------+---------------------------------------|
+   | ~=               |             | duplicated messages (see              |
+   |                  |             | $duplicate_threads)                   |
+   |------------------+-------------+---------------------------------------|
+   | ~$               |             | unreferenced messages (requires       |
+   |                  |             | threaded view)                        |
+   |------------------+-------------+---------------------------------------|
+   |                  |             | ``From'' contains realname and        |
+   | ~*               |             | (syntactically) valid address         |
+   |                  |             | (excluded are addresses matching      |
+   |                  |             | against alternates or any alias)      |
+   +------------------------------------------------------------------------+
 
    Where EXPR, USER, ID, and SUBJECT are regexp. Special attention has to be
    made when using regular expressions inside of patterns. Specifically,
@@ -4868,7 +5339,7 @@ Chapter 7. Reference
    backslash in the regular expression, you will need to use two backslashes
    instead (\\).
 
-   *) The forms <[MAX], >[MIN], [MIN]- and -[MAX] are allowed, too.
+   *) The forms <[MAX], >[MIN] , [MIN]- and -[MAX] are allowed, too.
 
 3. Configuration Commands
 
@@ -4876,7 +5347,7 @@ Chapter 7. Reference
 
      o account-hook pattern command
 
-     o alias key address [ , address, ... ]
+     o alias key address [ , address ,... ]
 
      o alias [ * | key ... ]
 
@@ -4964,7 +5435,7 @@ Chapter 7. Reference
 
      o reply-hook regexp command
 
-     o set [no|inv]variable[=value] [ variable ... ]
+     o set [no|inv]variable[=value ] [ variable ... ]
 
      o set variable [variable ... ]
 
@@ -4989,46 +5460,93 @@ Chapter 7. Reference
    removed already. The left column contains the old synonym variables, the
    right column the full/new name:
 
- edit_hdrs               edit_headers
- forw_decode             forward_decode
- forw_format             forward_format
- forw_quote              forward_quote
- hdr_format              index_format
- indent_str              indent_string
- mime_fwd                mime_forward
- msg_format              message_format
- pgp_autosign            crypt_autosign
- pgp_autoencrypt         crypt_autoencrypt
- pgp_replyencrypt        crypt_replyencrypt
- pgp_replysign           crypt_replysign
- pgp_replysignencrypted  crypt_replysignencrypted
- pgp_verify_sig          crypt_verify_sig
- pgp_create_traditional  pgp_autoinline
- pgp_auto_traditional    pgp_replyinline
- forw_decrypt            forward_decrypt
- smime_sign_as           smime_default_key
- post_indent_str         post_indent_string
- print_cmd               print_command
- shorten_hierarchy       sidebar_shorten_hierarchy
- ask_followup_to         nntp_ask_followup_to
- ask_x_comment_to        nntp_ask_x_comment_to
- catchup_newsgroup       nntp_catchup
- followup_to_poster      nntp_followup_to_poster
- group_index_format      nntp_group_index_format
- inews                   nntp_inews
- mime_subject            nntp_mime_subject
- news_cache_dir          nntp_cache_dir
- news_server             nntp_host
- newsrc                  nntp_newsrc
- nntp_poll               nntp_mail_check
- pop_checkinterval       pop_mail_check
- post_moderated          nntp_post_moderated
- save_unsubscribed       nntp_save_unsubscribed
- show_new_news           nntp_show_new_news
- show_only_unread        nntp_show_only_unread
- x_comment_to            nntp_x_comment_to
- smtp_auth_username      smtp_user
- smtp_auth_password      smtp_pass
+   Table 7.3. Obsolete Variables
+
+   +----------------------------------------------------+
+   | Old Name               | New Name                  |
+   |------------------------+---------------------------|
+   | edit_hdrs              | edit_headers              |
+   |------------------------+---------------------------|
+   | forw_decode            | forward_decode            |
+   |------------------------+---------------------------|
+   | forw_format            | forward_format            |
+   |------------------------+---------------------------|
+   | forw_quote             | forward_quote             |
+   |------------------------+---------------------------|
+   | hdr_format             | index_format              |
+   |------------------------+---------------------------|
+   | indent_str             | indent_string             |
+   |------------------------+---------------------------|
+   | mime_fwd               | mime_forward              |
+   |------------------------+---------------------------|
+   | msg_format             | message_format            |
+   |------------------------+---------------------------|
+   | pgp_autosign           | crypt_autosign            |
+   |------------------------+---------------------------|
+   | pgp_autoencrypt        | crypt_autoencrypt         |
+   |------------------------+---------------------------|
+   | pgp_replyencrypt       | crypt_replyencrypt        |
+   |------------------------+---------------------------|
+   | pgp_replysign          | crypt_replysign           |
+   |------------------------+---------------------------|
+   | pgp_replysignencrypted | crypt_replysignencrypted  |
+   |------------------------+---------------------------|
+   | pgp_verify_sig         | crypt_verify_sig          |
+   |------------------------+---------------------------|
+   | pgp_create_traditional | pgp_autoinline            |
+   |------------------------+---------------------------|
+   | pgp_auto_traditional   | pgp_replyinline           |
+   |------------------------+---------------------------|
+   | forw_decrypt           | forward_decrypt           |
+   |------------------------+---------------------------|
+   | smime_sign_as          | smime_default_key         |
+   |------------------------+---------------------------|
+   | post_indent_str        | post_indent_string        |
+   |------------------------+---------------------------|
+   | print_cmd              | print_command             |
+   |------------------------+---------------------------|
+   | shorten_hierarchy      | sidebar_shorten_hierarchy |
+   |------------------------+---------------------------|
+   | ask_followup_to        | nntp_ask_followup_to      |
+   |------------------------+---------------------------|
+   | ask_x_comment_to       | nntp_ask_x_comment_to     |
+   |------------------------+---------------------------|
+   | catchup_newsgroup      | nntp_catchup              |
+   |------------------------+---------------------------|
+   | followup_to_poster     | nntp_followup_to_poster   |
+   |------------------------+---------------------------|
+   | group_index_format     | nntp_group_index_format   |
+   |------------------------+---------------------------|
+   | inews                  | nntp_inews                |
+   |------------------------+---------------------------|
+   | mime_subject           | nntp_mime_subject         |
+   |------------------------+---------------------------|
+   | news_cache_dir         | nntp_cache_dir            |
+   |------------------------+---------------------------|
+   | news_server            | nntp_host                 |
+   |------------------------+---------------------------|
+   | newsrc                 | nntp_newsrc               |
+   |------------------------+---------------------------|
+   | nntp_poll              | nntp_mail_check           |
+   |------------------------+---------------------------|
+   | pop_checkinterval      | pop_mail_check            |
+   |------------------------+---------------------------|
+   | post_moderated         | nntp_post_moderated       |
+   |------------------------+---------------------------|
+   | save_unsubscribed      | nntp_save_unsubscribed    |
+   |------------------------+---------------------------|
+   | show_new_news          | nntp_show_new_news        |
+   |------------------------+---------------------------|
+   | show_only_unread       | nntp_show_only_unread     |
+   |------------------------+---------------------------|
+   | x_comment_to           | nntp_x_comment_to         |
+   |------------------------+---------------------------|
+   | smtp_auth_username     | smtp_user                 |
+   |------------------------+---------------------------|
+   | smtp_auth_password     | smtp_pass                 |
+   |------------------------+---------------------------|
+   | user_agent             | agent_string              |
+   +----------------------------------------------------+
 
    The contrib subdirectory contains a script named update-config.pl which
    eases migration.
@@ -7203,7 +7721,7 @@ Chapter 7. Reference
 
    Type: system property
 
-   Value: 474
+   Value: 475
 
    This is a read-only system property and specifies muttng's subversion
    revision string.
@@ -9920,308 +10438,374 @@ Chapter 7. Reference
    settings for this menu will affect the default bindings for all menus
    (except as noted).
 
- bottom-page                L   move to the bottom of the page
- current-bottom     not bound   move current entry to bottom of page
- current-middle     not bound   move current entry to middle of page
- current-top        not bound   move current entry to top of page
- enter-command              :   enter a muttngrc command
- exit                       q   exit this menu
- first-entry                =   move to the first entry
- half-down                  ]   scroll down 1/2 page
- half-up                    [   scroll up 1/2 page
- help                       ?   this screen
- jump                  number   jump to an index number
- last-entry                 *   move to the last entry
- middle-page                M   move to the middle of the page
- next-entry                 j   move to the next entry
- next-line                  >   scroll down one line
- next-page                  z   move to the next page
- previous-entry             k   move to the previous entry
- previous-line              <   scroll up one line
- previous-page              Z   move to the previous page
- refresh                   ^L   clear and redraw the screen
- search                     /   search for a regular expression
- search-next                n   search for next match
- search-opposite    not bound   search for next match in opposite direction
- search-reverse         ESC /   search backwards for a regular expression
- select-entry             RET   select the current entry
- shell-escape               !   run a program in a subshell
- tag-entry                  t   toggle the tag on the current entry
- tag-prefix                 ;   apply next command to tagged entries
- tag-prefix-cond    not bound   apply next function ONLY to tagged messages
- top-page                   H   move to the top of the page
- what-key           not bound   display the keycode for a key press
+             bottom-page                L   move to the bottom of the page
+             current-bottom     not bound   move current entry to bottom of page
+             current-middle     not bound   move current entry to middle of page
+             current-top        not bound   move current entry to top of page
+             enter-command              :   enter a muttngrc command
+             exit                       q   exit this menu
+             first-entry                =   move to the first entry
+             half-down                  ]   scroll down 1/2 page
+             half-up                    [   scroll up 1/2 page
+             help                       ?   this screen
+             jump                  number   jump to an index number
+             last-entry                 *   move to the last entry
+             middle-page                M   move to the middle of the page
+             next-entry                 j   move to the next entry
+             next-line                  >   scroll down one line
+             next-page                  z   move to the next page
+             previous-entry             k   move to the previous entry
+             previous-line              <   scroll up one line
+             previous-page              Z   move to the previous page
+             refresh                   ^L   clear and redraw the screen
+             search                     /   search for a regular expression
+             search-next                n   search for next match
+             search-opposite    not bound   search for next match in opposite
+             direction
+             search-reverse         ESC /   search backwards for a regular
+             expression
+             select-entry             RET   select the current entry
+             shell-escape               !   run a program in a subshell
+             tag-entry                  t   toggle the tag on the current entry
+             tag-prefix                 ;   apply next command to tagged entries
+             tag-prefix-cond    not bound   apply next function ONLY to tagged
+             messages
+             top-page                   H   move to the top of the page
+             what-key           not bound   display the keycode for a key press
+
 
   5.2. index
 
- bounce-message             b   remail a message to another user
- change-folder              c   open a different folder
- change-folder-readonly ESC c   open a different folder in read only mode
- check-traditional-pgp  ESC P   check for classic pgp
- clear-flag                 W   clear a status flag from a message
- copy-message               C   copy a message to a file/mailbox
- create-alias               a   create an alias from a message sender
- decode-copy            ESC C   decode a message and copy it to a file/mailbox
- decode-save            ESC s   decode a message and save it to a file/mailbox
- delete-message             d   delete the current entry
- delete-pattern             D   delete messages matching a pattern
- delete-subthread       ESC d   delete all messages in subthread
- delete-thread             ^D   delete all messages in thread
- display-address            @   display full address of sender
- display-toggle-weed        h   display message and toggle header weeding
- display-message          RET   display a message
- edit                       e   edit the current message
- edit-type                 ^E   edit the current message's Content-Type
- exit                       x   exit without saving changes
- extract-keys              ^K   extract PGP public keys
- fetch-mail                 G   retrieve mail from POP server
- flag-message               F   toggle a message's 'important' flag
- forget-passphrase         ^F   wipe PGP passphrase from memory
- forward-message            f   forward a message with comments
- group-reply                g   reply to all recipients
- limit                      l   show only messages matching a pattern
- list-reply                 L   reply to specified mailing list
- mail                       m   compose a new mail message
- mail-key               ESC k   mail a PGP public key
- next-new                 TAB   jump to the next new message
- next-subthread         ESC n   jump to the next subthread
- next-thread               ^N   jump to the next thread
- next-undeleted             j   move to the next undeleted message
- next-unread        not bound   jump to the next unread message
- parent-message             P   jump to parent message in thread
- pipe-message               |   pipe message/attachment to a shell command
- previous-new         ESC TAB   jump to the previous new message
- previous-page              Z   move to the previous page
- previous-subthread     ESC p   jump to previous subthread
- previous-thread           ^P   jump to previous thread
- previous-undeleted         k   move to the last undelete message
- previous-unread    not bound   jump to the previous unread message
- print-message              p   print the current entry
- query                      Q   query external program for addresses
- quit                       q   save changes to mailbox and quit
- read-subthread         ESC r   mark the current subthread as read
- read-thread               ^R   mark the current thread as read
- recall-message             R   recall a postponed message
- reply                      r   reply to a message
- resend-message         ESC e   resend message and preserve MIME structure
- save-message               s   save message/attachment to a file
- set-flag                   w   set a status flag on a message
- show-version               V   show the Mutt-ng version number and date
- show-limit             ESC l   show currently active limit pattern, if any
- sort-mailbox               o   sort messages
- sort-reverse               O   sort messages in reverse order
- sync-mailbox               $   save changes to mailbox
- tag-pattern                T   tag messages matching a pattern
- tag-thread             ESC t   tag/untag all messages in the current thread
- toggle-new                 N   toggle a message's 'new' flag
- toggle-write               %   toggle whether the mailbox will be rewritten
- undelete-message           u   undelete the current entry
- undelete-pattern           U   undelete messages matching a pattern
- undelete-subthread     ESC u   undelete all messages in subthread
- undelete-thread           ^U   undelete all messages in thread
- untag-pattern             ^T   untag messages matching a pattern
- view-attachments           v   show MIME attachments
+             bounce-message             b   remail a message to another user
+             change-folder              c   open a different folder
+             change-folder-readonly ESC c   open a different folder in read only
+             mode
+             check-traditional-pgp  ESC P   check for classic pgp
+             clear-flag                 W   clear a status flag from a message
+             copy-message               C   copy a message to a file/mailbox
+             create-alias               a   create an alias from a message
+             senderdecode-copy            ESC C   decode a message and copy it
+             to a file/mailbox
+             decode-save            ESC s   decode a message and save it to a
+             file/mailbox
+             delete-message             d   delete the current entry
+             delete-pattern             D   delete messages matching a pattern
+             delete-subthread       ESC d   delete all messages in subthread
+             delete-thread             ^D   delete all messages in thread
+             display-address            @   display full address of sender
+             display-toggle-weed        h   display message and toggle header
+             weeding
+             display-message          RET   display a message
+             edit                       e   edit the current message
+             edit-type                 ^E   edit the current message's
+             Content-Type
+             exit                       x   exit without saving changes
+             extract-keys              ^K   extract PGP public keys
+             fetch-mail                 G   retrieve mail from POP server
+             flag-message               F   toggle a message's 'important' flag
+             forget-passphrase         ^F   wipe PGP passphrase from memory
+             forward-message            f   forward a message with comments
+             group-reply                g   reply to all recipients
+             limit                      l   show only messages matching a
+             patternlist-reply                 L   reply to specified mailing
+             list
+             mail                       m   compose a new mail message
+             mail-key               ESC k   mail a PGP public key
+             next-new                 TAB   jump to the next new message
+             next-subthread         ESC n   jump to the next subthread
+             next-thread               ^N   jump to the next thread
+             next-undeleted             j   move to the next undeleted message
+             next-unread        not bound   jump to the next unread message
+             parent-message             P   jump to parent message in thread
+             pipe-message               |   pipe message/attachment to a shell
+             command
+             previous-new         ESC TAB   jump to the previous new message
+             previous-page              Z   move to the previous page
+             previous-subthread     ESC p   jump to previous subthread
+             previous-thread           ^P   jump to previous thread
+             previous-undeleted         k   move to the last undelete message
+             previous-unread    not bound   jump to the previous unread message
+             print-message              p   print the current entry
+             query                      Q   query external program for addresses
+             quit                       q   save changes to mailbox and quit
+             read-subthread         ESC r   mark the current subthread as read
+             read-thread               ^R   mark the current thread as read
+             recall-message             R   recall a postponed message
+             reply                      r   reply to a message
+             resend-message         ESC e   resend message and preserve MIME
+             structure
+             save-message               s   save message/attachment to a file
+             set-flag                   w   set a status flag on a message
+             show-version               V   show the Mutt-ng version number and
+             date
+             show-limit             ESC l   show currently active limit pattern,
+             if any
+             sort-mailbox               o   sort messages
+             sort-reverse               O   sort messages in reverse order
+             sync-mailbox               $   save changes to mailbox
+             tag-pattern                T   tag messages matching a pattern
+             tag-thread             ESC t   tag/untag all messages in the
+             current thread
+             toggle-new                 N   toggle a message's 'new' flag
+             toggle-write               %   toggle whether the mailbox will be
+             rewritten
+             undelete-message           u   undelete the current entry
+             undelete-pattern           U   undelete messages matching a pattern
+             undelete-subthread     ESC u   undelete all messages in subthread
+             undelete-thread           ^U   undelete all messages in thread
+             untag-pattern             ^T   untag messages matching a pattern
+             view-attachments           v   show MIME attachments
+
 
   5.3. pager
 
- bottom             not bound   jump to the bottom of the message
- bounce-message             b   remail a message to another user
- change-folder              c   open a different folder
- change-folder-readonly ESC c   open a different folder in read only mode
- check-traditional-pgp  ESC P   check for classic pgp
- copy-message               C   copy a message to a file/mailbox
- create-alias               a   create an alias from a message sender
- decode-copy            ESC C   decode a message and copy it to a file/mailbox
- decode-save            ESC s   decode a message and save it to a file/mailbox
- delete-message             d   delete the current entry
- delete-subthread       ESC d   delete all messages in subthread
- delete-thread             ^D   delete all messages in thread
- display-address            @   display full address of sender
- display-toggle-weed        h   display message and toggle header weeding
- edit                       e   edit the current message
- edit-type                 ^E   edit the current message's Content-Type
- enter-command              :   enter a muttngrc command
- exit                       i   return to the main-menu
- extract-keys              ^K   extract PGP public keys
- flag-message               F   toggle a message's 'important' flag
- forget-passphrase         ^F   wipe PGP passphrase from memory
- forward-message            f   forward a message with comments
- group-reply                g   reply to all recipients
- half-up            not bound   move up one-half page
- half-down          not bound   move down one-half page
- help                       ?   this screen
- list-reply                 L   reply to specified mailing list
- mail                       m   compose a new mail message
- mail-key               ESC k   mail a PGP public key
- mark-as-new                N   toggle a message's 'new' flag
- next-line                RET   scroll down one line
- next-entry                 J   move to the next entry
- next-new                 TAB   jump to the next new message
- next-page                      move to the next page
- next-subthread         ESC n   jump to the next subthread
- next-thread               ^N   jump to the next thread
- next-undeleted             j   move to the next undeleted message
- next-unread        not bound   jump to the next unread message
- parent-message             P   jump to parent message in thread
- pipe-message               |   pipe message/attachment to a shell command
- previous-line      BackSpace   scroll up one line
- previous-entry             K   move to the previous entry
- previous-new       not bound   jump to the previous new message
- previous-page              -   move to the previous page
- previous-subthread     ESC p   jump to previous subthread
- previous-thread           ^P   jump to previous thread
- previous-undeleted         k   move to the last undelete message
- previous-unread    not bound   jump to the previous unread message
- print-message              p   print the current entry
- quit                       Q   save changes to mailbox and quit
- read-subthread         ESC r   mark the current subthread as read
- read-thread               ^R   mark the current thread as read
- recall-message             R   recall a postponed message
- redraw-screen             ^L   clear and redraw the screen
- reply                      r   reply to a message
- save-message               s   save message/attachment to a file
- search                     /   search for a regular expression
- search-next                n   search for next match
- search-opposite    not bound   search for next match in opposite direction
- search-reverse         ESC /   search backwards for a regular expression
- search-toggle              \   toggle search pattern coloring
- shell-escape               !   invoke a command in a subshell
- show-version               V   show the Mutt-ng version number and date
- skip-quoted                S   skip beyond quoted text
- sync-mailbox               $   save changes to mailbox
- tag-message                t   tag a message
- toggle-quoted              T   toggle display of quoted text
- top                        ^   jump to the top of the message
- undelete-message           u   undelete the current entry
- undelete-subthread     ESC u   undelete all messages in subthread
- undelete-thread           ^U   undelete all messages in thread
- view-attachments           v   show MIME attachments
+             bottom             not bound   jump to the bottom of the message
+             bounce-message             b   remail a message to another user
+             change-folder              c   open a different folder
+             change-folder-readonly ESC c   open a different folder in read only
+             mode
+             check-traditional-pgp  ESC P   check for classic pgp
+             copy-message               C   copy a message to a file/mailbox
+             create-alias               a   create an alias from a message
+             senderdecode-copy            ESC C   decode a message and copy it
+             to a file/mailbox
+             decode-save            ESC s   decode a message and save it to a
+             file/mailbox
+             delete-message             d   delete the current entry
+             delete-subthread       ESC d   delete all messages in subthread
+             delete-thread             ^D   delete all messages in thread
+             display-address            @   display full address of sender
+             display-toggle-weed        h   display message and toggle header
+             weeding
+             edit                       e   edit the current message
+             edit-type                 ^E   edit the current message's
+             Content-Type
+             enter-command              :   enter a muttngrc command
+             exit                       i   return to the main-menu
+             extract-keys              ^K   extract PGP public keys
+             flag-message               F   toggle a message's 'important' flag
+             forget-passphrase         ^F   wipe PGP passphrase from memory
+             forward-message            f   forward a message with comments
+             group-reply                g   reply to all recipients
+             half-up            not bound   move up one-half page
+             half-down          not bound   move down one-half page
+             help                       ?   this screen
+             list-reply                 L   reply to specified mailing list
+             mail                       m   compose a new mail message
+             mail-key               ESC k   mail a PGP public key
+             mark-as-new                N   toggle a message's 'new' flag
+             next-line                RET   scroll down one line
+             next-entry                 J   move to the next entry
+             next-new                 TAB   jump to the next new message
+             next-page                      move to the next page
+             next-subthread         ESC n   jump to the next subthread
+             next-thread               ^N   jump to the next thread
+             next-undeleted             j   move to the next undeleted message
+             next-unread        not bound   jump to the next unread message
+             parent-message             P   jump to parent message in thread
+             pipe-message               |   pipe message/attachment to a shell
+             command
+             previous-line      BackSpace   scroll up one line
+             previous-entry             K   move to the previous entry
+             previous-new       not bound   jump to the previous new message
+             previous-page              -   move to the previous page
+             previous-subthread     ESC p   jump to previous subthread
+             previous-thread           ^P   jump to previous thread
+             previous-undeleted         k   move to the last undelete message
+             previous-unread    not bound   jump to the previous unread message
+             print-message              p   print the current entry
+             quit                       Q   save changes to mailbox and quit
+             read-subthread         ESC r   mark the current subthread as read
+             read-thread               ^R   mark the current thread as read
+             recall-message             R   recall a postponed message
+             redraw-screen             ^L   clear and redraw the screen
+             reply                      r   reply to a message
+             save-message               s   save message/attachment to a file
+             search                     /   search for a regular expression
+             search-next                n   search for next match
+             search-opposite    not bound   search for next match in opposite
+             direction
+             search-reverse         ESC /   search backwards for a regular
+             expression
+             search-toggle              \   toggle search pattern coloring
+             shell-escape               !   invoke a command in a subshell
+             show-version               V   show the Mutt-ng version number and
+             date
+             skip-quoted                S   skip beyond quoted text
+             sync-mailbox               $   save changes to mailbox
+             tag-message                t   tag a message
+             toggle-quoted              T   toggle display of quoted text
+             top                        ^   jump to the top of the message
+             undelete-message           u   undelete the current entry
+             undelete-subthread     ESC u   undelete all messages in subthread
+             undelete-thread           ^U   undelete all messages in thread
+             view-attachments           v   show MIME attachments
+
 
   5.4. alias
 
- search                     /   search for a regular expression
- search-next                n   search for next match
- search-reverse         ESC /   search backwards for a regular expression
+             search                     /   search for a regular expression
+             search-next                n   search for next match
+             search-reverse         ESC /   search backwards for a regular
+             expression
+
 
   5.5. query
 
- create-alias               a   create an alias from a message sender
- mail                       m   compose a new mail message
- query                      Q   query external program for addresses
- query-append               A   append new query results to current results
- search                     /   search for a regular expression
- search-next                n   search for next match
- search-opposite    not bound   search for next match in opposite direction
- search-reverse         ESC /   search backwards for a regular expression
+             create-alias               a   create an alias from a message
+             sendermail                       m   compose a new mail message
+             query                      Q   query external program for addresses
+             query-append               A   append new query results to current
+             results
+             search                     /   search for a regular expression
+             search-next                n   search for next match
+             search-opposite    not bound   search for next match in opposite
+             direction
+             search-reverse         ESC /   search backwards for a regular
+             expression
+
 
   5.6. attach
 
- bounce-message             b   remail a message to another user
- collapse-parts             v   toggle display of subparts
- delete-entry               d   delete the current entry
- display-toggle-weed        h   display message and toggle header weeding
- edit-type                 ^E   edit the current entry's Content-Type
- extract-keys              ^K   extract PGP public keys
- forward-message            f   forward a message with comments
- group-reply                g   reply to all recipients
- list-reply                 L   reply to specified mailing list
- pipe-entry                 |   pipe message/attachment to a shell command
- print-entry                p   print the current entry
- reply                      r   reply to a message
- resend-message         ESC e   resend message and preserve MIME structure
- save-entry                 s   save message/attachment to a file
- undelete-entry             u   undelete the current entry
- view-attach              RET   view attachment using mailcap entry if necessary
- view-mailcap               m   force viewing of attachment using mailcap
- view-text                  T   view attachment as text
+             bounce-message             b   remail a message to another user
+             collapse-parts             v   toggle display of subparts
+             delete-entry               d   delete the current entry
+             display-toggle-weed        h   display message and toggle header
+             weeding
+             edit-type                 ^E   edit the current entry's
+             Content-Typeextract-keys              ^K   extract PGP public keys
+             forward-message            f   forward a message with comments
+             group-reply                g   reply to all recipients
+             list-reply                 L   reply to specified mailing list
+             pipe-entry                 |   pipe message/attachment to a shell
+             command
+             print-entry                p   print the current entry
+             reply                      r   reply to a message
+             resend-message         ESC e   resend message and preserve MIME
+             structure
+             save-entry                 s   save message/attachment to a file
+             undelete-entry             u   undelete the current entry
+             view-attach              RET   view attachment using mailcap entry
+             if necessary
+             view-mailcap               m   force viewing of attachment using
+             mailcap
+             view-text                  T   view attachment as text
+
 
   5.7. compose
 
- attach-file                a   attach a file(s) to this message
- attach-message             A   attach message(s) to this message
- attach-key             ESC k   attach a PGP public key
- copy-file                  C   save message/attachment to a file
- detach-file                D   delete the current entry
- display-toggle-weed        h   display message and toggle header weeding
- edit-bcc                   b   edit the BCC list
- edit-cc                    c   edit the CC list
- edit-description           d   edit attachment description
- edit-encoding             ^E   edit attachment transfer-encoding
- edit-fcc                   f   enter a file to save a copy of this message in
- edit-from              ESC f   edit the from: field
- edit-file               ^X e   edit the file to be attached
- edit-headers               E   edit the message with headers
- edit                       e   edit the message
- edit-mime                  m   edit attachment using mailcap entry
- edit-reply-to              r   edit the Reply-To field
- edit-subject               s   edit the subject of this message
- edit-to                    t   edit the TO list
- edit-type                 ^T   edit attachment type
- filter-entry               F   filter attachment through a shell command
- forget-passphrase         ^F   wipe PGP passphrase from memory
- ispell                     i   run ispell on the message
- new-mime                   n   compose new attachment using mailcap entry
- pgp-menu                   p   show PGP options
- pipe-entry                 |   pipe message/attachment to a shell command
- postpone-message           P   save this message to send later
- print-entry                l   print the current entry
- rename-file                R   rename/move an attached file
- send-message               y   send the message
- toggle-unlink              u   toggle whether to delete file after sending it
- view-attach              RET   view attachment using mailcap entry if necessary
- write-fcc                  w   write the message to a folder
+             attach-file                a   attach a file(s) to this message
+             attach-message             A   attach message(s) to this message
+             attach-key             ESC k   attach a PGP public key
+             copy-file                  C   save message/attachment to a file
+             detach-file                D   delete the current entry
+             display-toggle-weed        h   display message and toggle header
+             weeding
+             edit-bcc                   b   edit the BCC list
+             edit-cc                    c   edit the CC list
+             edit-description           d   edit attachment description
+             edit-encoding             ^E   edit attachment transfer-encoding
+             edit-fcc                   f   enter a file to save a copy of this
+             message in
+             edit-from              ESC f   edit the from: field
+             edit-file               ^X e   edit the file to be attached
+             edit-headers               E   edit the message with headers
+             edit                       e   edit the message
+             edit-mime                  m   edit attachment using mailcap entry
+             edit-reply-to              r   edit the Reply-To field
+             edit-subject               s   edit the subject of this message
+             edit-to                    t   edit the TO list
+             edit-type                 ^T   edit attachment type
+             filter-entry               F   filter attachment through a shell
+             command
+             forget-passphrase         ^F   wipe PGP passphrase from memory
+             ispell                     i   run ispell on the message
+             new-mime                   n   compose new attachment using mailcap
+             entry
+             pgp-menu                   p   show PGP options
+             pipe-entry                 |   pipe message/attachment to a shell
+             command
+             postpone-message           P   save this message to send later
+             print-entry                l   print the current entry
+             rename-file                R   rename/move an attached file
+             send-message               y   send the message
+             toggle-unlink              u   toggle whether to delete file after
+             sending it
+             view-attach              RET   view attachment using mailcap entry
+             if necessary
+             write-fcc              w   write the message to a folder
+
 
   5.8. postpone
 
- delete-entry               d   delete the current entry
- undelete-entry             u   undelete the current entry
+             delete-entry               d   delete the current entry
+             undelete-entry             u   undelete the current entry
+
 
   5.9. browser
 
- change-dir                 c   change directories
- check-new                TAB   check mailboxes for new mail
- enter-mask                 m   enter a file mask
- search                     /   search for a regular expression
- search-next                n   search for next match
- search-reverse         ESC /   search backwards for a regular expression
- select-new                 N   select a new file in this directory
- sort                       o   sort messages
- sort-reverse               O   sort messages in reverse order
- toggle-mailboxes         TAB   toggle whether to browse mailboxes or all files
- view-file              SPACE   view file
- subscribe                  s   subscribe to current mailbox (IMAP Only)
- unsubscribe                u   unsubscribe to current mailbox (IMAP Only)
- toggle-subscribed          T   toggle view all/subscribed mailboxes (IMAP Only)
+             change-dir                 c   change directories
+             check-new                TAB   check mailboxes for new mail
+             enter-mask                 m   enter a file mask
+             search                     /   search for a regular expression
+             search-next                n   search for next match
+             search-reverse         ESC /   search backwards for a regular
+             expression
+             select-new                 N   select a new file in this directory
+             sort                       o   sort messages
+             sort-reverse               O   sort messages in reverse order
+             toggle-mailboxes         TAB   toggle whether to browse mailboxes
+             or all files
+             view-file              SPACE   view file
+             subscribe                  s   subscribe to current mailbox (IMAP
+             Only)
+             unsubscribe                u   unsubscribe to current mailbox (IMAP
+             Only)
+             toggle-subscribed          T   toggle view all/subscribed mailboxes
+             (IMAP Only)
+
 
   5.10. pgp
 
- view-name                  %   view the key's user id
- verify-key                 c   verify a PGP public key
+             view-name                  %   view the key's user id
+             verify-key                 c   verify a PGP public key
+
 
   5.11. editor
 
- backspace          BackSpace   delete the char in front of the cursor
- backward-char             ^B   move the cursor one character to the left
- backward-word          ESC b   move the cursor to the previous word
- bol                       ^A   jump to the beginning of the line
- buffy-cycle            Space   cycle among incoming mailboxes
- capitalize-word        ESC c   uppercase the first character in the word
- complete                 TAB   complete filename or alias
- complete-query            ^T   complete address with query
- delete-char               ^D   delete the char under the cursor
- downcase-word          ESC l   lowercase all characters in current word
- eol                       ^E   jump to the end of the line
- forward-char              ^F   move the cursor one character to the right
- forward-word           ESC f   move the cursor to the next word
- history-down       not bound   scroll down through the history list
- history-up         not bound   scroll up through the history list
- kill-eol                  ^K   delete chars from cursor to end of line
- kill-eow               ESC d   delete chars from cursor to end of word
- kill-line                 ^U   delete all chars on the line
- kill-word                 ^W   delete the word in front of the cursor
- quote-char                ^V   quote the next typed key
- transpose-chars    not bound   transpose character under cursor with previous
- upcase-word            ESC u   uppercase all characters in current word
+             backspace          BackSpace   delete the char in front of the
+             cursor
+             backward-char             ^B   move the cursor one character to the
+             left
+             backward-word          ESC b   move the cursor to the previous word
+             bol                       ^A   jump to the beginning of the line
+             buffy-cycle            Space   cycle among incoming mailboxes
+             capitalize-word        ESC c   uppercase the first character in the
+             word
+             complete                 TAB   complete filename or alias
+             complete-query            ^T   complete address with query
+             delete-char               ^D   delete the char under the cursor
+             downcase-word          ESC l   lowercase all characters in current
+             word
+             eol                       ^E   jump to the end of the line
+             forward-char              ^F   move the cursor one character to the
+             right
+             forward-word           ESC f   move the cursor to the next word
+             history-down       not bound   scroll down through the history list
+             history-up         not bound   scroll up through the history list
+             kill-eol                  ^K   delete chars from cursor to end of
+             line
+             kill-eow               ESC d   delete chars from cursor to end of
+             word
+             kill-line                 ^U   delete all chars on the line
+             kill-word                 ^W   delete the word in front of the
+             cursor
+             quote-char                ^V   quote the next typed key
+             transpose-chars    not bound   transpose character under cursor
+             with previous
+             upcase-word            ESC u   uppercase all characters in current
+             word
+
 
 Chapter 8. Miscellany
 
@@ -10234,41 +10818,61 @@ Chapter 8. Miscellany
    Kari Hurtta <kari.hurtta@fmi.fi> co-developed the original MIME >parsing
    code back in the ELM-ME days.
 
-   The following people have been very helpful to the development of Mutt:
+   The following people have been very helpful to the development of Mutt
+   (sorted by surnames):
 
-   Vikas Agnihotri <vikasa@writeme.com>, Francois Berjon
-   <Francois.Berjon@aar.alcatel-alsthom.fr>, Aric Blumer <aric@fore.com>,
-   John Capo <jc@irbs.com>, David Champion <dgc@uchicago.edu, Brendan Cully
-   <brendan@kublai.com>, Liviu Daia <daia@stoilow.imar.ro>, Thomas E. Dickey
-   <dickey@herndon4.his.com>, David DeSimone <fox@convex.hp.com>, Nickolay N.
-   Dudorov <nnd@wint.itfs.nsk.su>, Ruslan Ermilov <ru@freebsd.org>, Edmund
-   Grimley Evans <edmundo@rano.org, Michael Finken <finken@conware.de>, Sven
-   Guckes <guckes@math.fu-berlin.de>, Lars Hecking <lhecking@nmrc.ie>, Mark
-   Holloman <holloman@nando.net>, Andreas Holzmann
-   <holzmann@fmi.uni-passau.de>, Marco d'Itri <md@linux.it>, Björn Jacke
-   <bjacke@suse.com>, Byrial Jensen <byrial@image.dk>, David Jeske
-   <jeske@igcom.net>, Christophe Kalt <kalt@hugo.int-evry.fr>, Tommi
-   Komulainen <Tommi.Komulainen@iki.fi>, Felix von Leitner (a.k.a ``Fefe'')
-   <leitner@math.fu-berlin.de>, Brandon Long <blong@fiction.net>, Jimmy
-   Mäkelä <jmy@flashback.net>, Lars Marowsky-Bree
-   <lmb@pointer.in-minden.de>, Thomas ``Mike'' Michlmayr
-   <mike@cosy.sbg.ac.at>, Andrew W. Nosenko <awn@bcs.zp.ua>, David O'Brien
-   <obrien@Nuxi.cs.ucdavis.edu>, Clint Olsen <olsenc@ichips.intel.com>, Park
-   Myeong Seok <pms@romance.kaist.ac.kr>, Thomas Parmelan
-   <tom@ankh.fr.eu.org>, Ollivier Robert <roberto@keltia.freenix.fr>, Thomas
-   Roessler <roessler@does-not-exist.org>, Roland Rosenfeld
-   <roland@spinnaker.de>, TAKIZAWA Takashi <taki@luna.email.ne.jp>, Allain
-   Thivillon <Allain.Thivillon@alma.fr> Gero Treuner
-   <gero@faveve.uni-stuttgart.de>, Vsevolod Volkov <vvv@lucky.net>, Ken
-   Weinert <kenw@ihs.com>
+     o Vikas Agnihotri <vikasa@writeme.com>
+     o Francois Berjon < Francois.Berjon@aar.alcatel-alsthom.fr>
+     o Aric Blumer <aric@fore.com>, John Capo < jc@irbs.com >
+     o David Champion <dgc@uchicago.edu>
+     o Brendan Cully <brendan@kublai.com>
+     o Liviu Daia <daia@stoilow.imar.ro>
+     o Thomas E. Dickey <dickey@herndon4.his.com>
+     o David DeSimone <fox@convex.hp.com>
+     o Nickolay N. Dudorov <nnd@wint.itfs.nsk.su>
+     o Ruslan Ermilov <ru@freebsd.org>
+     o Edmund Grimley Evans <edmundo@rano.org>
+     o Michael Finken <finken@conware.de>
+     o Sven Guckes <guckes@math.fu-berlin.de>
+     o Lars Hecking <lhecking@nmrc.ie>
+     o Mark Holloman <holloman@nando.net>
+     o Andreas Holzmann <holzmann@fmi.uni-passau.de>
+     o Marco d'Itri <md@linux.it>
+     o Björn Jacke <bjacke@suse.com>
+     o Byrial Jensen <byrial@image.dk>
+     o David Jeske <jeske@igcom.net>
+     o Christophe Kalt <kalt@hugo.int-evry.fr>
+     o Tommi Komulainen <Tommi.Komulainen@iki.fi>
+     o Felix von Leitner (a.k.a ``Fefe'') < leitner@math.fu-berlin.de >
+     o Brandon Long <blong@fiction.net>
+     o Jimmy Mäkeä <jmy@flashback.net>
+     o Lars Marowsky-Bree <lmb@pointer.in-minden.de>
+     o Thomas ``Mike'' Michlmayr <mike@cosy.sbg.ac.at>
+     o Andrew W. Nosenko <awn@bcs.zp.ua>
+     o David O'Brien <obrien@Nuxi.cs.ucdavis.edu>
+     o Clint Olsen <olsenc@ichips.intel.com>
+     o Park Myeong Seok <pms@romance.kaist.ac.kr>
+     o Thomas Parmelan <tom@ankh.fr.eu.org>
+     o Ollivier Robert <roberto@keltia.freenix.fr>
+     o Thomas Roessler <roessler@does-not-exist.org>
+     o Roland Rosenfeld <roland@spinnaker.de>
+     o TAKIZAWA Takashi <taki@luna.email.ne.jp>
+     o Allain Thivillon <Allain.Thivillon@alma.fr>
+     o Gero Treuner <gero@faveve.uni-stuttgart.de>
+     o Vsevolod Volkov <vvv@lucky.net>
+     o Ken Weinert <kenw@ihs.com>
 
    Mutt-ng is developed by the following people:
 
-   Andreas Krennmair <ak@synflood.at>, Nico Golde <nico@ngolde.de>, Rocco
-   Rutte <pdmef@cs.tu-berlin.de>
+     o Andreas Krennmair <ak@synflood.at>
+     o Nico Golde <nico@ngolde.de>
+     o Rocco Rutte <pdmef@cs.tu-berlin.de>
 
-   The following people have been very helpful to the development of Mutt-ng:
+   The following people have been very helpful to the development of Mutt-ng
+   (sorted by surnames):
 
-   Christian Gall <cg@cgall.de>, Iain Lea <iain@bricbrac.de>, Andreas Kneib
-   <akneib@gmx.net>, Carsten Schoelzki <cjs@weisshuhn.de>, Elimar Riesebieter
-   <riesebie@lxtec.de>
+     o Christian Gall <cg@cgall.de>
+     o Iain Lea <iain@bricbrac.de>
+     o Andreas Kneib <akneib@gmx.net>
+     o Carsten Schoelzki <cjs@weisshuhn.de>
+     o Elimar Riesebieter <riesebie@lxtec.de>

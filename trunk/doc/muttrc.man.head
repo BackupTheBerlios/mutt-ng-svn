@@ -451,6 +451,7 @@ l l.
 ~T	tagged messages
 ~t \fIEXPR\fP	messages addressed to \fIEXPR\fP
 ~U	unread messages
+~u	message is addressed to a subscribed mailing list
 ~v	message is part of a collapsed thread.
 ~x \fIEXPR\fP	messages which contain \fIEXPR\fP in the \(lqReferences\(rq field
 ~z \fIMIN\fP-\fIMAX\fP	messages with a size in the range \fIMIN\fP to \fIMAX\fP

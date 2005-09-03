@@ -1,605 +1,681 @@
-</sect1>
-
-<sect1 id="functions">
-<title>Functions</title>
-
-<para>
-The following is the list of available functions listed by the mapping
-in which they are available.  The default key setting is given, and an
-explanation of what the function does.  The key bindings of these
-functions can be changed with the <link linkend="bind">bind</link>
-command.
-</para>
-
-<sect2>
-<title>generic</title>
-
-<para>
-The <emphasis>generic</emphasis> menu is not a real menu, but specifies common functions
-(such as movement) available in all menus except for <emphasis>pager</emphasis> and
-<emphasis>editor</emphasis>.  Changing settings for this menu will affect the default
-bindings for all menus (except as noted).
-</para>
-
-<para>
-
-<screen>
-bottom-page                L   move to the bottom of the page
-current-bottom     not bound   move current entry to bottom of page
-current-middle     not bound   move current entry to middle of page
-current-top        not bound   move current entry to top of page
-enter-command              :   enter a muttngrc command
-exit                       q   exit this menu
-first-entry                =   move to the first entry
-half-down                  ]   scroll down 1/2 page
-half-up                    [   scroll up 1/2 page
-help                       ?   this screen
-jump                  number   jump to an index number
-last-entry                 *   move to the last entry
-middle-page                M   move to the middle of the page
-next-entry                 j   move to the next entry
-next-line                  &gt;   scroll down one line
-next-page                  z   move to the next page
-previous-entry             k   move to the previous entry
-previous-line              &lt;   scroll up one line
-previous-page              Z   move to the previous page
-refresh                   ^L   clear and redraw the screen
-search                     /   search for a regular expression
-search-next                n   search for next match
-search-opposite    not bound   search for next match in opposite direction
-search-reverse         ESC /   search backwards for a regular expression
-select-entry             RET   select the current entry
-shell-escape               !   run a program in a subshell
-tag-entry                  t   toggle the tag on the current entry
-tag-prefix                 ;   apply next command to tagged entries
-tag-prefix-cond    not bound   apply next function ONLY to tagged messages
-top-page                   H   move to the top of the page
-what-key           not bound   display the keycode for a key press
-</screen>
-
-</para>
-
-</sect2>
-
-<sect2>
-<title>index</title>
-
-<para>
-
-<screen>
-bounce-message             b   remail a message to another user
-change-folder              c   open a different folder
-change-folder-readonly ESC c   open a different folder in read only mode
-check-traditional-pgp  ESC P   check for classic pgp
-clear-flag                 W   clear a status flag from a message
-copy-message               C   copy a message to a file/mailbox
-create-alias               a   create an alias from a message sender
-decode-copy            ESC C   decode a message and copy it to a file/mailbox
-decode-save            ESC s   decode a message and save it to a file/mailbox
-delete-message             d   delete the current entry
-delete-pattern             D   delete messages matching a pattern
-delete-subthread       ESC d   delete all messages in subthread
-delete-thread             ^D   delete all messages in thread
-display-address            @   display full address of sender
-display-toggle-weed        h   display message and toggle header weeding
-display-message          RET   display a message
-edit                       e   edit the current message
-edit-type                 ^E   edit the current message's Content-Type
-exit                       x   exit without saving changes
-extract-keys              ^K   extract PGP public keys
-fetch-mail                 G   retrieve mail from POP server
-flag-message               F   toggle a message's 'important' flag
-forget-passphrase         ^F   wipe PGP passphrase from memory
-forward-message            f   forward a message with comments
-group-reply                g   reply to all recipients
-limit                      l   show only messages matching a pattern
-list-reply                 L   reply to specified mailing list
-mail                       m   compose a new mail message
-mail-key               ESC k   mail a PGP public key
-next-new                 TAB   jump to the next new message
-next-subthread         ESC n   jump to the next subthread
-next-thread               ^N   jump to the next thread
-next-undeleted             j   move to the next undeleted message
-next-unread        not bound   jump to the next unread message
-parent-message             P   jump to parent message in thread
-pipe-message               |   pipe message/attachment to a shell command
-previous-new         ESC TAB   jump to the previous new message
-previous-page              Z   move to the previous page
-previous-subthread     ESC p   jump to previous subthread
-previous-thread           ^P   jump to previous thread
-previous-undeleted         k   move to the last undelete message
-previous-unread    not bound   jump to the previous unread message
-print-message              p   print the current entry
-query                      Q   query external program for addresses
-quit                       q   save changes to mailbox and quit
-read-subthread         ESC r   mark the current subthread as read
-read-thread               ^R   mark the current thread as read
-recall-message             R   recall a postponed message
-reply                      r   reply to a message
-resend-message         ESC e   resend message and preserve MIME structure
-save-message               s   save message/attachment to a file
-set-flag                   w   set a status flag on a message
-show-version               V   show the Mutt-ng version number and date
-show-limit             ESC l   show currently active limit pattern, if any
-sort-mailbox               o   sort messages
-sort-reverse               O   sort messages in reverse order
-sync-mailbox               $   save changes to mailbox
-tag-pattern                T   tag messages matching a pattern
-tag-thread             ESC t   tag/untag all messages in the current thread
-toggle-new                 N   toggle a message's 'new' flag
-toggle-write               %   toggle whether the mailbox will be rewritten
-undelete-message           u   undelete the current entry
-undelete-pattern           U   undelete messages matching a pattern
-undelete-subthread     ESC u   undelete all messages in subthread
-undelete-thread           ^U   undelete all messages in thread
-untag-pattern             ^T   untag messages matching a pattern
-view-attachments           v   show MIME attachments
-</screen>
-
-</para>
-
-</sect2>
-
-<sect2>
-<title>pager</title>
-
-<para>
-
-<screen>
-bottom             not bound   jump to the bottom of the message
-bounce-message             b   remail a message to another user
-change-folder              c   open a different folder
-change-folder-readonly ESC c   open a different folder in read only mode
-check-traditional-pgp  ESC P   check for classic pgp
-copy-message               C   copy a message to a file/mailbox
-create-alias               a   create an alias from a message sender
-decode-copy            ESC C   decode a message and copy it to a file/mailbox
-decode-save            ESC s   decode a message and save it to a file/mailbox
-delete-message             d   delete the current entry
-delete-subthread       ESC d   delete all messages in subthread
-delete-thread             ^D   delete all messages in thread
-display-address            @   display full address of sender
-display-toggle-weed        h   display message and toggle header weeding
-edit                       e   edit the current message
-edit-type                 ^E   edit the current message's Content-Type
-enter-command              :   enter a muttngrc command
-exit                       i   return to the main-menu
-extract-keys              ^K   extract PGP public keys
-flag-message               F   toggle a message's 'important' flag
-forget-passphrase         ^F   wipe PGP passphrase from memory
-forward-message            f   forward a message with comments
-group-reply                g   reply to all recipients
-half-up            not bound   move up one-half page
-half-down          not bound   move down one-half page
-help                       ?   this screen
-list-reply                 L   reply to specified mailing list
-mail                       m   compose a new mail message
-mail-key               ESC k   mail a PGP public key
-mark-as-new                N   toggle a message's 'new' flag
-next-line                RET   scroll down one line
-next-entry                 J   move to the next entry
-next-new                 TAB   jump to the next new message
-next-page                      move to the next page
-next-subthread         ESC n   jump to the next subthread
-next-thread               ^N   jump to the next thread
-next-undeleted             j   move to the next undeleted message
-next-unread        not bound   jump to the next unread message
-parent-message             P   jump to parent message in thread
-pipe-message               |   pipe message/attachment to a shell command
-previous-line      BackSpace   scroll up one line
-previous-entry             K   move to the previous entry
-previous-new       not bound   jump to the previous new message
-previous-page              -   move to the previous page
-previous-subthread     ESC p   jump to previous subthread
-previous-thread           ^P   jump to previous thread
-previous-undeleted         k   move to the last undelete message
-previous-unread    not bound   jump to the previous unread message
-print-message              p   print the current entry
-quit                       Q   save changes to mailbox and quit
-read-subthread         ESC r   mark the current subthread as read
-read-thread               ^R   mark the current thread as read
-recall-message             R   recall a postponed message
-redraw-screen             ^L   clear and redraw the screen
-reply                      r   reply to a message
-save-message               s   save message/attachment to a file
-search                     /   search for a regular expression
-search-next                n   search for next match
-search-opposite    not bound   search for next match in opposite direction
-search-reverse         ESC /   search backwards for a regular expression
-search-toggle              \   toggle search pattern coloring
-shell-escape               !   invoke a command in a subshell
-show-version               V   show the Mutt-ng version number and date
-skip-quoted                S   skip beyond quoted text
-sync-mailbox               $   save changes to mailbox
-tag-message                t   tag a message
-toggle-quoted              T   toggle display of quoted text
-top                        ^   jump to the top of the message
-undelete-message           u   undelete the current entry
-undelete-subthread     ESC u   undelete all messages in subthread
-undelete-thread           ^U   undelete all messages in thread
-view-attachments           v   show MIME attachments
-</screen>
-
-</para>
-
-</sect2>
-
-<sect2>
-<title>alias</title>
-
-<para>
-
-<screen>
-search                     /   search for a regular expression
-search-next                n   search for next match
-search-reverse         ESC /   search backwards for a regular expression
-</screen>
-
-</para>
-
-</sect2>
-
-<sect2>
-<title>query</title>
-
-<para>
-
-<screen>
-create-alias               a   create an alias from a message sender
-mail                       m   compose a new mail message
-query                      Q   query external program for addresses
-query-append               A   append new query results to current results
-search                     /   search for a regular expression
-search-next                n   search for next match
-search-opposite    not bound   search for next match in opposite direction
-search-reverse         ESC /   search backwards for a regular expression
-</screen>
-
-</para>
-
-</sect2>
-
-<sect2>
-<title>attach</title>
-
-<para>
-
-<screen>
-bounce-message             b   remail a message to another user
-collapse-parts             v   toggle display of subparts
-delete-entry               d   delete the current entry
-display-toggle-weed        h   display message and toggle header weeding
-edit-type                 ^E   edit the current entry's Content-Type
-extract-keys              ^K   extract PGP public keys
-forward-message            f   forward a message with comments
-group-reply                g   reply to all recipients
-list-reply                 L   reply to specified mailing list
-pipe-entry                 |   pipe message/attachment to a shell command
-print-entry                p   print the current entry
-reply                      r   reply to a message
-resend-message         ESC e   resend message and preserve MIME structure
-save-entry                 s   save message/attachment to a file
-undelete-entry             u   undelete the current entry
-view-attach              RET   view attachment using mailcap entry if necessary
-view-mailcap               m   force viewing of attachment using mailcap
-view-text                  T   view attachment as text
-</screen>
-
-</para>
-
-</sect2>
-
-<sect2>
-<title>compose</title>
-
-<para>
-
-<screen>
-attach-file                a   attach a file(s) to this message
-attach-message             A   attach message(s) to this message
-attach-key             ESC k   attach a PGP public key
-copy-file                  C   save message/attachment to a file
-detach-file                D   delete the current entry
-display-toggle-weed        h   display message and toggle header weeding
-edit-bcc                   b   edit the BCC list
-edit-cc                    c   edit the CC list
-edit-description           d   edit attachment description
-edit-encoding             ^E   edit attachment transfer-encoding
-edit-fcc                   f   enter a file to save a copy of this message in
-edit-from              ESC f   edit the from: field
-edit-file               ^X e   edit the file to be attached
-edit-headers               E   edit the message with headers
-edit                       e   edit the message
-edit-mime                  m   edit attachment using mailcap entry
-edit-reply-to              r   edit the Reply-To field
-edit-subject               s   edit the subject of this message
-edit-to                    t   edit the TO list
-edit-type                 ^T   edit attachment type
-filter-entry               F   filter attachment through a shell command
-forget-passphrase         ^F   wipe PGP passphrase from memory
-ispell                     i   run ispell on the message
-new-mime                   n   compose new attachment using mailcap entry
-pgp-menu                   p   show PGP options
-pipe-entry                 |   pipe message/attachment to a shell command
-postpone-message           P   save this message to send later
-print-entry                l   print the current entry
-rename-file                R   rename/move an attached file
-send-message               y   send the message
-toggle-unlink              u   toggle whether to delete file after sending it
-view-attach              RET   view attachment using mailcap entry if necessary
-write-fcc		   w   write the message to a folder
-</screen>
-
-</para>
-
-</sect2>
-
-<sect2>
-<title>postpone</title>
-
-<para>
-
-<screen>
-delete-entry               d   delete the current entry
-undelete-entry             u   undelete the current entry
-</screen>
-
-</para>
-
-</sect2>
-
-<sect2>
-<title>browser</title>
-
-<para>
-
-<screen>
-change-dir                 c   change directories
-check-new                TAB   check mailboxes for new mail
-enter-mask                 m   enter a file mask
-search                     /   search for a regular expression
-search-next                n   search for next match
-search-reverse         ESC /   search backwards for a regular expression
-select-new                 N   select a new file in this directory
-sort                       o   sort messages
-sort-reverse               O   sort messages in reverse order
-toggle-mailboxes         TAB   toggle whether to browse mailboxes or all files
-view-file              SPACE   view file
-subscribe                  s   subscribe to current mailbox (IMAP Only)
-unsubscribe                u   unsubscribe to current mailbox (IMAP Only)
-toggle-subscribed          T   toggle view all/subscribed mailboxes (IMAP Only)
-</screen>
-
-</para>
-
-</sect2>
-
-<sect2>
-<title>pgp</title>
-
-<para>
-
-<screen>
-view-name                  %   view the key's user id
-verify-key                 c   verify a PGP public key
-</screen>
-
-</para>
-
-</sect2>
-
-<sect2>
-<title>editor</title>
-
-<para>
-
-<screen>
-backspace          BackSpace   delete the char in front of the cursor
-backward-char             ^B   move the cursor one character to the left
-backward-word          ESC b   move the cursor to the previous word
-bol                       ^A   jump to the beginning of the line
-buffy-cycle            Space   cycle among incoming mailboxes
-capitalize-word        ESC c   uppercase the first character in the word
-complete                 TAB   complete filename or alias
-complete-query            ^T   complete address with query
-delete-char               ^D   delete the char under the cursor
-downcase-word          ESC l   lowercase all characters in current word
-eol                       ^E   jump to the end of the line
-forward-char              ^F   move the cursor one character to the right
-forward-word           ESC f   move the cursor to the next word
-history-down       not bound   scroll down through the history list
-history-up         not bound   scroll up through the history list
-kill-eol                  ^K   delete chars from cursor to end of line
-kill-eow               ESC d   delete chars from cursor to end of word
-kill-line                 ^U   delete all chars on the line
-kill-word                 ^W   delete the word in front of the cursor
-quote-char                ^V   quote the next typed key
-transpose-chars    not bound   transpose character under cursor with previous
-upcase-word            ESC u   uppercase all characters in current word
-</screen>
-
-</para>
-
-</sect2>
-
-</sect1>
-
-</chapter>
-
-<chapter>
-<title>Miscellany</title>
-
-<sect1>
-<title>Acknowledgments</title>
-
-<para> Kari Hurtta <ulink URL="mailto:kari.hurtta@fmi.fi"
->&lt;kari.hurtta@fmi.fi&gt;</ulink> co-developed the original MIME
->parsing code back in the ELM-ME days.
-</para>
-
-<para> The following people have been very helpful to the development of
-Mutt: </para>
-
-<para> Vikas Agnihotri <ulink
-    URL="mailto:vikasa@writeme.com">&lt;vikasa@writeme.com&gt;</ulink>,
-
-Francois Berjon <ulink
-  URL="mailto:Francois.Berjon@aar.alcatel-alsthom.fr">&lt;Francois.Berjon@aar.alcatel-alsthom.fr&gt;</ulink>,
-
-Aric Blumer <ulink URL="mailto:aric@fore.com"
-  >&lt;aric@fore.com&gt;</ulink>,
-
-John Capo <ulink URL="mailto:jc@irbs.com"
-  >&lt;jc@irbs.com&gt;</ulink>,
-
-David Champion <ulink URL="mailto:dgc@uchicago.edu"
-  >&lt;dgc@uchicago.edu</ulink>,
-
-Brendan Cully <ulink URL="mailto:brendan@kublai.com"
-  >&lt;brendan@kublai.com&gt;</ulink>,
-
-Liviu Daia <ulink URL="mailto:daia@stoilow.imar.ro"
-  >&lt;daia@stoilow.imar.ro&gt;</ulink>,
-
-Thomas E. Dickey <ulink
-  URL="mailto:dickey@herndon4.his.com">&lt;dickey@herndon4.his.com&gt;</ulink>,
-
-David DeSimone <ulink URL="mailto:fox@convex.hp.com"
-  >&lt;fox@convex.hp.com&gt;</ulink>,
-
-Nickolay N. Dudorov <ulink URL="mailto:nnd@wint.itfs.nsk.su"
-  >&lt;nnd@wint.itfs.nsk.su&gt;</ulink>,
-
-Ruslan Ermilov <ulink
-  URL="mailto:ru@freebsd.org">&lt;ru@freebsd.org&gt;</ulink>,
-
-Edmund Grimley Evans <ulink
-  URL="mailto:edmundo@rano.org">&lt;edmundo@rano.org</ulink>,
-
-Michael Finken <ulink
-  URL="mailto:finken@conware.de">&lt;finken@conware.de&gt;</ulink>,
-
-Sven Guckes <ulink
-  URL="mailto:guckes@math.fu-berlin.de">&lt;guckes@math.fu-berlin.de&gt;</ulink>,
-
-Lars Hecking <ulink URL="mailto:lhecking@nmrc.ie"
-  >&lt;lhecking@nmrc.ie&gt;</ulink>,
-
-Mark Holloman <ulink
-  URL="mailto:holloman@nando.net">&lt;holloman@nando.net&gt;</ulink>,
-
-Andreas Holzmann <ulink
-  URL="mailto:holzmann@fmi.uni-passau.de">&lt;holzmann@fmi.uni-passau.de&gt;</ulink>,
-
-Marco d'Itri <ulink
-  URL="mailto:md@linux.it">&lt;md@linux.it&gt;</ulink>,
-
-Bj&ouml;rn Jacke <ulink
-  URL="mailto:bjacke@suse.com">&lt;bjacke@suse.com&gt;</ulink>,
-
-Byrial Jensen <ulink
-  URL="mailto:byrial@image.dk">&lt;byrial@image.dk&gt;</ulink>,
-
-David Jeske <ulink
-  URL="mailto:jeske@igcom.net">&lt;jeske@igcom.net&gt;</ulink>,
-
-Christophe Kalt <ulink URL="mailto:kalt@hugo.int-evry.fr"
-  >&lt;kalt@hugo.int-evry.fr&gt;</ulink>,
-
-Tommi Komulainen <ulink
-  URL="mailto:Tommi.Komulainen@iki.fi">&lt;Tommi.Komulainen@iki.fi&gt;</ulink>,
-
-Felix von Leitner (a.k.a ``Fefe'') <ulink
-  URL="mailto:leitner@math.fu-berlin.de">&lt;leitner@math.fu-berlin.de&gt;</ulink>,
-
-Brandon Long <ulink
-  URL="mailto:blong@fiction.net">&lt;blong@fiction.net&gt;</ulink>,
-
-Jimmy M&auml;kel&auml; <ulink
-  URL="mailto:jmy@flashback.net">&lt;jmy@flashback.net&gt;</ulink>,
-
-Lars Marowsky-Bree <ulink
-  URL="mailto:lmb@pointer.in-minden.de">&lt;lmb@pointer.in-minden.de&gt;</ulink>,
-
-Thomas ``Mike'' Michlmayr <ulink
-  URL="mailto:mike@cosy.sbg.ac.at">&lt;mike@cosy.sbg.ac.at&gt;</ulink>,
-
-Andrew W. Nosenko <ulink
-URL="mailto:awn@bcs.zp.ua">&lt;awn@bcs.zp.ua&gt;</ulink>,
-
-David O'Brien <ulink
-  URL="mailto:obrien@Nuxi.cs.ucdavis.edu">&lt;obrien@Nuxi.cs.ucdavis.edu&gt;</ulink>,
-
-Clint Olsen <ulink URL="mailto:olsenc@ichips.intel.com"
-  >&lt;olsenc@ichips.intel.com&gt;</ulink>,
-
-Park Myeong Seok <ulink URL="mailto:pms@romance.kaist.ac.kr"
-  >&lt;pms@romance.kaist.ac.kr&gt;</ulink>,
-
-Thomas Parmelan <ulink URL="mailto:tom@ankh.fr.eu.org"
-  >&lt;tom@ankh.fr.eu.org&gt;</ulink>,
-
-Ollivier Robert <ulink URL="mailto:roberto@keltia.freenix.fr"
-  >&lt;roberto@keltia.freenix.fr&gt;</ulink>,
-
-Thomas Roessler <ulink URL="mailto:roessler@does-not-exist.org"
-  >&lt;roessler@does-not-exist.org&gt;</ulink>,
-
-Roland Rosenfeld <ulink URL="mailto:roland@spinnaker.de"
-  >&lt;roland@spinnaker.de&gt;</ulink>,
-
-TAKIZAWA Takashi <ulink URL="mailto:taki@luna.email.ne.jp"
-  >&lt;taki@luna.email.ne.jp&gt;</ulink>,
-
-Allain Thivillon <ulink URL="mailto:Allain.Thivillon@alma.fr"
-  >&lt;Allain.Thivillon@alma.fr&gt;</ulink>
-
-Gero Treuner <ulink URL="mailto:gero@faveve.uni-stuttgart.de"
-  >&lt;gero@faveve.uni-stuttgart.de&gt;</ulink>,
-
-Vsevolod Volkov <ulink URL="mailto:vvv@lucky.net"
-  >&lt;vvv@lucky.net&gt;</ulink>,
-
-Ken Weinert <ulink URL="mailto:kenw@ihs.com"
-  >&lt;kenw@ihs.com&gt;</ulink>
-
-</para>
-
-<para>
-Mutt-ng is developed by the following people:
-</para>
-
-<para> Andreas Krennmair <ulink URL="mailto:ak@synflood.at"
->&lt;ak@synflood.at&gt;</ulink>,
-
-Nico Golde <ulink URL="mailto:nico@ngolde.de"
->&lt;nico@ngolde.de&gt;</ulink>,
-
-Rocco Rutte <ulink URL="mailto:pdmef@cs.tu-berlin.de"
->&lt;pdmef@cs.tu-berlin.de&gt;</ulink>
-</para>
-
-<para> The following people have been very helpful to the development of
-Mutt-ng: </para>
-
-<para> Christian Gall <ulink URL="mailto:cg@cgall.de"
->&lt;cg@cgall.de&gt;</ulink>,
-
-Iain Lea <ulink URL="mailto:iain@bricbrac.de"
->&lt;iain@bricbrac.de&gt;</ulink>,
-
-Andreas Kneib <ulink URL="mailto:akneib@gmx.net"
->&lt;akneib@gmx.net&gt;</ulink>,
-
-Carsten Schoelzki <ulink URL="mailto:cjs@weisshuhn.de"
->&lt;cjs@weisshuhn.de&gt;</ulink>,
-
-Elimar Riesebieter <ulink URL="mailto:riesebie@lxtec.de"
->&lt;riesebie@lxtec.de&gt;</ulink>
-</para>
-
-</sect1>
-
-</chapter>
-
-</book>
+<!-- vim:ft=xml
+-->
+      
+    </sect1>
+    
+    <sect1 id="functions">
+      <title>Functions</title>
+      
+      <para>
+        The following is the list of available functions listed by the mapping
+        in which they are available.  The default key setting is given, and an
+        explanation of what the function does.  The key bindings of these
+        functions can be changed with the <link linkend="bind">bind</link>
+        command.
+      </para>
+      
+      <sect2>
+        <title>generic</title>
+        
+        <para>
+          The <emphasis>generic</emphasis> menu is not a real menu, but
+          specifies common functions
+          (such as movement) available in all menus except for <emphasis>pager</emphasis> and
+          <emphasis>editor</emphasis>.  Changing settings for this menu will
+          affect the default
+          bindings for all menus (except as noted).
+        </para>
+        
+        <para>
+          
+          <screen>
+            bottom-page                L   move to the bottom of the page
+            current-bottom     not bound   move current entry to bottom of page
+            current-middle     not bound   move current entry to middle of page
+            current-top        not bound   move current entry to top of page
+            enter-command              :   enter a muttngrc command
+            exit                       q   exit this menu
+            first-entry                =   move to the first entry
+            half-down                  ]   scroll down 1/2 page
+            half-up                    [   scroll up 1/2 page
+            help                       ?   this screen
+            jump                  number   jump to an index number
+            last-entry                 *   move to the last entry
+            middle-page                M   move to the middle of the page
+            next-entry                 j   move to the next entry
+            next-line                  &gt;   scroll down one line
+            next-page                  z   move to the next page
+            previous-entry             k   move to the previous entry
+            previous-line              &lt;   scroll up one line
+            previous-page              Z   move to the previous page
+            refresh                   ^L   clear and redraw the screen
+            search                     /   search for a regular expression
+            search-next                n   search for next match
+            search-opposite    not bound   search for next match in opposite
+            direction
+            search-reverse         ESC /   search backwards for a regular
+            expression
+            select-entry             RET   select the current entry
+            shell-escape               !   run a program in a subshell
+            tag-entry                  t   toggle the tag on the current entry
+            tag-prefix                 ;   apply next command to tagged entries
+            tag-prefix-cond    not bound   apply next function ONLY to tagged
+            messages
+            top-page                   H   move to the top of the page
+            what-key           not bound   display the keycode for a key press
+          </screen>
+          
+        </para>
+        
+      </sect2>
+      
+      <sect2>
+        <title>index</title>
+        
+        <para>
+          
+          <screen>
+            bounce-message             b   remail a message to another user
+            change-folder              c   open a different folder
+            change-folder-readonly ESC c   open a different folder in read only
+            mode
+            check-traditional-pgp  ESC P   check for classic pgp
+            clear-flag                 W   clear a status flag from a message
+            copy-message               C   copy a message to a file/mailbox
+            create-alias               a   create an alias from a message
+            senderdecode-copy            ESC C   decode a message and copy it
+            to a file/mailbox
+            decode-save            ESC s   decode a message and save it to a
+            file/mailbox
+            delete-message             d   delete the current entry
+            delete-pattern             D   delete messages matching a pattern
+            delete-subthread       ESC d   delete all messages in subthread
+            delete-thread             ^D   delete all messages in thread
+            display-address            @   display full address of sender
+            display-toggle-weed        h   display message and toggle header
+            weeding
+            display-message          RET   display a message
+            edit                       e   edit the current message
+            edit-type                 ^E   edit the current message's
+            Content-Type
+            exit                       x   exit without saving changes
+            extract-keys              ^K   extract PGP public keys
+            fetch-mail                 G   retrieve mail from POP server
+            flag-message               F   toggle a message's 'important' flag
+            forget-passphrase         ^F   wipe PGP passphrase from memory
+            forward-message            f   forward a message with comments
+            group-reply                g   reply to all recipients
+            limit                      l   show only messages matching a
+            patternlist-reply                 L   reply to specified mailing
+            list
+            mail                       m   compose a new mail message
+            mail-key               ESC k   mail a PGP public key
+            next-new                 TAB   jump to the next new message
+            next-subthread         ESC n   jump to the next subthread
+            next-thread               ^N   jump to the next thread
+            next-undeleted             j   move to the next undeleted message
+            next-unread        not bound   jump to the next unread message
+            parent-message             P   jump to parent message in thread
+            pipe-message               |   pipe message/attachment to a shell
+            command
+            previous-new         ESC TAB   jump to the previous new message
+            previous-page              Z   move to the previous page
+            previous-subthread     ESC p   jump to previous subthread
+            previous-thread           ^P   jump to previous thread
+            previous-undeleted         k   move to the last undelete message
+            previous-unread    not bound   jump to the previous unread message
+            print-message              p   print the current entry
+            query                      Q   query external program for addresses
+            quit                       q   save changes to mailbox and quit
+            read-subthread         ESC r   mark the current subthread as read
+            read-thread               ^R   mark the current thread as read
+            recall-message             R   recall a postponed message
+            reply                      r   reply to a message
+            resend-message         ESC e   resend message and preserve MIME
+            structure
+            save-message               s   save message/attachment to a file
+            set-flag                   w   set a status flag on a message
+            show-version               V   show the Mutt-ng version number and
+            date
+            show-limit             ESC l   show currently active limit pattern,
+            if any
+            sort-mailbox               o   sort messages
+            sort-reverse               O   sort messages in reverse order
+            sync-mailbox               $   save changes to mailbox
+            tag-pattern                T   tag messages matching a pattern
+            tag-thread             ESC t   tag/untag all messages in the
+            current thread
+            toggle-new                 N   toggle a message's 'new' flag
+            toggle-write               %   toggle whether the mailbox will be
+            rewritten
+            undelete-message           u   undelete the current entry
+            undelete-pattern           U   undelete messages matching a pattern
+            undelete-subthread     ESC u   undelete all messages in subthread
+            undelete-thread           ^U   undelete all messages in thread
+            untag-pattern             ^T   untag messages matching a pattern
+            view-attachments           v   show MIME attachments
+          </screen>
+          
+        </para>
+        
+      </sect2>
+      
+      <sect2>
+        <title>pager</title>
+        
+        <para>
+          
+          <screen>
+            bottom             not bound   jump to the bottom of the message
+            bounce-message             b   remail a message to another user
+            change-folder              c   open a different folder
+            change-folder-readonly ESC c   open a different folder in read only
+            mode
+            check-traditional-pgp  ESC P   check for classic pgp
+            copy-message               C   copy a message to a file/mailbox
+            create-alias               a   create an alias from a message
+            senderdecode-copy            ESC C   decode a message and copy it
+            to a file/mailbox
+            decode-save            ESC s   decode a message and save it to a
+            file/mailbox
+            delete-message             d   delete the current entry
+            delete-subthread       ESC d   delete all messages in subthread
+            delete-thread             ^D   delete all messages in thread
+            display-address            @   display full address of sender
+            display-toggle-weed        h   display message and toggle header
+            weeding
+            edit                       e   edit the current message
+            edit-type                 ^E   edit the current message's
+            Content-Type
+            enter-command              :   enter a muttngrc command
+            exit                       i   return to the main-menu
+            extract-keys              ^K   extract PGP public keys
+            flag-message               F   toggle a message's 'important' flag
+            forget-passphrase         ^F   wipe PGP passphrase from memory
+            forward-message            f   forward a message with comments
+            group-reply                g   reply to all recipients
+            half-up            not bound   move up one-half page
+            half-down          not bound   move down one-half page
+            help                       ?   this screen
+            list-reply                 L   reply to specified mailing list
+            mail                       m   compose a new mail message
+            mail-key               ESC k   mail a PGP public key
+            mark-as-new                N   toggle a message's 'new' flag
+            next-line                RET   scroll down one line
+            next-entry                 J   move to the next entry
+            next-new                 TAB   jump to the next new message
+            next-page                      move to the next page
+            next-subthread         ESC n   jump to the next subthread
+            next-thread               ^N   jump to the next thread
+            next-undeleted             j   move to the next undeleted message
+            next-unread        not bound   jump to the next unread message
+            parent-message             P   jump to parent message in thread
+            pipe-message               |   pipe message/attachment to a shell
+            command
+            previous-line      BackSpace   scroll up one line
+            previous-entry             K   move to the previous entry
+            previous-new       not bound   jump to the previous new message
+            previous-page              -   move to the previous page
+            previous-subthread     ESC p   jump to previous subthread
+            previous-thread           ^P   jump to previous thread
+            previous-undeleted         k   move to the last undelete message
+            previous-unread    not bound   jump to the previous unread message
+            print-message              p   print the current entry
+            quit                       Q   save changes to mailbox and quit
+            read-subthread         ESC r   mark the current subthread as read
+            read-thread               ^R   mark the current thread as read
+            recall-message             R   recall a postponed message
+            redraw-screen             ^L   clear and redraw the screen
+            reply                      r   reply to a message
+            save-message               s   save message/attachment to a file
+            search                     /   search for a regular expression
+            search-next                n   search for next match
+            search-opposite    not bound   search for next match in opposite
+            direction
+            search-reverse         ESC /   search backwards for a regular
+            expression
+            search-toggle              \   toggle search pattern coloring
+            shell-escape               !   invoke a command in a subshell
+            show-version               V   show the Mutt-ng version number and
+            date
+            skip-quoted                S   skip beyond quoted text
+            sync-mailbox               $   save changes to mailbox
+            tag-message                t   tag a message
+            toggle-quoted              T   toggle display of quoted text
+            top                        ^   jump to the top of the message
+            undelete-message           u   undelete the current entry
+            undelete-subthread     ESC u   undelete all messages in subthread
+            undelete-thread           ^U   undelete all messages in thread
+            view-attachments           v   show MIME attachments
+          </screen>
+          
+        </para>
+        
+      </sect2>
+      
+      <sect2>
+        <title>alias</title>
+        
+        <para>
+          
+          <screen>
+            search                     /   search for a regular expression
+            search-next                n   search for next match
+            search-reverse         ESC /   search backwards for a regular
+            expression
+          </screen>
+          
+        </para>
+        
+      </sect2>
+      
+      <sect2>
+        <title>query</title>
+        
+        <para>
+          
+          <screen>
+            create-alias               a   create an alias from a message
+            sendermail                       m   compose a new mail message
+            query                      Q   query external program for addresses
+            query-append               A   append new query results to current
+            results
+            search                     /   search for a regular expression
+            search-next                n   search for next match
+            search-opposite    not bound   search for next match in opposite
+            direction
+            search-reverse         ESC /   search backwards for a regular
+            expression
+          </screen>
+          
+        </para>
+        
+      </sect2>
+      
+      <sect2>
+        <title>attach</title>
+        
+        <para>
+          
+          <screen>
+            bounce-message             b   remail a message to another user
+            collapse-parts             v   toggle display of subparts
+            delete-entry               d   delete the current entry
+            display-toggle-weed        h   display message and toggle header
+            weeding
+            edit-type                 ^E   edit the current entry's
+            Content-Typeextract-keys              ^K   extract PGP public keys
+            forward-message            f   forward a message with comments
+            group-reply                g   reply to all recipients
+            list-reply                 L   reply to specified mailing list
+            pipe-entry                 |   pipe message/attachment to a shell
+            command
+            print-entry                p   print the current entry
+            reply                      r   reply to a message
+            resend-message         ESC e   resend message and preserve MIME
+            structure
+            save-entry                 s   save message/attachment to a file
+            undelete-entry             u   undelete the current entry
+            view-attach              RET   view attachment using mailcap entry
+            if necessary
+            view-mailcap               m   force viewing of attachment using
+            mailcap
+            view-text                  T   view attachment as text
+          </screen>
+          
+        </para>
+        
+      </sect2>
+      
+      <sect2>
+        <title>compose</title>
+        
+        <para>
+          
+          <screen>
+            attach-file                a   attach a file(s) to this message
+            attach-message             A   attach message(s) to this message
+            attach-key             ESC k   attach a PGP public key
+            copy-file                  C   save message/attachment to a file
+            detach-file                D   delete the current entry
+            display-toggle-weed        h   display message and toggle header
+            weeding
+            edit-bcc                   b   edit the BCC list
+            edit-cc                    c   edit the CC list
+            edit-description           d   edit attachment description
+            edit-encoding             ^E   edit attachment transfer-encoding
+            edit-fcc                   f   enter a file to save a copy of this
+            message in
+            edit-from              ESC f   edit the from: field
+            edit-file               ^X e   edit the file to be attached
+            edit-headers               E   edit the message with headers
+            edit                       e   edit the message
+            edit-mime                  m   edit attachment using mailcap entry
+            edit-reply-to              r   edit the Reply-To field
+            edit-subject               s   edit the subject of this message
+            edit-to                    t   edit the TO list
+            edit-type                 ^T   edit attachment type
+            filter-entry               F   filter attachment through a shell
+            command
+            forget-passphrase         ^F   wipe PGP passphrase from memory
+            ispell                     i   run ispell on the message
+            new-mime                   n   compose new attachment using mailcap
+            entry
+            pgp-menu                   p   show PGP options
+            pipe-entry                 |   pipe message/attachment to a shell
+            command
+            postpone-message           P   save this message to send later
+            print-entry                l   print the current entry
+            rename-file                R   rename/move an attached file
+            send-message               y   send the message
+            toggle-unlink              u   toggle whether to delete file after
+            sending it
+            view-attach              RET   view attachment using mailcap entry
+            if necessary
+            write-fcc		   w   write the message to a folder
+          </screen>
+          
+        </para>
+        
+      </sect2>
+      
+      <sect2>
+        <title>postpone</title>
+        
+        <para>
+          
+          <screen>
+            delete-entry               d   delete the current entry
+            undelete-entry             u   undelete the current entry
+          </screen>
+          
+        </para>
+        
+      </sect2>
+      
+      <sect2>
+        <title>browser</title>
+        
+        <para>
+          
+          <screen>
+            change-dir                 c   change directories
+            check-new                TAB   check mailboxes for new mail
+            enter-mask                 m   enter a file mask
+            search                     /   search for a regular expression
+            search-next                n   search for next match
+            search-reverse         ESC /   search backwards for a regular
+            expression
+            select-new                 N   select a new file in this directory
+            sort                       o   sort messages
+            sort-reverse               O   sort messages in reverse order
+            toggle-mailboxes         TAB   toggle whether to browse mailboxes
+            or all files
+            view-file              SPACE   view file
+            subscribe                  s   subscribe to current mailbox (IMAP
+            Only)
+            unsubscribe                u   unsubscribe to current mailbox (IMAP
+            Only)
+            toggle-subscribed          T   toggle view all/subscribed mailboxes
+            (IMAP Only)
+          </screen>
+          
+        </para>
+        
+      </sect2>
+      
+      <sect2>
+        <title>pgp</title>
+        
+        <para>
+          
+          <screen>
+            view-name                  %   view the key's user id
+            verify-key                 c   verify a PGP public key
+          </screen>
+          
+        </para>
+        
+      </sect2>
+      
+      <sect2>
+        <title>editor</title>
+        
+        <para>
+          
+          <screen>
+            backspace          BackSpace   delete the char in front of the
+            cursor
+            backward-char             ^B   move the cursor one character to the
+            left
+            backward-word          ESC b   move the cursor to the previous word
+            bol                       ^A   jump to the beginning of the line
+            buffy-cycle            Space   cycle among incoming mailboxes
+            capitalize-word        ESC c   uppercase the first character in the
+            word
+            complete                 TAB   complete filename or alias
+            complete-query            ^T   complete address with query
+            delete-char               ^D   delete the char under the cursor
+            downcase-word          ESC l   lowercase all characters in current
+            word
+            eol                       ^E   jump to the end of the line
+            forward-char              ^F   move the cursor one character to the
+            right
+            forward-word           ESC f   move the cursor to the next word
+            history-down       not bound   scroll down through the history list
+            history-up         not bound   scroll up through the history list
+            kill-eol                  ^K   delete chars from cursor to end of
+            line
+            kill-eow               ESC d   delete chars from cursor to end of
+            word
+            kill-line                 ^U   delete all chars on the line
+            kill-word                 ^W   delete the word in front of the
+            cursor
+            quote-char                ^V   quote the next typed key
+            transpose-chars    not bound   transpose character under cursor
+            with previous
+            upcase-word            ESC u   uppercase all characters in current
+            word
+          </screen>
+          
+        </para>
+        
+      </sect2>
+      
+    </sect1>
+    
+  </chapter>
+  
+  <chapter>
+    <title>Miscellany</title>
+    
+    <sect1>
+      <title>Acknowledgments</title>
+      
+      <para>
+         Kari Hurtta <email>kari.hurtta@fmi.fi</email> co-developed the
+        original MIME
+        >parsing code back in the ELM-ME days.
+      </para>
+      
+      <para> The following people have been very helpful to the development of
+        Mutt (sorted by surnames): 
+      </para>
+      
+      <para>
+        <itemizedlist>
+          <listitem>
+            Vikas Agnihotri <email>vikasa@writeme.com</email>
+          </listitem>
+          <listitem>
+            Francois Berjon <email> Francois.Berjon@aar.alcatel-alsthom.fr</email>
+          </listitem>
+          <listitem>
+            Aric Blumer <email>aric@fore.com</email>, John Capo <email>
+              jc@irbs.com
+            </email>
+          </listitem>
+          <listitem>
+            David Champion <email>dgc@uchicago.edu</email>
+          </listitem>
+          <listitem>
+            Brendan Cully <email>brendan@kublai.com</email>
+          </listitem>
+          <listitem>
+            Liviu Daia <email>daia@stoilow.imar.ro</email>
+          </listitem>
+          <listitem>
+            Thomas E. Dickey <email>dickey@herndon4.his.com</email>
+          </listitem>
+          <listitem>
+            David DeSimone <email>fox@convex.hp.com</email>
+          </listitem>
+          <listitem>
+            Nickolay N. Dudorov <email>nnd@wint.itfs.nsk.su</email>
+          </listitem>
+          <listitem>
+            Ruslan Ermilov <email>ru@freebsd.org</email>
+          </listitem>
+          <listitem>
+            Edmund Grimley Evans <email>edmundo@rano.org</email>
+          </listitem>
+          <listitem>
+            Michael Finken <email>finken@conware.de</email>
+          </listitem>
+          <listitem>
+            Sven Guckes <email>guckes@math.fu-berlin.de</email>
+          </listitem>
+          <listitem>
+            Lars Hecking <email>lhecking@nmrc.ie</email>
+          </listitem>
+          <listitem>
+            Mark Holloman <email>holloman@nando.net</email>
+          </listitem>
+          <listitem>
+            Andreas Holzmann <email>holzmann@fmi.uni-passau.de</email>
+          </listitem>
+          <listitem>
+            Marco d'Itri <email>md@linux.it</email>
+          </listitem>
+          <listitem>
+            Björn Jacke <email>bjacke@suse.com</email>
+          </listitem>
+          <listitem>
+            Byrial Jensen <email>byrial@image.dk</email>
+          </listitem>
+          <listitem>
+            David Jeske <email>jeske@igcom.net</email>
+          </listitem>
+          <listitem>
+            Christophe Kalt <email>kalt@hugo.int-evry.fr</email>
+          </listitem>
+          <listitem>
+            Tommi Komulainen <email>Tommi.Komulainen@iki.fi</email>
+          </listitem>
+          <listitem>
+            Felix von Leitner (a.k.a ``Fefe'') <email>
+              leitner@math.fu-berlin.de
+            </email>
+          </listitem>
+          <listitem>
+            Brandon Long <email>blong@fiction.net</email>
+          </listitem>
+          <listitem>
+            Jimmy Mäkeä <email>jmy@flashback.net</email>
+          </listitem>
+          <listitem>
+            Lars Marowsky-Bree <email>lmb@pointer.in-minden.de</email>
+          </listitem>
+          <listitem>
+            Thomas ``Mike'' Michlmayr <email>mike@cosy.sbg.ac.at</email>
+          </listitem>
+          <listitem>
+            Andrew W. Nosenko <email>awn@bcs.zp.ua</email>
+          </listitem>
+          <listitem>
+            David O'Brien <email>obrien@Nuxi.cs.ucdavis.edu</email>
+          </listitem>
+          <listitem>
+            Clint Olsen <email>olsenc@ichips.intel.com</email>
+          </listitem>
+          <listitem>
+            Park Myeong Seok <email>pms@romance.kaist.ac.kr</email>
+          </listitem>
+          <listitem>
+            Thomas Parmelan <email>tom@ankh.fr.eu.org</email>
+          </listitem>
+          <listitem>
+            Ollivier Robert <email>roberto@keltia.freenix.fr</email>
+          </listitem>
+          <listitem>
+            Thomas Roessler <email>roessler@does-not-exist.org</email>
+          </listitem>
+          <listitem>
+            Roland Rosenfeld <email>roland@spinnaker.de</email>
+          </listitem>
+          <listitem>
+            TAKIZAWA Takashi <email>taki@luna.email.ne.jp</email>
+          </listitem>
+          <listitem>
+            Allain Thivillon <email>Allain.Thivillon@alma.fr</email>
+          </listitem>
+          <listitem>
+            Gero Treuner <email>gero@faveve.uni-stuttgart.de</email>
+          </listitem>
+          <listitem>
+            Vsevolod Volkov <email>vvv@lucky.net</email>
+          </listitem>
+          <listitem>
+            Ken Weinert <email>kenw@ihs.com</email>
+          </listitem>
+          </itemizedlist>
+        </para>
+        
+        <para>
+          Mutt-ng is developed by the following people:
+        </para>
+        
+        <para>
+          <itemizedlist>
+            <listitem>
+              Andreas Krennmair <email>ak@synflood.at</email>
+            </listitem>
+            <listitem>
+              Nico Golde <email>nico@ngolde.de</email>
+            </listitem>
+            <listitem>
+              Rocco Rutte <email>pdmef@cs.tu-berlin.de</email>
+            </listitem>
+          </itemizedlist>
+        </para>
+        
+        <para>
+          The following people have been very helpful to the
+          development of Mutt-ng (sorted by surnames):
+        </para>
+        
+        <para>
+          <itemizedlist>
+            <listitem>
+              Christian Gall <email>cg@cgall.de</email>
+            </listitem>
+            <listitem>
+              Iain Lea <email>iain@bricbrac.de</email>
+            </listitem>
+            <listitem>
+              Andreas Kneib <email>akneib@gmx.net</email>
+            </listitem>
+            <listitem>
+              Carsten Schoelzki <email>cjs@weisshuhn.de</email>
+            </listitem>
+            <listitem>
+              Elimar Riesebieter <email>riesebie@lxtec.de</email>
+            </listitem>
+          </itemizedlist>
+        </para>
+        
+      </sect1>
+      
+    </chapter>
+    
+  </book>

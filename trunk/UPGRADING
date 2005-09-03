@@ -10,6 +10,10 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-09-03:
+
+  The ~u pattern has been added.
+
 2005-08-31:
 
   The following pre-defined read-only variables were added:

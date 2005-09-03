@@ -1,3 +1,27 @@
+2005-09-03 19:41:53  Alain Bench  <veronatif@free.fr>  (brendan)
+
+	* contrib/gpg.rc: One should let GnuPG charset be automatically
+	infered from whatever current locale, without hardcoding.
+
+2005-09-03 04:34:25  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* doc/manual.xml.head: Just use EXPR as a place holder for regular
+	expressions, instead of any of EXPR, USER, ID and SUBJECT. Noted
+	by Vincent Lefevre.
+
+	* doc/manual.sgml.head, doc/manual.sgml.tail, doc/manual.xml.head,
+	doc/manual.xml.tail, doc/Makefile.in: Rename manual.sgml.* to
+	manual.xml.*.
+
+2005-09-02 18:18:19  Alain Bench  <veronatif@free.fr>  (brendan)
+
+	* keymap.c: Allow non-ascii characters in push arguments. Closes: #2023.
+
+	* doc/manual.sgml.head, doc/muttrc.man.head, mutt.h, pattern.c:
+	Adjust ~l to match all known lists, add ~u to match only
+	subscribed lists. Normalise pattern ordering in docs. Closes:
+	#2050.
+
 2005-09-01 17:07:14  Brendan Cully  <brendan@kublai.com>  (brendan)
 
 	* configure.in, imap/auth_sasl.c, main.c, mutt_sasl.c,

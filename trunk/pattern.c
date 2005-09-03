@@ -80,6 +80,7 @@ struct pattern_flags {
   'T', M_TAG, 0, NULL}, {
   't', M_TO, 0, eat_regexp}, {
   'U', M_UNREAD, 0, NULL}, {
+  'u', M_SUBSCRIBED_LIST, 0, NULL}, {
   'v', M_COLLAPSED, 0, NULL}, {
   'V', M_CRYPT_VERIFIED, 0, NULL},
 #ifdef USE_NNTP
@@ -1006,6 +1007,11 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags,
                                      pat->alladdr, 2, h->env->to,
                                      h->env->cc)));
   case M_LIST:
+    return (pat->
+            not ^ (h->env
+                   && mutt_is_list_cc (pat->alladdr, h->env->to,
+                                       h->env->cc)));
+  case M_SUBSCRIBED_LIST:
     return (pat->
             not ^ (h->env
                    && mutt_is_list_recipient (pat->alladdr, h->env->to,
