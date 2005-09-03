@@ -123,7 +123,7 @@ manual-chunked stamp-doc-chunked: $(srcdir)/chunk.xsl manual.xml
 	-xsltproc --stringparam html.stylesheet muttng.css --nonet -o html/ $^
 	touch stamp-doc-chunked
 	cd html; for file in *.html ; do \
-	  @HTMLCLEAN_CMD@ $file || true ; \
+	  @HTMLCLEAN_CMD@ $$file || true ; \
 	done
 	
 manual.pdf: stamp-doc-tex
