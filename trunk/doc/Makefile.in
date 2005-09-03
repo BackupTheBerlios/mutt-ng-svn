@@ -45,8 +45,8 @@ DISTFILES = Makefile.in dotlock.man  	\
 	muttrc.man.tail			\
 	mbox.man			\
 	mmdf.man			\
-	manual.sgml.head		\
-	manual.sgml.tail		\
+	manual.xml.head		\
+	manual.xml.tail		\
 	instdoc.sh.in			\
 	patch-notes.txt			\
 	smime-notes.txt			\
@@ -84,10 +84,12 @@ install: all instdoc
 	done
 	-$(INSTALL) -m 644 manual.txt $(DESTDIR)$(docdir) || true
 	-$(INSTALL) -m 644 manual.html $(DESTDIR)$(docdir) || true
+	-$(INSTALL) -m 644 muttng.css $(DESTDIR)$(docdir) || true
 	$(top_srcdir)/mkinstalldirs $(DESTDIR)$(docdir)/html
 	-cd html; for file in *.html ; do \
 		$(INSTALL) -m 644 $$file $(DESTDIR)$(docdir)/html/ || true ;\
 	done
+	-$(INSTALL) -m 644 muttng.css $(DESTDIR)$(docdir)/html || true
 
 uninstall:
 	for f in muttng.1 mutt_dotlock.1 fleang.1 muttng-flea.1 muttngbug.1 ; do \
@@ -104,6 +106,8 @@ uninstall:
 	-cd html; for f in *.html ; do \
 	  rm -f $(DESTDIR)$(docdir)/html/$$f ; \
 	done
+	-rm -rf $(DESTDIR)$(docdir)/muttng.css
+	-rm -rf $(DESTDIR)$(docdir)/html/muttng.css
 	-rmdir $(DESTDIR)$(docdir)/html
 
 check:
@@ -111,12 +115,12 @@ manual.txt: manual.html
 	@HTML2TXT_CMD@
 
 manual.html: $(srcdir)/html.xsl manual.xml
-	-xsltproc --nonet -o $@ $^
+	-xsltproc --stringparam html.stylesheet muttng.css --nonet -o $@ $^
 	@HTMLCLEAN_CMD@ $@ || true
 
 manual-chunked stamp-doc-chunked: $(srcdir)/chunk.xsl manual.xml
 	test -d html || mkdir html
-	-xsltproc --nonet -o html/ $^
+	-xsltproc --stringparam html.stylesheet muttng.css --nonet -o html/ $^
 	touch stamp-doc-chunked
 	cd html; for file in *.html ; do \
 	  @HTMLCLEAN_CMD@ $file || true ; \
@@ -190,9 +194,9 @@ muttrc.man stamp-doc-man: ../makedoc$(EXEEXT) $(top_srcdir)/init.h muttrc.man.he
 		> muttrc.man
 	touch stamp-doc-man
 
-manual.xml stamp-doc-xml: ../makedoc$(EXEEXT) $(top_srcdir)/init.h manual.sgml.head manual.sgml.tail $(top_srcdir)/VERSION.in $(top_srcdir)/VERSION.svn
-	( sed -e "s/@VERSION\@/`cat $(top_srcdir)/VERSION.in`-r`cat $(top_srcdir)/VERSION.svn`/" $(srcdir)/manual.sgml.head ;\
+manual.xml stamp-doc-xml: ../makedoc$(EXEEXT) $(top_srcdir)/init.h manual.xml.head manual.xml.tail $(top_srcdir)/VERSION.in $(top_srcdir)/VERSION.svn
+	( sed -e "s/@VERSION\@/`cat $(top_srcdir)/VERSION.in`-r`cat $(top_srcdir)/VERSION.svn`/" $(srcdir)/manual.xml.head ;\
 	  $(MAKEDOC_CPP) $(top_srcdir)/init.h | ../makedoc -s ) |      \
-		cat - $(srcdir)/manual.sgml.tail > manual.xml
+		cat - $(srcdir)/manual.xml.tail > manual.xml
 	touch stamp-doc-xml
 

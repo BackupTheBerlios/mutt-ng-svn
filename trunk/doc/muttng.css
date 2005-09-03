@@ -1,0 +1,33 @@
+@media screen {
+
+  body {
+    color: black;
+    background: transparent;
+    text-align:justify;
+  }
+
+  h1,h2,h3,h4,h5,p.abstract, {
+    font-family: sans-serif;
+  }
+
+  pre.screen {
+    margin-left: 1cm;
+    margin-right: 1cm;
+    padding: 2mm;
+    border-width: 0.4pt;
+    border-style: dotted;
+    border-color: black;
+    background-color: #efefef;
+  }
+
+  table {
+    border: 0pt;
+    font-family: sans-serif;
+  }
+
+  thead {
+    color: white;
+    background-color: #efefef;
+    font-weight: bold;
+  }
+}
