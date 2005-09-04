@@ -1190,7 +1190,7 @@ AC_PATH_PROG([HTMLCLEAN_CMD], [tidy], [none])
 
 if test x"$HTMLCLEAN_CMD" != x"none"
 then
-  HTMLCLEAN_CMD="$HTMLCLEAN_CMD -i -m -asxml -utf8 "
+  HTMLCLEAN_CMD="$HTMLCLEAN_CMD -q -i -m -asxml -utf8 "
 else
   HTMLCLEAN_CMD="echo "
 fi

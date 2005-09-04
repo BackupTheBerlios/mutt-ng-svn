@@ -7602,7 +7602,7 @@ Chapter 7. Reference
 
    Type: system property
 
-   Value: 479
+   Value: 480
 
    This is a read-only system property and specifies muttng's subversion
    revision string.

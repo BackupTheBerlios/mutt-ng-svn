@@ -115,12 +115,12 @@ manual.txt: manual.html
 	@HTML2TXT_CMD@
 
 manual.html: $(srcdir)/html.xsl manual.xml
-	-xsltproc --stringparam html.stylesheet muttng.css --nonet -o $@ $^
+	-xsltproc --stringparam html.stylesheet muttng.css -o $@ $^
 	@HTMLCLEAN_CMD@ $@ || true
 
 manual-chunked stamp-doc-chunked: $(srcdir)/chunk.xsl manual.xml
 	test -d html || mkdir html
-	-xsltproc --stringparam html.stylesheet muttng.css --nonet -o html/ $^
+	-xsltproc --stringparam html.stylesheet muttng.css -o html/ $^
 	touch stamp-doc-chunked
 	cd html; for file in *.html ; do \
 	  @HTMLCLEAN_CMD@ $$file || true ; \
