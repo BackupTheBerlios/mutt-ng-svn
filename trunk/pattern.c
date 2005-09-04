@@ -1222,22 +1222,16 @@ int mutt_pattern_func (int op, char *prompt)
   mutt_clear_error ();
 
   if (op == M_LIMIT) {
+    /* drop previous limit pattern */
     mem_free (&Context->pattern);
     if (Context->limit_pattern)
       mutt_pattern_free (&Context->limit_pattern);
-    if (!Context->vcount) {
+    if (Context->msgcount && !Context->vcount) {
       mutt_error _("No messages matched criteria.");
-
-#if 0
-      Context->vcount = Context->msgcount;
-      /* restore full display */
-      for (i = 0; i < Context->msgcount; i++) {
-        Context->hdrs[i]->virtual = i;
-        Context->v2r[i] = i;
-      }
-#endif
     }
-    else if (str_ncmp (buf, "~A", 2) != 0) {
+
+    /* record new limit pattern, unless match all */
+    if (str_ncmp (buf, "~A", 2) != 0) {
       Context->pattern = simple;
       simple = NULL;            /* don't clobber it */
       Context->limit_pattern = mutt_pattern_comp (buf, M_FULL_MSG, &err);

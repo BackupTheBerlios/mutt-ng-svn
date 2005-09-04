@@ -1428,9 +1428,10 @@ int ci_send_message (int flags, /* send mode */
          query_quadoption (OPT_FORWEDIT,
                            _("Edit forwarded message?")) == M_YES)) {
       /* If the this isn't a text message, look for a mailcap edit command */
-      if (mutt_needs_mailcap (msg->content))
-        mutt_edit_attachment (msg->content);
-      else if (!Editor || str_cmp ("builtin", Editor) == 0)
+      if (mutt_needs_mailcap (msg->content)) {
+        if (!mutt_edit_attachment (msg->content))
+          goto cleanup;
+      } else if (!Editor || str_cmp ("builtin", Editor) == 0)
         mutt_builtin_editor (msg->content->filename, msg, cur);
       else if (option (OPTEDITHDRS)) {
         mutt_env_to_local (msg->env);

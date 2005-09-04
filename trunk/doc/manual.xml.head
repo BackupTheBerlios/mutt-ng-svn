@@ -929,7 +929,7 @@
           <row><entry><code>v        </code></entry><entry><code></code></entry><entry>view-attachments</entry></row>
           <row><entry><code>x       </code></entry><entry><code></code></entry><entry>abort changes and exit</entry></row>
           <row><entry><code>&#60;Return&#62;  </code></entry><entry><code></code></entry><entry>display-message</entry></row>
-          <row><entry><code>&#60;Tab&#62;      </code></entry><entry><code></code></entry><entry>jump to the next new message</entry></row>
+          <row><entry><code>&#60;Tab&#62;      </code></entry><entry><code></code></entry><entry>jump to the next new or unread message</entry></row>
           <row><entry><code>@      </code></entry><entry><code></code></entry><entry>show the author's full e-mail address</entry></row>
           <row><entry><code>$       </code></entry><entry><code></code></entry><entry>save changes to mailbox</entry></row>
           <row><entry><code>/       </code></entry><entry><code></code></entry><entry>search</entry></row>

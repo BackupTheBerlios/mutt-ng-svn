@@ -64,7 +64,7 @@ typedef struct _sslsockdata {
 } sslsockdata;
 
 /* local prototypes */
-int ssl_init (void);
+static int ssl_init (void);
 static int add_entropy (const char *file);
 static int ssl_socket_read (CONNECTION * conn, char *buf, size_t len);
 static int ssl_socket_write (CONNECTION * conn, const char *buf, size_t len);

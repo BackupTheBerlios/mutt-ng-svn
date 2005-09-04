@@ -1,3 +1,22 @@
+2005-09-04 18:01:57  Zardoz@users.sourceforge.net  (brendan)
+
+	* keymap.c: Teach keymap.c about KEY_NEXT. Closes: #1588.
+
+2005-09-04 06:57:04  Alain Bench  <veronatif@free.fr>  (brendan)
+
+	* doc/manual.xml.head, doc/manual.xml.tail: Note that <Tab> is
+	bound to next-new-then-unread by default, rather than
+	next-new. Closes: #1637.
+
+	* curs_main.c, pattern.c: Allow empty limits, and limits in empty
+	mailboxes. Closes: #1853, #1906.
+
+2005-09-03 23:22:31  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* send.c, attach.c: Note when mutt_edit_attachment fails and
+	display error instead of prompting to abort an unmodified
+	file. Closes: #2051.
+
 2005-09-03 19:41:53  Alain Bench  <veronatif@free.fr>  (brendan)
 
 	* contrib/gpg.rc: One should let GnuPG charset be automatically
