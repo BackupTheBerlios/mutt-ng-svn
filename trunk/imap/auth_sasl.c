@@ -137,10 +137,6 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
         debug_print (1, ("error base64-encoding client response.\n"));
         goto bail;
       }
-
-      /* sasl_client_st(art|ep) allocate pc with malloc, expect me to 
-       * free it */
-      mem_free (&pc);
     }
 
     if (irc == IMAP_CMD_RESPOND) {
