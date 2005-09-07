@@ -41,6 +41,10 @@
 #include "nntp.h"
 #endif
 
+#ifdef USE_SASL
+#include "mutt_sasl.h"
+#endif
+
 #include "lib/mem.h"
 #include "lib/intl.h"
 #include "lib/str.h"
@@ -2342,16 +2346,19 @@ int mutt_index_menu (void)
       break;
   }
 
+  if (!attach_msg) {
 #ifdef USE_IMAP
   /* Close all open IMAP connections */
-  if (!attach_msg)
     imap_logout_all ();
 #endif
 #ifdef USE_NNTP
   /* Close all open NNTP connections */
-  if (!attach_msg)
     nntp_logout_all ();
 #endif
+#if defined (USE_SASL) || defined (USE_SASL2)
+    mutt_sasl_done ();
+#endif
+  }
 
   mutt_menuDestroy (&menu);
   return (close);

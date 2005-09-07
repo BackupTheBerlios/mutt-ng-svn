@@ -15,6 +15,7 @@
 
 #include "imap.h"
 #include "mutt_socket.h"
+#include "mutt_curses.h"
 
 /* -- symbols -- */
 #define IMAP_PORT 143
@@ -173,7 +174,7 @@ int imap_open_connection (IMAP_DATA * idata);
 IMAP_DATA *imap_conn_find (const ACCOUNT * account, int flags);
 int imap_parse_list_response (IMAP_DATA * idata, char **name, int *noselect,
                               int *noinferiors, char *delim);
-int imap_read_literal (FILE * fp, IMAP_DATA * idata, long bytes);
+int imap_read_literal (FILE * fp, IMAP_DATA * idata, long bytes, progress_t*);
 void imap_expunge_mailbox (IMAP_DATA * idata);
 int imap_reconnect (CONTEXT * ctx);
 void imap_logout (IMAP_DATA * idata);

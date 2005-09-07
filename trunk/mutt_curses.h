@@ -7,6 +7,8 @@
  * It's licensed under the GNU General Public License,
  * please see the file GPL in the top level source directory.
  */
+#ifndef _MUTT_CURSES_H
+#define _MUTT_CURSES_H
 
 #ifdef USE_SLANG_CURSES
 
@@ -129,6 +131,15 @@ typedef struct color_line {
   struct color_line *next;
 } COLOR_LINE;
 
+typedef struct {
+  const char* msg;
+  long pos;
+  long size;
+  char sizestr[SHORT_STRING];
+} progress_t;
+
+void mutt_progress_bar (progress_t* progress, long pos);
+
 extern int *ColorQuote;
 extern int ColorQuoteUsed;
 extern int ColorDefs[];
@@ -167,3 +178,5 @@ extern int wclear ();
 extern int waddstr ();
 extern int wclrtoeol ();
 #endif
+
+#endif /* !_MUTT_CURSES_H */

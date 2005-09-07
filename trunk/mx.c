@@ -201,6 +201,7 @@ int mx_lock_file (const char *path, int fd, int excl, int dot, int timeout)
 
   count = 0;
   attempt = 0;
+  prev_sb.st_size = 0;
   while (fcntl (fd, F_SETLK, &lck) == -1) {
     struct stat sb;
 

@@ -953,7 +953,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** When \fIset\fP, Mutt-ng will not show the presence of messages that are hidden
    ** by limiting, at the top of threads in the thread tree.  Note that when
-   ** $$hide_missing is set, this option will have no effect.
+   ** $$hide_missing is \fIset\fP, this option will have no effect.
    */
   {"hide_top_missing", DT_BOOL, R_TREE|R_INDEX, OPTHIDETOPMISSING, "yes" },
   /*
@@ -1892,6 +1892,17 @@ struct option_t MuttVars[] = {
    ** was connection lost.
    */
 #endif
+#ifdef USE_SOCKET
+  { "net_inc", DT_NUM, R_NONE, UL &NetInc, "10" },
+  /*
+  ** .pp
+  ** Operations that expect to transfer a large amount of data over the
+  ** network will update their progress every \fInet_inc\fP kilobytes.
+  ** If set to 0, no progress messages will be displayed.
+  ** .pp
+  ** See also ``$$read_inc'' and ``$$write_inc''.
+  */
+#endif 
   {"pager", DT_PATH, R_NONE, UL &Pager, "builtin"},
   /*
    ** .pp
@@ -3535,7 +3546,9 @@ struct option_t MuttVars[] = {
    ** default, messages with the same subject are grouped together in
    ** ``pseudo threads.''  This may not always be desirable, such as in a
    ** personal mailbox where you might have several unrelated messages with
-   ** the subject ``hi'' which will get grouped together.
+   ** the subject ``hi'' which will get grouped together. See also
+   ** ``$$sort_re'' for a less drastic way of controlling this
+   ** behaviour.
    */
   {"strip_was", DT_BOOL, R_NONE, OPTSTRIPWAS, "no" },
   /**

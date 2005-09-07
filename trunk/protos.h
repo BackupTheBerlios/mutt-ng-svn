@@ -68,6 +68,7 @@ BODY *mutt_read_mime_header (FILE *, int);
 CONTENT *mutt_get_content_info (const char *fname, BODY * b);
 
 LIST *mutt_make_references (ENVELOPE * e);
+char* mutt_read_rfc822_line (FILE*, char*, size_t*);
 LIST *mutt_parse_references (char *, int);
 
 ENVELOPE *mutt_read_rfc822_header (FILE *, HEADER *, short, short);

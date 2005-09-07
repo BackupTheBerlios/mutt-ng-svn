@@ -228,7 +228,7 @@ static void pgp_copy_clearsigned (FILE * fpin, STATE * s, char *charset)
 int pgp_application_pgp_handler (BODY * m, STATE * s)
 {
   int needpass = -1, pgp_keyblock = 0;
-  int c;
+  int c = 1;
   int clearsign = 0, rv, rc;
   long start_pos = 0;
   long bytes, last_pos, offset;

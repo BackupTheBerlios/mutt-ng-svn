@@ -325,6 +325,7 @@ int imap_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
   IMAP_CACHE *cache;
   int read;
   int rc;
+  progress_t bar;
 
   /* Sam's weird courier server returns an OK response even when FETCH
    * fails. Thanks Sam. */
@@ -395,7 +396,10 @@ int imap_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
             imap_error ("imap_fetch_message()", buf);
             goto bail;
           }
-          if (imap_read_literal (msg->fp, idata, bytes) < 0)
+          bar.size = bytes;
+          bar.msg = _("Fetching message...");
+          mutt_progress_bar (&bar, 0);
+          if (imap_read_literal (msg->fp, idata, bytes, &bar) < 0)
             goto bail;
           /* pick up trailing line */
           if ((rc = imap_cmd_step (idata)) != IMAP_CMD_CONTINUE)
@@ -492,6 +496,8 @@ int imap_append_message (CONTEXT * ctx, MESSAGE * msg)
   int c, last;
   IMAP_MBOX mx;
   int rc;
+  progress_t bar;
+  size_t sent;
 
   idata = (IMAP_DATA *) ctx->data;
 
@@ -518,6 +524,10 @@ int imap_append_message (CONTEXT * ctx, MESSAGE * msg)
     len++;
   }
   rewind (fp);
+
+  bar.msg = _("Uploading message...");
+  bar.size = len;
+  mutt_progress_bar (&bar, 0);
 
   imap_munge_mbox_name (mbox, sizeof (mbox), mailbox);
   snprintf (buf, sizeof (buf), "APPEND %s (%s%s%s%s%s) {%lu}", mbox,
@@ -548,16 +558,17 @@ int imap_append_message (CONTEXT * ctx, MESSAGE * msg)
     goto fail;
   }
 
-  mutt_message _("Uploading message ...");
-
-  for (last = EOF, len = 0; (c = fgetc (fp)) != EOF; last = c) {
+  for (last = EOF, sent = len = 0; (c = fgetc (fp)) != EOF; last = c) {
     if (c == '\n' && last != '\r')
       buf[len++] = '\r';
 
     buf[len++] = c;
 
-    if (len > sizeof (buf) - 3)
+    if (len > sizeof (buf) - 3) {
+      sent += len;
       flush_buffer (buf, &len, idata->conn);
+      mutt_progress_bar (&bar, sent);
+    }
   }
 
   if (len)
@@ -856,7 +867,7 @@ static int msg_fetch_header (CONTEXT * ctx, IMAP_HEADER * h, char *buf,
     return rc;
 
   if (imap_get_literal_count (buf, &bytes) == 0) {
-    imap_read_literal (fp, idata, bytes);
+    imap_read_literal (fp, idata, bytes, NULL);
 
     /* we may have other fields of the FETCH _after_ the literal
      * (eg Domino puts FLAGS here). Nothing wrong with that, either.

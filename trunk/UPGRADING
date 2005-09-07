@@ -10,6 +10,13 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-09-07:
+
+  All patterns may be prefixed with = instead of ~ to enable
+  string search instead of regular expression match.
+
+  The $net_inc variables has been added.
+
 2005-09-03:
 
   The ~u pattern has been added.

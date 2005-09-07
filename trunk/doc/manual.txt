@@ -1976,7 +1976,8 @@ Chapter 3. Configuration
 
 4. Defining/Using aliases
 
-   Usage: alias key address [ , address, ... ]
+   Usage: alias key address[ ,  address, ... ]
+
 
    It's usually very cumbersome to remember or type out the address of
    someone you are communicating with. Mutt-ng allows you to create
@@ -2028,6 +2029,7 @@ Chapter 3. Configuration
 5. Changing the default key bindings
 
    Usage: bind map key function
+
 
    This command allows you to change the default key bindings (operation
    invoked when pressing a key).
@@ -2160,7 +2162,9 @@ Chapter 3. Configuration
 
 6. Defining aliases for character sets
 
-   Usage: charset-hook alias charset Usage: iconv-hook charset local-charset
+   Usage: charset-hook alias  charset
+   Usage: iconv-hook charset  local-charset
+
 
    The charset-hook command defines an alias for a character set. This is
    useful to properly display messages which are tagged with a character set
@@ -2173,6 +2177,7 @@ Chapter 3. Configuration
 7. Setting variables based upon mailbox
 
    Usage: folder-hook [!]regexp command
+
 
    It is often desirable to change settings based on which mailbox you are
    reading. The folder-hook command provides a method by which you can
@@ -2199,7 +2204,8 @@ Chapter 3. Configuration
 
 8. Keyboard macros
 
-   Usage: macro menu key sequence [ description ]
+   Usage: macro menu key sequence [  description ]
+
 
    Macros are useful when you would like a single key to perform a series of
    actions. When you press key in menu menu ,Mutt-ng will behave as if you
@@ -2232,8 +2238,10 @@ Chapter 3. Configuration
 
 9. Using color and mono video attributes
 
-   Usage: color object foreground background [ regexp ] Usage: color index
-   foreground background pattern Usage: uncolor index pattern [ pattern ... ]
+   Usage: color object foregroundbackground [  regexp]
+   Usage: color index foreground backgroundpattern
+   Usage: uncolor index pattern[ pattern ...  ]
+
 
    If your terminal supports color, you can spice up Mutt-ng by creating your
    own color scheme. To define the color of an object (type of information),
@@ -2332,8 +2340,9 @@ Chapter 3. Configuration
    If your terminal does not support color, it is still possible change the
    video attributes through the use of the ``mono'' command:
 
-   Usage: mono <object> <attribute> [ regexp ] Usage: mono index attribute
-   pattern Usage: unmono index pattern [ pattern ... ]
+   Usage: mono <object> <attribute>[ regexp ]
+   Usage: mono index attribute pattern
+   Usage: unmono index pattern[ pattern ... ]
 
    where attribute is one of the following:
 
@@ -2349,7 +2358,8 @@ Chapter 3. Configuration
 
 10. Ignoring (weeding) unwanted message headers
 
-   Usage: [un]ignore pattern [ pattern ... ]
+   Usage: [un]ignore pattern [  pattern... ]
+
 
    Messages often have many header fields added by automatic processing
    systems, or which may not seem useful to display on the screen. This
@@ -2502,8 +2512,9 @@ Chapter 3. Configuration
 
 13. Mailing lists
 
-   Usage: [un]lists regexp [ regexp ... ] Usage: [un]subscribe regexp [
-   regexp ... ]
+   Usage: [un]lists regexp [  regexp... ]
+   Usage: [un]subscribe regexp [  regexp... ]
+
 
    Mutt-ng has a few nice features for using-lists .In order to take
    advantage of them, you must specify which addresses belong to mailing
@@ -2548,6 +2559,7 @@ Chapter 3. Configuration
 
    Usage: mbox-hook [!]pattern mailbox
 
+
    This command is used to move read messages from a specified mailbox to
    adifferent mailbox automatically when you quit or change folders. pattern
    is a regular expression specifying the mailbox to treat as a ``spool''
@@ -2558,7 +2570,8 @@ Chapter 3. Configuration
 
 15. Defining mailboxes which receive mail
 
-   Usage: [un]mailboxes [!]filename [ filename ... ]
+   Usage: [un]mailboxes [!]filename[ filename ... ]
+
 
    This command specifies folders which can receive mail and which will be
    checked for new messages. By default, the main menu status bar displays
@@ -2588,7 +2601,9 @@ Chapter 3. Configuration
 
 16. User defined headers
 
-   Usage: my_hdr string unmy_hdr field [ field ... ]
+   Usage: my_hdr string
+   Usage: unmy_hdr field [ field... ]
+
 
    The ``my_hdr'' command allows you to create your own header fields which
    will be added to every message you send.
@@ -2618,7 +2633,8 @@ Chapter 3. Configuration
 
 17. Defining the order of headers when viewing messages
 
-   Usage: hdr_order header1 header2 header3
+   Usage: hdr_order header1header2 header3
+
 
    With this command, you can specify an order in which mutt will attempt to
    present headers to you when viewing messages.
@@ -2632,6 +2648,7 @@ Chapter 3. Configuration
 18. Specify default save filename
 
    Usage: save-hook [!]pattern filename
+
 
    This command is used to override the default filename used when saving
    messages. filename will be used as the default filename if the message is
@@ -2651,6 +2668,7 @@ Chapter 3. Configuration
 
    Usage: fcc-hook [!]pattern mailbox
 
+
    This command is used to save outgoing mail in a mailbox other than record.
    Mutt-ng searches the initial list of message recipients for the first
    matching regexp and uses mailbox as the default Fcc: mailbox. If no match
@@ -2667,13 +2685,18 @@ Chapter 3. Configuration
 
    Usage: fcc-save-hook [!]pattern mailbox
 
+
    This command is a shortcut, equivalent to doing both a fcc-hook and a
    save-hook with its arguments.
 
 21. Change settings based upon message recipients
 
-   Usage: reply-hook [!]pattern command Usage: send-hook [!]pattern command
+   Usage: reply-hook [!]pattern command
+   Usage: send-hook [!]pattern command
    Usage: send2-hook [!]pattern command
+
+
+   v
 
    These commands can be used to execute arbitrary configuration commands
    based upon recipients of the message. pattern is a regular expression
@@ -2713,6 +2736,7 @@ Chapter 3. Configuration
 
    Usage: message-hook [!]pattern command
 
+
    This command can be used to execute arbitrary configuration commands
    before viewing or formatting a message based upon information about the
    message. command is executed if the pattern matches the message to be
@@ -2730,6 +2754,7 @@ Chapter 3. Configuration
 
    Usage: crypt-hook pattern keyid
 
+
    When encrypting messages with PGP or OpenSSL, you may want to associate a
    certain key with a given e-mail address automatically, either because the
    recipient's public key can't be deduced from the destination address, or
@@ -2746,21 +2771,30 @@ Chapter 3. Configuration
 
    Usage: push string
 
+
    This command adds the named string to the keyboard buffer. The string may
    contain control characters, key names and function names like the sequence
    string in the macro command. You may use it to automatically run a
-   sequence of commands at startup, or when entering certain folders.
+   sequence of commands at startup, or when entering certain folders. For
+   example, the following command will automatically collapse all threads
+   when entering a folder:
+
+ folder-hook . 'push <collapse-all>'
+
 
 25. Executing functions
 
-   Usage: exec function [ function ... ]
+   Usage: exec function [  function ... ]
+
 
    This command can be used to execute any function. Functions are listed in
    the functions. ``exec function'' is equivalent to ``push <function>''.
 
 26. Message Scoring
 
-   Usage: score pattern value Usage: unscore pattern [ pattern ... ]
+   Usage: score pattern value
+   Usage: unscore pattern [  pattern... ]
+
 
    In situations where you have to cope with a lot of emails, e.g. when you
    read many different mailing lists, and take part in discussions, it is
@@ -2818,7 +2852,9 @@ Chapter 3. Configuration
 
 27. Spam detection
 
-   Usage: spam pattern format Usage: nospam pattern
+   Usage: spam pattern format
+   Usage: nospam pattern
+
 
    Mutt-ng has generalized support for external spam-scoring filters. By
    defining your spam patterns with the spam and nospam commands, you can
@@ -2908,9 +2944,11 @@ Chapter 3. Configuration
 
 28. Setting variables
 
-   Usage: set [no|inv]variable [=value] [ variable ... ] Usage: toggle
-   variable [variable ... ] Usage: unset variable [variable ... ] Usage:
-   reset variable [variable ... ]
+   Usage: set [no|inv]variable[=value] [  variable ... ]
+   Usage: toggle variable [variable... ]
+   Usage: unset variable [variable... ]
+   Usage: reset variable [variable... ]
+
 
    This command is used to set (and unset) variables .There are four basic
    types of variables: boolean, number, string and quadoption. boolean
@@ -2961,7 +2999,8 @@ Chapter 3. Configuration
 
 29. Reading initialization commands from another file
 
-   Usage: source filename [ filename ... ]
+   Usage: source filename [  filename... ]
+
 
    This command allows the inclusion of initialization commands from other
    files. For example, I place all of my aliases in ˜/.mail_aliases so that
@@ -2976,7 +3015,8 @@ Chapter 3. Configuration
 
 30. Removing hooks
 
-   Usage: unhook [ * | hook-type ]
+   Usage: unhook [ * |  hook-type ]
+
 
    This command permits you to flush hooks you have previously defined. You
    can either remove all hooks by giving the ``*'' character as an argument,
@@ -4239,7 +4279,7 @@ Chapter 4. Advanced Usage
 
   19.2. Write a compressed mailbox
 
-   Usage: close-hook regexp "command"
+   Usage: close-hook regexp"command"
 
    This is used to close the folder that was open with the open-hook command
    after some changes were made to it.
@@ -4264,7 +4304,7 @@ Chapter 4. Advanced Usage
 
   19.3. Append a message to a compressed mailbox
 
-   Usage: append-hook regexp "command"
+   Usage: append-hook regexp"command"
 
    This command is used for saving to an existing compressed folder. The
    command is the command that can be used for appending to the folders whose
@@ -7602,7 +7642,7 @@ Chapter 7. Reference
 
    Type: system property
 
-   Value: 480
+   Value: 481
 
    This is a read-only system property and specifies muttng's subversion
    revision string.
@@ -7633,7 +7673,19 @@ Chapter 7. Reference
    This variable, when set, makes the thread tree narrower, allowing deeper
    threads to fit on the screen.
 
-160. nntp_ask_followup_to
+160. net_inc
+
+   Type: number
+
+   Default: 10
+
+   Operations that expect to transfer a large amount of data over the network
+   will update their progress every net_inc kilobytes. If set to 0, no
+   progress messages will be displayed.
+
+   See also ``$read_inc'' and ``$write_inc''.
+
+161. nntp_ask_followup_to
 
    Type: boolean
 
@@ -7644,7 +7696,7 @@ Chapter 7. Reference
    If set, Mutt-ng will prompt you for the Followup-To: header field before
    editing the body of an outgoing news article.
 
-161. nntp_ask_x_comment_to
+162. nntp_ask_x_comment_to
 
    Type: boolean
 
@@ -7655,7 +7707,7 @@ Chapter 7. Reference
    If set, Mutt-ng will prompt you for the X-Comment-To: header field before
    editing the body of an outgoing news article.
 
-162. nntp_cache_dir
+163. nntp_cache_dir
 
    Type: path
 
@@ -7670,7 +7722,7 @@ Chapter 7. Reference
    As for the header caching in connection with IMAP and/or Maildir, this
    drastically increases speed and lowers traffic.
 
-163. nntp_catchup
+164. nntp_catchup
 
    Type: quadoption
 
@@ -7681,7 +7733,7 @@ Chapter 7. Reference
    If this variable is set, Mutt-ng will mark all articles in a newsgroup as
    read when you leaving it.
 
-164. nntp_context
+165. nntp_context
 
    Type: number
 
@@ -7696,7 +7748,7 @@ Chapter 7. Reference
    If there're more articles than defined with $nntp_context, all older ones
    will be removed/not shown in the index.
 
-165. nntp_followup_to_poster
+166. nntp_followup_to_poster
 
    Type: quadoption
 
@@ -7708,7 +7760,7 @@ Chapter 7. Reference
    Followup-To: header field, a follow-up to the newsgroup is not permitted.
    The message will be mailed to the submitter of the message via mail.
 
-166. nntp_group_index_format
+167. nntp_group_index_format
 
    Type: string
 
@@ -7731,7 +7783,7 @@ Chapter 7. Reference
  %|X     pad to the end of the line with character "X"
 
 
-167. nntp_host
+168. nntp_host
 
    Type: string
 
@@ -7754,7 +7806,7 @@ Chapter 7. Reference
    presents a security risk since the superuser of your machine may read it
    regardless of the file's permissions.
 
-168. nntp_inews
+169. nntp_inews
 
    Type: path
 
@@ -7771,7 +7823,7 @@ Chapter 7. Reference
 
    Example: set inews="/usr/local/bin/inews -hS"
 
-169. nntp_load_description
+170. nntp_load_description
 
    Type: boolean
 
@@ -7782,7 +7834,7 @@ Chapter 7. Reference
    This variable controls whether or not descriptions for newsgroups are to
    be loaded when subscribing to a newsgroup.
 
-170. nntp_mail_check
+171. nntp_mail_check
 
    Type: number
 
@@ -7794,7 +7846,7 @@ Chapter 7. Reference
    new article will cause a recheck for new news. If set to 0, Mutt-ng will
    recheck on each operation in index (stepping, read article, etc.).
 
-171. nntp_mime_subject
+172. nntp_mime_subject
 
    Type: boolean
 
@@ -7807,7 +7859,7 @@ Chapter 7. Reference
 
    Note: Only change this setting if you know what you are doing.
 
-172. nntp_newsrc
+173. nntp_newsrc
 
    Type: path
 
@@ -7824,7 +7876,7 @@ Chapter 7. Reference
  %s      newsserver name
 
 
-173. nntp_pass
+174. nntp_pass
 
    Type: string
 
@@ -7838,7 +7890,7 @@ Chapter 7. Reference
    since the superuser of your machine may read it regardless of the file's
    permissions.
 
-174. nntp_post_moderated
+175. nntp_post_moderated
 
    Type: quadoption
 
@@ -7852,7 +7904,7 @@ Chapter 7. Reference
    Note: if the newsserver does not support posting to that newsgroup or a
    group is totally read-only, that posting will not have any effect.
 
-175. nntp_reconnect
+176. nntp_reconnect
 
    Type: quadoption
 
@@ -7863,7 +7915,7 @@ Chapter 7. Reference
    Controls whether or not Mutt-ng will try to reconnect to a newsserver when
    the was connection lost.
 
-176. nntp_save_unsubscribed
+177. nntp_save_unsubscribed
 
    Type: boolean
 
@@ -7874,7 +7926,7 @@ Chapter 7. Reference
    When set, info about unsubscribed newsgroups will be saved into the
    ``newsrc'' file and into the news cache.
 
-177. nntp_show_new_news
+178. nntp_show_new_news
 
    Type: boolean
 
@@ -7887,7 +7939,7 @@ Chapter 7. Reference
    controls whether or not the number of new articles of subscribed
    newsgroups will be checked.
 
-178. nntp_show_only_unread
+179. nntp_show_only_unread
 
    Type: boolean
 
@@ -7898,7 +7950,7 @@ Chapter 7. Reference
    If set, only subscribed newsgroups that contain unread articles will be
    displayed in the newsgroup browser.
 
-179. nntp_user
+180. nntp_user
 
    Type: string
 
@@ -7909,7 +7961,7 @@ Chapter 7. Reference
    Your login name on the NNTP server. If unset and the server requires
    authentification, Mutt-ng will prompt you for your account name.
 
-180. nntp_x_comment_to
+181. nntp_x_comment_to
 
    Type: boolean
 
@@ -7921,7 +7973,7 @@ Chapter 7. Reference
    full name of the original article author) to articles that you followup
    to.
 
-181. operating_system
+182. operating_system
 
    Type: string
 
@@ -7933,7 +7985,7 @@ Chapter 7. Reference
 
    It may, for example, look as: ``mutt-ng 1.5.9i (Linux)''.
 
-182. pager
+183. pager
 
    Type: path
 
@@ -7949,7 +8001,7 @@ Chapter 7. Reference
    pager, and screen resizes cause lines longer than the screen width to be
    badly formatted in the help menu.
 
-183. pager_context
+184. pager_context
 
    Type: number
 
@@ -7960,7 +8012,7 @@ Chapter 7. Reference
    Mutt-ng will display the line after the last one on the screen at the top
    of the next page (0 lines of context).
 
-184. pager_format
+185. pager_format
 
    Type: string
 
@@ -7970,7 +8022,7 @@ Chapter 7. Reference
    displayed before each message in either the internal or an external pager.
    The valid sequences are listed in the ``$index_format'' section.
 
-185. pager_index_lines
+186. pager_index_lines
 
    Type: number
 
@@ -7987,7 +8039,7 @@ Chapter 7. Reference
    of messages in the current folder is less than pager_index_lines, then the
    index will only use as many lines as it needs.
 
-186. pager_stop
+187. pager_stop
 
    Type: boolean
 
@@ -7996,7 +8048,7 @@ Chapter 7. Reference
    When set, the internal-pager will not move to the next message when you
    are at the end of a message and invoke the next-page function.
 
-187. pgp_auto_decode
+188. pgp_auto_decode
 
    Type: boolean
 
@@ -8009,7 +8061,7 @@ Chapter 7. Reference
    checked with the check-traditional-pgp function, Mutt-ng will
    automatically check the message for traditional pgp.
 
-188. pgp_autoinline
+189. pgp_autoinline
 
    Type: boolean
 
@@ -8028,7 +8080,7 @@ Chapter 7. Reference
    Also note that using the old-style PGP message format is strongly
    deprecated. (PGP only)
 
-189. pgp_check_exit
+190. pgp_check_exit
 
    Type: boolean
 
@@ -8038,7 +8090,7 @@ Chapter 7. Reference
    signing or encrypting. A non-zero exit code means that the subprocess
    failed. (PGP only)
 
-190. pgp_clearsign_command
+191. pgp_clearsign_command
 
    Type: string
 
@@ -8048,7 +8100,7 @@ Chapter 7. Reference
 
    Note that the use of this format is strongly deprecated. (PGP only)
 
-191. pgp_decode_command
+192. pgp_decode_command
 
    Type: string
 
@@ -8086,7 +8138,7 @@ Chapter 7. Reference
    samples/ subdirectory which has been installed on your system alongside
    the documentation. (PGP only)
 
-192. pgp_decrypt_command
+193. pgp_decrypt_command
 
    Type: string
 
@@ -8094,7 +8146,7 @@ Chapter 7. Reference
 
    This command is used to decrypt a PGP encrypted message. (PGP only)
 
-193. pgp_encrypt_only_command
+194. pgp_encrypt_only_command
 
    Type: string
 
@@ -8102,7 +8154,7 @@ Chapter 7. Reference
 
    This command is used to encrypt a body part without signing it. (PGP only)
 
-194. pgp_encrypt_sign_command
+195. pgp_encrypt_sign_command
 
    Type: string
 
@@ -8110,7 +8162,7 @@ Chapter 7. Reference
 
    This command is used to both sign and encrypt a body part. (PGP only)
 
-195. pgp_entry_format
+196. pgp_entry_format
 
    Type: string
 
@@ -8158,7 +8210,7 @@ Chapter 7. Reference
 
    (PGP only)
 
-196. pgp_export_command
+197. pgp_export_command
 
    Type: string
 
@@ -8167,7 +8219,7 @@ Chapter 7. Reference
    This command is used to export a public key from the user's key ring. (PGP
    only)
 
-197. pgp_getkeys_command
+198. pgp_getkeys_command
 
    Type: string
 
@@ -8176,7 +8228,7 @@ Chapter 7. Reference
    This command is invoked whenever Mutt-ng will need public key information.
    %r is the only printf(3)-like sequence used with this format. (PGP only)
 
-198. pgp_good_sign
+199. pgp_good_sign
 
    Type: regular expression
 
@@ -8187,7 +8239,7 @@ Chapter 7. Reference
    text. Use this variable if the exit code from the command is 0 even for
    bad signatures. (PGP only)
 
-199. pgp_ignore_subkeys
+200. pgp_ignore_subkeys
 
    Type: boolean
 
@@ -8197,7 +8249,7 @@ Chapter 7. Reference
    Instead, the principal key will inherit the subkeys' capabilities. Unset
    this if you want to play interesting key selection games. (PGP only)
 
-200. pgp_import_command
+201. pgp_import_command
 
    Type: string
 
@@ -8206,7 +8258,7 @@ Chapter 7. Reference
    This command is used to import a key from a message into the user's public
    key ring. (PGP only)
 
-201. pgp_list_pubring_command
+202. pgp_list_pubring_command
 
    Type: string
 
@@ -8218,7 +8270,7 @@ Chapter 7. Reference
    This format is also generated by the pgpring utility which comes with
    Mutt-ng. (PGP only)
 
-202. pgp_list_secring_command
+203. pgp_list_secring_command
 
    Type: string
 
@@ -8230,7 +8282,7 @@ Chapter 7. Reference
    This format is also generated by the pgpring utility which comes with
    Mutt-ng. (PGP only)
 
-203. pgp_long_ids
+204. pgp_long_ids
 
    Type: boolean
 
@@ -8239,7 +8291,7 @@ Chapter 7. Reference
    If set, use 64 bit PGP key IDs. Unset uses the normal 32 bit Key IDs. (PGP
    only)
 
-204. pgp_mime_auto
+205. pgp_mime_auto
 
    Type: quadoption
 
@@ -8252,7 +8304,7 @@ Chapter 7. Reference
    Also note that using the old-style PGP message format is strongly
    deprecated. (PGP only)
 
-205. pgp_replyinline
+206. pgp_replyinline
 
    Type: boolean
 
@@ -8273,7 +8325,7 @@ Chapter 7. Reference
    Also note that using the old-style PGP message format is strongly
    deprecated. (PGP only)
 
-206. pgp_retainable_sigs
+207. pgp_retainable_sigs
 
    Type: boolean
 
@@ -8286,7 +8338,7 @@ Chapter 7. Reference
    where the outer layer (multipart/encrypted) can be easily removed, while
    the inner multipart/signed part is retained. (PGP only)
 
-207. pgp_show_unusable
+208. pgp_show_unusable
 
    Type: boolean
 
@@ -8296,7 +8348,7 @@ Chapter 7. Reference
    menu. This includes keys which have been revoked, have expired, or have
    been marked as ``disabled'' by the user. (PGP only)
 
-208. pgp_sign_as
+209. pgp_sign_as
 
    Type: string
 
@@ -8306,7 +8358,7 @@ Chapter 7. Reference
    which of your private keys to use. It is recommended that you use the
    keyid form to specify your key (e.g., ``0x00112233''). (PGP only)
 
-209. pgp_sign_command
+210. pgp_sign_command
 
    Type: string
 
@@ -8315,7 +8367,7 @@ Chapter 7. Reference
    This command is used to create the detached PGP signature for a
    multipart/signed PGP/MIME body part. (PGP only)
 
-210. pgp_sort_keys
+211. pgp_sort_keys
 
    Type: sort order
 
@@ -8343,7 +8395,7 @@ Chapter 7. Reference
    If you prefer reverse order of the above values, prefix it with
    ``reverse-''. (PGP only)
 
-211. pgp_strict_enc
+212. pgp_strict_enc
 
    Type: boolean
 
@@ -8354,7 +8406,7 @@ Chapter 7. Reference
    problems with non-verifyable PGP signatures, so only change this if you
    know what you are doing. (PGP only)
 
-212. pgp_timeout
+213. pgp_timeout
 
    Type: number
 
@@ -8363,7 +8415,7 @@ Chapter 7. Reference
    The number of seconds after which a cached passphrase will expire if not
    used. Default: 300. (PGP only)
 
-213. pgp_use_gpg_agent
+214. pgp_use_gpg_agent
 
    Type: boolean
 
@@ -8371,7 +8423,7 @@ Chapter 7. Reference
 
    If set, Mutt-ng will use a possibly-running gpg-agent process. (PGP only)
 
-214. pgp_verify_command
+215. pgp_verify_command
 
    Type: string
 
@@ -8379,7 +8431,7 @@ Chapter 7. Reference
 
    This command is used to verify PGP signatures. (PGP only)
 
-215. pgp_verify_key_command
+216. pgp_verify_key_command
 
    Type: string
 
@@ -8388,7 +8440,7 @@ Chapter 7. Reference
    This command is used to verify key information from the key selection
    menu. (PGP only)
 
-216. pipe_decode
+217. pipe_decode
 
    Type: boolean
 
@@ -8398,7 +8450,7 @@ Chapter 7. Reference
    pipe the messages without any preprocessing. When set, Mutt-ng will weed
    headers and will attempt to PGP/MIME decode the messages first.
 
-217. pipe_sep
+218. pipe_sep
 
    Type: string
 
@@ -8407,7 +8459,7 @@ Chapter 7. Reference
    The separator to add between messages when piping a list of tagged
    messages to an external Unix command.
 
-218. pipe_split
+219. pipe_split
 
    Type: boolean
 
@@ -8420,7 +8472,7 @@ Chapter 7. Reference
    by one. In both cases the messages are piped in the current sorted order,
    and the ``$pipe_sep'' separator is added after each message.
 
-219. pop_auth_try_all
+220. pop_auth_try_all
 
    Type: boolean
 
@@ -8433,7 +8485,7 @@ Chapter 7. Reference
    unavailable. If a method is available but authentication fails, Mutt-ng
    will not connect to the POP server.
 
-220. pop_authenticators
+221. pop_authenticators
 
    Type: string
 
@@ -8452,7 +8504,7 @@ Chapter 7. Reference
 
    Example: set pop_authenticators="digest-md5:apop:user"
 
-221. pop_delete
+222. pop_delete
 
    Type: quadoption
 
@@ -8464,7 +8516,7 @@ Chapter 7. Reference
    server when using the ``fetch-mail'' function. When unset, Mutt-ng will
    download messages but also leave them on the POP server.
 
-222. pop_host
+223. pop_host
 
    Type: string
 
@@ -8481,7 +8533,7 @@ Chapter 7. Reference
    since the superuser of your machine may read it regardless of the file's
    permissions.
 
-223. pop_last
+224. pop_last
 
    Type: boolean
 
@@ -8493,7 +8545,7 @@ Chapter 7. Reference
    for retrieving only unread messages from the POP server when using the
    ``fetch-mail'' function.
 
-224. pop_mail_check
+225. pop_mail_check
 
    Type: number
 
@@ -8504,7 +8556,7 @@ Chapter 7. Reference
    This variable configures how often (in seconds) POP should look for new
    mail.
 
-225. pop_pass
+226. pop_pass
 
    Type: string
 
@@ -8519,7 +8571,7 @@ Chapter 7. Reference
    since the superuser of your machine may read it regardless of the file's
    permissions.
 
-226. pop_reconnect
+227. pop_reconnect
 
    Type: quadoption
 
@@ -8530,7 +8582,7 @@ Chapter 7. Reference
    Controls whether or not Mutt-ng will try to reconnect to a POP server when
    the connection is lost.
 
-227. pop_user
+228. pop_user
 
    Type: string
 
@@ -8542,7 +8594,7 @@ Chapter 7. Reference
 
    This variable defaults to your user name on the local machine.
 
-228. post_indent_string
+229. post_indent_string
 
    Type: string
 
@@ -8551,7 +8603,7 @@ Chapter 7. Reference
    Similar to the ``$attribution'' variable, Mutt-ng will append this string
    after the inclusion of a message which is being replied to.
 
-229. postpone
+230. postpone
 
    Type: quadoption
 
@@ -8560,7 +8612,7 @@ Chapter 7. Reference
    Controls whether or not messages are saved in the ``$postponed'' mailbox
    when you elect not to send immediately.
 
-230. postponed
+231. postponed
 
    Type: path
 
@@ -8571,7 +8623,7 @@ Chapter 7. Reference
    in the mailbox specified by this variable. Also see the ``$postpone''
    variable.
 
-231. preconnect
+232. preconnect
 
    Type: string
 
@@ -8591,7 +8643,7 @@ Chapter 7. Reference
    Note: For this example to work, you must be able to log in to the remote
    machine without having to enter a password.
 
-232. print
+233. print
 
    Type: quadoption
 
@@ -8600,7 +8652,7 @@ Chapter 7. Reference
    Controls whether or not Mutt-ng really prints messages. This is set to
    ask-no by default, because some people accidentally hit ``p'' often.
 
-233. print_command
+234. print_command
 
    Type: path
 
@@ -8608,7 +8660,7 @@ Chapter 7. Reference
 
    This specifies the command pipe that should be used to print messages.
 
-234. print_decode
+235. print_decode
 
    Type: boolean
 
@@ -8621,7 +8673,7 @@ Chapter 7. Reference
    useful if you are using some advanced printer filter which is able to
    properly format e-mail messages for printing.
 
-235. print_split
+236. print_split
 
    Type: boolean
 
@@ -8636,7 +8688,7 @@ Chapter 7. Reference
    Those who use the enscript(1) program's mail-printing mode will most
    likely want to set this option.
 
-236. prompt_after
+237. prompt_after
 
    Type: boolean
 
@@ -8647,7 +8699,7 @@ Chapter 7. Reference
    returning to the index menu. If unset, Mutt-ng will return to the index
    menu when the external pager exits.
 
-237. query_command
+238. query_command
 
    Type: path
 
@@ -8657,7 +8709,7 @@ Chapter 7. Reference
    queries. The string should contain a %s, which will be substituted with
    the query string the user types. See ``query'' for more information.
 
-238. quit
+239. quit
 
    Type: quadoption
 
@@ -8668,7 +8720,7 @@ Chapter 7. Reference
    effect, and if it is set to ask-yes or ask-no, you are prompted for
    confirmation when you try to quit.
 
-239. quote_empty
+240. quote_empty
 
    Type: boolean
 
@@ -8677,7 +8729,7 @@ Chapter 7. Reference
    Controls whether or not empty lines will be quoted using
    ``indent_string''.
 
-240. quote_quoted
+241. quote_quoted
 
    Type: boolean
 
@@ -8687,7 +8739,7 @@ Chapter 7. Reference
    be added to the end of existing prefix. Otherwise, quoted lines will be
    prepended by ``indent_string''.
 
-241. quote_regexp
+242. quote_regexp
 
    Type: regular expression
 
@@ -8700,7 +8752,7 @@ Chapter 7. Reference
    to set this to a regular expression that matches exactly the quote
    characters at the beginning of quoted lines.
 
-242. read_inc
+243. read_inc
 
    Type: number
 
@@ -8716,7 +8768,7 @@ Chapter 7. Reference
 
    Also see the ``$write_inc'' variable.
 
-243. read_only
+244. read_only
 
    Type: boolean
 
@@ -8724,7 +8776,7 @@ Chapter 7. Reference
 
    If set, all folders are opened in read-only mode.
 
-244. realname
+245. realname
 
    Type: string
 
@@ -8738,7 +8790,7 @@ Chapter 7. Reference
    Note: This variable will not be used when the user has set a real name in
    the $from variable.
 
-245. recall
+246. recall
 
    Type: quadoption
 
@@ -8750,7 +8802,7 @@ Chapter 7. Reference
    Setting this variable to yes is not generally useful, and thus not
    recommended.
 
-246. record
+247. record
 
    Type: path
 
@@ -8764,7 +8816,7 @@ Chapter 7. Reference
    The value of $record is overridden by the ``$force_name'' and
    ``$save_name'' variables, and the ``fcc-hook'' command.
 
-247. reply_regexp
+248. reply_regexp
 
    Type: regular expression
 
@@ -8774,7 +8826,7 @@ Chapter 7. Reference
    replying. The default value corresponds to the English ``Re:'' and the
    German ``Aw:''.
 
-248. reply_self
+249. reply_self
 
    Type: boolean
 
@@ -8784,7 +8836,7 @@ Chapter 7. Reference
    assume that you want to reply to the recipients of that message rather
    than to yourself.
 
-249. reply_to
+250. reply_to
 
    Type: quadoption
 
@@ -8798,7 +8850,7 @@ Chapter 7. Reference
    ``Reply-To:'' header field to the list address and you want to send a
    private message to the author of a message.
 
-250. resolve
+251. resolve
 
    Type: boolean
 
@@ -8808,7 +8860,7 @@ Chapter 7. Reference
    undeleted) message whenever a command that modifies the current message is
    executed.
 
-251. reverse_alias
+252. reverse_alias
 
    Type: boolean
 
@@ -8829,7 +8881,7 @@ Chapter 7. Reference
    ``abd30425@somewhere.net.'' This is useful when the person's e-mail
    address is not human friendly (like CompuServe addresses).
 
-252. reverse_name
+253. reverse_name
 
    Type: boolean
 
@@ -8843,7 +8895,7 @@ Chapter 7. Reference
    is unset, or the address that would be used doesn't match your alternates,
    the From: line will use your address on the current machine.
 
-253. reverse_realname
+254. reverse_realname
 
    Type: boolean
 
@@ -8854,7 +8906,7 @@ Chapter 7. Reference
    possibly including eventual real names. When it is unset, Mutt-ng will
    override any such real names with the setting of the realname variable.
 
-254. rfc2047_parameters
+255. rfc2047_parameters
 
    Type: boolean
 
@@ -8876,7 +8928,7 @@ Chapter 7. Reference
    Mutt-ng generates this kind of encoding. Instead, Mutt-ng will
    unconditionally use the encoding specified in RFC 2231.
 
-255. save_address
+256. save_address
 
    Type: boolean
 
@@ -8886,7 +8938,7 @@ Chapter 7. Reference
    default folder for saving a mail. If ``$save_name'' or ``$force_name'' is
    set too, the selection of the fcc folder will be changed as well.
 
-256. save_empty
+257. save_empty
 
    Type: boolean
 
@@ -8899,7 +8951,7 @@ Chapter 7. Reference
    Note: This only applies to mbox and MMDF folders, Mutt-ng does not delete
    MH and Maildir directories.
 
-257. save_name
+258. save_name
 
    Type: boolean
 
@@ -8914,7 +8966,7 @@ Chapter 7. Reference
 
    Also see the ``$force_name'' variable.
 
-258. score
+259. score
 
    Type: boolean
 
@@ -8924,7 +8976,7 @@ Chapter 7. Reference
    selectively disable scoring for certain folders when the
    ``$score_threshold_delete'' variable and friends are used.
 
-259. score_threshold_delete
+260. score_threshold_delete
 
    Type: number
 
@@ -8935,7 +8987,7 @@ Chapter 7. Reference
    Mutt-ng scores are always greater than or equal to zero, the default
    setting of this variable will never mark a message for deletion.
 
-260. score_threshold_flag
+261. score_threshold_flag
 
    Type: number
 
@@ -8944,7 +8996,7 @@ Chapter 7. Reference
    Messages which have been assigned a score greater than or equal to this
    variable's value are automatically marked ``flagged''.
 
-261. score_threshold_read
+262. score_threshold_read
 
    Type: number
 
@@ -8955,7 +9007,7 @@ Chapter 7. Reference
    Mutt-ng scores are always greater than or equal to zero, the default
    setting of this variable will never mark a message read.
 
-262. send_charset
+263. send_charset
 
    Type: string
 
@@ -8968,7 +9020,7 @@ Chapter 7. Reference
    character set (such as iso-8859-2, koi8-r or iso-2022-jp) either instead
    of or after iso-8859-1.
 
-263. sendmail
+264. sendmail
 
    Type: path
 
@@ -8978,7 +9030,7 @@ Chapter 7. Reference
    Mutt-ng expects that the specified program interprets additional arguments
    as recipient addresses.
 
-264. sendmail_wait
+265. sendmail_wait
 
    Type: number
 
@@ -9005,7 +9057,7 @@ Chapter 7. Reference
    process will be put in a temporary file. If there is some error, you will
    be informed as to where to find the output.
 
-265. shell
+266. shell
 
    Type: path
 
@@ -9014,7 +9066,7 @@ Chapter 7. Reference
    Command to use when spawning a subshell. By default, the user's login
    shell from /etc/passwd is used.
 
-266. sidebar_boundary
+267. sidebar_boundary
 
    Type: string
 
@@ -9024,7 +9076,7 @@ Chapter 7. Reference
    variable specifies the characters at which to split a folder name into
    ``hierarchy items.''
 
-267. sidebar_delim
+268. sidebar_delim
 
    Type: string
 
@@ -9033,7 +9085,7 @@ Chapter 7. Reference
    This specifies the delimiter between the sidebar (if visible) and other
    screens.
 
-268. sidebar_newmail_only
+269. sidebar_newmail_only
 
    Type: boolean
 
@@ -9041,7 +9093,7 @@ Chapter 7. Reference
 
    If set, only folders with new mail will be shown in the sidebar.
 
-269. sidebar_number_format
+270. sidebar_number_format
 
    Type: string
 
@@ -9082,7 +9134,7 @@ Chapter 7. Reference
    1) These expandos only have a non-zero value for the current mailbox and
    will always be zero otherwise.
 
-270. sidebar_shorten_hierarchy
+271. sidebar_shorten_hierarchy
 
    Type: boolean
 
@@ -9098,7 +9150,7 @@ Chapter 7. Reference
    At which characters this compression is done is controled via the
    $sidebar_boundary variable.
 
-271. sidebar_visible
+272. sidebar_visible
 
    Type: boolean
 
@@ -9107,7 +9159,7 @@ Chapter 7. Reference
    This specifies whether or not to show the sidebar (a list of folders
    specified with the ``mailboxes'' command).
 
-272. sidebar_width
+273. sidebar_width
 
    Type: number
 
@@ -9115,7 +9167,7 @@ Chapter 7. Reference
 
    The width of the sidebar.
 
-273. sig_dashes
+274. sig_dashes
 
    Type: boolean
 
@@ -9130,7 +9182,7 @@ Chapter 7. Reference
    For example, Mutt-ng has the ability to highlight the signature in a
    different color in the builtin pager.
 
-274. sig_on_top
+275. sig_on_top
 
    Type: boolean
 
@@ -9141,7 +9193,7 @@ Chapter 7. Reference
    you really know what you are doing, and are prepared to take some heat
    from netiquette guardians.
 
-275. signature
+276. signature
 
    Type: path
 
@@ -9151,7 +9203,7 @@ Chapter 7. Reference
    outgoing messages. If the filename ends with a pipe (``|''), it is assumed
    that filename is a shell command and input should be read from its stdout.
 
-276. signoff_string
+277. signoff_string
 
    Type: string
 
@@ -9164,7 +9216,7 @@ Chapter 7. Reference
    or witty quotes into your mails, better use a signature file instead of
    the signoff string.
 
-277. simple_search
+278. simple_search
 
    Type: string
 
@@ -9180,7 +9232,7 @@ Chapter 7. Reference
 
    ˜f joe | ˜s joe
 
-278. sleep_time
+279. sleep_time
 
    Type: number
 
@@ -9191,7 +9243,7 @@ Chapter 7. Reference
    expunging messages from the current folder. The default is to pause one
    second, so a value of zero for this option suppresses the pause.
 
-279. smart_wrap
+280. smart_wrap
 
    Type: boolean
 
@@ -9201,7 +9253,7 @@ Chapter 7. Reference
    pager. If set, long lines are wrapped at a word boundary. If unset, lines
    are simply wrapped at the screen edge. Also see the ``$markers'' variable.
 
-280. smileys
+281. smileys
 
    Type: regular expression
 
@@ -9210,7 +9262,7 @@ Chapter 7. Reference
    The pager uses this variable to catch some common false positives of
    ``$quote_regexp'', most notably smileys in the beginning of a line
 
-281. smime_ask_cert_label
+282. smime_ask_cert_label
 
    Type: boolean
 
@@ -9220,7 +9272,7 @@ Chapter 7. Reference
    certificate about to be added to the database or not. It is set by
    default. (S/MIME only)
 
-282. smime_ca_location
+283. smime_ca_location
 
    Type: path
 
@@ -9229,7 +9281,7 @@ Chapter 7. Reference
    This variable contains the name of either a directory, or a file which
    contains trusted certificates for use with OpenSSL. (S/MIME only)
 
-283. smime_certificates
+284. smime_certificates
 
    Type: path
 
@@ -9242,7 +9294,7 @@ Chapter 7. Reference
    contains mailbox-address keyid pairs, and which can be manually edited.
    This one points to the location of the certificates. (S/MIME only)
 
-284. smime_decrypt_command
+285. smime_decrypt_command
 
    Type: string
 
@@ -9285,7 +9337,7 @@ Chapter 7. Reference
    samples/ subdirectory which has been installed on your system alongside
    the documentation. (S/MIME only)
 
-285. smime_decrypt_use_default_key
+286. smime_decrypt_use_default_key
 
    Type: boolean
 
@@ -9296,7 +9348,7 @@ Chapter 7. Reference
    use the mailbox-address to determine the key to use. It will ask you to
    supply a key, if it can't find one. (S/MIME only)
 
-286. smime_default_key
+287. smime_default_key
 
    Type: string
 
@@ -9306,7 +9358,7 @@ Chapter 7. Reference
    keyid (the hash-value that OpenSSL generates) to work properly (S/MIME
    only)
 
-287. smime_encrypt_command
+288. smime_encrypt_command
 
    Type: string
 
@@ -9314,7 +9366,7 @@ Chapter 7. Reference
 
    This command is used to create encrypted S/MIME messages. (S/MIME only)
 
-288. smime_encrypt_with
+289. smime_encrypt_with
 
    Type: string
 
@@ -9325,7 +9377,7 @@ Chapter 7. Reference
 
    If unset ``3des'' (TripleDES) is used. (S/MIME only)
 
-289. smime_get_cert_command
+290. smime_get_cert_command
 
    Type: string
 
@@ -9334,7 +9386,7 @@ Chapter 7. Reference
    This command is used to extract X509 certificates from a PKCS7 structure.
    (S/MIME only)
 
-290. smime_get_cert_email_command
+291. smime_get_cert_email_command
 
    Type: string
 
@@ -9344,7 +9396,7 @@ Chapter 7. Reference
    certificates, and for verification purposes (to check whether the
    certificate was issued for the sender's mailbox). (S/MIME only)
 
-291. smime_get_signer_cert_command
+292. smime_get_signer_cert_command
 
    Type: string
 
@@ -9354,7 +9406,7 @@ Chapter 7. Reference
    S/MIME signature, so that the certificate's owner may get compared to the
    email's ``From:'' header field. (S/MIME only)
 
-292. smime_import_cert_command
+293. smime_import_cert_command
 
    Type: string
 
@@ -9363,7 +9415,7 @@ Chapter 7. Reference
    This command is used to import a certificate via smime_keysng. (S/MIME
    only)
 
-293. smime_is_default
+294. smime_is_default
 
    Type: boolean
 
@@ -9379,7 +9431,7 @@ Chapter 7. Reference
    (Note that this variable can be overridden by unsetting $crypt_autosmime.)
    (S/MIME only)
 
-294. smime_keys
+295. smime_keys
 
    Type: path
 
@@ -9392,7 +9444,7 @@ Chapter 7. Reference
    which contains mailbox-address keyid pair, and which can be manually
    edited. This one points to the location of the private keys. (S/MIME only)
 
-295. smime_pk7out_command
+296. smime_pk7out_command
 
    Type: string
 
@@ -9401,7 +9453,7 @@ Chapter 7. Reference
    This command is used to extract PKCS7 structures of S/MIME signatures, in
    order to extract the public X509 certificate(s). (S/MIME only)
 
-296. smime_sign_command
+297. smime_sign_command
 
    Type: string
 
@@ -9410,7 +9462,7 @@ Chapter 7. Reference
    This command is used to created S/MIME signatures of type
    multipart/signed, which can be read by all mail clients. (S/MIME only)
 
-297. smime_sign_opaque_command
+298. smime_sign_opaque_command
 
    Type: string
 
@@ -9420,7 +9472,7 @@ Chapter 7. Reference
    application/x-pkcs7-signature, which can only be handled by mail clients
    supporting the S/MIME extension. (S/MIME only)
 
-298. smime_timeout
+299. smime_timeout
 
    Type: number
 
@@ -9429,7 +9481,7 @@ Chapter 7. Reference
    The number of seconds after which a cached passphrase will expire if not
    used. (S/MIME only)
 
-299. smime_verify_command
+300. smime_verify_command
 
    Type: string
 
@@ -9438,7 +9490,7 @@ Chapter 7. Reference
    This command is used to verify S/MIME signatures of type multipart/signed.
    (S/MIME only)
 
-300. smime_verify_opaque_command
+301. smime_verify_opaque_command
 
    Type: string
 
@@ -9447,7 +9499,7 @@ Chapter 7. Reference
    This command is used to verify S/MIME signatures of type
    application/x-pkcs7-mime. (S/MIME only)
 
-301. smtp_envelope
+302. smtp_envelope
 
    Type: string
 
@@ -9463,7 +9515,7 @@ Chapter 7. Reference
    as the envelope sender but only a particular one which may not be the same
    as the user's desired From: header.
 
-302. smtp_host
+303. smtp_host
 
    Type: string
 
@@ -9475,7 +9527,7 @@ Chapter 7. Reference
    invoking the sendmail binary. Setting this variable overrides the value of
    ``$sendmail'', and any associated variables.
 
-303. smtp_pass
+304. smtp_pass
 
    Type: string
 
@@ -9490,7 +9542,7 @@ Chapter 7. Reference
    since the superuser of your machine may read it regardless of the file's
    permissions.
 
-304. smtp_port
+305. smtp_port
 
    Type: number
 
@@ -9504,7 +9556,7 @@ Chapter 7. Reference
    Defaults to 25, the standard SMTP port, but RFC 2476-compliant SMTP
    servers will probably desire 587, the mail submission port.
 
-305. smtp_use_tls
+306. smtp_use_tls
 
    Type: string
 
@@ -9518,7 +9570,7 @@ Chapter 7. Reference
    to start TLS and continue without TLS in case of an error. Muttng still
    needs to have SSL support enabled in order to use it.
 
-306. smtp_user
+307. smtp_user
 
    Type: string
 
@@ -9529,7 +9581,7 @@ Chapter 7. Reference
    Defines the username to use with SMTP AUTH. Setting this variable will
    cause Mutt-ng to attempt to use SMTP AUTH when sending.
 
-307. sort
+308. sort
 
    Type: sort order
 
@@ -9552,7 +9604,7 @@ Chapter 7. Reference
    You may optionally use the ``reverse-'' prefix to specify reverse sorting
    order (example: set sort=reverse-date-sent).
 
-308. sort_alias
+309. sort_alias
 
    Type: sort order
 
@@ -9566,7 +9618,7 @@ Chapter 7. Reference
     unsorted (leave in order specified in .muttrc)
 
 
-309. sort_aux
+310. sort_aux
 
    Type: sort order
 
@@ -9589,7 +9641,7 @@ Chapter 7. Reference
    not the right thing to do, but kept to not break any existing
    configuration setting).
 
-310. sort_browser
+311. sort_browser
 
    Type: sort order
 
@@ -9607,7 +9659,7 @@ Chapter 7. Reference
    You may optionally use the ``reverse-'' prefix to specify reverse sorting
    order (example: set sort_browser=reverse-date).
 
-311. sort_re
+312. sort_re
 
    Type: boolean
 
@@ -9622,7 +9674,7 @@ Chapter 7. Reference
    whether or not this is the case, as long as the non-``$reply_regexp''
    parts of both messages are identical.
 
-312. spam_separator
+313. spam_separator
 
    Type: string
 
@@ -9633,7 +9685,7 @@ Chapter 7. Reference
    matches value for the spam label. If set, each successive match will
    append to the previous, using ``spam_separator'' as a separator.
 
-313. spoolfile
+314. spoolfile
 
    Type: path
 
@@ -9644,7 +9696,7 @@ Chapter 7. Reference
    automatically set this variable to the value of the environment variable
    $MAIL if it is not set.
 
-314. ssl_ca_certificates_file
+315. ssl_ca_certificates_file
 
    Type: path
 
@@ -9656,7 +9708,7 @@ Chapter 7. Reference
 
    Example: set ssl_ca_certificates_file=/etc/ssl/certs/ca-certificates.crt
 
-315. ssl_client_cert
+316. ssl_client_cert
 
    Type: path
 
@@ -9666,7 +9718,7 @@ Chapter 7. Reference
 
    The file containing a client certificate and its associated private key.
 
-316. ssl_force_tls
+317. ssl_force_tls
 
    Type: boolean
 
@@ -9678,7 +9730,7 @@ Chapter 7. Reference
    otherwise have to abort the connection anyway. This option supersedes
    ``$ssl_starttls''.
 
-317. ssl_min_dh_prime_bits
+318. ssl_min_dh_prime_bits
 
    Type: number
 
@@ -9690,7 +9742,7 @@ Chapter 7. Reference
    use in any Diffie-Hellman key exchange. A value of 0 will use the default
    from the GNUTLS library.
 
-318. ssl_starttls
+319. ssl_starttls
 
    Type: quadoption
 
@@ -9702,7 +9754,7 @@ Chapter 7. Reference
    advertising the capability. When unset, Mutt-ng will not attempt to use
    STARTTLS regardless of the server's capabilities.
 
-319. ssl_use_sslv2
+320. ssl_use_sslv2
 
    Type: boolean
 
@@ -9713,7 +9765,7 @@ Chapter 7. Reference
    This variables specifies whether to attempt to use SSLv2 in the SSL
    authentication process.
 
-320. ssl_use_sslv3
+321. ssl_use_sslv3
 
    Type: boolean
 
@@ -9724,7 +9776,7 @@ Chapter 7. Reference
    This variables specifies whether to attempt to use SSLv3 in the SSL
    authentication process.
 
-321. ssl_use_tlsv1
+322. ssl_use_tlsv1
 
    Type: boolean
 
@@ -9735,7 +9787,7 @@ Chapter 7. Reference
    This variables specifies whether to attempt to use TLSv1 in the SSL
    authentication process.
 
-322. ssl_usesystemcerts
+323. ssl_usesystemcerts
 
    Type: boolean
 
@@ -9747,7 +9799,7 @@ Chapter 7. Reference
    certificate store when checking if server certificate is signed by a
    trusted CA.
 
-323. status_chars
+324. status_chars
 
    Type: string
 
@@ -9764,7 +9816,7 @@ Chapter 7. Reference
    (Certain operations like composing a new mail, replying, forwarding, etc.
    are not permitted in this mode).
 
-324. status_format
+325. status_format
 
    Type: string
 
@@ -9908,7 +9960,7 @@ Chapter 7. Reference
    will replace any dots in the expansion by underscores. This might be
    helpful with IMAP folders that don't like dots in folder names.
 
-325. status_on_top
+326. status_on_top
 
    Type: boolean
 
@@ -9917,7 +9969,7 @@ Chapter 7. Reference
    Setting this variable causes the ``status bar'' to be displayed on the
    first line of the screen rather than near the bottom.
 
-326. strict_mailto
+327. strict_mailto
 
    Type: boolean
 
@@ -9932,7 +9984,7 @@ Chapter 7. Reference
    ``X-Mailto-'' and the message including headers will be shown in the
    editor regardless of what ``$edit_headers'' is set to.
 
-327. strict_mime
+328. strict_mime
 
    Type: boolean
 
@@ -9947,7 +9999,7 @@ Chapter 7. Reference
    *text to a single space to prevent the display of MIME-encoded
    ``Subject:'' header field from being devided into multiple lines.
 
-328. strict_threads
+329. strict_threads
 
    Type: boolean
 
@@ -9958,9 +10010,10 @@ Chapter 7. Reference
    default, messages with the same subject are grouped together in ``pseudo
    threads.'' This may not always be desirable, such as in a personal mailbox
    where you might have several unrelated messages with the subject ``hi''
-   which will get grouped together.
+   which will get grouped together. See also ``$sort_re'' for a less drastic
+   way of controlling this behaviour.
 
-329. strip_was
+330. strip_was
 
    Type: boolean
 
@@ -9970,7 +10023,7 @@ Chapter 7. Reference
    which matches $strip_was_regex when replying. This is useful to properly
    react on subject changes and reduce ``subject noise.'' (esp. in Usenet)
 
-330. strip_was_regex
+331. strip_was_regex
 
    Type: regular expression
 
@@ -9980,7 +10033,7 @@ Chapter 7. Reference
    part of the ``Subject'' line when replying if it won't be empty
    afterwards.
 
-331. stuff_quoted
+332. stuff_quoted
 
    Type: boolean
 
@@ -9990,7 +10043,7 @@ Chapter 7. Reference
    ``stuffed'', i.e. a space will be inserted between the quote characters
    and the actual text.
 
-332. suspend
+333. suspend
 
    Type: boolean
 
@@ -10000,7 +10053,7 @@ Chapter 7. Reference
    key, usually CTRL+Z. This is useful if you run Mutt-ng inside an xterm
    using a command like ``xterm -e muttng.''
 
-333. text_flowed
+334. text_flowed
 
    Type: boolean
 
@@ -10013,7 +10066,7 @@ Chapter 7. Reference
 
    Note that $indent_string is ignored when this option is set.
 
-334. thorough_search
+335. thorough_search
 
    Type: boolean
 
@@ -10024,7 +10077,7 @@ Chapter 7. Reference
    searched are decoded before searching. If unset, messages are searched as
    they appear in the folder.
 
-335. thread_received
+336. thread_received
 
    Type: boolean
 
@@ -10033,7 +10086,7 @@ Chapter 7. Reference
    When set, Mutt-ng uses the date received rather than the date sent to
    thread messages by subject.
 
-336. tilde
+337. tilde
 
    Type: boolean
 
@@ -10042,7 +10095,7 @@ Chapter 7. Reference
    When set, the internal-pager will pad blank lines to the bottom of the
    screen with a tilde (˜).
 
-337. timeout
+338. timeout
 
    Type: number
 
@@ -10052,7 +10105,7 @@ Chapter 7. Reference
    to be pressed in the main menu before timing out and checking for new
    mail. A value of zero or less will cause Mutt-ng to never time out.
 
-338. tmpdir
+339. tmpdir
 
    Type: path
 
@@ -10063,7 +10116,7 @@ Chapter 7. Reference
    not set, the environment variable $TMPDIR is used. If $TMPDIR is not set
    then "/tmp" is used.
 
-339. to_chars
+340. to_chars
 
    Type: string
 
@@ -10080,7 +10133,7 @@ Chapter 7. Reference
    character is used to indicate when a mail was sent to a mailing-list
    you're subscribe to (default: L).
 
-340. trash
+341. trash
 
    Type: path
 
@@ -10093,7 +10146,7 @@ Chapter 7. Reference
    Note: When you delete a message in the trash folder, it is really deleted,
    so that there is no way to recover mail.
 
-341. tunnel
+342. tunnel
 
    Type: string
 
@@ -10108,7 +10161,7 @@ Chapter 7. Reference
    Note: For this example to work you must be able to log in to the remote
    machine without having to enter a password.
 
-342. umask
+343. umask
 
    Type: number
 
@@ -10117,7 +10170,7 @@ Chapter 7. Reference
    This sets the umask that will be used by Mutt-ng when creating all kinds
    of files. If unset, the default value is 077.
 
-343. uncollapse_jump
+344. uncollapse_jump
 
    Type: boolean
 
@@ -10126,7 +10179,7 @@ Chapter 7. Reference
    When set, Mutt-ng will jump to the next unread message, if any, when the
    current thread is uncollapsed.
 
-344. use_8bitmime
+345. use_8bitmime
 
    Type: boolean
 
@@ -10141,7 +10194,7 @@ Chapter 7. Reference
    flag when sending 8-bit messages to enable ESMTP negotiation or tell
    libESMTP to do so.
 
-345. use_domain
+346. use_domain
 
    Type: boolean
 
@@ -10151,7 +10204,7 @@ Chapter 7. Reference
    portion) with the value of ``$hostname''. If unset, no addresses will be
    qualified.
 
-346. use_from
+347. use_from
 
    Type: boolean
 
@@ -10161,7 +10214,7 @@ Chapter 7. Reference
    messages. If unset, no ``From:'' header field will be generated unless the
    user explicitly sets one using the ``my_hdr'' command.
 
-347. use_idn
+348. use_idn
 
    Type: boolean
 
@@ -10174,7 +10227,7 @@ Chapter 7. Reference
    Note: You can use IDNs for addresses even if this is unset. This variable
    only affects decoding.
 
-348. use_ipv6
+349. use_ipv6
 
    Type: boolean
 
@@ -10184,7 +10237,7 @@ Chapter 7. Reference
    contact. If this option is unset, Mutt-ng will restrict itself to IPv4
    addresses. Normally, the default should work.
 
-349. visual
+350. visual
 
    Type: path
 
@@ -10193,7 +10246,7 @@ Chapter 7. Reference
    Specifies the visual editor to invoke when the ˜v command is given in the
    builtin editor.
 
-350. wait_key
+351. wait_key
 
    Type: boolean
 
@@ -10209,7 +10262,7 @@ Chapter 7. Reference
    When set, Mutt-ng will always ask for a key. When unset, Mutt-ng will wait
    for a key only if the external command returned a non-zero status.
 
-351. weed
+352. weed
 
    Type: boolean
 
@@ -10218,7 +10271,7 @@ Chapter 7. Reference
    When set, Mutt-ng will weed headers when displaying, forwarding, printing,
    or replying to messages.
 
-352. wrap_search
+353. wrap_search
 
    Type: boolean
 
@@ -10229,7 +10282,7 @@ Chapter 7. Reference
    When set, searches will wrap around the first (or last) message. When
    unset, searches will not wrap.
 
-353. wrapmargin
+354. wrapmargin
 
    Type: number
 
@@ -10238,7 +10291,7 @@ Chapter 7. Reference
    Controls the size of the margin remaining at the right side of the
    terminal when Mutt-ng's pager does smart wrapping.
 
-354. write_bcc
+355. write_bcc
 
    Type: boolean
 
@@ -10247,7 +10300,7 @@ Chapter 7. Reference
    Controls whether Mutt-ng writes out the Bcc header when preparing messages
    to be sent. Exim users may wish to unset this.
 
-355. write_inc
+356. write_inc
 
    Type: number
 
@@ -10259,7 +10312,7 @@ Chapter 7. Reference
 
    Also see the ``$read_inc'' variable.
 
-356. xterm_icon
+357. xterm_icon
 
    Type: string
 
@@ -10269,7 +10322,7 @@ Chapter 7. Reference
    set. This string is identical in formatting to the one used by
    ``$status_format''.
 
-357. xterm_leave
+358. xterm_leave
 
    Type: string
 
@@ -10285,7 +10338,7 @@ Chapter 7. Reference
    set xterm_leave = "`test x$DISPLAY != x && xprop -id $WINDOWID | grep
    WM_NAME | cut -d '"' -f 2`"
 
-358. xterm_set_titles
+359. xterm_set_titles
 
    Type: boolean
 
@@ -10295,7 +10348,7 @@ Chapter 7. Reference
    as you're in an appropriate terminal). The default must be unset to force
    in the validity checking.
 
-359. xterm_title
+360. xterm_title
 
    Type: string
 

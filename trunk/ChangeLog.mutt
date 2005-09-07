@@ -1,4 +1,75 @@
-2005-09-04 18:01:57  Zardoz@users.sourceforge.net  (brendan)
+2005-09-07 08:01:59  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* curs_lib.c: Ensure progress bar rounds to $net_inc.
+
+	* curs_lib.c, globals.h, imap/imap.c, imap/imap_private.h,
+	imap/message.c, init.h, mutt_curses.h: Display progress meter when
+	uploading/fetching IMAP data. Closes: #1772.
+
+	* pager.c: Adjust gross hack to return to the same line in the
+	pager after an index operation so that it doesn't shoot past the
+	end of the file if there are fewer lines on return (eg when weed
+	is set).
+
+	* mx.c, pgp.c: Silence some GCC warnings about uninitialized
+	variables.
+
+	* build-release, configure.in, mutt.h: Remove international
+	vs. U.S. distribution distinction. build-release expects the
+	previous version to be x.y.zi and should be updated again for
+	1.5.12.
+
+2005-09-06 16:46:44  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* doc/manual.xml.head: More documentation cosmetics (newlines
+	between Usage: lines).
+
+	* pager.c: Gross hack to return to the same line in the pager
+	after executing an index function. Closes: #1210.
+
+	* doc/manual.xml.head, imap/command.c, imap/imap.c, imap/imap.h,
+	init.c, mutt.h, pattern.c: Extend pattern language to do simple
+	string matches as well as regular expressions when the pattern is
+	invoked with = instead of ~. And, when possible, perform full body
+	searches on the IMAP server instead of locally, for an enormous
+	speed boost.
+
+	* imap/utf7.c, init.c, main.c, protos.h: Fix a memory leak in
+	imap_utf7_decode and do a little cleanup on shutdown.  Get a
+	high five from valgrind.
+
+	* curs_main.c, main.c: Move SASL and IMAP shutdown hooks into main
+	where they belong.
+
+	* init.c: Release pwent after extracting data from it.
+
+	* mutt_sasl.h, curs_main.c, mutt_sasl.c: Release global SASL state
+	when quitting.
+
+2005-09-05 04:22:45  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* doc/manual.xml.head: Documentation cosmetics (add some line
+	breaks).
+
+	* init.h: Point $hide_top_limited to $hide_limited instead of
+	$hide_missing. Likewise for $hide_top_missing. Closes: #2039.
+
+	* init.h: Mention $sort_re in $strict_threads
+	documentation. Closes: #2052.
+
+	* doc/manual.xml.head: Add a push example. Closes: #1591.
+
+2005-09-04 19:46:26  Rupert Levene  <rupert@levene.dyndns.org>  (brendan)
+
+	* doc/manual.xml.head: Mention $include when describing how mutt
+	prepares message replies. Closes: #1471.                                 
+
+2005-09-04 19:28:19  Dale Woolridge  (brendan)
+
+	* pattern.c, protos.h, parse.c: Unfold message headers before
+	performing ~h search. Closes: #1865.
+
+2005-09-04 18:01:57  <Zardoz@users.sourceforge.net>  (brendan)
 
 	* keymap.c: Teach keymap.c about KEY_NEXT. Closes: #1588.
 

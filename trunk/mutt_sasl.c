@@ -429,6 +429,10 @@ void mutt_sasl_setup_conn (CONNECTION * conn, sasl_conn_t * saslconn)
   conn->conn_write = mutt_sasl_conn_write;
 }
 
+void mutt_sasl_done (void) {
+  sasl_done ();
+}
+
 /* mutt_sasl_cb_log: callback to log SASL messages */
 static int mutt_sasl_cb_log (void *context, int priority, const char *message)
 {

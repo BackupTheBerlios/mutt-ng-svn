@@ -2899,10 +2899,9 @@ set folder = $user_magic_number</screen>
       <title>Defining/Using aliases  </title>
       
       <para>
-        Usage: <literal>alias</literal> <emphasis>key</emphasis> <emphasis>
-          address
-        </emphasis>
-        &lsqb; , <emphasis>address</emphasis>, ... &rsqb;
+        <literallayout>
+Usage: <literal>alias</literal> <emphasis>key</emphasis> <emphasis>address</emphasis>&lsqb; , <emphasis>address</emphasis>, ... &rsqb;
+        </literallayout>
       </para>
       
       <para>
@@ -3021,9 +3020,9 @@ set alias_file=~/.mail_aliases</screen>
       <title>Changing the default key bindings  </title>
       
       <para>
-        Usage: <literal>bind</literal> <emphasis>map</emphasis> <emphasis>key</emphasis> <emphasis>
-          function
-        </emphasis>
+        <literallayout>
+Usage: <literal>bind</literal> <emphasis>map</emphasis> <emphasis>key</emphasis> <emphasis>function</emphasis>
+        </literallayout>
       </para>
       
       <para>
@@ -3240,13 +3239,10 @@ set alias_file=~/.mail_aliases</screen>
       <title>Defining aliases for character sets   </title>
       
       <para>
-        Usage: <literal>charset-hook</literal> <emphasis>alias</emphasis> <emphasis>
-          charset
-        </emphasis>
-        
-        Usage: <literal>iconv-hook</literal> <emphasis>charset</emphasis> <emphasis>
-          local-charset
-        </emphasis>
+        <literallayout>
+Usage: <literal>charset-hook</literal> <emphasis>alias</emphasis> <emphasis> charset</emphasis>
+Usage: <literal>iconv-hook</literal> <emphasis>charset</emphasis> <emphasis> local-charset </emphasis>
+        </literallayout>
       </para>
       
       <para>
@@ -3274,9 +3270,10 @@ set alias_file=~/.mail_aliases</screen>
       <title>Setting variables based upon mailbox  </title>
       
       <para>
-        Usage: <literal>folder-hook</literal> &lsqb;!&rsqb;<emphasis>regexp</emphasis> <emphasis>
-          command
-        </emphasis>
+        <literallayout>
+Usage: <literal>folder-hook</literal> &lsqb;!&rsqb;<emphasis>regexp</emphasis> <emphasis>command</emphasis>
+        </literallayout>
+
       </para>
       
       <para>
@@ -3338,10 +3335,9 @@ folder-hook . set sort=date-sent</screen>
       <title>Keyboard macros  </title>
       
       <para>
-        Usage: <literal>macro</literal> <emphasis>menu</emphasis> <emphasis>key</emphasis> <emphasis>
-          sequence
-        </emphasis>
-        &lsqb; <emphasis>description</emphasis> &rsqb;
+        <literallayout>
+Usage: <literal>macro</literal> <emphasis>menu</emphasis> <emphasis>key</emphasis> <emphasis>sequence</emphasis> &lsqb; <emphasis>description</emphasis> &rsqb;
+        </literallayout>
       </para>
       
       <para>
@@ -3415,20 +3411,11 @@ folder-hook . set sort=date-sent</screen>
       <title>Using color and mono video attributes  </title>
       
       <para>
-        Usage: <literal>color</literal> <emphasis>object</emphasis> <emphasis>
-          foreground
-        </emphasis>
-        <emphasis>background</emphasis> &lsqb; <emphasis>regexp</emphasis>
-        &rsqb;
-        
-        Usage: <literal>color</literal> index <emphasis>foreground</emphasis> <emphasis>
-          background
-        </emphasis>
-        <emphasis>pattern</emphasis>
-        
-        Usage: <literal>uncolor</literal> index <emphasis>pattern</emphasis>
-        &lsqb; <emphasis>pattern</emphasis> ...  &rsqb;
-        
+        <literallayout>
+Usage: <literal>color</literal> <emphasis>object</emphasis> <emphasis>foreground</emphasis><emphasis>background</emphasis> &lsqb; <emphasis>regexp</emphasis>&rsqb;
+Usage: <literal>color</literal> index <emphasis>foreground</emphasis> <emphasis>background</emphasis><emphasis>pattern</emphasis>
+Usage: <literal>uncolor</literal> index <emphasis>pattern</emphasis>&lsqb; <emphasis>pattern</emphasis> ...  &rsqb;
+      </literallayout>
       </para>
       
       <para>
@@ -3711,18 +3698,11 @@ export COLORFGBG</screen>
       </para>
       
       <para>
-        Usage: <literal>mono</literal> <emphasis>&lt;object&gt;
-          &lt;attribute&gt;
-        </emphasis>
-        &lsqb; <emphasis>regexp</emphasis> &rsqb;
-        
-        Usage: <literal>mono</literal> index <emphasis>attribute</emphasis> <emphasis>
-          pattern
-        </emphasis>
-        
-        Usage: <literal>unmono</literal> index <emphasis>pattern</emphasis>
-        &lsqb; <emphasis>pattern</emphasis> ...  &rsqb;
-        
+        <literallayout>
+Usage: <literal>mono</literal> <emphasis>&lt;object&gt; &lt;attribute&gt;</emphasis>&lsqb; <emphasis>regexp</emphasis> &rsqb;
+Usage: <literal>mono</literal> index <emphasis>attribute</emphasis> <emphasis>pattern</emphasis>
+Usage: <literal>unmono</literal> index <emphasis>pattern</emphasis>&lsqb; <emphasis>pattern</emphasis> ...  &rsqb;
+        </literallayout>
       </para>
       
       <para>
@@ -3777,10 +3757,9 @@ export COLORFGBG</screen>
       <title>Ignoring (weeding) unwanted message headers  </title>
       
       <para>
-        Usage: <literal>&lsqb;un&rsqb;ignore</literal> <emphasis>pattern</emphasis> &lsqb; <emphasis>
-          pattern
-        </emphasis>
-        ... &rsqb;
+        <literallayout>
+Usage: <literal>&lsqb;un&rsqb;ignore</literal> <emphasis>pattern</emphasis> &lsqb; <emphasis>pattern</emphasis>... &rsqb;
+        </literallayout>
       </para>
       
       <para>
@@ -4117,15 +4096,10 @@ set text_flowed</screen>
       <title>Mailing lists  </title>
       
       <para>
-        Usage: <literal>&lsqb;un&rsqb;lists</literal> <emphasis>regexp</emphasis> &lsqb; <emphasis>
-          regexp
-        </emphasis>
-        ... &rsqb;
-        
-        Usage: <literal>&lsqb;un&rsqb;subscribe</literal> <emphasis>regexp</emphasis> &lsqb; <emphasis>
-          regexp
-        </emphasis>
-        ... &rsqb;
+        <literallayout>
+Usage: <literal>&lsqb;un&rsqb;lists</literal> <emphasis>regexp</emphasis> &lsqb; <emphasis>regexp</emphasis>... &rsqb;
+Usage: <literal>&lsqb;un&rsqb;subscribe</literal> <emphasis>regexp</emphasis> &lsqb; <emphasis>regexp</emphasis>... &rsqb;
+        </literallayout>
       </para>
       
       <para>
@@ -4203,9 +4177,9 @@ set text_flowed</screen>
       <title>Using Multiple spool mailboxes  </title>
       
       <para>
-        Usage: <literal>mbox-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>
-          mailbox
-        </emphasis>
+        <literallayout>
+Usage: <literal>mbox-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
+        </literallayout>
       </para>
       
       <para>
@@ -4238,10 +4212,9 @@ set text_flowed</screen>
       <title>Defining mailboxes which receive mail  </title>
       
       <para>
-        Usage: <literal>&lsqb;un&rsqb;mailboxes</literal> &lsqb;!&rsqb;<emphasis>
-          filename
-        </emphasis>
-        &lsqb; <emphasis>filename</emphasis> ... &rsqb;
+        <literallayout>
+Usage: <literal>&lsqb;un&rsqb;mailboxes</literal> &lsqb;!&rsqb;<emphasis>filename</emphasis>&lsqb; <emphasis>filename</emphasis> ... &rsqb;
+        </literallayout>
       </para>
       
       <para>
@@ -4311,14 +4284,10 @@ set text_flowed</screen>
       <title>User defined headers  </title>
       
       <para>
-        Usage:
-        
-        <literal>my&lowbar;hdr</literal> <emphasis>string</emphasis>
-        
-        <literal>unmy&lowbar;hdr</literal> <emphasis>field</emphasis> &lsqb; <emphasis>
-          field
-        </emphasis>
-        ... &rsqb;
+        <literallayout>
+Usage: <literal>my&lowbar;hdr</literal> <emphasis>string</emphasis>
+Usage: <literal>unmy&lowbar;hdr</literal> <emphasis>field</emphasis> &lsqb; <emphasis>field</emphasis>... &rsqb;
+        </literallayout>
       </para>
       
       <para>
@@ -4381,8 +4350,9 @@ unmy&lowbar;hdr to cc</screen>
       <title>Defining the order of headers when viewing messages  </title>
       
       <para>
-        Usage: <literal>hdr&lowbar;order</literal> <emphasis>header1</emphasis>
-        <emphasis>header2</emphasis> <emphasis>header3</emphasis>
+        <literallayout>
+Usage: <literal>hdr&lowbar;order</literal> <emphasis>header1</emphasis><emphasis>header2</emphasis> <emphasis>header3</emphasis>
+        </literallayout>
       </para>
       
       <para>
@@ -4414,9 +4384,9 @@ hdr&lowbar;order From Date: From: To: Cc: Subject:</screen>
       <title>Specify default save filename  </title>
       
       <para>
-        Usage: <literal>save-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>
-          filename
-        </emphasis>
+        <literallayout>
+Usage: <literal>save-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>filename</emphasis>
+        </literallayout>
       </para>
       
       <para>
@@ -4462,9 +4432,9 @@ save-hook aol\\.com$ +spam</screen>
       <title>Specify default Fcc: mailbox when composing  </title>
       
       <para>
-        Usage: <literal>fcc-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>
-          mailbox
-        </emphasis>
+        <literallayout>
+Usage: <literal>fcc-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
+        </literallayout>
       </para>
       
       <para>
@@ -4508,9 +4478,9 @@ save-hook aol\\.com$ +spam</screen>
       <title>Specify default save filename and default Fcc: mailbox at once  </title>
       
       <para>
-        Usage: <literal>fcc-save-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>
-          mailbox
-        </emphasis>
+        <literallayout>
+Usage: <literal>fcc-save-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
+        </literallayout>
       </para>
       
       <para>
@@ -4530,17 +4500,11 @@ save-hook aol\\.com$ +spam</screen>
       <title>Change settings based upon message recipients  </title>
       
       <para>
-        Usage: <literal>reply-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>
-          command
-        </emphasis>
-        
-        Usage: <literal>send-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>
-          command
-        </emphasis>
-        
-        Usage: <literal>send2-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>
-          command
-        </emphasis>
+        <literallayout>
+Usage: <literal>reply-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>command</emphasis>
+Usage: <literal>send-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>command</emphasis>
+Usage: <literal>send2-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>command</emphasis>
+        </literallayout>v
       </para>
       
       <para>
@@ -4635,9 +4599,9 @@ save-hook aol\\.com$ +spam</screen>
       <title>Change settings before formatting a message  </title>
       
       <para>
-        Usage: <literal>message-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>
-          command
-        </emphasis>
+        <literallayout>
+Usage: <literal>message-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>command</emphasis>
+        </literallayout>
       </para>
       
       <para>
@@ -4674,9 +4638,9 @@ message-hook '~f freshmeat-news' 'set pager="less \"+/^  subject:.*\""'</screen>
       <title>Choosing the cryptographic key of the recipient  </title>
       
       <para>
-        Usage: <literal>crypt-hook</literal> <emphasis>pattern</emphasis> <emphasis>
-          keyid
-        </emphasis>
+        <literallayout>
+Usage: <literal>crypt-hook</literal> <emphasis>pattern</emphasis> <emphasis>keyid</emphasis>
+        </literallayout>
       </para>
       
       <para>
@@ -4707,18 +4671,25 @@ message-hook '~f freshmeat-news' 'set pager="less \"+/^  subject:.*\""'</screen>
       <title>Adding key sequences to the keyboard buffer  </title>
       
       <para>
-        Usage: <literal>push</literal> <emphasis>string</emphasis>
+        <literallayout>
+Usage: <literal>push</literal> <emphasis>string</emphasis>
+        </literallayout>
       </para>
       
       <para>
-        This command adds the named string to the keyboard buffer. The string
-        may
-        contain control characters, key names and function names like the
-        sequence
-        string in the <link linkend="macro">macro</link> command. You may use
-        it to
-        automatically run a sequence of commands at startup, or when entering
-        certain folders.
+
+        This command adds the named string to the keyboard buffer. The
+        string may contain control characters, key names and function
+        names like the sequence string in the <link
+          linkend="macro">macro</link> command. You may use it to
+        automatically run a sequence of commands at startup, or when
+        entering certain folders. For example, the following command
+        will automatically collapse all threads when entering a folder:
+
+        <screen>
+folder-hook . 'push &lt;collapse-all&gt;'
+        </screen>
+
       </para>
       
       <para>
@@ -4731,10 +4702,9 @@ message-hook '~f freshmeat-news' 'set pager="less \"+/^  subject:.*\""'</screen>
       <title>Executing functions  </title>
       
       <para>
-        Usage: <literal>exec</literal> <emphasis>function</emphasis> &lsqb; <emphasis>
-          function
-        </emphasis>
-        ... &rsqb;
+        <literallayout>
+Usage: <literal>exec</literal> <emphasis>function</emphasis> &lsqb; <emphasis>function</emphasis> ... &rsqb;
+        </literallayout>
       </para>
       
       <para>
@@ -4753,14 +4723,10 @@ message-hook '~f freshmeat-news' 'set pager="less \"+/^  subject:.*\""'</screen>
       <title>Message Scoring  </title>
       
       <para>
-        Usage: <literal>score</literal> <emphasis>pattern</emphasis> <emphasis>
-          value
-        </emphasis>
-        
-        Usage: <literal>unscore</literal> <emphasis>pattern</emphasis> &lsqb; <emphasis>
-          pattern
-        </emphasis>
-        ... &rsqb;
+        <literallayout>
+Usage: <literal>score</literal> <emphasis>pattern</emphasis> <emphasis>value</emphasis>
+Usage: <literal>unscore</literal> <emphasis>pattern</emphasis> &lsqb; <emphasis>pattern</emphasis>... &rsqb;
+        </literallayout>
       </para>
       
       <para>
@@ -4897,12 +4863,11 @@ color index  red     yellow  "~n 100-"</screen>
       <title>Spam detection  </title>
       
       <para>
-        Usage: <literal>spam</literal> <emphasis>pattern</emphasis> <emphasis>
-          format
-        </emphasis>
-        
-        Usage: <literal>nospam</literal> <emphasis>pattern</emphasis>
-      </para>
+        <literallayout>
+Usage: <literal>spam</literal> <emphasis>pattern</emphasis> <emphasis>format </emphasis>
+Usage: <literal>nospam</literal> <emphasis>pattern</emphasis>
+        </literallayout>
+        </para>
       
       <para>
         Mutt-ng has generalized support for external spam-scoring filters.
@@ -5074,25 +5039,13 @@ spam "^From: .*MAILER-DAEMON"       "999"</screen>
       <title>Setting variables  </title>
       
       <para>
-        Usage: <literal>set</literal> &lsqb;no&verbar;inv&rsqb;<emphasis>
-          variable
-        </emphasis>
-        &lsqb;=<emphasis>value</emphasis>&rsqb; &lsqb; <emphasis>variable</emphasis> ... &rsqb;
-        
-        Usage: <literal>toggle</literal> <emphasis>variable</emphasis> &lsqb;<emphasis>
-          variable
-        </emphasis>
-        ... &rsqb;
-        
-        Usage: <literal>unset</literal> <emphasis>variable</emphasis> &lsqb;<emphasis>
-          variable
-        </emphasis>
-        ... &rsqb;
-        
-        Usage: <literal>reset</literal> <emphasis>variable</emphasis> &lsqb;<emphasis>
-          variable
-        </emphasis>
-        ... &rsqb;
+        <literallayout>
+Usage: <literal>set</literal> &lsqb;no&verbar;inv&rsqb;<emphasis>variable</emphasis>&lsqb;=<emphasis>value</emphasis>&rsqb; &lsqb; <emphasis>variable</emphasis> ... &rsqb;
+Usage: <literal>toggle</literal> <emphasis>variable</emphasis> &lsqb;<emphasis>variable</emphasis>... &rsqb;
+Usage: <literal>unset</literal> <emphasis>variable</emphasis> &lsqb;<emphasis>variable</emphasis>... &rsqb;
+Usage: <literal>reset</literal> <emphasis>variable</emphasis> &lsqb;<emphasis>variable</emphasis>... &rsqb;
+      </literallayout>
+
       </para>
       
       <para>
@@ -5211,10 +5164,9 @@ set ?allow_8bit</screen>
       <title>Reading initialization commands from another file  </title>
       
       <para>
-        Usage: <literal>source</literal> <emphasis>filename</emphasis> &lsqb; <emphasis>
-          filename
-        </emphasis>
-        ... &rsqb;
+        <literallayout>
+Usage: <literal>source</literal> <emphasis>filename</emphasis> &lsqb; <emphasis>filename</emphasis>... &rsqb;
+        </literallayout>
       </para>
       
       <para>
@@ -5250,8 +5202,10 @@ set ?allow_8bit</screen>
       <title>Removing hooks  </title>
       
       <para>
-        Usage: <literal>unhook</literal> &lsqb; * &verbar; <emphasis>hook-type</emphasis> &rsqb;
-      </para>
+        <literallayout>
+Usage: <literal>unhook</literal> &lsqb; * &verbar; <emphasis>hook-type</emphasis> &rsqb;
+        </literallayout>
+        </para>
       
       <para>
         This command permits you to flush hooks you have previously defined.
@@ -7870,8 +7824,9 @@ append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </screen>
         <title>Open a compressed mailbox for reading</title>
         
         <para>
-          Usage: <literal>open-hook</literal> <emphasis>regexp</emphasis>
-          &quot;<emphasis>command</emphasis>&quot;
+          <literallayout>
+Usage: <literal>open-hook</literal> <emphasis>regexp</emphasis> &quot;<emphasis>command</emphasis>&quot;
+          </literallayout>
         </para>
         
         <para>
@@ -7926,8 +7881,9 @@ open-hook \\.gz$ "gzip -cd %f &#62; %t"
         <title>Write a compressed mailbox</title>
         
         <para>
-          Usage: <literal>close-hook</literal> <emphasis>regexp</emphasis>
-          &quot;<emphasis>command</emphasis>&quot;
+          <literallayout>
+Usage: <literal>close-hook</literal> <emphasis>regexp</emphasis>&quot;<emphasis>command</emphasis>&quot;
+        </literallayout>
         </para>
         
         <para>
@@ -7986,8 +7942,9 @@ close-hook \\.gz$ "gzip -c %t &#62; %f"</screen>
         <title>Append a message to a compressed mailbox</title>
         
         <para>
-          Usage: <literal>append-hook</literal> <emphasis>regexp</emphasis>
-          &quot;<emphasis>command</emphasis>&quot;
+          <literallayout>
+Usage: <literal>append-hook</literal> <emphasis>regexp</emphasis>&quot;<emphasis>command</emphasis>&quot;
+        </literallayout>
         </para>
         
         <para>

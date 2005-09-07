@@ -2290,6 +2290,7 @@ void mutt_init (int skip_sys_rc, LIST * commands)
 
     Realname = str_dup (mutt_gecos_name (rnbuf, sizeof (rnbuf), pw));
     Shell = str_dup (pw->pw_shell);
+    endpwent ();
   }
   else {
     if (!Homedir) {
