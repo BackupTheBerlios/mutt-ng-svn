@@ -684,7 +684,7 @@ void mutt_pattern_free (pattern_t ** pat)
       regfree (tmp->rx);
       mem_free (&tmp->rx);
     }
-    mem_free (tmp->str);
+    mem_free (&tmp->str);
     if (tmp->child)
       mutt_pattern_free (&tmp->child);
     mem_free (&tmp);
