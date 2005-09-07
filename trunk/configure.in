@@ -651,7 +651,7 @@ AC_ARG_WITH(sasl2, AC_HELP_STRING([--with-sasl2[=PFX]], [Use Cyrus SASL library 
           MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS mutt_sasl.o"
           MUTTLIBS="$MUTTLIBS -lsasl2"
           LIBS="$saved_LIBS"
-          AC_DEFINE(USE_SASL2,1,
+          AC_DEFINE(USE_SASL,1,
                   [ Define if want to use version 2 of the Cyrus SASL library. ])
           need_sasl=yes
         fi

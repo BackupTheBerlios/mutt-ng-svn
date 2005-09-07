@@ -23,10 +23,8 @@
 #include "lib/intl.h"
 #include "lib/debug.h"
 
-#ifdef USE_SASL
 #include <sasl/sasl.h>
 #include <sasl/saslutil.h>
-#endif
 
 /* imap_auth_sasl: Default authenticator if available. */
 imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
@@ -37,9 +35,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
   char buf[HUGE_STRING];
   const char *mech;
 
-#ifdef USE_SASL
   const char *pc = NULL;
-#endif
   unsigned int len, olen;
   unsigned char client_start;
 
@@ -65,18 +61,14 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
     if (mutt_bit_isset (idata->capabilities, AUTH_ANON) &&
         (!idata->conn->account.user[0] ||
          !ascii_strncmp (idata->conn->account.user, "anonymous", 9)))
-#ifdef USE_SASL
       rc = sasl_client_start (saslconn, "AUTH=ANONYMOUS", NULL, &pc, &olen,
                               &mech);
-#endif
   }
 
   if (rc != SASL_OK && rc != SASL_CONTINUE)
     do {
-#ifdef USE_SASL
       rc = sasl_client_start (saslconn, method, &interaction,
                               &pc, &olen, &mech);
-#endif
       if (rc == SASL_INTERACT)
         mutt_sasl_interact (interaction);
     }
@@ -116,11 +108,9 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
       goto bail;
 
     if (irc == IMAP_CMD_RESPOND) {
-#ifdef USE_SASL
       if (sasl_decode64
           (idata->cmd.buf + 2, str_len (idata->cmd.buf + 2), buf,
            LONG_STRING - 1,
-#endif
                          &len) != SASL_OK) {
         debug_print (1, ("error base64-decoding server response.\n"));
         goto bail;
@@ -150,9 +140,7 @@ imap_auth_res_t imap_auth_sasl (IMAP_DATA * idata, const char *method)
 
       /* sasl_client_st(art|ep) allocate pc with malloc, expect me to 
        * free it */
-#ifndef USE_SASL
       mem_free (&pc);
-#endif
     }
 
     if (irc == IMAP_CMD_RESPOND) {

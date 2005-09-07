@@ -12,9 +12,7 @@
 #ifndef _MUTT_SASL_H_
 #define _MUTT_SASL_H_ 1
 
-#ifdef USE_SASL
 #include <sasl/sasl.h>
-#endif
 
 #include "mutt_socket.h"
 

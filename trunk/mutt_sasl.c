@@ -69,7 +69,6 @@ static int getnameinfo_err (int ret)
   }
   return err;
 }
-#endif
 
 /* arbitrary. SASL will probably use a smaller buffer anyway. OTOH it's
  * been a while since I've had access to an SASL server which negotiated
@@ -123,7 +122,6 @@ static int iptostring (const struct sockaddr *addr, socklen_t addrlen,
 
   return SASL_OK;
 }
-#endif
 
 /* mutt_sasl_start: called before doing a SASL exchange - initialises library
  *   (if necessary). */
