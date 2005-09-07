@@ -1,5 +1,8 @@
 Changes specific to mutt-ng:
 
+2005-09-07:
+  * Mutt-ng no longer contains support for SASL 1.x.
+
 2005-08-29:
   * Mutt-ng now can limit the number of headers to show if
     $edit_headers is set via $editor_headers

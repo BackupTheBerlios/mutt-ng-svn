@@ -12,10 +12,8 @@
 #ifndef _MUTT_SASL_H_
 #define _MUTT_SASL_H_ 1
 
-#ifdef USE_SASL2
+#ifdef USE_SASL
 #include <sasl/sasl.h>
-#else
-#include <sasl.h>
 #endif
 
 #include "mutt_socket.h"
@@ -32,11 +30,7 @@ typedef struct {
   const unsigned int *pbufsize;
 
   /* read buffer */
-#ifdef USE_SASL2
   const char *buf;
-#else
-  char *buf;
-#endif
   unsigned int blen;
   unsigned int bpos;
 

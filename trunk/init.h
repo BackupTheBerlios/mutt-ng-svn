@@ -3868,9 +3868,6 @@ static const char* Features[] = {
 #ifdef USE_SASL
   "sasl",
 #endif
-#ifdef USE_SASL2
-  "sasl2",
-#endif
 #ifdef USE_LIBESMTP
   "libesmtp",
 #endif

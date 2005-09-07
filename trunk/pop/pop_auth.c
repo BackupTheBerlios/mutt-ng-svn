@@ -25,14 +25,8 @@
 #include <unistd.h>
 
 #ifdef USE_SASL
-#ifdef USE_SASL2
 #include <sasl/sasl.h>
 #include <sasl/saslutil.h>
-#else
-#include <sasl.h>
-#include <saslutil.h>
-#endif
-
 #include "mutt_sasl.h"
 #endif
 
@@ -47,10 +41,8 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
   char inbuf[LONG_STRING];
   const char *mech;
 
-#ifdef USE_SASL2
+#ifdef USE_SASL
   const char *pc = NULL;
-#else
-  char *pc = NULL;
 #endif
   unsigned int len, olen;
   unsigned char client_start;
@@ -64,12 +56,9 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
     method = pop_data->auth_list;
 
   FOREVER {
-#ifdef USE_SASL2
+#ifdef USE_SASL
     rc =
       sasl_client_start (saslconn, method, &interaction, &pc, &olen, &mech);
-#else
-    rc = sasl_client_start (saslconn, method, NULL,
-                            &interaction, &pc, &olen, &mech);
 #endif
     if (rc != SASL_INTERACT)
       break;
@@ -103,13 +92,10 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
     if (rc != SASL_CONTINUE)
       break;
 
-#ifdef USE_SASL2
+#ifdef USE_SASL
     if (!str_ncmp (inbuf, "+ ", 2)
         && sasl_decode64 (inbuf, strlen (inbuf), buf, LONG_STRING - 1,
                           &len) != SASL_OK)
-#else
-    if (!str_ncmp (inbuf, "+ ", 2)
-        && sasl_decode64 (inbuf, strlen (inbuf), buf, &len) != SASL_OK)
 #endif
     {
       debug_print (1, ("error base64-decoding server response.\n"));
@@ -138,7 +124,7 @@ static pop_auth_res_t pop_auth_sasl (POP_DATA * pop_data, const char *method)
 
       /* sasl_client_st(art|ep) allocate pc with malloc, expect me to 
        * free it */
-#ifndef USE_SASL2
+#ifndef USE_SASL
       mem_free (&pc);
 #endif
     }

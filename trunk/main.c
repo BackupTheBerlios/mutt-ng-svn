@@ -322,11 +322,6 @@ static void show_version (void)
 #else
          "-USE_SASL  "
 #endif
-#ifdef USE_SASL2
-         "+USE_SASL2  "
-#else
-         "-USE_SASL2  "
-#endif
 #ifdef USE_LIBESMTP
          "+USE_LIBESMTP  "
 #else

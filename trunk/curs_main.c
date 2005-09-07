@@ -2355,7 +2355,7 @@ int mutt_index_menu (void)
   /* Close all open NNTP connections */
     nntp_logout_all ();
 #endif
-#if defined (USE_SASL) || defined (USE_SASL2)
+#ifdef USE_SASL
     mutt_sasl_done ();
 #endif
   }

@@ -12,6 +12,8 @@ sources of information.
 
 2005-09-07:
 
+  SASL 1.x support has been removed.
+
   All patterns may be prefixed with = instead of ~ to enable
   string search instead of regular expression match.
 

@@ -628,36 +628,6 @@ fi
 
 AM_CONDITIONAL(USE_SSL, test x$need_ssl = xyes)
 
-AC_ARG_WITH(sasl, AC_HELP_STRING([--with-sasl[=PFX]], [Use Cyrus SASL library for POP/IMAP authentication]),
-        [
-        if test "$with_sasl" != "no" -a "$need_imap" != "yes" -a "$need_pop" != "yes"
-        then
-          AC_MSG_ERROR([SASL support is only useful with POP or IMAP support])
-        fi
-
-        if test "$with_sasl" != "no"
-        then
-          if test "$with_sasl" != "yes"
-          then
-            CPPFLAGS="$CPPFLAGS -I$with_sasl/include"
-            LDFLAGS="$LDFLAGS -L$with_sasl/lib"
-          fi
-
-          saved_LIBS="$LIBS"
-
-          AC_CHECK_LIB(sasl, sasl_client_init,,
-            AC_MSG_ERROR([could not find libsasl]),)
-
-          MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS mutt_sasl.o"
-          MUTTLIBS="$MUTTLIBS -lsasl"
-          LIBS="$saved_LIBS"
-          AC_DEFINE(USE_SASL,1,
-                  [ Define if want to use the Cyrus SASL library for POP/IMAP authentication. ])
-          need_sasl=yes
-        fi
-        ])
-AM_CONDITIONAL(USE_SASL, test x$need_sasl = xyes)
-
 AC_ARG_WITH(sasl2, AC_HELP_STRING([--with-sasl2[=PFX]], [Use Cyrus SASL library version 2 for POP/IMAP authentication]),
         [
         if test "$with_sasl2" != "no" -a "$need_imap" != "yes" -a "$need_pop" != "yes"
@@ -681,8 +651,6 @@ AC_ARG_WITH(sasl2, AC_HELP_STRING([--with-sasl2[=PFX]], [Use Cyrus SASL library 
           MUTT_LIB_OBJECTS="$MUTT_LIB_OBJECTS mutt_sasl.o"
           MUTTLIBS="$MUTTLIBS -lsasl2"
           LIBS="$saved_LIBS"
-          AC_DEFINE(USE_SASL,1,
-                  [ Define if want to use the Cyrus SASL library for POP/IMAP authentication. ])
           AC_DEFINE(USE_SASL2,1,
                   [ Define if want to use version 2 of the Cyrus SASL library. ])
           need_sasl=yes
