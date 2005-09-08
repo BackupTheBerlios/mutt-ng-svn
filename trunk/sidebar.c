@@ -40,10 +40,14 @@ void calc_boundaries (int menu)
 
   if (list_empty(Incoming))
     return;
+  if (CurBuffy < 0 || CurBuffy >= Incoming->length)
+    CurBuffy = 0;
+  if (TopBuffy < 0 || TopBuffy >= Incoming->length)
+    TopBuffy = 0;
   /* correct known_lines if it has changed because of a window resize */
   /*  if (known_lines != LINES)
     known_lines = LINES; */
-  
+
   lines = LINES - 2 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
   known_lines = lines;
   if (option (OPTSIDEBARNEWMAILONLY)) {
