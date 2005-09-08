@@ -444,7 +444,7 @@ static int rx_from_string (struct option_t* dst, const char* val,
     mem_free (&rx);
   }
 
-  if (p->pattern) {
+  if (p->pattern && p->rx) {
     regfree (p->rx);
     mem_free (&p->rx);
   }
@@ -1366,11 +1366,34 @@ static void del_option (void* p) {
   mem_free (&ptr);
 }
 
+static int init_expand (char** dst, const char* src) {
+  BUFFER token;
+  BUFFER in;
+
+  if (src && *src) {
+    memset (&token, 0, sizeof (BUFFER));
+    memset (&in, 0, sizeof (BUFFER));
+    in.data = (char*) src;
+    in.dptr = in.data;
+    in.dsize = str_len (src);
+    mutt_extract_token (&token, &in, M_TOKEN_SPACE);
+    mem_free (dst);
+    if (token.data && *token.data)
+      *dst = str_dup (token.data);
+    else
+      *dst = str_dup ("");
+    mem_free (&token.data);
+  } else
+    *dst = str_dup ("");
+  return (1);
+}
+
 /* if additional data more == 1, we want to resolve synonyms */
 static void mutt_restore_default (const char* name, void* p,
                                   unsigned long more) {
   char errbuf[STRING];
   struct option_t* ptr = (struct option_t*) p;
+  char* init = NULL;
 
   if (DTYPE (ptr->type) == DT_SYN) {
     if (!more)
@@ -1379,13 +1402,16 @@ static void mutt_restore_default (const char* name, void* p,
   }
   if (!ptr)
     return;
-  if (FuncTable[DTYPE (ptr->type)].opt_from_string &&
-      FuncTable[DTYPE (ptr->type)].opt_from_string (ptr, ptr->init, errbuf,
+  if (FuncTable[DTYPE (ptr->type)].opt_from_string) {
+    init_expand (&init, ptr->init);
+    if (FuncTable[DTYPE (ptr->type)].opt_from_string (ptr, init, errbuf,
                                                     sizeof (errbuf)) < 0) {
-    mutt_endwin (NULL);
-    fprintf (stderr, _("Invalid default setting found. Please report this "
-                       "error:\n\"%s\"\n"), errbuf);
-    exit (1);
+      mutt_endwin (NULL);
+      fprintf (stderr, _("Invalid default setting found. Please report this "
+                         "error:\n\"%s\"\n"), errbuf);
+      exit (1);
+    }
+    mem_free (&init);
   }
 
   if (ptr->flags & R_INDEX)
