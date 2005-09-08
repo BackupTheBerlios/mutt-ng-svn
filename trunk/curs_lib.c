@@ -310,6 +310,7 @@ void mutt_curses_error (const char *fmt, ...)
   set_option (OPTMSGERR);
 }
 
+#ifdef USER_SOCKET
 void mutt_progress_bar (progress_t* progress, long pos) {
   char posstr[SHORT_STRING];
 
@@ -333,6 +334,7 @@ void mutt_progress_bar (progress_t* progress, long pos) {
     mutt_message ("%s %s/%s", progress->msg, posstr, progress->sizestr);
   }
 }
+#endif
 
 void mutt_curses_message (const char *fmt, ...)
 {

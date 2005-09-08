@@ -3,10 +3,10 @@
   body {
     color: black;
     background: transparent;
-    text-align:justify;
+    text-align: justify;
   }
 
-  h1,h2,h3,h4,h5,p.abstract, {
+  h1,h2,h3,h4,h5,p.abstract {
     font-family: sans-serif;
   }
 
