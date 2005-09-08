@@ -2609,7 +2609,9 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
   fclose (fp);
   if (IsHeader (extra)) {
     Context->msgnotreadyet = -1;
-    if (rc != -1) {
+    if (rc == -1)
+      OldHdr = NULL;
+    else {
       TopLine = topline;
       OldHdr = extra->hdr;
     }
