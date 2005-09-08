@@ -218,7 +218,7 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
       if (pat->op == M_HEADER) {
         if (*(buf = mutt_read_rfc822_line (fp, buf, &blen)) == '\0')
           break;
-      } if (fgets (buf, blen - 1, fp) == NULL)
+      } else if (fgets (buf, blen - 1, fp) == NULL)
         break;                  /* don't loop forever */
       if (patmatch (pat, buf) == 0) {
         match = 1;
