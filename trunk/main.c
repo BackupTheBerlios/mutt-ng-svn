@@ -71,7 +71,7 @@
 #endif
 
 #ifdef CRYPT_BACKEND_GPGME
-#include <gpgme/gpgme.h>
+#include <gpgme.h>
 #endif
 
 static const char *ReachingUs = N_("\
