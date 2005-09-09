@@ -173,7 +173,7 @@ int rfc3676_handler (BODY * a, STATE * s) {
      * possibly a change in quoting level. But that's better than not
      * displaying it at all.
      */
-    if ((t = strrchr (buf, '\n')) || (t = strrchr (buf, '\r'))) {
+    if ((t = strrchr (buf, '\r')) || (t = strrchr (buf, '\n'))) {
       *t = '\0';
       buf_len = t - buf;
     }
