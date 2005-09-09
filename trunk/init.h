@@ -511,7 +511,7 @@ struct option_t MuttVars[] = {
    ** English).
    */
 #ifdef DEBUG
-  {"debug_level", DT_NUM, R_NONE, UL &DebugLevel, "0" },
+  {"debug_level", DT_NUM, R_NONE, UL &DebugLevel, "1" },
   /*
    ** .pp
    ** Availability: debug

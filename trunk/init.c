@@ -200,7 +200,7 @@ static int bool_from_string (struct option_t* dst, const char* val,
     set_option (dst->data);
   else
     unset_option (dst->data);
-  return (0);
+  return (1);
 }
 
 static void num_to_string (char* dst, size_t dstlen,
@@ -445,7 +445,7 @@ static int rx_from_string (struct option_t* dst, const char* val,
     return (0);
   }
 
-  if (p->pattern && p->rx) {
+  if (p->rx) {
     regfree (p->rx);
     mem_free (&p->rx);
   }
@@ -506,10 +506,11 @@ static void addr_to_string (char* dst, size_t dstlen,
 
 static int addr_from_string (struct option_t* dst, const char* val,
                              char* errbuf, size_t errlen) {
-  if (!dst || !val || !*val)
+  if (!dst)
     return (0);
   rfc822_free_address ((ADDRESS**) dst->data);
-  *((ADDRESS**) dst->data) = rfc822_parse_adrlist (NULL, val);
+  if (val && *val)
+    *((ADDRESS**) dst->data) = rfc822_parse_adrlist (NULL, val);
   return (1);
 }
 
@@ -1367,29 +1368,36 @@ static void del_option (void* p) {
   mem_free (&ptr);
 }
 
-static int init_expand (char** dst, const char* src) {
+static int init_expand (char** dst, struct option_t* src) {
   BUFFER token, in;
   size_t len = 0;
 
   mem_free (dst);
 
-  if (src && *src) {
-    memset (&token, 0, sizeof (BUFFER));
-    memset (&in, 0, sizeof (BUFFER));
-    len = str_len (src) + 2;
-    in.data = mem_malloc (len+1);
-    snprintf (in.data, len, "\"%s\"", src);
-    in.dptr = in.data;
-    in.dsize = len;
-    mutt_extract_token (&token, &in, 0);
-    if (token.data && *token.data)
-      *dst = str_dup (token.data);
-    else
+  if (DTYPE(src->type) == DT_STR ||
+      DTYPE(src->type) == DT_PATH) {
+    /* only expand for string as it's the only place where
+     * we want to expand vars right now */
+    if (src->init && *src->init) {
+      memset (&token, 0, sizeof (BUFFER));
+      memset (&in, 0, sizeof (BUFFER));
+      len = str_len (src->init) + 2;
+      in.data = mem_malloc (len+1);
+      snprintf (in.data, len, "\"%s\"", src->init);
+      in.dptr = in.data;
+      in.dsize = len;
+      mutt_extract_token (&token, &in, 0);
+      if (token.data && *token.data)
+        *dst = str_dup (token.data);
+      else
+        *dst = str_dup ("");
+      mem_free (&in.data);
+      mem_free (&token.data);
+    } else
       *dst = str_dup ("");
-    mem_free (&in.data);
-    mem_free (&token.data);
   } else
-    *dst = str_dup ("");
+    /* for non-string: take value as is */
+    *dst = str_dup (src->init);
   return (1);
 }
 
@@ -1408,12 +1416,14 @@ static void mutt_restore_default (const char* name, void* p,
   if (!ptr)
     return;
   if (FuncTable[DTYPE (ptr->type)].opt_from_string) {
-    init_expand (&init, ptr->init);
-    if (FuncTable[DTYPE (ptr->type)].opt_from_string (ptr, init, errbuf,
-                                                    sizeof (errbuf)) < 0) {
-      mutt_endwin (NULL);
-      fprintf (stderr, _("Invalid default setting found. Please report this "
-                         "error:\n\"%s\"\n"), errbuf);
+    init_expand (&init, ptr);
+    if (!FuncTable[DTYPE (ptr->type)].opt_from_string (ptr, init, errbuf,
+                                                       sizeof (errbuf))) {
+      if (!option (OPTNOCURSES))
+        mutt_endwin (NULL);
+      fprintf (stderr, _("Invalid default setting for $%s found: \"%s\".\n"
+                         "Please report this error: \"%s\"\n"),
+               ptr->option, NONULL (init), errbuf);
       exit (1);
     }
     mem_free (&init);

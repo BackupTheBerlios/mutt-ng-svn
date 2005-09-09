@@ -201,7 +201,6 @@ int buffy_parse_mailboxes (BUFFER * path, BUFFER * s, unsigned long data,
 
     if (data == M_UNMAILBOXES && str_eq (buf, "*")) {
       list_del (&Incoming, (list_del_t*) buffy_free);
-      sidebar_draw (CurrentMenu);
       return 0;
     }
 
@@ -246,7 +245,6 @@ int buffy_parse_mailboxes (BUFFER * path, BUFFER * s, unsigned long data,
       tmp->size = 0;
 #endif /* BUFFY_SIZE */
   }
-  sidebar_draw (CurrentMenu);
   return 0;
 }
 
