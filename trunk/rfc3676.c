@@ -68,7 +68,7 @@ static void print_flowed_line (char *line, STATE * s, int ql) {
   }
 
   if (str_len (line) == 0) {
-    if (option (OPTQUOTEEMPTY)) {
+    if (!(s->flags & M_REPLYING) || option (OPTQUOTEEMPTY)) {
       if (s->prefix)
         state_puts(s->prefix,s);
       for (i=0;i<ql;++i) state_putc('>',s);
@@ -191,6 +191,15 @@ int rfc3676_handler (BODY * a, STATE * s) {
 
     if (delsp && buf_len >= 1 && buf[buf_len-1] == ' ')
       buf[--buf_len] = '\0';
+
+    /* we're here when last space removed 'cause of DelSp was
+     * the last space and there isn't more -> done */
+    if ((buf_len - buf_off) < 0) {
+      print_flowed_line (curline, s, quotelevel);
+      *curline = '\0';
+      curline_len = 1;
+      continue;
+    }
 
     /* signature separator also flushes the previous paragraph */
     if (strcmp(buf + buf_off, "-- ") == 0 && curline && *curline) {
