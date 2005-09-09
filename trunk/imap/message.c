@@ -398,9 +398,7 @@ int imap_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
           }
           bar.size = bytes;
           bar.msg = _("Fetching message...");
-#ifdef USE_SOCKET
           mutt_progress_bar (&bar, 0);
-#endif
           if (imap_read_literal (msg->fp, idata, bytes, &bar) < 0)
             goto bail;
           /* pick up trailing line */
@@ -529,9 +527,7 @@ int imap_append_message (CONTEXT * ctx, MESSAGE * msg)
 
   bar.msg = _("Uploading message...");
   bar.size = len;
-#ifdef USE_SOCKET
   mutt_progress_bar (&bar, 0);
-#endif
 
   imap_munge_mbox_name (mbox, sizeof (mbox), mailbox);
   snprintf (buf, sizeof (buf), "APPEND %s (%s%s%s%s%s) {%lu}", mbox,
@@ -571,9 +567,7 @@ int imap_append_message (CONTEXT * ctx, MESSAGE * msg)
     if (len > sizeof (buf) - 3) {
       sent += len;
       flush_buffer (buf, &len, idata->conn);
-#ifdef USE_SOCKET
-    mutt_progress_bar (&bar, sent);
-#endif
+      mutt_progress_bar (&bar, sent);
     }
   }
 
