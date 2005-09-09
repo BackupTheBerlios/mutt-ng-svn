@@ -442,6 +442,7 @@ static int rx_from_string (struct option_t* dst, const char* val,
     regerror (e, rx, errbuf, errlen);
     regfree (rx);
     mem_free (&rx);
+    return (0);
   }
 
   if (p->pattern && p->rx) {
@@ -1367,21 +1368,25 @@ static void del_option (void* p) {
 }
 
 static int init_expand (char** dst, const char* src) {
-  BUFFER token;
-  BUFFER in;
+  BUFFER token, in;
+  size_t len = 0;
+
+  mem_free (dst);
 
   if (src && *src) {
     memset (&token, 0, sizeof (BUFFER));
     memset (&in, 0, sizeof (BUFFER));
-    in.data = (char*) src;
+    len = str_len (src) + 2;
+    in.data = mem_malloc (len+1);
+    snprintf (in.data, len, "\"%s\"", src);
     in.dptr = in.data;
-    in.dsize = str_len (src);
-    mutt_extract_token (&token, &in, M_TOKEN_SPACE);
-    mem_free (dst);
+    in.dsize = len;
+    mutt_extract_token (&token, &in, 0);
     if (token.data && *token.data)
       *dst = str_dup (token.data);
     else
       *dst = str_dup ("");
+    mem_free (&in.data);
     mem_free (&token.data);
   } else
     *dst = str_dup ("");
