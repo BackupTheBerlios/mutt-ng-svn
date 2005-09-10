@@ -662,43 +662,43 @@
         </thead>
         <tbody>
           <row>
-            <entry><code>j</code> or <code>Down</code></entry>
-            <entry><code>next-entry</code></entry>
+            <entry><literal>j</literal> or <literal>Down</literal></entry>
+            <entry><literal>next-entry</literal></entry>
             <entry>move to the next entry</entry>
           </row>
           <row>
-            <entry><code>k</code> or <code>Up</code></entry>
-            <entry><code>previous-entry</code></entry>
+            <entry><literal>k</literal> or <literal>Up</literal></entry>
+            <entry><literal>previous-entry</literal></entry>
             <entry>move to the previous entry</entry>
           </row>
           <row>
-            <entry><code>z</code> or <code>PageDn</code></entry>
-            <entry><code>page-down</code></entry>
+            <entry><literal>z</literal> or <literal>PageDn</literal></entry>
+            <entry><literal>page-down</literal></entry>
             <entry>go to the next page</entry>
           </row>
           <row>
-            <entry><code>Z</code> or <code>PageUp</code></entry>
-            <entry><code>page-up</code></entry>
+            <entry><literal>Z</literal> or <literal>PageUp</literal></entry>
+            <entry><literal>page-up</literal></entry>
             <entry>go to the previous page</entry>
           </row>
           <row>
-            <entry><code>=</code> or <code>Home</code></entry>
-            <entry><code>first-entry</code></entry>
+            <entry><literal>=</literal> or <literal>Home</literal></entry>
+            <entry><literal>first-entry</literal></entry>
             <entry>jump to the first entry</entry>
           </row>
           <row>
-            <entry><code>*</code> or <code>End</code></entry>
-            <entry><code>last-entry</code></entry>
+            <entry><literal>*</literal> or <literal>End</literal></entry>
+            <entry><literal>last-entry</literal></entry>
             <entry>jump to the last entry</entry>
           </row>
           <row>
-            <entry><code>q</code></entry>
-            <entry><code>quit</code></entry>
+            <entry><literal>q</literal></entry>
+            <entry><literal>quit</literal></entry>
             <entry>exit the current menu</entry>
           </row>
           <row>
-            <entry><code>?</code></entry>
-            <entry><code>help</code></entry>
+            <entry><literal>?</literal></entry>
+            <entry><literal>help</literal></entry>
             <entry>list all key bindings for the current menu</entry>
           </row>
         </tbody>
@@ -740,113 +740,113 @@
         </thead>
         <tbody>
           <row>
-            <entry><code>^A or &#60;Home&#62;  </code></entry>
-            <entry><code>bol     </code></entry>
+            <entry><literal>^A or &#60;Home&#62;  </literal></entry>
+            <entry><literal>bol     </literal></entry>
             <entry>move to the start of the line</entry>
           </row>
           <row>
-            <entry><code>^B or &#60;Left&#62;   </code></entry>
-            <entry><code>backward-char </code>
+            <entry><literal>^B or &#60;Left&#62;   </literal></entry>
+            <entry><literal>backward-char </literal>
             </entry><entry>move back one char</entry>
           </row>
           <row>
-            <entry><code>Esc B  </code></entry>
-            <entry><code>backward-word    </code></entry>
+            <entry><literal>Esc B  </literal></entry>
+            <entry><literal>backward-word    </literal></entry>
             <entry>move back one word</entry>
           </row>
           <row>
-            <entry><code>^D or &#60;Delete&#62;  </code></entry>
-            <entry><code>delete-char    </code></entry>
+            <entry><literal>^D or &#60;Delete&#62;  </literal></entry>
+            <entry><literal>delete-char    </literal></entry>
             <entry>delete the char under the cursor</entry>
           </row>
           <row>
-            <entry><code>^E or &#60;End&#62;   </code></entry>
-            <entry><code>eol          </code></entry>
+            <entry><literal>^E or &#60;End&#62;   </literal></entry>
+            <entry><literal>eol          </literal></entry>
             <entry>move to the end of the line</entry>
           </row>
           <row>
-            <entry><code>^F or &#60;Right&#62;  </code></entry>
-            <entry><code>forward-char   </code></entry>
+            <entry><literal>^F or &#60;Right&#62;  </literal></entry>
+            <entry><literal>forward-char   </literal></entry>
             <entry>move forward one char</entry>
           </row>
           <row>
-            <entry><code>Esc F </code></entry>
-            <entry><code>forward-word      </code></entry>
+            <entry><literal>Esc F </literal></entry>
+            <entry><literal>forward-word      </literal></entry>
             <entry>move forward one word</entry>
           </row>
           <row>
-            <entry><code>&#60;Tab&#62;   </code></entry>
-            <entry><code>complete     </code></entry>
+            <entry><literal>&#60;Tab&#62;   </literal></entry>
+            <entry><literal>complete     </literal></entry>
             <entry>complete filename or alias</entry>
           </row>
           <row>
-            <entry><code>^T         </code></entry>
-            <entry><code>complete-query   </code></entry>
+            <entry><literal>^T         </literal></entry>
+            <entry><literal>complete-query   </literal></entry>
             <entry>complete address with query</entry>
           </row>
           <row>
-            <entry><code>^K          </code></entry>
-            <entry><code>kill-eol      </code></entry>
+            <entry><literal>^K          </literal></entry>
+            <entry><literal>kill-eol      </literal></entry>
             <entry>delete to the end of the line</entry>
           </row>
           <row>
-            <entry><code>ESC d </code></entry>
-            <entry><code>kill-eow    </code></entry>
+            <entry><literal>ESC d </literal></entry>
+            <entry><literal>kill-eow    </literal></entry>
             <entry>delete to the end of the word</entry>
           </row>
           <row>
-            <entry><code>^W     </code></entry>
-            <entry><code>kill-word     </code></entry>
+            <entry><literal>^W     </literal></entry>
+            <entry><literal>kill-word     </literal></entry>
             <entry>kill the word in front of the cursor</entry>
           </row>
           <row>
-            <entry><code>^U      </code></entry>
-            <entry><code>kill-line      </code></entry>
+            <entry><literal>^U      </literal></entry>
+            <entry><literal>kill-line      </literal></entry>
             <entry>delete entire line</entry>
           </row>
           <row>
-            <entry><code>^V       </code></entry>
-            <entry><code>quote-char    </code></entry>
+            <entry><literal>^V       </literal></entry>
+            <entry><literal>quote-char    </literal></entry>
             <entry>quote the next typed key</entry>
           </row>
           <row>
-            <entry><code>&#60;Up&#62;   </code></entry>
-            <entry><code>history-up   </code></entry>
+            <entry><literal>&#60;Up&#62;   </literal></entry>
+            <entry><literal>history-up   </literal></entry>
             <entry>recall previous string from history</entry>
           </row>
           <row>
-            <entry><code>&#60;Down&#62;      </code></entry>
-            <entry><code>history-down   </code></entry>
+            <entry><literal>&#60;Down&#62;      </literal></entry>
+            <entry><literal>history-down   </literal></entry>
             <entry>recall next string from history</entry>
           </row>
           <row>
-            <entry><code>&#60;BackSpace&#62;  </code></entry>
-            <entry><code>backspace     </code></entry>
+            <entry><literal>&#60;BackSpace&#62;  </literal></entry>
+            <entry><literal>backspace     </literal></entry>
             <entry>kill the char in front of the cursor</entry>
           </row>
           <row>
-            <entry><code>Esc u        </code></entry>
-            <entry><code>upcase-word      </code></entry>
+            <entry><literal>Esc u        </literal></entry>
+            <entry><literal>upcase-word      </literal></entry>
             <entry>convert word to upper case</entry>
           </row>
           <row>
-            <entry><code>Esc l        </code></entry>
-            <entry><code>downcase-word      </code></entry>
+            <entry><literal>Esc l        </literal></entry>
+            <entry><literal>downcase-word      </literal></entry>
             <entry>convert word to lower case</entry>
           </row>
           <row>
-            <entry><code>Esc c        </code></entry>
-            <entry><code>capitalize-word    </code></entry>
+            <entry><literal>Esc c        </literal></entry>
+            <entry><literal>capitalize-word    </literal></entry>
             <entry>capitalize the word</entry>
           </row>
           <row>
-            <entry><code>^G           </code></entry>
-            <entry><code>n/a    </code></entry>
+            <entry><literal>^G           </literal></entry>
+            <entry><literal>n/a    </literal></entry>
             <entry>abort</entry>
           </row>
           <row>
-            <entry><code>&#60;Return&#62;     </code></entry>
-            <entry><code>n/a    </code></entry>
+            <entry><literal>&#60;Return&#62;     </literal></entry>
+            <entry><literal>n/a    </literal></entry>
             <entry>finish editing</entry>
           </row>
         </tbody>
@@ -907,35 +907,35 @@
           </row>
         </thead>
         <tbody>
-          <row><entry><code>c      </code></entry><entry><code></code></entry><entry>change to a different mailbox</entry></row>
-          <row><entry><code>ESC c    </code></entry><entry><code></code></entry><entry>change to a folder in read-only mode</entry></row>
-          <row><entry><code>C        </code></entry><entry><code></code></entry><entry>copy the current message to another mailbox</entry></row>
-          <row><entry><code>ESC C     </code></entry><entry><code></code></entry><entry>decode a message and copy it to a folder</entry></row>
-          <row><entry><code>ESC s    </code></entry><entry><code></code></entry><entry>decode a message and save it to a folder</entry></row>
-          <row><entry><code>D       </code></entry><entry><code></code></entry><entry>delete messages matching a pattern</entry></row>
-          <row><entry><code>d     </code></entry><entry><code></code></entry><entry>delete the current message</entry></row>
-          <row><entry><code>F      </code></entry><entry><code></code></entry><entry>mark as important</entry></row>
-          <row><entry><code>l      </code></entry><entry><code></code></entry><entry>show messages matching a pattern</entry></row>
-          <row><entry><code>N       </code></entry><entry><code></code></entry><entry>mark message as new</entry></row>
-          <row><entry><code>o       </code></entry><entry><code></code></entry><entry>change the current sort method</entry></row>
-          <row><entry><code>O       </code></entry><entry><code></code></entry><entry>reverse sort the mailbox</entry></row>
-          <row><entry><code>q       </code></entry><entry><code></code></entry><entry>save changes and exit</entry></row>
-          <row><entry><code>s        </code></entry><entry><code></code></entry><entry>save-message</entry></row>
-          <row><entry><code>T       </code></entry><entry><code></code></entry><entry>tag messages matching a pattern</entry></row>
-          <row><entry><code>t       </code></entry><entry><code></code></entry><entry>toggle the tag on a message</entry></row>
-          <row><entry><code>ESC t  </code></entry><entry><code></code></entry><entry>toggle tag on entire message thread</entry></row>
-          <row><entry><code>U       </code></entry><entry><code></code></entry><entry>undelete messages matching a pattern</entry></row>
-          <row><entry><code>u        </code></entry><entry><code></code></entry><entry>undelete-message</entry></row>
-          <row><entry><code>v        </code></entry><entry><code></code></entry><entry>view-attachments</entry></row>
-          <row><entry><code>x       </code></entry><entry><code></code></entry><entry>abort changes and exit</entry></row>
-          <row><entry><code>&#60;Return&#62;  </code></entry><entry><code></code></entry><entry>display-message</entry></row>
-          <row><entry><code>&#60;Tab&#62;      </code></entry><entry><code></code></entry><entry>jump to the next new or unread message</entry></row>
-          <row><entry><code>@      </code></entry><entry><code></code></entry><entry>show the author's full e-mail address</entry></row>
-          <row><entry><code>$       </code></entry><entry><code></code></entry><entry>save changes to mailbox</entry></row>
-          <row><entry><code>/       </code></entry><entry><code></code></entry><entry>search</entry></row>
-          <row><entry><code>ESC /     </code></entry><entry><code></code></entry><entry>search-reverse</entry></row>
-          <row><entry><code>^L       </code></entry><entry><code></code></entry><entry>clear and redraw the screen</entry></row>
-          <row><entry><code>^T        </code></entry><entry><code></code></entry><entry>untag messages matching a pattern</entry></row>
+          <row><entry><literal>c      </literal></entry><entry><literal></literal></entry><entry>change to a different mailbox</entry></row>
+          <row><entry><literal>ESC c    </literal></entry><entry><literal></literal></entry><entry>change to a folder in read-only mode</entry></row>
+          <row><entry><literal>C        </literal></entry><entry><literal></literal></entry><entry>copy the current message to another mailbox</entry></row>
+          <row><entry><literal>ESC C     </literal></entry><entry><literal></literal></entry><entry>decode a message and copy it to a folder</entry></row>
+          <row><entry><literal>ESC s    </literal></entry><entry><literal></literal></entry><entry>decode a message and save it to a folder</entry></row>
+          <row><entry><literal>D       </literal></entry><entry><literal></literal></entry><entry>delete messages matching a pattern</entry></row>
+          <row><entry><literal>d     </literal></entry><entry><literal></literal></entry><entry>delete the current message</entry></row>
+          <row><entry><literal>F      </literal></entry><entry><literal></literal></entry><entry>mark as important</entry></row>
+          <row><entry><literal>l      </literal></entry><entry><literal></literal></entry><entry>show messages matching a pattern</entry></row>
+          <row><entry><literal>N       </literal></entry><entry><literal></literal></entry><entry>mark message as new</entry></row>
+          <row><entry><literal>o       </literal></entry><entry><literal></literal></entry><entry>change the current sort method</entry></row>
+          <row><entry><literal>O       </literal></entry><entry><literal></literal></entry><entry>reverse sort the mailbox</entry></row>
+          <row><entry><literal>q       </literal></entry><entry><literal></literal></entry><entry>save changes and exit</entry></row>
+          <row><entry><literal>s        </literal></entry><entry><literal></literal></entry><entry>save-message</entry></row>
+          <row><entry><literal>T       </literal></entry><entry><literal></literal></entry><entry>tag messages matching a pattern</entry></row>
+          <row><entry><literal>t       </literal></entry><entry><literal></literal></entry><entry>toggle the tag on a message</entry></row>
+          <row><entry><literal>ESC t  </literal></entry><entry><literal></literal></entry><entry>toggle tag on entire message thread</entry></row>
+          <row><entry><literal>U       </literal></entry><entry><literal></literal></entry><entry>undelete messages matching a pattern</entry></row>
+          <row><entry><literal>u        </literal></entry><entry><literal></literal></entry><entry>undelete-message</entry></row>
+          <row><entry><literal>v        </literal></entry><entry><literal></literal></entry><entry>view-attachments</entry></row>
+          <row><entry><literal>x       </literal></entry><entry><literal></literal></entry><entry>abort changes and exit</entry></row>
+          <row><entry><literal>&#60;Return&#62;  </literal></entry><entry><literal></literal></entry><entry>display-message</entry></row>
+          <row><entry><literal>&#60;Tab&#62;      </literal></entry><entry><literal></literal></entry><entry>jump to the next new or unread message</entry></row>
+          <row><entry><literal>@      </literal></entry><entry><literal></literal></entry><entry>show the author's full e-mail address</entry></row>
+          <row><entry><literal>$       </literal></entry><entry><literal></literal></entry><entry>save changes to mailbox</entry></row>
+          <row><entry><literal>/       </literal></entry><entry><literal></literal></entry><entry>search</entry></row>
+          <row><entry><literal>ESC /     </literal></entry><entry><literal></literal></entry><entry>search-reverse</entry></row>
+          <row><entry><literal>^L       </literal></entry><entry><literal></literal></entry><entry>clear and redraw the screen</entry></row>
+          <row><entry><literal>^T        </literal></entry><entry><literal></literal></entry><entry>untag messages matching a pattern</entry></row>
         </tbody>
       </tgroup>
     </table>
@@ -1152,17 +1152,17 @@
           </row>
         </thead>
         <tbody>
-          <row><entry><code>&#60;Return&#62;   </code></entry><entry><code></code></entry><entry>go down one line</entry></row>
-          <row><entry><code>&#60;Space&#62;   </code></entry><entry><code></code></entry><entry>display the next page (or next message if at the end of a message)</entry></row>
-          <row><entry><code>-           </code></entry><entry><code></code></entry><entry>go back to the previous page</entry></row>
-          <row><entry><code>n            </code></entry><entry><code></code></entry><entry>search for next match</entry></row>
-          <row><entry><code>S         </code></entry><entry><code></code></entry><entry>skip beyond quoted text</entry></row>
-          <row><entry><code>T         </code></entry><entry><code></code></entry><entry>toggle display of quoted text</entry></row>
-          <row><entry><code>?        </code></entry><entry><code></code></entry><entry>show key bindings</entry></row>
-          <row><entry><code>/        </code></entry><entry><code></code></entry><entry>search for a regular expression (pattern)</entry></row>
-          <row><entry><code>ESC /   </code></entry><entry><code></code></entry><entry>search backwards for a regular expression</entry></row>
-          <row><entry><code>\       </code></entry><entry><code></code></entry><entry>toggle search pattern coloring</entry></row>
-          <row><entry><code>^      </code></entry><entry><code></code></entry><entry>jump to the top of the message</entry></row>
+          <row><entry><literal>&#60;Return&#62;   </literal></entry><entry><literal></literal></entry><entry>go down one line</entry></row>
+          <row><entry><literal>&#60;Space&#62;   </literal></entry><entry><literal></literal></entry><entry>display the next page (or next message if at the end of a message)</entry></row>
+          <row><entry><literal>-           </literal></entry><entry><literal></literal></entry><entry>go back to the previous page</entry></row>
+          <row><entry><literal>n            </literal></entry><entry><literal></literal></entry><entry>search for next match</entry></row>
+          <row><entry><literal>S         </literal></entry><entry><literal></literal></entry><entry>skip beyond quoted text</entry></row>
+          <row><entry><literal>T         </literal></entry><entry><literal></literal></entry><entry>toggle display of quoted text</entry></row>
+          <row><entry><literal>?        </literal></entry><entry><literal></literal></entry><entry>show key bindings</entry></row>
+          <row><entry><literal>/        </literal></entry><entry><literal></literal></entry><entry>search for a regular expression (pattern)</entry></row>
+          <row><entry><literal>ESC /   </literal></entry><entry><literal></literal></entry><entry>search backwards for a regular expression</entry></row>
+          <row><entry><literal>\       </literal></entry><entry><literal></literal></entry><entry>toggle search pattern coloring</entry></row>
+          <row><entry><literal>^      </literal></entry><entry><literal></literal></entry><entry>jump to the top of the message</entry></row>
         </tbody>
       </tgroup>
     </table>
@@ -1201,7 +1201,7 @@ linkend="color">color</link>
         into the correct color and character settings.  The sequences
         Mutt-ng supports are: <literal>ESC [ Ps;Ps;Ps;...;Ps
           m</literal> (see table below for possible values for
-        <code>Ps</code>).
+        <literal>Ps</literal>).
       </para>
       
       <para>
@@ -1216,13 +1216,13 @@ linkend="color">color</link>
           </row>
         </thead>
         <tbody>
-          <row><entry><code>0  </code></entry><entry>All Attributes Off</entry></row>
-          <row><entry><code>1  </code></entry><entry>Bold on</entry></row>
-          <row><entry><code>4  </code></entry><entry>Underline on</entry></row>
-          <row><entry><code>5  </code></entry><entry>Blink on</entry></row>
-          <row><entry><code>7 </code></entry><entry>Reverse video on</entry></row>
-          <row><entry><code>3x  </code></entry><entry>Foreground color is x (see table below)</entry></row>
-          <row><entry><code>4x </code></entry><entry>Background color is x (see table below)</entry></row>
+          <row><entry><literal>0  </literal></entry><entry>All Attributes Off</entry></row>
+          <row><entry><literal>1  </literal></entry><entry>Bold on</entry></row>
+          <row><entry><literal>4  </literal></entry><entry>Underline on</entry></row>
+          <row><entry><literal>5  </literal></entry><entry>Blink on</entry></row>
+          <row><entry><literal>7 </literal></entry><entry>Reverse video on</entry></row>
+          <row><entry><literal>3x  </literal></entry><entry>Foreground color is x (see table below)</entry></row>
+          <row><entry><literal>4x </literal></entry><entry>Background color is x (see table below)</entry></row>
         </tbody>
       </tgroup>
     </table>
@@ -1238,14 +1238,14 @@ linkend="color">color</link>
           </row>
         </thead>
         <tbody>
-          <row><entry><code>0   </code></entry><entry>black</entry></row>
-          <row><entry><code>1  </code></entry><entry>red</entry></row>
-          <row><entry><code>2  </code></entry><entry>green</entry></row>
-          <row><entry><code>3  </code></entry><entry>yellow</entry></row>
-          <row><entry><code>4  </code></entry><entry>blue</entry></row>
-          <row><entry><code>5 </code></entry><entry>magenta</entry></row>
-          <row><entry><code>6  </code></entry><entry>cyan</entry></row>
-          <row><entry><code>7 </code></entry><entry>white</entry></row>
+          <row><entry><literal>0   </literal></entry><entry>black</entry></row>
+          <row><entry><literal>1  </literal></entry><entry>red</entry></row>
+          <row><entry><literal>2  </literal></entry><entry>green</entry></row>
+          <row><entry><literal>3  </literal></entry><entry>yellow</entry></row>
+          <row><entry><literal>4  </literal></entry><entry>blue</entry></row>
+          <row><entry><literal>5 </literal></entry><entry>magenta</entry></row>
+          <row><entry><literal>6  </literal></entry><entry>cyan</entry></row>
+          <row><entry><literal>7 </literal></entry><entry>white</entry></row>
         </tbody>
       </tgroup>
     </table>
@@ -1293,20 +1293,20 @@ linkend="color">color</link>
             </row>
           </thead>
           <tbody>
-            <row><entry><code>^D   </code></entry><entry><code>delete-thread       </code></entry><entry>delete all messages in the current  thread</entry></row>
-            <row><entry><code>^U   </code></entry><entry><code>undelete-thread     </code></entry><entry>undelete all messages in the current thread</entry></row>
-            <row><entry><code>^N   </code></entry><entry><code>next-thread         </code></entry><entry>jump to the start of the next thread</entry></row>
-            <row><entry><code>^P   </code></entry><entry><code>previous-thread     </code></entry><entry>jump to the start of the previous thread</entry></row>
-            <row><entry><code>^R    </code></entry><entry><code>read-thread         </code></entry><entry>mark the current thread as read</entry></row>
-            <row><entry><code>ESC d </code></entry><entry><code>delete-subthread    </code></entry><entry>delete all messages in the current subthread</entry></row>
-            <row><entry><code>ESC u </code></entry><entry><code>undelete-subthread  </code></entry><entry>undelete all messages in the current subthread</entry></row>
-            <row><entry><code>ESC n </code></entry><entry><code>next-subthread      </code></entry><entry>jump to the start of the next subthread</entry></row>
-            <row><entry><code>ESC p </code></entry><entry><code>previous-subthread  </code></entry><entry>jump to the start of the previous subthread</entry></row>
-            <row><entry><code>ESC r </code></entry><entry><code>read-subthread      </code></entry><entry>mark the current subthread as read </entry></row>
-            <row><entry><code>ESC t </code></entry><entry><code>tag-thread          </code></entry><entry>toggle the tag on the current thread</entry></row>
-            <row><entry><code>ESC v </code></entry><entry><code>collapse-thread    </code></entry><entry>toggle collapse for the current thread</entry></row>
-            <row><entry><code>ESC V </code></entry><entry><code>collapse-all      </code></entry><entry>toggle collapse for all threads</entry></row>
-            <row><entry><code>P    </code></entry><entry><code>parent-message        </code></entry><entry>jump to parent message in thread</entry></row>
+            <row><entry><literal>^D   </literal></entry><entry><literal>delete-thread       </literal></entry><entry>delete all messages in the current  thread</entry></row>
+            <row><entry><literal>^U   </literal></entry><entry><literal>undelete-thread     </literal></entry><entry>undelete all messages in the current thread</entry></row>
+            <row><entry><literal>^N   </literal></entry><entry><literal>next-thread         </literal></entry><entry>jump to the start of the next thread</entry></row>
+            <row><entry><literal>^P   </literal></entry><entry><literal>previous-thread     </literal></entry><entry>jump to the start of the previous thread</entry></row>
+            <row><entry><literal>^R    </literal></entry><entry><literal>read-thread         </literal></entry><entry>mark the current thread as read</entry></row>
+            <row><entry><literal>ESC d </literal></entry><entry><literal>delete-subthread    </literal></entry><entry>delete all messages in the current subthread</entry></row>
+            <row><entry><literal>ESC u </literal></entry><entry><literal>undelete-subthread  </literal></entry><entry>undelete all messages in the current subthread</entry></row>
+            <row><entry><literal>ESC n </literal></entry><entry><literal>next-subthread      </literal></entry><entry>jump to the start of the next subthread</entry></row>
+            <row><entry><literal>ESC p </literal></entry><entry><literal>previous-subthread  </literal></entry><entry>jump to the start of the previous subthread</entry></row>
+            <row><entry><literal>ESC r </literal></entry><entry><literal>read-subthread      </literal></entry><entry>mark the current subthread as read </entry></row>
+            <row><entry><literal>ESC t </literal></entry><entry><literal>tag-thread          </literal></entry><entry>toggle the tag on the current thread</entry></row>
+            <row><entry><literal>ESC v </literal></entry><entry><literal>collapse-thread    </literal></entry><entry>toggle collapse for the current thread</entry></row>
+            <row><entry><literal>ESC V </literal></entry><entry><literal>collapse-all      </literal></entry><entry>toggle collapse for all threads</entry></row>
+            <row><entry><literal>P    </literal></entry><entry><literal>parent-message        </literal></entry><entry>jump to parent message in thread</entry></row>
           </tbody>
         </tgroup>
       </table>
@@ -1614,13 +1614,13 @@ linkend="color">color</link>
             </row>
           </thead>
           <tbody>
-            <row><entry><code>m    </code></entry><entry><code>compose    </code></entry><entry>compose a new message</entry></row>
-            <row><entry><code>r     </code></entry><entry><code>reply       </code></entry><entry>reply to sender</entry></row>
-            <row><entry><code>g     </code></entry><entry><code>group-reply </code></entry><entry>reply to all recipients</entry></row>
-            <row><entry><code>L     </code></entry><entry><code>list-reply  </code></entry><entry>reply to mailing list address</entry></row>
-            <row><entry><code>f     </code></entry><entry><code>forward     </code></entry><entry>forward message</entry></row>
-            <row><entry><code>b     </code></entry><entry><code>bounce      </code></entry><entry>bounce (remail) message</entry></row>
-            <row><entry><code>ESC k  </code></entry><entry><code>mail-key    </code></entry><entry>mail a PGP public key to someone</entry></row>
+            <row><entry><literal>m    </literal></entry><entry><literal>compose    </literal></entry><entry>compose a new message</entry></row>
+            <row><entry><literal>r     </literal></entry><entry><literal>reply       </literal></entry><entry>reply to sender</entry></row>
+            <row><entry><literal>g     </literal></entry><entry><literal>group-reply </literal></entry><entry>reply to all recipients</entry></row>
+            <row><entry><literal>L     </literal></entry><entry><literal>list-reply  </literal></entry><entry>reply to mailing list address</entry></row>
+            <row><entry><literal>f     </literal></entry><entry><literal>forward     </literal></entry><entry>forward message</entry></row>
+            <row><entry><literal>b     </literal></entry><entry><literal>bounce      </literal></entry><entry>bounce (remail) message</entry></row>
+            <row><entry><literal>ESC k  </literal></entry><entry><literal>mail-key    </literal></entry><entry>mail a PGP public key to someone</entry></row>
           </tbody>
         </tgroup>
       </table>
@@ -1756,26 +1756,26 @@ set edit_headers</screen>
             </row>
           </thead>
           <tbody>
-            <row><entry><code>a    </code></entry><entry><code>attach-file  </code></entry><entry>attach a file</entry></row>
-            <row><entry><code>A    </code></entry><entry><code>attach-message  </code></entry><entry>attach message(s) to the message</entry></row>
-            <row><entry><code>ESC k  </code></entry><entry><code>attach-key       </code></entry><entry>attach a PGP public key</entry></row>
-            <row><entry><code>d    </code></entry><entry><code>edit-description  </code></entry><entry>edit description on attachment</entry></row>
-            <row><entry><code>D  </code></entry><entry><code>detach-file     </code></entry><entry>detach a file</entry></row>
-            <row><entry><code>t </code></entry><entry><code>edit-to         </code></entry><entry>edit the To field</entry></row>
-            <row><entry><code>ESC f </code></entry><entry><code>edit-from       </code></entry><entry>edit the From field</entry></row>
-            <row><entry><code>r  </code></entry><entry><code>edit-reply-to   </code></entry><entry>edit the Reply-To field</entry></row>
-            <row><entry><code>c </code></entry><entry><code>edit-cc         </code></entry><entry>edit the Cc field</entry></row>
-            <row><entry><code>b      </code></entry><entry><code>edit-bcc        </code></entry><entry>edit the Bcc field</entry></row>
-            <row><entry><code>y     </code></entry><entry><code>send-message    </code></entry><entry>send the message</entry></row>
-            <row><entry><code>s    </code></entry><entry><code>edit-subject    </code></entry><entry>edit the Subject</entry></row>
-            <row><entry><code>S   </code></entry><entry><code>smime-menu        </code></entry><entry>select S/MIME options</entry></row>
-            <row><entry><code>f      </code></entry><entry><code>edit-fcc        </code></entry><entry>specify an ``Fcc'' mailbox</entry></row>
-            <row><entry><code>p     </code></entry><entry><code>pgp-menu        </code></entry><entry>select PGP options</entry></row>
-            <row><entry><code>P    </code></entry><entry><code>postpone-message </code></entry><entry>postpone this message until later</entry></row>
-            <row><entry><code>q   </code></entry><entry><code>quit            </code></entry><entry>quit (abort) sending the message</entry></row>
-            <row><entry><code>w  </code></entry><entry><code>write-fcc      </code></entry><entry>write the message to a folder</entry></row>
-            <row><entry><code>i </code></entry><entry><code>ispell          </code></entry><entry>check spelling (if available on your system)</entry></row>
-            <row><entry><code>^F  </code></entry><entry><code>forget-passphrase   </code></entry><entry>wipe passphrase(s) from memory</entry></row>
+            <row><entry><literal>a    </literal></entry><entry><literal>attach-file  </literal></entry><entry>attach a file</entry></row>
+            <row><entry><literal>A    </literal></entry><entry><literal>attach-message  </literal></entry><entry>attach message(s) to the message</entry></row>
+            <row><entry><literal>ESC k  </literal></entry><entry><literal>attach-key       </literal></entry><entry>attach a PGP public key</entry></row>
+            <row><entry><literal>d    </literal></entry><entry><literal>edit-description  </literal></entry><entry>edit description on attachment</entry></row>
+            <row><entry><literal>D  </literal></entry><entry><literal>detach-file     </literal></entry><entry>detach a file</entry></row>
+            <row><entry><literal>t </literal></entry><entry><literal>edit-to         </literal></entry><entry>edit the To field</entry></row>
+            <row><entry><literal>ESC f </literal></entry><entry><literal>edit-from       </literal></entry><entry>edit the From field</entry></row>
+            <row><entry><literal>r  </literal></entry><entry><literal>edit-reply-to   </literal></entry><entry>edit the Reply-To field</entry></row>
+            <row><entry><literal>c </literal></entry><entry><literal>edit-cc         </literal></entry><entry>edit the Cc field</entry></row>
+            <row><entry><literal>b      </literal></entry><entry><literal>edit-bcc        </literal></entry><entry>edit the Bcc field</entry></row>
+            <row><entry><literal>y     </literal></entry><entry><literal>send-message    </literal></entry><entry>send the message</entry></row>
+            <row><entry><literal>s    </literal></entry><entry><literal>edit-subject    </literal></entry><entry>edit the Subject</entry></row>
+            <row><entry><literal>S   </literal></entry><entry><literal>smime-menu        </literal></entry><entry>select S/MIME options</entry></row>
+            <row><entry><literal>f      </literal></entry><entry><literal>edit-fcc        </literal></entry><entry>specify an ``Fcc'' mailbox</entry></row>
+            <row><entry><literal>p     </literal></entry><entry><literal>pgp-menu        </literal></entry><entry>select PGP options</entry></row>
+            <row><entry><literal>P    </literal></entry><entry><literal>postpone-message </literal></entry><entry>postpone this message until later</entry></row>
+            <row><entry><literal>q   </literal></entry><entry><literal>quit            </literal></entry><entry>quit (abort) sending the message</entry></row>
+            <row><entry><literal>w  </literal></entry><entry><literal>write-fcc      </literal></entry><entry>write the message to a folder</entry></row>
+            <row><entry><literal>i </literal></entry><entry><literal>ispell          </literal></entry><entry>check spelling (if available on your system)</entry></row>
+            <row><entry><literal>^F  </literal></entry><entry><literal>forget-passphrase   </literal></entry><entry>wipe passphrase(s) from memory</entry></row>
           </tbody>
         </tgroup>
       </table>
@@ -2083,10 +2083,10 @@ lists linuxevent@luga\.at vuln-dev@ mutt-ng-users@</screen>
             </row>
           </thead>
           <tbody>
-            <row><entry><code>R      </code></entry><entry>The key has been revoked and can't be used.</entry></row>
-            <row><entry><code>X     </code></entry><entry>The key is expired and can't be used.</entry></row>
-            <row><entry><code>d     </code></entry><entry>You have marked the key as disabled.</entry></row>
-            <row><entry><code>c     </code></entry><entry>There are unknown critical self-signature packets.</entry></row>
+            <row><entry><literal>R      </literal></entry><entry>The key has been revoked and can't be used.</entry></row>
+            <row><entry><literal>X     </literal></entry><entry>The key is expired and can't be used.</entry></row>
+            <row><entry><literal>d     </literal></entry><entry>You have marked the key as disabled.</entry></row>
+            <row><entry><literal>c     </literal></entry><entry>There are unknown critical self-signature packets.</entry></row>
           </tbody>
         </tgroup>
       </table>
@@ -3182,29 +3182,29 @@ Usage: <literal>bind</literal> <emphasis>map</emphasis> <emphasis>key</emphasis>
             </row>
           </thead>
           <tbody>
-            <row><entry><code>\t     </code></entry><entry>tab</entry></row>
-            <row><entry><code>&#60;tab&#62;      </code></entry><entry>tab</entry></row>
-            <row><entry><code>&#60;backtab&#62;   </code></entry><entry>backtab / shift-tab</entry></row>
-            <row><entry><code>\r    </code></entry><entry>carriage return</entry></row>
-            <row><entry><code>\n     </code></entry><entry>newline</entry></row>
-            <row><entry><code>\e      </code></entry><entry>escape</entry></row>
-            <row><entry><code>&#60;esc&#62;   </code></entry><entry>escape</entry></row>
-            <row><entry><code>&#60;up&#62;     </code></entry><entry>up arrow</entry></row>
-            <row><entry><code>&#60;down&#62;     </code></entry><entry>down arrow</entry></row>
-            <row><entry><code>&#60;left&#62;     </code></entry><entry>left arrow</entry></row>
-            <row><entry><code>&#60;right&#62;    </code></entry><entry>right arrow</entry></row>
-            <row><entry><code>&#60;pageup&#62;   </code></entry><entry>Page Up</entry></row>
-            <row><entry><code>&#60;pagedown&#62;  </code></entry><entry>Page Down</entry></row>
-            <row><entry><code>&#60;backspace&#62;  </code></entry><entry>Backspace</entry></row>
-            <row><entry><code>&#60;delete&#62;    </code></entry><entry>Delete</entry></row>
-            <row><entry><code>&#60;insert&#62;     </code></entry><entry>Insert</entry></row>
-            <row><entry><code>&#60;enter&#62;    </code></entry><entry>Enter</entry></row>
-            <row><entry><code>&#60;return&#62;   </code></entry><entry>Return</entry></row>
-            <row><entry><code>&#60;home&#62;     </code></entry><entry>Home</entry></row>
-            <row><entry><code>&#60;end&#62;      </code></entry><entry>End</entry></row>
-            <row><entry><code>&#60;space&#62;    </code></entry><entry>Space bar</entry></row>
-            <row><entry><code>&#60;f1&#62;       </code></entry><entry>function key 1</entry></row>
-            <row><entry><code>&#60;f10&#62;       </code></entry><entry>function key 10</entry></row>
+            <row><entry><literal>\t     </literal></entry><entry>tab</entry></row>
+            <row><entry><literal>&#60;tab&#62;      </literal></entry><entry>tab</entry></row>
+            <row><entry><literal>&#60;backtab&#62;   </literal></entry><entry>backtab / shift-tab</entry></row>
+            <row><entry><literal>\r    </literal></entry><entry>carriage return</entry></row>
+            <row><entry><literal>\n     </literal></entry><entry>newline</entry></row>
+            <row><entry><literal>\e      </literal></entry><entry>escape</entry></row>
+            <row><entry><literal>&#60;esc&#62;   </literal></entry><entry>escape</entry></row>
+            <row><entry><literal>&#60;up&#62;     </literal></entry><entry>up arrow</entry></row>
+            <row><entry><literal>&#60;down&#62;     </literal></entry><entry>down arrow</entry></row>
+            <row><entry><literal>&#60;left&#62;     </literal></entry><entry>left arrow</entry></row>
+            <row><entry><literal>&#60;right&#62;    </literal></entry><entry>right arrow</entry></row>
+            <row><entry><literal>&#60;pageup&#62;   </literal></entry><entry>Page Up</entry></row>
+            <row><entry><literal>&#60;pagedown&#62;  </literal></entry><entry>Page Down</entry></row>
+            <row><entry><literal>&#60;backspace&#62;  </literal></entry><entry>Backspace</entry></row>
+            <row><entry><literal>&#60;delete&#62;    </literal></entry><entry>Delete</entry></row>
+            <row><entry><literal>&#60;insert&#62;     </literal></entry><entry>Insert</entry></row>
+            <row><entry><literal>&#60;enter&#62;    </literal></entry><entry>Enter</entry></row>
+            <row><entry><literal>&#60;return&#62;   </literal></entry><entry>Return</entry></row>
+            <row><entry><literal>&#60;home&#62;     </literal></entry><entry>Home</entry></row>
+            <row><entry><literal>&#60;end&#62;      </literal></entry><entry>End</entry></row>
+            <row><entry><literal>&#60;space&#62;    </literal></entry><entry>Space bar</entry></row>
+            <row><entry><literal>&#60;f1&#62;       </literal></entry><entry>function key 1</entry></row>
+            <row><entry><literal>&#60;f10&#62;       </literal></entry><entry>function key 10</entry></row>
           </tbody>
         </tgroup>
       </table>
@@ -6681,12 +6681,12 @@ color sidebar white black</screen>
             </row>
           </thead>
           <tbody>
-            <row><entry><code>none</code></entry><entry><code>sidebar-scroll-up    </code></entry><entry>Scrolls the mailbox list up 1 page</entry></row>
-            <row><entry><code>none</code></entry><entry><code>sidebar-scroll-down </code></entry><entry>Scrolls the mailbox list down 1 page</entry></row>
-            <row><entry><code>none</code></entry><entry><code>sidebar-next       </code></entry><entry>Highlights the next mailbox</entry></row>
-            <row><entry><code>none</code></entry><entry><code>sidebar-next-new  </code></entry><entry>Highlights the next mailbox with new mail</entry></row>
-            <row><entry><code>none</code></entry><entry><code>sidebar-previous  </code></entry><entry>Highlights the previous mailbox</entry></row>
-            <row><entry><code>none</code></entry><entry><code>sidebar-open      </code></entry><entry>Opens the currently highlighted mailbox</entry></row>
+            <row><entry><literal>none</literal></entry><entry><literal>sidebar-scroll-up    </literal></entry><entry>Scrolls the mailbox list up 1 page</entry></row>
+            <row><entry><literal>none</literal></entry><entry><literal>sidebar-scroll-down </literal></entry><entry>Scrolls the mailbox list down 1 page</entry></row>
+            <row><entry><literal>none</literal></entry><entry><literal>sidebar-next       </literal></entry><entry>Highlights the next mailbox</entry></row>
+            <row><entry><literal>none</literal></entry><entry><literal>sidebar-next-new  </literal></entry><entry>Highlights the next mailbox with new mail</entry></row>
+            <row><entry><literal>none</literal></entry><entry><literal>sidebar-previous  </literal></entry><entry>Highlights the previous mailbox</entry></row>
+            <row><entry><literal>none</literal></entry><entry><literal>sidebar-open      </literal></entry><entry>Opens the currently highlighted mailbox</entry></row>
           </tbody>
         </tgroup>
       </table>
@@ -9262,29 +9262,29 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
             </row>
           </thead>
           <tbody>
-            <row><entry><code>-A   </code></entry><entry>expand an alias</entry></row>
-            <row><entry><code>-a  </code></entry><entry>attach a file to a message</entry></row>
-            <row><entry><code>-b  </code></entry><entry>specify a blind carbon-copy (BCC) address</entry></row>
-            <row><entry><code>-c   </code></entry><entry>specify a carbon-copy (Cc) address</entry></row>
-            <row><entry><code>-e  </code></entry><entry>specify a config command to be run after initialization files are read</entry></row>
-            <row><entry><code>-f   </code></entry><entry>specify a mailbox to load</entry></row>
-            <row><entry><code>-F   </code></entry><entry>specify an alternate file to read initialization commands</entry></row>
-            <row><entry><code>-h   </code></entry><entry>print help on command line options</entry></row>
-            <row><entry><code>-H   </code></entry><entry>specify a draft file from which to read a header and body</entry></row>
-            <row><entry><code>-i   </code></entry><entry>specify a file to include in a message composition</entry></row>
-            <row><entry><code>-m   </code></entry><entry>specify a default mailbox type</entry></row>
-            <row><entry><code>-n   </code></entry><entry>do not read the system Muttngrc</entry></row>
-            <row><entry><code>-p   </code></entry><entry>recall a postponed message</entry></row>
-            <row><entry><code>-Q   </code></entry><entry>query a configuration variable</entry></row>
-            <row><entry><code>-R   </code></entry><entry>open mailbox in read-only mode</entry></row>
-            <row><entry><code>-s   </code></entry><entry>specify a subject (enclose in quotes if it contains spaces)</entry></row>
-            <row><entry><code>-t    </code></entry><entry>dump the value of all variables to stdout</entry></row>
-            <row><entry><code>-T   </code></entry><entry>dump the value of all changed variables to stdout</entry></row>
-            <row><entry><code>-v   </code></entry><entry>show version number and compile-time definitions</entry></row>
-            <row><entry><code>-x   </code></entry><entry>simulate the mailx(1) compose mode</entry></row>
-            <row><entry><code>-y    </code></entry><entry>show a menu containing the files specified by the mailboxes command</entry></row>
-            <row><entry><code>-z    </code></entry><entry>exit immediately if there are no messages in the mailbox</entry></row>
-            <row><entry><code>-Z   </code></entry><entry>open the first folder with new message,exit immediately if none</entry></row>
+            <row><entry><literal>-A   </literal></entry><entry>expand an alias</entry></row>
+            <row><entry><literal>-a  </literal></entry><entry>attach a file to a message</entry></row>
+            <row><entry><literal>-b  </literal></entry><entry>specify a blind carbon-copy (BCC) address</entry></row>
+            <row><entry><literal>-c   </literal></entry><entry>specify a carbon-copy (Cc) address</entry></row>
+            <row><entry><literal>-e  </literal></entry><entry>specify a config command to be run after initialization files are read</entry></row>
+            <row><entry><literal>-f   </literal></entry><entry>specify a mailbox to load</entry></row>
+            <row><entry><literal>-F   </literal></entry><entry>specify an alternate file to read initialization commands</entry></row>
+            <row><entry><literal>-h   </literal></entry><entry>print help on command line options</entry></row>
+            <row><entry><literal>-H   </literal></entry><entry>specify a draft file from which to read a header and body</entry></row>
+            <row><entry><literal>-i   </literal></entry><entry>specify a file to include in a message composition</entry></row>
+            <row><entry><literal>-m   </literal></entry><entry>specify a default mailbox type</entry></row>
+            <row><entry><literal>-n   </literal></entry><entry>do not read the system Muttngrc</entry></row>
+            <row><entry><literal>-p   </literal></entry><entry>recall a postponed message</entry></row>
+            <row><entry><literal>-Q   </literal></entry><entry>query a configuration variable</entry></row>
+            <row><entry><literal>-R   </literal></entry><entry>open mailbox in read-only mode</entry></row>
+            <row><entry><literal>-s   </literal></entry><entry>specify a subject (enclose in quotes if it contains spaces)</entry></row>
+            <row><entry><literal>-t    </literal></entry><entry>dump the value of all variables to stdout</entry></row>
+            <row><entry><literal>-T   </literal></entry><entry>dump the value of all changed variables to stdout</entry></row>
+            <row><entry><literal>-v   </literal></entry><entry>show version number and compile-time definitions</entry></row>
+            <row><entry><literal>-x   </literal></entry><entry>simulate the mailx(1) compose mode</entry></row>
+            <row><entry><literal>-y    </literal></entry><entry>show a menu containing the files specified by the mailboxes command</entry></row>
+            <row><entry><literal>-z    </literal></entry><entry>exit immediately if there are no messages in the mailbox</entry></row>
+            <row><entry><literal>-Z   </literal></entry><entry>open the first folder with new message,exit immediately if none</entry></row>
           </tbody>
         </tgroup>
       </table>
@@ -9362,50 +9362,50 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
             </row>
           </thead>
           <tbody>
-            <row><entry><code>~A </code></entry><entry><code></code></entry><entry>all messages</entry></row>
-            <row><entry><code>~b </code></entry><entry><code>EXPR      </code></entry><entry>messages which contain EXPR in the message body</entry></row>
-            <row><entry><code>~B </code></entry><entry><code>EXPR        </code></entry><entry>messages which contain EXPR in the whole message</entry></row>
-            <row><entry><code>~c </code></entry><entry><code>EXPR       </code></entry><entry>messages carbon-copied to EXPR</entry></row>
-            <row><entry><code>~C </code></entry><entry><code>EXPR       </code></entry><entry>message is either to: or cc: EXPR</entry></row>
-            <row><entry><code>~D </code></entry><entry><code></code></entry><entry>deleted messages</entry></row>
-            <row><entry><code>~d </code></entry><entry><code>[MIN]-[MAX] </code></entry><entry>messages with ``date-sent'' in a Date range</entry></row>
-            <row><entry><code>~E </code></entry><entry><code></code></entry><entry>expired messages</entry></row>
-            <row><entry><code>~e </code></entry><entry><code>EXPR       </code></entry><entry>message which contains EXPR in the ``Sender'' field</entry></row>
-            <row><entry><code>~F </code></entry><entry><code></code></entry><entry>flagged messages</entry></row>
-            <row><entry><code>~f </code></entry><entry><code>EXPR       </code></entry><entry>messages originating from EXPR</entry></row>
-            <row><entry><code>~g </code></entry><entry><code></code></entry><entry>cryptographically signed messages</entry></row>
-            <row><entry><code>~G </code></entry><entry><code></code></entry><entry>cryptographically encrypted messages</entry></row>
-            <row><entry><code>~H </code></entry><entry><code>EXPR       </code></entry><entry>messages with a spam attribute matching EXPR</entry></row>
-            <row><entry><code>~h </code></entry><entry><code>EXPR       </code></entry><entry>messages which contain EXPR in the message header</entry></row>
-            <row><entry><code>~k </code></entry><entry><code></code></entry><entry>message contains PGP key material</entry></row>
-            <row><entry><code>~i </code></entry><entry><code>EXPR         </code></entry><entry>message which match ID in the ``Message-ID'' field</entry></row>
-            <row><entry><code>~L </code></entry><entry><code>EXPR       </code></entry><entry>message is either originated or received by EXPR</entry></row>
-            <row><entry><code>~l </code></entry><entry><code></code></entry><entry>message is addressed to a known mailing list</entry></row>
-            <row><entry><code>~m </code></entry><entry><code>[MIN]-[MAX] </code></entry><entry>message in the range MIN to MAX *)</entry></row>
-            <row><entry><code>~M </code></entry><entry><code></code></entry><entry>multipart messages</entry></row>
-            <row><entry><code>~n </code></entry><entry><code>[MIN]-[MAX] </code></entry><entry>messages with a score in the range MIN to MAX *)</entry></row>
-            <row><entry><code>~N </code></entry><entry><code></code></entry><entry>new messages</entry></row>
-            <row><entry><code>~O </code></entry><entry><code></code></entry><entry>old messages</entry></row>
-            <row><entry><code>~p </code></entry><entry><code></code></entry><entry>message is addressed to you (consults alternates)</entry></row>
-            <row><entry><code>~P </code></entry><entry><code></code></entry><entry>message is from you (consults alternates)</entry></row>
-            <row><entry><code>~Q </code></entry><entry><code></code></entry><entry>messages which have been replied to</entry></row>
-            <row><entry><code>~R </code></entry><entry><code></code></entry><entry>read messages</entry></row>
-            <row><entry><code>~r </code></entry><entry><code>[MIN]-[MAX] </code></entry><entry>messages with ``date-received'' in a Date range</entry></row>
-            <row><entry><code>~S </code></entry><entry><code></code></entry><entry>superseded messages</entry></row>
-            <row><entry><code>~s </code></entry><entry><code>EXPR    </code></entry><entry>messages having EXPR in the ``Subject'' field.</entry></row>
-            <row><entry><code>~T </code></entry><entry><code></code></entry><entry>tagged messages</entry></row>
-            <row><entry><code>~t </code></entry><entry><code>EXPR       </code></entry><entry>messages addressed to EXPR</entry></row>
-            <row><entry><code>~U </code></entry><entry><code></code></entry><entry>unread messages</entry></row>
-            <row><entry><code>~u </code></entry><entry><code></code></entry><entry>message is addressed to a subscribed mailing list</entry></row>
-            <row><entry><code>~v </code></entry><entry><code></code></entry><entry>message is part of a collapsed thread.</entry></row>
-            <row><entry><code>~V </code></entry><entry><code></code></entry><entry>cryptographically verified messages</entry></row>
-            <row><entry><code>~w </code></entry><entry><code>EXPR    </code></entry><entry>messages which contain EXPR in the `Newsgroups' field (if compiled with NNTP support)</entry></row>
-            <row><entry><code>~x </code></entry><entry><code>EXPR  </code></entry><entry>messages which contain EXPR in the `References' field</entry></row>
-            <row><entry><code>~y </code></entry><entry><code>EXPR        </code></entry><entry>messages which contain EXPR in the `X-Label' field</entry></row>
-            <row><entry><code>~z </code></entry><entry><code>[MIN]-[MAX] </code></entry><entry>messages with a size in the range MIN to MAX *)</entry></row>
-            <row><entry><code>~= </code></entry><entry><code></code></entry><entry>duplicated messages (see $duplicate_threads)</entry></row>
-            <row><entry><code>~$ </code></entry><entry><code></code></entry><entry>unreferenced messages (requires threaded view)</entry></row>
-            <row><entry><code>~* </code></entry><entry><code></code></entry><entry>``From'' contains realname and (syntactically) valid address (excluded are addresses matching against alternates or any alias)</entry></row>
+            <row><entry><literal>~A </literal></entry><entry><literal></literal></entry><entry>all messages</entry></row>
+            <row><entry><literal>~b </literal></entry><entry><literal>EXPR      </literal></entry><entry>messages which contain EXPR in the message body</entry></row>
+            <row><entry><literal>~B </literal></entry><entry><literal>EXPR        </literal></entry><entry>messages which contain EXPR in the whole message</entry></row>
+            <row><entry><literal>~c </literal></entry><entry><literal>EXPR       </literal></entry><entry>messages carbon-copied to EXPR</entry></row>
+            <row><entry><literal>~C </literal></entry><entry><literal>EXPR       </literal></entry><entry>message is either to: or cc: EXPR</entry></row>
+            <row><entry><literal>~D </literal></entry><entry><literal></literal></entry><entry>deleted messages</entry></row>
+            <row><entry><literal>~d </literal></entry><entry><literal>[MIN]-[MAX] </literal></entry><entry>messages with ``date-sent'' in a Date range</entry></row>
+            <row><entry><literal>~E </literal></entry><entry><literal></literal></entry><entry>expired messages</entry></row>
+            <row><entry><literal>~e </literal></entry><entry><literal>EXPR       </literal></entry><entry>message which contains EXPR in the ``Sender'' field</entry></row>
+            <row><entry><literal>~F </literal></entry><entry><literal></literal></entry><entry>flagged messages</entry></row>
+            <row><entry><literal>~f </literal></entry><entry><literal>EXPR       </literal></entry><entry>messages originating from EXPR</entry></row>
+            <row><entry><literal>~g </literal></entry><entry><literal></literal></entry><entry>cryptographically signed messages</entry></row>
+            <row><entry><literal>~G </literal></entry><entry><literal></literal></entry><entry>cryptographically encrypted messages</entry></row>
+            <row><entry><literal>~H </literal></entry><entry><literal>EXPR       </literal></entry><entry>messages with a spam attribute matching EXPR</entry></row>
+            <row><entry><literal>~h </literal></entry><entry><literal>EXPR       </literal></entry><entry>messages which contain EXPR in the message header</entry></row>
+            <row><entry><literal>~k </literal></entry><entry><literal></literal></entry><entry>message contains PGP key material</entry></row>
+            <row><entry><literal>~i </literal></entry><entry><literal>EXPR         </literal></entry><entry>message which match ID in the ``Message-ID'' field</entry></row>
+            <row><entry><literal>~L </literal></entry><entry><literal>EXPR       </literal></entry><entry>message is either originated or received by EXPR</entry></row>
+            <row><entry><literal>~l </literal></entry><entry><literal></literal></entry><entry>message is addressed to a known mailing list</entry></row>
+            <row><entry><literal>~m </literal></entry><entry><literal>[MIN]-[MAX] </literal></entry><entry>message in the range MIN to MAX *)</entry></row>
+            <row><entry><literal>~M </literal></entry><entry><literal></literal></entry><entry>multipart messages</entry></row>
+            <row><entry><literal>~n </literal></entry><entry><literal>[MIN]-[MAX] </literal></entry><entry>messages with a score in the range MIN to MAX *)</entry></row>
+            <row><entry><literal>~N </literal></entry><entry><literal></literal></entry><entry>new messages</entry></row>
+            <row><entry><literal>~O </literal></entry><entry><literal></literal></entry><entry>old messages</entry></row>
+            <row><entry><literal>~p </literal></entry><entry><literal></literal></entry><entry>message is addressed to you (consults alternates)</entry></row>
+            <row><entry><literal>~P </literal></entry><entry><literal></literal></entry><entry>message is from you (consults alternates)</entry></row>
+            <row><entry><literal>~Q </literal></entry><entry><literal></literal></entry><entry>messages which have been replied to</entry></row>
+            <row><entry><literal>~R </literal></entry><entry><literal></literal></entry><entry>read messages</entry></row>
+            <row><entry><literal>~r </literal></entry><entry><literal>[MIN]-[MAX] </literal></entry><entry>messages with ``date-received'' in a Date range</entry></row>
+            <row><entry><literal>~S </literal></entry><entry><literal></literal></entry><entry>superseded messages</entry></row>
+            <row><entry><literal>~s </literal></entry><entry><literal>EXPR    </literal></entry><entry>messages having EXPR in the ``Subject'' field.</entry></row>
+            <row><entry><literal>~T </literal></entry><entry><literal></literal></entry><entry>tagged messages</entry></row>
+            <row><entry><literal>~t </literal></entry><entry><literal>EXPR       </literal></entry><entry>messages addressed to EXPR</entry></row>
+            <row><entry><literal>~U </literal></entry><entry><literal></literal></entry><entry>unread messages</entry></row>
+            <row><entry><literal>~u </literal></entry><entry><literal></literal></entry><entry>message is addressed to a subscribed mailing list</entry></row>
+            <row><entry><literal>~v </literal></entry><entry><literal></literal></entry><entry>message is part of a collapsed thread.</entry></row>
+            <row><entry><literal>~V </literal></entry><entry><literal></literal></entry><entry>cryptographically verified messages</entry></row>
+            <row><entry><literal>~w </literal></entry><entry><literal>EXPR    </literal></entry><entry>messages which contain EXPR in the `Newsgroups' field (if compiled with NNTP support)</entry></row>
+            <row><entry><literal>~x </literal></entry><entry><literal>EXPR  </literal></entry><entry>messages which contain EXPR in the `References' field</entry></row>
+            <row><entry><literal>~y </literal></entry><entry><literal>EXPR        </literal></entry><entry>messages which contain EXPR in the `X-Label' field</entry></row>
+            <row><entry><literal>~z </literal></entry><entry><literal>[MIN]-[MAX] </literal></entry><entry>messages with a size in the range MIN to MAX *)</entry></row>
+            <row><entry><literal>~= </literal></entry><entry><literal></literal></entry><entry>duplicated messages (see $duplicate_threads)</entry></row>
+            <row><entry><literal>~$ </literal></entry><entry><literal></literal></entry><entry>unreferenced messages (requires threaded view)</entry></row>
+            <row><entry><literal>~* </literal></entry><entry><literal></literal></entry><entry>``From'' contains realname and (syntactically) valid address (excluded are addresses matching against alternates or any alias)</entry></row>
           </tbody>
         </tgroup>
       </table>
@@ -9998,47 +9998,47 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
             </row>
           </thead>
           <tbody>
-            <row><entry><code>edit_hdrs</code></entry><entry><code>edit_headers</code></entry></row>
-            <row><entry><code>forw_decode</code></entry><entry><code>forward_decode</code></entry></row>
-            <row><entry><code>forw_format</code></entry><entry><code>forward_format</code></entry></row>
-            <row><entry><code>forw_quote</code></entry><entry><code>forward_quote</code></entry></row>
-            <row><entry><code>hdr_format</code></entry><entry><code>index_format</code></entry></row>
-            <row><entry><code>indent_str</code></entry><entry><code>indent_string</code></entry></row>
-            <row><entry><code>mime_fwd</code></entry><entry><code>mime_forward</code></entry></row>
-            <row><entry><code>msg_format</code></entry><entry><code>message_format</code></entry></row>
-            <row><entry><code>pgp_autosign</code></entry><entry><code>crypt_autosign</code></entry></row>
-            <row><entry><code>pgp_autoencrypt</code></entry><entry><code>crypt_autoencrypt</code></entry></row>
-            <row><entry><code>pgp_replyencrypt</code></entry><entry><code>crypt_replyencrypt</code></entry></row>
-            <row><entry><code>pgp_replysign</code></entry><entry><code>crypt_replysign</code></entry></row>
-            <row><entry><code>pgp_replysignencrypted</code></entry><entry><code>crypt_replysignencrypted</code></entry></row>
-            <row><entry><code>pgp_verify_sig</code></entry><entry><code>crypt_verify_sig</code></entry></row>
-            <row><entry><code>pgp_create_traditional</code></entry><entry><code>pgp_autoinline</code></entry></row>
-            <row><entry><code>pgp_auto_traditional</code></entry><entry><code>pgp_replyinline</code></entry></row>
-            <row><entry><code>forw_decrypt</code></entry><entry><code>forward_decrypt</code></entry></row>
-            <row><entry><code>smime_sign_as</code></entry><entry><code>smime_default_key</code></entry></row>
-            <row><entry><code>post_indent_str</code></entry><entry><code>post_indent_string</code></entry></row>
-            <row><entry><code>print_cmd</code></entry><entry><code>print_command</code></entry></row>
-            <row><entry><code>shorten_hierarchy</code></entry><entry><code>sidebar_shorten_hierarchy</code></entry></row>
-            <row><entry><code>ask_followup_to</code></entry><entry><code>nntp_ask_followup_to</code></entry></row>
-            <row><entry><code>ask_x_comment_to</code></entry><entry><code>nntp_ask_x_comment_to</code></entry></row>
-            <row><entry><code>catchup_newsgroup</code></entry><entry><code>nntp_catchup</code></entry></row>
-            <row><entry><code>followup_to_poster</code></entry><entry><code>nntp_followup_to_poster</code></entry></row>
-            <row><entry><code>group_index_format</code></entry><entry><code>nntp_group_index_format</code></entry></row>
-            <row><entry><code>inews</code></entry><entry><code>nntp_inews</code></entry></row>
-            <row><entry><code>mime_subject</code></entry><entry><code>nntp_mime_subject</code></entry></row>
-            <row><entry><code>news_cache_dir</code></entry><entry><code>nntp_cache_dir</code></entry></row>
-            <row><entry><code>news_server</code></entry><entry><code>nntp_host</code></entry></row>
-            <row><entry><code>newsrc</code></entry><entry><code>nntp_newsrc</code></entry></row>
-            <row><entry><code>nntp_poll</code></entry><entry><code>nntp_mail_check</code></entry></row>
-            <row><entry><code>pop_checkinterval</code></entry><entry><code>pop_mail_check</code></entry></row>
-            <row><entry><code>post_moderated</code></entry><entry><code>nntp_post_moderated</code></entry></row>
-            <row><entry><code>save_unsubscribed</code></entry><entry><code>nntp_save_unsubscribed</code></entry></row>
-            <row><entry><code>show_new_news</code></entry><entry><code>nntp_show_new_news</code></entry></row>
-            <row><entry><code>show_only_unread</code></entry><entry><code>nntp_show_only_unread</code></entry></row>
-            <row><entry><code>x_comment_to</code></entry><entry><code>nntp_x_comment_to</code></entry></row>
-            <row><entry><code>smtp_auth_username</code></entry><entry><code>smtp_user</code></entry></row>
-            <row><entry><code>smtp_auth_password</code></entry><entry><code>smtp_pass</code></entry></row>
-            <row><entry><code>user_agent</code></entry><entry><code>agent_string</code></entry></row>
+            <row><entry><literal>edit_hdrs</literal></entry><entry><literal>edit_headers</literal></entry></row>
+            <row><entry><literal>forw_decode</literal></entry><entry><literal>forward_decode</literal></entry></row>
+            <row><entry><literal>forw_format</literal></entry><entry><literal>forward_format</literal></entry></row>
+            <row><entry><literal>forw_quote</literal></entry><entry><literal>forward_quote</literal></entry></row>
+            <row><entry><literal>hdr_format</literal></entry><entry><literal>index_format</literal></entry></row>
+            <row><entry><literal>indent_str</literal></entry><entry><literal>indent_string</literal></entry></row>
+            <row><entry><literal>mime_fwd</literal></entry><entry><literal>mime_forward</literal></entry></row>
+            <row><entry><literal>msg_format</literal></entry><entry><literal>message_format</literal></entry></row>
+            <row><entry><literal>pgp_autosign</literal></entry><entry><literal>crypt_autosign</literal></entry></row>
+            <row><entry><literal>pgp_autoencrypt</literal></entry><entry><literal>crypt_autoencrypt</literal></entry></row>
+            <row><entry><literal>pgp_replyencrypt</literal></entry><entry><literal>crypt_replyencrypt</literal></entry></row>
+            <row><entry><literal>pgp_replysign</literal></entry><entry><literal>crypt_replysign</literal></entry></row>
+            <row><entry><literal>pgp_replysignencrypted</literal></entry><entry><literal>crypt_replysignencrypted</literal></entry></row>
+            <row><entry><literal>pgp_verify_sig</literal></entry><entry><literal>crypt_verify_sig</literal></entry></row>
+            <row><entry><literal>pgp_create_traditional</literal></entry><entry><literal>pgp_autoinline</literal></entry></row>
+            <row><entry><literal>pgp_auto_traditional</literal></entry><entry><literal>pgp_replyinline</literal></entry></row>
+            <row><entry><literal>forw_decrypt</literal></entry><entry><literal>forward_decrypt</literal></entry></row>
+            <row><entry><literal>smime_sign_as</literal></entry><entry><literal>smime_default_key</literal></entry></row>
+            <row><entry><literal>post_indent_str</literal></entry><entry><literal>post_indent_string</literal></entry></row>
+            <row><entry><literal>print_cmd</literal></entry><entry><literal>print_command</literal></entry></row>
+            <row><entry><literal>shorten_hierarchy</literal></entry><entry><literal>sidebar_shorten_hierarchy</literal></entry></row>
+            <row><entry><literal>ask_followup_to</literal></entry><entry><literal>nntp_ask_followup_to</literal></entry></row>
+            <row><entry><literal>ask_x_comment_to</literal></entry><entry><literal>nntp_ask_x_comment_to</literal></entry></row>
+            <row><entry><literal>catchup_newsgroup</literal></entry><entry><literal>nntp_catchup</literal></entry></row>
+            <row><entry><literal>followup_to_poster</literal></entry><entry><literal>nntp_followup_to_poster</literal></entry></row>
+            <row><entry><literal>group_index_format</literal></entry><entry><literal>nntp_group_index_format</literal></entry></row>
+            <row><entry><literal>inews</literal></entry><entry><literal>nntp_inews</literal></entry></row>
+            <row><entry><literal>mime_subject</literal></entry><entry><literal>nntp_mime_subject</literal></entry></row>
+            <row><entry><literal>news_cache_dir</literal></entry><entry><literal>nntp_cache_dir</literal></entry></row>
+            <row><entry><literal>news_server</literal></entry><entry><literal>nntp_host</literal></entry></row>
+            <row><entry><literal>newsrc</literal></entry><entry><literal>nntp_newsrc</literal></entry></row>
+            <row><entry><literal>nntp_poll</literal></entry><entry><literal>nntp_mail_check</literal></entry></row>
+            <row><entry><literal>pop_checkinterval</literal></entry><entry><literal>pop_mail_check</literal></entry></row>
+            <row><entry><literal>post_moderated</literal></entry><entry><literal>nntp_post_moderated</literal></entry></row>
+            <row><entry><literal>save_unsubscribed</literal></entry><entry><literal>nntp_save_unsubscribed</literal></entry></row>
+            <row><entry><literal>show_new_news</literal></entry><entry><literal>nntp_show_new_news</literal></entry></row>
+            <row><entry><literal>show_only_unread</literal></entry><entry><literal>nntp_show_only_unread</literal></entry></row>
+            <row><entry><literal>x_comment_to</literal></entry><entry><literal>nntp_x_comment_to</literal></entry></row>
+            <row><entry><literal>smtp_auth_username</literal></entry><entry><literal>smtp_user</literal></entry></row>
+            <row><entry><literal>smtp_auth_password</literal></entry><entry><literal>smtp_pass</literal></entry></row>
+            <row><entry><literal>user_agent</literal></entry><entry><literal>agent_string</literal></entry></row>
           </tbody>
         </tgroup>
       </table>
