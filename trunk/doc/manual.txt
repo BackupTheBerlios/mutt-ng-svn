@@ -350,6 +350,8 @@
 
                 1. Acknowledgments
 
+   Index
+
    List of Tables
 
    2.1. Default Menu Movement Keys
@@ -2393,8 +2395,8 @@ Chapter 3. Configuration
    whether you sent them or whether you received them from someone else. For
    instance, when replying to a message that you sent to a different party,
    mutt will automatically suggest to send the response to the original
-   message's recipients -- responding to yourself won't make much sense in
-   many cases. (See reply-to .)
+   message's recipients--responding to yourself won't make much sense in many
+   cases. (See reply-to .)
 
    Many users receive e-mail under a number of different addresses. To fully
    use mutt's features here, the program must be able to recognize what
@@ -6108,7 +6110,7 @@ Chapter 7. Reference
 
    Type: number
 
-   Default: 0
+   Default: 1
 
    Availability: debug
 
@@ -7642,7 +7644,7 @@ Chapter 7. Reference
 
    Type: system property
 
-   Value: 481
+   Value: 503
 
    This is a read-only system property and specifies muttng's subversion
    revision string.
@@ -10817,3 +10819,729 @@ Chapter 8. Miscellany
      o Andreas Kneib <akneib@gmx.net>
      o Carsten Schoelzki <cjs@weisshuhn.de>
      o Elimar Riesebieter <riesebie@lxtec.de>
+
+Index
+
+  C
+
+   Configuration Variables
+
+                abort_noattach, abort_noattach
+
+                abort_nosubject, abort_nosubject
+
+                abort_unmodified, abort_unmodified
+
+                agent_string, agent_string
+
+                alias_file, alias_file
+
+                alias_format, alias_format
+
+                allow_8bit, allow_8bit
+
+                allow_ansi, allow_ansi
+
+                arrow_cursor, arrow_cursor
+
+                ascii_chars, ascii_chars
+
+                askbcc, askbcc
+
+                askcc, askcc
+
+                assumed_charset, assumed_charset
+
+                attach_format, attach_format
+
+                attach_remind_regexp, attach_remind_regexp
+
+                attach_sep, attach_sep
+
+                attach_split, attach_split
+
+                attribution, attribution
+
+                autoedit, autoedit
+
+                auto_tag, auto_tag
+
+                beep, beep
+
+                beep_new, beep_new
+
+                bounce, bounce
+
+                bounce_delivered, bounce_delivered
+
+                braille_friendly, braille_friendly
+
+                certificate_file, certificate_file
+
+                charset, charset
+
+                check_new, check_new
+
+                collapse_unread, collapse_unread
+
+                compose_format, compose_format
+
+                config_charset, config_charset
+
+                confirmappend, confirmappend
+
+                confirmcreate, confirmcreate
+
+                connect_timeout, connect_timeout
+
+                content_type, content_type
+
+                copy, copy
+
+                crypt_autoencrypt, crypt_autoencrypt
+
+                crypt_autopgp, crypt_autopgp
+
+                crypt_autosign, crypt_autosign
+
+                crypt_autosmime, crypt_autosmime
+
+                crypt_replyencrypt, crypt_replyencrypt
+
+                crypt_replysign, crypt_replysign
+
+                crypt_replysignencrypted, crypt_replysignencrypted
+
+                crypt_timestamp, crypt_timestamp
+
+                crypt_use_gpgme, crypt_use_gpgme
+
+                crypt_verify_sig, crypt_verify_sig
+
+                date_format, date_format
+
+                debug_level, debug_level
+
+                default_hook, default_hook
+
+                delete, delete
+
+                delete_space, delete_space
+
+                delete_untag, delete_untag
+
+                digest_collapse, digest_collapse
+
+                display_filter, display_filter
+
+                dotlock_program, dotlock_program
+
+                dsn_notify, dsn_notify
+
+                dsn_return, dsn_return
+
+                duplicate_threads, duplicate_threads
+
+                editor, editor
+
+                editor_headers, editor_headers
+
+                edit_headers, edit_headers
+
+                encode_from, encode_from
+
+                entropy_file, entropy_file
+
+                envelope_from, envelope_from
+
+                escape, escape
+
+                fast_reply, fast_reply
+
+                fcc_attach, fcc_attach
+
+                fcc_clear, fcc_clear
+
+                file_charset, file_charset
+
+                folder, folder
+
+                folder_format, folder_format
+
+                followup_to, followup_to
+
+                force_buffy_check, force_buffy_check
+
+                force_name, force_name
+
+                forward_decode, forward_decode
+
+                forward_decrypt, forward_decrypt
+
+                forward_edit, forward_edit
+
+                forward_format, forward_format
+
+                forward_quote, forward_quote
+
+                from, from
+
+                gecos_mask, gecos_mask
+
+                hdrs, hdrs
+
+                header, header
+
+                header_cache, header_cache
+
+                header_cache_compress, header_cache_compress
+
+                help, help
+
+                hidden_host, hidden_host
+
+                hide_limited, hide_limited
+
+                hide_missing, hide_missing
+
+                hide_thread_subject, hide_thread_subject
+
+                hide_top_limited, hide_top_limited
+
+                hide_top_missing, hide_top_missing
+
+                history, history
+
+                honor_followup_to, honor_followup_to
+
+                hostname, hostname
+
+                ignore_list_reply_to, ignore_list_reply_to
+
+                imap_authenticators, imap_authenticators
+
+                imap_check_subscribed, imap_check_subscribed
+
+                imap_delim_chars, imap_delim_chars
+
+                imap_headers, imap_headers
+
+                imap_home_namespace, imap_home_namespace
+
+                imap_keepalive, imap_keepalive
+
+                imap_list_subscribed, imap_list_subscribed
+
+                imap_login, imap_login
+
+                imap_mail_check, imap_mail_check
+
+                imap_pass, imap_pass
+
+                imap_passive, imap_passive
+
+                imap_peek, imap_peek
+
+                imap_reconnect, imap_reconnect
+
+                imap_servernoise, imap_servernoise
+
+                imap_user, imap_user
+
+                implicit_autoview, implicit_autoview
+
+                include, include
+
+                include_onlyfirst, include_onlyfirst
+
+                indent_string, indent_string
+
+                index_format, index_format
+
+                ispell, ispell
+
+                keep_flagged, keep_flagged
+
+                list_reply, list_reply
+
+                locale, locale
+
+                mailcap_path, mailcap_path
+
+                mailcap_sanitize, mailcap_sanitize
+
+                maildir_header_cache_verify, maildir_header_cache_verify
+
+                maildir_trash, maildir_trash
+
+                mail_check, mail_check
+
+                markers, markers
+
+                mark_old, mark_old
+
+                mask, mask
+
+                max_display_recips, max_display_recips
+
+                max_line_length, max_line_length
+
+                mbox, mbox
+
+                mbox_type, mbox_type
+
+                menu_context, menu_context
+
+                menu_move_off, menu_move_off
+
+                menu_scroll, menu_scroll
+
+                message_format, message_format
+
+                meta_key, meta_key
+
+                metoo, metoo
+
+                mh_purge, mh_purge
+
+                mh_seq_flagged, mh_seq_flagged
+
+                mh_seq_replied, mh_seq_replied
+
+                mh_seq_unseen, mh_seq_unseen
+
+                mime_forward, mime_forward
+
+                mime_forward_decode, mime_forward_decode
+
+                mime_forward_rest, mime_forward_rest
+
+                mixmaster, mixmaster
+
+                mix_entry_format, mix_entry_format
+
+                move, move
+
+                msgid_format, msgid_format
+
+                muttng_bindir, muttng_bindir
+
+                muttng_docdir, muttng_docdir
+
+                muttng_folder_name, muttng_folder_name
+
+                muttng_folder_path, muttng_folder_path
+
+                muttng_hcache_backend, muttng_hcache_backend
+
+                muttng_pwd, muttng_pwd
+
+                muttng_revision, muttng_revision
+
+                muttng_sysconfdir, muttng_sysconfdir
+
+                muttng_version, muttng_version
+
+                narrow_tree, narrow_tree
+
+                net_inc, net_inc
+
+                nntp_ask_followup_to, nntp_ask_followup_to
+
+                nntp_ask_x_comment_to, nntp_ask_x_comment_to
+
+                nntp_cache_dir, nntp_cache_dir
+
+                nntp_catchup, nntp_catchup
+
+                nntp_context, nntp_context
+
+                nntp_followup_to_poster, nntp_followup_to_poster
+
+                nntp_group_index_format, nntp_group_index_format
+
+                nntp_host, nntp_host
+
+                nntp_inews, nntp_inews
+
+                nntp_load_description, nntp_load_description
+
+                nntp_mail_check, nntp_mail_check
+
+                nntp_mime_subject, nntp_mime_subject
+
+                nntp_newsrc, nntp_newsrc
+
+                nntp_pass, nntp_pass
+
+                nntp_post_moderated, nntp_post_moderated
+
+                nntp_reconnect, nntp_reconnect
+
+                nntp_save_unsubscribed, nntp_save_unsubscribed
+
+                nntp_show_new_news, nntp_show_new_news
+
+                nntp_show_only_unread, nntp_show_only_unread
+
+                nntp_user, nntp_user
+
+                nntp_x_comment_to, nntp_x_comment_to
+
+                operating_system, operating_system
+
+                pager, pager
+
+                pager_context, pager_context
+
+                pager_format, pager_format
+
+                pager_index_lines, pager_index_lines
+
+                pager_stop, pager_stop
+
+                pgp_autoinline, pgp_autoinline
+
+                pgp_auto_decode, pgp_auto_decode
+
+                pgp_check_exit, pgp_check_exit
+
+                pgp_clearsign_command, pgp_clearsign_command
+
+                pgp_decode_command, pgp_decode_command
+
+                pgp_decrypt_command, pgp_decrypt_command
+
+                pgp_encrypt_only_command, pgp_encrypt_only_command
+
+                pgp_encrypt_sign_command, pgp_encrypt_sign_command
+
+                pgp_entry_format, pgp_entry_format
+
+                pgp_export_command, pgp_export_command
+
+                pgp_getkeys_command, pgp_getkeys_command
+
+                pgp_good_sign, pgp_good_sign
+
+                pgp_ignore_subkeys, pgp_ignore_subkeys
+
+                pgp_import_command, pgp_import_command
+
+                pgp_list_pubring_command, pgp_list_pubring_command
+
+                pgp_list_secring_command, pgp_list_secring_command
+
+                pgp_long_ids, pgp_long_ids
+
+                pgp_mime_auto, pgp_mime_auto
+
+                pgp_replyinline, pgp_replyinline
+
+                pgp_retainable_sigs, pgp_retainable_sigs
+
+                pgp_show_unusable, pgp_show_unusable
+
+                pgp_sign_as, pgp_sign_as
+
+                pgp_sign_command, pgp_sign_command
+
+                pgp_sort_keys, pgp_sort_keys
+
+                pgp_strict_enc, pgp_strict_enc
+
+                pgp_timeout, pgp_timeout
+
+                pgp_use_gpg_agent, pgp_use_gpg_agent
+
+                pgp_verify_command, pgp_verify_command
+
+                pgp_verify_key_command, pgp_verify_key_command
+
+                pipe_decode, pipe_decode
+
+                pipe_sep, pipe_sep
+
+                pipe_split, pipe_split
+
+                pop_authenticators, pop_authenticators
+
+                pop_auth_try_all, pop_auth_try_all
+
+                pop_delete, pop_delete
+
+                pop_host, pop_host
+
+                pop_last, pop_last
+
+                pop_mail_check, pop_mail_check
+
+                pop_pass, pop_pass
+
+                pop_reconnect, pop_reconnect
+
+                pop_user, pop_user
+
+                postpone, postpone
+
+                postponed, postponed
+
+                post_indent_string, post_indent_string
+
+                preconnect, preconnect
+
+                print, print
+
+                print_command, print_command
+
+                print_decode, print_decode
+
+                print_split, print_split
+
+                prompt_after, prompt_after
+
+                query_command, query_command
+
+                quit, quit
+
+                quote_empty, quote_empty
+
+                quote_quoted, quote_quoted
+
+                quote_regexp, quote_regexp
+
+                read_inc, read_inc
+
+                read_only, read_only
+
+                realname, realname
+
+                recall, recall
+
+                record, record
+
+                reply_regexp, reply_regexp
+
+                reply_self, reply_self
+
+                reply_to, reply_to
+
+                resolve, resolve
+
+                reverse_alias, reverse_alias
+
+                reverse_name, reverse_name
+
+                reverse_realname, reverse_realname
+
+                rfc2047_parameters, rfc2047_parameters
+
+                save_address, save_address
+
+                save_empty, save_empty
+
+                save_name, save_name
+
+                score, score
+
+                score_threshold_delete, score_threshold_delete
+
+                score_threshold_flag, score_threshold_flag
+
+                score_threshold_read, score_threshold_read
+
+                sendmail, sendmail
+
+                sendmail_wait, sendmail_wait
+
+                send_charset, send_charset
+
+                shell, shell
+
+                sidebar_boundary, sidebar_boundary
+
+                sidebar_delim, sidebar_delim
+
+                sidebar_newmail_only, sidebar_newmail_only
+
+                sidebar_number_format, sidebar_number_format
+
+                sidebar_shorten_hierarchy, sidebar_shorten_hierarchy
+
+                sidebar_visible, sidebar_visible
+
+                sidebar_width, sidebar_width
+
+                signature, signature
+
+                signoff_string, signoff_string
+
+                sig_dashes, sig_dashes
+
+                sig_on_top, sig_on_top
+
+                simple_search, simple_search
+
+                sleep_time, sleep_time
+
+                smart_wrap, smart_wrap
+
+                smileys, smileys
+
+                smime_ask_cert_label, smime_ask_cert_label
+
+                smime_ca_location, smime_ca_location
+
+                smime_certificates, smime_certificates
+
+                smime_decrypt_command, smime_decrypt_command
+
+                smime_decrypt_use_default_key, smime_decrypt_use_default_key
+
+                smime_default_key, smime_default_key
+
+                smime_encrypt_command, smime_encrypt_command
+
+                smime_encrypt_with, smime_encrypt_with
+
+                smime_get_cert_command, smime_get_cert_command
+
+                smime_get_cert_email_command, smime_get_cert_email_command
+
+                smime_get_signer_cert_command, smime_get_signer_cert_command
+
+                smime_import_cert_command, smime_import_cert_command
+
+                smime_is_default, smime_is_default
+
+                smime_keys, smime_keys
+
+                smime_pk7out_command, smime_pk7out_command
+
+                smime_sign_command, smime_sign_command
+
+                smime_sign_opaque_command, smime_sign_opaque_command
+
+                smime_timeout, smime_timeout
+
+                smime_verify_command, smime_verify_command
+
+                smime_verify_opaque_command, smime_verify_opaque_command
+
+                smtp_envelope, smtp_envelope
+
+                smtp_host, smtp_host
+
+                smtp_pass, smtp_pass
+
+                smtp_port, smtp_port
+
+                smtp_user, smtp_user
+
+                smtp_use_tls, smtp_use_tls
+
+                sort, sort
+
+                sort_alias, sort_alias
+
+                sort_aux, sort_aux
+
+                sort_browser, sort_browser
+
+                sort_re, sort_re
+
+                spam_separator, spam_separator
+
+                spoolfile, spoolfile
+
+                ssl_ca_certificates_file, ssl_ca_certificates_file
+
+                ssl_client_cert, ssl_client_cert
+
+                ssl_force_tls, ssl_force_tls
+
+                ssl_min_dh_prime_bits, ssl_min_dh_prime_bits
+
+                ssl_starttls, ssl_starttls
+
+                ssl_usesystemcerts, ssl_usesystemcerts
+
+                ssl_use_sslv2, ssl_use_sslv2
+
+                ssl_use_sslv3, ssl_use_sslv3
+
+                ssl_use_tlsv1, ssl_use_tlsv1
+
+                status_chars, status_chars
+
+                status_format, status_format
+
+                status_on_top, status_on_top
+
+                strict_mailto, strict_mailto
+
+                strict_mime, strict_mime
+
+                strict_threads, strict_threads
+
+                strip_was, strip_was
+
+                strip_was_regex, strip_was_regex
+
+                stuff_quoted, stuff_quoted
+
+                suspend, suspend
+
+                text_flowed, text_flowed
+
+                thorough_search, thorough_search
+
+                thread_received, thread_received
+
+                tilde, tilde
+
+                timeout, timeout
+
+                tmpdir, tmpdir
+
+                to_chars, to_chars
+
+                trash, trash
+
+                tunnel, tunnel
+
+                umask, umask
+
+                uncollapse_jump, uncollapse_jump
+
+                use_8bitmime, use_8bitmime
+
+                use_domain, use_domain
+
+                use_from, use_from
+
+                use_idn, use_idn
+
+                use_ipv6, use_ipv6
+
+                visual, visual
+
+                wait_key, wait_key
+
+                weed, weed
+
+                wrapmargin, wrapmargin
+
+                wrap_search, wrap_search
+
+                write_bcc, write_bcc
+
+                write_inc, write_inc
+
+                xterm_icon, xterm_icon
+
+                xterm_leave, xterm_leave
+
+                xterm_set_titles, xterm_set_titles
+
+                xterm_title, xterm_title
