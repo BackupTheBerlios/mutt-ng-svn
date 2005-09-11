@@ -4,7 +4,7 @@
 
 <book>
 
-<bookinfo>
+<bookinfo> <!--{{{-->
   <title>The Mutt Next Generation E-Mail Client</title>
   <author>
     <firstname>Andreas</firstname><surname>Krennmair</surname>
@@ -24,13 +24,13 @@
       Sven Guckes on mutt, ca. 2003: ``But it still sucks!''
     </para>
   </abstract>
-</bookinfo>
+</bookinfo> <!--}}}-->
 
-<chapter> <!--{{{-->
-  <title>Introduction  </title>
-  
-  <sect1>
-    <title>Overview  </title>
+<chapter id="introduction"> <!--{{{-->
+  <title>Introduction</title>
+
+  <sect1 id="overview">
+    <title>Overview</title>
     
     <para>
       <emphasis role="bold">Mutt-ng</emphasis> is a small but very
@@ -58,8 +58,8 @@
     
   </sect1>
   
-  <sect1>
-    <title>Mutt-ng Home Page  </title>
+  <sect1 id="homepage">
+    <title>Mutt-ng Home Page</title>
     
     <para>
       <ulink url="http://www.muttng.org/">http://www.muttng.org</ulink>
@@ -71,8 +71,8 @@
     
   </sect1>
   
-  <sect1>
-    <title>Mailing Lists  </title>
+  <sect1 id="mailinglists">
+    <title>Mailing Lists</title>
     
     <para>
       
@@ -102,8 +102,8 @@
     
   </sect1>
   
-  <sect1>
-    <title>Software Distribution Sites  </title>
+  <sect1 id="distrib-sites">
+    <title>Software Distribution Sites</title>
     
     <para>
       So far, there are no official releases of Mutt-ng, but you can
@@ -118,8 +118,8 @@
     
   </sect1>
   
-  <sect1>
-    <title>IRC  </title>
+  <sect1 id="irc">
+    <title>IRC</title>
     
     <para>
       Visit channel <emphasis>#muttng</emphasis> on <ulink
@@ -130,8 +130,8 @@
     
   </sect1>
   
-  <sect1>
-    <title>Weblog  </title>
+  <sect1 id="weblog">
+    <title>Weblog</title>
     
     <para>
       If you want to read fresh news about the latest development in
@@ -144,8 +144,8 @@
     
   </sect1>
   
-  <sect1>
-    <title>Copyright  </title>
+  <sect1 id="copyright">
+    <title>Copyright</title>
     
     <para>
       Mutt is Copyright (C) 1996-2000 Michael R. Elkins
@@ -175,16 +175,16 @@
   </sect1>
   
 </chapter>
-  <!--}}}-->
+<!--}}}-->
 
-<chapter>
-  <title>Getting Started    </title>
+<chapter id="getting-started"> <!--{{{-->
+  <title>Getting Started</title>
   
-  <sect1> <!--{{{-->
-    <title>Basic Concepts      </title>
+  <sect1 id="basic-concepts"> <!--{{{-->
+    <title>Basic Concepts</title>
     
-    <sect2> <!--{{{-->
-      <title>Screens and Menus        </title>
+    <sect2 id="concept-screens-and-menus"> <!--{{{-->
+      <title>Screens and Menus</title>
       
       <para>
         mutt-ng offers different screens of which every has its special
@@ -294,8 +294,8 @@
     </sect2>
       <!--}}}-->
     
-    <sect2> <!--{{{-->
-      <title>Configuration        </title>
+    <sect2 id="concept-configuration"> <!--{{{-->
+      <title>Configuration</title>
       
       <para>
         Mutt-ng does <emphasis>not</emphasis> feature an internal
@@ -326,8 +326,8 @@
     </sect2>
       <!--}}}-->
     
-    <sect2> <!--{{{-->
-      <title>Functions        </title>
+    <sect2 id="concept-functions"> <!--{{{-->
+      <title>Functions</title>
       
       <para>
         Mutt-ng offers great flexibility due to the use of functions:
@@ -346,8 +346,8 @@
     </sect2>
       <!--}}}-->
     
-    <sect2> <!--{{{-->
-      <title>Interaction        </title>
+    <sect2 id="concept-interaction"> <!--{{{-->
+      <title>Interaction</title>
       
       <para>
         Mutt-ng has two basic concepts of user interaction:
@@ -392,8 +392,8 @@
     </sect2>
       <!--}}}-->
     
-    <sect2> <!--{{{-->
-      <title>Modularization        </title>
+    <sect2 id="concept-modularization"> <!--{{{-->
+      <title>Modularization</title>
       
       <para>
         Although mutt-ng has many functionality built-in, many
@@ -415,8 +415,8 @@
     </sect2>
       <!--}}}-->
     
-    <sect2> <!--{{{-->
-      <title>Patterns        </title>
+    <sect2 id="concept-patterns"> <!--{{{-->
+      <title>Patterns</title>
       
       <para>
         Mutt-ng has a built-in pattern matching ``language'' which is
@@ -440,11 +440,11 @@
   
   <!--}}}-->
   
-  <sect1> <!--{{{-->
-    <title>Screens and Menus      </title>
+  <sect1 id="screens-and-menus"> <!--{{{-->
+    <title>Screens and Menus</title>
     
-    <sect2>
-      <title>Index       </title>
+    <sect2 id="intro-index">
+      <title>Index</title>
       
       <para>
         The index is the screen that you usually see first when you
@@ -467,8 +467,8 @@
       
     </sect2>
     
-    <sect2>
-      <title>Pager       </title>
+    <sect2 id="intro-pager">
+      <title>Pager</title>
       
       <para>
         The pager is responsible for showing the email content. On the
@@ -499,8 +499,8 @@
       
     </sect2>
     
-    <sect2>
-      <title>File Browser        </title>
+    <sect2 id="intro-browser">
+      <title>File Browser</title>
       
       <para>
         The file browser is the interface to the local or remote
@@ -518,8 +518,8 @@
       
     </sect2>
     
-    <sect2>
-      <title>Sidebar        </title>
+    <sect2 id="intro-sidebar">
+      <title>Sidebar</title>
       
       <para>
         The sidebar comes in handy to manage mails which are spread
@@ -538,8 +538,8 @@
       
     </sect2>
     
-    <sect2>
-      <title>Help        </title>
+    <sect2 id="intro-help">
+      <title>Help</title>
       
       <para>
         The help screen is meant to offer a quick help to the user. It
@@ -556,8 +556,8 @@
       
     </sect2>
     
-    <sect2>
-      <title>Compose Menu          </title>
+    <sect2 id="intro-compose">
+      <title>Compose Menu</title>
       
       <para>
         The compose menu features a split screen containing the
@@ -581,8 +581,8 @@
       
     </sect2>
     
-    <sect2>
-      <title>Alias Menu          </title>
+    <sect2 id="intro-alias">
+      <title>Alias Menu</title>
       
       <para>
         The alias menu is used to help users finding the recipients
@@ -600,8 +600,8 @@
       
     </sect2>
     
-    <sect2>
-      <title>Attachment Menu          </title>
+    <sect2 id="intro-attach">
+      <title>Attachment Menu</title>
       
       <para>
         As will be later discussed in detail, mutt-ng features a good
@@ -620,8 +620,8 @@
       
     </sect2>
     
-    <sect2>
-      <title>Key Menu          </title>
+    <sect2 id="intro-keysel">
+      <title>Key Menu</title>
       
       <para>
         <literal>FIXME</literal>
@@ -640,8 +640,8 @@
   </sect1>
     <!--}}}-->
   
-  <sect1> <!--{{{-->
-    <title>Moving Around in Menus  </title>
+  <sect1 id="moving"> <!--{{{-->
+    <title>Moving Around in Menus</title>
     
     <para>
       Information is presented in menus, very similar to ELM.  Here is a
@@ -716,7 +716,7 @@
     <!--}}}-->
   
   <sect1 id="editing"> <!--{{{-->
-    <title>Editing Input Fields  </title>
+    <title>Editing Input Fields</title>
     
     <para>
       Mutt-ng has a builtin line editor which is used as the primary way to
@@ -875,8 +875,8 @@
   </sect1>
     <!--}}}-->
   
-  <sect1>
-    <title>Reading Mail - The Index and Pager  </title> <!--{{{-->
+  <sect1 id="reading"> <!--{{{-->
+    <title>Reading Mail - The Index and Pager</title>
     
     <para>
       Similar to many other mail clients, there are two modes in which mail
@@ -891,8 +891,8 @@
       modes.
     </para>
     
-    <sect2>
-      <title>The Message Index</title> <!--{{{-->
+    <sect2 id="reading-index">
+      <title>The Message Index</title>
       
       <para>
 
@@ -1123,14 +1123,12 @@
           </variablelist>
         </para>
         
-        <!--}}}-->
       </sect3>
       
-      <!--}}}-->
     </sect2>
     
-    <sect2>
-      <title>The Pager</title> <!--{{{-->
+    <sect2 id="reading-pager">
+      <title>The Pager</title>
       
       <para>
         By default, Mutt-ng uses its builtin pager to display the body of
@@ -1263,11 +1261,10 @@ linkend="color">color</link>
           your xterm, then that color will be used instead of green.
         </para>
         
-        <!--}}}-->
       </sect2>
       
       <sect2 id="threads">
-        <title>Threaded Mode</title> <!--{{{-->
+        <title>Threaded Mode</title>
         
         <para>
           When the mailbox is <link linkend="sort">sorted</link> by <emphasis>
@@ -1336,11 +1333,10 @@ linkend="color">color</link>
           See also: <link linkend="strict-threads">strict-threads</link>.
         </para>
         
-        <!--}}}-->
       </sect2>
       
-      <sect2>
-        <title>Miscellaneous Functions</title> <!--{{{-->
+      <sect2 id="pager-functions">
+        <title>Miscellaneous Functions</title>
         
         <para>
           <emphasis role="bold">create-alias</emphasis><anchor id="create-alias"/>
@@ -1586,14 +1582,13 @@ linkend="color">color</link>
           
         </para>
         
-        <!--}}}-->
       </sect2>
       
-      <!--}}}-->
     </sect1>
+    <!--}}}-->
     
-    <sect1>
-      <title>Sending Mail  </title> <!--{{{-->
+    <sect1 id="sending"> <!--{{{-->
+      <title>Sending Mail</title>
       
       <para>
         The following bindings are available in the <emphasis>index</emphasis>
@@ -1637,8 +1632,8 @@ linkend="color">color</link>
         .
       </para>
       
-      <sect2>
-        <title>Composing new messages  </title> <!--{{{-->
+      <sect2 id="sending-compose">
+        <title>Composing new messages</title>
         
         <para>
           When you want to send an email using mutt-ng, simply press <literal>m</literal> on
@@ -1800,14 +1795,13 @@ set edit_headers</screen>
           
         </para>
         
-        <!--}}}-->
       </sect2>
       
-      <sect2>
-        <title>Replying      </title> <!--{{{-->
+      <sect2 id="sending-reply">
+        <title>Replying</title>
         
-        <sect3>
-          <title>Simple Replies       </title> <!--{{{-->
+        <sect3 id="sending-simple-reply">
+          <title>Simple Replies</title>
           
           <para>
             When you want to reply to an email message, select it in the index
@@ -1887,11 +1881,10 @@ set attribution = "attribution="* %n &lt;%a&gt; [%(%y-%m-%d %H:%M)]:"</screen>
             
           </para>
           
-          <!--}}}-->
         </sect3>
         
-        <sect3>
-          <title>Group Replies      </title> <!--{{{-->
+        <sect3 id="sending-group-reply">
+          <title>Group Replies</title>
           
           <para>
             In the situation where a group of people uses email as a
@@ -1908,11 +1901,10 @@ set attribution = "attribution="* %n &lt;%a&gt; [%(%y-%m-%d %H:%M)]:"</screen>
             
           </para>
           
-          <!--}}}-->
         </sect3>
         
-        <sect3>
-          <title>List Replies      </title> <!--{{{-->
+        <sect3 id="sending-list-reply">
+          <title>List Replies</title>
           
           <para>
             When you use mailing lists, it's generally better to send your
@@ -1955,14 +1947,12 @@ lists linuxevent@luga\.at vuln-dev@ mutt-ng-users@</screen>
             
           </para>
           
-          <!--}}}-->
         </sect3>
         
-        <!--}}}-->
       </sect2>
       
-      <sect2>
-        <title>Editing the message header  </title>
+      <sect2 id="sending-edit-header">
+        <title>Editing the message header</title>
         
         <para>
           When editing the header of your outgoing message, there are a couple
@@ -2011,8 +2001,8 @@ lists linuxevent@luga\.at vuln-dev@ mutt-ng-users@</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Using Mutt-ng with PGP  </title>
+      <sect2 id="sending-crypto">
+        <title>Using Mutt-ng with PGP</title>
         
         <para>
           If you want to use PGP, you can specify 
@@ -2139,8 +2129,8 @@ lists linuxevent@luga\.at vuln-dev@ mutt-ng-users@</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Sending anonymous messages via mixmaster  </title>
+      <sect2 id="sending-mixmaster">
+        <title>Sending anonymous messages via mixmaster</title>
         
         <para>
           You may also have configured mutt to co-operate with Mixmaster, an
@@ -2212,7 +2202,7 @@ lists linuxevent@luga\.at vuln-dev@ mutt-ng-users@</screen>
     </sect1>
     
     <sect1 id="forwarding-mail">
-      <title>Forwarding and Bouncing Mail  </title>
+      <title>Forwarding and Bouncing Mail</title>
       
       <para>
         Often, it is necessary to forward mails to other people.
@@ -2282,7 +2272,7 @@ a horrible death.
     </sect1>
     
     <sect1 id="postponing-mail">
-      <title>Postponing Mail  </title>
+      <title>Postponing Mail</title>
       
       <para>
         At times it is desirable to delay sending a message that you have
@@ -2328,14 +2318,17 @@ a horrible death.
       </para>
       
     </sect1>
+
+    <!--}}}-->
     
-  </chapter>
+</chapter>
+<!--}}}-->
   
-  <chapter>
-    <title>Configuration  </title>
+<chapter id="configuration"> <!--{{{-->
+    <title>Configuration</title>
     
-    <sect1>
-      <title>Locations of Configuration Files  </title>
+    <sect1 id="configuration-files">
+      <title>Locations of Configuration Files</title>
       
       <para>
         While the default configuration (or ``preferences'') make Mutt-ng
@@ -2379,8 +2372,8 @@ a horrible death.
       
     </sect1>
     
-    <sect1 id="muttrc-syntax">
-      <title>Basic Syntax of Initialization Files  </title>
+    <sect1 id="configuration-syntax">
+      <title>Basic Syntax of Initialization Files</title>
       
       <para>
         An initialization file consists of a series of <link linkend="commands">
@@ -2510,16 +2503,16 @@ line5</screen>
       
     </sect1>
     
-    <sect1>
-      <title>Expansion within variables    </title>
+    <sect1 id="configuration-expansion">
+      <title>Expansion within variables</title>
       
       <para>
         Besides just assign static content to variables, there's plenty of
         ways of adding external and more or less dynamic content.
       </para>
       
-      <sect2>
-        <title>Commands' Output     </title>
+      <sect2 id="configuration-expansion-commands">
+        <title>Commands' Output</title>
         
         <para>
           It is possible to substitute the output of a Unix command in an
@@ -2543,8 +2536,8 @@ my_hdr X-Operating-System: `uname -a`</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Environment Variables     </title>
+      <sect2 id="configuration-expansion-environment">
+        <title>Environment Variables</title>
         
         <para>
           UNIX environments can be accessed like the way it is done in
@@ -2574,8 +2567,8 @@ set record=+sent_on_$HOSTNAME</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Configuration Variables     </title>
+      <sect2 id="configuration-expansion-config">
+        <title>Configuration Variables</title>
         
         <para>
           As for environment variables, the values of all configuration
@@ -2617,8 +2610,8 @@ set imap_home_namespace = $folder</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Self-Defined Variables     </title>
+      <sect2 id="configuration-expansion-self">
+        <title>Self-Defined Variables</title>
         
         <para>
           Mutt-ng flexibly allows users to define their own variables. To
@@ -2744,8 +2737,8 @@ unset user_foo</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Pre-Defined Variables     </title>
+      <sect2 id="configuration-expansion-predef">
+        <title>Pre-Defined Variables</title>
         
         <para>
           In order to allow users to share one setup over a number of
@@ -2868,8 +2861,8 @@ folder-hook . 'source ~/.mutt/score-$muttng_folder_name'</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Type Conversions     </title>
+      <sect2 id="configuration-expansion-typeconv">
+        <title>Type Conversions</title>
         
         <para>
           A note about variable's types during conversion: internally
@@ -2896,7 +2889,7 @@ set folder = $user_magic_number</screen>
     </sect1>
     
     <sect1 id="alias">
-      <title>Defining/Using aliases  </title>
+      <title>Defining/Using aliases</title>
       
       <para>
         <literallayout>
@@ -3017,7 +3010,7 @@ set alias_file=~/.mail_aliases</screen>
     </sect1>
     
     <sect1 id="bind">
-      <title>Changing the default key bindings  </title>
+      <title>Changing the default key bindings</title>
       
       <para>
         <literallayout>
@@ -3236,7 +3229,7 @@ Usage: <literal>bind</literal> <emphasis>map</emphasis> <emphasis>key</emphasis>
     </sect1>
     
     <sect1 id="charset-hook">
-      <title>Defining aliases for character sets   </title>
+      <title>Defining aliases for character sets</title>
       
       <para>
         <literallayout>
@@ -3267,7 +3260,7 @@ Usage: <literal>iconv-hook</literal> <emphasis>charset</emphasis> <emphasis> loc
     </sect1>
     
     <sect1 id="folder-hook">
-      <title>Setting variables based upon mailbox  </title>
+      <title>Setting variables based upon mailbox</title>
       
       <para>
         <literallayout>
@@ -3332,7 +3325,7 @@ folder-hook . set sort=date-sent</screen>
     </sect1>
     
     <sect1 id="macro">
-      <title>Keyboard macros  </title>
+      <title>Keyboard macros</title>
       
       <para>
         <literallayout>
@@ -3408,7 +3401,7 @@ Usage: <literal>macro</literal> <emphasis>menu</emphasis> <emphasis>key</emphasi
     </sect1>
     
     <sect1 id="color">
-      <title>Using color and mono video attributes  </title>
+      <title>Using color and mono video attributes</title>
       
       <para>
         <literallayout>
@@ -3754,7 +3747,7 @@ Usage: <literal>unmono</literal> index <emphasis>pattern</emphasis>&lsqb; <empha
     </sect1>
     
     <sect1 id="ignore">
-      <title>Ignoring (weeding) unwanted message headers  </title>
+      <title>Ignoring (weeding) unwanted message headers</title>
       
       <para>
         <literallayout>
@@ -3809,7 +3802,7 @@ unignore posted-to:</screen>
     </sect1>
     
     <sect1 id="alternates">
-      <title>Alternative addresses  </title>
+      <title>Alternative addresses</title>
       
       <para>
         Usage: <literal>&lsqb;un&rsqb;alternates</literal> <emphasis>regexp</emphasis> &lsqb; <emphasis>
@@ -3824,7 +3817,7 @@ unignore posted-to:</screen>
         depending on whether you sent them or whether you received them from
         someone else.  For instance, when replying to a message that you
         sent to a different party, mutt will automatically suggest to send
-        the response to the original message's recipients -- responding to
+        the response to the original message's recipients--responding to
         yourself won't make much sense in many cases.  (See <link linkend="reply-to">
           reply-to
         </link>
@@ -3877,11 +3870,11 @@ unignore posted-to:</screen>
       
     </sect1>
     
-    <sect1>
-      <title>Format = Flowed    </title>
+    <sect1 id="format-flowed">
+      <title>Format = Flowed</title>
       
-      <sect2>
-        <title>Introduction      </title>
+      <sect2 id="format-flowed-intro">
+        <title>Introduction</title>
         
         <para>
           Mutt-ng contains support for so-called <literal>format=flowed</literal> messages.
@@ -3904,8 +3897,8 @@ unignore posted-to:</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Receiving: Display Setup      </title>
+      <sect2 id="format-flowed-display">
+        <title>Receiving: Display Setup</title>
         
         <para>
           When you receive emails that are marked as <literal>format=flowed</literal>
@@ -3989,8 +3982,8 @@ set stuff_quoted</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Sending      </title>
+      <sect2 id="format-flowed-send">
+        <title>Sending</title>
         
         <para>
           If you want mutt-ng to send emails with <literal>format=flowed</literal> set, you
@@ -4064,7 +4057,7 @@ set text_flowed</screen>
         
       </sect2>
       
-      <sect2>
+      <sect2 id="format-flowed-notes">
         <title>Additional Notes</title>
         
         <para>
@@ -4093,7 +4086,7 @@ set text_flowed</screen>
     </sect1>
     
     <sect1 id="lists">
-      <title>Mailing lists  </title>
+      <title>Mailing lists</title>
       
       <para>
         <literallayout>
@@ -4174,7 +4167,7 @@ Usage: <literal>&lsqb;un&rsqb;subscribe</literal> <emphasis>regexp</emphasis> &l
     </sect1>
     
     <sect1 id="mbox-hook">
-      <title>Using Multiple spool mailboxes  </title>
+      <title>Using Multiple spool mailboxes</title>
       
       <para>
         <literallayout>
@@ -4209,7 +4202,7 @@ Usage: <literal>mbox-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <e
     </sect1>
     
     <sect1 id="mailboxes">
-      <title>Defining mailboxes which receive mail  </title>
+      <title>Defining mailboxes which receive mail</title>
       
       <para>
         <literallayout>
@@ -4281,7 +4274,7 @@ Usage: <literal>&lsqb;un&rsqb;mailboxes</literal> &lsqb;!&rsqb;<emphasis>filenam
     </sect1>
     
     <sect1 id="my-hdr">
-      <title>User defined headers  </title>
+      <title>User defined headers</title>
       
       <para>
         <literallayout>
@@ -4347,7 +4340,7 @@ unmy&lowbar;hdr to cc</screen>
     </sect1>
     
     <sect1 id="hdr-order">
-      <title>Defining the order of headers when viewing messages  </title>
+      <title>Defining the order of headers when viewing messages</title>
       
       <para>
         <literallayout>
@@ -4381,7 +4374,7 @@ hdr&lowbar;order From Date: From: To: Cc: Subject:</screen>
     </sect1>
     
     <sect1 id="save-hook">
-      <title>Specify default save filename  </title>
+      <title>Specify default save filename</title>
       
       <para>
         <literallayout>
@@ -4429,7 +4422,7 @@ save-hook aol\\.com$ +spam</screen>
     </sect1>
     
     <sect1 id="fcc-hook">
-      <title>Specify default Fcc: mailbox when composing  </title>
+      <title>Specify default Fcc: mailbox when composing</title>
       
       <para>
         <literallayout>
@@ -4475,7 +4468,7 @@ Usage: <literal>fcc-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <em
     </sect1>
     
     <sect1 id="fcc-save-hook">
-      <title>Specify default save filename and default Fcc: mailbox at once  </title>
+      <title>Specify default save filename and default Fcc: mailbox at once</title>
       
       <para>
         <literallayout>
@@ -4497,8 +4490,9 @@ Usage: <literal>fcc-save-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis
     </sect1>
     
     <sect1 id="send-hook">
-      <title>Change settings based upon message recipients  </title>
-      
+      <title>Change settings based upon message recipients</title>
+
+      <anchor id="reply-hook"/>
       <para>
         <literallayout>
 Usage: <literal>reply-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <emphasis>command</emphasis>
@@ -4596,7 +4590,7 @@ Usage: <literal>send2-hook</literal> &lsqb;!&rsqb;<emphasis>pattern</emphasis> <
     </sect1>
     
     <sect1 id="message-hook">
-      <title>Change settings before formatting a message  </title>
+      <title>Change settings before formatting a message</title>
       
       <para>
         <literallayout>
@@ -4635,7 +4629,7 @@ message-hook '~f freshmeat-news' 'set pager="less \"+/^  subject:.*\""'</screen>
     </sect1>
     
     <sect1 id="crypt-hook">
-      <title>Choosing the cryptographic key of the recipient  </title>
+      <title>Choosing the cryptographic key of the recipient</title>
       
       <para>
         <literallayout>
@@ -4668,7 +4662,7 @@ Usage: <literal>crypt-hook</literal> <emphasis>pattern</emphasis> <emphasis>keyi
     </sect1>
     
     <sect1 id="push">
-      <title>Adding key sequences to the keyboard buffer  </title>
+      <title>Adding key sequences to the keyboard buffer</title>
       
       <para>
         <literallayout>
@@ -4699,7 +4693,7 @@ folder-hook . 'push &lt;collapse-all&gt;'
     </sect1>
     
     <sect1 id="exec">
-      <title>Executing functions  </title>
+      <title>Executing functions</title>
       
       <para>
         <literallayout>
@@ -4720,7 +4714,7 @@ Usage: <literal>exec</literal> <emphasis>function</emphasis> &lsqb; <emphasis>fu
     </sect1>
     
     <sect1 id="score-command">
-      <title>Message Scoring  </title>
+      <title>Message Scoring</title>
       
       <para>
         <literallayout>
@@ -4860,7 +4854,7 @@ color index  red     yellow  "~n 100-"</screen>
     </sect1>
     
     <sect1 id="spam">
-      <title>Spam detection  </title>
+      <title>Spam detection</title>
       
       <para>
         <literallayout>
@@ -5036,7 +5030,7 @@ spam "^From: .*MAILER-DAEMON"       "999"</screen>
     </sect1>
     
     <sect1 id="set">
-      <title>Setting variables  </title>
+      <title>Setting variables</title>
       
       <para>
         <literallayout>
@@ -5161,7 +5155,7 @@ set ?allow_8bit</screen>
     </sect1>
     
     <sect1 id="source">
-      <title>Reading initialization commands from another file  </title>
+      <title>Reading initialization commands from another file</title>
       
       <para>
         <literallayout>
@@ -5199,7 +5193,7 @@ Usage: <literal>source</literal> <emphasis>filename</emphasis> &lsqb; <emphasis>
     </sect1>
     
     <sect1 id="unhook">
-      <title>Removing hooks  </title>
+      <title>Removing hooks</title>
       
       <para>
         <literallayout>
@@ -5220,11 +5214,11 @@ Usage: <literal>unhook</literal> &lsqb; * &verbar; <emphasis>hook-type</emphasis
       
     </sect1>
     
-    <sect1 id="sect:sharingsetups">
-      <title>Sharing Setups      </title>
+    <sect1 id="share">
+      <title>Sharing Setups</title>
       
-      <sect2>
-        <title>Character Sets      </title>
+      <sect2 id="share-charset">
+        <title>Character Sets</title>
         
         <para>
           As users may run mutt-ng on different systems, the configuration
@@ -5273,8 +5267,8 @@ set config_charset = "..."</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Modularization        </title>
+      <sect2 id="share-modularization">
+        <title>Modularization</title>
         
         <para>
           ``Modularization'' means to divide the setup into several files
@@ -5294,8 +5288,8 @@ set config_charset = "..."</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Conditional parts      </title>
+      <sect2 id="share-conditional">
+        <title>Conditional parts</title>
         
         <para>
           When using a configuration on different systems, the user may not
@@ -5461,8 +5455,8 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
       
     </sect1>
     
-    <sect1>
-      <title>Obsolete Variables  </title>
+    <sect1 id="vars-obsolete">
+      <title>Obsolete Variables</title>
       
       <para>
         In the process of ensuring and creating more consistency, many
@@ -5482,16 +5476,17 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
     </sect1>
     
   </chapter>
+  <!--}}}-->
   
-  <chapter>
-    <title>Advanced Usage  </title>
+  <chapter id="advanced-usage"> <!--{{{-->
+    <title>Advanced Usage</title>
     
-    <sect1 id="regexp">
-      <title>Regular Expressions  </title>
+    <sect1 id="advanced-regexp">
+      <title>Regular Expressions</title>
       
       <para>
         All string patterns in Mutt-ng including those in more complex
-        <link linkend="patterns">patterns</link> must be specified
+        <link linkend="tab-patterns">patterns</link> must be specified
         using regular expressions (regexp) in the ``POSIX extended'' syntax
         (which
         is more or less the syntax used by egrep and GNU awk).  For your
@@ -5515,7 +5510,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
         Note that the regular expression can be enclosed/delimited by either
         &quot;
         or ' which is useful if the regular expression includes a white-space
-        character.  See <link linkend="muttrc-syntax">muttrc-syntax</link>
+        character.  See <link linkend="configuration-syntax">muttrc-syntax</link>
         for more information on &quot; and ' delimiter processing.  To match a
         literal &quot; or ' you must preface it with \ (backslash).
       </para>
@@ -5906,27 +5901,27 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
       
     </sect1>
     
-    <sect1>
-      <title>Patterns  </title>
+    <sect1 id="advanced-patterns">
+      <title>Patterns</title>
       
       <para>
         Mutt-ng's pattern language provides a simple yet effective way to
         set up rules to match messages, e.g. for operations like tagging and
         scoring. A pattern consists of one or more sub-pattern, which can be
         logically grouped, ORed, and negated. For a complete listing of
-        these patterns, please refer to table <link linkend="patterns">patterns</link> in the Reference chapter.
+        these patterns, please refer to table <link linkend="tab-patterns">patterns</link> in the Reference chapter.
       </para>
       
       <para>
         It must be noted that in this table, <literal>EXPR</literal> is
         a regular expression. For ranges, the forms
         <literal>&lt;[MAX]</literal>, <literal>&gt;&#62;[MIN]</literal>,
-        <literal> [MIN]- </literal> and <literal>-[MAX]</literal> are
+        <literal> [MIN]-</literal> and <literal>-[MAX]</literal> are
         also possible.
       </para>
       
-      <sect2>
-        <title>Complex Patterns </title>
+      <sect2 id="patterns-complex">
+        <title>Complex Patterns</title>
         
         <para>
           It is possible to combine several sub-patterns to a more complex
@@ -5975,8 +5970,8 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Patterns and Dates </title>
+      <sect2 sect="patterns-dates">
+        <title>Patterns and Dates</title>
         
         <para>
           When using dates in patterns, the dates must be specified in a
@@ -6043,11 +6038,11 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
       
     </sect1>
     
-    <sect1>
-      <title>Format Strings      </title>
+    <sect1 id="formatstrings">
+      <title>Format Strings</title>
       
-      <sect2>
-        <title>Introduction        </title>
+      <sect2 id="formatstrings-intro">
+        <title>Introduction</title>
         
         <para>
           The so called <emphasis>Format Strings</emphasis> offer great
@@ -6200,8 +6195,8 @@ Mutt-ng 1.5.9i on mailhost: Inbox: ...</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Conditional Expansion        </title>
+      <sect2 id="formatstrings-conditional">
+        <title>Conditional Expansion</title>
         
         <para>
           To only print the number of messages if there are new messages in
@@ -6322,8 +6317,8 @@ set status_format = "%v on %h: %B: %?n?%n&amp;no? new messages ...</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Modifications and Padding        </title>
+      <sect2 id="formatstrings-padding">
+        <title>Modifications and Padding</title>
         
         <para>
           Besides the information given so far, there're even more features of
@@ -6436,8 +6431,8 @@ set status_format = "%B: %?n?%n&amp;no? new messages %&#62; (%v on %h)"</screen>
       
     </sect1>
     
-    <sect1>
-      <title>Using Tags  </title>
+    <sect1 id="using-tags">
+      <title>Using Tags</title>
       
       <para>
         Sometimes it is desirable to perform an operation on a group of
@@ -6447,7 +6442,7 @@ set status_format = "%B: %?n?%n&amp;no? new messages %&#62; (%v on %h)"</screen>
         matching a pattern, use the tag-pattern function, which is bound to
         ``shift-T'' by default.  Or you can select individual messages by
         hand using the ``tag-message'' function, which is bound to ``t'' by
-        default.  See <link linkend="patterns">patterns</link> for Mutt-ng's
+        default.  See <link linkend="tab-patterns">patterns</link> for Mutt-ng's
         pattern
         matching syntax.
       </para>
@@ -6482,7 +6477,7 @@ set status_format = "%B: %?n?%n&amp;no? new messages %&#62; (%v on %h)"</screen>
     </sect1>
     
     <sect1 id="hooks">
-      <title>Using Hooks  </title>
+      <title>Using Hooks</title>
       
       <para>
         A <emphasis>hook</emphasis> is a concept borrowed from the EMACS editor
@@ -6494,8 +6489,8 @@ set status_format = "%B: %?n?%n&amp;no? new messages %&#62; (%v on %h)"</screen>
         reading, or to whom you are sending mail.  In the Mutt-ng world, a <emphasis>
           hook
         </emphasis>
-        consists of a <link linkend="regexp">regexp</link> or
-        <link linkend="patterns">patterns</link> along with a
+        consists of a <link linkend="advanced-regexp">regexp</link> or
+        <link linkend="tab-patterns">patterns</link> along with a
         configuration option/command.  See
         
         <itemizedlist>
@@ -6575,14 +6570,14 @@ send-hook ~C'^b@b\.b$' my_hdr from: c@c.c</screen>
             fcc-hook,message-hook
           </literal>
           )are evaluated in a slightly different manner.  For the other
-          types of hooks, a <link linkend="regexp">regexp</link> is
+          types of hooks, a <link linkend="advanced-regexp">regexp</link> is
           sufficient.  But in dealing with messages a finer grain of control is
           needed for matching since for different purposes you want to match
           different criteria.
         </para>
         
         <para>
-          Mutt-ng allows the use of the <link linkend="patterns">patterns</link>
+          Mutt-ng allows the use of the <link linkend="tab-patterns">patterns</link>
           language for matching messages in hook commands.  This works in
           exactly the same way as it would when <emphasis>limiting</emphasis>
           or<emphasis>searching</emphasis> the mailbox, except that you are
@@ -6629,7 +6624,7 @@ send-hook '~t ^me@cs\.hmc\.edu$' 'my_hdr From: Mutt-ng User &#60;user@host&#62;'
     </sect1>
     
     <sect1 id="sidebar">
-      <title>Using the sidebar  </title>
+      <title>Using the sidebar</title>
       
       <para>
         The sidebar, a feature specific to Mutt-ng, allows you to use a mailbox
@@ -6721,7 +6716,7 @@ macro pager B ':toggle sidebar_visible^M'</screen>
     </sect1>
     
     <sect1 id="query">
-      <title>External Address Queries  </title>
+      <title>External Address Queries</title>
       
       <para>
         Mutt-ng supports connecting to external directory databases such as
@@ -6793,8 +6788,8 @@ roessler@guug.de        Thomas Roessler mutt pgp</screen>
       
     </sect1>
     
-    <sect1>
-      <title>Mailbox Formats  </title>
+    <sect1 id="mailbox-formats">
+      <title>Mailbox Formats</title>
       
       <para>
         Mutt-ng supports reading and writing of four different mailbox formats:
@@ -6876,7 +6871,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
     </sect1>
     
     <sect1 id="shortcuts">
-      <title>Mailbox Shortcuts  </title>
+      <title>Mailbox Shortcuts</title>
       
       <para>
         There are a number of built in shortcuts which refer to specific
@@ -6954,7 +6949,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
     </sect1>
     
     <sect1 id="using-lists">
-      <title>Handling Mailing Lists  </title>
+      <title>Handling Mailing Lists</title>
       
       <para>
         Mutt-ng has a few configuration options that make dealing with large
@@ -7079,8 +7074,8 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
       
     </sect1>
     
-    <sect1>
-      <title>Editing threads  </title>
+    <sect1 id="editing-threads">
+      <title>Editing threads</title>
       
       <para>
         Mutt-ng has the ability to dynamically restructure threads that are
@@ -7090,7 +7085,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         annoyances which make it hard to follow a discussion.
       </para>
       
-      <sect2>
+      <sect2 id="editing-threads-link">
         <title>Linking threads</title>
         
         <para>
@@ -7115,7 +7110,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         
       </sect2>
       
-      <sect2>
+      <sect2 id="editing-threads-break">
         <title>Breaking threads</title>
         
         <para>
@@ -7138,7 +7133,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
     </sect1>
     
     <sect1 id="dsn">
-      <title>Delivery Status Notification (DSN) Support  </title>
+      <title>Delivery Status Notification (DSN) Support</title>
       
       <para>
         RFC1894 defines a set of MIME content types for relaying information
@@ -7214,8 +7209,8 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
       
     </sect1>
     
-    <sect1>
-      <title>POP3 Support (OPTIONAL)  </title>
+    <sect1 id="pop3">
+      <title>POP3 Support (OPTIONAL)</title>
       
       <para>
         If Mutt-ng was compiled with POP3 support (by running the <emphasis>
@@ -7288,8 +7283,8 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
       
     </sect1>
     
-    <sect1>
-      <title>IMAP Support (OPTIONAL)  </title>
+    <sect1 id="imap">
+      <title>IMAP Support (OPTIONAL)</title>
       
       <para>
         If Mutt-ng was compiled with IMAP support (by running the <emphasis>
@@ -7371,7 +7366,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         selects the same folder.
       </para>
       
-      <sect2>
+      <sect2 id="imap-browser">
         <title>The Folder Browser</title>
         
         <para>
@@ -7424,7 +7419,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         
       </sect2>
       
-      <sect2>
+      <sect2 id="imap-auth">
         <title>Authentication</title>
         
         <para>
@@ -7511,8 +7506,8 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
       
     </sect1>
     
-    <sect1 id="reading-news">
-      <title>NNTP Support (OPTIONAL)  </title>
+    <sect1 id="nntp">
+      <title>NNTP Support (OPTIONAL)</title>
       
       <para>
         If compiled with ``--enable-nntp'' option, Mutt-ng can read news from
@@ -7533,8 +7528,8 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         maildir/IMAP.
       </para>
       
-      <sect2>
-        <title>Again: Scoring    </title>
+      <sect2 id="nntp-scoring">
+        <title>Again: Scoring</title>
         
         <para>
           Especially for Usenet, people often ask for advanced filtering
@@ -7628,8 +7623,8 @@ score !~* =42</screen>
       
     </sect1>
     
-    <sect1>
-      <title>SMTP Support (OPTIONAL)  </title>
+    <sect1 id="smtp">
+      <title>SMTP Support (OPTIONAL)</title>
       
       <para>
         Mutt-ng can be built using a library called ``libESMTP'' which
@@ -7686,7 +7681,7 @@ score !~* =42</screen>
     </sect1>
     
     <sect1 id="account-hook">
-      <title>Managing multiple IMAP/POP/NNTP accounts (OPTIONAL)  </title>
+      <title>Managing multiple IMAP/POP/NNTP accounts (OPTIONAL)</title>
       
       <para>
         If you happen to have accounts on multiple IMAP and/or POP servers,
@@ -7717,7 +7712,7 @@ account-hook imap://host2/ 'set tunnel="ssh host2 /usr/libexec/imapd"'</screen>
     </sect1>
     
     <sect1 id="urlview">
-      <title>Start a WWW Browser on URLs (EXTERNAL)  </title>
+      <title>Start a WWW Browser on URLs (EXTERNAL)</title>
       
       <para>
         If a message contains URLs (<emphasis>unified resource locator</emphasis> = address in the
@@ -7741,8 +7736,8 @@ macro pager \cb |urlview\n</screen>
       
     </sect1>
     
-    <sect1>
-      <title>Compressed folders Support (OPTIONAL)  </title>
+    <sect1 id="compressed-folders">
+      <title>Compressed folders Support (OPTIONAL)</title>
       
       <para>
         If Mutt-ng was compiled with compressed folders support (by running the
@@ -8010,7 +8005,7 @@ append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </screen>
         
       </sect2>
       
-      <sect2>
+      <sect2 id="encrypted-folders">
         <title>Encrypted folders</title>
         
         <para>
@@ -8053,9 +8048,10 @@ close-hook \\.pgp$ "pgp -fe YourPgpUserIdOrKeyId &#60; %t &#62; %f"
     </sect1>
     
   </chapter>
+  <!--}}}-->
   
-  <chapter>
-    <title>Mutt-ng's MIME Support  </title>
+  <chapter id="mime-support"> <!--{{{-->
+    <title>Mutt-ng's MIME Support</title>
     
     <para>
       Quite a bit of effort has been made to make Mutt-ng the premier text-mode
@@ -8070,8 +8066,8 @@ close-hook \\.pgp$ "pgp -fe YourPgpUserIdOrKeyId &#60; %t &#62; %f"
       the external commands to use for handling specific MIME types.
     </para>
     
-    <sect1>
-      <title>Using MIME in Mutt  </title>
+    <sect1 id="mime">
+      <title>Using MIME in Mutt</title>
       
       <para>
         There are three areas/menus in Mutt-ng which deal with MIME, they are
@@ -8080,7 +8076,7 @@ close-hook \\.pgp$ "pgp -fe YourPgpUserIdOrKeyId &#60; %t &#62; %f"
         menu.
       </para>
       
-      <sect2>
+      <sect2 id="mime-view">
         <title>Viewing MIME messages in the pager</title>
         
         <para>
@@ -8204,7 +8200,7 @@ close-hook \\.pgp$ "pgp -fe YourPgpUserIdOrKeyId &#60; %t &#62; %f"
       
     </sect1>
     
-    <sect1>
+    <sect1 id="mime-types">
       <title>
         MIME Type configuration with <literal>mime.types</literal>  
       </title>
@@ -8270,7 +8266,7 @@ audio/x-aiff                    aif aifc aiff</screen>
       
     </sect1>
     
-    <sect1>
+    <sect1 id="mime-mailcap">
       <title>
         MIME Viewer configuration with <literal>mailcap</literal>  
       </title>
@@ -8303,7 +8299,7 @@ ${HOME}/.mailcap:/usr/local/share/mutt/mailcap:/etc/mailcap:/etc/mailcap:/usr/et
         entries.
       </para>
       
-      <sect2>
+      <sect2 id="mime-mailcap-basics">
         <title>The Basics of the mailcap file</title>
         
         <para>
@@ -8331,7 +8327,7 @@ ${HOME}/.mailcap:/usr/local/share/mutt/mailcap:/etc/mailcap:/etc/mailcap:/usr/et
           The content type is specified in the MIME standard type/subtype
           method.
           For example,
-          <literal>text/plain, text/html, image/gif, </literal>
+          <literal>text/plain, text/html, image/gif,</literal>
           etc.  In addition, the mailcap format includes two formats for
           wildcards, one using the special '*' subtype, the other is the
           implicit
@@ -8413,7 +8409,7 @@ text/*; more</screen>
         
       </sect2>
       
-      <sect2>
+      <sect2 id="mime-mailcap-security">
         <title>Secure use of mailcap</title>
         
         <para>
@@ -8467,10 +8463,10 @@ text/test-mailcap-bug; cat %s; copiousoutput; test=charset=%{charset} \
         
       </sect2>
       
-      <sect2>
+      <sect2 id="mime-mailcap-advanced">
         <title>Advanced mailcap Usage</title>
         
-        <sect3>
+        <sect3 id="mime-mailcap-advanced-fields">
           <title>Optional Fields</title>
           
           <para>
@@ -8644,7 +8640,7 @@ text/html; lynx %s</screen>
           
         </sect3>
         
-        <sect3>
+        <sect3 id="mime-mailcap-advanced-searchorder">
           <title>Search Order</title>
           
           <para>
@@ -8697,7 +8693,7 @@ text/html;      lynx -dump %s; nametemplate=%s.html; copiousoutput</screen>
           
         </sect3>
         
-        <sect3>
+        <sect3 id="mime-mailcap-advanced-expansion">
           <title>Command Expansion</title>
           
           <para>
@@ -8782,7 +8778,7 @@ Content-Type: text/plain; charset=iso-8859-1</screen>
         
       </sect2>
       
-      <sect2>
+      <sect2 id="mime-mailcap-examples">
         <title>Example mailcap files</title>
         
         <para>
@@ -8850,7 +8846,7 @@ application/ms-excel; open.pl %s</screen>
     </sect1>
     
     <sect1 id="auto-view">
-      <title>MIME Autoview  </title>
+      <title>MIME Autoview</title>
       
       <para>
         In addition to explicitly telling Mutt-ng to view an attachment with
@@ -8909,7 +8905,7 @@ application/postscript; ps2ascii %s; copiousoutput</screen>
     </sect1>
     
     <sect1 id="alternative-order">
-      <title>MIME Multipart/Alternative  </title>
+      <title>MIME Multipart/Alternative</title>
       
       <para>
         Mutt-ng has some heuristics for determining which attachment of a
@@ -8945,7 +8941,7 @@ application/postscript image/*</screen>
     </sect1>
     
     <sect1 id="mime-lookup">
-      <title>MIME Lookup  </title>
+      <title>MIME Lookup</title>
       
       <para>
         Mutt-ng's mime&lowbar;lookup list specifies a list of mime-types that
@@ -8987,9 +8983,10 @@ mime_lookup application/octet-stream application/X-Lotus-Manuscript</screen>
     </sect1>
     
   </chapter>
+  <!--}}}-->
   
-  <chapter>
-    <title>Security Considerations    </title>
+  <chapter id="security"> <!--{{{-->
+    <title>Security Considerations</title>
     
     <para>
       First of all, mutt-ng contains no security holes included by
@@ -9015,8 +9012,8 @@ mime_lookup application/octet-stream application/X-Lotus-Manuscript</screen>
       of setup, please read this chapter carefully.
     </para>
     
-    <sect1>
-      <title>Passwords      </title>
+    <sect1 id="security-passwords">
+      <title>Passwords</title>
       
       <para>
         Although mutt-ng can be told the various passwords for accounts,
@@ -9030,8 +9027,8 @@ mime_lookup application/octet-stream application/X-Lotus-Manuscript</screen>
       
     </sect1>
     
-    <sect1>
-      <title>Temporary Files      </title>
+    <sect1 id="security-tempfiles">
+      <title>Temporary Files</title>
       
       <para>
         Mutt-ng uses many temporary files for viewing messages, verifying
@@ -9044,11 +9041,11 @@ mime_lookup application/octet-stream application/X-Lotus-Manuscript</screen>
       
     </sect1>
     
-    <sect1>
-      <title>Information Leaks    </title>
+    <sect1 id="security-leaks">
+      <title>Information Leaks</title>
       
-      <sect2>
-        <title>Message-ID: headers      </title>
+      <sect2 id="security-leaks-mid">
+        <title>Message-ID: headers</title>
         
         <para>
           In the default configuration, mutt-ng will leak some information
@@ -9066,8 +9063,8 @@ mime_lookup application/octet-stream application/X-Lotus-Manuscript</screen>
         
       </sect2>
       
-      <sect2>
-        <title>mailto:-style links      </title>
+      <sect2 id="security-leaks-mailto">
+        <title>mailto:-style links</title>
         
         <para>
           As mutt-ng be can be set up to be the mail client to handle
@@ -9137,8 +9134,8 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
       
     </sect1>
     
-    <sect1>
-      <title>External applications      </title>
+    <sect1 id="security-external">
+      <title>External applications</title>
       
       <para>
         Mutt-ng in many places has to rely on external applications or
@@ -9146,8 +9143,8 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
         applications.
       </para>
       
-      <sect2>
-        <title>mailcap        </title>
+      <sect2 id="security-external-mailcap">
+        <title>mailcap</title>
         
         <para>
           One of these is the <literal>mailcap</literal> mechanism as defined
@@ -9211,8 +9208,8 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
         
       </sect2>
       
-      <sect2>
-        <title>Other        </title>
+      <sect2 id="security-external-other">
+        <title>Other</title>
         
         <para>
           Besides the mailcap mechanism, mutt-ng uses a number of other
@@ -9236,12 +9233,13 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
     </sect1>
     
   </chapter>
+  <!--}}}-->
   
-  <chapter>
-    <title>Reference  </title>
+  <chapter id="reference"> <!--{{{-->
+    <title>Reference</title>
     
     <sect1 id="commandline">
-      <title>Command line options  </title>
+      <title>Command line options</title>
       
       <para>
         Running <literal>mutt</literal> with no arguments will make Mutt-ng
@@ -9347,11 +9345,11 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
     </sect1>
     
     <sect1 id="patterns">
-      <title>Patterns  </title>
+      <title>Patterns</title>
 
       <para>
 
-        <table>
+        <table id="tab-patterns">
           <title>Patterns</title>
           <tgroup cols="2" align="left" colsep="1" rowsep="1">
           <thead>
@@ -9413,7 +9411,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
       
       <para>
         Where EXPR are 
-        <link linkend="regexp">regexp</link>.  Special attention has to be
+        <link linkend="advanced-regexp">regexp</link>.  Special attention has to be
         made when using regular expressions inside of patterns.  Specifically,
         Mutt-ng's parser for these patterns will strip one level of backslash
         (\),
@@ -9439,7 +9437,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
     </sect1>
     
     <sect1 id="commands">
-      <title>Configuration Commands  </title>
+      <title>Configuration Commands</title>
       
       <para>
         The following are the commands understood by mutt.

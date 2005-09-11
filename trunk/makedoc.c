@@ -739,7 +739,10 @@ static void print_confline (const char *varname, int type, const char *val)
       sgml_fputs (varname);
       add_s ("</title>\n<para>Type: <literal>");
       add_s (type2human (type));
-      add_s ("</literal></para>\n\n");
+      add_s ("</literal></para>\n");
+      add_s ("<indexterm><primary>Configuration Variables</primary><secondary>");
+      sgml_fputs (varname);
+      add_s ("</secondary></indexterm>\n\n");
 
       if (type == DT_STR || type == DT_RX || type == DT_ADDR
           || type == DT_PATH) {

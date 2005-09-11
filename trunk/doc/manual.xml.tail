@@ -14,7 +14,7 @@
         command.
       </para>
       
-      <sect2>
+      <sect2 id="functions-generic">
         <title>generic</title>
         
         <para>
@@ -69,7 +69,7 @@
         
       </sect2>
       
-      <sect2>
+      <sect2 id="functions-index">
         <title>index</title>
         
         <para>
@@ -164,7 +164,7 @@
         
       </sect2>
       
-      <sect2>
+      <sect2 id="functions-pager">
         <title>pager</title>
         
         <para>
@@ -260,7 +260,7 @@
         
       </sect2>
       
-      <sect2>
+      <sect2 id="functions-alias">
         <title>alias</title>
         
         <para>
@@ -276,7 +276,7 @@
         
       </sect2>
       
-      <sect2>
+      <sect2 id="functions-query">
         <title>query</title>
         
         <para>
@@ -299,7 +299,7 @@
         
       </sect2>
       
-      <sect2>
+      <sect2 id="functions-attach">
         <title>attach</title>
         
         <para>
@@ -334,7 +334,7 @@
         
       </sect2>
       
-      <sect2>
+      <sect2 id="functions-compose">
         <title>compose</title>
         
         <para>
@@ -386,7 +386,7 @@
         
       </sect2>
       
-      <sect2>
+      <sect2 id="functions-postpone">
         <title>postpone</title>
         
         <para>
@@ -400,7 +400,7 @@
         
       </sect2>
       
-      <sect2>
+      <sect2 id="functions-browser">
         <title>browser</title>
         
         <para>
@@ -431,7 +431,7 @@
         
       </sect2>
       
-      <sect2>
+      <sect2 id="functions-crypto">
         <title>pgp</title>
         
         <para>
@@ -445,7 +445,7 @@
         
       </sect2>
       
-      <sect2>
+      <sect2 id="functions-editor">
         <title>editor</title>
         
         <para>
@@ -493,10 +493,10 @@
     
   </chapter>
   
-  <chapter>
+  <chapter id="miscellany">
     <title>Miscellany</title>
     
-    <sect1>
+    <sect1 id="acknowledgments">
       <title>Acknowledgments</title>
       
       <para>
@@ -684,5 +684,7 @@
       </sect1>
       
     </chapter>
-    
+
+    <index/>
+
   </book>

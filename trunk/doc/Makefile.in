@@ -200,3 +200,6 @@ manual.xml stamp-doc-xml: ../makedoc$(EXEEXT) $(top_srcdir)/init.h manual.xml.he
 		cat - $(srcdir)/manual.xml.tail > manual.xml
 	touch stamp-doc-xml
 
+publish: manual.html manual-chunked
+	rsync -azv -e "ssh -2" --delete ./html/ `whoami`@shell.berlios.de:/home/groups/mutt-ng/htdocs/manual
+	scp -2 -C manual.html muttng.css `whoami`@shell.berlios.de:/home/groups/mutt-ng/htdocs/manual
