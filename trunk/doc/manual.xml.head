@@ -1222,7 +1222,7 @@
           Furthermore, the following flags reflect who the message is
           addressed
           to.  They can be customized with the
-          <muttng-doc:varref name="to_chars" link="to-chars"/> variable.
+          <muttng-doc:varref name="to-chars"/> variable.
         </para>
         
         <para>
@@ -1490,7 +1490,7 @@
         <para>
           Mutt-ng uses these attributes for handling text/enriched messages,
           and they
-          can also be used by an external <muttng-doc:command name="auto_view"/>
+          can also be used by an external <muttng-doc:command name="auto-view"/>
           script for highlighting purposes.  <emphasis role="bold">Note:</emphasis> If you change the colors for your
           display, for example by changing the color associated with color2 for
           your xterm, then that color will be used instead of green.
@@ -1608,18 +1608,18 @@
           in the thread and hides the others. This is useful when threads
           contain so many messages that you can only see a handful of threads
           onthe screen. See <literal>%M</literal> in
-          <muttng-doc:varref name="index_format" link="index-format"/>.
+          <muttng-doc:varref name="index-format"/>.
         </para>
 
         <para>
           For example, you could use
-          <literal>%?M?(#%03M)&amp;(%4l)?</literal> in <muttng-doc:varref name="index_format" link="index-format"/>
+          <literal>%?M?(#%03M)&amp;(%4l)?</literal> in <muttng-doc:varref name="index-format"/>
           to optionally
           display the number of hidden messages if the thread is collapsed.
         </para>
         
         <para>
-          See also the <muttng-doc:varref name="strict_threads" link="strict-threads"/> variable.
+          See also the <muttng-doc:varref name="strict-threads"/> variable.
         </para>
         
       </sect2>
@@ -1634,9 +1634,9 @@
         <para>
           Creates a new alias based upon the current message (or prompts for a
           new one).  Once editing is complete, an <muttng-doc:command name="alias"/>
-          command is added to the file specified by the <muttng-doc:varref name="alias_file" link="alias-file"/>
+          command is added to the file specified by the <muttng-doc:varref name="alias-file"/>
           variable for future use. <emphasis role="bold">Note:</emphasis>
-          Specifying an <muttng-doc:varref name="alias_file" link="alias-file"/>
+          Specifying an <muttng-doc:varref name="alias-file"/>
           does not add the aliases specified there-in, you must also <muttng-doc:command name="source"/>
           the file.
         </para>
@@ -1740,7 +1740,7 @@
           match the regular expressions given by the <muttng-doc:command name="lists"/>
           commands, but also honor any <literal>Mail-Followup-To</literal>
           header(s) if the
-          <muttng-doc:varref name="honor_followup_to" link="honor-followup-to"/>
+          <muttng-doc:varref name="honor-followup-to"/>
           configuration variable is set.  Using this when replying to messages
           posted
           to mailing lists helps avoid duplicate copies being sent to the
@@ -1755,10 +1755,10 @@
         <para>
           Asks for an external Unix command and pipes the current or
           tagged message(s) to it. The variables
-          <muttng-doc:varref name="pipe_decode" link="honor-followup-to"/>,
-          <muttng-doc:varref name="pipe_split" link="pipe-split"/>,
-          <muttng-doc:varref name="pipe_decode" link="pipe-decode"/> and
-          <muttng-doc:varref name="wait_key" link="wait-key"/> 
+          <muttng-doc:varref name="pipe-decode"/>,
+          <muttng-doc:varref name="pipe-split"/>,
+          <muttng-doc:varref name="pipe-decode"/> and
+          <muttng-doc:varref name="wait-key"/> 
           control the exact behavior of this function.
         </para>
         
@@ -1791,7 +1791,7 @@
         
         <para>
           Asks for an external Unix command and executes it.  The
-          <muttng-doc:varref name="wait_key" link="wait-key"/>
+          <muttng-doc:varref name="wait-key"/>
           can be used to control
           whether Mutt-ng will wait for a key to be pressed when the command
           returns
@@ -1805,7 +1805,7 @@
         
         <para>
           The <emphasis>pager</emphasis> uses the
-          <muttng-doc:varref name="quote_regexp" link="quote-regexp"/>
+          <muttng-doc:varref name="quote-regexp"/>
           variable to detect quoted text when
           displaying the body of the message.  This function toggles the
           displayof the quoted material in the message.  It is particularly
@@ -2135,7 +2135,7 @@ set edit_headers</screen>
           certainoperations like composing a new mail, replying, forwarding,
           etc. are
           not permitted when you are in that folder. The <literal>%r</literal>
-          in <muttng-doc:varref name="status_format" link="status-format"/>
+          in <muttng-doc:varref name="status-format"/>
           will change to
           a 'A' to indicate that you are in attach-message mode.
         </para>
@@ -2339,8 +2339,8 @@ Attach: filename [description]</screen>
         </para>
         
         <para>
-          Also see the <muttng-doc:varref name="edit_headers" link="edit-headers"/> and
-          <muttng-doc:varref name="editor_headers" link="editor-headers"/> variables
+          Also see the <muttng-doc:varref name="edit-headers"/> and
+          <muttng-doc:varref name="editor-headers"/> variables
         </para>
         
         <para>
@@ -2360,7 +2360,7 @@ Pgp: [E | S | S id]</screen>
 
           ``E'' encrypts, ``S'' signs and
           ``S&lt;id&gt;'' signs with the given key, setting
-          <muttng-doc:varref name="pgp_sign_as" link="pgp-sign-as"/>
+          <muttng-doc:varref name="pgp-sign-as"/>
           permanently.
         </para>
         
@@ -2390,7 +2390,7 @@ Pgp: [E | S | S id]</screen>
         
         <para>
           Most fields of the entries in the key selection menu (see also 
-          <muttng-doc:varref name="pgp_entry_format" link="pgp-entry-format"/>)
+          <muttng-doc:varref name="pgp-entry-format"/>)
           have obvious meanings.  But some explanations on the capabilities,
           flags, 
           and validity fields are in order.
@@ -2530,7 +2530,7 @@ Pgp: [E | S | S id]</screen>
         <para>
           Note that different remailers do have different capabilities,
           indicated in the <literal>%c</literal> entry of the remailer menu lines (see
-          <muttng-doc:varref name="mix_entry_format" link="mix-entry-format"/>).
+          <muttng-doc:varref name="mix-entry-format"/>).
           Most important is
           the ``middleman'' capability, indicated by a capital ``M'': This
           means that the remailer in question cannot be used as the final
@@ -2928,7 +2928,7 @@ set imap_home_namespace = $folder</screen>
         </para>
         
         <para>
-          would set the value of <muttng-doc:varref name="imap_home_namespace" link="imap-home-namespace"/>
+          would set the value of <muttng-doc:varref name="imap-home-namespace"/>
           to the value to which <muttng-doc:varref name="folder"/>
           is <emphasis>currently</emphasis> set to.
         </para>
@@ -2936,7 +2936,7 @@ set imap_home_namespace = $folder</screen>
         <para>
           <emphasis role="bold">Note:</emphasis> There're no logical links
           established in such cases so
-          that the the value for <muttng-doc:varref name="imap_home_namespace" link="imap-home-namespace"/>
+          that the the value for <muttng-doc:varref name="imap-home-namespace"/>
           won't change even
           if <muttng-doc:varref name="folder"/> gets changed.
         </para>
@@ -3278,7 +3278,7 @@ alias theguys manny, moe, jack</screen>
       <para>
         On the other hand, the <muttng-doc:funcref name="create-alias"/>
         function can use only one file, the one pointed to by the
-        <muttng-doc:varref name="alias_file" link="alias-file"/>
+        <muttng-doc:varref name="alias-file"/>
         variable (which is
         <literal>~/.muttrc</literal> by default). This file is not
         special either,
@@ -3309,7 +3309,7 @@ set alias_file=~/.mail_aliases</screen>
         prompt.  You can
         also enter aliases in your editor at the appropriate headers if you
         have the
-        <muttng-doc:varref name="editor_headers" link="edit-headers"/>
+        <muttng-doc:varref name="editor-headers"/>
         variable set.
       </para>
       
@@ -3894,7 +3894,7 @@ folder-hook . set sort=date-sent</screen>
           <listitem>
             
             <para>
-              quoted (text matching <muttng-doc:varref name="quote_regexp" link="quote-regexp"/> in the body of a message)
+              quoted (text matching <muttng-doc:varref name="quote-regexp"/> in the body of a message)
             </para>
           </listitem>
           <listitem>
@@ -4219,7 +4219,7 @@ unignore posted-to:</screen>
         sent to a different party, mutt will automatically suggest to send
         the response to the original message's recipients--responding to
         yourself won't make much sense in many cases.
-        (See <muttng-doc:varref name="reply_to" link="reply-to"/>.)
+        (See <muttng-doc:varref name="reply-to"/>.)
       </para>
       
       <para>
@@ -4443,7 +4443,7 @@ set text_flowed</screen>
         <title>Additional Notes</title>
         
         <para>
-          For completeness, the <muttng-doc:varref name="delete_space" link="delete-space"/> variable provides the mechanism
+          For completeness, the <muttng-doc:varref name="delete-space"/> variable provides the mechanism
           to generate a <literal>DelSp=yes</literal> parameter on <emphasis>
             outgoing
           </emphasis>
@@ -4499,7 +4499,7 @@ set text_flowed</screen>
         against
         receiving personal CCs of list messages.  Also note that the generation
         of the Mail-Followup-To header is controlled by the
-        <muttng-doc:varref name="followup_to" link="followup-to"/>
+        <muttng-doc:varref name="followup-to"/>
         configuration variable.
       </para>
       
@@ -4653,14 +4653,14 @@ set text_flowed</screen>
       
     </sect1>
     
-    <sect1 id="command-my_hdr"><anchor id="command-unmy_hdr"/>
+    <sect1 id="command-my-hdr"><anchor id="command-unmy-hdr"/>
       <title>User defined headers</title>
       
       <para>
-        Usage: <muttng-doc:command name="my_hdr"/> <emphasis>string</emphasis>
+        Usage: <muttng-doc:command name="my-hdr"/> <emphasis>string</emphasis>
       </para>
       <para>
-        Usage: <muttng-doc:command name="unmy_hdr"/> <emphasis>field</emphasis> [<emphasis>field</emphasis>...]
+        Usage: <muttng-doc:command name="unmy-hdr"/> <emphasis>field</emphasis> [<emphasis>field</emphasis>...]
       </para>
       
       <para>
@@ -4694,7 +4694,7 @@ my_hdr Organization: A Really Big Company, Anytown, USA</screen>
       
       <para>
         If you would like to add a header field to a single message, you should
-        either set the <muttng-doc:varref name="edit_headers" link="edit-headers"/>
+        either set the <muttng-doc:varref name="edit-headers"/>
         variable,
         or use the <emphasis>edit-headers</emphasis> function (default: ``E'')
         in the send-menu so
@@ -4719,11 +4719,11 @@ unmy_hdr to cc</screen>
       
     </sect1>
     
-    <sect1 id="command-hdr_order"><anchor id="command-unhdr_order"/>
+    <sect1 id="command-hdr-order"><anchor id="command-unhdr-order"/>
       <title>Defining the order of headers when viewing messages</title>
       
       <para>
-        Usage: <muttng-doc:command name="hdr_order"/> <emphasis>header1</emphasis><emphasis>header2</emphasis> <emphasis>header3</emphasis>
+        Usage: <muttng-doc:command name="hdr-order"/> <emphasis>header1</emphasis><emphasis>header2</emphasis> <emphasis>header3</emphasis>
       </para>
       
       <para>
@@ -5163,14 +5163,14 @@ score "<muttng-doc:pattern name="f"/> santaclaus@northpole\.int" =666</screen>
       
       <para>
         These three thresholds can be set via the variables
-        <muttng-doc:varref name="score_threshold_read" link="score-threshold-read"/>,
-        <muttng-doc:varref name="score_threshold_flag" link="score-threshold-flag"/> and
-        <muttng-doc:varref name="score_threshold_delete" link="score-threshold-delete"/>.
+        <muttng-doc:varref name="score-threshold-read"/>,
+        <muttng-doc:varref name="score-threshold-flag"/> and
+        <muttng-doc:varref name="score-threshold-delete"/>.
       </para>
       <para>
         By default,
-        <muttng-doc:varref name="score_threshold_read" link="score-threshold-read"/> and
-        <muttng-doc:varref name="score_threshold_delete" link="score-threshold-delete"/> 
+        <muttng-doc:varref name="score-threshold-read"/> and
+        <muttng-doc:varref name="score-threshold-delete"/> 
         are set to
         <literal>-1</literal>, which means that in the default threshold
         configuration no
@@ -5229,7 +5229,7 @@ color index  red     yellow  "<muttng-doc:pattern name="n"/> 100-"</screen>
         mail based on its spam attributes, as determined by the external
         filter. You also can display the spam attributes in your index
         display using the <literal>%H</literal> selector in the
-        <muttng-doc:varref name="index_format" link="index-format"/>
+        <muttng-doc:varref name="index-format"/>
         variable. (Tip: try <literal>%?H?[%H] ?</literal>
         to display spam tags only when they are defined for a given message.)
       </para>
@@ -5734,7 +5734,7 @@ ifdef feature_nntp 'source ~/.mutt-ng/setup-nntp'</screen>
           An example for testing for variable names can be used if users
           use different revisions of mutt-ng whereby the older one may not
           have a certain variable. To test for the availability of
-          <muttng-doc:varref name="imap_mail_check" link="imap-mail-check"/>
+          <muttng-doc:varref name="imap-mail-check"/>
           use:
         </para>
         
@@ -5747,8 +5747,8 @@ ifdef imap_mail_check 'set imap_mail_check = 300'</screen>
         
         <para>
           Provided for completeness is the test for menu names. To set
-          <muttng-doc:varref name="pager_index_lines"
-            link="pager-index-lines"/>
+          <muttng-doc:varref name="pager-index-lines"
+           />
           only if the pager
           menu is available, use:
         </para>
@@ -6433,7 +6433,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
         
         <para>
           The setting for the status bar of the index is controlled via the
-          <muttng-doc:varref name="status_format" link="status-format"/>
+          <muttng-doc:varref name="status-format"/>
           variable. For the hostname and version string, there's an expando
           for <literal>$status_format</literal>: <literal>
             %h
@@ -6800,7 +6800,7 @@ set status_format = "%B: %?n?%n&amp;no? new messages %&#62; (%v on %h)"</screen>
         </emphasis>
         operation will
         be applied to all tagged messages if that operation can be used in that
-        manner.  If the <muttng-doc:varref name="auto_tag" link="auto-tag"/>
+        manner.  If the <muttng-doc:varref name="auto-tag"/>
         variable is set, the next operation applies to the tagged messages
         automatically, without requiring the ``tag-prefix''.
       </para>
@@ -6903,7 +6903,7 @@ set status_format = "%B: %?n?%n&amp;no? new messages %&#62; (%v on %h)"</screen>
         
         <screen>
 send-hook . 'unmy_hdr From:'
-send-hook <muttng-doc:pattern name="C"/>'^b@b\.b$' my_hdr from: c@c.c</screen>
+send-hook <muttng-doc:pattern name="C"/>'^b@b\.b$' my-hdr from: c@c.c</screen>
         
       </para>
       
@@ -6937,7 +6937,7 @@ send-hook <muttng-doc:pattern name="C"/>'^b@b\.b$' my_hdr from: c@c.c</screen>
           mail to a specific address, you could do something like:
           
           <screen>
-send-hook '<muttng-doc:pattern name="t"/> ^me@cs\.hmc\.edu$' 'my_hdr From: Mutt-ng User &#60;user@host&#62;'</screen>
+send-hook '<muttng-doc:pattern name="t"/> ^me@cs\.hmc\.edu$' 'my-hdr From: Mutt-ng User &#60;user@host&#62;'</screen>
           
           which would execute the given command when sending mail to
           <emphasis>me@cs.hmc.edu</emphasis>.
@@ -7042,7 +7042,7 @@ macro pager B ':toggle sidebar_visible^M'</screen>
         LDAP,
         ph/qi, bbdb, or NIS through a wrapper script which connects to mutt
         using a simple interface.  Using the
-        <muttng-doc:varref name="query_command" link="query-command"/>
+        <muttng-doc:varref name="query-command"/>
         variable, you specify the wrapper
         command to use.  For example:
       </para>
@@ -7114,7 +7114,7 @@ roessler@guug.de        Thomas Roessler mutt pgp</screen>
         mbox, MMDF, MH and Maildir.  The mailbox type is autodetected, so there
         is no need to use a flag for different mailbox types.  When creating
         newmailboxes, Mutt-ng uses the default specified with the
-        <muttng-doc:varref name="mbox_type" link="mbox-type"/>
+        <muttng-doc:varref name="mbox-type"/>
         variable.
       </para>
       
@@ -7204,20 +7204,20 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
           <listitem>
             
             <para>
-              ! -- refers to your <muttng-doc:varref name="spoolfile" link="spoolfile"/>
+              ! -- refers to your <muttng-doc:varref name="spoolfile"/>
               (incoming) mailbox
             </para>
           </listitem>
           <listitem>
             
             <para>
-              &gt; -- refers to your <muttng-doc:varref name="mbox" link="mbox"/> file
+              &gt; -- refers to your <muttng-doc:varref name="mbox"/> file
             </para>
           </listitem>
           <listitem>
             
             <para>
-              &lt; -- refers to your <muttng-doc:varref name="record" link="record"/> file
+              &lt; -- refers to your <muttng-doc:varref name="record"/> file
             </para>
           </listitem>
           <listitem>
@@ -7241,7 +7241,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
           <listitem>
             
             <para>
-              = or + -- refers to your <muttng-doc:varref name="folder" link="folder"/>
+              = or + -- refers to your <muttng-doc:varref name="folder"/>
               directory
             </para>
           </listitem>
@@ -7283,7 +7283,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         the <emphasis>index</emphasis> menu display.  This is useful to
         distinguish between
         personal and list mail in the same mailbox.  In the
-        <muttng-doc:varref name="index_format" link="index-format"/>
+        <muttng-doc:varref name="index-format"/>
         variable, the escape ``%L''
         will return the string ``To &lt;list&gt;'' when ``list'' appears in the
         ``To'' field, and ``Cc &lt;list&gt;'' when it appears in the ``Cc''
@@ -7306,7 +7306,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         Mutt-ng also supports the <literal>Mail-Followup-To</literal> header. 
         When you send
         a message to a list of recipients which includes one or several
-        subscribed mailing lists, and if the <muttng-doc:varref name="followup_to" link="followup-to"/>
+        subscribed mailing lists, and if the <muttng-doc:varref name="followup-to"/>
         option is set, mutt will generate
         a Mail-Followup-To header which contains all the recipients to whom
         you send this message, but not your address. This indicates that
@@ -7320,7 +7320,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         Conversely, when group-replying or list-replying to a message which
         has a <literal>Mail-Followup-To</literal> header, mutt will respect
         this header if
-        the <muttng-doc:varref name="honor_followup_to" link="honor-followup-to"/>
+        the <muttng-doc:varref name="honor-followup-to"/>
         configuration
         variable is set.  Using list-reply will in this case also make sure
         that the reply goes to the mailing list, even if it's not specified
@@ -7340,7 +7340,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         than the author of the message.  This can create problems when trying
         to reply directly to the author in private, since most mail clients
         will automatically reply to the address given in the ``Reply-To''
-        field.  Mutt-ng uses the <muttng-doc:varref name="reply_to" link="reply-to"/>
+        field.  Mutt-ng uses the <muttng-doc:varref name="reply-to"/>
         variable to help decide which address to use.  If set to <emphasis>
           ask-yes
         </emphasis>
@@ -7356,7 +7356,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
       <para>
         The ``X-Label:'' header field can be used to further identify mailing
         lists or list subject matter (or just to annotate messages
-        individually).  The <muttng-doc:varref name="index_format" link="index-format"/>
+        individually).  The <muttng-doc:varref name="index-format"/>
         variable's ``%y'' and
         ``%Y'' escapes can be used to expand ``X-Label:'' fields in the
         index, and Mutt-ng's pattern-matcher can match regular expressions to
@@ -7491,7 +7491,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
           <listitem>
             
             <para>
-              <muttng-doc:varref name="dsn_notify" link="dsn-notify"/> is used
+              <muttng-doc:varref name="dsn-notify"/> is used
               to request receipts for different results (such as failed
               message,message delivered, etc.).
               
@@ -7500,7 +7500,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
           <listitem>
             
             <para>
-              <muttng-doc:varref name="dsn_return" link="dsn-return"/> requests
+              <muttng-doc:varref name="dsn-return"/> requests
               how much of your message should be returned with the receipt
               (headers or full message).
               
@@ -7555,7 +7555,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         reason the frequency at which Mutt-ng will check for mail remotely can
         be
         controlled by the
-        <muttng-doc:varref name="pop_mail_check" link="pop-mail-check"/>
+        <muttng-doc:varref name="pop-mail-check"/>
         variable, which defaults to every 60 seconds.
       </para>
       
@@ -7576,7 +7576,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         (default: G).  It allows to connect to <link
           linkend="pop-host">pop-host</link>
         ,fetch all your new mail and place it in the
-        local <muttng-doc:varref name="spoolfile" link="spoolfile"/>.  After this
+        local <muttng-doc:varref name="spoolfile"/>.  After this
         point, Mutt-ng runs exactly as if the mail had always been local.
       </para>
       
@@ -7664,7 +7664,7 @@ imap://imapserver:port/INBOX</screen>
         When browsing folders on an IMAP server, you can toggle whether to look
         at only the folders you are subscribed to, or all folders with the
         <emphasis>toggle-subscribed</emphasis> command.  See also the 
-        <muttng-doc:varref name="imap_list_subscribed" link="imap-list-subscribed"/>
+        <muttng-doc:varref name="imap-list-subscribed"/>
         variable.
       </para>
       
@@ -7672,9 +7672,9 @@ imap://imapserver:port/INBOX</screen>
         Polling for new mail on an IMAP server can cause noticeable delays. So,
         you'll
         want to carefully tune the
-        <muttng-doc:varref name="imap_mail_check" link="imap-mail-check"/>
+        <muttng-doc:varref name="imap-mail-check"/>
         and
-        <muttng-doc:varref name="timeout" link="timeout"/>
+        <muttng-doc:varref name="timeout"/>
         variables.
       </para>
       
@@ -7782,7 +7782,7 @@ imap://imapserver:port/INBOX</screen>
             <listitem>
               
               <para>
-                <muttng-doc:varref name="imap_user" link="imap-user"/> - controls
+                <muttng-doc:varref name="imap-user"/> - controls
                 the username under which you request authentication on the IMAP
                 server,
                 for all authenticators. This is overridden by an explicit
@@ -7794,7 +7794,7 @@ imap://imapserver:port/INBOX</screen>
             <listitem>
               
               <para>
-                <muttng-doc:varref name="imap_pass" link="imap-pass"/> - a
+                <muttng-doc:varref name="imap-pass"/> - a
                 password which you may preset, used by all authentication
                 methods where
                 a password is needed.
@@ -7803,7 +7803,7 @@ imap://imapserver:port/INBOX</screen>
             <listitem>
               
               <para>
-                <muttng-doc:varref name="imap_authenticators" link="imap-authenticators"/>
+                <muttng-doc:varref name="imap-authenticators"/>
                 - a colon-delimited list of IMAP
                 authentication methods to try, in the order you wish to try
                 them. If
@@ -7840,7 +7840,7 @@ imap://imapserver:port/INBOX</screen>
         environment variable. Like other
         news readers,
         info about subscribed newsgroups is saved in a file as specified by the
-        <muttng-doc:varref name="nntp_newsrc" link="nntp-newsrc"/> variable.
+        <muttng-doc:varref name="nntp-newsrc"/> variable.
         Article headers are cached and can be loaded from a file when a
         newsgroup is entered instead loading from newsserver; currently, this
         caching mechanism still is different from the header caching for
@@ -7952,24 +7952,24 @@ score !<muttng-doc:pattern name="*"/> =42</screen>
         support includes support for Delivery Status Notification
         (see <link linkend="dsn">dsn</link> section) as well as
         handling the <literal>8BITMIME</literal> flag controlled via
-        <muttng-doc:varref name="use_8bitmime" link="use-8bitmime"/>.
+        <muttng-doc:varref name="use-8bitmime"/>.
       </para>
       
       <para>
         To enable sending mail directly via SMTP without an MTA such as
-        Postfix or SSMTP and the like, simply set the <muttng-doc:varref name="smtp_host" link="smtp-host"/>
+        Postfix or SSMTP and the like, simply set the <muttng-doc:varref name="smtp-host"/>
         variable pointing to your SMTP server.
       </para>
       
       <para>
-        Authentication mechanisms are available via the <muttng-doc:varref name="smtp_user" link="smtp-user"/>
-        and <muttng-doc:varref name="smtp_pass" link="smtp-pass"/> variables.
+        Authentication mechanisms are available via the <muttng-doc:varref name="smtp-user"/>
+        and <muttng-doc:varref name="smtp-pass"/> variables.
       </para>
       
       <para>
         Transport Encryption via the StartTLS command is also available. For
         this to work, first of all Mutt-ng must be built with SSL or GNUTLS.
-        Secondly, the <muttng-doc:varref name="smtp_use_tls" link="smtp-use-tls"/> variable
+        Secondly, the <muttng-doc:varref name="smtp-use-tls"/> variable
         must be either set
         to ``enabled'' or ``required.'' In both cases, StartTLS will be used if
         the server supports it: for the second case, the connection will fail
@@ -7982,7 +7982,7 @@ score !<muttng-doc:pattern name="*"/> =42</screen>
         sender, i.e. they allow for only one value which may not be what the
         user wants to send as the <literal>From:</literal> header. In this
         case, the variable
-        <muttng-doc:varref name="smtp_envelope" link="smtp-envelope"/> may be used
+        <muttng-doc:varref name="smtp-envelope"/> may be used
         to set the envelope different from the <literal>From:</literal> header.
       </para>
       
@@ -8108,7 +8108,7 @@ append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </screen>
         use of programs that do not have well defined extensions. Just use
         &quot;.&quot; as a regexp. But this may be surprising if your
         compressing script produces empty files. In this situation, unset
-        <muttng-doc:varref name="save_empty" link="save-empty"/>
+        <muttng-doc:varref name="save-empty"/>
         ,so that the compressed file
         will be removed if you delete all of the messages.
       </para>
@@ -8263,7 +8263,7 @@ append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </screen>
           When <muttng-doc:hook name="append"/> is used, the
           folder is
           not opened, which saves time, but this means that we can not find out
-          what the folder type is. Thus the default (<muttng-doc:varref name="mbox_type" link="mbox-type"/>
+          what the folder type is. Thus the default (<muttng-doc:varref name="mbox-type"/>
           )type is always supposed (i.e.
           this is the format used for the temporary folder).
         </para>
@@ -8696,7 +8696,7 @@ text/*; more</screen>
           parameters
           in expansion of %s syntaxes properly, and avoids risky
           characters by
-          substituting them, see the <muttng-doc:varref name="mailcap_sanitize" link="mailcap-sanitize"/>
+          substituting them, see the <muttng-doc:varref name="mailcap-sanitize"/>
           variable.
         </para>
         
@@ -8784,13 +8784,13 @@ text/html; lynx -dump %s ; copiousoutput</screen>
                 <term>needsterminal</term>
                 <listitem>
                   <para>
-                    Mutt-ng uses this flag when viewing attachments with <muttng-doc:command name="auto_view"/>,
+                    Mutt-ng uses this flag when viewing attachments with <muttng-doc:command name="auto-view"/>,
                     in order to decide whether it should honor the setting
-                    of the <muttng-doc:varref name="wait_key" link="wait-key"/> variable or
+                    of the <muttng-doc:varref name="wait-key"/> variable or
                     not.  When an attachment is viewed using an interactive
                     program, and the
                     corresponding mailcap entry has a <emphasis>needsterminal</emphasis> flag, Mutt-ng will use
-                    <muttng-doc:varref name="wait_key" link="wait-key"/> and the exit
+                    <muttng-doc:varref name="wait-key"/> and the exit
                     statusof the program to decide if it will ask you to press
                     a key after the
                     external program has exited.  In all other situations it
@@ -8938,7 +8938,7 @@ nametemplate=%s.gif</screen>
           </para>
           
           <para>
-            In addition, you can use this with <muttng-doc:command name="auto_view"/>
+            In addition, you can use this with <muttng-doc:command name="auto-view"/>
             to denote two commands for viewing an attachment, one to be viewed
             automatically, the other to be viewed interactively from the
             attachment
@@ -8951,7 +8951,7 @@ text/html;      netscape -remote 'openURL(%s)' ; test=RunningX
 text/html;      lynx %s; nametemplate=%s.html
 text/html;      lynx -dump %s; nametemplate=%s.html; copiousoutput</screen>
             
-            For <muttng-doc:command name="auto_view"/>, Mutt-ng will choose
+            For <muttng-doc:command name="auto-view"/>, Mutt-ng will choose
             the third
             entry because of the copiousoutput tag.  For interactive viewing,
             Mutt
@@ -9116,7 +9116,7 @@ application/ms-excel; open.pl %s</screen>
       
     </sect1>
     
-    <sect1 id="command-auto_view"><anchor id="command-unauto_view"/>
+    <sect1 id="command-auto-view"><anchor id="command-unauto-view"/>
       <title>MIME Autoview</title>
       
       <para>
@@ -9175,7 +9175,7 @@ application/postscript; ps2ascii %s; copiousoutput</screen>
       
     </sect1>
     
-    <sect1 id="command-alternative_order"><anchor id="command-unalternative_order"/>
+    <sect1 id="command-alternative-order"><anchor id="command-unalternative-order"/>
       <title>MIME Multipart/Alternative</title>
       
       <para>
@@ -9195,7 +9195,7 @@ application/postscript image/*</screen>
       
       <para>
         Next, mutt will check if any of the types have a defined 
-        <muttng-doc:command name="auto_view"/>, and use that.  Failing
+        <muttng-doc:command name="auto-view"/>, and use that.  Failing
         that, Mutt-ng will look for any text type.  As a last attempt, mutt
         willlook for any type it knows how to handle.
       </para>
@@ -9211,7 +9211,7 @@ application/postscript image/*</screen>
       
     </sect1>
     
-    <sect1 id="command-mime_lookup"><anchor id="command-unmime_lookup"/>
+    <sect1 id="command-mime-lookup"><anchor id="command-unmime-lookup"/>
       <title>MIME Lookup</title>
       
       <para>
@@ -9303,11 +9303,11 @@ mime_lookup application/octet-stream application/X-Lotus-Manuscript</screen>
       
       <para>
         Mutt-ng uses many temporary files for viewing messages, verifying
-        digital signatures, etc. The <muttng-doc:varref name="umask" link="umask"/>
+        digital signatures, etc. The <muttng-doc:varref name="umask"/>
         variable can be used to change the default permissions of these
         files. Please only change it if you really know what you are doing.
         Also, a different location for these files may be desired which can
-        be changed via the <muttng-doc:varref name="tmpdir" link="tmpdir"/> variable.
+        be changed via the <muttng-doc:varref name="tmpdir"/> variable.
       </para>
       
     </sect1>
@@ -9327,7 +9327,7 @@ mime_lookup application/octet-stream application/X-Lotus-Manuscript</screen>
           information probably telling others how many mail you sent in which
           time, you at least need to remove the <literal>%P</literal>
           expando from the
-          default setting of the <muttng-doc:varref name="msgid_format" link="msgid-format"/> variable. Please make sure that
+          default setting of the <muttng-doc:varref name="msgid-format"/> variable. Please make sure that
           you really know how local parts of these <literal>Message-ID:</literal> headers
           are composed.
         </para>
@@ -9344,7 +9344,7 @@ mime_lookup application/octet-stream application/X-Lotus-Manuscript</screen>
           will be strict in interpreting them which means that arbitrary
           header fields can be embedded in these links which could override
           existing header fields or attach arbitrary files. This may be
-          problematic if the <muttng-doc:varref name="edit_headers" link="edit-headers"/>
+          problematic if the <muttng-doc:varref name="edit-headers"/>
           variable is <emphasis>unset</emphasis>, i.e. the
           user doesn't want to see header fields while editing the message.
         </para>
@@ -9367,7 +9367,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
         </para>
         
         <para>
-          When <emphasis>unsetting</emphasis> the <muttng-doc:varref name="strict_mailto" link="strict-mailto"/>
+          When <emphasis>unsetting</emphasis> the <muttng-doc:varref name="strict-mailto"/>
           variable, mutt-ng will
         </para>
         
@@ -9387,7 +9387,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
             <listitem>
               
               <para>
-                turn on the <muttng-doc:varref name="edit_headers" link="edit-headers"/>
+                turn on the <muttng-doc:varref name="edit-headers"/>
                 variable by
                 force to let the user see all the headers
                 (because they still may leak information.)
@@ -9420,7 +9420,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           by <muttng-doc:rfc num="1524"/>. Mutt-ng can be set up to <emphasis>automatically</emphasis>
           execute any
           given utility as listed in one of the mailcap files (see the
-          <muttng-doc:varref name="mailcap_path" link="mailcap-path"/>
+          <muttng-doc:varref name="mailcap-path"/>
           variable for details.) 
         </para>
         
@@ -9464,7 +9464,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
             <listitem>
               
               <para>
-                leave the <muttng-doc:varref name="mailcap_sanitize" link="mailcap-sanitize"/> variable in its default
+                leave the <muttng-doc:varref name="mailcap-sanitize"/> variable in its default
                 state to restrict mailcap expandos to a safe set of characters
                 
               </para>
@@ -9986,13 +9986,13 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="alternative_order"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+              <literal><muttng-doc:command name="alternative-order"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unalternative_order"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+              <literal><muttng-doc:command name="unalternative-order"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
@@ -10004,13 +10004,13 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="auto_view"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+              <literal><muttng-doc:command name="auto-view"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unauto_view"/></literal><emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+              <literal><muttng-doc:command name="unauto-view"/></literal><emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
@@ -10070,13 +10070,13 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="hdr_order"/></literal> <emphasis>header</emphasis> [ <emphasis>header</emphasis> ... ]
+              <literal><muttng-doc:command name="hdr-order"/></literal> <emphasis>header</emphasis> [ <emphasis>header</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unhdr_order"/></literal> <emphasis>header</emphasis> [ <emphasis>header</emphasis> ... ]
+              <literal><muttng-doc:command name="unhdr-order"/></literal> <emphasis>header</emphasis> [ <emphasis>header</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
@@ -10136,14 +10136,14 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="mime_lookup"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+              <literal><muttng-doc:command name="mime-lookup"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
               <literal>
-                <muttng-doc:command name="unmime_lookup"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+                <muttng-doc:command name="unmime-lookup"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
@@ -10161,13 +10161,13 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="my_hdr"/></literal> <emphasis>string</emphasis>
+              <literal><muttng-doc:command name="my-hdr"/></literal> <emphasis>string</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unmy_hdr"/></literal> <emphasis>field</emphasis> [ <emphasis>field</emphasis> ... ]
+              <literal><muttng-doc:command name="unmy-hdr"/></literal> <emphasis>field</emphasis> [ <emphasis>field</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
@@ -10310,167 +10310,167 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <tbody>
             <row>
               <entry><literal>edit_hdrs</literal></entry>
-              <entry><muttng-doc:varref name="edit_headers" link="edit-headers"/></entry>
+              <entry><muttng-doc:varref name="edit-headers"/></entry>
             </row>
             <row>
               <entry><literal>forw_decode</literal></entry>
-              <entry><muttng-doc:varref name="forward_decode" link="forward-decode"/></entry>
+              <entry><muttng-doc:varref name="forward-decode"/></entry>
               </row>
             <row>
               <entry><literal>forw_format</literal></entry>
-              <entry><muttng-doc:varref name="forward_format" link="forward-format"/></entry>
+              <entry><muttng-doc:varref name="forward-format"/></entry>
               </row>
             <row>
               <entry><literal>forw_quote</literal></entry>
-              <entry><muttng-doc:varref name="forward_quote" link="forward-quote"/></entry>
+              <entry><muttng-doc:varref name="forward-quote"/></entry>
               </row>
             <row>
               <entry><literal>hdr_format</literal></entry>
-              <entry><muttng-doc:varref name="index_format" link="index-format"/></entry>
+              <entry><muttng-doc:varref name="index-format"/></entry>
               </row>
             <row>
               <entry><literal>indent_str</literal></entry>
-              <entry><muttng-doc:varref name="indent_string" link="indent-string"/></entry>
+              <entry><muttng-doc:varref name="indent-string"/></entry>
               </row>
             <row>
               <entry><literal>mime_fwd</literal></entry>
-              <entry><muttng-doc:varref name="mime_forward" link="mime-forward"/></entry>
+              <entry><muttng-doc:varref name="mime-forward"/></entry>
               </row>
             <row>
               <entry><literal>msg_format</literal></entry>
-              <entry><muttng-doc:varref name="message_format" link="message-format"/></entry>
+              <entry><muttng-doc:varref name="message-format"/></entry>
               </row>
             <row>
               <entry><literal>pgp_autosign</literal></entry>
-              <entry><muttng-doc:varref name="crypt_autosign" link="crypt-autosign"/></entry>
+              <entry><muttng-doc:varref name="crypt-autosign"/></entry>
               </row>
             <row>
               <entry><literal>pgp_autoencrypt</literal></entry>
-              <entry><muttng-doc:varref name="crypt_autoencrypt" link="crypt-autoencrypt"/></entry>
+              <entry><muttng-doc:varref name="crypt-autoencrypt"/></entry>
               </row>
             <row>
               <entry><literal>pgp_replyencrypt</literal></entry>
-              <entry><muttng-doc:varref name="crypt_replyencrypt" link="crypt-replyencrypt"/></entry>
+              <entry><muttng-doc:varref name="crypt-replyencrypt"/></entry>
               </row>
             <row>
               <entry><literal>pgp_replysign</literal></entry>
-              <entry><muttng-doc:varref name="crypt_replysign" link="crypt-replysign"/></entry>
+              <entry><muttng-doc:varref name="crypt-replysign"/></entry>
               </row>
             <row>
               <entry><literal>pgp_replysignencrypted</literal></entry>
-              <entry><muttng-doc:varref name="crypt_replysignencrypted" link="crypt-replysignencrypted"/></entry>
+              <entry><muttng-doc:varref name="crypt-replysignencrypted"/></entry>
               </row>
             <row>
               <entry><literal>pgp_verify_sig</literal></entry>
-              <entry><muttng-doc:varref name="crypt_verify_sig" link="crypt-verify-sig"/></entry>
+              <entry><muttng-doc:varref name="crypt-verify-sig"/></entry>
               </row>
             <row>
               <entry><literal>pgp_create_traditional</literal></entry>
-              <entry><muttng-doc:varref name="pgp_autoinline" link="pgp-autoinline"/></entry>
+              <entry><muttng-doc:varref name="pgp-autoinline"/></entry>
               </row>
             <row>
               <entry><literal>pgp_auto_traditional</literal></entry>
-              <entry><muttng-doc:varref name="pgp_replyinline" link="pgp-replyinline"/></entry>
+              <entry><muttng-doc:varref name="pgp-replyinline"/></entry>
               </row>
             <row>
               <entry><literal>forw_decrypt</literal></entry>
-              <entry><muttng-doc:varref name="forward_decrypt" link="forward-decrypt"/></entry>
+              <entry><muttng-doc:varref name="forward-decrypt"/></entry>
               </row>
             <row>
               <entry><literal>smime_sign_as</literal></entry>
-              <entry><muttng-doc:varref name="smime_default_key" link="smime-default-key"/></entry>
+              <entry><muttng-doc:varref name="smime-default-key"/></entry>
               </row>
             <row>
               <entry><literal>post_indent_str</literal></entry>
-              <entry><muttng-doc:varref name="post_indent_string" link="post-indent-string"/></entry>
+              <entry><muttng-doc:varref name="post-indent-string"/></entry>
               </row>
             <row>
               <entry><literal>print_cmd</literal></entry>
-              <entry><muttng-doc:varref name="print_command" link="print-command"/></entry>
+              <entry><muttng-doc:varref name="print-command"/></entry>
               </row>
             <row>
               <entry><literal>shorten_hierarchy</literal></entry>
-              <entry><muttng-doc:varref name="sidebar_shorten_hierarchy" link="sidebar-shorten-hierarchy"/></entry>
+              <entry><muttng-doc:varref name="sidebar-shorten-hierarchy"/></entry>
               </row>
             <row>
               <entry><literal>ask_followup_to</literal></entry>
-              <entry><muttng-doc:varref name="nntp_ask_followup_to" link="nntp-ask-followup-to"/></entry>
+              <entry><muttng-doc:varref name="nntp-ask-followup-to"/></entry>
               </row>
             <row>
               <entry><literal>ask_x_comment_to</literal></entry>
-              <entry><muttng-doc:varref name="nntp_ask_x_comment_to" link="nntp-ask-x-comment-to"/></entry>
+              <entry><muttng-doc:varref name="nntp-ask-x-comment-to"/></entry>
               </row>
             <row>
               <entry><literal>catchup_newsgroup</literal></entry>
-              <entry><muttng-doc:varref name="nntp_catchup" link="nntp-catchup"/></entry>
+              <entry><muttng-doc:varref name="nntp-catchup"/></entry>
             </row>
             <row>
               <entry><literal>followup_to_poster</literal></entry>
-              <entry><muttng-doc:varref name="nntp_followup_to_poster" link="nntp-followup-to-poster"/></entry>
+              <entry><muttng-doc:varref name="nntp-followup-to-poster"/></entry>
             </row>
             <row>
               <entry><literal>group_index_format</literal></entry>
-              <entry><muttng-doc:varref name="nntp_group_index_format" link="nntp-group-index-format"/></entry>
+              <entry><muttng-doc:varref name="nntp-group-index-format"/></entry>
             </row>
             <row>
               <entry><literal>inews</literal></entry>
-              <entry><muttng-doc:varref name="nntp_inews" link="nntp-inews"/></entry>
+              <entry><muttng-doc:varref name="nntp-inews"/></entry>
             </row>
             <row>
               <entry><literal>mime_subject</literal></entry>
-              <entry><muttng-doc:varref name="nntp_mime_subject" link="nntp-mime-subject"/></entry>
+              <entry><muttng-doc:varref name="nntp-mime-subject"/></entry>
             </row>
             <row>
               <entry><literal>news_cache_dir</literal></entry>
-              <entry><muttng-doc:varref name="nntp_cache_dir" link="nntp-cache-dir"/></entry>
+              <entry><muttng-doc:varref name="nntp-cache-dir"/></entry>
             </row>
             <row>
               <entry><literal>news_server</literal></entry>
-              <entry><muttng-doc:varref name="nntp_host" link="nntp-host"/></entry>
+              <entry><muttng-doc:varref name="nntp-host"/></entry>
             </row>
             <row>
               <entry><literal>newsrc</literal></entry>
-              <entry><muttng-doc:varref name="nntp_newsrc" link="nntp-newsrc"/></entry>
+              <entry><muttng-doc:varref name="nntp-newsrc"/></entry>
             </row>
             <row>
               <entry><literal>nntp_poll</literal></entry>
-              <entry><muttng-doc:varref name="nntp_mail_check" link="nntp-mail-check"/></entry>
+              <entry><muttng-doc:varref name="nntp-mail-check"/></entry>
             </row>
             <row>
               <entry><literal>pop_checkinterval</literal></entry>
-              <entry><muttng-doc:varref name="pop_mail_check" link="pop-mail-check"/></entry>
+              <entry><muttng-doc:varref name="pop-mail-check"/></entry>
             </row>
             <row>
               <entry><literal>post_moderated</literal></entry>
-              <entry><muttng-doc:varref name="nntp_post_moderated" link="nntp-post-moderated"/></entry>
+              <entry><muttng-doc:varref name="nntp-post-moderated"/></entry>
             </row>
             <row>
               <entry><literal>save_unsubscribed</literal></entry>
-              <entry><muttng-doc:varref name="nntp_save_unsubscribed" link="nntp-save-unsubscribed"/></entry>
+              <entry><muttng-doc:varref name="nntp-save-unsubscribed"/></entry>
             </row>
             <row>
               <entry><literal>show_new_news</literal></entry>
-              <entry><muttng-doc:varref name="nntp_show_new_news" link="nntp-show-new-news"/></entry>
+              <entry><muttng-doc:varref name="nntp-show-new-news"/></entry>
             </row>
             <row>
               <entry><literal>show_only_unread</literal></entry>
-              <entry><muttng-doc:varref name="nntp_show_only_unread" link="nntp-show-only-unread"/></entry>
+              <entry><muttng-doc:varref name="nntp-show-only-unread"/></entry>
             </row>
             <row>
               <entry><literal>x_comment_to</literal></entry>
-              <entry><muttng-doc:varref name="nntp_x_comment_to" link="nntp-x-comment-to"/></entry>
+              <entry><muttng-doc:varref name="nntp-x-comment-to"/></entry>
             </row>
             <row>
               <entry><literal>smtp_auth_username</literal></entry>
-              <entry><muttng-doc:varref name="smtp_user" link="smtp-user"/></entry>
+              <entry><muttng-doc:varref name="smtp-user"/></entry>
             </row>
             <row>
               <entry><literal>smtp_auth_password</literal></entry>
-              <entry><muttng-doc:varref name="smtp_pass" link="smtp-pass"/></entry>
+              <entry><muttng-doc:varref name="smtp-pass"/></entry>
             </row>
             <row>
               <entry><literal>user_agent</literal></entry>
-              <entry><muttng-doc:varref name="agent_string" link="agent-string"/></entry>
+              <entry><muttng-doc:varref name="agent-string"/></entry>
             </row>
           </tbody>
         </tgroup>

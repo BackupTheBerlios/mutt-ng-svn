@@ -16,14 +16,13 @@
   
   <xsl:output 
     method="xml" 
-    doctype-public="-//OASIS//DTD DocBook XML V4.2//EN"
-    doctype-system="http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"
+    doctype-public="-//OASIS//DTD DocBook XML V4.3//EN"
+    doctype-system="http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
     indent="yes"
     output-encoding="utf-8"
   />
   
   <xsl:strip-space elements="*"/>
-
  
   <!-- as default, copy each node -->
   <xsl:template match="/ | node() | @* | comment() | processing-instruction()">
@@ -62,10 +61,10 @@
   </xsl:template>
 
   <xsl:template match="muttng-doc:command">
-     <literal><link linkend="{concat('command-', @name)}"><xsl:value-of select="@name"/></link></literal>
+    <literal><link linkend="{concat('command-', @name)}"><xsl:value-of select="translate(@name,'-','_')"/></link></literal>
      <indexterm>
        <primary>Configuration Commands</primary>
-       <secondary><literal><xsl:value-of select="@name"/></literal></secondary>
+       <secondary><literal><xsl:value-of select="translate(@name,'-','_')"/></literal></secondary>
      </indexterm>
   </xsl:template>
 
@@ -103,7 +102,7 @@
   </xsl:template>
 
   <xsl:template match="muttng-doc:vardef">
-    <sect1 id="{@id}">
+    <sect1 id="{translate(@name,'_','-')}">
       <title><xsl:value-of select="concat('$',@name)"/></title>
       <indexterm>
         <primary>Configuration Variables</primary>
@@ -114,17 +113,9 @@
   </xsl:template>
  
   <xsl:template match="muttng-doc:varref">
-    <xsl:choose>
-      <xsl:when test="@link">
-        <link linkend="{@link}"><literal><xsl:value-of select="concat('$',@name)"/></literal></link>
-      </xsl:when>
-      <xsl:otherwise>
-        <link linkend="{@name}"><literal><xsl:value-of select="concat('$',@name)"/></literal></link>
-      </xsl:otherwise>
-    </xsl:choose>
-    <indexterm>
+    <link linkend="{@name}"><literal><xsl:value-of select="concat('$',translate(@name,'-','_'))"/></literal></link><indexterm>
       <primary>Configuration Variables</primary>
-      <secondary><literal>$<xsl:value-of select="@name"/></literal></secondary>
+      <secondary><literal>$<xsl:value-of select="translate(@name,'-','_')"/></literal></secondary>
     </indexterm>
   </xsl:template>
 
@@ -134,10 +125,6 @@
 
   <xsl:template match="muttng-doc:rfc">
     <ulink url="{concat('http://www.faqs.org/rfcs/rfc', @num, '.html')}">RfC <xsl:value-of select="@num"/></ulink>
-  </xsl:template>
-
-  <xsl:template match="/">
-    <xsl:apply-templates select="*"/>
   </xsl:template>
 
 </xsl:stylesheet>

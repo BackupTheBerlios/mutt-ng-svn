@@ -737,9 +737,7 @@ static void print_confline (const char *varname, int type, const char *val)
     /* SGML based manual */
   case F_SGML:
     {
-      add_s ("\n<muttng-doc:vardef id=\"");
-      sgml_id_fputs (varname);
-      add_s ("\" name=\"");
+      add_s ("\n<muttng-doc:vardef name=\"");
       sgml_fputs (varname);
       add_s ("\">\n<para>Type: <literal>");
       add_s (type2human (type));

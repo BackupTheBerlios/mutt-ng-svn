@@ -2038,7 +2038,7 @@
             </para></listitem>
           </varlistentry>
           <varlistentry>
-            <term><literal>&lt;muttng-doc:varref name="" link=""/&gt;</literal></term>
+            <term><literal>&lt;muttng-doc:varref name=""/&gt;</literal></term>
             <listitem><para>
                 <emphasis>References to variables.</emphasis> This
                 practically is the same as above except that the text
