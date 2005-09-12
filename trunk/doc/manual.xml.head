@@ -10690,7 +10690,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
               </row>
             <row>
               <entry><literal>pgp_replysignencrypted</literal></entry>
-              <entry><muttng-doc:varref name="crypt-replysignencrypted" link="crypt_replysignencrypted"/></entry>
+              <entry><muttng-doc:varref name="crypt-replysignencrypted" link="crypt-replysignencrypted"/></entry>
               </row>
             <row>
               <entry><literal>pgp_verify_sig</literal></entry>
@@ -10722,7 +10722,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
               </row>
             <row>
               <entry><literal>shorten_hierarchy</literal></entry>
-              <entry><muttng-doc:varref name="sidebar-shorten-hierarchy" link="sidebar_shorten_hierarchy"/></entry>
+              <entry><muttng-doc:varref name="sidebar-shorten-hierarchy" link="sidebar-shorten-hierarchy"/></entry>
               </row>
             <row>
               <entry><literal>ask_followup_to</literal></entry>
