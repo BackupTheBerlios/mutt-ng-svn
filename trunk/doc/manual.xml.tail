@@ -492,197 +492,324 @@
     </sect1>
     
   </chapter>
-  
-  <chapter id="miscellany">
-    <title>Miscellany</title>
+
+  <appendix/>
+
+  <chapter id="acknowledgments">
+    <title>Acknowledgments</title>
     
-    <sect1 id="acknowledgments">
-      <title>Acknowledgments</title>
-      
-      <para>
-         Kari Hurtta <email>kari.hurtta@fmi.fi</email> co-developed the
-        original MIME
-        >parsing code back in the ELM-ME days.
+    <para>
+        Kari Hurtta <email>kari.hurtta@fmi.fi</email> co-developed the
+      original MIME
+      >parsing code back in the ELM-ME days.
+    </para>
+    
+    <para> The following people have been very helpful to the development of
+      Mutt (sorted by surnames): 
+    </para>
+    
+    <para>
+      <itemizedlist>
+        <listitem>
+          Vikas Agnihotri <email>vikasa@writeme.com</email>
+        </listitem>
+        <listitem>
+          Francois Berjon <email> Francois.Berjon@aar.alcatel-alsthom.fr</email>
+        </listitem>
+        <listitem>
+          Aric Blumer <email>aric@fore.com</email>, John Capo <email>
+            jc@irbs.com
+          </email>
+        </listitem>
+        <listitem>
+          David Champion <email>dgc@uchicago.edu</email>
+        </listitem>
+        <listitem>
+          Brendan Cully <email>brendan@kublai.com</email>
+        </listitem>
+        <listitem>
+          Liviu Daia <email>daia@stoilow.imar.ro</email>
+        </listitem>
+        <listitem>
+          Thomas E. Dickey <email>dickey@herndon4.his.com</email>
+        </listitem>
+        <listitem>
+          David DeSimone <email>fox@convex.hp.com</email>
+        </listitem>
+        <listitem>
+          Nickolay N. Dudorov <email>nnd@wint.itfs.nsk.su</email>
+        </listitem>
+        <listitem>
+          Ruslan Ermilov <email>ru@freebsd.org</email>
+        </listitem>
+        <listitem>
+          Edmund Grimley Evans <email>edmundo@rano.org</email>
+        </listitem>
+        <listitem>
+          Michael Finken <email>finken@conware.de</email>
+        </listitem>
+        <listitem>
+          Sven Guckes <email>guckes@math.fu-berlin.de</email>
+        </listitem>
+        <listitem>
+          Lars Hecking <email>lhecking@nmrc.ie</email>
+        </listitem>
+        <listitem>
+          Mark Holloman <email>holloman@nando.net</email>
+        </listitem>
+        <listitem>
+          Andreas Holzmann <email>holzmann@fmi.uni-passau.de</email>
+        </listitem>
+        <listitem>
+          Marco d'Itri <email>md@linux.it</email>
+        </listitem>
+        <listitem>
+          Björn Jacke <email>bjacke@suse.com</email>
+        </listitem>
+        <listitem>
+          Byrial Jensen <email>byrial@image.dk</email>
+        </listitem>
+        <listitem>
+          David Jeske <email>jeske@igcom.net</email>
+        </listitem>
+        <listitem>
+          Christophe Kalt <email>kalt@hugo.int-evry.fr</email>
+        </listitem>
+        <listitem>
+          Tommi Komulainen <email>Tommi.Komulainen@iki.fi</email>
+        </listitem>
+        <listitem>
+          Felix von Leitner (a.k.a ``Fefe'') <email>
+            leitner@math.fu-berlin.de
+          </email>
+        </listitem>
+        <listitem>
+          Brandon Long <email>blong@fiction.net</email>
+        </listitem>
+        <listitem>
+          Jimmy Mäkeä <email>jmy@flashback.net</email>
+        </listitem>
+        <listitem>
+          Lars Marowsky-Bree <email>lmb@pointer.in-minden.de</email>
+        </listitem>
+        <listitem>
+          Thomas ``Mike'' Michlmayr <email>mike@cosy.sbg.ac.at</email>
+        </listitem>
+        <listitem>
+          Andrew W. Nosenko <email>awn@bcs.zp.ua</email>
+        </listitem>
+        <listitem>
+          David O'Brien <email>obrien@Nuxi.cs.ucdavis.edu</email>
+        </listitem>
+        <listitem>
+          Clint Olsen <email>olsenc@ichips.intel.com</email>
+        </listitem>
+        <listitem>
+          Park Myeong Seok <email>pms@romance.kaist.ac.kr</email>
+        </listitem>
+        <listitem>
+          Thomas Parmelan <email>tom@ankh.fr.eu.org</email>
+        </listitem>
+        <listitem>
+          Ollivier Robert <email>roberto@keltia.freenix.fr</email>
+        </listitem>
+        <listitem>
+          Thomas Roessler <email>roessler@does-not-exist.org</email>
+        </listitem>
+        <listitem>
+          Roland Rosenfeld <email>roland@spinnaker.de</email>
+        </listitem>
+        <listitem>
+          TAKIZAWA Takashi <email>taki@luna.email.ne.jp</email>
+        </listitem>
+        <listitem>
+          Allain Thivillon <email>Allain.Thivillon@alma.fr</email>
+        </listitem>
+        <listitem>
+          Gero Treuner <email>gero@faveve.uni-stuttgart.de</email>
+        </listitem>
+        <listitem>
+          Vsevolod Volkov <email>vvv@lucky.net</email>
+        </listitem>
+        <listitem>
+          Ken Weinert <email>kenw@ihs.com</email>
+        </listitem>
+        </itemizedlist>
       </para>
       
-      <para> The following people have been very helpful to the development of
-        Mutt (sorted by surnames): 
+      <para>
+        Mutt-ng is developed by the following people:
       </para>
       
       <para>
         <itemizedlist>
           <listitem>
-            Vikas Agnihotri <email>vikasa@writeme.com</email>
+            Andreas Krennmair <email>ak@synflood.at</email>
           </listitem>
           <listitem>
-            Francois Berjon <email> Francois.Berjon@aar.alcatel-alsthom.fr</email>
+            Nico Golde <email>nico@ngolde.de</email>
           </listitem>
           <listitem>
-            Aric Blumer <email>aric@fore.com</email>, John Capo <email>
-              jc@irbs.com
-            </email>
+            Rocco Rutte <email>pdmef@cs.tu-berlin.de</email>
           </listitem>
-          <listitem>
-            David Champion <email>dgc@uchicago.edu</email>
-          </listitem>
-          <listitem>
-            Brendan Cully <email>brendan@kublai.com</email>
-          </listitem>
-          <listitem>
-            Liviu Daia <email>daia@stoilow.imar.ro</email>
-          </listitem>
-          <listitem>
-            Thomas E. Dickey <email>dickey@herndon4.his.com</email>
-          </listitem>
-          <listitem>
-            David DeSimone <email>fox@convex.hp.com</email>
-          </listitem>
-          <listitem>
-            Nickolay N. Dudorov <email>nnd@wint.itfs.nsk.su</email>
-          </listitem>
-          <listitem>
-            Ruslan Ermilov <email>ru@freebsd.org</email>
-          </listitem>
-          <listitem>
-            Edmund Grimley Evans <email>edmundo@rano.org</email>
-          </listitem>
-          <listitem>
-            Michael Finken <email>finken@conware.de</email>
-          </listitem>
-          <listitem>
-            Sven Guckes <email>guckes@math.fu-berlin.de</email>
-          </listitem>
-          <listitem>
-            Lars Hecking <email>lhecking@nmrc.ie</email>
-          </listitem>
-          <listitem>
-            Mark Holloman <email>holloman@nando.net</email>
-          </listitem>
-          <listitem>
-            Andreas Holzmann <email>holzmann@fmi.uni-passau.de</email>
-          </listitem>
-          <listitem>
-            Marco d'Itri <email>md@linux.it</email>
-          </listitem>
-          <listitem>
-            Björn Jacke <email>bjacke@suse.com</email>
-          </listitem>
-          <listitem>
-            Byrial Jensen <email>byrial@image.dk</email>
-          </listitem>
-          <listitem>
-            David Jeske <email>jeske@igcom.net</email>
-          </listitem>
-          <listitem>
-            Christophe Kalt <email>kalt@hugo.int-evry.fr</email>
-          </listitem>
-          <listitem>
-            Tommi Komulainen <email>Tommi.Komulainen@iki.fi</email>
-          </listitem>
-          <listitem>
-            Felix von Leitner (a.k.a ``Fefe'') <email>
-              leitner@math.fu-berlin.de
-            </email>
-          </listitem>
-          <listitem>
-            Brandon Long <email>blong@fiction.net</email>
-          </listitem>
-          <listitem>
-            Jimmy Mäkeä <email>jmy@flashback.net</email>
-          </listitem>
-          <listitem>
-            Lars Marowsky-Bree <email>lmb@pointer.in-minden.de</email>
-          </listitem>
-          <listitem>
-            Thomas ``Mike'' Michlmayr <email>mike@cosy.sbg.ac.at</email>
-          </listitem>
-          <listitem>
-            Andrew W. Nosenko <email>awn@bcs.zp.ua</email>
-          </listitem>
-          <listitem>
-            David O'Brien <email>obrien@Nuxi.cs.ucdavis.edu</email>
-          </listitem>
-          <listitem>
-            Clint Olsen <email>olsenc@ichips.intel.com</email>
-          </listitem>
-          <listitem>
-            Park Myeong Seok <email>pms@romance.kaist.ac.kr</email>
-          </listitem>
-          <listitem>
-            Thomas Parmelan <email>tom@ankh.fr.eu.org</email>
-          </listitem>
-          <listitem>
-            Ollivier Robert <email>roberto@keltia.freenix.fr</email>
-          </listitem>
-          <listitem>
-            Thomas Roessler <email>roessler@does-not-exist.org</email>
-          </listitem>
-          <listitem>
-            Roland Rosenfeld <email>roland@spinnaker.de</email>
-          </listitem>
-          <listitem>
-            TAKIZAWA Takashi <email>taki@luna.email.ne.jp</email>
-          </listitem>
-          <listitem>
-            Allain Thivillon <email>Allain.Thivillon@alma.fr</email>
-          </listitem>
-          <listitem>
-            Gero Treuner <email>gero@faveve.uni-stuttgart.de</email>
-          </listitem>
-          <listitem>
-            Vsevolod Volkov <email>vvv@lucky.net</email>
-          </listitem>
-          <listitem>
-            Ken Weinert <email>kenw@ihs.com</email>
-          </listitem>
-          </itemizedlist>
-        </para>
-        
-        <para>
-          Mutt-ng is developed by the following people:
-        </para>
-        
-        <para>
-          <itemizedlist>
-            <listitem>
-              Andreas Krennmair <email>ak@synflood.at</email>
-            </listitem>
-            <listitem>
-              Nico Golde <email>nico@ngolde.de</email>
-            </listitem>
-            <listitem>
-              Rocco Rutte <email>pdmef@cs.tu-berlin.de</email>
-            </listitem>
-          </itemizedlist>
-        </para>
-        
-        <para>
-          The following people have been very helpful to the
-          development of Mutt-ng (sorted by surnames):
-        </para>
-        
-        <para>
-          <itemizedlist>
-            <listitem>
-              Christian Gall <email>cg@cgall.de</email>
-            </listitem>
-            <listitem>
-              Iain Lea <email>iain@bricbrac.de</email>
-            </listitem>
-            <listitem>
-              Andreas Kneib <email>akneib@gmx.net</email>
-            </listitem>
-            <listitem>
-              Carsten Schoelzki <email>cjs@weisshuhn.de</email>
-            </listitem>
-            <listitem>
-              Elimar Riesebieter <email>riesebie@lxtec.de</email>
-            </listitem>
-          </itemizedlist>
-        </para>
-        
-      </sect1>
+        </itemizedlist>
+      </para>
       
+      <para>
+        The following people have been very helpful to the
+        development of Mutt-ng (sorted by surnames):
+      </para>
+      
+      <para>
+        <itemizedlist>
+          <listitem>
+            Christian Gall <email>cg@cgall.de</email>
+          </listitem>
+          <listitem>
+            Iain Lea <email>iain@bricbrac.de</email>
+          </listitem>
+          <listitem>
+            Andreas Kneib <email>akneib@gmx.net</email>
+          </listitem>
+          <listitem>
+            Felix Meinhold <email>felix.meinhold@gmx.net</email>
+          </listitem>
+          <listitem>
+            Carsten Schoelzki <email>cjs@weisshuhn.de</email>
+          </listitem>
+          <listitem>
+            Elimar Riesebieter <email>riesebie@lxtec.de</email>
+          </listitem>
+        </itemizedlist>
+      </para>
+
+    </chapter>
+
+    <chapter id="hacking-documentation">
+      <title>Hacking Documentation</title>
+
+      <para>
+        This manual is written in XML and transformed via a XSLT
+        stylesheet into valid DocBook/XML to be again transformed via a
+        XSLT stylesheet into the final formats.
+      </para>
+
+      <para>
+        This two pass processing is required to keep the file size low
+        and to sanitize use, i.e. drastically lower the typing
+        overhead.
+      </para>
+
+      <para>
+        To achieve the latter, the sources come with a file called
+        <literal>muttng-manual.xsl</literal> introducing the
+        <literal>muttng-doc</literal> namespace which offers the following
+        tags to be used (<emphasis>note: this is far from being
+          complete, any help towards consistency is <emphasis
+            role="bold">highly</emphasis> appreciated</emphasis>).
+      </para>
+
+      <para>
+        <variablelist>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:man name="" [sect=""]/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>References to manual pages.</emphasis> If the
+                <literal>sect</literal> parameter is omitted, it'll
+                be 1 for the commands section. There's no auto-indexing yet.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:envvar name=""/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>References to environment
+                  variables.</emphasis> The <literal>name</literal>
+                parameter must contain upper-case letters only without
+                the dollar sign as it'll be added automatically.
+                Auto-indexing under <emphasis>Environment
+                  Variables</emphasis> is done.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:hook name=""/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>References to hooks.</emphasis> The string
+                <literal>-hook</literal> will be added automatically to
+                the value given in the <literal>name</literal>
+                parameter. All entries will be auto-indexed under
+                <emphasis>Hooks</emphasis>.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:command name=""/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>References to configuration
+                  commands.</emphasis> The name is given via the
+                <literal>name</literal> parameter and will be
+                auto-indexed under <emphasis>Configuration
+                  Commands</emphasis>.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:pattern name=""/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>References to patterns.</emphasis> The
+                <literal>name</literal> parameter must only contain the
+                letter/symbol for the pattern as the tilde symbol/equal
+                sign will be added automatically. Auto-indexing is done
+                under <emphasis>Patterns</emphasis>.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:funcdef name="" key=""/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>Defining a command.</emphasis>. It's used to
+                define a command with the name given in the
+                <literal>name</literal> parameter and a default key
+                binding given via <literal>key</literal>. The string
+                will be automatically enclosed in
+                <literal>&lt;&gt;</literal>. Auto-indexing is done under
+                <emphasis>Functions</emphasis>. Also an anchor with id
+                <literal>func-[name]</literal> will be added with
+                <literal>[name]</literal> being the value of the
+                <literal>name</literal> parameter.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:funcref name=""/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>References to functions.</emphasis>. This is
+                practically the same as the above except that there's no
+                anchor defined.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:vardef name="" id=""/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>Defining a variable.</emphasis> This is to be
+                used by <literal>makedoc</literal> only to define a
+                command with a given name and XML-normalized link given
+                via <literal>id</literal>. Auto-indexing is done under
+                <emphasis>Configuration Variables</emphasis>. The
+                <literal>name</literal> parameter's value will be
+                prefixed with a dollar sign as for environment
+                variables.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:varref name="" link=""/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>References to variables.</emphasis> This
+                practically is the same as above except that the text
+                inbetween won't be wrapped within a
+                <literal>&lt;sect1&gt;</literal> tag. Auto-indexing is
+                the same as for the above. This one is intended for
+                manual use.
+            </para></listitem>
+          </varlistentry>
+        </variablelist>
+      </para>
+
     </chapter>
 
     <index/>

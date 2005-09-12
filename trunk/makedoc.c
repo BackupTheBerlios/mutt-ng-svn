@@ -608,14 +608,17 @@ static int sgml_fputc (int c)
     return add_s ("&lt;");
   case '>':
     return add_s ("&gt;");
+#if 0
   case '$':
     return add_s ("&dollar;");
   case '_':
     return add_s ("&lowbar;");
   case '%':
     return add_s ("&percnt;");
+#endif
   case '&':
     return add_s ("&amp;");
+#if 0
   case '\\':
     return add_s ("&bsol;");
   case '"':
@@ -626,6 +629,7 @@ static int sgml_fputc (int c)
     return add_s ("&rsqb;");
   case '~':
     return add_s ("&tilde;");
+#endif
   default:
     return add_c (c);
   }
@@ -733,16 +737,13 @@ static void print_confline (const char *varname, int type, const char *val)
     /* SGML based manual */
   case F_SGML:
     {
-      add_s ("\n<sect1 id=\"");
+      add_s ("\n<muttng-doc:vardef id=\"");
       sgml_id_fputs (varname);
-      add_s ("\">\n<title>");
+      add_s ("\" name=\"");
       sgml_fputs (varname);
-      add_s ("</title>\n<para>Type: <literal>");
+      add_s ("\">\n<para>Type: <literal>");
       add_s (type2human (type));
       add_s ("</literal></para>\n");
-      add_s ("<indexterm><primary>Configuration Variables</primary><secondary>");
-      sgml_fputs (varname);
-      add_s ("</secondary></indexterm>\n\n");
 
       if (type == DT_STR || type == DT_RX || type == DT_ADDR
           || type == DT_PATH) {
@@ -1164,7 +1165,7 @@ static int print_it (int special, char *str, int docstat)
         }
       case SP_END_SECT:
         {
-          add_s ("</sect1>\n");
+          add_s ("</muttng-doc:vardef>\n");
           break;
         }
       case SP_STR:
@@ -1201,7 +1202,7 @@ void print_ref (int output_dollar, const char *ref)
     sgml_id_fputs (ref);
     add_s ("\">\n");
     if (output_dollar)
-      add_s ("&dollar;");
+      add_s ("$");
     sgml_fputs (ref);
     add_s ("</link>");
     break;
