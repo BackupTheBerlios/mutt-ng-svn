@@ -14,7 +14,7 @@
     <firstname>Michael</firstname><surname>Elkins</surname>
     <email>me@cs.hmc.edu</email>
   </author>
-  <pubdate>version devel-r473</pubdate>
+  <pubdate>version @VERSION@</pubdate>
   <abstract>
     <para>
       Michael Elinks on mutt, circa 1995:
