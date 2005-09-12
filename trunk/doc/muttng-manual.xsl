@@ -112,20 +112,17 @@
   </xsl:template>
  
   <xsl:template match="muttng-doc:varref">
-    <link>
-      <xsl:choose>
-        <xsl:when test="@link">
-          <xsl:param name="linkend" value="@link"/>
-        </xsl:when>
-        <xsl:otherwise>
-          <xsl:param name="linkend" value="@name"/>
-        </xsl:otherwise>
-      </xsl:choose>
-      <xsl:value-of select="concat('$',@name)"/>
-    </link>
+    <xsl:choose>
+      <xsl:when test="@link">
+        <link linkend="{@link}"><literal><xsl:value-of select="concat('$',@name)"/></literal></link>
+      </xsl:when>
+      <xsl:otherwise>
+        <link linkend="{@name}"><literal><xsl:value-of select="concat('$',@name)"/></literal></link>
+      </xsl:otherwise>
+    </xsl:choose>
     <indexterm>
       <primary>Configuration Variables</primary>
-      <secondary><xsl:value-of select="@name"/></secondary>
+      <secondary>$<xsl:value-of select="@name"/></secondary>
     </indexterm>
   </xsl:template>
 
