@@ -28,7 +28,7 @@
         
         <para>
           
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Default Generic Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -208,7 +208,7 @@
         
         <para>
           
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Default Index Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -578,7 +578,7 @@
         
         <para>
           
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Default Pager Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -973,7 +973,7 @@
         
         <para>
           
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Default Alias Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1013,7 +1013,7 @@
         
         <para>
           
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Default Query Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1078,7 +1078,7 @@
         
         <para>
           
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Default Attachment Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1193,7 +1193,7 @@
         
         <para>
           
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Default Compose Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1383,7 +1383,7 @@
         
         <para>
           
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Default Postpone Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1418,7 +1418,7 @@
         
         <para>
           
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Default Browser Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1513,7 +1513,7 @@
         
         <para>
           
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Default PGP Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1548,7 +1548,7 @@
         
         <para>
           
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Default Editor Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1682,7 +1682,7 @@
         <title>sidebar</title>
         
       <para>
-        <table>
+        <table frame="none" rowsep="1">
           <title>Referene: Default Sidebar Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1990,13 +1990,15 @@
             </para></listitem>
           </varlistentry>
           <varlistentry>
-            <term><literal>&lt;muttng-doc:pattern name=""/&gt;</literal></term>
+            <term><literal>&lt;muttng-doc:pattern name="" [full="1"]/&gt;</literal></term>
             <listitem><para>
                 <emphasis>References to patterns.</emphasis> The
                 <literal>name</literal> parameter must only contain the
                 letter/symbol for the pattern as the tilde symbol/equal
                 sign will be added automatically. Auto-indexing is done
-                under <emphasis>Patterns</emphasis>.
+                under <emphasis>Patterns</emphasis>. If the
+                <literal>full</literal> is given the equal sign as well
+                as tilde will be printed for a fully complete reference.
             </para></listitem>
           </varlistentry>
           <varlistentry>
@@ -2044,6 +2046,26 @@
                 <literal>&lt;sect1&gt;</literal> tag. Auto-indexing is
                 the same as for the above. This one is intended for
                 manual use.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:web url""/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>Pretty print a linked URL</emphasis>. As for
+                E-Mail addresses where the text (mostly) equals the
+                link's target, URLs must be enclosed in
+                <literal>&lt;&gt;</literal> (also this reduced redudant
+                URL typing).
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:rfc num=""/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>References to RfC documents.</emphasis> Use
+                this to produce links to RfC document with number given
+                as the <literal>num</literal> parameter. A link to
+                <muttng-doc:web url="http://www.faqs.org/"/> will be
+                made. Auto-indexing is not done yet.
             </para></listitem>
           </varlistentry>
         </variablelist>

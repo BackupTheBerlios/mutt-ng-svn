@@ -49,31 +49,33 @@
      <literal><xsl:value-of select="concat('$', @name)"/></literal>
      <indexterm>
        <primary>Environment Variables</primary>
-       <secondary><xsl:value-of select="concat('$', @name)"/></secondary>
+       <secondary><literal><xsl:value-of select="concat('$', @name)"/></literal></secondary>
      </indexterm>
   </xsl:template> 
 
   <xsl:template match="muttng-doc:hook">
-     <literal><xsl:value-of select="concat(@name, '-hook')"/></literal>
+     <literal><link linkend="{concat(@name, '-hook')}"><xsl:value-of select="concat(@name, '-hook')"/></link></literal>
      <indexterm>
        <primary>Hooks</primary>
-       <secondary><xsl:value-of select="concat(@name, '-hook')"/></secondary>
+       <secondary><literal><xsl:value-of select="concat(@name, '-hook')"/></literal></secondary>
      </indexterm>
   </xsl:template>
 
   <xsl:template match="muttng-doc:command">
-     <literal><xsl:value-of select="@name"/></literal>
+     <literal><link linkend="{concat('command-', @name)}"><xsl:value-of select="@name"/></link></literal>
      <indexterm>
        <primary>Configuration Commands</primary>
-       <secondary><xsl:value-of select="@name"/></secondary>
+       <secondary><literal><xsl:value-of select="@name"/></literal></secondary>
      </indexterm>
   </xsl:template>
 
   <xsl:template match="muttng-doc:pattern">
-     <literal>~<xsl:value-of select="@name"/>/=<xsl:value-of select="@name"/></literal>
+    <literal>~<xsl:value-of select="@name"/></literal>
+    <xsl:if test="@full='1'">/<literal>=<xsl:value-of select="@name"/></literal></xsl:if>
      <indexterm>
        <primary>Patterns</primary>
-       <secondary>~<xsl:value-of select="@name"/>/=<xsl:value-of select="@name"/></secondary>
+       <secondary><literal>~<xsl:value-of select="@name"/></literal>/
+         <literal>=<xsl:value-of select="@name"/></literal></secondary>
      </indexterm>
   </xsl:template>
 
@@ -82,7 +84,7 @@
      <anchor id="func-{@name}"/>
      <indexterm>
        <primary>Functions</primary>
-       <secondary><xsl:value-of select="@name"/></secondary>
+       <secondary><literal>&lt;<xsl:value-of select="@name"/>&gt;</literal></secondary>
      </indexterm>
   </xsl:template>
 
@@ -96,7 +98,7 @@
     -->
     <indexterm>
       <primary>Functions</primary>
-      <secondary><xsl:value-of select="@name"/></secondary>
+      <secondary><literal>&lt;<xsl:value-of select="@name"/>&gt;</literal></secondary>
     </indexterm>
   </xsl:template>
 
@@ -105,7 +107,7 @@
       <title><xsl:value-of select="concat('$',@name)"/></title>
       <indexterm>
         <primary>Configuration Variables</primary>
-        <secondary>$<xsl:value-of select="@name"/></secondary>
+        <secondary><literal>$<xsl:value-of select="@name"/></literal></secondary>
       </indexterm>
       <xsl:apply-templates/>
     </sect1>
@@ -122,8 +124,16 @@
     </xsl:choose>
     <indexterm>
       <primary>Configuration Variables</primary>
-      <secondary>$<xsl:value-of select="@name"/></secondary>
+      <secondary><literal>$<xsl:value-of select="@name"/></literal></secondary>
     </indexterm>
+  </xsl:template>
+
+  <xsl:template match="muttng-doc:web">
+    <ulink url="{@url}"><literal>&lt;<xsl:value-of select="@url"/>&gt;</literal></ulink>
+  </xsl:template>
+
+  <xsl:template match="muttng-doc:rfc">
+    <ulink url="{concat('http://www.faqs.org/rfcs/rfc', @num, '.html')}">RfC <xsl:value-of select="@num"/></ulink>
   </xsl:template>
 
   <xsl:template match="/">

@@ -62,7 +62,7 @@
     <title>Mutt-ng Home Page</title>
     
     <para>
-      <ulink url="http://www.muttng.org/">http://www.muttng.org</ulink>
+      <muttng-doc:web url="http://www.muttng.org/"/>
     </para>
     
     <para>
@@ -107,9 +107,7 @@
     
     <para>
       So far, there are no official releases of Mutt-ng, but you can
-      download daily snapshots from <ulink
-        url="http://mutt-ng.berlios.de/snapshots/"
-        >http://mutt-ng.berlios.de/snapshots/</ulink>
+      download daily snapshots from <muttng-doc:web url="http://mutt-ng.berlios.de/snapshots/"/>
     </para>
     
     <para>
@@ -690,7 +688,7 @@
     
     <para>
 
-      <table>
+      <table frame="none" rowsep="1">
         <title>Most commonly used movement bindings</title>
         <tgroup cols="3" align="left" colsep="1" rowsep="1">
         <thead>
@@ -768,7 +766,7 @@
     
     <para>
 
-      <table>
+      <table frame="none" rowsep="1">
         <title>Line Editor Functions</title>
         <tgroup cols="3" align="left" colsep="1" rowsep="1">
         <thead>
@@ -930,7 +928,7 @@
       
       <para>
 
-      <table>
+      <table frame="none" rowsep="1">
         <title>Most commonly used Index Bindings</title>
         <tgroup cols="3" align="left" colsep="1" rowsep="1">
         <thead>
@@ -1289,7 +1287,7 @@
       
       <para>
 
-      <table>
+      <table frame="none" rowsep="1">
         <title>Most commonly used Pager Bindings</title>
         <tgroup cols="3" align="left" colsep="1" rowsep="1">
         <thead>
@@ -1397,7 +1395,7 @@
       
       <para>
 
-      <table>
+      <table frame="none" rowsep="1">
         <title>ANSI Escape Sequences</title>
         <tgroup cols="2" align="left" colsep="1" rowsep="1">
         <thead>
@@ -1440,7 +1438,7 @@
     </table>
 
     
-      <table>
+      <table frame="none" rowsep="1">
         <title>ANSI Colors</title>
         <tgroup cols="2" align="left" colsep="1" rowsep="1">
         <thead>
@@ -1492,7 +1490,7 @@
         <para>
           Mutt-ng uses these attributes for handling text/enriched messages,
           and they
-          can also be used by an external <link linkend="auto-view">autoview</link>
+          can also be used by an external <muttng-doc:command name="auto_view"/>
           script for highlighting purposes.  <emphasis role="bold">Note:</emphasis> If you change the colors for your
           display, for example by changing the color associated with color2 for
           your xterm, then that color will be used instead of green.
@@ -1516,7 +1514,7 @@
         
         <para>
 
-        <table>
+        <table frame="none" rowsep="1">
           <title>Most commonly used thread-related bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1639,7 +1637,7 @@
           command is added to the file specified by the <muttng-doc:varref name="alias_file" link="alias-file"/>
           variable for future use. <emphasis role="bold">Note:</emphasis>
           Specifying an <muttng-doc:varref name="alias_file" link="alias-file"/>
-          does not add the aliases specified there-in, you must also <link linkend="source">source</link>
+          does not add the aliases specified there-in, you must also <muttng-doc:command name="source"/>
           the file.
         </para>
         
@@ -1662,7 +1660,7 @@
         </para>
         
         <para>
-          Toggles the weeding of message header fields specified by <link linkend="ignore">ignore</link>
+          Toggles the weeding of message header fields specified by <muttng-doc:command name="ignore"/>
           commands.
         </para>
         
@@ -1709,7 +1707,7 @@
           a
           configuration file.  A common use is to check the settings of
           variables, or
-          in conjunction with <link linkend="macro">macro</link> to change
+          in conjunction with <muttng-doc:command name="macro"/> to change
           settings on the
           fly.
         </para>
@@ -1739,7 +1737,7 @@
         <para>
           Reply to the current or tagged message(s) by extracting any addresses
           which
-          match the regular expressions given by the <link linkend="lists">lists</link>
+          match the regular expressions given by the <muttng-doc:command name="lists"/>
           commands, but also honor any <literal>Mail-Followup-To</literal>
           header(s) if the
           <muttng-doc:varref name="honor_followup_to" link="honor-followup-to"/>
@@ -1845,7 +1843,7 @@
       
       <para>
 
-        <table>
+        <table frame="none" rowsep="1">
           <title>Most commonly used Mail Composition Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -2012,7 +2010,7 @@ set edit_headers</screen>
         
         <para>
 
-        <table>
+        <table frame="none" rowsep="1">
           <title>Most commonly used Compose Menu Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -2403,7 +2401,7 @@ Pgp: [E | S | S id]</screen>
           flags:
 
 
-        <table>
+        <table frame="none" rowsep="1">
           <title>PGP Key Menu Flags</title>
           <tgroup cols="2" align="left" colsep="1" rowsep="1">
           <thead>
@@ -3230,13 +3228,11 @@ set folder = $user_magic_number</screen>
       
     </sect1>
     
-    <sect1 id="alias">
+    <sect1 id="command-alias"><anchor id="command-unalias"/>
       <title>Defining/Using aliases</title>
-      
+
       <para>
-        <literallayout>
-Usage: <literal>alias</literal> <emphasis>key</emphasis> <emphasis>address</emphasis> [, <emphasis>address</emphasis>,...]
-        </literallayout>
+        Usage: <muttng-doc:command name="alias"/> <emphasis>key</emphasis> <emphasis>address</emphasis> [, <emphasis>address</emphasis>,...]
       </para>
       
       <para>
@@ -3274,7 +3270,7 @@ alias theguys manny, moe, jack</screen>
         Unlike other mailers, Mutt-ng doesn't require aliases to be defined
         in a special file.  The <literal>alias</literal> command can appear
         anywhere in
-        a configuration file, as long as this file is <link linkend="source">source</link>.
+        a configuration file, as long as this file is <muttng-doc:command name="source"/>.
         Consequently, you can have multiple alias files, or
         you can have all aliases defined in your muttrc.
       </para>
@@ -3288,7 +3284,7 @@ alias theguys manny, moe, jack</screen>
         special either,
         in the sense that Mutt-ng will happily append aliases to any file, but
         in
-        order for the new aliases to take effect you need to explicitly <link linkend="source">source</link>
+        order for the new aliases to take effect you need to explicitly <muttng-doc:command name="source"/>
         this file too.
       </para>
       
@@ -3344,13 +3340,11 @@ set alias_file=~/.mail_aliases</screen>
       
     </sect1>
     
-    <sect1 id="bind">
+    <sect1 id="command-bind">
       <title>Changing the default key bindings</title>
       
       <para>
-        <literallayout>
-Usage: <literal>bind</literal> <emphasis>map</emphasis> <emphasis>key</emphasis> <emphasis>function</emphasis>
-        </literallayout>
+        Usage: <muttng-doc:command name="bind"/> <emphasis>map</emphasis> <emphasis>key</emphasis> <emphasis>function</emphasis>
       </para>
       
       <para>
@@ -3500,7 +3494,7 @@ Usage: <literal>bind</literal> <emphasis>map</emphasis> <emphasis>key</emphasis>
       
       <para>
         
-        <table>
+        <table frame="none" rowsep="1">
           <title>Alternative Key Names</title>
           <tgroup cols="2" align="left" colsep="1" rowsep="1">
           <thead>
@@ -3632,12 +3626,13 @@ Usage: <literal>bind</literal> <emphasis>map</emphasis> <emphasis>key</emphasis>
     
     <sect1 id="charset-hook">
       <title>Defining aliases for character sets</title>
-      
+
+      <anchor id="iconv-hook"/>
       <para>
-        <literallayout>
-Usage: <muttng-doc:hook name="charset"/> <emphasis>alias</emphasis> <emphasis> charset</emphasis>
-Usage: <muttng-doc:hook name="iconv"/> <emphasis>charset</emphasis> <emphasis> local-charset </emphasis>
-        </literallayout>
+        Usage: <muttng-doc:hook name="charset"/> <emphasis>alias</emphasis> <emphasis> charset</emphasis>
+      </para>
+      <para>
+        Usage: <muttng-doc:hook name="iconv"/> <emphasis>charset</emphasis> <emphasis> local-charset </emphasis>
       </para>
       
       <para>
@@ -3665,10 +3660,7 @@ Usage: <muttng-doc:hook name="iconv"/> <emphasis>charset</emphasis> <emphasis> l
       <title>Setting variables based upon mailbox</title>
       
       <para>
-        <literallayout>
-Usage: <muttng-doc:hook name="folder"/> [!]<emphasis>regexp</emphasis> <emphasis>command</emphasis>
-        </literallayout>
-
+        Usage: <muttng-doc:hook name="folder"/> [!]<emphasis>regexp</emphasis> <emphasis>command</emphasis>
       </para>
       
       <para>
@@ -3726,13 +3718,11 @@ folder-hook . set sort=date-sent</screen>
       
     </sect1>
     
-    <sect1 id="macro">
+    <sect1 id="command-macro">
       <title>Keyboard macros</title>
       
       <para>
-        <literallayout>
-Usage: <literal>macro</literal> <emphasis>menu</emphasis> <emphasis>key</emphasis> <emphasis>sequence</emphasis> [<emphasis>description</emphasis>]
-        </literallayout>
+        Usage: <muttng-doc:command name="macro"/> <emphasis>menu</emphasis> <emphasis>key</emphasis> <emphasis>sequence</emphasis> [<emphasis>description</emphasis>]
       </para>
       
       <para>
@@ -3758,7 +3748,7 @@ Usage: <literal>macro</literal> <emphasis>menu</emphasis> <emphasis>key</emphasi
       
       <para>
         <emphasis>key</emphasis> and <emphasis>sequence</emphasis> are expanded
-        by the same rules as the <link linkend="bind">bind</link>.  There are
+        by the same rules as the <muttng-doc:command name="bind"/>.  There are
         some additions however.  The
         first is that control characters in <emphasis>sequence</emphasis> can
         also be specified
@@ -3771,7 +3761,7 @@ Usage: <literal>macro</literal> <emphasis>menu</emphasis> <emphasis>key</emphasi
           name&gt;
         </emphasis>
         .For a listing of key
-        names see the section on <link linkend="bind">bind</link>.  Functions
+        names see the section on <muttng-doc:command name="bind"/>.  Functions
         are listed in the <link linkend="functions">functions</link>.
       </para>
       
@@ -3802,15 +3792,19 @@ Usage: <literal>macro</literal> <emphasis>menu</emphasis> <emphasis>key</emphasi
       
     </sect1>
     
-    <sect1 id="color">
+    <sect1 id="command-color"><anchor id="command-uncolor"/>
       <title>Using color and mono video attributes</title>
-      
+
+      <anchor id="command-mono"/>
+      <anchor id="command-unmono"/>
       <para>
-        <literallayout>
-Usage: <literal>color</literal> <emphasis>object</emphasis> <emphasis>foreground</emphasis><emphasis>background</emphasis> [<emphasis>regexp</emphasis>]
-Usage: <literal>color</literal> index <emphasis>foreground</emphasis> <emphasis>background</emphasis><emphasis>pattern</emphasis>
-Usage: <literal>uncolor</literal> index <emphasis>pattern</emphasis>[<emphasis>pattern</emphasis>...]
-      </literallayout>
+        Usage: <muttng-doc:command name="color"/> <emphasis>object</emphasis> <emphasis>foreground</emphasis><emphasis>background</emphasis> [<emphasis>regexp</emphasis>]
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="color"/> index <emphasis>foreground</emphasis> <emphasis>background</emphasis><emphasis>pattern</emphasis>
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="uncolor"/> index <emphasis>pattern</emphasis>[<emphasis>pattern</emphasis>...]
       </para>
       
       <para>
@@ -4093,11 +4087,13 @@ export COLORFGBG</screen>
       </para>
       
       <para>
-        <literallayout>
-Usage: <literal>mono</literal> <emphasis>&lt;object&gt; &lt;attribute&gt;</emphasis>[<emphasis>regexp</emphasis>]
-Usage: <literal>mono</literal> index <emphasis>attribute</emphasis> <emphasis>pattern</emphasis>
-Usage: <literal>unmono</literal> index <emphasis>pattern</emphasis> [<emphasis>pattern</emphasis>...]
-        </literallayout>
+        Usage: <muttng-doc:command name="mono"/> <emphasis>&lt;object&gt; &lt;attribute&gt;</emphasis>[<emphasis>regexp</emphasis>]
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="mono"/> index <emphasis>attribute</emphasis> <emphasis>pattern</emphasis>
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="unmono"/> index <emphasis>pattern</emphasis> [<emphasis>pattern</emphasis>...]
       </para>
       
       <para>
@@ -4148,15 +4144,17 @@ Usage: <literal>unmono</literal> index <emphasis>pattern</emphasis> [<emphasis>p
       
     </sect1>
     
-    <sect1 id="ignore">
+    <sect1 id="command-ignore"><anchor id="command-unignore"/>
       <title>Ignoring (weeding) unwanted message headers</title>
-      
+
       <para>
-        <literallayout>
-Usage: <literal>[un]ignore</literal> <emphasis>pattern</emphasis> [<emphasis>pattern</emphasis>...]
-        </literallayout>
+        Usage: <muttng-doc:command name="ignore"/> <emphasis>pattern</emphasis> [<emphasis>pattern</emphasis>...]
       </para>
-      
+
+      <para>
+        Usage: <muttng-doc:command name="unignore"/> <emphasis>pattern</emphasis> [<emphasis>pattern</emphasis>...]
+      </para>
+ 
       <para>
         Messages often have many header fields added by automatic processing
         systems,
@@ -4203,14 +4201,17 @@ unignore posted-to:</screen>
       
     </sect1>
     
-    <sect1 id="alternates">
+    <sect1 id="command-alternates"><anchor id="command-unalternates"/>
       <title>Alternative addresses</title>
       
       <para>
-        Usage: <literal>[un]alternates</literal> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
-        
+        Usage: <muttng-doc:command name="alternates"/> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
       </para>
-      
+
+      <para>
+        Usage: <muttng-doc:command name="unalternates"/> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
+      </para>
+ 
       <para>
         With various functions, mutt will treat messages differently,
         depending on whether you sent them or whether you received them from
@@ -4289,7 +4290,7 @@ unignore posted-to:</screen>
         <para>
           For introductory information on <literal>format=flowed</literal>
           messages, see
-          <ulink URL="http://www.joeclark.org/ffaq.html">&#60;http://www.joeclark.org/ffaq.html&#62;</ulink>.
+          <muttng-doc:web url="http://www.joeclark.org/ffaq.html"/>.
         </para>
         
       </sect2>
@@ -4413,7 +4414,7 @@ set text_flowed</screen>
           side, the first space (if any) is removed. As a consequence and in
           addition to the above simple setting, please keep this in mind when
           making manual formattings within the editor. Also note that mutt-ng
-          currently violates the standard (RfC 3676) as it does not
+          currently violates the standard (<muttng-doc:rfc num="3676"/>) as it does not
           space-stuff lines starting with:
         </para>
         
@@ -4421,7 +4422,6 @@ set text_flowed</screen>
           
           <itemizedlist>
             <listitem>
-              
               <para>
                 <literal>&gt;</literal> This is <emphasis>not</emphasis> the
                 quote character but a right
@@ -4429,21 +4429,6 @@ set text_flowed</screen>
                 
               </para>
             </listitem>
-            <listitem>
-              
-              <para>
-                <literal>From</literal> with a trailing space.
-                
-              </para>
-            </listitem>
-            <listitem>
-              
-              <para>
-                just a space for formatting reasons
-                
-              </para>
-            </listitem>
-            
           </itemizedlist>
           
         </para>
@@ -4482,14 +4467,21 @@ set text_flowed</screen>
       
     </sect1>
     
-    <sect1 id="lists">
+    <sect1 id="command-lists"><anchor id="command-unlists"/><anchor id="command-subscribe"/>
+      <anchor id="command-unsubscribe"/>
       <title>Mailing lists</title>
       
       <para>
-        <literallayout>
-Usage: <literal>[un]lists</literal> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
-Usage: <literal>[un]subscribe</literal> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
-        </literallayout>
+        Usage: <muttng-doc:command name="lists"/> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="unlists"/> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="subscribe"/> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="unsubscribe"/> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
       </para>
       
       <para>
@@ -4563,9 +4555,7 @@ Usage: <literal>[un]subscribe</literal> <emphasis>regexp</emphasis> [<emphasis>r
       <title>Using Multiple spool mailboxes</title>
       
       <para>
-        <literallayout>
-Usage: <muttng-doc:hook name="mbox"/> [!]<emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
-        </literallayout>
+        Usage: <muttng-doc:hook name="mbox"/> [!]<emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
       </para>
       
       <para>
@@ -4594,15 +4584,16 @@ Usage: <muttng-doc:hook name="mbox"/> [!]<emphasis>pattern</emphasis> <emphasis>
       
     </sect1>
     
-    <sect1 id="mailboxes">
+    <sect1 id="command-mailboxes"><anchor id="command-unmailboxes"/>
       <title>Defining mailboxes which receive mail</title>
-      
+
       <para>
-        <literallayout>
-Usage: <literal>[un]mailboxes</literal> [!]<emphasis>filename</emphasis> [<emphasis>filename</emphasis>...]
-        </literallayout>
+        Usage: <muttng-doc:command name="mailboxes"/> [!]<emphasis>filename</emphasis> [<emphasis>filename</emphasis>...]
       </para>
-      
+      <para>
+        Usage: <muttng-doc:command name="unmailboxes"/> [!]<emphasis>filename</emphasis> [<emphasis>filename</emphasis>...]
+      </para>
+ 
       <para>
         This command specifies folders which can receive mail and
         which will be checked for new messages.  By default, the
@@ -4662,14 +4653,14 @@ Usage: <literal>[un]mailboxes</literal> [!]<emphasis>filename</emphasis> [<empha
       
     </sect1>
     
-    <sect1 id="my-hdr">
+    <sect1 id="command-my_hdr"><anchor id="command-unmy_hdr"/>
       <title>User defined headers</title>
       
       <para>
-        <literallayout>
-Usage: <literal>my_hdr</literal> <emphasis>string</emphasis>
-Usage: <literal>unmy_hdr</literal> <emphasis>field</emphasis> [<emphasis>field</emphasis>...]
-        </literallayout>
+        Usage: <muttng-doc:command name="my_hdr"/> <emphasis>string</emphasis>
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="unmy_hdr"/> <emphasis>field</emphasis> [<emphasis>field</emphasis>...]
       </para>
       
       <para>
@@ -4697,7 +4688,7 @@ my_hdr Organization: A Really Big Company, Anytown, USA</screen>
           not
         </emphasis>
         allowed between the keyword and
-        the colon (``:'').  The standard for electronic mail (RFC822) says that
+        the colon (``:'').  The standard for electronic mail (<muttng-doc:rfc num="822"/>) says that
         space is illegal there, so Mutt-ng enforces the rule.
       </para>
       
@@ -4728,13 +4719,11 @@ unmy_hdr to cc</screen>
       
     </sect1>
     
-    <sect1 id="hdr-order">
+    <sect1 id="command-hdr_order"><anchor id="command-unhdr_order"/>
       <title>Defining the order of headers when viewing messages</title>
       
       <para>
-        <literallayout>
-Usage: <literal>hdr_order</literal> <emphasis>header1</emphasis><emphasis>header2</emphasis> <emphasis>header3</emphasis>
-        </literallayout>
+        Usage: <muttng-doc:command name="hdr_order"/> <emphasis>header1</emphasis><emphasis>header2</emphasis> <emphasis>header3</emphasis>
       </para>
       
       <para>
@@ -4766,9 +4755,7 @@ hdr_order From Date: From: To: Cc: Subject:</screen>
       <title>Specify default save filename</title>
       
       <para>
-        <literallayout>
-Usage: <muttng-doc:hook name="save"/> [!]<emphasis>pattern</emphasis> <emphasis>filename</emphasis>
-        </literallayout>
+        Usage: <muttng-doc:hook name="save"/> [!]<emphasis>pattern</emphasis> <emphasis>filename</emphasis>
       </para>
       
       <para>
@@ -4814,9 +4801,7 @@ save-hook aol\\.com$ +spam</screen>
       <title>Specify default Fcc: mailbox when composing</title>
       
       <para>
-        <literallayout>
-Usage: <muttng-doc:hook name="fcc"/> [!]<emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
-        </literallayout>
+        Usage: <muttng-doc:hook name="fcc"/> [!]<emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
       </para>
       
       <para>
@@ -4836,7 +4821,7 @@ Usage: <muttng-doc:hook name="fcc"/> [!]<emphasis>pattern</emphasis> <emphasis>m
       </para>
       
       <para>
-        Example: <literal><muttng-doc:hook name="fcc"/> ]@.[aol\\.com$
+        Example: <literal><muttng-doc:hook name="fcc"/> [@.]aol\\.com$
           +spammers
         </literal>
       </para>
@@ -4858,9 +4843,7 @@ Usage: <muttng-doc:hook name="fcc"/> [!]<emphasis>pattern</emphasis> <emphasis>m
       <title>Specify default save filename and default Fcc: mailbox at once</title>
       
       <para>
-        <literallayout>
-Usage: <literal><muttng-doc:hook name="fcc-save"/></literal> [!]<emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
-        </literallayout>
+        Usage: <literal><muttng-doc:hook name="fcc-save"/></literal> [!]<emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
       </para>
       
       <para>
@@ -4878,12 +4861,15 @@ Usage: <literal><muttng-doc:hook name="fcc-save"/></literal> [!]<emphasis>patter
       <title>Change settings based upon message recipients</title>
 
       <anchor id="reply-hook"/>
+      <anchor id="send2-hook"/>
       <para>
-        <literallayout>
-Usage: <muttng-doc:hook name="reply"/> [!]<emphasis>pattern</emphasis> <emphasis>command</emphasis>
-Usage: <muttng-doc:hook name="send"/> [!]<emphasis>pattern</emphasis> <emphasis>command</emphasis>
-Usage: <muttng-doc:hook name="send2"/> [!]<emphasis>pattern</emphasis> <emphasis>command</emphasis>
-        </literallayout>v
+        Usage: <muttng-doc:hook name="reply"/> [!]<emphasis>pattern</emphasis> <emphasis>command</emphasis>
+      </para>
+      <para>
+        Usage: <muttng-doc:hook name="send"/> [!]<emphasis>pattern</emphasis> <emphasis>command</emphasis>
+      </para>
+      <para>
+        Usage: <muttng-doc:hook name="send2"/> [!]<emphasis>pattern</emphasis> <emphasis>command</emphasis>
       </para>
       
       <para>
@@ -4971,9 +4957,7 @@ Usage: <muttng-doc:hook name="send2"/> [!]<emphasis>pattern</emphasis> <emphasis
       <title>Change settings before formatting a message</title>
       
       <para>
-        <literallayout>
-Usage: <muttng-doc:hook name="message"/> [!]<emphasis>pattern</emphasis> <emphasis>command</emphasis>
-        </literallayout>
+        Usage: <muttng-doc:hook name="message"/> [!]<emphasis>pattern</emphasis> <emphasis>command</emphasis>
       </para>
       
       <para>
@@ -5010,9 +4994,7 @@ message-hook '<muttng-doc:pattern name="f"/> freshmeat-news' 'set pager="less \"
       <title>Choosing the cryptographic key of the recipient</title>
       
       <para>
-        <literallayout>
-Usage: <muttng-doc:hook name="crypt"/> <emphasis>pattern</emphasis> <emphasis>keyid</emphasis>
-        </literallayout>
+        Usage: <muttng-doc:hook name="crypt"/> <emphasis>pattern</emphasis> <emphasis>keyid</emphasis>
       </para>
       
       <para>
@@ -5039,20 +5021,18 @@ Usage: <muttng-doc:hook name="crypt"/> <emphasis>pattern</emphasis> <emphasis>ke
       
     </sect1>
     
-    <sect1 id="push">
+    <sect1 id="command-push">
       <title>Adding key sequences to the keyboard buffer</title>
       
       <para>
-        <literallayout>
-Usage: <literal>push</literal> <emphasis>string</emphasis>
-        </literallayout>
+        Usage: <muttng-doc:command name="push"/> <emphasis>string</emphasis>
       </para>
       
       <para>
 
         This command adds the named string to the keyboard buffer. The
         string may contain control characters, key names and function
-        names like the sequence string in the <link linkend="macro">macro</link> command. You may use it to
+        names like the sequence string in the <muttng-doc:command name="macro"/> command. You may use it to
         automatically run a sequence of commands at startup, or when
         entering certain folders. For example, the following command
         will automatically collapse all threads when entering a folder:
@@ -5069,13 +5049,11 @@ folder-hook . 'push &lt;collapse-all&gt;'
       
     </sect1>
     
-    <sect1 id="exec">
+    <sect1 id="command-exec">
       <title>Executing functions</title>
       
       <para>
-        <literallayout>
-Usage: <literal>exec</literal> <emphasis>function</emphasis> [<emphasis>function</emphasis>...]
-        </literallayout>
+        Usage: <muttng-doc:command name="exec"/> <emphasis>function</emphasis> [<emphasis>function</emphasis>...]
       </para>
       
       <para>
@@ -5090,14 +5068,14 @@ Usage: <literal>exec</literal> <emphasis>function</emphasis> [<emphasis>function
       
     </sect1>
     
-    <sect1 id="score-command">
+    <sect1 id="command-score"><anchor id="command-unscore"/>
       <title>Message Scoring</title>
       
       <para>
-        <literallayout>
-Usage: <literal>score</literal> <emphasis>pattern</emphasis> <emphasis>value</emphasis>
-Usage: <literal>unscore</literal> <emphasis>pattern</emphasis> [<emphasis>pattern</emphasis>...]
-        </literallayout>
+        Usage: <muttng-doc:command name="score"/> <emphasis>pattern</emphasis> <emphasis>value</emphasis>
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="unscore"/> <emphasis>pattern</emphasis> [<emphasis>pattern</emphasis>...]
       </para>
       
       <para>
@@ -5229,15 +5207,15 @@ color index  red     yellow  "<muttng-doc:pattern name="n"/> 100-"</screen>
       
     </sect1>
     
-    <sect1 id="spam">
+    <sect1 id="command-spam"><anchor id="command-nospam"/>
       <title>Spam detection</title>
-      
+
       <para>
-        <literallayout>
-Usage: <literal>spam</literal> <emphasis>pattern</emphasis> <emphasis>format </emphasis>
-Usage: <literal>nospam</literal> <emphasis>pattern</emphasis>
-        </literallayout>
-        </para>
+        Usage: <muttng-doc:command name="spam"/> <emphasis>pattern</emphasis> <emphasis>format </emphasis>
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="nospam"/> <emphasis>pattern</emphasis>
+      </para>
       
       <para>
         Mutt-ng has generalized support for external spam-scoring filters.
@@ -5401,17 +5379,20 @@ spam "^From: .*MAILER-DAEMON"       "999"</screen>
       
     </sect1>
     
-    <sect1 id="set">
+    <sect1 id="command-set"><anchor id="command-unset"/><anchor id="command-reset"/><anchor id="command-toggle"/>
       <title>Setting variables</title>
-      
-      <para>
-        <literallayout>
-Usage: <literal>set</literal> [no|inv]<emphasis>variable</emphasis>[=<emphasis>value</emphasis>] [<emphasis>variable</emphasis>...]
-Usage: <literal>toggle</literal> <emphasis>variable</emphasis> [<emphasis>variable</emphasis>...]
-Usage: <literal>unset</literal> <emphasis>variable</emphasis> [<emphasis>variable</emphasis>...]
-Usage: <literal>reset</literal> <emphasis>variable</emphasis> [<emphasis>variable</emphasis>...]
-      </literallayout>
 
+      <para>
+        Usage: <muttng-doc:command name="set"/> [no|inv]<emphasis>variable</emphasis>[=<emphasis>value</emphasis>] [<emphasis>variable</emphasis>...]
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="toggle"/> <emphasis>variable</emphasis> [<emphasis>variable</emphasis>...]
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="unset"/> <emphasis>variable</emphasis> [<emphasis>variable</emphasis>...]
+      </para>
+      <para>
+        Usage: <muttng-doc:command name="reset"/> <emphasis>variable</emphasis> [<emphasis>variable</emphasis>...]
       </para>
       
       <para>
@@ -5524,13 +5505,11 @@ set ?allow_8bit</screen>
       
     </sect1>
     
-    <sect1 id="source">
+    <sect1 id="command-source">
       <title>Reading initialization commands from another file</title>
       
       <para>
-        <literallayout>
-Usage: <literal>source</literal> <emphasis>filename</emphasis> [<emphasis>filename</emphasis>...]
-        </literallayout>
+        Usage: <muttng-doc:command name="source"/> <emphasis>filename</emphasis> [<emphasis>filename</emphasis>...]
       </para>
       
       <para>
@@ -5562,14 +5541,12 @@ Usage: <literal>source</literal> <emphasis>filename</emphasis> [<emphasis>filena
       
     </sect1>
     
-    <sect1 id="unhook">
+    <sect1 id="command-unhook">
       <title>Removing hooks</title>
       
       <para>
-        <literallayout>
-Usage: <literal>unhook</literal> [* | <emphasis>hook-type</emphasis>]
-        </literallayout>
-        </para>
+        Usage: <muttng-doc:command name="unhook"/> [* | <emphasis>hook-type</emphasis>]
+      </para>
       
       <para>
         This command permits you to flush hooks you have previously defined.
@@ -5898,26 +5875,26 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
       </para>
       
       <para>
-        A list of characters enclosed by ``]'' and ``['' matches any
+        A list of characters enclosed by ``]'' and ``]'' matches any
         single character in that list; if the first character of the list
         is a caret ``^'' then it matches any character <emphasis role="bold">
           not
         </emphasis>
         in the
         list.  For example, the regular expression <emphasis role="bold">
-          ]0123456789[
+          ]0123456789]
         </emphasis>
         matches any single digit.  A range of ASCII characters may be specified
         by giving the first and last characters, separated by a hyphen
         ``-''.  Most metacharacters lose their special meaning inside
-        lists.  To include a literal ``['' place it first in the list.
+        lists.  To include a literal ``]'' place it first in the list.
         Similarly, to include a literal ``^'' place it anywhere but first.
         Finally, to include a literal hyphen ``-'' place it last.
       </para>
       
       <para>
         Certain named classes of characters are predefined.  Character classes
-        consist of ``]:'', a keyword denoting the class, and ``:[''.
+        consist of ``[:'', a keyword denoting the class, and ``:]''.
         The following classes are defined by the POSIX standard:
       </para>
       
@@ -5925,7 +5902,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
         <variablelist>
           
           <varlistentry>
-            <term>]:alnum:[</term>
+            <term>[:alnum:]</term>
             <listitem>
               <para>
                 Alphanumeric characters.
@@ -5933,7 +5910,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>]:alpha:[</term>
+            <term>[:alpha:]</term>
             <listitem>
               <para>
                 Alphabetic characters.
@@ -5941,7 +5918,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>]:blank:[</term>
+            <term>[:blank:]</term>
             <listitem>
               <para>
                 Space or tab characters.
@@ -5949,7 +5926,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>]:cntrl:[</term>
+            <term>[:cntrl:]</term>
             <listitem>
               <para>
                 Control characters.
@@ -5957,7 +5934,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>]:digit:[</term>
+            <term>[:digit:]</term>
             <listitem>
               <para>
                 Numeric characters.
@@ -5965,7 +5942,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>]:graph:[</term>
+            <term>[:graph:]</term>
             <listitem>
               <para>
                 Characters that are both printable and visible.  (A space is
@@ -5975,7 +5952,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>]:lower:[</term>
+            <term>[:lower:]</term>
             <listitem>
               <para>
                 Lower-case alphabetic characters.
@@ -5983,7 +5960,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>]:print:[</term>
+            <term>[:print:]</term>
             <listitem>
               <para>
                 Printable characters (characters that are not control
@@ -5992,7 +5969,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>]:punct:[</term>
+            <term>[:punct:]</term>
             <listitem>
               <para>
                 Punctuation characters (characters that are not letter, digits,
@@ -6002,7 +5979,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>]:space:[</term>
+            <term>[:space:]</term>
             <listitem>
               <para>
                 Space characters (such as space, tab and formfeed, to name a
@@ -6011,7 +5988,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>]:upper:[</term>
+            <term>[:upper:]</term>
             <listitem>
               <para>
                 Upper-case alphabetic characters.
@@ -6019,7 +5996,7 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
             </listitem>
           </varlistentry>
           <varlistentry>
-            <term>]:xdigit:[</term>
+            <term>[:xdigit:]</term>
             <listitem>
               <para>
                 Characters that are hexadecimal digits.
@@ -6034,8 +6011,8 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
         brackets of a character list.  Note that the brackets in these
         class names are part of the symbolic names, and must be included
         in addition to the brackets delimiting the bracket list.  For
-        example, <emphasis role="bold">]]:digit:[[</emphasis> is equivalent to
-        <emphasis role="bold">]0-9[</emphasis>.
+        example, <emphasis role="bold">[[:digit:]]</emphasis> is equivalent to
+        <emphasis role="bold">[0-9]</emphasis>.
       </para>
       
       <para>
@@ -6056,14 +6033,14 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
               <para>
                 A collating symbol is a multi-character collating element
                 enclosed in
-                ``].'' and ``.[''.  For example, if ``ch'' is a
+                ``[.'' and ``.]''.  For example, if ``ch'' is a
                 collating
                 element, then <emphasis role="bold">
-                  ]].ch.[[
+                  [[.ch.]]
                 </emphasis>
                 is a regexp that matches
                 this collating element, while <emphasis role="bold">
-                  ]ch[
+                  [ch]
                 </emphasis>
                 is a regexp that
                 matches either ``c'' or ``h''.
@@ -6076,11 +6053,11 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
               <para>
                 An equivalence class is a locale-specific name for a list of
                 characters that are equivalent. The name is enclosed in
-                ``]=''
-                and ``=[''.  For example, the name ``e'' might be used to
+                ``[=''
+                and ``=]''.  For example, the name ``e'' might be used to
                 represent all of ``è'' ``é'' and ``e''.  In this
                 case,
-                <emphasis role="bold">]]=e=[[</emphasis> is
+                <emphasis role="bold">[[=e=]]</emphasis> is
                 a regexp that matches any of
                 ``è'', ``é'' and ``e''.
               </para>
@@ -6829,7 +6806,7 @@ set status_format = "%B: %?n?%n&amp;no? new messages %&#62; (%v on %h)"</screen>
       </para>
       
       <para>
-        In <link linkend="macro">macro</link> or <link linkend="push">push</link> commands,
+        In <muttng-doc:command name="macro"/> or <muttng-doc:command name="push"/> commands,
         you can use the ``tag-prefix-cond'' operator.  If there are no tagged
         messages, mutt will "eat" the rest of the macro to abort it's
         execution.Mutt-ng will stop "eating" the macro when it encounters the
@@ -7295,7 +7272,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         know what addresses you consider to be mailing lists (technically
         this does not have to be a mailing list, but that is what it is most
         often used for), and what lists you are subscribed to.  This is
-        accomplished through the use of the <link linkend="lists">lists</link>
+        accomplished through the use of the <muttng-doc:command name="lists"/>
         commands in your muttrc.
       </para>
       
@@ -7471,7 +7448,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
       <title>Delivery Status Notification (DSN) Support</title>
       
       <para>
-        RFC1894 defines a set of MIME content types for relaying information
+        <muttng-doc:rfc num="1894"/> defines a set of MIME content types for relaying information
         about the status of electronic mail messages.  These can be thought of
         as
         ``return receipts.''
@@ -7620,34 +7597,48 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
       <title>IMAP Support (OPTIONAL)</title>
       
       <para>
-        If Mutt-ng was compiled with IMAP support (by running the <emphasis>
-          configure
-        </emphasis>
-        script with the <emphasis>--enable-imap</emphasis> flag), it has the
-        ability to work
-        with folders located on a remote IMAP server.
+        If Mutt-ng was compiled with IMAP support (by running the
+        <emphasis>configure</emphasis> script with the
+        <emphasis>--enable-imap</emphasis> flag), it has the
+        ability to work with folders located on a remote IMAP server.
       </para>
       
       <para>
-        You can access the remote inbox by selecting the folder
-        <literal>imap://imapserver/INBOX</literal>, where <literal>imapserver</literal> is the name of the
-        IMAP server and <literal>INBOX</literal> is the special name for your
-        spool mailbox on
-        the IMAP server. If you want to access another mail folder at the IMAP
-        server, you should use <literal>imap://imapserver/path/to/folder</literal> where
-        <literal>path/to/folder</literal> is the path of the folder you want to
-        access.
+        You can access the remote inbox by selecting the folder via its
+        URL:
+      </para>
+
+      <para>
+        <screen>
+imap://imapserver/INBOX</screen>
+      </para>
+
+      <para>
+        where <literal>imapserver</literal> is the name of the IMAP
+        server and <literal>INBOX</literal> is the special name for your
+        spool mailbox on the IMAP server. If you want to access another
+        mail folder at the IMAP server, you should use
+      </para>
+
+      <para>
+        <screen>
+imap://imapserver/path/to/folder</screen>
+      </para>
+        
+      <para>
+        where <literal>path/to/folder</literal> is the path
+        of the folder you want to access. You can select an alternative
+        port by specifying it with the server, i.e.:
+      </para>
+
+      <para>
+        <screen>
+imap://imapserver:port/INBOX</screen>
       </para>
       
       <para>
-        You can select an alternative port by specifying it with the server,
-        i.e.:
-        <literal>imap://imapserver:port/INBOX</literal>.
-      </para>
-      
-      <para>
-        You can also specify different username for each folder, i.e.:
-        <literal>imap://username@imapserver[:port]/INBOX</literal>.
+        You can also specify different username for each folder by
+        prenpending your username and an @ symbol to the server's name.
       </para>
       
       <para>
@@ -7657,14 +7648,9 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         script with the <emphasis>--with-ssl</emphasis> flag), connections to
         IMAP servers
         can be encrypted. This naturally requires that the server supports
-        SSL encrypted connections. To access a folder with IMAP/SSL, you should
-        use <literal>imaps://[username@]imapserver[:port]/path/to/folder</literal> as your 
-        folder path.
-      </para>
-      
-      <para>
-        Pine-compatible notation is also supported, i.e.
-        <literal>{[username@]imapserver[:port][/ssl]}path/to/folder</literal>
+        SSL encrypted connections. To access a folder with IMAP/SSL, you only
+        need to substitute the initial <literal>imap://</literal> by
+        <literal>imaps://</literal> in the above examples.
       </para>
       
       <para>
@@ -7868,7 +7854,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
           Especially for Usenet, people often ask for advanced filtering
           and scoring functionality. Of course, mutt-ng has scoring and
           allows a killfile, too. How to use a killfile has been discussed
-          in <link linkend="score-command">Message Scoring</link>.
+          in <link linkend="command-score">Message Scoring</link>.
         </para>
         
         <para>
@@ -7913,10 +7899,7 @@ score !<muttng-doc:pattern name="*"/> =42</screen>
             <listitem>
               
               <para>
-                Email addresses must be valid according to RFC 2822, see
-                <ulink
-                  URL="ftp://ftp.rfc-editor.org/in-notes/rfc2822.txt">&#60;ftp://ftp.rfc-editor.org/in-notes/rfc2822.txt&#62;
-                </ulink>
+                Email addresses must be valid according to <muttng-doc:rfc num="2822"/>
               </para>
             </listitem>
             <listitem>
@@ -8045,8 +8028,7 @@ account-hook imap://host2/ 'set tunnel="ssh host2 /usr/libexec/imapd"'</screen>
         efficient to get
         a menu with all the URLs and start a WWW browser on one of them.  This
         functionality is provided by the external urlview program which can be
-        retrieved at <ulink URL="ftp://ftp.mutt.org/mutt/contrib/">ftp://ftp.mutt.org/mutt/contrib/</ulink>
->
+        retrieved at <muttng-doc:web url="ftp://ftp.mutt.org/mutt/contrib/"/>
         and the configuration commands:
         
         <screen>
@@ -8135,9 +8117,7 @@ append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </screen>
         <title>Open a compressed mailbox for reading</title>
         
         <para>
-          <literallayout>
-Usage: <muttng-doc:hook name="open"/> <emphasis>regexp</emphasis> &quot;<emphasis>command</emphasis>&quot;
-          </literallayout>
+          Usage: <muttng-doc:hook name="open"/> <emphasis>regexp</emphasis> &quot;<emphasis>command</emphasis>&quot;
         </para>
         
         <para>
@@ -8192,9 +8172,7 @@ open-hook \\.gz$ "gzip -cd %f &#62; %t"
         <title>Write a compressed mailbox</title>
         
         <para>
-          <literallayout>
-Usage: <muttng-doc:hook name="close"/> <emphasis>regexp</emphasis>&quot;<emphasis>command</emphasis>&quot;
-        </literallayout>
+          Usage: <muttng-doc:hook name="close"/> <emphasis>regexp</emphasis>&quot;<emphasis>command</emphasis>&quot;
         </para>
         
         <para>
@@ -8249,9 +8227,7 @@ close-hook \\.gz$ "gzip -c %t &#62; %f"</screen>
         <title>Append a message to a compressed mailbox</title>
         
         <para>
-          <literallayout>
-Usage: <muttng-doc:hook name="append"/> <emphasis>regexp</emphasis>&quot;<emphasis>command</emphasis>&quot;
-        </literallayout>
+          Usage: <muttng-doc:hook name="append"/> <emphasis>regexp</emphasis>&quot;<emphasis>command</emphasis>&quot;
         </para>
         
         <para>
@@ -8573,8 +8549,8 @@ audio/x-aiff                    aif aifc aiff</screen>
       </title>
       
       <para>
-        Mutt-ng supports RFC 1524 MIME Configuration, in particular the Unix
-        specific format specified in Appendix A of RFC 1524.  This file format
+        Mutt-ng supports <muttng-doc:rfc num="1524"/> MIME Configuration, in particular the Unix
+        specific format specified in Appendix A of the RfC.  This file format
         is commonly referred to as the mailcap format.  Many MIME compliant
         programs utilize the mailcap format, allowing you to specify handling
         for all MIME types in one place for all programs.  Programs known to
@@ -8808,7 +8784,7 @@ text/html; lynx -dump %s ; copiousoutput</screen>
                 <term>needsterminal</term>
                 <listitem>
                   <para>
-                    Mutt-ng uses this flag when viewing attachments with <link linkend="auto-view">auto-view</link>,
+                    Mutt-ng uses this flag when viewing attachments with <muttng-doc:command name="auto_view"/>,
                     in order to decide whether it should honor the setting
                     of the <muttng-doc:varref name="wait_key" link="wait-key"/> variable or
                     not.  When an attachment is viewed using an interactive
@@ -8962,7 +8938,7 @@ nametemplate=%s.gif</screen>
           </para>
           
           <para>
-            In addition, you can use this with <link linkend="auto-view">auto-view</link>
+            In addition, you can use this with <muttng-doc:command name="auto_view"/>
             to denote two commands for viewing an attachment, one to be viewed
             automatically, the other to be viewed interactively from the
             attachment
@@ -8975,7 +8951,7 @@ text/html;      netscape -remote 'openURL(%s)' ; test=RunningX
 text/html;      lynx %s; nametemplate=%s.html
 text/html;      lynx -dump %s; nametemplate=%s.html; copiousoutput</screen>
             
-            For <link linkend="auto-view">auto-view</link>, Mutt-ng will choose
+            For <muttng-doc:command name="auto_view"/>, Mutt-ng will choose
             the third
             entry because of the copiousoutput tag.  For interactive viewing,
             Mutt
@@ -9065,7 +9041,7 @@ Content-Type: text/plain; charset=iso-8859-1</screen>
             </variablelist>
             Mutt-ng does not currently support the %F and %n
             keywords
-            specified in RFC 1524.  The main purpose of these parameters is for
+            specified in <muttng-doc:rfc num="1524"/>.  The main purpose of these parameters is for
             multipart messages, which is handled internally by Mutt-ng.
           </para>
           
@@ -9140,7 +9116,7 @@ application/ms-excel; open.pl %s</screen>
       
     </sect1>
     
-    <sect1 id="auto-view">
+    <sect1 id="command-auto_view"><anchor id="command-unauto_view"/>
       <title>MIME Autoview</title>
       
       <para>
@@ -9199,7 +9175,7 @@ application/postscript; ps2ascii %s; copiousoutput</screen>
       
     </sect1>
     
-    <sect1 id="alternative-order">
+    <sect1 id="command-alternative_order"><anchor id="command-unalternative_order"/>
       <title>MIME Multipart/Alternative</title>
       
       <para>
@@ -9219,7 +9195,7 @@ application/postscript image/*</screen>
       
       <para>
         Next, mutt will check if any of the types have a defined 
-        <link linkend="auto-view">auto-view</link>, and use that.  Failing
+        <muttng-doc:command name="auto_view"/>, and use that.  Failing
         that, Mutt-ng will look for any text type.  As a last attempt, mutt
         willlook for any type it knows how to handle.
       </para>
@@ -9235,7 +9211,7 @@ application/postscript image/*</screen>
       
     </sect1>
     
-    <sect1 id="mime-lookup">
+    <sect1 id="command-mime_lookup"><anchor id="command-unmime_lookup"/>
       <title>MIME Lookup</title>
       
       <para>
@@ -9441,8 +9417,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
         
         <para>
           One of these is the <literal>mailcap</literal> mechanism as defined
-          by RfC
-          1524. Mutt-ng can be set up to <emphasis>automatically</emphasis>
+          by <muttng-doc:rfc num="1524"/>. Mutt-ng can be set up to <emphasis>automatically</emphasis>
           execute any
           given utility as listed in one of the mailcap files (see the
           <muttng-doc:varref name="mailcap_path" link="mailcap-path"/>
@@ -9543,7 +9518,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
       
       <para>
         
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Command Line Options</title>
           <tgroup cols="2" align="left" colsep="1" rowsep="1">
           <thead>
@@ -9656,10 +9631,10 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
       </para>
       
       <para>
-        <literal>mutt</literal> ] -nz [ ] -F <emphasis>muttrc</emphasis> [ ] -m <emphasis>
+        <literal>mutt</literal> ] -nz ] ] -F <emphasis>muttrc</emphasis> ] ] -m <emphasis>
           type
         </emphasis>
-        [ ] -f <emphasis>mailbox</emphasis> [ 
+        ] ] -f <emphasis>mailbox</emphasis> ] 
       </para>
       
       <para>
@@ -9667,16 +9642,16 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
       </para>
       
       <para>
-        <literal>mutt</literal> ] -n [ ] -F <emphasis>muttrc</emphasis> [ ] -a <emphasis>
+        <literal>mutt</literal> ] -n ] ] -F <emphasis>muttrc</emphasis> ] ] -a <emphasis>
           file
         </emphasis>
-        [ ] -c <emphasis>address</emphasis> [ ] -i <emphasis>
+        ] ] -c <emphasis>address</emphasis> ] ] -i <emphasis>
           filename
         </emphasis>
-        [ ] -s <emphasis>subject</emphasis> [ <emphasis>address</emphasis> ] <emphasis>
+        ] ] -s <emphasis>subject</emphasis> ] <emphasis>address</emphasis> ] <emphasis>
           address
         </emphasis>
-        ... [ 
+        ... ] 
       </para>
       
       <para>
@@ -9711,7 +9686,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
 
       <para>
 
-        <table id="tab-patterns">
+        <table frame="none" rowsep="1" id="tab-patterns">
           <title>Reference: Patterns</title>
           <tgroup cols="2" align="left" colsep="1" rowsep="1">
           <thead>
@@ -9723,222 +9698,222 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           </thead>
           <tbody>
             <row>
-              <entry><muttng-doc:pattern name="A"/></entry>
+              <entry><muttng-doc:pattern full="1" name="A"/></entry>
               <entry><literal></literal></entry>
               <entry>all messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="b"/></entry>
+              <entry><muttng-doc:pattern full="1" name="b"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>messages which contain EXPR in the message body</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="B"/></entry>
+              <entry><muttng-doc:pattern full="1" name="B"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>messages which contain EXPR in the whole message</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="c"/></entry>
+              <entry><muttng-doc:pattern full="1" name="c"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>messages carbon-copied to EXPR</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="C"/></entry>
+              <entry><muttng-doc:pattern full="1" name="C"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>message is either to: or cc: EXPR</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="D"/></entry>
+              <entry><muttng-doc:pattern full="1" name="D"/></entry>
               <entry><literal></literal></entry>
               <entry>deleted messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="d"/></entry>
+              <entry><muttng-doc:pattern full="1" name="d"/></entry>
               <entry><literal>[MIN]-[MAX]</literal></entry>
               <entry>messages with ``date-sent'' in a Date range</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="E"/></entry>
+              <entry><muttng-doc:pattern full="1" name="E"/></entry>
               <entry><literal></literal></entry>
               <entry>expired messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="e"/></entry>
+              <entry><muttng-doc:pattern full="1" name="e"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>message which contains EXPR in the ``Sender'' field</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="F"/></entry>
+              <entry><muttng-doc:pattern full="1" name="F"/></entry>
               <entry><literal></literal></entry>
               <entry>flagged messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="f"/></entry>
+              <entry><muttng-doc:pattern full="1" name="f"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>messages originating from EXPR</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="g"/></entry>
+              <entry><muttng-doc:pattern full="1" name="g"/></entry>
               <entry><literal></literal></entry>
               <entry>cryptographically signed messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="G"/></entry>
+              <entry><muttng-doc:pattern full="1" name="G"/></entry>
               <entry><literal></literal></entry>
               <entry>cryptographically encrypted messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="H"/></entry>
+              <entry><muttng-doc:pattern full="1" name="H"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>messages with a spam attribute matching EXPR</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="h"/></entry>
+              <entry><muttng-doc:pattern full="1" name="h"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>messages which contain EXPR in the message header</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="k"/></entry>
+              <entry><muttng-doc:pattern full="1" name="k"/></entry>
               <entry><literal></literal></entry>
               <entry>message contains PGP key material</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="i"/></entry>
+              <entry><muttng-doc:pattern full="1" name="i"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>message which match ID in the ``Message-ID'' field</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="L"/></entry>
+              <entry><muttng-doc:pattern full="1" name="L"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>message is either originated or received by EXPR</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="l"/></entry>
+              <entry><muttng-doc:pattern full="1" name="l"/></entry>
               <entry><literal></literal></entry>
               <entry>message is addressed to a known mailing list</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="m"/></entry>
+              <entry><muttng-doc:pattern full="1" name="m"/></entry>
               <entry><literal>[MIN]-[MAX]</literal></entry>
               <entry>message in the range MIN to MAX *)</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="M"/></entry>
+              <entry><muttng-doc:pattern full="1" name="M"/></entry>
               <entry><literal></literal></entry>
               <entry>multipart messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="n"/></entry>
+              <entry><muttng-doc:pattern full="1" name="n"/></entry>
               <entry><literal>[MIN]-[MAX]</literal></entry>
               <entry>messages with a score in the range MIN to MAX *)</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="N"/></entry>
+              <entry><muttng-doc:pattern full="1" name="N"/></entry>
               <entry><literal></literal></entry>
               <entry>new messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="O"/></entry>
+              <entry><muttng-doc:pattern full="1" name="O"/></entry>
               <entry><literal></literal></entry>
               <entry>old messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="p"/></entry>
+              <entry><muttng-doc:pattern full="1" name="p"/></entry>
               <entry><literal></literal></entry>
               <entry>message is addressed to you (consults alternates)</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="P"/></entry>
+              <entry><muttng-doc:pattern full="1" name="P"/></entry>
               <entry><literal></literal></entry>
               <entry>message is from you (consults alternates)</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="Q"/></entry>
+              <entry><muttng-doc:pattern full="1" name="Q"/></entry>
               <entry><literal></literal></entry>
               <entry>messages which have been replied to</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="R"/></entry>
+              <entry><muttng-doc:pattern full="1" name="R"/></entry>
               <entry><literal></literal></entry>
               <entry>read messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="r"/></entry>
+              <entry><muttng-doc:pattern full="1" name="r"/></entry>
               <entry><literal>[MIN]-[MAX]</literal></entry>
               <entry>messages with ``date-received'' in a Date range</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="S"/></entry>
+              <entry><muttng-doc:pattern full="1" name="S"/></entry>
               <entry><literal></literal></entry>
               <entry>superseded messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="s"/></entry>
+              <entry><muttng-doc:pattern full="1" name="s"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>messages having EXPR in the ``Subject'' field.</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="T"/></entry>
+              <entry><muttng-doc:pattern full="1" name="T"/></entry>
               <entry><literal></literal></entry>
               <entry>tagged messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="t"/></entry>
+              <entry><muttng-doc:pattern full="1" name="t"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>messages addressed to EXPR</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="U"/></entry>
+              <entry><muttng-doc:pattern full="1" name="U"/></entry>
               <entry><literal></literal></entry>
               <entry>unread messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="u"/></entry>
+              <entry><muttng-doc:pattern full="1" name="u"/></entry>
               <entry><literal></literal></entry>
               <entry>message is addressed to a subscribed mailing list</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="v"/></entry>
+              <entry><muttng-doc:pattern full="1" name="v"/></entry>
               <entry><literal></literal></entry>
               <entry>message is part of a collapsed thread.</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="V"/></entry>
+              <entry><muttng-doc:pattern full="1" name="V"/></entry>
               <entry><literal></literal></entry>
               <entry>cryptographically verified messages</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="w"/></entry>
+              <entry><muttng-doc:pattern full="1" name="w"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>messages which contain EXPR in the `Newsgroups' field (if compiled with NNTP support)</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="x"/></entry>
+              <entry><muttng-doc:pattern full="1" name="x"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>messages which contain EXPR in the `References' field</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="y"/></entry>
+              <entry><muttng-doc:pattern full="1" name="y"/></entry>
               <entry><literal>EXPR</literal></entry>
               <entry>messages which contain EXPR in the `X-Label' field</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="z"/></entry>
+              <entry><muttng-doc:pattern full="1" name="z"/></entry>
               <entry><literal>[MIN]-[MAX]</literal></entry>
               <entry>messages with a size in the range MIN to MAX *)</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="="/></entry>
+              <entry><muttng-doc:pattern full="1" name="="/></entry>
               <entry><literal></literal></entry>
               <entry>duplicated messages (see $duplicate_threads)</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="$"/></entry>
+              <entry><muttng-doc:pattern full="1" name="$"/></entry>
               <entry><literal></literal></entry>
               <entry>unreferenced messages (requires threaded view)</entry>
             </row>
             <row>
-              <entry><muttng-doc:pattern name="*"/></entry>
+              <entry><muttng-doc:pattern full="1" name="*"/></entry>
               <entry><literal></literal></entry>
               <entry>``From'' contains realname and (syntactically) valid address
                 (excluded are addresses matching against alternates or any alias)</entry>
@@ -9981,521 +9956,326 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal>
-                <muttng-doc:hook name="account"/>
-              </literal>
-              <emphasis>pattern</emphasis> <emphasis>command</emphasis>
+              <literal><muttng-doc:hook name="account"/></literal> <emphasis>pattern</emphasis> <emphasis>command</emphasis>
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="alias"/></literal> <emphasis>key</emphasis> <emphasis>address</emphasis> [, <emphasis>address</emphasis>, ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="unalias"/></literal> [ * | <emphasis>key</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="alternates"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="unalternates"/></literal> [ * | <emphasis>regexp</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="alternative_order"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="unalternative_order"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:hook name="append"/></literal> <emphasis>regexp</emphasis> <emphasis>command</emphasis>
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="auto_view"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="unauto_view"/></literal><emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="bind"/></literal> <emphasis>map</emphasis> <emphasis>key</emphasis> <emphasis>function</emphasis>
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:hook name="charset"/></literal> <emphasis>alias</emphasis> <emphasis>charset</emphasis>
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:hook name="close"/></literal> <emphasis>regexp</emphasis> <emphasis>command</emphasis>
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="color"/></literal> <emphasis>object</emphasis> <emphasis>foreground</emphasis> <emphasis>background</emphasis> [ <emphasis>regexp</emphasis> ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="uncolor"/></literal> <emphasis>index</emphasis> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="exec"/></literal> <emphasis>function</emphasis> [ <emphasis>function</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:hook name="fcc"/></literal> <emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:hook name="fcc-save"/></literal> <emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:hook name="folder"/></literal> <emphasis>pattern</emphasis> <emphasis>command</emphasis>
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="hdr_order"/></literal> <emphasis>header</emphasis> [ <emphasis>header</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="unhdr_order"/></literal> <emphasis>header</emphasis> [ <emphasis>header</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:hook name="charset"/></literal> <emphasis>charset</emphasis> <emphasis>local-charset</emphasis>
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="ignore"/></literal> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="unignore"/></literal> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="lists"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="unlists"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="macro"/></literal> <emphasis>menu</emphasis> <emphasis>key</emphasis> <emphasis>sequence</emphasis> [ <emphasis>description</emphasis> ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="mailboxes"/></literal> <emphasis>filename</emphasis> [ <emphasis>filename</emphasis> ... ]
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:hook name="mbox"/></literal> <emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:hook name="message"/></literal> <emphasis>pattern</emphasis> <emphasis>command</emphasis>
+            </para>
+          </listitem>
+          <listitem>
+            
+            <para>
+              <literal><muttng-doc:command name="mime_lookup"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
               <literal>
-                <link linkend="alias">alias</link>
-              </literal>
-              <emphasis>key</emphasis> <emphasis>address</emphasis> ] , <emphasis>
-                address
-              </emphasis>
-              ,... [
+                <muttng-doc:command name="unmime_lookup"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="alias">alias</link>
-              </literal>
-              ] * | <emphasis>key</emphasis> ... [
+              <literal><muttng-doc:command name="mono"/></literal> <emphasis>object attribute</emphasis> [ <emphasis>regexp</emphasis> ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="alternates">alternates</link>
-              </literal>
-              <emphasis>regexp</emphasis> ] <emphasis>regexp</emphasis>
-              ... [
+              <literal><muttng-doc:command name="unmono"/></literal> <emphasis>index</emphasis> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="alternates">alternates</link>
-              </literal>
-              ] * | <emphasis>regexp</emphasis> ... [
+              <literal><muttng-doc:command name="my_hdr"/></literal> <emphasis>string</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="alternative-order">alternative-order</link>
-              </literal>
-              <emphasis>mimetype</emphasis> ] <emphasis>mimetype</emphasis> ... [
+              <literal><muttng-doc:command name="unmy_hdr"/></literal> <emphasis>field</emphasis> [ <emphasis>field</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="alternative-order">alternative-order</link>
-              </literal>
-              <emphasis>mimetype</emphasis> ] <emphasis>mimetype</emphasis> ... [
+              <literal><muttng-doc:hook name="open"/></literal> <emphasis>regexp</emphasis> <emphasis>command</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <muttng-doc:hook name="append"/>
-              </literal>
-              <emphasis>regexp</emphasis> <emphasis>command</emphasis>
+              <literal><muttng-doc:hook name="crypt"/></literal> <emphasis>pattern</emphasis> <emphasis>key-id</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="auto-view">auto-view</link>
-              </literal>
-              <emphasis>mimetype</emphasis> ] <emphasis>mimetype</emphasis> ... [
+              <literal><muttng-doc:command name="push"/></literal> <emphasis>string</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="auto-view">auto-view</link>
-              </literal>
-              <emphasis>mimetype</emphasis> ] <emphasis>mimetype</emphasis> ... [
+              <literal><muttng-doc:command name="reset"/> </literal><emphasis>variable</emphasis> [ <emphasis>variable</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="bind">bind</link>
-              </literal>
-              <emphasis>map</emphasis> <emphasis>key</emphasis> <emphasis>
-                function
-              </emphasis>
+              <literal><muttng-doc:hook name="save"/></literal> <emphasis>regexp</emphasis> <emphasis>filename</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <muttng-doc:hook name="charset"/>
-              </literal>
-              <emphasis>alias</emphasis> <emphasis>charset</emphasis>
+              <literal><muttng-doc:command name="score"/> </literal> <emphasis>pattern</emphasis> <emphasis>value</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <muttng-doc:hook name="close"/>
-              </literal>
-              <emphasis>regexp</emphasis> <emphasis>command</emphasis>
+              <literal><muttng-doc:command name="unscore"/></literal> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="color">color</link>
-              </literal>
-              <emphasis>object</emphasis> <emphasis>foreground</emphasis> <emphasis>
-                background
-              </emphasis>
-              ] <emphasis>regexp</emphasis> [
+              <literal><muttng-doc:hook name="send"/></literal> <emphasis>regexp</emphasis> <emphasis>command</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="color">color</link>
-              </literal>
-              <emphasis>index</emphasis> <emphasis>pattern</emphasis> ] <emphasis>
-                pattern
-              </emphasis>
-              ... [
+              <literal><muttng-doc:hook name="reply"/></literal> <emphasis>regexp</emphasis> <emphasis>command</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="exec">exec</link>
-              </literal>
-              <emphasis>function</emphasis> ] <emphasis>function</emphasis> ... [
+              <literal><muttng-doc:command name="set"/></literal> [no|inv]<emphasis>variable</emphasis>[ =<emphasis>value</emphasis> ] [ <emphasis>variable</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <muttng-doc:hook name="fcc"/>
-              </literal>
-              <emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
+              <literal><muttng-doc:command name="unset"/></literal> <emphasis>variable</emphasis> [ <emphasis>variable</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <muttng-doc:hook name="fcc-save"/>
-              </literal>
-              <emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
+              <literal><muttng-doc:command name="source"/></literal> <emphasis>filename</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <muttng-doc:hook name="folder"/>
-              </literal>
-              <emphasis>pattern</emphasis> <emphasis>command</emphasis>
+              <literal><muttng-doc:command name="spam"/></literal> <emphasis>pattern</emphasis> <emphasis>format</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="hdr-order">hdr-order</link>
-              </literal>
-              <emphasis>header</emphasis> ] <emphasis>header</emphasis>
-              ... [
+              <literal><muttng-doc:command name="nospam"/></literal> <emphasis>pattern</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="hdr-order">hdr-order</link>
-              </literal>
-              <emphasis>header</emphasis> ] <emphasis>header</emphasis>
-              ... [
+              <literal><muttng-doc:command name="subscribe"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ] 
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <muttng-doc:hook name="charset"/>
-              </literal>
-              <emphasis>charset</emphasis> <emphasis>local-charset</emphasis>
+              <literal><muttng-doc:command name="unsubscribe"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ] 
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="ignore">ignore</link>
-              </literal>
-              <emphasis>pattern</emphasis> ] <emphasis>pattern</emphasis>
-              ... [
+              <literal><muttng-doc:command name="toggle"/></literal> <emphasis>variable</emphasis> [ <emphasis>variable</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal>
-                <link linkend="ignore">ignore</link>
-              </literal>
-              <emphasis>pattern</emphasis> ] <emphasis>pattern</emphasis>
-              ... [
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="lists">lists</link>
-              </literal>
-              <emphasis>regexp</emphasis> ] <emphasis>regexp</emphasis>
-              ... [ 
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="lists">lists</link>
-              </literal>
-              <emphasis>regexp</emphasis> ] <emphasis>regexp</emphasis>
-              ... [ 
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="macro">macro</link>
-              </literal>
-              <emphasis>menu</emphasis> <emphasis>key</emphasis> <emphasis>
-                sequence
-              </emphasis>
-              ] <emphasis>description</emphasis> [ 
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="mailboxes">mailboxes</link>
-              </literal>
-              <emphasis>filename</emphasis> ] <emphasis>filename</emphasis> ... [
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <muttng-doc:hook name="mbox"/>
-              </literal>
-              <emphasis>pattern</emphasis> <emphasis>mailbox</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <muttng-doc:hook name="message"/>
-              </literal>
-              <emphasis>pattern</emphasis> <emphasis>command</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="mime-lookup">mime-lookup</link>
-              </literal>
-              <emphasis>mimetype</emphasis> ] <emphasis>mimetype</emphasis> ... [
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="mime-lookup">mime-lookup</link>
-              </literal>
-              <emphasis>mimetype</emphasis> ] <emphasis>mimetype</emphasis> ... [
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="color">color</link>
-              </literal>
-              <emphasis>object attribute</emphasis> ] <emphasis>regexp</emphasis> [
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="color">color</link>
-              </literal>
-              <emphasis>index</emphasis> <emphasis>pattern</emphasis> ] <emphasis>
-                pattern
-              </emphasis>
-              ... [
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="my-hdr">my-hdr</link>
-              </literal>
-              <emphasis>string</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="my-hdr">my-hdr</link>
-              </literal>
-              <emphasis>field</emphasis> ] <emphasis>field</emphasis> ...
-              [
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <muttng-doc:hook name="open"/>
-              </literal>
-              <emphasis>regexp</emphasis> <emphasis>command</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <muttng-doc:hook name="crypt"/>
-              </literal>
-              <emphasis>pattern</emphasis> <emphasis>key-id</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="push">push</link>
-              </literal>
-              <emphasis>string</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="set">set</link>
-              </literal>
-              <emphasis>variable</emphasis> ]<emphasis>variable</emphasis>
-              ... [
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <muttng-doc:hook name="save"/>
-              </literal>
-              <emphasis>regexp</emphasis> <emphasis>filename</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="score-command">score-command</link>
-              </literal>
-              <emphasis>pattern</emphasis> <emphasis>value</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="score-command">score-command</link>
-              </literal>
-              <emphasis>pattern</emphasis> ] <emphasis>pattern</emphasis>
-              ... [
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <muttng-doc:hook name="send"/>
-              </literal>
-              <emphasis>regexp</emphasis> <emphasis>command</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <muttng-doc:hook name="reply"/>
-              </literal>
-              <emphasis>regexp</emphasis> <emphasis>command</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="set">set</link>
-              </literal>
-              ]no|inv[<emphasis>variable</emphasis>]=<emphasis>
-                value
-              </emphasis>
-              [ ] <emphasis>variable</emphasis> ... [
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="set">set</link>
-              </literal>
-              <emphasis>variable</emphasis> ]<emphasis>variable</emphasis>
-              ... [
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="source">source</link>
-              </literal>
-              <emphasis>filename</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="spam">spam</link>
-              </literal>
-              <emphasis>pattern</emphasis> <emphasis>format</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="spam">spam</link>
-              </literal>
-              <emphasis>pattern</emphasis>
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="lists">lists</link>
-              </literal>
-              <emphasis>regexp</emphasis> ] <emphasis>regexp</emphasis>
-              ... [ 
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="lists">lists</link>
-              </literal>
-              <emphasis>regexp</emphasis> ] <emphasis>regexp</emphasis>
-              ... [ 
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="set">set</link>
-              </literal>
-              <emphasis>variable</emphasis> ]<emphasis>variable</emphasis>
-              ... [
-            </para>
-          </listitem>
-          <listitem>
-            
-            <para>
-              <literal>
-                <link linkend="unhook">unhook</link>
-              </literal>
-              <emphasis>hook-type</emphasis>
+              <literal><muttng-doc:command name="unhook"/></literal> <emphasis>hook-type</emphasis>
             </para>
           </listitem>
           
@@ -10518,7 +10298,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
       <para>
         <anchor id="sect-obsolete"/>
 
-        <table>
+        <table frame="none" rowsep="1">
           <title>Reference: Obsolete Variables</title>
           <tgroup cols="2" align="left" colsep="1" rowsep="1">
           <thead>

@@ -4,10 +4,18 @@
     color: black;
     background: transparent;
     text-align: justify;
+    margin-left: 1cm;
+    margin-right: 1cm;
   }
 
-  h1,h2,h3,h4,h5,p.abstract {
+  h1,h2,h3,h4,h5,p.title,div.toc,span.appendix,
+  span.chapter,span.sect1,span.sect2,span.sect3,
+  div.list-of-tables {
     font-family: sans-serif;
+  }
+
+  h1.title,div.author,p.pubdate,div.abstract {
+    text-align: center;
   }
 
   pre.screen {
@@ -15,18 +23,22 @@
     margin-right: 1cm;
     padding: 2mm;
     border-width: 0.4pt;
-    border-style: dotted;
+    border-style: solid;
     border-color: black;
     background-color: #efefef;
   }
 
-  table {
-    border: 0pt;
-    font-family: sans-serif;
-  }
-
   thead {
     background-color: #efefef;
+  }
+
+  thead,span.term {
     font-weight: bold;
+  }
+
+  tr {
+    border-width: 0.4pt;
+    border-color: black;
+    border-style: solid;
   }
 }
