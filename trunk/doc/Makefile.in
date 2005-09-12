@@ -141,7 +141,7 @@ clean:
 	rm -f *.aux *.log *.tex *.out
 
 clean-real:
-	rm -f manual.txt manual.html manual.xml manual.pdf
+	rm -f manual.txt manual.html manual.xml manual-pre.xml manual.pdf
 	rm -rf html
 
 maintainer-clean: clean clean-real distclean

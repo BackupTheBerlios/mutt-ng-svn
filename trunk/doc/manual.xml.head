@@ -691,7 +691,7 @@
     <para>
 
       <table>
-        <title>Default Menu Movement Keys</title>
+        <title>Most commonly used movement bindings</title>
         <tgroup cols="3" align="left" colsep="1" rowsep="1">
         <thead>
           <row>
@@ -769,7 +769,7 @@
     <para>
 
       <table>
-        <title>Built-In Editor Functions</title>
+        <title>Line Editor Functions</title>
         <tgroup cols="3" align="left" colsep="1" rowsep="1">
         <thead>
           <row>
@@ -906,10 +906,6 @@
       <literal>bind editor &lt;delete&gt; backspace</literal>
     </para>
     
-    <para>
-      
-    </para>
-    
   </sect1>
     <!--}}}-->
   
@@ -935,7 +931,7 @@
       <para>
 
       <table>
-        <title>Default Index Menu Bindings</title>
+        <title>Most commonly used Index Bindings</title>
         <tgroup cols="3" align="left" colsep="1" rowsep="1">
         <thead>
           <row>
@@ -1294,7 +1290,7 @@
       <para>
 
       <table>
-        <title>Default Pager Menu Bindings</title>
+        <title>Most commonly used Pager Bindings</title>
         <tgroup cols="3" align="left" colsep="1" rowsep="1">
         <thead>
           <row>
@@ -1521,7 +1517,7 @@
         <para>
 
         <table>
-          <title>Default Thread Function Bindings</title>
+          <title>Most commonly used thread-related bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
             <row>
@@ -1643,9 +1639,7 @@
           command is added to the file specified by the <muttng-doc:varref name="alias_file" link="alias-file"/>
           variable for future use. <emphasis role="bold">Note:</emphasis>
           Specifying an <muttng-doc:varref name="alias_file" link="alias-file"/>
-          does not add the aliases specified there-in, you must also <link linkend="source">
-            source
-          </link>
+          does not add the aliases specified there-in, you must also <link linkend="source">source</link>
           the file.
         </para>
         
@@ -1668,9 +1662,7 @@
         </para>
         
         <para>
-          Toggles the weeding of message header fields specified by <link linkend="ignore">
-            ignore
-          </link>
+          Toggles the weeding of message header fields specified by <link linkend="ignore">ignore</link>
           commands.
         </para>
         
@@ -1703,9 +1695,7 @@
         </para>
         
         <para>
-          Note that this command is also available on the <link linkend="compose-menu">
-            compose-menu
-          </link>
+          Note that this command is also available on the <link linkend="compose-menu">compose-menu</link>
           .There, it's used to
           fine-tune the properties of attachments you are going to send.
         </para>
@@ -1749,9 +1739,7 @@
         <para>
           Reply to the current or tagged message(s) by extracting any addresses
           which
-          match the regular expressions given by the <link linkend="lists">
-            lists
-          </link>
+          match the regular expressions given by the <link linkend="lists">lists</link>
           commands, but also honor any <literal>Mail-Followup-To</literal>
           header(s) if the
           <muttng-doc:varref name="honor_followup_to" link="honor-followup-to"/>
@@ -1858,7 +1846,7 @@
       <para>
 
         <table>
-          <title>Default Mail Composition Bindings</title>
+          <title>Most commonly used Mail Composition Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
             <row>
@@ -1913,10 +1901,7 @@
         Bouncing a message sends the message as is to the recipient you
         specify.  Forwarding a message allows you to add comments or
         modify the message you are forwarding.  These items are discussed
-        in greater detail in the next chapter <link linkend="forwarding-mail">
-          forwarding-mail
-        </link>
-        .
+        in greater detail in the next chapter <link linkend="forwarding-mail">forwarding-mail</link>.
       </para>
       
       <sect2 id="sending-compose">
@@ -2028,7 +2013,7 @@ set edit_headers</screen>
         <para>
 
         <table>
-          <title>Default Compose Menu Bindings</title>
+          <title>Most commonly used Compose Menu Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
             <row>
@@ -2741,10 +2726,7 @@ a horrible death.
       <title>Basic Syntax of Initialization Files</title>
       
       <para>
-        An initialization file consists of a series of <link linkend="commands">
-          commands
-        </link>
-        .Each line of the file may contain one or more commands.
+        An initialization file consists of a series of <link linkend="commands">commands</link>. Each line of the file may contain one or more commands.
         When multiple commands are used, they must be separated by a semicolon
         (;).
         
@@ -3292,10 +3274,8 @@ alias theguys manny, moe, jack</screen>
         Unlike other mailers, Mutt-ng doesn't require aliases to be defined
         in a special file.  The <literal>alias</literal> command can appear
         anywhere in
-        a configuration file, as long as this file is <link linkend="source">
-          source
-        </link>
-        .Consequently, you can have multiple alias files, or
+        a configuration file, as long as this file is <link linkend="source">source</link>.
+        Consequently, you can have multiple alias files, or
         you can have all aliases defined in your muttrc.
       </para>
       
@@ -3308,9 +3288,7 @@ alias theguys manny, moe, jack</screen>
         special either,
         in the sense that Mutt-ng will happily append aliases to any file, but
         in
-        order for the new aliases to take effect you need to explicitly <link linkend="source">
-          source
-        </link>
+        order for the new aliases to take effect you need to explicitly <link linkend="source">source</link>
         this file too.
       </para>
       
@@ -3641,10 +3619,8 @@ Usage: <literal>bind</literal> <emphasis>map</emphasis> <emphasis>key</emphasis>
           key
         </emphasis>
         is pressed.
-        For a complete list of functions, see the <link linkend="functions">
-          functions
-        </link>
-        .The special function <literal>noop</literal> unbinds the specified key
+        For a complete list of functions, see the <link linkend="functions">functions</link>. 
+        The special function <literal>noop</literal> unbinds the specified key
         sequence.
       </para>
       
@@ -4517,14 +4493,11 @@ Usage: <literal>[un]subscribe</literal> <emphasis>regexp</emphasis> [<emphasis>r
       </para>
       
       <para>
-        Mutt-ng has a few nice features for <link linkend="using-lists">
-          using-lists
-        </link>
-        .In order to take advantage of them, you must
+        Mutt-ng has a few nice features for <link linkend="using-lists">using-lists</link>. 
+        In order to take advantage of them, you must
         specify which addresses belong to mailing lists, and which mailing
-        lists you are subscribed to.  Once you have done this, the <link linkend="func-list-reply">
-          list-reply
-        </link>
+        lists you are subscribed to.  Once you have done this, the
+        <link linkend="func-list-reply">list-reply</link>
         function will work for all known lists.
         Additionally, when you send a message to a subscribed list, mutt will
         add a Mail-Followup-To header to tell other users' mail user agents
@@ -4676,9 +4649,7 @@ Usage: <literal>[un]mailboxes</literal> [!]<emphasis>filename</emphasis> [<empha
           mailboxes
         </literal>
         command are resolved when
-        the command is executed, so if these names contain <link linkend="shortcuts">
-          shortcuts
-        </link>
+        the command is executed, so if these names contain <link linkend="shortcuts">shortcuts</link>
         (such as ``='' and ``!''), any variable
         definition that affect these characters (like <muttng-doc:varref name="folder"/>
         and <muttng-doc:varref name="spoolfile"/>)
@@ -5081,8 +5052,7 @@ Usage: <literal>push</literal> <emphasis>string</emphasis>
 
         This command adds the named string to the keyboard buffer. The
         string may contain control characters, key names and function
-        names like the sequence string in the <link
-          linkend="macro">macro</link> command. You may use it to
+        names like the sequence string in the <link linkend="macro">macro</link> command. You may use it to
         automatically run a sequence of commands at startup, or when
         entering certain folders. For example, the following command
         will automatically collapse all threads when entering a folder:
@@ -5445,10 +5415,8 @@ Usage: <literal>reset</literal> <emphasis>variable</emphasis> [<emphasis>variabl
       </para>
       
       <para>
-        This command is used to set (and unset) <link linkend="variables">
-          variables
-        </link>
-        .There are four basic types of variables:
+        This command is used to set (and unset) <link linkend="variables">variables</link>. 
+        There are four basic types of variables:
         boolean, number, string and quadoption.  <emphasis>boolean</emphasis>
         variables can be
         <emphasis>set</emphasis> (true) or <emphasis>unset</emphasis> (false). 
@@ -7063,56 +7031,6 @@ color sidebar white black</screen>
       </para>
       
       <para>
-        The available functions are:
-
-        <table>
-          <title>Default Sidebar Function Bindings</title>
-          <tgroup cols="3" align="left" colsep="1" rowsep="1">
-          <thead>
-            <row>
-              <entry>Key</entry>
-              <entry>Function</entry>
-              <entry>Description</entry>
-            </row>
-          </thead>
-          <tbody>
-            <row>
-              <entry><literal>none</literal></entry>
-              <entry><muttng-doc:funcref name="sidebar-scroll-up"/></entry>
-              <entry>Scrolls the mailbox list up 1 page</entry>
-            </row>
-            <row>
-              <entry><literal>none</literal></entry>
-              <entry><muttng-doc:funcref name="sidebar-scroll-down"/></entry>
-              <entry>Scrolls the mailbox list down 1 page</entry>
-            </row>
-            <row>
-              <entry><literal>none</literal></entry>
-              <entry><muttng-doc:funcref name="sidebar-next"/></entry>
-              <entry>Highlights the next mailbox</entry>
-            </row>
-            <row>
-              <entry><literal>none</literal></entry>
-              <entry><muttng-doc:funcref name="sidebar-next-new"/></entry>
-              <entry>Highlights the next mailbox with new mail</entry>
-            </row>
-            <row>
-              <entry><literal>none</literal></entry>
-              <entry><muttng-doc:funcref name="sidebar-previous"/></entry>
-              <entry>Highlights the previous mailbox</entry>
-            </row>
-            <row>
-              <entry><literal>none</literal></entry>
-              <entry><muttng-doc:funcref name="sidebar-open"/></entry>
-              <entry>Opens the currently highlighted mailbox</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-      </para>
-      
-      <para>
         Reasonable key bindings look e.g. like this:
         
         <screen>
@@ -7387,9 +7305,8 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         through which you received a message (i.e., of a subscribed list) in
         the <emphasis>index</emphasis> menu display.  This is useful to
         distinguish between
-        personal and list mail in the same mailbox.  In the <link linkend="index-format">
-          index-format
-        </link>
+        personal and list mail in the same mailbox.  In the
+        <muttng-doc:varref name="index_format" link="index-format"/>
         variable, the escape ``%L''
         will return the string ``To &lt;list&gt;'' when ``list'' appears in the
         ``To'' field, and ``Cc &lt;list&gt;'' when it appears in the ``Cc''
@@ -7412,9 +7329,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         Mutt-ng also supports the <literal>Mail-Followup-To</literal> header. 
         When you send
         a message to a list of recipients which includes one or several
-        subscribed mailing lists, and if the <link linkend="followup-to">
-          followup-to
-        </link>
+        subscribed mailing lists, and if the <muttng-doc:varref name="followup_to" link="followup-to"/>
         option is set, mutt will generate
         a Mail-Followup-To header which contains all the recipients to whom
         you send this message, but not your address. This indicates that
@@ -7681,9 +7596,8 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
       
       <para>
         Another way to access your POP3 mail is the <emphasis>fetch-mail</emphasis> function
-        (default: G).  It allows to connect to <link linkend="pop-host">
-          pop-host
-        </link>
+        (default: G).  It allows to connect to <link
+          linkend="pop-host">pop-host</link>
         ,fetch all your new mail and place it in the
         local <muttng-doc:varref name="spoolfile" link="spoolfile"/>.  After this
         point, Mutt-ng runs exactly as if the mail had always been local.
@@ -8052,28 +7966,20 @@ score !<muttng-doc:pattern name="*"/> =42</screen>
         <literal>--with-libesmtp</literal> or the output <literal>muttng -v</literal> contains
         <literal>+USE_LIBESMTP</literal>, this will be or is the case
         already. The SMTP
-        support includes support for Delivery Status Notification (see <link linkend="dsn">
-          dsn
-        </link>
-        section) as well as
-        handling the <literal>8BITMIME</literal> flag controlled via <link linkend="use-8bitmime">
-          use-8bitmime
-        </link>
-        .
+        support includes support for Delivery Status Notification
+        (see <link linkend="dsn">dsn</link> section) as well as
+        handling the <literal>8BITMIME</literal> flag controlled via
+        <muttng-doc:varref name="use_8bitmime" link="use-8bitmime"/>.
       </para>
       
       <para>
         To enable sending mail directly via SMTP without an MTA such as
-        Postfix or SSMTP and the like, simply set the <link linkend="smtp-host">
-          smtp-host
-        </link>
+        Postfix or SSMTP and the like, simply set the <muttng-doc:varref name="smtp_host" link="smtp-host"/>
         variable pointing to your SMTP server.
       </para>
       
       <para>
-        Authentication mechanisms are available via the <link linkend="smtp-user">
-          smtp-user
-        </link>
+        Authentication mechanisms are available via the <muttng-doc:varref name="smtp_user" link="smtp-user"/>
         and <muttng-doc:varref name="smtp_pass" link="smtp-pass"/> variables.
       </para>
       
@@ -8219,9 +8125,8 @@ append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </screen>
         supposes it is not compressed. This is important because it allows the
         use of programs that do not have well defined extensions. Just use
         &quot;.&quot; as a regexp. But this may be surprising if your
-        compressing script produces empty files. In this situation, unset <link linkend="save-empty">
-          save-empty
-        </link>
+        compressing script produces empty files. In this situation, unset
+        <muttng-doc:varref name="save_empty" link="save-empty"/>
         ,so that the compressed file
         will be removed if you delete all of the messages.
       </para>
@@ -8382,9 +8287,7 @@ append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </screen>
           When <muttng-doc:hook name="append"/> is used, the
           folder is
           not opened, which saves time, but this means that we can not find out
-          what the folder type is. Thus the default (<link linkend="mbox-type">
-            mbox-type
-          </link>
+          what the folder type is. Thus the default (<muttng-doc:varref name="mbox_type" link="mbox-type"/>
           )type is always supposed (i.e.
           this is the format used for the temporary folder).
         </para>
@@ -8817,9 +8720,7 @@ text/*; more</screen>
           parameters
           in expansion of %s syntaxes properly, and avoids risky
           characters by
-          substituting them, see the <link linkend="mailcap-sanitize">
-            mailcap-sanitize
-          </link>
+          substituting them, see the <muttng-doc:varref name="mailcap_sanitize" link="mailcap-sanitize"/>
           variable.
         </para>
         
@@ -8907,10 +8808,8 @@ text/html; lynx -dump %s ; copiousoutput</screen>
                 <term>needsterminal</term>
                 <listitem>
                   <para>
-                    Mutt-ng uses this flag when viewing attachments with <link linkend="auto-view">
-                      auto-view
-                    </link>
-                    ,in order to decide whether it should honor the setting
+                    Mutt-ng uses this flag when viewing attachments with <link linkend="auto-view">auto-view</link>,
+                    in order to decide whether it should honor the setting
                     of the <muttng-doc:varref name="wait_key" link="wait-key"/> variable or
                     not.  When an attachment is viewed using an interactive
                     program, and the
@@ -9063,9 +8962,7 @@ nametemplate=%s.gif</screen>
           </para>
           
           <para>
-            In addition, you can use this with <link linkend="auto-view">
-              auto-view
-            </link>
+            In addition, you can use this with <link linkend="auto-view">auto-view</link>
             to denote two commands for viewing an attachment, one to be viewed
             automatically, the other to be viewed interactively from the
             attachment
@@ -9494,9 +9391,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
         </para>
         
         <para>
-          When <emphasis>unsetting</emphasis> the <link linkend="strict-mailto">
-            strict-mailto
-          </link>
+          When <emphasis>unsetting</emphasis> the <muttng-doc:varref name="strict_mailto" link="strict-mailto"/>
           variable, mutt-ng will
         </para>
         
@@ -9649,7 +9544,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
       <para>
         
         <table>
-          <title>Mutt-NG Command Line Options</title>
+          <title>Reference: Command Line Options</title>
           <tgroup cols="2" align="left" colsep="1" rowsep="1">
           <thead>
             <row>
@@ -9817,7 +9712,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
       <para>
 
         <table id="tab-patterns">
-          <title>Patterns</title>
+          <title>Reference: Patterns</title>
           <tgroup cols="2" align="left" colsep="1" rowsep="1">
           <thead>
             <row>
@@ -10066,16 +9961,9 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
       </para>
       
       <para>
-        *) The forms <literal>&lt;]MAX[</literal>, <literal>
-          &gt;]MIN[
-        </literal>
-        ,
-        <literal>]MIN[-</literal> and <literal>-]MAX[</literal>
+        *) The forms <literal>&lt;[MAX]</literal>, <literal>&gt;[MIN]</literal>,
+        <literal>[MIN]-</literal> and <literal>-[MAX]</literal>
         are allowed, too.
-      </para>
-      
-      <para>
-        
       </para>
       
     </sect1>
@@ -10631,7 +10519,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
         <anchor id="sect-obsolete"/>
 
         <table>
-          <title>Obsolete Variables</title>
+          <title>Reference: Obsolete Variables</title>
           <tgroup cols="2" align="left" colsep="1" rowsep="1">
           <thead>
             <row>
@@ -10690,7 +10578,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
               </row>
             <row>
               <entry><literal>pgp_replysignencrypted</literal></entry>
-              <entry><muttng-doc:varref name="crypt-replysignencrypted" link="crypt-replysignencrypted"/></entry>
+              <entry><muttng-doc:varref name="crypt_replysignencrypted" link="crypt-replysignencrypted"/></entry>
               </row>
             <row>
               <entry><literal>pgp_verify_sig</literal></entry>
@@ -10722,7 +10610,7 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
               </row>
             <row>
               <entry><literal>shorten_hierarchy</literal></entry>
-              <entry><muttng-doc:varref name="sidebar-shorten-hierarchy" link="sidebar-shorten-hierarchy"/></entry>
+              <entry><muttng-doc:varref name="sidebar_shorten_hierarchy" link="sidebar-shorten-hierarchy"/></entry>
               </row>
             <row>
               <entry><literal>ask_followup_to</literal></entry>

@@ -105,9 +105,9 @@
       <title><xsl:value-of select="concat('$',@name)"/></title>
       <indexterm>
         <primary>Configuration Variables</primary>
-        <secondary><xsl:value-of select="@name"/></secondary>
+        <secondary>$<xsl:value-of select="@name"/></secondary>
       </indexterm>
-      <xsl:value-of select="text()"/>
+      <xsl:apply-templates/>
     </sect1>
   </xsl:template>
  
