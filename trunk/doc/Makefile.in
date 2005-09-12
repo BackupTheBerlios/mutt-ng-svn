@@ -84,8 +84,6 @@ install: all instdoc
 		$(INSTALL) -m 644 $(srcdir)/$$f $(DESTDIR)$(docdir) ; \
 	done
 	-$(INSTALL) -m 644 manual.txt $(DESTDIR)$(docdir) || true
-	-$(INSTALL) -m 644 manual.html $(DESTDIR)$(docdir) || true
-	-$(INSTALL) -m 644 muttng.css $(DESTDIR)$(docdir) || true
 	$(top_srcdir)/mkinstalldirs $(DESTDIR)$(docdir)/html
 	-cd html; for file in *.html ; do \
 		$(INSTALL) -m 644 $$file $(DESTDIR)$(docdir)/html/ || true ;\
@@ -99,17 +97,7 @@ uninstall:
 	for f in muttngrc.5 muttng-mbox.5  ; do \
 	  rm -f $(DESTDIR)$(mandir)/man5/$$f ; \
 	done
-	for f in $(srcdir_DOCFILES) $(topsrcdir_DOCFILES) ; do \
-	  rm -f $(DESTDIR)$(docdir)/$$f ; \
-	done
-	-rm -f $(DESTDIR)$(docdir)/manual.txt
-	-rm -f $(DESTDIR)$(docdir)/manual.html
-	-cd html; for f in *.html ; do \
-	  rm -f $(DESTDIR)$(docdir)/html/$$f ; \
-	done
-	-rm -rf $(DESTDIR)$(docdir)/muttng.css
-	-rm -rf $(DESTDIR)$(docdir)/html/muttng.css
-	-rmdir $(DESTDIR)$(docdir)/html
+	-rm -rf $(DESTDIR)$(docdir)/*
 
 check:
 manual.txt: manual.html
