@@ -213,12 +213,12 @@ int make_sidebar_entry (char* box, int idx, size_t len)
 #if USE_IMAP
   if (l > 0 && str_ncmp (box, ImapHomeNamespace, l) == 0 && 
       str_len (box) > l)
-    box += l + 1;
+    box += l + 1; /* we're trimming the ImapHomeNamespace, the "+ 1" is for the separator */
   else
 #endif
   if (l_m > 0 && str_ncmp (box, Maildir, l_m) == 0 && 
       str_len (box) > l_m)
-    box += l_m + 1;
+    box += l_m;
   else
     box = basename (box);
 
