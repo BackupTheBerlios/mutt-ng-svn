@@ -676,16 +676,24 @@ struct option_t MuttVars[] = {
    ** you must take care of space-stuffing <tt/From / lines (with a trailing
    ** space) yourself.
    */
-  {"envelope_from", DT_BOOL, R_NONE, OPTENVFROM, "no" },
+  {"envelope_from", DT_SYN, R_NONE, UL "use_envelope_from", 0 },
+  {"use_envelope_from", DT_BOOL, R_NONE, OPTENVFROM, "no" },
   /*
    ** .pp
-   ** When \fIset\fP, Mutt-ng will try to derive the message's \fIenvelope\fP
-   ** sender from the ``\fTFrom:\fP'' header field. Note that this information is passed 
-   ** to the sendmail command using the ``\fT-f\fP" command line switch, so don't set this
-   ** option if you are using that switch in $$sendmail yourself,
-   ** or if the sendmail on your machine doesn't support that command
-   ** line switch.
+   ** When \fIset\fP, mutt-ng will use ``$$envelope_from_address'' as the
+   ** \fIenvelope\fP sender if that is set, otherwise it will attempt to
+   ** derive it from the "From:" header.
+   **
+   ** .pp
+   ** \fBNote:\fP This information is passed
+   ** to sendmail command using the "-f" command line switch and
+   ** passed to the SMTP server for libESMTP (if support is compiled in).
    */
+  {"envelope_from_address", DT_ADDR, R_NONE, UL &EnvFrom, "" },
+  /*
+  ** Manually sets the \fIenvelope\fP sender for outgoing messages.
+  ** This value is ignored if ``$$use_envelope_from'' is unset.
+  */
   {"escape", DT_STR, R_NONE, UL &EscChar, "~"},
   /*
    ** .pp
@@ -2529,20 +2537,8 @@ struct option_t MuttVars[] = {
    ** presents a security risk since the superuser of your machine may read it
    ** regardless of the file's permissions.  
    */
-  {"smtp_envelope", DT_STR, R_NONE, UL &SmtpEnvFrom, "" },
-  /*
-   ** .pp
-   ** Availability: SMTP
-   **
-   ** .pp
-   ** If this variable is non-empty, it'll be used as the envelope sender. If it's empty
-   ** (the default), the value of the regular \fTFrom:\fP header will be used.
-   **
-   ** .pp
-   ** This may be necessary as some providers don't allow for arbitrary values
-   ** as the envelope sender but only a particular one which may not be the same as the
-   ** user's desired \fTFrom:\fP header.
-   */
+  {"smtp_envelope", DT_SYN, R_NONE, UL "envelope_from_address", 0 },
+
   {"smtp_host", DT_STR, R_NONE, UL &SmtpHost, "" },
   /*
    ** .pp

@@ -428,14 +428,15 @@ pop_query_status pop_query_d (POP_DATA * pop_data, char *buf, size_t buflen, cha
  * -2 - invalid command or execution error,
  * -3 - error in funct(*line, *data)
  */
-pop_query_status pop_fetch_data (POP_DATA * pop_data, char *query, char *msg,
+pop_query_status pop_fetch_data (POP_DATA * pop_data, char *query, progress_t* bar,
                     int (*funct) (char *, void *), void *data)
 {
   char buf[LONG_STRING];
   char *inbuf;
   char *p;
   pop_query_status ret;
-  int chunk, line = 0;
+  int chunk = 0;
+  long pos = 0;
   size_t lenbuf = 0;
 
   strfcpy (buf, query, sizeof (buf));
@@ -463,14 +464,14 @@ pop_query_status pop_fetch_data (POP_DATA * pop_data, char *query, char *msg,
     }
 
     strfcpy (inbuf + lenbuf, p, sizeof (buf));
+    pos += chunk;
 
     if (chunk >= sizeof (buf)) {
       lenbuf += strlen (p);
     }
     else {
-      line++;
-      if (msg && ReadInc && (line % ReadInc == 0))
-        mutt_message ("%s %d", msg, line);
+      if (bar)
+        mutt_progress_bar (bar, pos);
       if (ret == 0 && funct (inbuf, data) < 0)
         ret = PFD_FUNCT_ERROR;
       lenbuf = 0;
@@ -506,6 +507,7 @@ pop_query_status pop_reconnect (CONTEXT * ctx)
 {
   pop_query_status ret;
   POP_DATA *pop_data = (POP_DATA *) ctx->data;
+  progress_t bar;
 
   if (pop_data->status == POP_CONNECTED)
     return PQ_OK;
@@ -517,15 +519,16 @@ pop_query_status pop_reconnect (CONTEXT * ctx)
 
     ret = pop_open_connection (pop_data);
     if (ret == PQ_OK) {
-      char *msg = _("Verifying message indexes...");
       int i;
+
+      bar.msg = _("Verifying message indexes...");
+      bar.size = 0;
+      mutt_progress_bar (&bar, 0);
 
       for (i = 0; i < ctx->msgcount; i++)
         ctx->hdrs[i]->refno = -1;
 
-      mutt_message (msg);
-
-      ret = pop_fetch_data (pop_data, "UIDL\r\n", msg, check_uidl, ctx);
+      ret = pop_fetch_data (pop_data, "UIDL\r\n", &bar, check_uidl, ctx);
       if (ret == PQ_ERR) {
         mutt_error ("%s", pop_data->err_msg);
         mutt_sleep (2);

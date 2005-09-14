@@ -358,8 +358,8 @@ int mutt_libesmtp_invoke (ADDRESS * from,       /* the sender */
     SMTPFAIL ("smtp_add_message");
 
   /*  Initialize envelope sender */
-  if (SmtpEnvFrom && *SmtpEnvFrom)
-    envfrom = SmtpEnvFrom;
+  if (option (OPTENVFROM) && EnvFrom)
+    envfrom = EnvFrom->mailbox;
   if (!smtp_set_reverse_path (message, envfrom))
     SMTPFAIL ("smtp_set_reverse_path");
 

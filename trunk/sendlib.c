@@ -2025,9 +2025,16 @@ static int mutt_invoke_sendmail (ADDRESS * from,        /* the sender */
     if (eightbit && option (OPTUSE8BITMIME))
       args = add_option (args, &argslen, &argsmax, "-B8BITMIME");
 
-    if (option (OPTENVFROM) && from && !from->next) {
-      args = add_option (args, &argslen, &argsmax, "-f");
-      args = add_args (args, &argslen, &argsmax, from);
+    if (option (OPTENVFROM)) {
+      ADDRESS *f = NULL;
+      if (EnvFrom)
+        f = EnvFrom;
+      else if (from && !from->next)
+        f = from;
+      if (f) {
+        args = add_option (args, &argslen, &argsmax, "-f");
+        args = add_args (args, &argslen, &argsmax, f);
+      }
     }
     if (DsnNotify) {
       args = add_option (args, &argslen, &argsmax, "-N");

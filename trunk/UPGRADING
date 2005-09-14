@@ -10,6 +10,13 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-09-14:
+
+  The $smtp_envelope_from variable has been removed in favor of the
+  general $envelope_from_address.
+
+  The $envelope_from option has been renamed to $use_envelope_from.
+
 2005-09-07:
 
   SASL 1.x support has been removed.
