@@ -321,13 +321,14 @@ static int mutt_nntp_query (NNTP_DATA * data, char *line, size_t linelen)
  * -3 - error in funct(*line, *data).
  */
 static int mutt_nntp_fetch (NNTP_DATA * nntp_data, char *query, char *msg,
-                            int (*funct) (char *, void *), void *data,
-                            int tagged)
+                            progress_t* bar, int (*funct) (char *, void *),
+                            void *data, int tagged)
 {
   char buf[LONG_STRING];
   char *inbuf, *p;
   int done = FALSE;
   int chunk, line;
+  long pos = 0;
   size_t lenbuf = 0;
   int ret;
 
@@ -361,17 +362,22 @@ static int mutt_nntp_fetch (NNTP_DATA * nntp_data, char *query, char *msg,
       }
 
       strfcpy (inbuf + lenbuf, p, sizeof (buf));
+      pos += chunk;
 
       if (chunk >= sizeof (buf)) {
         lenbuf += str_len (p);
       }
       else {
-        line++;
-        if (msg && ReadInc && (line % ReadInc == 0)) {
-          if (tagged)
-            mutt_message (_("%s (tagged: %d) %d"), msg, tagged, line);
-          else
-            mutt_message ("%s %d", msg, line);
+        if (bar) {
+          mutt_progress_bar (bar, pos);
+        } else if (msg) {
+          line++;
+          if (ReadInc && (line % ReadInc == 0)) {
+            if (tagged)
+              mutt_message (_("%s (tagged: %d) %d"), msg, tagged, line);
+            else
+              mutt_message ("%s %d", msg, line);
+          }
         }
 
         if (ret == 0 && funct (inbuf, data) < 0)
@@ -461,7 +467,7 @@ static int nntp_read_header (CONTEXT * ctx, const char *msgid,
   else
     snprintf (buf, sizeof (buf), "HEAD %s\r\n", msgid);
 
-  ret = mutt_nntp_fetch (nntp_data, buf, NULL, nntp_read_tempfile, f, 0);
+  ret = mutt_nntp_fetch (nntp_data, buf, NULL, NULL, nntp_read_tempfile, f, 0);
   if (ret) {
     if (ret != -1)
       debug_print (1, ("%s\n", buf));
@@ -510,7 +516,7 @@ static int parse_description (char *line, void *n)
 #undef news
 }
 
-static void nntp_get_desc (NNTP_DATA * data, char *mask, char *msg)
+static void nntp_get_desc (NNTP_DATA * data, char *mask, char *msg, progress_t* bar)
 {
   char buf[STRING];
 
@@ -522,7 +528,7 @@ static void nntp_get_desc (NNTP_DATA * data, char *mask, char *msg)
     snprintf (buf, sizeof (buf), "XGTITLE %s\r\n", mask);
   else
     snprintf (buf, sizeof (buf), "LIST NEWSGROUPS %s\r\n", mask);
-  if (mutt_nntp_fetch (data, buf, msg, parse_description, data->nserv, 0) !=
+  if (mutt_nntp_fetch (data, buf, msg, bar, parse_description, data->nserv, 0) !=
       0) {
 #ifdef DEBUG
     nntp_error ("nntp_get_desc()", buf);
@@ -702,7 +708,7 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
   fc.messages = mem_calloc (last - first + 1, sizeof (unsigned short));
   if (nntp_data->nserv->hasLISTGROUP) {
     snprintf (buf, sizeof (buf), "LISTGROUP %s\r\n", nntp_data->group);
-    if (mutt_nntp_fetch (nntp_data, buf, NULL, nntp_fetch_numbers, &fc, 0) !=
+    if (mutt_nntp_fetch (nntp_data, buf, NULL, NULL, nntp_fetch_numbers, &fc, 0) !=
         0) {
       mutt_error (_("LISTGROUP command failed: %s"), buf);
       sleep (2);
@@ -768,7 +774,7 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
     fc.last = last;
     fc.msg = msg;
     snprintf (buf, sizeof (buf), "XOVER %d-%d\r\n", first, last);
-    ret = mutt_nntp_fetch (nntp_data, buf, NULL, add_xover_line, &fc, 0);
+    ret = mutt_nntp_fetch (nntp_data, buf, NULL, NULL, add_xover_line, &fc, 0);
     if (ctx->msgcount > oldmsgcount)
       mx_update_context (ctx, ctx->msgcount - oldmsgcount);
     if (ret != 0) {
@@ -860,7 +866,7 @@ int nntp_open_mailbox (CONTEXT * ctx)
   mutt_message (_("Selecting %s..."), nntp_data->group);
 
   if (!nntp_data->desc) {
-    nntp_get_desc (nntp_data, nntp_data->group, NULL);
+    nntp_get_desc (nntp_data, nntp_data->group, NULL, NULL);
     if (nntp_data->desc)
       nntp_save_cache_index (serv);
   }
@@ -920,8 +926,8 @@ int nntp_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
   char buf[LONG_STRING];
   char path[_POSIX_PATH_MAX];
   NNTP_CACHE *cache;
-  char *m = _("Fetching message...");
   int ret;
+  progress_t bar;
 
   /* see if we already have the message in our cache */
   cache =
@@ -936,8 +942,6 @@ int nntp_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
   /* clear the previous entry */
   unlink (cache->path);
   free (cache->path);
-
-  mutt_message (m);
 
   cache->index = ctx->hdrs[msgno]->index;
   mutt_mktemp (path);
@@ -954,7 +958,11 @@ int nntp_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
     snprintf (buf, sizeof (buf), "ARTICLE %d\r\n",
               ctx->hdrs[msgno]->article_num);
 
-  ret = mutt_nntp_fetch ((NNTP_DATA *) ctx->data, buf, m, nntp_read_tempfile,
+  bar.msg = _("Fetching message...");
+  bar.size = 0;
+  mutt_progress_bar (&bar, 0);
+
+  ret = mutt_nntp_fetch ((NNTP_DATA *) ctx->data, buf, NULL, &bar, nntp_read_tempfile,
                          msg->fp, ctx->tagged);
   if (ret == 1) {
     mutt_error (_("Article %d not found on server"),
@@ -1332,7 +1340,7 @@ int nntp_check_newgroups (NNTP_SERVER * serv, int force)
   else
     nntp_data.group = NULL;
   l = serv->tail;
-  if (mutt_nntp_fetch (&nntp_data, buf, _("Adding new newsgroups..."),
+  if (mutt_nntp_fetch (&nntp_data, buf, _("Adding new newsgroups..."), NULL,
                        add_group, serv, 0) != 0) {
 #ifdef DEBUG
     nntp_error ("nntp_check_newgroups()", buf);
@@ -1351,7 +1359,7 @@ int nntp_check_newgroups (NNTP_SERVER * serv, int force)
     l = l->next;
     ((NNTP_DATA *) l->data)->new = 1;
     nntp_get_desc ((NNTP_DATA *) l->data, ((NNTP_DATA *) l->data)->group,
-                   NULL);
+                   NULL, NULL);
   }
   if (emp.next)
     nntp_save_cache_index (serv);
@@ -1404,7 +1412,7 @@ int nntp_get_active (NNTP_SERVER * serv)
   nntp_data.nserv = serv;
   nntp_data.group = NULL;
 
-  if (mutt_nntp_fetch (&nntp_data, "LIST\r\n", msg, add_group, serv, 0) < 0) {
+  if (mutt_nntp_fetch (&nntp_data, "LIST\r\n", msg, NULL, add_group, serv, 0) < 0) {
 #ifdef DEBUG
     nntp_error ("nntp_get_active()", "LIST\r\n");
 #endif
@@ -1413,7 +1421,7 @@ int nntp_get_active (NNTP_SERVER * serv)
 
   strfcpy (msg, _("Loading descriptions..."), sizeof (msg));
   mutt_message (msg);
-  nntp_get_desc (&nntp_data, "*", msg);
+  nntp_get_desc (&nntp_data, "*", msg, NULL);
 
   for (tmp = serv->list; tmp; tmp = tmp->next) {
     NNTP_DATA *data = (NNTP_DATA *) tmp->data;
@@ -1510,7 +1518,7 @@ int nntp_check_children (CONTEXT * ctx, const char *msgid)
   cc.num = 0;
   cc.max = 25;
   cc.child = mem_malloc (sizeof (unsigned int) * 25);
-  if (mutt_nntp_fetch (nntp_data, buf, NULL, check_children, &cc, 0)) {
+  if (mutt_nntp_fetch (nntp_data, buf, NULL, NULL, check_children, &cc, 0)) {
     mem_free (&cc.child);
     return -1;
   }
