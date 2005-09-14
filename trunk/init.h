@@ -670,7 +670,7 @@ struct option_t MuttVars[] = {
    ** delivery and transport agents tend to do with messages.
    **
    ** .pp
-   ** \fBNote:\fP as mutt-ng currently violates RfC3676 defining
+   ** \fBNote:\fP as Mutt-ng currently violates RfC3676 defining
    ** \fTformat=flowed\fP, it's <em/strongly/ advised to \fIset\fP
    ** this option although discouraged by the standard. Alternatively,
    ** you must take care of space-stuffing <tt/From / lines (with a trailing
@@ -680,7 +680,7 @@ struct option_t MuttVars[] = {
   {"use_envelope_from", DT_BOOL, R_NONE, OPTENVFROM, "no" },
   /*
    ** .pp
-   ** When \fIset\fP, mutt-ng will use ``$$envelope_from_address'' as the
+   ** When \fIset\fP, Mutt-ng will use ``$$envelope_from_address'' as the
    ** \fIenvelope\fP sender if that is set, otherwise it will attempt to
    ** derive it from the "From:" header.
    **
@@ -859,7 +859,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** E.g. you can use 
    ** \fTsend-hook Mutt-ng-devel@lists.berlios.de 'my_hdr From: Foo Bar <foo@bar.fb>'\fP
-   ** when replying to the mutt-ng developer's mailing list and Mutt-ng takes this email address.
+   ** when replying to the Mutt-ng developer's mailing list and Mutt-ng takes this email address.
    ** .pp
    ** Defaults to the contents of the environment variable \fT$$$EMAIL\fP.
    */
@@ -1565,7 +1565,7 @@ struct option_t MuttVars[] = {
    ** .pp
    ** This variable controls how message counts are printed when the sidebar
    ** is enabled. If this variable is \fIempty\fP (\fIand only if\fP), no numbers
-   ** will be printed \fIand\fP mutt-ng won't frequently count mail (which
+   ** will be printed \fIand\fP Mutt-ng won't frequently count mail (which
    ** may be a great speedup esp. with mbox-style mailboxes.)
    ** .pp
    ** The following \fTprintf(3)\fP-like sequences are supported all of which
@@ -2591,7 +2591,7 @@ struct option_t MuttVars[] = {
   {"ssl_force_tls", DT_BOOL, R_NONE, OPTSSLFORCETLS, "no" },
   /*
    ** .pp
-   ** If this variable is \fIset\fP, mutt-ng will require that all connections
+   ** If this variable is \fIset\fP, Mutt-ng will require that all connections
    ** to remote servers be encrypted. Furthermore it will attempt to
    ** negotiate TLS even if the server does not advertise the capability,
    ** since it would otherwise have to abort the connection anyway. This
@@ -3516,7 +3516,7 @@ struct option_t MuttVars[] = {
    ** if ``$$edit_headers'' is unset.
    **
    ** .pp
-   ** If this variable is \fIset\fP, mutt-ng is strict and allows anything to be
+   ** If this variable is \fIset\fP, Mutt-ng is strict and allows anything to be
    ** changed. If it's \fIunset\fP, all headers given will be prefixed with
    ** ``X-Mailto-'' and the message including headers will be shown in the editor
    ** regardless of what ``$$edit_headers'' is set to.
@@ -3549,14 +3549,14 @@ struct option_t MuttVars[] = {
   {"strip_was", DT_BOOL, R_NONE, OPTSTRIPWAS, "no" },
   /**
   ** .pp
-  ** When \fIset\fP, mutt-ng will remove the trailing part of the ``\fTSubject:\fP''
+  ** When \fIset\fP, Mutt-ng will remove the trailing part of the ``\fTSubject:\fP''
   ** line which matches $$strip_was_regex when replying. This is useful to
   ** properly react on subject changes and reduce ``subject noise.'' (esp. in Usenet)
   **/
   {"strip_was_regex", DT_RX, R_NONE, UL &StripWasRegexp, "\\([Ww][Aa][RrSs]: .*\\)[ ]*$"},
   /**
   ** .pp
-  ** When non-empty and $$strip_was is \fIset\fP, mutt-ng will remove this
+  ** When non-empty and $$strip_was is \fIset\fP, Mutt-ng will remove this
   ** trailing part of the ``Subject'' line when replying if it won't be empty
   ** afterwards.
   **/
@@ -3794,8 +3794,8 @@ struct option_t MuttVars[] = {
   /*
    ** .pp
    ** If $$xterm_set_titles is \fIset\fP, this string will be used to
-   ** set the title when leaving mutt-ng. For terminal-based programs,
-   ** there's no easy and portable way to read the current title so mutt-ng
+   ** set the title when leaving Mutt-ng. For terminal-based programs,
+   ** there's no easy and portable way to read the current title so Mutt-ng
    ** cannot read it upon startup and restore it when exiting.
    **
    ** .pp
