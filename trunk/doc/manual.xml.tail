@@ -1756,9 +1756,10 @@
           Francois Berjon <email> Francois.Berjon@aar.alcatel-alsthom.fr</email>
         </listitem>
         <listitem>
-          Aric Blumer <email>aric@fore.com</email>, John Capo <email>
-            jc@irbs.com
-          </email>
+          Aric Blumer <email>aric@fore.com</email>
+        </listitem>
+        <listitem>
+          John Capo <email>jc@irbs.com</email>
         </listitem>
         <listitem>
           David Champion <email>dgc@uchicago.edu</email>
@@ -1965,8 +1966,7 @@
                   variables.</emphasis> The <literal>name</literal>
                 parameter must contain upper-case letters only without
                 the dollar sign as it'll be added automatically.
-                Auto-indexing under <emphasis>Environment
-                  Variables</emphasis> is done.
+                Auto-indexing is done.
             </para></listitem>
           </varlistentry>
           <varlistentry>
@@ -1975,18 +1975,7 @@
                 <emphasis>References to hooks.</emphasis> The string
                 <literal>-hook</literal> will be added automatically to
                 the value given in the <literal>name</literal>
-                parameter. All entries will be auto-indexed under
-                <emphasis>Hooks</emphasis>.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term><literal>&lt;muttng-doc:command name=""/&gt;</literal></term>
-            <listitem><para>
-                <emphasis>References to configuration
-                  commands.</emphasis> The name is given via the
-                <literal>name</literal> parameter and will be
-                auto-indexed under <emphasis>Configuration
-                  Commands</emphasis>.
+                parameter. All entries will be auto-indexed.
             </para></listitem>
           </varlistentry>
           <varlistentry>
@@ -1995,9 +1984,8 @@
                 <emphasis>References to patterns.</emphasis> The
                 <literal>name</literal> parameter must only contain the
                 letter/symbol for the pattern as the tilde symbol/equal
-                sign will be added automatically. Auto-indexing is done
-                under <emphasis>Patterns</emphasis>. If the
-                <literal>full</literal> is given the equal sign as well
+                sign will be added automatically. Auto-indexing is done. If the
+                <literal>full</literal> parameter is given the equal sign as well
                 as tilde will be printed for a fully complete reference.
             </para></listitem>
           </varlistentry>
@@ -2009,8 +1997,8 @@
                 <literal>name</literal> parameter and a default key
                 binding given via <literal>key</literal>. The string
                 will be automatically enclosed in
-                <literal>&lt;&gt;</literal>. Auto-indexing is done under
-                <emphasis>Functions</emphasis>. Also an anchor with id
+                <literal>&lt;&gt;</literal>. Auto-indexing is done.
+                Also an anchor with id
                 <literal>func-[name]</literal> will be added with
                 <literal>[name]</literal> being the value of the
                 <literal>name</literal> parameter.
@@ -2025,13 +2013,12 @@
             </para></listitem>
           </varlistentry>
           <varlistentry>
-            <term><literal>&lt;muttng-doc:vardef name="" id=""/&gt;</literal></term>
+            <term><literal>&lt;muttng-doc:vardef name=""/&gt;</literal></term>
             <listitem><para>
                 <emphasis>Defining a variable.</emphasis> This is to be
                 used by <literal>makedoc</literal> only to define a
                 command with a given name and XML-normalized link given
-                via <literal>id</literal>. Auto-indexing is done under
-                <emphasis>Configuration Variables</emphasis>. The
+                via <literal>id</literal>. Auto-indexing is done. The
                 <literal>name</literal> parameter's value will be
                 prefixed with a dollar sign as for environment
                 variables.
@@ -2065,9 +2052,48 @@
                 this to produce links to RfC document with number given
                 as the <literal>num</literal> parameter. A link to
                 <muttng-doc:web url="http://www.faqs.org/"/> will be
-                made. Auto-indexing is not done yet.
+                made. Auto-indexing is done under
+                <emphasis>RfC</emphasis>.
             </para></listitem>
           </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:cmddef name="" [noanchor="1"]/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>Defining a configuration command.</emphasis>
+                The name of the command is given as the
+                <literal>name</literal> parameter. In case a single
+                command has multiple possible calling sequences, specify
+                <literal>noanchor="1"</literal> for subsequent use.
+                Auto-indexing is done. Specify the arguments within the
+                tag.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:cmdref name=""/&gt;</literal></term>
+            <listitem><para>
+                <emphasis>References to configuration commands.</emphasis>
+                Use this to refer to commands as it builds the proper
+                internal reference name. Auto-indexing is done.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:lstconf/&gt;</literal>,
+              <literal>&lt;muttng-doc:lstmail/&gt;</literal>,
+              <literal>&lt;muttng-doc:lstshell/&gt;</literal>
+            </term>
+            <listitem><para>
+                <emphasis>Screen layout by context.</emphasis> These are
+                used to specify environments for different types of
+                screen output. For DocBook output, all of these simply
+                map to <literal>&lt;screen/&gt;</literal>. But as a
+                possible future migration to LaTeX may be ahead,
+                different languages defined for the
+                <literal>listings.sty</literal> packages may be used to
+                have proper syntax highlighting for these so that there
+                must be a context sensitive distinction.
+            </para></listitem>
+          </varlistentry>
+
         </variablelist>
       </para>
 

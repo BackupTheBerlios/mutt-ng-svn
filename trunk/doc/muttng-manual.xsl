@@ -47,34 +47,43 @@
   <xsl:template match="muttng-doc:envvar">
      <literal><xsl:value-of select="concat('$', @name)"/></literal>
      <indexterm>
-       <primary>Environment Variables</primary>
-       <secondary><literal><xsl:value-of select="concat('$', @name)"/></literal></secondary>
+       <primary sortas="{@name}"><literal>$<xsl:value-of select="@name"/></literal></primary>
      </indexterm>
   </xsl:template> 
 
   <xsl:template match="muttng-doc:hook">
      <literal><link linkend="{concat(@name, '-hook')}"><xsl:value-of select="concat(@name, '-hook')"/></link></literal>
      <indexterm>
-       <primary>Hooks</primary>
-       <secondary><literal><xsl:value-of select="concat(@name, '-hook')"/></literal></secondary>
+       <primary sortas="{@name}-hook"><literal><xsl:value-of select="concat(@name, '-hook')"/></literal></primary>
      </indexterm>
   </xsl:template>
 
-  <xsl:template match="muttng-doc:command">
-    <literal><link linkend="{concat('command-', @name)}"><xsl:value-of select="translate(@name,'-','_')"/></link></literal>
+  <xsl:template match="muttng-doc:cmddef">
+    <xsl:choose>
+      <xsl:when test="@noanchor='1'"/>
+      <xsl:otherwise>
+        <anchor id="command-{translate(@name,'_','-')}"/>
+      </xsl:otherwise>
+    </xsl:choose>
+    Usage: <literal><xsl:value-of select="@name"/></literal> <emphasis><xsl:apply-templates/></emphasis>
+    <indexterm>
+      <primary sortas="{@name}"><literal><xsl:value-of select="@name"/></literal></primary>
+     </indexterm>
+   </xsl:template>
+
+   <xsl:template match="muttng-doc:cmdref">
+     <link linkend="command-{translate(@name,'_','-')}"><literal><xsl:value-of select="@name"/></literal></link>
      <indexterm>
-       <primary>Configuration Commands</primary>
-       <secondary><literal><xsl:value-of select="translate(@name,'-','_')"/></literal></secondary>
+       <primary sortas="{@name}"><literal><xsl:value-of select="@name"/></literal></primary>
      </indexterm>
-  </xsl:template>
-
+   </xsl:template>
+ 
   <xsl:template match="muttng-doc:pattern">
     <literal>~<xsl:value-of select="@name"/></literal>
     <xsl:if test="@full='1'">/<literal>=<xsl:value-of select="@name"/></literal></xsl:if>
      <indexterm>
-       <primary>Patterns</primary>
-       <secondary><literal>~<xsl:value-of select="@name"/></literal>/
-         <literal>=<xsl:value-of select="@name"/></literal></secondary>
+       <primary sortas="~{@name}"><literal>~<xsl:value-of select="@name"/></literal>/
+         <literal>=<xsl:value-of select="@name"/></literal></primary>
      </indexterm>
   </xsl:template>
 
@@ -82,8 +91,7 @@
      <literal>&lt;<xsl:value-of select="@name"/>&gt;</literal> (default: <xsl:value-of select="@key"/>)
      <anchor id="func-{@name}"/>
      <indexterm>
-       <primary>Functions</primary>
-       <secondary><literal>&lt;<xsl:value-of select="@name"/>&gt;</literal></secondary>
+       <primary sortas="{@name}"><literal>&lt;<xsl:value-of select="@name"/>&gt;</literal></primary>
      </indexterm>
   </xsl:template>
 
@@ -96,8 +104,7 @@
     </link>
     -->
     <indexterm>
-      <primary>Functions</primary>
-      <secondary><literal>&lt;<xsl:value-of select="@name"/>&gt;</literal></secondary>
+      <primary sortas="{@name}"><literal>&lt;<xsl:value-of select="@name"/>&gt;</literal></primary>
     </indexterm>
   </xsl:template>
 
@@ -105,8 +112,7 @@
     <sect1 id="{translate(@name,'_','-')}">
       <title><xsl:value-of select="concat('$',@name)"/></title>
       <indexterm>
-        <primary>Configuration Variables</primary>
-        <secondary><literal>$<xsl:value-of select="@name"/></literal></secondary>
+        <primary sortas="{@name}"><literal>$<xsl:value-of select="@name"/></literal></primary>
       </indexterm>
       <xsl:apply-templates/>
     </sect1>
@@ -114,8 +120,7 @@
  
   <xsl:template match="muttng-doc:varref">
     <link linkend="{@name}"><literal><xsl:value-of select="concat('$',translate(@name,'-','_'))"/></literal></link><indexterm>
-      <primary>Configuration Variables</primary>
-      <secondary><literal>$<xsl:value-of select="translate(@name,'-','_')"/></literal></secondary>
+      <primary sortas="{@name}"><literal>$<xsl:value-of select="translate(@name,'-','_')"/></literal></primary>
     </indexterm>
   </xsl:template>
 
@@ -125,6 +130,25 @@
 
   <xsl:template match="muttng-doc:rfc">
     <ulink url="{concat('http://www.faqs.org/rfcs/rfc', @num, '.html')}">RfC <xsl:value-of select="@num"/></ulink>
+    <indexterm><primary>RfC</primary><secondary><xsl:value-of select="@num"/></secondary></indexterm>
+  </xsl:template>
+
+  <xsl:template match="muttng-doc:lstconf">
+    <screen>
+      <xsl:apply-templates/>
+    </screen>
+  </xsl:template>
+
+  <xsl:template match="muttng-doc:lstmail">
+    <screen>
+      <xsl:apply-templates/>
+    </screen>
+  </xsl:template>
+
+  <xsl:template match="muttng-doc:lstshell">
+    <screen>
+      <xsl:apply-templates/>
+    </screen>
   </xsl:template>
 
 </xsl:stylesheet>

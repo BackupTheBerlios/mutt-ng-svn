@@ -895,7 +895,7 @@
     
     <para>
       You can remap the <emphasis>editor</emphasis> functions using the
-      <muttng-doc:command name="bind"/> command.  For example, to make
+      <muttng-doc:cmdref name="bind"/> command.  For example, to make
       the <emphasis>Delete</emphasis> key delete the character in front
       of the cursor rather than under, you could use
     </para>
@@ -1380,7 +1380,7 @@
         ``_'' for denoting underline. Mutt-ng will attempt to display
         these
         in bold and underline respectively if your terminal supports them. If
-        not, you can use the bold and underline <muttng-doc:command name="color"/>
+        not, you can use the bold and underline <muttng-doc:cmdref name="color"/>
         objects to specify a color or mono attribute for them.
       </para>
       
@@ -1490,7 +1490,7 @@
         <para>
           Mutt-ng uses these attributes for handling text/enriched messages,
           and they
-          can also be used by an external <muttng-doc:command name="auto-view"/>
+          can also be used by an external <muttng-doc:cmdref name="auto_view"/>
           script for highlighting purposes.  <emphasis role="bold">Note:</emphasis> If you change the colors for your
           display, for example by changing the color associated with color2 for
           your xterm, then that color will be used instead of green.
@@ -1633,11 +1633,11 @@
         
         <para>
           Creates a new alias based upon the current message (or prompts for a
-          new one).  Once editing is complete, an <muttng-doc:command name="alias"/>
+          new one).  Once editing is complete, an <muttng-doc:cmdref name="alias"/>
           command is added to the file specified by the <muttng-doc:varref name="alias-file"/>
           variable for future use. <emphasis role="bold">Note:</emphasis>
           Specifying an <muttng-doc:varref name="alias-file"/>
-          does not add the aliases specified there-in, you must also <muttng-doc:command name="source"/>
+          does not add the aliases specified there-in, you must also <muttng-doc:cmdref name="source"/>
           the file.
         </para>
         
@@ -1660,7 +1660,7 @@
         </para>
         
         <para>
-          Toggles the weeding of message header fields specified by <muttng-doc:command name="ignore"/>
+          Toggles the weeding of message header fields specified by <muttng-doc:cmdref name="ignore"/>
           commands.
         </para>
         
@@ -1707,7 +1707,7 @@
           a
           configuration file.  A common use is to check the settings of
           variables, or
-          in conjunction with <muttng-doc:command name="macro"/> to change
+          in conjunction with <muttng-doc:cmdref name="macro"/> to change
           settings on the
           fly.
         </para>
@@ -1737,7 +1737,7 @@
         <para>
           Reply to the current or tagged message(s) by extracting any addresses
           which
-          match the regular expressions given by the <muttng-doc:command name="lists"/>
+          match the regular expressions given by the <muttng-doc:cmdref name="lists"/>
           commands, but also honor any <literal>Mail-Followup-To</literal>
           header(s) if the
           <muttng-doc:varref name="honor-followup-to"/>
@@ -1913,8 +1913,8 @@
         
         <para>
           
-          <screen>
-To:</screen>
+          <muttng-doc:lstmail>
+To:</muttng-doc:lstmail>
           
         </para>
         
@@ -1936,10 +1936,10 @@ To:</screen>
         
         <para>
           
-          <screen>
+          <muttng-doc:lstconf>
 set editor = "vim +/^$/ -c ':set tw=72'"
 set editor = "nano"
-set editor = "emacs"</screen>
+set editor = "emacs"</muttng-doc:lstconf>
           
         </para>
         
@@ -1997,8 +1997,8 @@ set editor = "emacs"</screen>
         
         <para>
           
-          <screen>
-set edit_headers</screen>
+          <muttng-doc:lstconf>
+set edit_headers</muttng-doc:lstconf>
           
         </para>
         
@@ -2164,12 +2164,12 @@ set edit_headers</screen>
           
           <para>
             
-            <screen>
+            <muttng-doc:lstmail>
 On Mon, Mar 07, 2005 at 05:02:12PM +0100, Michael Svensson wrote:
 &gt; Bill, can you please send last month's progress report to Mr. 
 &gt; Morgan? We also urgently need the cost estimation for the new 
 &gt; production server that we want to set up before our customer's 
-&gt; project will go live.</screen>
+&gt; project will go live.</muttng-doc:lstmail>
             
           </para>
           
@@ -2186,28 +2186,28 @@ On Mon, Mar 07, 2005 at 05:02:12PM +0100, Michael Svensson wrote:
           <para>
             The quote attribution is configurable, by default it is set to
             
-            <screen>
-set attribution = "On %d, %n wrote:"</screen>
+            <muttng-doc:lstconf>
+set attribution = "On %d, %n wrote:"</muttng-doc:lstconf>
             
           </para>
           
           <para>
             It can also be set to something more compact, e.g.
             
-            <screen>
-set attribution = "attribution="* %n &lt;%a&gt; [%(%y-%m-%d %H:%M)]:"</screen>
+            <muttng-doc:lstconf>
+set attribution = "attribution="* %n &lt;%a&gt; [%(%y-%m-%d %H:%M)]:"</muttng-doc:lstconf>
             
           </para>
           
           <para>
             The example above results in the following attribution:
             
-            <screen>
+            <muttng-doc:lstmail>
 * Michael Svensson &lt;svensson@foobar.com&gt; [05-03-06 17:02]:
 &gt; Bill, can you please send last month's progress report to Mr. 
 &gt; Morgan? We also urgently need the cost estimation for the new 
 &gt; production server that we want to set up before our customer's 
-&gt; project will go live.</screen>
+&gt; project will go live.</muttng-doc:lstmail>
             
           </para>
           
@@ -2276,8 +2276,8 @@ set attribution = "attribution="* %n &lt;%a&gt; [%(%y-%m-%d %H:%M)]:"</screen>
           
           <para>
             
-            <screen>
-lists linuxevent@luga\.at vuln-dev@ mutt-ng-users@</screen>
+            <muttng-doc:lstconf>
+lists linuxevent@luga\.at vuln-dev@ mutt-ng-users@</muttng-doc:lstconf>
             
           </para>
           
@@ -2322,8 +2322,8 @@ lists linuxevent@luga\.at vuln-dev@ mutt-ng-users@</screen>
         <para>
           You can also attach files to your message by specifying
 
-          <screen>
-Attach: filename [description]</screen>
+          <muttng-doc:lstmail>
+Attach: filename [description]</muttng-doc:lstmail>
 
           where <emphasis>filename</emphasis> is the file to attach and <emphasis>
             description
@@ -2355,8 +2355,8 @@ Attach: filename [description]</screen>
         <para>
           If you want to use PGP, you can specify 
         
-          <screen>
-Pgp: [E | S | S id]</screen>
+          <muttng-doc:lstmail>
+Pgp: [E | S | S id]</muttng-doc:lstmail>
 
           ``E'' encrypts, ``S'' signs and
           ``S&lt;id&gt;'' signs with the given key, setting
@@ -2572,7 +2572,7 @@ Pgp: [E | S | S id]</screen>
       
       <para>
         
-        <screen>
+        <muttng-doc:lstmail>
 ----- Forwarded message from Lucas User &#60;luser@example.com&#62; -----
 
 From: Lucas User &#60;luser@example.com&#62;
@@ -2583,7 +2583,7 @@ Subject: Re: blackmail
 Pay me EUR 50,000.- cash or your favorite stuffed animal will die
 a horrible death.
 
------ End forwarded message -----</screen>
+----- End forwarded message -----</muttng-doc:lstmail>
         
       </para>
       
@@ -2728,8 +2728,8 @@ a horrible death.
         When multiple commands are used, they must be separated by a semicolon
         (;).
         
-        <screen>
-set realname='Mutt-ng user' ; ignore x-</screen>
+        <muttng-doc:lstconf>
+set realname='Mutt-ng user' ; ignore x-</muttng-doc:lstconf>
         
         The hash mark, or pound sign
         (``#''), is used as a ``comment'' character. You can use it to
@@ -2739,8 +2739,8 @@ set realname='Mutt-ng user' ; ignore x-</screen>
       
       <para>
         
-        <screen>
-my_hdr X-Disclaimer: Why are you listening to me? # This is a comment</screen>
+        <muttng-doc:lstconf>
+my_hdr X-Disclaimer: Why are you listening to me? # This is a comment</muttng-doc:lstconf>
         
       </para>
       
@@ -2770,8 +2770,8 @@ my_hdr X-Disclaimer: Why are you listening to me? # This is a comment</screen>
         interpreted
         character.
         
-        <screen>
-set realname="Michael \"MuttDude\" Elkins"</screen>
+        <muttng-doc:lstconf>
+set realname="Michael \"MuttDude\" Elkins"</muttng-doc:lstconf>
         
       </para>
       
@@ -2797,9 +2797,9 @@ set realname="Michael \"MuttDude\" Elkins"</screen>
       
       <para>
         
-        <screen>
+        <muttng-doc:lstconf>
 # folder-hook . \
-set realname="Michael \"MuttDude\" Elkins"</screen>
+set realname="Michael \"MuttDude\" Elkins"</muttng-doc:lstconf>
         
       </para>
       
@@ -2821,12 +2821,12 @@ set realname="Michael \"MuttDude\" Elkins"</screen>
       
       <para>
         
-        <screen>
+        <muttng-doc:lstconf>
 line1\
 line2a # line2b\
 line3\
 line4
-line5</screen>
+line5</muttng-doc:lstconf>
         
       </para>
       
@@ -2867,8 +2867,8 @@ line5</screen>
         
         <para>
           
-          <screen>
-my_hdr X-Operating-System: `uname -a`</screen>
+          <muttng-doc:lstconf>
+my_hdr X-Operating-System: `uname -a`</muttng-doc:lstconf>
           
         </para>
         
@@ -2892,8 +2892,8 @@ my_hdr X-Operating-System: `uname -a`</screen>
         
         <para>
           
-          <screen>
-set record=+sent_on_$HOSTNAME</screen>
+          <muttng-doc:lstconf>
+set record=+sent_on_$HOSTNAME</muttng-doc:lstconf>
           
         </para>
         
@@ -2922,8 +2922,8 @@ set record=+sent_on_$HOSTNAME</screen>
         
         <para>
           
-          <screen>
-set imap_home_namespace = $folder</screen>
+          <muttng-doc:lstconf>
+set imap_home_namespace = $folder</muttng-doc:lstconf>
           
         </para>
         
@@ -2969,9 +2969,9 @@ set imap_home_namespace = $folder</screen>
         
         <para>
           
-          <screen>
+          <muttng-doc:lstconf>
 macro generic &lt;F1&gt; "!less -r /path/to/manual" "Show manual"
-macro pager &lt;F1&gt; "!less -r /path/to/manual" "Show manual"</screen>
+macro pager &lt;F1&gt; "!less -r /path/to/manual" "Show manual"</muttng-doc:lstconf>
           
         </para>
         
@@ -2985,11 +2985,11 @@ macro pager &lt;F1&gt; "!less -r /path/to/manual" "Show manual"</screen>
         
         <para>
           
-          <screen>
+          <muttng-doc:lstconf>
 set user_manualcmd = "!less -r /path/to_manual" 
 macro generic &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"
 macro pager &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"
-macro index &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"</screen>
+macro index &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"</muttng-doc:lstconf>
           
         </para>
         
@@ -2999,8 +2999,8 @@ macro index &lt;F1&gt; "$user_manualcmd&lt;enter&gt;" "Show manual"</screen>
         
         <para>
           
-          <screen>
-macro index &lt;F2&gt; "$user_manualcmd | grep '\^[ ]\\+~. '" "Show Patterns"</screen>
+          <muttng-doc:lstconf>
+macro index &lt;F2&gt; "$user_manualcmd | grep '\^[ ]\\+~. '" "Show Patterns"</muttng-doc:lstconf>
           
         </para>
         
@@ -3028,9 +3028,9 @@ macro index &lt;F2&gt; "$user_manualcmd | grep '\^[ ]\\+~. '" "Show Patterns"</s
         
         <para>
           
-          <screen>
+          <muttng-doc:lstconf>
 set user_foo = 42
-set user_foo = 666</screen>
+set user_foo = 666</muttng-doc:lstconf>
           
         </para>
         
@@ -3042,8 +3042,8 @@ set user_foo = 666</screen>
         
         <para>
           
-          <screen>
-set ?user_foo</screen>
+          <muttng-doc:lstconf>
+set ?user_foo</muttng-doc:lstconf>
           
         </para>
         
@@ -3053,8 +3053,8 @@ set ?user_foo</screen>
         
         <para>
           
-          <screen>
-reset user_foo</screen>
+          <muttng-doc:lstconf>
+reset user_foo</muttng-doc:lstconf>
           
         </para>
         
@@ -3065,8 +3065,8 @@ reset user_foo</screen>
         
         <para>
           
-          <screen>
-unset user_foo</screen>
+          <muttng-doc:lstconf>
+unset user_foo</muttng-doc:lstconf>
           
         </para>
         
@@ -3100,8 +3100,8 @@ unset user_foo</screen>
         
         <para>
           
-          <screen>
-muttng -Q muttng_docdir</screen>
+          <muttng-doc:lstshell>
+$ muttng -Q muttng_docdir</muttng-doc:lstshell>
           
         </para>
         
@@ -3113,8 +3113,8 @@ muttng -Q muttng_docdir</screen>
         
         <para>
           
-          <screen>
-set user_manualcmd = '!less -r /path/to_manual'</screen>
+          <muttng-doc:lstconf>
+set user_manualcmd = '!less -r /path/to_manual'</muttng-doc:lstconf>
           
         </para>
         
@@ -3124,8 +3124,8 @@ set user_manualcmd = '!less -r /path/to_manual'</screen>
         
         <para>
           
-          <screen>
-set user_manualcmd = "!less -r $muttng_docdir/manual.txt"</screen>
+          <muttng-doc:lstconf>
+set user_manualcmd = "!less -r $muttng_docdir/manual.txt"</muttng-doc:lstconf>
           
         </para>
         
@@ -3146,8 +3146,8 @@ set user_manualcmd = "!less -r $muttng_docdir/manual.txt"</screen>
         
         <para>
           
-          <screen>
-folder-hook . "set user_current_folder = $muttng_folder_name"</screen>
+          <muttng-doc:lstconf>
+folder-hook . "set user_current_folder = $muttng_folder_name"</muttng-doc:lstconf>
           
         </para>
         
@@ -3158,8 +3158,8 @@ folder-hook . "set user_current_folder = $muttng_folder_name"</screen>
         
         <para>
           
-          <screen>
-folder-hook . "set user_current_folder = some_folder"</screen>
+          <muttng-doc:lstconf>
+folder-hook . "set user_current_folder = some_folder"</muttng-doc:lstconf>
           
         </para>
         
@@ -3171,8 +3171,8 @@ folder-hook . "set user_current_folder = some_folder"</screen>
         
         <para>
           
-          <screen>
-folder-hook . 'set user_current_folder = $muttng_folder_name'</screen>
+          <muttng-doc:lstconf>
+folder-hook . 'set user_current_folder = $muttng_folder_name'</muttng-doc:lstconf>
           
         </para>
         
@@ -3189,8 +3189,8 @@ folder-hook . 'set user_current_folder = $muttng_folder_name'</screen>
         
         <para>
           
-          <screen>
-folder-hook . 'source ~/.mutt/score-$muttng_folder_name'</screen>
+          <muttng-doc:lstconf>
+folder-hook . 'source ~/.mutt/score-$muttng_folder_name'</muttng-doc:lstconf>
           
         </para>
         
@@ -3215,12 +3215,12 @@ folder-hook . 'source ~/.mutt/score-$muttng_folder_name'</screen>
         
         <para>
           
-          <screen>
+          <muttng-doc:lstconf>
 set read_inc = 100
 set folder = $read_inc
 set read_inc = $folder
 set user_magic_number = 42
-set folder = $user_magic_number</screen>
+set folder = $user_magic_number</muttng-doc:lstconf>
           
         </para>
         
@@ -3228,11 +3228,13 @@ set folder = $user_magic_number</screen>
       
     </sect1>
     
-    <sect1 id="command-alias"><anchor id="command-unalias"/>
+    <sect1>
       <title>Defining/Using aliases</title>
 
       <para>
-        Usage: <muttng-doc:command name="alias"/> <emphasis>key</emphasis> <emphasis>address</emphasis> [, <emphasis>address</emphasis>,...]
+        <muttng-doc:cmddef name="alias">
+          key address [, address,...]
+        </muttng-doc:cmddef>
       </para>
       
       <para>
@@ -3255,14 +3257,16 @@ set folder = $user_magic_number</screen>
       </para>
       
       <para>
-        <literal>unalias</literal> [* | <emphasis>key</emphasis> <emphasis>...</emphasis>]
+        <muttng-doc:cmddef name="unalias">
+          [* | key ... ]
+        </muttng-doc:cmddef>
       </para>
       
       <para>
         
-        <screen>
+        <muttng-doc:lstconf>
 alias muttdude me@cs.hmc.edu (Michael Elkins)
-alias theguys manny, moe, jack</screen>
+alias theguys manny, moe, jack</muttng-doc:lstconf>
         
       </para>
       
@@ -3270,7 +3274,7 @@ alias theguys manny, moe, jack</screen>
         Unlike other mailers, Mutt-ng doesn't require aliases to be defined
         in a special file.  The <literal>alias</literal> command can appear
         anywhere in
-        a configuration file, as long as this file is <muttng-doc:command name="source"/>.
+        a configuration file, as long as this file is <muttng-doc:cmdref name="source"/>.
         Consequently, you can have multiple alias files, or
         you can have all aliases defined in your muttrc.
       </para>
@@ -3284,7 +3288,7 @@ alias theguys manny, moe, jack</screen>
         special either,
         in the sense that Mutt-ng will happily append aliases to any file, but
         in
-        order for the new aliases to take effect you need to explicitly <muttng-doc:command name="source"/>
+        order for the new aliases to take effect you need to explicitly <muttng-doc:cmdref name="source"/>
         this file too.
       </para>
       
@@ -3294,10 +3298,10 @@ alias theguys manny, moe, jack</screen>
       
       <para>
         
-        <screen>
+        <muttng-doc:lstconf>
 source /usr/local/share/Mutt-ng.aliases
 source ~/.mail_aliases
-set alias_file=~/.mail_aliases</screen>
+set alias_file=~/.mail_aliases</muttng-doc:lstconf>
         
       </para>
       
@@ -3340,11 +3344,13 @@ set alias_file=~/.mail_aliases</screen>
       
     </sect1>
     
-    <sect1 id="command-bind">
+    <sect1>
       <title>Changing the default key bindings</title>
       
       <para>
-        Usage: <muttng-doc:command name="bind"/> <emphasis>map</emphasis> <emphasis>key</emphasis> <emphasis>function</emphasis>
+        <muttng-doc:cmddef name="bind">
+          map key function
+        </muttng-doc:cmddef>
       </para>
       
       <para>
@@ -3693,8 +3699,8 @@ set alias_file=~/.mail_aliases</screen>
       
       <para>
         
-        <screen>
-folder-hook mutt set sort=threads</screen>
+        <muttng-doc:lstconf>
+folder-hook mutt set sort=threads</muttng-doc:lstconf>
         
       </para>
       
@@ -3707,8 +3713,8 @@ folder-hook mutt set sort=threads</screen>
       
       <para>
         
-        <screen>
-folder-hook . set sort=date-sent</screen>
+        <muttng-doc:lstconf>
+folder-hook . set sort=date-sent</muttng-doc:lstconf>
         
       </para>
       
@@ -3718,11 +3724,13 @@ folder-hook . set sort=date-sent</screen>
       
     </sect1>
     
-    <sect1 id="command-macro">
+    <sect1>
       <title>Keyboard macros</title>
       
       <para>
-        Usage: <muttng-doc:command name="macro"/> <emphasis>menu</emphasis> <emphasis>key</emphasis> <emphasis>sequence</emphasis> [<emphasis>description</emphasis>]
+        <muttng-doc:cmddef name="macro">
+          menu key sequence [description]
+        </muttng-doc:cmddef>
       </para>
       
       <para>
@@ -3748,7 +3756,7 @@ folder-hook . set sort=date-sent</screen>
       
       <para>
         <emphasis>key</emphasis> and <emphasis>sequence</emphasis> are expanded
-        by the same rules as the <muttng-doc:command name="bind"/>.  There are
+        by the same rules as the <muttng-doc:cmdref name="bind"/>.  There are
         some additions however.  The
         first is that control characters in <emphasis>sequence</emphasis> can
         also be specified
@@ -3761,7 +3769,7 @@ folder-hook . set sort=date-sent</screen>
           name&gt;
         </emphasis>
         .For a listing of key
-        names see the section on <muttng-doc:command name="bind"/>.  Functions
+        names see the section on <muttng-doc:cmdref name="bind"/>.  Functions
         are listed in the <link linkend="functions">functions</link>.
       </para>
       
@@ -3792,19 +3800,17 @@ folder-hook . set sort=date-sent</screen>
       
     </sect1>
     
-    <sect1 id="command-color"><anchor id="command-uncolor"/>
+    <sect1>
       <title>Using color and mono video attributes</title>
 
-      <anchor id="command-mono"/>
-      <anchor id="command-unmono"/>
       <para>
-        Usage: <muttng-doc:command name="color"/> <emphasis>object</emphasis> <emphasis>foreground</emphasis><emphasis>background</emphasis> [<emphasis>regexp</emphasis>]
+        <muttng-doc:cmddef name="color">object foreground background [regexp]</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="color"/> index <emphasis>foreground</emphasis> <emphasis>background</emphasis><emphasis>pattern</emphasis>
+        <muttng-doc:cmddef name="color" noanchor="1">index foreground pattern</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="uncolor"/> index <emphasis>pattern</emphasis>[<emphasis>pattern</emphasis>...]
+        <muttng-doc:cmddef name="uncolor">index pattern [pattern ...]</muttng-doc:cmddef>
       </para>
       
       <para>
@@ -4038,9 +4044,9 @@ folder-hook . set sort=date-sent</screen>
       
       <para>
         
-        <screen>
+        <muttng-doc:lstshell>
 set COLORFGBG="green;black"
-export COLORFGBG</screen>
+export COLORFGBG</muttng-doc:lstshell>
         
       </para>
       
@@ -4087,13 +4093,13 @@ export COLORFGBG</screen>
       </para>
       
       <para>
-        Usage: <muttng-doc:command name="mono"/> <emphasis>&lt;object&gt; &lt;attribute&gt;</emphasis>[<emphasis>regexp</emphasis>]
+        <muttng-doc:cmddef name="mono">object attribute [regexp]</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="mono"/> index <emphasis>attribute</emphasis> <emphasis>pattern</emphasis>
+        <muttng-doc:cmddef name="mono" noanchor="1">index attribute pattern</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="unmono"/> index <emphasis>pattern</emphasis> [<emphasis>pattern</emphasis>...]
+        <muttng-doc:cmddef name="unmono">index pattern [pattern ...]</muttng-doc:cmddef>
       </para>
       
       <para>
@@ -4144,15 +4150,15 @@ export COLORFGBG</screen>
       
     </sect1>
     
-    <sect1 id="command-ignore"><anchor id="command-unignore"/>
+    <sect1>
       <title>Ignoring (weeding) unwanted message headers</title>
 
       <para>
-        Usage: <muttng-doc:command name="ignore"/> <emphasis>pattern</emphasis> [<emphasis>pattern</emphasis>...]
+        <muttng-doc:cmddef name="ignore">pattern [pattern ...]</muttng-doc:cmddef>
       </para>
 
       <para>
-        Usage: <muttng-doc:command name="unignore"/> <emphasis>pattern</emphasis> [<emphasis>pattern</emphasis>...]
+        <muttng-doc:cmddef name="unignore">pattern [pattern ...]</muttng-doc:cmddef>
       </para>
  
       <para>
@@ -4186,12 +4192,12 @@ export COLORFGBG</screen>
       <para>
         For example:
         
-        <screen>
+        <muttng-doc:lstconf>
 # Sven's draconian header weeding
 ignore *
 unignore from date subject to cc
 unignore organization organisation x-mailer: x-newsreader: x-mailing-list:
-unignore posted-to:</screen>
+unignore posted-to:</muttng-doc:lstconf>
         
       </para>
       
@@ -4201,15 +4207,15 @@ unignore posted-to:</screen>
       
     </sect1>
     
-    <sect1 id="command-alternates"><anchor id="command-unalternates"/>
+    <sect1>
       <title>Alternative addresses</title>
       
       <para>
-        Usage: <muttng-doc:command name="alternates"/> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
+        <muttng-doc:cmddef name="alternates">regexp [regexp ...]</muttng-doc:cmddef>
       </para>
 
       <para>
-        Usage: <muttng-doc:command name="unalternates"/> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
+        <muttng-doc:cmddef name="unalternates">regexp [regexp ...]</muttng-doc:cmddef>
       </para>
  
       <para>
@@ -4308,8 +4314,8 @@ unignore posted-to:</screen>
         
         <para>
           
-          <screen>
-set wrapmargin = 10</screen>
+          <muttng-doc:lstconf>
+set wrapmargin = 10</muttng-doc:lstconf>
           
         </para>
         
@@ -4325,8 +4331,8 @@ set wrapmargin = 10</screen>
         
         <para>
           
-          <screen>
-set max_line_length = 120</screen>
+          <muttng-doc:lstconf>
+set max_line_length = 120</muttng-doc:lstconf>
           
         </para>
         
@@ -4343,11 +4349,11 @@ set max_line_length = 120</screen>
         
         <para>
           
-          <screen>
+          <muttng-doc:lstmail>
 &gt;Bill, can you please send last month's progress report to Mr. 
 &gt;Morgan? We also urgently need the cost estimation for the new 
 &gt;production server that we want to set up before our customer's 
-&gt;project will go live.</screen>
+&gt;project will go live.</muttng-doc:lstmail>
           
         </para>
         
@@ -4359,8 +4365,8 @@ set max_line_length = 120</screen>
         
         <para>
           
-          <screen>
-set stuff_quoted</screen>
+          <muttng-doc:lstconf>
+set stuff_quoted</muttng-doc:lstconf>
           
         </para>
         
@@ -4370,11 +4376,11 @@ set stuff_quoted</screen>
         
         <para>
           
-          <screen>
+          <muttng-doc:lstmail>
 &gt; Bill, can you please send last month's progress report to Mr. 
 &gt; Morgan? We also urgently need the cost estimation for the new 
 &gt; production server that we want to set up before our customer's
-&gt; project will go live.</screen>
+&gt; project will go live.</muttng-doc:lstmail>
           
         </para>
         
@@ -4390,8 +4396,8 @@ set stuff_quoted</screen>
         
         <para>
           
-          <screen>
-set text_flowed</screen>
+          <muttng-doc:lstconf>
+set text_flowed</muttng-doc:lstconf>
           
         </para>
         
@@ -4467,21 +4473,20 @@ set text_flowed</screen>
       
     </sect1>
     
-    <sect1 id="command-lists"><anchor id="command-unlists"/><anchor id="command-subscribe"/>
-      <anchor id="command-unsubscribe"/>
+    <sect1>
       <title>Mailing lists</title>
       
       <para>
-        Usage: <muttng-doc:command name="lists"/> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
+        <muttng-doc:cmddef name="lists">regexp [regexp ...]</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="unlists"/> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
+        <muttng-doc:cmddef name="unlists">regexp [regexp ...]</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="subscribe"/> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
+        <muttng-doc:cmddef name="subscribe">regexp [regexp ...]</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="unsubscribe"/> <emphasis>regexp</emphasis> [<emphasis>regexp</emphasis>...]
+        <muttng-doc:cmddef name="unsubscribe">regexp [regexp ...]</muttng-doc:cmddef>
       </para>
       
       <para>
@@ -4584,14 +4589,14 @@ set text_flowed</screen>
       
     </sect1>
     
-    <sect1 id="command-mailboxes"><anchor id="command-unmailboxes"/>
+    <sect1>
       <title>Defining mailboxes which receive mail</title>
 
       <para>
-        Usage: <muttng-doc:command name="mailboxes"/> [!]<emphasis>filename</emphasis> [<emphasis>filename</emphasis>...]
+        <muttng-doc:cmddef name="mailboxes"> [!]filename [filename ... ]</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="unmailboxes"/> [!]<emphasis>filename</emphasis> [<emphasis>filename</emphasis>...]
+        <muttng-doc:cmddef name="unmailboxes"> [!]filename [filename ... ]</muttng-doc:cmddef>
       </para>
  
       <para>
@@ -4653,14 +4658,14 @@ set text_flowed</screen>
       
     </sect1>
     
-    <sect1 id="command-my-hdr"><anchor id="command-unmy-hdr"/>
+    <sect1>
       <title>User defined headers</title>
       
       <para>
-        Usage: <muttng-doc:command name="my-hdr"/> <emphasis>string</emphasis>
+        <muttng-doc:cmddef name="my_hdr">string</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="unmy-hdr"/> <emphasis>field</emphasis> [<emphasis>field</emphasis>...]
+        <muttng-doc:cmddef name="unmy_hdr">field [field ...]</muttng-doc:cmddef>
       </para>
       
       <para>
@@ -4675,8 +4680,8 @@ set text_flowed</screen>
       </para>
       
       <para>
-        <screen>
-my_hdr Organization: A Really Big Company, Anytown, USA</screen>
+        <muttng-doc:lstconf>
+my_hdr Organization: A Really Big Company, Anytown, USA</muttng-doc:lstconf>
       </para>
       
       <para>
@@ -4709,8 +4714,8 @@ my_hdr Organization: A Really Big Company, Anytown, USA</screen>
       </para>
       
       <para>
-        <screen>
-unmy_hdr to cc</screen>
+        <muttng-doc:lstconf>
+unmy_hdr to cc</muttng-doc:lstconf>
       </para>
       
       <para>
@@ -4719,13 +4724,17 @@ unmy_hdr to cc</screen>
       
     </sect1>
     
-    <sect1 id="command-hdr-order"><anchor id="command-unhdr-order"/>
+    <sect1>
       <title>Defining the order of headers when viewing messages</title>
       
       <para>
-        Usage: <muttng-doc:command name="hdr-order"/> <emphasis>header1</emphasis><emphasis>header2</emphasis> <emphasis>header3</emphasis>
+        <muttng-doc:cmddef name="hdr_order">header header [header ...]</muttng-doc:cmddef>
       </para>
-      
+
+      <para>
+        <muttng-doc:cmddef name="unhdr_order">[ * | header header ...]</muttng-doc:cmddef>
+      </para>
+ 
       <para>
         With this command, you can specify an order in which mutt will attempt
         to present headers to you when viewing messages.
@@ -4740,8 +4749,8 @@ unmy_hdr to cc</screen>
       
       <para>
         
-        <screen>
-hdr_order From Date: From: To: Cc: Subject:</screen>
+        <muttng-doc:lstconf>
+hdr_order From Date: From: To: Cc: Subject:</muttng-doc:lstconf>
         
       </para>
       
@@ -4780,9 +4789,9 @@ hdr_order From Date: From: To: Cc: Subject:</screen>
       
       <para>
         
-        <screen>
+        <muttng-doc:lstconf>
 save-hook me@(turing\\.)?cs\\.hmc\\.edu$ +elkins
-save-hook aol\\.com$ +spam</screen>
+save-hook aol\\.com$ +spam</muttng-doc:lstconf>
         
       </para>
       
@@ -4978,9 +4987,9 @@ save-hook aol\\.com$ +spam</screen>
       <para>
         Example:
         
-        <screen>
+        <muttng-doc:lstconf>
 message-hook <muttng-doc:pattern name="A"/> 'set pager=builtin'
-message-hook '<muttng-doc:pattern name="f"/> freshmeat-news' 'set pager="less \"+/^  subject:.*\""'</screen>
+message-hook '<muttng-doc:pattern name="f"/> freshmeat-news' 'set pager="less \"+/^  subject:.*\""'</muttng-doc:lstconf>
         
       </para>
       
@@ -5021,25 +5030,25 @@ message-hook '<muttng-doc:pattern name="f"/> freshmeat-news' 'set pager="less \"
       
     </sect1>
     
-    <sect1 id="command-push">
+    <sect1>
       <title>Adding key sequences to the keyboard buffer</title>
       
       <para>
-        Usage: <muttng-doc:command name="push"/> <emphasis>string</emphasis>
+        <muttng-doc:cmddef name="push">string</muttng-doc:cmddef>
       </para>
       
       <para>
 
         This command adds the named string to the keyboard buffer. The
         string may contain control characters, key names and function
-        names like the sequence string in the <muttng-doc:command name="macro"/> command. You may use it to
+        names like the sequence string in the <muttng-doc:cmdref name="macro"/> command. You may use it to
         automatically run a sequence of commands at startup, or when
         entering certain folders. For example, the following command
         will automatically collapse all threads when entering a folder:
 
-        <screen>
+        <muttng-doc:lstconf>
 folder-hook . 'push &lt;collapse-all&gt;'
-        </screen>
+        </muttng-doc:lstconf>
 
       </para>
       
@@ -5049,11 +5058,11 @@ folder-hook . 'push &lt;collapse-all&gt;'
       
     </sect1>
     
-    <sect1 id="command-exec">
+    <sect1>
       <title>Executing functions</title>
       
       <para>
-        Usage: <muttng-doc:command name="exec"/> <emphasis>function</emphasis> [<emphasis>function</emphasis>...]
+        <muttng-doc:cmddef name="exec">function [function ... ]</muttng-doc:cmddef>
       </para>
       
       <para>
@@ -5068,14 +5077,14 @@ folder-hook . 'push &lt;collapse-all&gt;'
       
     </sect1>
     
-    <sect1 id="command-score"><anchor id="command-unscore"/>
+    <sect1>
       <title>Message Scoring</title>
       
       <para>
-        Usage: <muttng-doc:command name="score"/> <emphasis>pattern</emphasis> <emphasis>value</emphasis>
+        <muttng-doc:cmddef name="score">pattern value</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="unscore"/> <emphasis>pattern</emphasis> [<emphasis>pattern</emphasis>...]
+        <muttng-doc:cmddef name="unscore">pattern [pattern ... ]</muttng-doc:cmddef>
       </para>
       
       <para>
@@ -5098,9 +5107,9 @@ folder-hook . 'push &lt;collapse-all&gt;'
       
       <para>
         
-        <screen>
+        <muttng-doc:lstconf>
 score "<muttng-doc:pattern name="f"/> nion@muttng\.org" 50
-score "<muttng-doc:pattern name="f"/> @sco\.com" -100</screen>
+score "<muttng-doc:pattern name="f"/> @sco\.com" -100</muttng-doc:lstconf>
         
       </para>
       
@@ -5112,8 +5121,8 @@ score "<muttng-doc:pattern name="f"/> @sco\.com" -100</screen>
       
       <para>
         
-        <screen>
-score "<muttng-doc:pattern name="f"/> santaclaus@northpole\.int" =666</screen>
+        <muttng-doc:lstconf>
+score "<muttng-doc:pattern name="f"/> santaclaus@northpole\.int" =666</muttng-doc:lstconf>
         
       </para>
       
@@ -5187,9 +5196,9 @@ score "<muttng-doc:pattern name="f"/> santaclaus@northpole\.int" =666</screen>
       
       <para>
         
-        <screen>
+        <muttng-doc:lstconf>
 color index  black   yellow  "<muttng-doc:pattern name="n"/> 10-"
-color index  red     yellow  "<muttng-doc:pattern name="n"/> 100-"</screen>
+color index  red     yellow  "<muttng-doc:pattern name="n"/> 100-"</muttng-doc:lstconf>
         
       </para>
       
@@ -5207,14 +5216,14 @@ color index  red     yellow  "<muttng-doc:pattern name="n"/> 100-"</screen>
       
     </sect1>
     
-    <sect1 id="command-spam"><anchor id="command-nospam"/>
+    <sect1>
       <title>Spam detection</title>
 
       <para>
-        Usage: <muttng-doc:command name="spam"/> <emphasis>pattern</emphasis> <emphasis>format </emphasis>
+        <muttng-doc:cmddef name="spam">pattern format</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="nospam"/> <emphasis>pattern</emphasis>
+        <muttng-doc:cmddef name="nospam">pattern</muttng-doc:cmddef>
       </para>
       
       <para>
@@ -5269,11 +5278,11 @@ color index  red     yellow  "<muttng-doc:pattern name="n"/> 100-"</screen>
         For example, suppose I use DCC, SpamAssassin, and PureMessage. I might
         define these spam settings:
         
-        <screen>
+        <muttng-doc:lstconf>
 spam "X-DCC-.*-Metrics:.*(....)=many"         "90+/DCC-%1"
 spam "X-Spam-Status: Yes"                     "90+/SA"
 spam "X-PerlMX-Spam: .*Probability=([0-9]+)%" "%1/PM"
-set spam_separator=", "</screen>
+set spam_separator=", "</muttng-doc:lstconf>
         
       </para>
       
@@ -5368,8 +5377,8 @@ set spam_separator=", "</screen>
       
       <para>
         
-        <screen>
-spam "^From: .*MAILER-DAEMON"       "999"</screen>
+        <muttng-doc:lstconf>
+spam "^From: .*MAILER-DAEMON"       "999"</muttng-doc:lstconf>
         
       </para>
       
@@ -5379,20 +5388,20 @@ spam "^From: .*MAILER-DAEMON"       "999"</screen>
       
     </sect1>
     
-    <sect1 id="command-set"><anchor id="command-unset"/><anchor id="command-reset"/><anchor id="command-toggle"/>
+    <sect1>
       <title>Setting variables</title>
 
       <para>
-        Usage: <muttng-doc:command name="set"/> [no|inv]<emphasis>variable</emphasis>[=<emphasis>value</emphasis>] [<emphasis>variable</emphasis>...]
+        <muttng-doc:cmddef name="set">[no|inv]variable [=value] [variable...]</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="toggle"/> <emphasis>variable</emphasis> [<emphasis>variable</emphasis>...]
+        <muttng-doc:cmddef name="toggle">variable [variable ...]</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="unset"/> <emphasis>variable</emphasis> [<emphasis>variable</emphasis>...]
+        <muttng-doc:cmddef name="unset">variable [variable ...]</muttng-doc:cmddef>
       </para>
       <para>
-        Usage: <muttng-doc:command name="reset"/> <emphasis>variable</emphasis> [<emphasis>variable</emphasis>...]
+        <muttng-doc:cmddef name="reset">variable [variable ...]</muttng-doc:cmddef>
       </para>
       
       <para>
@@ -5474,8 +5483,8 @@ spam "^From: .*MAILER-DAEMON"       "999"</screen>
       
       <para>
         
-        <screen>
-set ?allow_8bit</screen>
+        <muttng-doc:lstconf>
+set ?allow_8bit</muttng-doc:lstconf>
         
       </para>
       
@@ -5505,11 +5514,11 @@ set ?allow_8bit</screen>
       
     </sect1>
     
-    <sect1 id="command-source">
+    <sect1>
       <title>Reading initialization commands from another file</title>
       
       <para>
-        Usage: <muttng-doc:command name="source"/> <emphasis>filename</emphasis> [<emphasis>filename</emphasis>...]
+        <muttng-doc:cmddef name="source">filename [filename ...]</muttng-doc:cmddef>
       </para>
       
       <para>
@@ -5541,11 +5550,11 @@ set ?allow_8bit</screen>
       
     </sect1>
     
-    <sect1 id="command-unhook">
+    <sect1>
       <title>Removing hooks</title>
       
       <para>
-        Usage: <muttng-doc:command name="unhook"/> [* | <emphasis>hook-type</emphasis>]
+        <muttng-doc:cmddef name="unhook">[* | hook-type]</muttng-doc:cmddef>
       </para>
       
       <para>
@@ -5585,8 +5594,8 @@ set ?allow_8bit</screen>
         
         <para>
           
-          <screen>
-set config_charset = "..."</screen>
+          <muttng-doc:lstconf>
+set config_charset = "..."</muttng-doc:lstconf>
           
         </para>
         
@@ -5651,9 +5660,9 @@ set config_charset = "..."</screen>
         
         <para>
           
-          <screen>
+          <muttng-doc:lstconf>
 ifdef &lt;item&gt; &lt;command&gt;
-ifndef &lt;item&gt; &lt;command&gt;</screen>
+ifndef &lt;item&gt; &lt;command&gt;</muttng-doc:lstconf>
           
         </para>
         
@@ -5714,10 +5723,10 @@ ifndef &lt;item&gt; &lt;command&gt;</screen>
         
         <para>
           
-          <screen>
+          <muttng-doc:lstconf>
 ifdef feature_imap 'source ~/.mutt-ng/setup-imap'
 ifdef feature_pop  'source ~/.mutt-ng/setup-pop'
-ifdef feature_nntp 'source ~/.mutt-ng/setup-nntp'</screen>
+ifdef feature_nntp 'source ~/.mutt-ng/setup-nntp'</muttng-doc:lstconf>
           
         </para>
         
@@ -5740,8 +5749,8 @@ ifdef feature_nntp 'source ~/.mutt-ng/setup-nntp'</screen>
         
         <para>
           
-          <screen>
-ifdef imap_mail_check 'set imap_mail_check = 300'</screen>
+          <muttng-doc:lstconf>
+ifdef imap_mail_check 'set imap_mail_check = 300'</muttng-doc:lstconf>
           
         </para>
         
@@ -5755,8 +5764,8 @@ ifdef imap_mail_check 'set imap_mail_check = 300'</screen>
         
         <para>
           
-          <screen>
-ifdef pager 'set pager_index_lines = 10'</screen>
+          <muttng-doc:lstconf>
+ifdef pager 'set pager_index_lines = 10'</muttng-doc:lstconf>
           
         </para>
         
@@ -5770,9 +5779,9 @@ ifdef pager 'set pager_index_lines = 10'</screen>
         
         <para>
           
-          <screen>
+          <muttng-doc:lstconf>
 ifdef feature_ncurses 'source ~/.mutt-ng/setup-ncurses'
-ifndef feature_ncurses 'source ~/.mutt-ng/setup-slang'</screen>
+ifndef feature_ncurses 'source ~/.mutt-ng/setup-slang'</muttng-doc:lstconf>
           
         </para>
         
@@ -5782,9 +5791,9 @@ ifndef feature_ncurses 'source ~/.mutt-ng/setup-slang'</screen>
         
         <para>
           
-          <screen>
+          <muttng-doc:lstconf>
 ifdef feature_slang 'source ~/.mutt-ng/setup-slang'
-ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
+ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</muttng-doc:lstconf>
           
         </para>
         
@@ -6445,8 +6454,8 @@ ifndef feature_slang 'source ~/.mutt-ng/setup-ncurses'</screen>
         
         <para>
           
-          <screen>
-set status_format = "%v on %h: ..."</screen>
+          <muttng-doc:lstconf>
+set status_format = "%v on %h: ..."</muttng-doc:lstconf>
           
         </para>
         
@@ -6506,8 +6515,8 @@ Mutt-ng 1.5.9i on mailhost: ...</screen>
         
         <para>
           
-          <screen>
-set status_format = "%v on %h: %B: ...</screen>
+          <muttng-doc:lstconf>
+set status_format = "%v on %h: %B: ...</muttng-doc:lstconf>
           
         </para>
         
@@ -6551,8 +6560,8 @@ Mutt-ng 1.5.9i on mailhost: Inbox: ...</screen>
         
         <para>
           
-          <screen>
-set status_format = "%v on %h: %B %?n?%n new? ...</screen>
+          <muttng-doc:lstconf>
+set status_format = "%v on %h: %B %?n?%n new? ...</muttng-doc:lstconf>
           
         </para>
         
@@ -6633,8 +6642,8 @@ set status_format = "%v on %h: %B %?n?%n new? ...</screen>
         
         <para>
           
-          <screen>
-set status_format = "%v on %h: %B: %?n?%n new messages&amp;no new messages? ...</screen>
+          <muttng-doc:lstconf>
+set status_format = "%v on %h: %B: %?n?%n new messages&amp;no new messages? ...</muttng-doc:lstconf>
           
         </para>
         
@@ -6645,8 +6654,8 @@ set status_format = "%v on %h: %B: %?n?%n new messages&amp;no new messages? ...<
         
         <para>
           
-          <screen>
-set status_format = "%v on %h: %B: %?n?%n&amp;no? new messages ...</screen>
+          <muttng-doc:lstconf>
+set status_format = "%v on %h: %B: %?n?%n&amp;no? new messages ...</muttng-doc:lstconf>
           
         </para>
         
@@ -6729,8 +6738,8 @@ set status_format = "%v on %h: %B: %?n?%n&amp;no? new messages ...</screen>
                 
                 <para>
                   
-                  <screen>
-set status_format = "%v on %h: %B: %?n?%n&amp;no? new messages %|-"</screen>
+                  <muttng-doc:lstconf>
+set status_format = "%v on %h: %B: %?n?%n&amp;no? new messages %|-"</muttng-doc:lstconf>
                   
                 </para>
               </listitem>
@@ -6755,8 +6764,8 @@ set status_format = "%v on %h: %B: %?n?%n&amp;no? new messages %|-"</screen>
                 
                 <para>
                   
-                  <screen>
-set status_format = "%B: %?n?%n&amp;no? new messages %&#62; (%v on %h)"</screen>
+                  <muttng-doc:lstconf>
+set status_format = "%B: %?n?%n&amp;no? new messages %&#62; (%v on %h)"</muttng-doc:lstconf>
                   
                 </para>
               </listitem>
@@ -6806,7 +6815,7 @@ set status_format = "%B: %?n?%n&amp;no? new messages %&#62; (%v on %h)"</screen>
       </para>
       
       <para>
-        In <muttng-doc:command name="macro"/> or <muttng-doc:command name="push"/> commands,
+        In <muttng-doc:cmdref name="macro"/> or <muttng-doc:cmdref name="push"/> commands,
         you can use the ``tag-prefix-cond'' operator.  If there are no tagged
         messages, mutt will "eat" the rest of the macro to abort it's
         execution.Mutt-ng will stop "eating" the macro when it encounters the
@@ -6901,9 +6910,9 @@ set status_format = "%B: %?n?%n&amp;no? new messages %&#62; (%v on %h)"</screen>
       
       <para>
         
-        <screen>
+        <muttng-doc:lstconf>
 send-hook . 'unmy_hdr From:'
-send-hook <muttng-doc:pattern name="C"/>'^b@b\.b$' my-hdr from: c@c.c</screen>
+send-hook <muttng-doc:pattern name="C"/>'^b@b\.b$' my-hdr from: c@c.c</muttng-doc:lstconf>
         
       </para>
       
@@ -6936,8 +6945,8 @@ send-hook <muttng-doc:pattern name="C"/>'^b@b\.b$' my-hdr from: c@c.c</screen>
           sending
           mail to a specific address, you could do something like:
           
-          <screen>
-send-hook '<muttng-doc:pattern name="t"/> ^me@cs\.hmc\.edu$' 'my-hdr From: Mutt-ng User &#60;user@host&#62;'</screen>
+          <muttng-doc:lstconf>
+send-hook '<muttng-doc:pattern name="t"/> ^me@cs\.hmc\.edu$' 'my-hdr From: Mutt-ng User &#60;user@host&#62;'</muttng-doc:lstconf>
           
           which would execute the given command when sending mail to
           <emphasis>me@cs.hmc.edu</emphasis>.
@@ -6980,37 +6989,37 @@ send-hook '<muttng-doc:pattern name="t"/> ^me@cs\.hmc\.edu$' 'my-hdr From: Mutt-
         and highlights the ones with new email
         Use the following configuration commands:
         
-        <screen>
+        <muttng-doc:lstconf>
 set sidebar_visible="yes"
-set sidebar_width=25</screen>
+set sidebar_width=25</muttng-doc:lstconf>
         
       </para>
       
       <para>
         If you want to specify the mailboxes you can do so with:
         
-        <screen>
+        <muttng-doc:lstconf>
 set mbox='=INBOX'
 mailboxes INBOX \
 MBOX1 \
 MBOX2 \
-...</screen>
+...</muttng-doc:lstconf>
         
       </para>
       
       <para>
         You can also specify the colors for mailboxes with new mails by using:
         
-        <screen>
+        <muttng-doc:lstconf>
 color sidebar_new red black
-color sidebar white black</screen>
+color sidebar white black</muttng-doc:lstconf>
         
       </para>
       
       <para>
         Reasonable key bindings look e.g. like this:
         
-        <screen>
+        <muttng-doc:lstconf>
 bind index \Cp sidebar-prev
 bind index \Cn sidebar-next
 bind index \Cb sidebar-open
@@ -7019,7 +7028,7 @@ bind pager \Cn sidebar-next
 bind pager \Cb sidebar-open
 
 macro index B ':toggle sidebar_visible^M'
-macro pager B ':toggle sidebar_visible^M'</screen>
+macro pager B ':toggle sidebar_visible^M'</muttng-doc:lstconf>
         
       </para>
       
@@ -7049,8 +7058,8 @@ macro pager B ':toggle sidebar_visible^M'</screen>
       
       <para>
         
-        <screen>
-set query_command = "mutt_ldap_query.pl '%s'"</screen>
+        <muttng-doc:lstconf>
+set query_command = "mutt_ldap_query.pl '%s'"</muttng-doc:lstconf>
         
       </para>
       
@@ -7127,8 +7136,8 @@ roessler@guug.de        Thomas Roessler mutt pgp</screen>
       
       <para>
         
-        <screen>
-From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
+        <muttng-doc:lstmail>
+From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</muttng-doc:lstmail>
         
       </para>
       
@@ -7272,7 +7281,7 @@ From me@cs.hmc.edu Fri, 11 Apr 1997 11:44:56 PST</screen>
         know what addresses you consider to be mailing lists (technically
         this does not have to be a mailing list, but that is what it is most
         often used for), and what lists you are subscribed to.  This is
-        accomplished through the use of the <muttng-doc:command name="lists"/>
+        accomplished through the use of the <muttng-doc:cmdref name="lists"/>
         commands in your muttrc.
       </para>
       
@@ -7871,8 +7880,8 @@ imap://imapserver:port/INBOX</screen>
         
         <para>
           
-          <screen>
-score <muttng-doc:pattern name="*"/> =42</screen>
+          <muttng-doc:lstconf>
+score <muttng-doc:pattern name="*"/> =42</muttng-doc:lstconf>
           
         </para>
         
@@ -7883,8 +7892,8 @@ score <muttng-doc:pattern name="*"/> =42</screen>
         
         <para>
           
-          <screen>
-score !<muttng-doc:pattern name="*"/> =42</screen>
+          <muttng-doc:lstconf>
+score !<muttng-doc:pattern name="*"/> =42</muttng-doc:lstconf>
           
         </para>
         
@@ -8006,10 +8015,10 @@ score !<muttng-doc:pattern name="*"/> =42</screen>
       
       <para>
         
-        <screen>
+        <muttng-doc:lstconf>
 account-hook . 'unset imap_user; unset imap_pass; unset tunnel'
 account-hook imap://host1/ 'set imap_user=me1 imap_pass=foo'
-account-hook imap://host2/ 'set tunnel="ssh host2 /usr/libexec/imapd"'</screen>
+account-hook imap://host2/ 'set tunnel="ssh host2 /usr/libexec/imapd"'</muttng-doc:lstconf>
         
       </para>
       
@@ -8031,9 +8040,9 @@ account-hook imap://host2/ 'set tunnel="ssh host2 /usr/libexec/imapd"'</screen>
         retrieved at <muttng-doc:web url="ftp://ftp.mutt.org/mutt/contrib/"/>
         and the configuration commands:
         
-        <screen>
+        <muttng-doc:lstconf>
 macro index \cb |urlview\n
-macro pager \cb |urlview\n</screen>
+macro pager \cb |urlview\n</muttng-doc:lstconf>
         
       </para>
       
@@ -8083,10 +8092,10 @@ macro pager \cb |urlview\n</screen>
       
       <para>
         
-        <screen>
+        <muttng-doc:lstconf>
 open-hook \\.gz$ "gzip -cd %f &#62; %t" 
 close-hook \\.gz$ "gzip -c %t &#62; %f"
-append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </screen>
+append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </muttng-doc:lstconf>
         
       </para>
       
@@ -8154,9 +8163,9 @@ append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </screen>
         
         <para>
           
-          <screen>
+          <muttng-doc:lstconf>
 open-hook \\.gz$ "gzip -cd %f &#62; %t" 
-</screen>
+</muttng-doc:lstconf>
           
         </para>
         
@@ -8204,8 +8213,8 @@ open-hook \\.gz$ "gzip -cd %f &#62; %t"
         
         <para>
           
-          <screen>
-close-hook \\.gz$ "gzip -c %t &#62; %f"</screen>
+          <muttng-doc:lstconf>
+close-hook \\.gz$ "gzip -c %t &#62; %f"</muttng-doc:lstconf>
           
         </para>
         
@@ -8254,8 +8263,8 @@ close-hook \\.gz$ "gzip -c %t &#62; %f"</screen>
         
         <para>
           
-          <screen>
-append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </screen>
+          <muttng-doc:lstconf>
+append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </muttng-doc:lstconf>
           
         </para>
         
@@ -8296,10 +8305,10 @@ append-hook \\.gz$ "gzip -c %t &#62;&#62; %f" </screen>
         
         <para>
           
-          <screen>
+          <muttng-doc:lstconf>
 open-hook  \\.pgp$ "pgp -f &#60; %f &#62; %t"
 close-hook \\.pgp$ "pgp -fe YourPgpUserIdOrKeyId &#60; %t &#62; %f"
-</screen>
+</muttng-doc:lstconf>
           
         </para>
         
@@ -8784,7 +8793,7 @@ text/html; lynx -dump %s ; copiousoutput</screen>
                 <term>needsterminal</term>
                 <listitem>
                   <para>
-                    Mutt-ng uses this flag when viewing attachments with <muttng-doc:command name="auto-view"/>,
+                    Mutt-ng uses this flag when viewing attachments with <muttng-doc:cmdref name="auto_view"/>,
                     in order to decide whether it should honor the setting
                     of the <muttng-doc:varref name="wait-key"/> variable or
                     not.  When an attachment is viewed using an interactive
@@ -8938,7 +8947,7 @@ nametemplate=%s.gif</screen>
           </para>
           
           <para>
-            In addition, you can use this with <muttng-doc:command name="auto-view"/>
+            In addition, you can use this with <muttng-doc:cmdref name="auto_view"/>
             to denote two commands for viewing an attachment, one to be viewed
             automatically, the other to be viewed interactively from the
             attachment
@@ -8951,7 +8960,7 @@ text/html;      netscape -remote 'openURL(%s)' ; test=RunningX
 text/html;      lynx %s; nametemplate=%s.html
 text/html;      lynx -dump %s; nametemplate=%s.html; copiousoutput</screen>
             
-            For <muttng-doc:command name="auto-view"/>, Mutt-ng will choose
+            For <muttng-doc:cmdref name="auto_view"/>, Mutt-ng will choose
             the third
             entry because of the copiousoutput tag.  For interactive viewing,
             Mutt
@@ -9019,8 +9028,8 @@ text/html;      lynx -dump %s; nametemplate=%s.html; copiousoutput</screen>
                     instance, if
                     Your mail message contains:
                     
-                    <screen>
-Content-Type: text/plain; charset=iso-8859-1</screen>
+                    <muttng-doc:lstmail>
+Content-Type: text/plain; charset=iso-8859-1</muttng-doc:lstmail>
                     
                     then Mutt-ng will expand %{charset} to
                     iso-8859-1.  The default metamail
@@ -9116,9 +9125,17 @@ application/ms-excel; open.pl %s</screen>
       
     </sect1>
     
-    <sect1 id="command-auto-view"><anchor id="command-unauto-view"/>
+    <sect1>
       <title>MIME Autoview</title>
-      
+
+      <para>
+        <muttng-doc:cmddef name="auto_view">mime-type [mime-type ...]</muttng-doc:cmddef>
+      </para>
+
+      <para>
+        <muttng-doc:cmddef name="unauto_view">mime-type [mime-type ...]</muttng-doc:cmddef>
+      </para>
+ 
       <para>
         In addition to explicitly telling Mutt-ng to view an attachment with
         theMIME viewer defined in the mailcap file, Mutt-ng has support for
@@ -9142,9 +9159,9 @@ application/ms-excel; open.pl %s</screen>
       <para>
         For instance, if you set auto_view to:
         
-        <screen>
+        <muttng-doc:lstconf>
 auto_view text/html application/x-gunzip application/postscript
-image/gif application/x-tar-gz</screen>
+image/gif application/x-tar-gz</muttng-doc:lstconf>
         
       </para>
       
@@ -9175,9 +9192,17 @@ application/postscript; ps2ascii %s; copiousoutput</screen>
       
     </sect1>
     
-    <sect1 id="command-alternative-order"><anchor id="command-unalternative-order"/>
+    <sect1>
       <title>MIME Multipart/Alternative</title>
+
+      <para>
+        <muttng-doc:cmddef name="alternative_order">mime-type [mime-type ...]</muttng-doc:cmddef>
+      </para>
       
+      <para>
+        <muttng-doc:cmddef name="unalternative_order">mime-type [mime-type ...]</muttng-doc:cmddef>
+      </para>
+ 
       <para>
         Mutt-ng has some heuristics for determining which attachment of a
         multipart/alternative type to display.  First, mutt will check the 
@@ -9186,16 +9211,16 @@ application/postscript; ps2ascii %s; copiousoutput</screen>
         number of
         MIME types in order, including support for implicit and explicit
         wildcards, for example:
-        
-        <screen>
+       
+        <muttng-doc:lstconf>
 alternative_order text/enriched text/plain text
-application/postscript image/*</screen>
+application/postscript image/*</muttng-doc:lstconf>
         
       </para>
       
       <para>
         Next, mutt will check if any of the types have a defined 
-        <muttng-doc:command name="auto-view"/>, and use that.  Failing
+        <muttng-doc:cmdref name="auto_view"/>, and use that.  Failing
         that, Mutt-ng will look for any text type.  As a last attempt, mutt
         willlook for any type it knows how to handle.
       </para>
@@ -9211,9 +9236,17 @@ application/postscript image/*</screen>
       
     </sect1>
     
-    <sect1 id="command-mime-lookup"><anchor id="command-unmime-lookup"/>
+    <sect1>
       <title>MIME Lookup</title>
-      
+
+      <para>
+        <muttng-doc:cmddef name="mime_lookup">mime-type [mime-type ...]</muttng-doc:cmddef>
+      </para>
+
+      <para>
+        <muttng-doc:cmddef name="unmime_lookup">mime-type [mime-type ...]</muttng-doc:cmddef>
+      </para>
+ 
       <para>
         Mutt-ng's mime_lookup list specifies a list of mime-types that
         should not
@@ -9230,8 +9263,8 @@ application/postscript image/*</screen>
         configuration
         options (such as auto_view) specified.  Common usage would be:
         
-        <screen>
-mime_lookup application/octet-stream application/X-Lotus-Manuscript</screen>
+        <muttng-doc:lstconf>
+mime_lookup application/octet-stream application/X-Lotus-Manuscript</muttng-doc:lstconf>
         
       </para>
       
@@ -9962,37 +9995,37 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="alias"/></literal> <emphasis>key</emphasis> <emphasis>address</emphasis> [, <emphasis>address</emphasis>, ... ]
+              <literal><muttng-doc:cmdref name="alias"/></literal> <emphasis>key</emphasis> <emphasis>address</emphasis> [, <emphasis>address</emphasis>, ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unalias"/></literal> [ * | <emphasis>key</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="unalias"/></literal> [ * | <emphasis>key</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="alternates"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="alternates"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unalternates"/></literal> [ * | <emphasis>regexp</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="unalternates"/></literal> [ * | <emphasis>regexp</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="alternative-order"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="alternative_order"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unalternative-order"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="unalternative_order"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
@@ -10004,19 +10037,19 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="auto-view"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="auto_view"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unauto-view"/></literal><emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="unauto_view"/></literal><emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="bind"/></literal> <emphasis>map</emphasis> <emphasis>key</emphasis> <emphasis>function</emphasis>
+              <literal><muttng-doc:cmdref name="bind"/></literal> <emphasis>map</emphasis> <emphasis>key</emphasis> <emphasis>function</emphasis>
             </para>
           </listitem>
           <listitem>
@@ -10034,19 +10067,19 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="color"/></literal> <emphasis>object</emphasis> <emphasis>foreground</emphasis> <emphasis>background</emphasis> [ <emphasis>regexp</emphasis> ]
+              <literal><muttng-doc:cmdref name="color"/></literal> <emphasis>object</emphasis> <emphasis>foreground</emphasis> <emphasis>background</emphasis> [ <emphasis>regexp</emphasis> ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="uncolor"/></literal> <emphasis>index</emphasis> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="uncolor"/></literal> <emphasis>index</emphasis> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="exec"/></literal> <emphasis>function</emphasis> [ <emphasis>function</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="exec"/></literal> <emphasis>function</emphasis> [ <emphasis>function</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
@@ -10070,13 +10103,13 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="hdr-order"/></literal> <emphasis>header</emphasis> [ <emphasis>header</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="hdr_order"/></literal> <emphasis>header</emphasis> [ <emphasis>header</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unhdr-order"/></literal> <emphasis>header</emphasis> [ <emphasis>header</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="unhdr_order"/></literal> <emphasis>header</emphasis> [ <emphasis>header</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
@@ -10088,37 +10121,37 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="ignore"/></literal> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="ignore"/></literal> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unignore"/></literal> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="unignore"/></literal> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="lists"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="lists"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unlists"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="unlists"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="macro"/></literal> <emphasis>menu</emphasis> <emphasis>key</emphasis> <emphasis>sequence</emphasis> [ <emphasis>description</emphasis> ]
+              <literal><muttng-doc:cmdref name="macro"/></literal> <emphasis>menu</emphasis> <emphasis>key</emphasis> <emphasis>sequence</emphasis> [ <emphasis>description</emphasis> ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="mailboxes"/></literal> <emphasis>filename</emphasis> [ <emphasis>filename</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="mailboxes"/></literal> <emphasis>filename</emphasis> [ <emphasis>filename</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
@@ -10136,38 +10169,38 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="mime-lookup"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="mime_lookup"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
               <literal>
-                <muttng-doc:command name="unmime-lookup"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
+                <muttng-doc:cmdref name="unmime_lookup"/></literal> <emphasis>mimetype</emphasis> [ <emphasis>mimetype</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="mono"/></literal> <emphasis>object attribute</emphasis> [ <emphasis>regexp</emphasis> ]
+              <literal><muttng-doc:cmdref name="mono"/></literal> <emphasis>object attribute</emphasis> [ <emphasis>regexp</emphasis> ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unmono"/></literal> <emphasis>index</emphasis> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="unmono"/></literal> <emphasis>index</emphasis> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="my-hdr"/></literal> <emphasis>string</emphasis>
+              <literal><muttng-doc:cmdref name="my_hdr"/></literal> <emphasis>string</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unmy-hdr"/></literal> <emphasis>field</emphasis> [ <emphasis>field</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="unmy_hdr"/></literal> <emphasis>field</emphasis> [ <emphasis>field</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
@@ -10185,13 +10218,13 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="push"/></literal> <emphasis>string</emphasis>
+              <literal><muttng-doc:cmdref name="push"/></literal> <emphasis>string</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="reset"/> </literal><emphasis>variable</emphasis> [ <emphasis>variable</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="reset"/> </literal><emphasis>variable</emphasis> [ <emphasis>variable</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
@@ -10203,13 +10236,13 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="score"/> </literal> <emphasis>pattern</emphasis> <emphasis>value</emphasis>
+              <literal><muttng-doc:cmdref name="score"/> </literal> <emphasis>pattern</emphasis> <emphasis>value</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unscore"/></literal> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="unscore"/></literal> <emphasis>pattern</emphasis> [ <emphasis>pattern</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
@@ -10227,55 +10260,55 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="set"/></literal> [no|inv]<emphasis>variable</emphasis>[ =<emphasis>value</emphasis> ] [ <emphasis>variable</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="set"/></literal> [no|inv]<emphasis>variable</emphasis>[ =<emphasis>value</emphasis> ] [ <emphasis>variable</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unset"/></literal> <emphasis>variable</emphasis> [ <emphasis>variable</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="unset"/></literal> <emphasis>variable</emphasis> [ <emphasis>variable</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="source"/></literal> <emphasis>filename</emphasis>
+              <literal><muttng-doc:cmdref name="source"/></literal> <emphasis>filename</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="spam"/></literal> <emphasis>pattern</emphasis> <emphasis>format</emphasis>
+              <literal><muttng-doc:cmdref name="spam"/></literal> <emphasis>pattern</emphasis> <emphasis>format</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="nospam"/></literal> <emphasis>pattern</emphasis>
+              <literal><muttng-doc:cmdref name="nospam"/></literal> <emphasis>pattern</emphasis>
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="subscribe"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ] 
+              <literal><muttng-doc:cmdref name="subscribe"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ] 
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unsubscribe"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ] 
+              <literal><muttng-doc:cmdref name="unsubscribe"/></literal> <emphasis>regexp</emphasis> [ <emphasis>regexp</emphasis> ... ] 
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="toggle"/></literal> <emphasis>variable</emphasis> [ <emphasis>variable</emphasis> ... ]
+              <literal><muttng-doc:cmdref name="toggle"/></literal> <emphasis>variable</emphasis> [ <emphasis>variable</emphasis> ... ]
             </para>
           </listitem>
           <listitem>
             
             <para>
-              <literal><muttng-doc:command name="unhook"/></literal> <emphasis>hook-type</emphasis>
+              <literal><muttng-doc:cmdref name="unhook"/></literal> <emphasis>hook-type</emphasis>
             </para>
           </listitem>
           
