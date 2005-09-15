@@ -217,9 +217,12 @@ int make_sidebar_entry (char* box, int idx, size_t len)
   else
 #endif
   if (l_m > 0 && str_ncmp (box, Maildir, l_m) == 0 && 
-      str_len (box) > l_m)
+      str_len (box) > l_m) {
     box += l_m;
-  else
+    if (Maildir[strlen(Maildir)-1]!='/') {
+      box += 1;
+    }
+  } else
     box = basename (box);
 
   if (option (OPTSHORTENHIERARCHY) && str_len (box) > len-lencnt-1) {
