@@ -1302,7 +1302,7 @@ const char *mutt_make_version (int full)
 
   if (full)
     snprintf (vstring, sizeof (vstring), "Mutt-ng %s-r%s (based "
-              "on Mutt 1.5.10/%s)", MUTT_VERSION, MUTT_REVISION,
+              "on Mutt 1.5.11/%s)", MUTT_VERSION, MUTT_REVISION,
               ReleaseDate);
   else
     snprintf (vstring, sizeof (vstring), "mutt-ng/%s-r%s",
