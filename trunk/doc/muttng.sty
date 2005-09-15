@@ -1,0 +1,85 @@
+% this is pseudo-package with some definitions exluded
+% from muttng-tex.xsl to muttng.sty
+% written for mutt-ng by:
+% Rocco Rutte <pdmef@cs.tu-berlin.de>
+
+% packages
+\usepackage[american]{babel}
+\usepackage{ifpdf,makeidx,listings,longtable,textcomp}
+\usepackage[utf-8]{inputenc}
+
+\ifpdf
+  % options for pdf output
+  \usepackage[pdftex]{graphicx,thumbpdf}
+  \usepackage{ae,varioref,hyperref}
+  \hypersetup{breaklinks=true}
+  \newcommand{\web}[1]{\href{#1}{\nolinkurl{<#1>}}}
+  \pdfcompresslevel=9
+\else
+  % options for non-pdf output
+  \usepackage[dvips]{graphicx,hyperref}
+  % we need a clue on breaking URLs here to always work:
+  % - hyperref does it for pdf output
+  % - breakurl does it for non-pdf + non-html output
+  % - don't do it for tex4ht output
+  \makeatletter
+  \@ifpackageloaded{tex4ht}
+    {
+      % when doing tex4ht output, there's no need to
+      % break URLs at all since browsers will do that
+      \newcommand{\web}[1]{\href{#1}{\texttt{<#1>}}}
+    }{
+      % when not producing tex4ht output (i.e. postscript),
+      % use breakurl.sty to break URLs
+      \usepackage{breakurl,varioref}
+      \newcommand{\web}[1]{\texttt{<}\burl{#1}\texttt{>}}
+    }
+  \makeatother
+\fi
+\usepackage{makeidx}
+
+% no variables in toc, please!
+\setcounter{tocdepth}{1}
+
+% really call \appendix only once
+\newcounter{app}
+\newcommand{\myappendix}[0]{
+  \ifnum\arabic{app}=0
+    \appendix
+  \fi
+  \addtocounter{app}{1}
+}
+
+% from here on, these implement the muttng-doc namespace,
+% see Hacking Documentation for details
+% muttng-tex.xsl passes most of the content as-is so that
+% we do it here via LaTeX rather than XSL for good reason...
+
+\newcommand{\uglyesc}[1]{\lstinline[basicstyle=\ttfamily]{#1}}
+
+\newcommand{\mailto}[1]{\href{mailto:#1}{\texttt{<#1>}}}
+
+\newcommand{\man}[2][\empty]{\texttt{#2(\ifx#1\empty1\else#1\fi)}\index{#2@\texttt{#2(\ifx#1\empty1\else#1\fi)}}}
+
+\newcommand{\pat}[2][0]{\ifnum #1=0\texttt{\char126 #2}\else\texttt{\char126 #2/=#2}\fi\index{\char126 #2@\texttt{\char126 #2/=#2}}}
+
+\newcommand{\var}[1]{\uglyesc{$#1}\index{#1@\uglyesc{$#1}}}
+
+\newcommand{\envvar}[1]{\var{#1}}
+
+\newcommand{\hook}[1]{\hyperlink{#1-hook}{\texttt{#1-hook}}\index{#1-hook@\texttt{#1-hook}}}
+
+\newcommand{\cmddef}[2]{Usage: \uglyesc{#1} #2\hypertarget{cmd:#1}{}\index{#1@\uglyesc{#1}}}
+\newcommand{\cmdref}[1]{\hyperlink{cmd:#1}{\uglyesc{#1}}\index{#1@\uglyesc{#1}}}
+
+\newcommand{\funcdef}[2]{\texttt{<#1>} (default: \texttt{#2})\hypertarget{func:#1}{}\index{#1@\uglyesc{<#1>}}}
+\newcommand{\funcref}[1]{\hyperlink{func:#1}{\texttt{<#1>}}\index{#1@\uglyesc{<#1>}}}
+
+\newcommand{\vardef}[1]{\subsection{\uglyesc{$#1}}\hypertarget{#1}{}\index{#1@\uglyesc{$#1}}}
+\newcommand{\varref}[1]{\hyperlink{#1}{\uglyesc{$#1}}\index{#1@\uglyesc{$#1}}}
+
+\newcommand{\rfc}[1]{\href{http://www.faqs.org/rfcs/rfc#1.html}{RfC #1}\index{RfC!#1}}
+
+\newcommand{\key}[1]{\texttt{#1}}
+
+\makeindex

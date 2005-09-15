@@ -28,7 +28,7 @@
         
         <para>
           
-        <table frame="none" rowsep="1">
+        <table frame="none" rowsep="1" texstr="l|l|l">
           <title>Reference: Default Generic Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -41,157 +41,157 @@
           <tbody>
             <row>
               <entry><muttng-doc:funcref name="bottom-page"/></entry>
-              <entry><literal>L</literal></entry>
+              <entry><muttng-doc:key>L</muttng-doc:key></entry>
               <entry>move to the bottom of the page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="current-bottom"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>move current entry to bottom of page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="current-middle"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>move current entry to middle of page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="current-top"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>move current entry to top of page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="enter-command"/></entry>
-              <entry><literal>:</literal></entry>
+              <entry><muttng-doc:key>:</muttng-doc:key></entry>
               <entry>enter a muttngrc command</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="exit"/></entry>
-              <entry><literal>q</literal></entry>
+              <entry><muttng-doc:key>q</muttng-doc:key></entry>
               <entry>exit this menu</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="first-entry"/></entry>
-              <entry><literal>=</literal></entry>
+              <entry><muttng-doc:key>=</muttng-doc:key></entry>
               <entry>move to the first entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="half-down"/></entry>
-              <entry><literal>]</literal></entry>
+              <entry><muttng-doc:key>]</muttng-doc:key></entry>
               <entry>scroll down 1/2 page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="half-up"/></entry>
-              <entry><literal>[</literal></entry>
+              <entry><muttng-doc:key>[</muttng-doc:key></entry>
               <entry>scroll up 1/2 page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="help"/></entry>
-              <entry><literal>?</literal></entry>
+              <entry><muttng-doc:key>?</muttng-doc:key></entry>
               <entry>this screen</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="jump"/></entry>
-              <entry><literal>number</literal></entry>
+              <entry><muttng-doc:key>number</muttng-doc:key></entry>
               <entry>jump to an index number</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="last-entry"/></entry>
-              <entry><literal>*</literal></entry>
+              <entry><muttng-doc:key>*</muttng-doc:key></entry>
               <entry>move to the last entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="middle-page"/></entry>
-              <entry><literal>M</literal></entry>
+              <entry><muttng-doc:key>M</muttng-doc:key></entry>
               <entry>move to the middle of the page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-entry"/></entry>
-              <entry><literal>j</literal></entry>
+              <entry><muttng-doc:key>j</muttng-doc:key></entry>
               <entry>move to the next entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-line"/></entry>
-              <entry><literal>&gt;</literal></entry>
+              <entry><muttng-doc:key>></muttng-doc:key></entry>
               <entry>scroll down one line</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-page"/></entry>
-              <entry><literal>z</literal></entry>
+              <entry><muttng-doc:key>z</muttng-doc:key></entry>
               <entry>move to the next page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-entry"/></entry>
-              <entry><literal>k</literal></entry>
+              <entry><muttng-doc:key>k</muttng-doc:key></entry>
               <entry>move to the previous entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-line"/></entry>
-              <entry><literal>&lt;</literal></entry>
+              <entry><muttng-doc:key>></muttng-doc:key></entry>
               <entry>scroll up one line</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-page"/></entry>
-              <entry><literal>Z</literal></entry>
+              <entry><muttng-doc:key>Z</muttng-doc:key></entry>
               <entry>move to the previous page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="refresh"/></entry>
-              <entry><literal>^L</literal></entry>
+              <entry><muttng-doc:key mod="C">L</muttng-doc:key></entry>
               <entry>clear and redraw the screen</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search"/></entry>
-              <entry><literal>/</literal></entry>
+              <entry><muttng-doc:key>/</muttng-doc:key></entry>
               <entry>search for a regular expression</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-next"/></entry>
-              <entry><literal>n</literal></entry>
+              <entry><muttng-doc:key>n</muttng-doc:key></entry>
               <entry>search for next match</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-opposite"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>search for next match in opposite direction</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-reverse"/></entry>
-              <entry><literal>ESC /</literal></entry>
+              <entry><muttng-doc:key mod="E">/</muttng-doc:key></entry>
               <entry>search backwards for a regular expression</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="select-entry"/></entry>
-              <entry><literal>RET</literal></entry>
+              <entry><muttng-doc:key>Return</muttng-doc:key></entry>
               <entry>select the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="shell-escape"/></entry>
-              <entry><literal>!</literal></entry>
+              <entry><muttng-doc:key>!</muttng-doc:key></entry>
               <entry>run a program in a subshell</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="tag-entry"/></entry>
-              <entry><literal>t</literal></entry>
+              <entry><muttng-doc:key>t</muttng-doc:key></entry>
               <entry>toggle the tag on the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="tag-prefix"/></entry>
-              <entry><literal>;</literal></entry>
+              <entry><muttng-doc:key>;</muttng-doc:key></entry>
               <entry>apply next command to tagged entries</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="tag-prefix-cond"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>apply next function ONLY to tagged messages</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="top-page"/></entry>
-              <entry><literal>H</literal></entry>
+              <entry><muttng-doc:key>H</muttng-doc:key></entry>
               <entry>move to the top of the page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="what-key"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>display the keycode for a key press</entry>
             </row>
                   </tbody>
@@ -208,7 +208,7 @@
         
         <para>
           
-        <table frame="none" rowsep="1">
+        <table frame="none" rowsep="1" texstr="l|l|l">
           <title>Reference: Default Index Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -221,347 +221,347 @@
           <tbody>
             <row>
               <entry><muttng-doc:funcref name="bounce-message"/></entry>
-              <entry><literal>b</literal></entry>
+              <entry><muttng-doc:key>b</muttng-doc:key></entry>
               <entry>remail a message to another user</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="change-folder"/></entry>
-              <entry><literal>c</literal></entry>
+              <entry><muttng-doc:key>c</muttng-doc:key></entry>
               <entry>open a different folder</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="change-folder-readonly"/></entry>
-              <entry><literal>ESC c</literal></entry>
+              <entry><muttng-doc:key mod="E">c</muttng-doc:key></entry>
               <entry>open a different folder in read only mode</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="check-traditional-pgp"/></entry>
-              <entry><literal>ESC P</literal></entry>
+              <entry><muttng-doc:key mod="E">P</muttng-doc:key></entry>
               <entry>check for classic pgp</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="clear-flag"/></entry>
-              <entry><literal>W</literal></entry>
+              <entry><muttng-doc:key>W</muttng-doc:key></entry>
               <entry>clear a status flag from a message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="copy-message"/></entry>
-              <entry><literal>C</literal></entry>
+              <entry><muttng-doc:key>C</muttng-doc:key></entry>
               <entry>copy a message to a file/mailbox</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="create-alias"/></entry>
-              <entry><literal>a</literal></entry>
+              <entry><muttng-doc:key>a</muttng-doc:key></entry>
               <entry>create an alias from a message sender</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="decode-copy"/></entry>
-              <entry><literal>ESC C</literal></entry>
+              <entry><muttng-doc:key mod="E">C</muttng-doc:key></entry>
               <entry>decode a message and copy it to a file/mailbox</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="decode-save"/></entry>
-              <entry><literal>ESC s</literal></entry>
+              <entry><muttng-doc:key mod="E">s</muttng-doc:key></entry>
               <entry>decode a message and save it to a file/mailbox</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="delete-message"/></entry>
-              <entry><literal>d</literal></entry>
+              <entry><muttng-doc:key>d</muttng-doc:key></entry>
               <entry>delete the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="delete-pattern"/></entry>
-              <entry><literal>D</literal></entry>
+              <entry><muttng-doc:key>D</muttng-doc:key></entry>
               <entry>delete messages matching a pattern</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="delete-subthread"/></entry>
-              <entry><literal>ESC d</literal></entry>
+              <entry><muttng-doc:key mod="E">d</muttng-doc:key></entry>
               <entry>delete all messages in subthread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="delete-thread"/></entry>
-              <entry><literal>^D</literal></entry>
+              <entry><muttng-doc:key mod="C">D</muttng-doc:key></entry>
               <entry>delete all messages in thread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="display-address"/></entry>
-              <entry><literal>@</literal></entry>
+              <entry><muttng-doc:key>@</muttng-doc:key></entry>
               <entry>display full address of sender</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="display-toggle-weed"/></entry>
-              <entry><literal>h</literal></entry>
+              <entry><muttng-doc:key>h</muttng-doc:key></entry>
               <entry>display message and toggle header weeding</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="display-message"/></entry>
-              <entry><literal>RET</literal></entry>
+              <entry><muttng-doc:key>Return</muttng-doc:key></entry>
               <entry>display a message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit"/></entry>
-              <entry><literal>e</literal></entry>
+              <entry><muttng-doc:key>e</muttng-doc:key></entry>
               <entry>edit the current message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-type"/></entry>
-              <entry><literal>^E</literal></entry>
+              <entry><muttng-doc:key mod="C">E</muttng-doc:key></entry>
               <entry>edit the current message's Content-Type</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="exit"/></entry>
-              <entry><literal>x</literal></entry>
+              <entry><muttng-doc:key>x</muttng-doc:key></entry>
               <entry>exit without saving changes</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="extract-keys"/></entry>
-              <entry><literal>^K</literal></entry>
+              <entry><muttng-doc:key mod="C">K</muttng-doc:key></entry>
               <entry>extract PGP public keys</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="fetch-mail"/></entry>
-              <entry><literal>G</literal></entry>
+              <entry><muttng-doc:key>G</muttng-doc:key></entry>
               <entry>retrieve mail from POP server</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="flag-message"/></entry>
-              <entry><literal>F</literal></entry>
+              <entry><muttng-doc:key>F</muttng-doc:key></entry>
               <entry>toggle a message's 'important' flag</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="forget-passphrase"/></entry>
-              <entry><literal>^F</literal></entry>
+              <entry><muttng-doc:key mod="C">F</muttng-doc:key></entry>
               <entry>wipe PGP passphrase from memory</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="forward-message"/></entry>
-              <entry><literal>f</literal></entry>
+              <entry><muttng-doc:key>f</muttng-doc:key></entry>
               <entry>forward a message with comments</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="group-reply"/></entry>
-              <entry><literal>g</literal></entry>
+              <entry><muttng-doc:key>g</muttng-doc:key></entry>
               <entry>reply to all recipients</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="limit"/></entry>
-              <entry><literal>l</literal></entry>
+              <entry><muttng-doc:key>l</muttng-doc:key></entry>
               <entry>show only messages matching a pattern</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="list-reply"/></entry>
-              <entry><literal>L</literal></entry>
+              <entry><muttng-doc:key>L</muttng-doc:key></entry>
               <entry>reply to specified mailing list</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="mail"/></entry>
-              <entry><literal>m</literal></entry>
+              <entry><muttng-doc:key>m</muttng-doc:key></entry>
               <entry>compose a new mail message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="mail-key"/></entry>
-              <entry><literal>ESC k</literal></entry>
+              <entry><muttng-doc:key mod="E">k</muttng-doc:key></entry>
               <entry>mail a PGP public key</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-new"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>jump to the next new message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-new-then-unread"/></entry>
-              <entry><literal>TAB</literal></entry>
+              <entry><muttng-doc:key>Tab</muttng-doc:key></entry>
               <entry>jump to the next new or unread message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-subthread"/></entry>
-              <entry><literal>ESC n</literal></entry>
+              <entry><muttng-doc:key mod="E">n</muttng-doc:key></entry>
               <entry>jump to the next subthread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-thread"/></entry>
-              <entry><literal>^N</literal></entry>
+              <entry><muttng-doc:key mod="C">N</muttng-doc:key></entry>
               <entry>jump to the next thread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-undeleted"/></entry>
-              <entry><literal>j</literal></entry>
+              <entry><muttng-doc:key>j</muttng-doc:key></entry>
               <entry>move to the next undeleted message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-unread"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>jump to the next unread message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="parent-message"/></entry>
-              <entry><literal>P</literal></entry>
+              <entry><muttng-doc:key>P</muttng-doc:key></entry>
               <entry>jump to parent message in thread </entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="pipe-message"/></entry>
-              <entry><literal>|</literal></entry>
+              <entry><muttng-doc:key>|</muttng-doc:key></entry>
               <entry>pipe message/attachment to a shell command</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-new"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>jump to the previous new message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-new-then-unread"/></entry>
-              <entry><literal>ESC TAB</literal></entry>
+              <entry><muttng-doc:key mod="E">Tab</muttng-doc:key></entry>
               <entry>jump to the previous new or unread message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-page"/></entry>
-              <entry><literal>Z</literal></entry>
+              <entry><muttng-doc:key>Z</muttng-doc:key></entry>
               <entry>move to the previous page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-subthread"/></entry>
-              <entry><literal>ESC p</literal></entry>
+              <entry><muttng-doc:key mod="E">p</muttng-doc:key></entry>
               <entry>jump to previous subthread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-thread"/></entry>
-              <entry><literal>^P</literal></entry>
+              <entry><muttng-doc:key mod="C">P</muttng-doc:key></entry>
               <entry>jump to previous thread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-undeleted"/></entry>
-              <entry><literal>k</literal></entry>
+              <entry><muttng-doc:key>k</muttng-doc:key></entry>
               <entry>move to the last undelete message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-unread"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>jump to the previous unread message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="print-message"/></entry>
-              <entry><literal>p</literal></entry>
+              <entry><muttng-doc:key>p</muttng-doc:key></entry>
               <entry>print the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="query"/></entry>
-              <entry><literal>Q</literal></entry>
+              <entry><muttng-doc:key>Q</muttng-doc:key></entry>
               <entry>query external program for addresses</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="quit"/></entry>
-              <entry><literal>q</literal></entry>
+              <entry><muttng-doc:key>q</muttng-doc:key></entry>
               <entry>save changes to mailbox and quit</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="read-subthread"/></entry>
-              <entry><literal>ESC r</literal></entry>
+              <entry><muttng-doc:key mod="E">r</muttng-doc:key></entry>
               <entry>mark the current subthread as read</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="read-thread"/></entry>
-              <entry><literal>^R</literal></entry>
+              <entry><muttng-doc:key mod="C">R</muttng-doc:key></entry>
               <entry>mark the current thread as read</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="recall-message"/></entry>
-              <entry><literal>R</literal></entry>
+              <entry><muttng-doc:key>R</muttng-doc:key></entry>
               <entry>recall a postponed message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="reply"/></entry>
-              <entry><literal>r</literal></entry>
+              <entry><muttng-doc:key>r</muttng-doc:key></entry>
               <entry>reply to a message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="resend-message"/></entry>
-              <entry><literal>ESC e</literal></entry>
+              <entry><muttng-doc:key mod="E">e</muttng-doc:key></entry>
               <entry>resend message and preserve MIME structure</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="save-message"/></entry>
-              <entry><literal>s</literal></entry>
+              <entry><muttng-doc:key>s</muttng-doc:key></entry>
               <entry>save message/attachment to a file</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="set-flag"/></entry>
-              <entry><literal>w</literal></entry>
+              <entry><muttng-doc:key>w</muttng-doc:key></entry>
               <entry>set a status flag on a message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="show-version"/></entry>
-              <entry><literal>V</literal></entry>
+              <entry><muttng-doc:key>V</muttng-doc:key></entry>
               <entry>show the Mutt-ng version number and date</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="show-limit"/></entry>
-              <entry><literal>ESC l</literal></entry>
+              <entry><muttng-doc:key mod="E">l</muttng-doc:key></entry>
               <entry>show currently active limit pattern, if any</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="sort-mailbox"/></entry>
-              <entry><literal>o</literal></entry>
+              <entry><muttng-doc:key>o</muttng-doc:key></entry>
               <entry>sort messages</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="sort-reverse"/></entry>
-              <entry><literal>O</literal></entry>
+              <entry><muttng-doc:key>O</muttng-doc:key></entry>
               <entry>sort messages in reverse order</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="sync-mailbox"/></entry>
-              <entry><literal>$</literal></entry>
+              <entry><muttng-doc:key>$</muttng-doc:key></entry>
               <entry>save changes to mailbox</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="tag-pattern"/></entry>
-              <entry><literal>T</literal></entry>
+              <entry><muttng-doc:key>T</muttng-doc:key></entry>
               <entry>tag messages matching a pattern</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="tag-thread"/></entry>
-              <entry><literal>ESC t</literal></entry>
+              <entry><muttng-doc:key mod="E">t</muttng-doc:key></entry>
               <entry>tag/untag all messages in the current thread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="toggle-new"/></entry>
-              <entry><literal>N</literal></entry>
+              <entry><muttng-doc:key>N</muttng-doc:key></entry>
               <entry>toggle a message's 'new' flag</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="toggle-write"/></entry>
-              <entry><literal>%</literal></entry>
+              <entry><muttng-doc:key>%</muttng-doc:key></entry>
               <entry>toggle whether the mailbox will be rewritten</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="undelete-message"/></entry>
-              <entry><literal>u</literal></entry>
+              <entry><muttng-doc:key>u</muttng-doc:key></entry>
               <entry>undelete the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="undelete-pattern"/></entry>
-              <entry><literal>U</literal></entry>
+              <entry><muttng-doc:key>U</muttng-doc:key></entry>
               <entry>undelete messages matching a pattern</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="undelete-subthread"/></entry>
-              <entry><literal>ESC u</literal></entry>
+              <entry><muttng-doc:key mod="E">u</muttng-doc:key></entry>
               <entry>undelete all messages in subthread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="undelete-thread"/></entry>
-              <entry><literal>^U</literal></entry>
+              <entry><muttng-doc:key mod="C">U</muttng-doc:key></entry>
               <entry>undelete all messages in thread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="untag-pattern"/></entry>
-              <entry><literal>^T</literal></entry>
+              <entry><muttng-doc:key mod="C">T</muttng-doc:key></entry>
               <entry>untag messages matching a pattern</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="view-attachments"/></entry>
-              <entry><literal>v</literal></entry>
+              <entry><muttng-doc:key>v</muttng-doc:key></entry>
               <entry>show MIME attachments</entry>
             </row>
                   </tbody>
@@ -578,7 +578,7 @@
         
         <para>
           
-        <table frame="none" rowsep="1">
+        <table frame="none" rowsep="1" texstr="l|l|l">
           <title>Reference: Default Pager Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -591,372 +591,372 @@
           <tbody>
             <row>
               <entry><muttng-doc:funcref name="bottom"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>jump to the bottom of the message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="bounce-message"/></entry>
-              <entry><literal>b</literal></entry>
+              <entry><muttng-doc:key>b</muttng-doc:key></entry>
               <entry>remail a message to another user</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="change-folder"/></entry>
-              <entry><literal>c  </literal></entry>
+              <entry><muttng-doc:key>c</muttng-doc:key></entry>
               <entry>open a different folder</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="change-folder-readonly"/></entry>
-              <entry><literal>ESC c</literal></entry>
+              <entry><muttng-doc:key mod="E">c</muttng-doc:key></entry>
               <entry>open a different folder in read only mode</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="check-traditional-pgp"/></entry>
-              <entry><literal>ESC P</literal></entry>
+              <entry><muttng-doc:key mod="E">P</muttng-doc:key></entry>
               <entry>check for classic pgp</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="copy-message"/></entry>
-              <entry><literal>C</literal></entry>
+              <entry><muttng-doc:key>C</muttng-doc:key></entry>
               <entry>copy a message to a file/mailbox</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="create-alias"/></entry>
-              <entry><literal>a</literal></entry>
+              <entry><muttng-doc:key>a</muttng-doc:key></entry>
               <entry>create an alias from a message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="senderdecode-copy"/></entry>
-              <entry><literal>ESC C</literal></entry>
+              <entry><muttng-doc:key mod="E">C</muttng-doc:key></entry>
               <entry>decode a message and copy it to a file/mailbox</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="decode-save"/></entry>
-              <entry><literal>ESC s</literal></entry>
+              <entry><muttng-doc:key mod="E">s</muttng-doc:key></entry>
               <entry>decode a message and save it to a file/mailbox</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="delete-message"/></entry>
-              <entry><literal>d</literal></entry>
+              <entry><muttng-doc:key>d</muttng-doc:key></entry>
               <entry>delete the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="delete-subthread"/></entry>
-              <entry><literal>ESC d</literal></entry>
+              <entry><muttng-doc:key mod="E">d</muttng-doc:key></entry>
               <entry>delete all messages in subthread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="delete-thread"/></entry>
-              <entry><literal>^D</literal></entry>
+              <entry><muttng-doc:key mod="C">D</muttng-doc:key></entry>
               <entry>delete all messages in thread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="display-address"/></entry>
-              <entry><literal>@</literal></entry>
+              <entry><muttng-doc:key>@</muttng-doc:key></entry>
               <entry>display full address of sender</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="display-toggle-weed"/></entry>
-              <entry><literal>h</literal></entry>
+              <entry><muttng-doc:key>h</muttng-doc:key></entry>
               <entry>display message and toggle header weeding</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit"/></entry>
-              <entry><literal>e</literal></entry>
+              <entry><muttng-doc:key>e</muttng-doc:key></entry>
               <entry>edit the current message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-type"/></entry>
-              <entry><literal>^E</literal></entry>
+              <entry><muttng-doc:key mod="C">E</muttng-doc:key></entry>
               <entry>edit the current message's             Content-Type</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="enter-command"/></entry>
-              <entry><literal>:</literal></entry>
+              <entry><muttng-doc:key>:</muttng-doc:key></entry>
               <entry>enter a muttngrc command</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="exit"/></entry>
-              <entry><literal>i</literal></entry>
+              <entry><muttng-doc:key>i</muttng-doc:key></entry>
               <entry>return to the main-menu</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="extract-keys"/></entry>
-              <entry><literal>^K</literal></entry>
+              <entry><muttng-doc:key mod="C">K</muttng-doc:key></entry>
               <entry>extract PGP public keys</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="flag-message"/></entry>
-              <entry><literal>F</literal></entry>
+              <entry><muttng-doc:key>F</muttng-doc:key></entry>
               <entry>toggle a message's 'important' flag</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="forget-passphrase"/></entry>
-              <entry><literal>^F</literal></entry>
+              <entry><muttng-doc:key mod="C">F</muttng-doc:key></entry>
               <entry>wipe PGP passphrase from memory</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="forward-message"/></entry>
-              <entry><literal>f</literal></entry>
+              <entry><muttng-doc:key>f</muttng-doc:key></entry>
               <entry>forward a message with comments</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="group-reply"/></entry>
-              <entry><literal>g</literal></entry>
+              <entry><muttng-doc:key>g</muttng-doc:key></entry>
               <entry>reply to all recipients</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="half-up"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>move up one-half page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="half-down"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>move down one-half page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="help"/></entry>
-              <entry><literal>?</literal></entry>
+              <entry><muttng-doc:key>?</muttng-doc:key></entry>
               <entry>this screen</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="list-reply"/></entry>
-              <entry><literal>L</literal></entry>
+              <entry><muttng-doc:key>L</muttng-doc:key></entry>
               <entry>reply to specified mailing list</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="mail"/></entry>
-              <entry><literal>m</literal></entry>
+              <entry><muttng-doc:key>m</muttng-doc:key></entry>
               <entry>compose a new mail message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="mail-key"/></entry>
-              <entry><literal>ESC k</literal></entry>
+              <entry><muttng-doc:key mod="E">k</muttng-doc:key></entry>
               <entry>mail a PGP public key</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="mark-as-new"/></entry>
-              <entry><literal>N</literal></entry>
+              <entry><muttng-doc:key>N</muttng-doc:key></entry>
               <entry>toggle a message's 'new' flag</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-line"/></entry>
-              <entry><literal>RET</literal></entry>
+              <entry><muttng-doc:key>Return</muttng-doc:key></entry>
               <entry>scroll down one line</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-entry"/></entry>
-              <entry><literal>J</literal></entry>
+              <entry><muttng-doc:key>J</muttng-doc:key></entry>
               <entry>move to the next entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-new"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>jump to the next new message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-new-then-unread"/></entry>
-              <entry><literal>TAB</literal></entry>
+              <entry><muttng-doc:key>Tab</muttng-doc:key></entry>
               <entry>jump to the next new or unread message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-page"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>move to the next page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-subthread"/></entry>
-              <entry><literal>ESC n</literal></entry>
+              <entry><muttng-doc:key mod="E">n</muttng-doc:key></entry>
               <entry>jump to the next subthread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-thread"/></entry>
-              <entry><literal>^N</literal></entry>
+              <entry><muttng-doc:key mod="C">N</muttng-doc:key></entry>
               <entry>jump to the next thread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-undeleted"/></entry>
-              <entry><literal>j</literal></entry>
+              <entry><muttng-doc:key>j</muttng-doc:key></entry>
               <entry>move to the next undeleted message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="next-unread"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>jump to the next unread message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="parent-message"/></entry>
-              <entry><literal>P</literal></entry>
+              <entry><muttng-doc:key>P</muttng-doc:key></entry>
               <entry>jump to parent message in thread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="pipe-message"/></entry>
-              <entry><literal></literal>|</entry>
+              <entry><muttng-doc:key>|</muttng-doc:key></entry>
               <entry>pipe message/attachment to a shell command</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-line"/></entry>
-              <entry><literal>BackSpace</literal></entry>
+              <entry><muttng-doc:key>BackSpace</muttng-doc:key></entry>
               <entry>scroll up one line</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-entry"/></entry>
-              <entry><literal>K</literal></entry>
+              <entry><muttng-doc:key>K</muttng-doc:key></entry>
               <entry>move to the previous entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-new"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>jump to the previous new message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-new-then-unread"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>jump to the previous new or unread message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-page"/></entry>
-              <entry><literal>-</literal></entry>
+              <entry><muttng-doc:key>-</muttng-doc:key></entry>
               <entry>move to the previous page</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-subthread"/></entry>
-              <entry><literal>ESC p</literal></entry>
+              <entry><muttng-doc:key mod="E">p</muttng-doc:key></entry>
               <entry>jump to previous subthread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-thread"/></entry>
-              <entry><literal>^P</literal></entry>
+              <entry><muttng-doc:key mod="C">P</muttng-doc:key></entry>
               <entry>jump to previous thread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-undeleted"/></entry>
-              <entry><literal>k</literal></entry>
+              <entry><muttng-doc:key>k</muttng-doc:key></entry>
               <entry>move to the last undelete message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="previous-unread"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>jump to the previous unread message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="print-message"/></entry>
-              <entry><literal>p</literal></entry>
+              <entry><muttng-doc:key>p</muttng-doc:key></entry>
               <entry>print the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="quit"/></entry>
-              <entry><literal>Q</literal></entry>
+              <entry><muttng-doc:key>Q</muttng-doc:key></entry>
               <entry>save changes to mailbox and quit</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="read-subthread"/></entry>
-              <entry><literal>ESC r</literal></entry>
+              <entry><muttng-doc:key mod="E">r</muttng-doc:key></entry>
               <entry>mark the current subthread as read</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="read-thread"/></entry>
-              <entry><literal>^R</literal></entry>
+              <entry><muttng-doc:key mod="C">R</muttng-doc:key></entry>
               <entry>mark the current thread as read</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="recall-message"/></entry>
-              <entry><literal>R</literal></entry>
+              <entry><muttng-doc:key>R</muttng-doc:key></entry>
               <entry>recall a postponed message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="redraw-screen"/></entry>
-              <entry><literal>^L</literal></entry>
+              <entry><muttng-doc:key mod="C">L</muttng-doc:key></entry>
               <entry>clear and redraw the screen</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="reply"/></entry>
-              <entry><literal>r</literal></entry>
+              <entry><muttng-doc:key>r</muttng-doc:key></entry>
               <entry>reply to a message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="save-message"/></entry>
-              <entry><literal>s</literal></entry>
+              <entry><muttng-doc:key>s</muttng-doc:key></entry>
               <entry>save message/attachment to a file</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search"/></entry>
-              <entry><literal>/</literal></entry>
+              <entry><muttng-doc:key>/</muttng-doc:key></entry>
               <entry>search for a regular expression</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-next"/></entry>
-              <entry><literal>n</literal></entry>
+              <entry><muttng-doc:key>n</muttng-doc:key></entry>
               <entry>search for next match</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-opposite"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>search for next match in opposite direction</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-reverse"/></entry>
-              <entry><literal>ESC /</literal></entry>
+              <entry><muttng-doc:key mod="E">/</muttng-doc:key></entry>
               <entry>search backwards for a regular expression</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-toggle"/></entry>
-              <entry><literal>\</literal></entry>
+              <entry><muttng-doc:key>\</muttng-doc:key></entry>
               <entry>toggle search pattern coloring</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="shell-escape"/></entry>
-              <entry><literal>!</literal></entry>
+              <entry><muttng-doc:key>!</muttng-doc:key></entry>
               <entry>invoke a command in a subshell</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="show-version"/></entry>
-              <entry><literal>V</literal></entry>
+              <entry><muttng-doc:key>V</muttng-doc:key></entry>
               <entry>show the Mutt-ng version number and date</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="skip-quoted"/></entry>
-              <entry><literal>S</literal></entry>
+              <entry><muttng-doc:key>S</muttng-doc:key></entry>
               <entry>skip beyond quoted text</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="sync-mailbox"/></entry>
-              <entry><literal>$</literal></entry>
+              <entry><muttng-doc:key>$</muttng-doc:key></entry>
               <entry>save changes to mailbox</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="tag-message"/></entry>
-              <entry><literal>t</literal></entry>
+              <entry><muttng-doc:key>t</muttng-doc:key></entry>
               <entry>tag a message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="toggle-quoted"/></entry>
-              <entry><literal>T</literal></entry>
+              <entry><muttng-doc:key>T</muttng-doc:key></entry>
               <entry>toggle display of quoted text</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="top"/></entry>
-              <entry><literal>^</literal></entry>
+              <entry><muttng-doc:key>^</muttng-doc:key></entry>
               <entry>jump to the top of the message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="undelete-message"/></entry>
-              <entry><literal>u</literal></entry>
+              <entry><muttng-doc:key>u</muttng-doc:key></entry>
               <entry>undelete the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="undelete-subthread"/></entry>
-              <entry><literal>ESC u</literal></entry>
+              <entry><muttng-doc:key mod="E">u</muttng-doc:key></entry>
               <entry>undelete all messages in subthread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="undelete-thread"/></entry>
-              <entry><literal>^U</literal></entry>
+              <entry><muttng-doc:key mod="C">U</muttng-doc:key></entry>
               <entry>undelete all messages in thread</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="view-attachments"/></entry>
-              <entry><literal>v</literal></entry>
+              <entry><muttng-doc:key>v</muttng-doc:key></entry>
               <entry>show MIME attachments</entry>
             </row>
                   </tbody>
@@ -973,7 +973,7 @@
         
         <para>
           
-        <table frame="none" rowsep="1">
+        <table frame="none" rowsep="1" texstr="l|l|l">
           <title>Reference: Default Alias Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -986,17 +986,17 @@
           <tbody>
             <row>
               <entry><muttng-doc:funcref name="search"/></entry>
-              <entry><literal>/</literal></entry>
+              <entry><muttng-doc:key>/</muttng-doc:key></entry>
               <entry>search for a regular expression</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-next"/></entry>
-              <entry><literal>n</literal></entry>
+              <entry><muttng-doc:key>n</muttng-doc:key></entry>
               <entry>search for next match</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-reverse"/></entry>
-              <entry><literal>ESC /</literal></entry>
+              <entry><muttng-doc:key mod="E">/</muttng-doc:key></entry>
               <entry>search backwards for a regular expression</entry>
             </row>
                   </tbody>
@@ -1013,7 +1013,7 @@
         
         <para>
           
-        <table frame="none" rowsep="1">
+        <table frame="none" rowsep="1" texstr="l|l|l">
           <title>Reference: Default Query Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1026,42 +1026,42 @@
           <tbody>
             <row>
               <entry><muttng-doc:funcref name="create-alias"/></entry>
-              <entry><literal>a</literal></entry>
+              <entry><muttng-doc:key>a</muttng-doc:key></entry>
               <entry>create an alias from a message sender</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="mail"/></entry>
-              <entry><literal>m</literal></entry>
+              <entry><muttng-doc:key>m</muttng-doc:key></entry>
               <entry>compose a new mail message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="query"/></entry>
-              <entry><literal>Q</literal></entry>
+              <entry><muttng-doc:key>Q</muttng-doc:key></entry>
               <entry>query external program for addresses</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="query-append"/></entry>
-              <entry><literal>A</literal></entry>
+              <entry><muttng-doc:key>A</muttng-doc:key></entry>
               <entry>append new query results to current results</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search"/></entry>
-              <entry><literal>/</literal></entry>
+              <entry><muttng-doc:key>/</muttng-doc:key></entry>
               <entry>search for a regular expression</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-next"/></entry>
-              <entry><literal>n</literal></entry>
+              <entry><muttng-doc:key>n</muttng-doc:key></entry>
               <entry>search for next match</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-opposite"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>search for next match in opposite direction</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-reverse"/></entry>
-              <entry><literal>ESC /</literal></entry>
+              <entry><muttng-doc:key mod="E">/</muttng-doc:key></entry>
               <entry>search backwards for a regular expression</entry>
             </row>
                   </tbody>
@@ -1078,7 +1078,7 @@
         
         <para>
           
-        <table frame="none" rowsep="1">
+        <table frame="none" rowsep="1" texstr="l|l|l">
           <title>Reference: Default Attachment Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1091,92 +1091,92 @@
           <tbody>
             <row>
               <entry><muttng-doc:funcref name="bounce-message"/></entry>
-              <entry><literal>b</literal></entry>
+              <entry><muttng-doc:key>b</muttng-doc:key></entry>
               <entry>remail a message to another user</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="collapse-parts"/></entry>
-              <entry><literal>v</literal></entry>
+              <entry><muttng-doc:key>v</muttng-doc:key></entry>
               <entry>toggle display of subparts</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="delete-entry"/></entry>
-              <entry><literal>d</literal></entry>
+              <entry><muttng-doc:key>d</muttng-doc:key></entry>
               <entry>delete the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="display-toggle-weed"/></entry>
-              <entry><literal>h</literal></entry>
+              <entry><muttng-doc:key>h</muttng-doc:key></entry>
               <entry>display message and toggle header weeding</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-type"/></entry>
-              <entry><literal>^E</literal></entry>
+              <entry><muttng-doc:key mod="C">E</muttng-doc:key></entry>
               <entry>edit the current entry's Content-Type</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="extract-keys"/></entry>
-              <entry><literal>^K</literal></entry>
+              <entry><muttng-doc:key mod="C">K</muttng-doc:key></entry>
               <entry>extract PGP public keys</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="forward-message"/></entry>
-              <entry><literal>f</literal></entry>
+              <entry><muttng-doc:key>f</muttng-doc:key></entry>
               <entry>forward a message with comments</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="group-reply"/></entry>
-              <entry><literal>g</literal></entry>
+              <entry><muttng-doc:key>g</muttng-doc:key></entry>
               <entry>reply to all recipients</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="list-reply"/></entry>
-              <entry><literal>L</literal></entry>
+              <entry><muttng-doc:key>L</muttng-doc:key></entry>
               <entry>reply to specified mailing list</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="pipe-entry"/></entry>
-              <entry><literal>|</literal></entry>
+              <entry><muttng-doc:key>|</muttng-doc:key></entry>
               <entry>pipe message/attachment to a shell command</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="print-entry"/></entry>
-              <entry><literal>p</literal></entry>
+              <entry><muttng-doc:key>p</muttng-doc:key></entry>
               <entry>print the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="reply"/></entry>
-              <entry><literal>r</literal></entry>
+              <entry><muttng-doc:key>r</muttng-doc:key></entry>
               <entry>reply to a message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="resend-message"/></entry>
-              <entry><literal>ESC e</literal></entry>
+              <entry><muttng-doc:key mod="E">e</muttng-doc:key></entry>
               <entry>resend message and preserve MIME        structure</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="save-entry"/></entry>
-              <entry><literal>s</literal></entry>
+              <entry><muttng-doc:key>s</muttng-doc:key></entry>
               <entry>save message/attachment to a file</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="undelete-entry"/></entry>
-              <entry><literal>u</literal></entry>
+              <entry><muttng-doc:key>u</muttng-doc:key></entry>
               <entry>undelete the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="view-attach"/></entry>
-              <entry><literal>RET</literal></entry>
+              <entry><muttng-doc:key>Return</muttng-doc:key></entry>
               <entry>view attachment using mailcap entry if necessary</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="view-mailcap"/></entry>
-              <entry><literal>m</literal></entry>
+              <entry><muttng-doc:key>m</muttng-doc:key></entry>
               <entry>force viewing of attachment using mailcap</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="view-text"/></entry>
-              <entry><literal>T</literal></entry>
+              <entry><muttng-doc:key>T</muttng-doc:key></entry>
               <entry>view attachment as text</entry>
             </row>
                   </tbody>
@@ -1193,7 +1193,7 @@
         
         <para>
           
-        <table frame="none" rowsep="1">
+        <table frame="none" rowsep="1" texstr="l|l|l">
           <title>Reference: Default Compose Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1206,167 +1206,167 @@
           <tbody>
             <row>
               <entry><muttng-doc:funcref name="attach-file"/></entry>
-              <entry><literal>a</literal></entry>
+              <entry><muttng-doc:key>a</muttng-doc:key></entry>
               <entry>attach a file(s) to this message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="attach-message"/></entry>
-              <entry><literal>A</literal></entry>
+              <entry><muttng-doc:key>A</muttng-doc:key></entry>
               <entry>attach message(s) to this message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="attach-key"/></entry>
-              <entry><literal>ESC k</literal></entry>
+              <entry><muttng-doc:key mod="E">k</muttng-doc:key></entry>
               <entry>attach a PGP public key</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="copy-file"/></entry>
-              <entry><literal>C</literal></entry>
+              <entry><muttng-doc:key>C</muttng-doc:key></entry>
               <entry>save message/attachment to a file</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="detach-file"/></entry>
-              <entry><literal>D</literal></entry>
+              <entry><muttng-doc:key>D</muttng-doc:key></entry>
               <entry>delete the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="display-toggle-weed"/></entry>
-              <entry><literal>h</literal></entry>
+              <entry><muttng-doc:key>h</muttng-doc:key></entry>
               <entry>display message and toggle header weeding</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-bcc"/></entry>
-              <entry><literal>b</literal></entry>
+              <entry><muttng-doc:key>b</muttng-doc:key></entry>
               <entry>edit the BCC list</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-cc"/></entry>
-              <entry><literal>c</literal></entry>
+              <entry><muttng-doc:key>c</muttng-doc:key></entry>
               <entry>edit the CC list</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-description"/></entry>
-              <entry><literal>d</literal></entry>
+              <entry><muttng-doc:key>d</muttng-doc:key></entry>
               <entry>edit attachment description</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-encoding"/></entry>
-              <entry><literal>^E</literal></entry>
+              <entry><muttng-doc:key mod="C">E</muttng-doc:key></entry>
               <entry>edit attachment transfer-encoding</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-fcc"/></entry>
-              <entry><literal>f</literal></entry>
+              <entry><muttng-doc:key>f</muttng-doc:key></entry>
               <entry>enter a file to save a copy of this message in</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-from"/></entry>
-              <entry><literal>ESC f</literal></entry>
+              <entry><muttng-doc:key mod="E">f</muttng-doc:key></entry>
               <entry>edit the from: field</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-file"/></entry>
-              <entry><literal>^X e</literal></entry>
+              <entry><muttng-doc:key mod="C">X e</muttng-doc:key></entry>
               <entry>edit the file to be attached</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-headers"/></entry>
-              <entry><literal>E</literal></entry>
+              <entry><muttng-doc:key>E</muttng-doc:key></entry>
               <entry>edit the message with headers</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit"/></entry>
-              <entry><literal>e</literal></entry>
+              <entry><muttng-doc:key>e</muttng-doc:key></entry>
               <entry>edit the message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-mime"/></entry>
-              <entry><literal>m</literal></entry>
+              <entry><muttng-doc:key>m</muttng-doc:key></entry>
               <entry>edit attachment using mailcap entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-reply-to"/></entry>
-              <entry><literal>r</literal></entry>
+              <entry><muttng-doc:key>r</muttng-doc:key></entry>
               <entry>edit the Reply-To field</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-subject"/></entry>
-              <entry><literal>s</literal></entry>
+              <entry><muttng-doc:key>s</muttng-doc:key></entry>
               <entry>edit the subject of this message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-to"/></entry>
-              <entry><literal>t</literal></entry>
+              <entry><muttng-doc:key>t</muttng-doc:key></entry>
               <entry>edit the TO list</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="edit-type"/></entry>
-              <entry><literal>^T</literal></entry>
+              <entry><muttng-doc:key mod="C">T</muttng-doc:key></entry>
               <entry>edit attachment type</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="filter-entry"/></entry>
-              <entry><literal>F</literal></entry>
+              <entry><muttng-doc:key>F</muttng-doc:key></entry>
               <entry>filter attachment through a shell command</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="forget-passphrase"/></entry>
-              <entry><literal>^F</literal></entry>
+              <entry><muttng-doc:key mod="C">F</muttng-doc:key></entry>
               <entry>wipe PGP passphrase from memory</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="ispell"/></entry>
-              <entry><literal>i</literal></entry>
+              <entry><muttng-doc:key>i</muttng-doc:key></entry>
               <entry>run ispell on the message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="new-mime"/></entry>
-              <entry><literal>n</literal></entry>
+              <entry><muttng-doc:key>n</muttng-doc:key></entry>
               <entry>compose new attachment using mailcap entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="pgp-menu"/></entry>
-              <entry><literal>p</literal></entry>
+              <entry><muttng-doc:key>p</muttng-doc:key></entry>
               <entry>show PGP options</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="pipe-entry"/></entry>
-              <entry><literal>|</literal></entry>
+              <entry><muttng-doc:key>|</muttng-doc:key></entry>
               <entry>pipe message/attachment to a shell command</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="postpone-message"/></entry>
-              <entry><literal>P</literal></entry>
+              <entry><muttng-doc:key>P</muttng-doc:key></entry>
               <entry>save this message to send later</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="print-entry"/></entry>
-              <entry><literal>l</literal></entry>
+              <entry><muttng-doc:key>l</muttng-doc:key></entry>
               <entry>print the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="rename-file"/></entry>
-              <entry><literal>R</literal></entry>
+              <entry><muttng-doc:key>R</muttng-doc:key></entry>
               <entry>rename/move an attached file</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="send-message"/></entry>
-              <entry><literal>y</literal></entry>
+              <entry><muttng-doc:key>y</muttng-doc:key></entry>
               <entry>send the message</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="toggle-unlink"/></entry>
-              <entry><literal>u</literal></entry>
+              <entry><muttng-doc:key>u</muttng-doc:key></entry>
               <entry>toggle whether to delete file after sending it</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="view-attach"/></entry>
-              <entry><literal>RET</literal></entry>
+              <entry><muttng-doc:key>Return</muttng-doc:key></entry>
               <entry>view attachment using mailcap entry if necessary</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="write-fcc"/></entry>
-              <entry><literal>w  </literal></entry>
+              <entry><muttng-doc:key>w</muttng-doc:key></entry>
               <entry>write the message to a folder</entry>
             </row>
                   </tbody>
@@ -1383,7 +1383,7 @@
         
         <para>
           
-        <table frame="none" rowsep="1">
+        <table frame="none" rowsep="1" texstr="l|l|l">
           <title>Reference: Default Postpone Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1396,12 +1396,12 @@
           <tbody>
             <row>
               <entry><muttng-doc:funcref name="delete-entry"/></entry>
-              <entry><literal>d</literal></entry>
+              <entry><muttng-doc:key>d</muttng-doc:key></entry>
               <entry>delete the current entry</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="undelete-entry"/></entry>
-              <entry><literal>u</literal></entry>
+              <entry><muttng-doc:key>u</muttng-doc:key></entry>
               <entry>undelete the current entry</entry>
             </row>
                   </tbody>
@@ -1418,7 +1418,7 @@
         
         <para>
           
-        <table frame="none" rowsep="1">
+        <table frame="none" rowsep="1" texstr="l|l|l">
           <title>Reference: Default Browser Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1431,72 +1431,72 @@
           <tbody>
             <row>
               <entry><muttng-doc:funcref name="change-dir"/></entry>
-              <entry><literal>c</literal></entry>
+              <entry><muttng-doc:key>c</muttng-doc:key></entry>
               <entry>change directories</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="check-new"/></entry>
-              <entry><literal>TAB</literal></entry>
+              <entry><muttng-doc:key>Tab</muttng-doc:key></entry>
               <entry>check mailboxes for new mail</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="enter-mask"/></entry>
-              <entry><literal>m</literal></entry>
+              <entry><muttng-doc:key>m</muttng-doc:key></entry>
               <entry>enter a file mask</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search"/></entry>
-              <entry><literal>/</literal></entry>
+              <entry><muttng-doc:key>/</muttng-doc:key></entry>
               <entry>search for a regular expression</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-next"/></entry>
-              <entry><literal>n</literal></entry>
+              <entry><muttng-doc:key>n</muttng-doc:key></entry>
               <entry>search for next match</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="search-reverse"/></entry>
-              <entry><literal>ESC /</literal></entry>
+              <entry><muttng-doc:key mod="E">/</muttng-doc:key></entry>
               <entry>search backwards for a regular expression</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="select-new"/></entry>
-              <entry><literal>N</literal></entry>
+              <entry><muttng-doc:key>N</muttng-doc:key></entry>
               <entry>select a new file in this directory</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="sort"/></entry>
-              <entry><literal>o</literal></entry>
+              <entry><muttng-doc:key>o</muttng-doc:key></entry>
               <entry>sort messages</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="sort-reverse"/></entry>
-              <entry><literal>O</literal></entry>
+              <entry><muttng-doc:key>O</muttng-doc:key></entry>
               <entry>sort messages in reverse order</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="toggle-mailboxes"/></entry>
-              <entry><literal>TAB</literal></entry>
+              <entry><muttng-doc:key>Tab</muttng-doc:key></entry>
               <entry>toggle whether to browse mailboxes or all files</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="view-file"/></entry>
-              <entry><literal>SPACE</literal></entry>
+              <entry><muttng-doc:key>Space</muttng-doc:key></entry>
               <entry>view file</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="subscribe"/></entry>
-              <entry><literal>s</literal></entry>
+              <entry><muttng-doc:key>s</muttng-doc:key></entry>
               <entry>subscribe to current mailbox (IMAP            Only)</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="unsubscribe"/></entry>
-              <entry><literal>u</literal></entry>
+              <entry><muttng-doc:key>u</muttng-doc:key></entry>
               <entry>unsubscribe to current mailbox (IMAP            Only)</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="toggle-subscribed"/></entry>
-              <entry><literal>T</literal></entry>
+              <entry><muttng-doc:key>T</muttng-doc:key></entry>
               <entry>toggle view all/subscribed mailboxes            (IMAP Only)</entry>
             </row>
                   </tbody>
@@ -1513,7 +1513,7 @@
         
         <para>
           
-        <table frame="none" rowsep="1">
+        <table frame="none" rowsep="1" texstr="l|l|l">
           <title>Reference: Default PGP Menu Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1526,12 +1526,12 @@
           <tbody>
             <row>
               <entry><muttng-doc:funcref name="view-name"/></entry>
-              <entry><literal>%</literal></entry>
+              <entry><muttng-doc:key>%</muttng-doc:key></entry>
               <entry>view the key's user id</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="verify-key"/></entry>
-              <entry><literal>c</literal></entry>
+              <entry><muttng-doc:key>c</muttng-doc:key></entry>
               <entry>verify a PGP public key</entry>
             </row>
                   </tbody>
@@ -1548,7 +1548,7 @@
         
         <para>
           
-        <table frame="none" rowsep="1">
+        <table frame="none" rowsep="1" texstr="l|l|l">
           <title>Reference: Default Editor Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1561,112 +1561,112 @@
           <tbody>
             <row>
               <entry><muttng-doc:funcref name="backspace"/></entry>
-              <entry><literal>BackSpace</literal></entry>
+              <entry><muttng-doc:key>BackSpace</muttng-doc:key></entry>
               <entry>delete the char in front of the cursor</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="backward-char"/></entry>
-              <entry><literal>^B</literal></entry>
+              <entry><muttng-doc:key mod="C">B</muttng-doc:key></entry>
               <entry>move the cursor one character to the left</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="backward-word"/></entry>
-              <entry><literal>ESC b</literal></entry>
+              <entry><muttng-doc:key mod="E">b</muttng-doc:key></entry>
               <entry>move the cursor to the previous word</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="bol"/></entry>
-              <entry><literal>^A</literal></entry>
+              <entry><muttng-doc:key mod="C">A</muttng-doc:key></entry>
               <entry>jump to the beginning of the line</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="buffy-cycle"/></entry>
-              <entry><literal>Space</literal></entry>
+              <entry><muttng-doc:key>Space</muttng-doc:key></entry>
               <entry>cycle among incoming mailboxes</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="capitalize-word"/></entry>
-              <entry><literal>ESC c</literal></entry>
+              <entry><muttng-doc:key mod="E">c</muttng-doc:key></entry>
               <entry>uppercase the first character in the word</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="complete"/></entry>
-              <entry><literal>TAB</literal></entry>
+              <entry><muttng-doc:key>Tab</muttng-doc:key></entry>
               <entry>complete filename or alias</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="complete-query"/></entry>
-              <entry><literal>^T</literal></entry>
+              <entry><muttng-doc:key mod="C">T</muttng-doc:key></entry>
               <entry>complete address with query</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="delete-char"/></entry>
-              <entry><literal>^D</literal></entry>
+              <entry><muttng-doc:key mod="C">D</muttng-doc:key></entry>
               <entry>delete the char under the cursor</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="downcase-word"/></entry>
-              <entry><literal>ESC l</literal></entry>
+              <entry><muttng-doc:key mod="E">l</muttng-doc:key></entry>
               <entry>lowercase all characters in current word</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="eol"/></entry>
-              <entry><literal>^E</literal></entry>
+              <entry><muttng-doc:key mod="C">E</muttng-doc:key></entry>
               <entry>jump to the end of the line</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="forward-char"/></entry>
-              <entry><literal>^F</literal></entry>
+              <entry><muttng-doc:key mod="C">F</muttng-doc:key></entry>
               <entry>move the cursor one character to the right</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="forward-word"/></entry>
-              <entry><literal>ESC f</literal></entry>
+              <entry><muttng-doc:key mod="E">f</muttng-doc:key></entry>
               <entry>move the cursor to the next word</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="history-down"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>scroll down through the history list</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="history-up"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>scroll up through the history list</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="kill-eol"/></entry>
-              <entry><literal>^K</literal></entry>
+              <entry><muttng-doc:key mod="C">K</muttng-doc:key></entry>
               <entry>delete chars from cursor to end of line</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="kill-eow"/></entry>
-              <entry><literal>ESC d</literal></entry>
+              <entry><muttng-doc:key mod="E">d</muttng-doc:key></entry>
               <entry>delete chars from cursor to end of word</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="kill-line"/></entry>
-              <entry><literal>^U</literal></entry>
+              <entry><muttng-doc:key mod="C">U</muttng-doc:key></entry>
               <entry>delete all chars on the line</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="kill-word"/></entry>
-              <entry><literal>^W</literal></entry>
+              <entry><muttng-doc:key mod="C">W</muttng-doc:key></entry>
               <entry>delete the word in front of the cursor</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="quote-char"/></entry>
-              <entry><literal>^V</literal></entry>
+              <entry><muttng-doc:key mod="C">V</muttng-doc:key></entry>
               <entry>quote the next typed key</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="transpose-chars"/></entry>
-              <entry><literal>not bound</literal></entry>
+              <entry></entry>
               <entry>transpose character under cursor with previous</entry>
             </row>
             <row>
               <entry><muttng-doc:funcref name="upcase-word"/></entry>
-              <entry><literal>ESC u</literal></entry>
+              <entry><muttng-doc:key mod="E">u</muttng-doc:key></entry>
               <entry>uppercase all characters in current word</entry>
             </row>
                   </tbody>
@@ -1682,7 +1682,7 @@
         <title>sidebar</title>
         
       <para>
-        <table frame="none" rowsep="1">
+        <table frame="none" rowsep="1" texstr="l|l|l">
           <title>Referene: Default Sidebar Function Bindings</title>
           <tgroup cols="3" align="left" colsep="1" rowsep="1">
           <thead>
@@ -1694,32 +1694,32 @@
           </thead>
           <tbody>
             <row>
-              <entry><literal>none</literal></entry>
+              <entry></entry>
               <entry><muttng-doc:funcref name="sidebar-scroll-up"/></entry>
               <entry>Scrolls the mailbox list up 1 page</entry>
             </row>
             <row>
-              <entry><literal>none</literal></entry>
+              <entry></entry>
               <entry><muttng-doc:funcref name="sidebar-scroll-down"/></entry>
               <entry>Scrolls the mailbox list down 1 page</entry>
             </row>
             <row>
-              <entry><literal>none</literal></entry>
+              <entry></entry>
               <entry><muttng-doc:funcref name="sidebar-next"/></entry>
               <entry>Highlights the next mailbox</entry>
             </row>
             <row>
-              <entry><literal>none</literal></entry>
+              <entry></entry>
               <entry><muttng-doc:funcref name="sidebar-next-new"/></entry>
               <entry>Highlights the next mailbox with new mail</entry>
             </row>
             <row>
-              <entry><literal>none</literal></entry>
+              <entry></entry>
               <entry><muttng-doc:funcref name="sidebar-previous"/></entry>
               <entry>Highlights the previous mailbox</entry>
             </row>
             <row>
-              <entry><literal>none</literal></entry>
+              <entry></entry>
               <entry><muttng-doc:funcref name="sidebar-open"/></entry>
               <entry>Opens the currently highlighted mailbox</entry>
             </row>
@@ -1930,7 +1930,8 @@
 
       <para>
         This manual is written in XML and transformed via a XSLT
-        stylesheet into valid DocBook/XML to be again transformed via a
+        stylesheet into valid DocBook/XML and/or <muttng-doc:special
+          docbook="LaTeX" latex="\LaTeX{}"/> to be again transformed via a
         XSLT stylesheet into the final formats.
       </para>
 
@@ -1990,12 +1991,26 @@
             </para></listitem>
           </varlistentry>
           <varlistentry>
-            <term><literal>&lt;muttng-doc:funcdef name="" key=""/&gt;</literal></term>
+            <term><literal>&lt;muttng-doc:key [mod="C|E"]&gt;key&lt;/muttng-doc:key&gt;</literal></term>
+            <listitem><para>
+                <emphasis>Referencing a key.</emphasis>. Because it's
+                somewhat untrivial to always get the right escaping for 
+                <muttng-doc:special docbook="LaTeX" latex="\LaTeX{}"/>,
+                there's a tag for it. The optional modifiers
+                <literal>C</literal> or <literal>E</literal> stand for
+                Control and Escape respectively. To still allow
+                escaping, the actual key sequences must be given within
+                the tag.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:funcdef name=""/&gt;</literal></term>
             <listitem><para>
                 <emphasis>Defining a command.</emphasis>. It's used to
                 define a command with the name given in the
-                <literal>name</literal> parameter and a default key
-                binding given via <literal>key</literal>. The string
+                <literal>name</literal> parameter. The default key
+                binding must be given via
+                <literal>&lt;muttng-doc:key/&gt;</literal> (see above). The string
                 will be automatically enclosed in
                 <literal>&lt;&gt;</literal>. Auto-indexing is done.
                 Also an anchor with id
@@ -2093,8 +2108,33 @@
                 must be a context sensitive distinction.
             </para></listitem>
           </varlistentry>
+          <varlistentry>
+            <term><literal>&lt;muttng-doc:special [docbook=""] [latex=""]/&gt;</literal></term>
+            <listitem><para>
+                This is intended for specifying special strings for
+                either DocBook/XML or <muttng-doc:special
+                  docbook="LaTeX" latex="\LaTeX{}"/>.
+            </para></listitem>
+          </varlistentry>
 
         </variablelist>
+      </para>
+
+      <para>
+        Additional notes follow.
+      </para>
+      
+      <para>
+        <itemizedlist>
+          <listitem>
+            <para>To not fully bloat the XSL stylesheet
+              procuding the <muttng-doc:special docbook="LaTeX"
+                latex="\LaTeX{}"/> code, all tables <emphasis>must</emphasis>
+              have an attribute called <literal>texstr</literal> which is
+              directly passed to <literal>longtable</literal>.
+            </para>
+          </listitem>
+        </itemizedlist>
       </para>
 
     </appendix>

@@ -8,7 +8,7 @@
 
    <me@cs.hmc.edu>
 
-   version devel-r513
+   version devel-r522
 
    Abstract
 
@@ -502,14 +502,20 @@ Chapter 1. Introduction
      o Configuration and environment variables will be printed in a
        typewriter font and both prefixed with a dollar sign as it's common
        for UNIX-like environments. Configuration variables are lower-case
-       only while environment variables are upper-case only.
+       only while environment variables are upper-case only. $imap_mail_check
+       is a configuration variable while $EDITOR is an environment variable.
 
-     o Muttng-specific commands are enclosed in <> and printed in a
-       typewriter font, too.
+     o Muttng-specific functions are enclosed in <> and printed in a
+       typewriter font, too, as in <sync-mailbox>.
 
      o As common for UNIX-like environments, references to manual pages are
        printed with the section enclosed in braces, as in vi(1) or
        muttngrc(5). Execute man [section] [name] to view the manual page.
+
+     o Keys are presented in the following way: ordinary keys are just given
+       as-is, e.g. q. Control characters are prefixed with C- (e.g. the
+       screen can be redraw by pressing C-L) and E- for Escape, e.g. a folder
+       can be opened read-only with E-c.
 
    If, while reading this fine manual, you find any inconsistencies of
    whatever kind, please contact the developers via
@@ -796,29 +802,29 @@ Chapter 2. Getting Started
 
    Table 2.2. Line Editor Functions
 
-   Key            Function          Description
-   ^A or <Home>   <bol>             move to the start of the line
-   ^B or <Left>   <backward-char>   move back one char
-   Esc B          <backward-word>   move back one word
-   ^D or <Delete> <delete-char>     delete the char under the cursor
-   ^E or <End>    <eol>             move to the end of the line
-   ^F or <Right>  <forward-char>    move forward one char
-   Esc F          <forward-word>    move forward one word
-   <Tab>          <complete>        complete filename or alias
-   ^T             <complete-query>  complete address with query
-   ^K             <kill-eol>        delete to the end of the line
-   ESC d          <kill-eow>        delete to the end of the word
-   ^W             <kill-word>       kill the word in front of the cursor
-   ^U             <kill-line>       delete entire line
-   ^V             <quote-char>      quote the next typed key
-   <Up>           <history-up>      recall previous string from history
-   <Down>         <history-down>    recall next string from history
-   <BackSpace>    <backspace>       kill the char in front of the cursor
-   Esc u          <upcase-word>     convert word to upper case
-   Esc l          <downcase-word>   convert word to lower case
-   Esc c          <capitalize-word> capitalize the word
-   ^G             n/a               abort
-   <Return>       n/a               finish editing
+   Key           Function          Description
+   C-A or Home   <bol>             move to the start of the line
+   C-B or Left   <backward-char>   move back one char
+   E-B           <backward-word>   move back one word
+   C-D or Delete <delete-char>     delete the char under the cursor
+   C-E or End    <eol>             move to the end of the line
+   C-F or Right  <forward-char>    move forward one char
+   E-F           <forward-word>    move forward one word
+   Tab           <complete>        complete filename or alias
+   C-T           <complete-query>  complete address with query
+   C-K           <kill-eol>        delete to the end of the line
+   E-d           <kill-eow>        delete to the end of the word
+   C-W           <kill-word>       kill the word in front of the cursor
+   C-U           <kill-line>       delete entire line
+   C-V           <quote-char>      quote the next typed key
+   Up            <history-up>      recall previous string from history
+   Down          <history-down>    recall next string from history
+   BackSpace     <backspace>       kill the char in front of the cursor
+   E-u           <upcase-word>     convert word to upper case
+   E-l           <downcase-word>   convert word to lower case
+   E-c           <capitalize-word> capitalize the word
+   C-G                             abort
+   Return                          finish editing
 
    You can remap the editor functions using the bind command. For example, to
    make the Delete key delete the character in front of the cursor rather
@@ -840,36 +846,36 @@ Chapter 2. Getting Started
 
    Table 2.3. Most commonly used Index Bindings
 
-   Key      Function Description
-   c                 change to a different mailbox
-   ESC c             change to a folder in read-only mode
-   C                 copy the current message to another mailbox
-   ESC C             decode a message and copy it to a folder
-   ESC s             decode a message and save it to a folder
-   D                 delete messages matching a pattern
-   d                 delete the current message
-   F                 mark as important
-   l                 show messages matching a pattern
-   N                 mark message as new
-   o                 change the current sort method
-   O                 reverse sort the mailbox
-   q                 save changes and exit
-   s                 save-message
-   T                 tag messages matching a pattern
-   t                 toggle the tag on a message
-   ESC t             toggle tag on entire message thread
-   U                 undelete messages matching a pattern
-   u                 undelete-message
-   v                 view-attachments
-   x                 abort changes and exit
-   <Return>          display-message
-   <Tab>             jump to the next new or unread message
-   @                 show the author's full e-mail address
-   $                 save changes to mailbox
-   /                 search
-   ESC /             search-reverse
-   ^L                clear and redraw the screen
-   ^T                untag messages matching a pattern
+   Key    Function Description
+   c               change to a different mailbox
+   E-c             change to a folder in read-only mode
+   C               copy the current message to another mailbox
+   E-C             decode a message and copy it to a folder
+   E-s             decode a message and save it to a folder
+   D               delete messages matching a pattern
+   d               delete the current message
+   F               mark as important
+   l               show messages matching a pattern
+   N               mark message as new
+   o               change the current sort method
+   O               reverse sort the mailbox
+   q               save changes and exit
+   s               save-message
+   T               tag messages matching a pattern
+   t               toggle the tag on a message
+   E-t             toggle tag on entire message thread
+   U               undelete messages matching a pattern
+   u               undelete-message
+   v               view-attachments
+   x               abort changes and exit
+   Return          display-message
+   Tab             jump to the next new or unread message
+   @               show the author's full e-mail address
+   $               save changes to mailbox
+   /               search
+   E-/             search-reverse
+   C-L             clear and redraw the screen
+   C-T             untag messages matching a pattern
 
     5.1.1. Status Flags
 
@@ -958,19 +964,19 @@ Chapter 2. Getting Started
 
    Table 2.4. Most commonly used Pager Bindings
 
-   Key      Function Description
-   <Return>          go down one line
-   <Space>           display the next page (or next message if at the end of
-                     a message)
-   -                 go back to the previous page
-   n                 search for next match
-   S                 skip beyond quoted text
-   T                 toggle display of quoted text
-   ?                 show key bindings
-   /                 search for a regular expression (pattern)
-   ESC /             search backwards for a regular expression
-   \                 toggle search pattern coloring
-   ^                 jump to the top of the message
+   Key    Function Description
+   Return          go down one line
+   Space           display the next page (or next message if at the end of a
+                   message)
+   -               go back to the previous page
+   n               search for next match
+   S               skip beyond quoted text
+   T               toggle display of quoted text
+   ?               show key bindings
+   /               search for a regular expression (pattern)
+   E-/             search backwards for a regular expression
+   \               toggle search pattern coloring
+   ^               jump to the top of the message
 
    In addition, many of the functions from the index are available in the
    pager, such as delete-message or copy-message (this is one advantage over
@@ -979,8 +985,8 @@ Chapter 2. Getting Started
    Also, the internal pager supports a couple other advanced features. For
    one, it will accept and translate the ``standard'' nroff sequences forbold
    and underline. These sequences are a series of either the letter,
-   backspace (^H), the letter again for bold or the letter, backspace, ``_''
-   for denoting underline. Mutt-ng will attempt to display these in bold and
+   backspace (C-H), the letter again for bold or the letter, backspace, _ for
+   denoting underline. Mutt-ng will attempt to display these in bold and
    underline respectively if your terminal supports them. If not, you can use
    the bold and underline color objects to specify a color or mono attribute
    for them.
@@ -1026,21 +1032,21 @@ Chapter 2. Getting Started
 
    Table 2.7. Most commonly used thread-related bindings
 
-   Key   Function             Description
-   ^D    <delete-thread>      delete all messages in the current thread
-   ^U    <undelete-thread>    undelete all messages in the current thread
-   ^N    <next-thread>        jump to the start of the next thread
-   ^P    <previous-thread>    jump to the start of the previous thread
-   ^R    <read-thread>        mark the current thread as read
-   ESC d <delete-subthread>   delete all messages in the current subthread
-   ESC u <undelete-subthread> undelete all messages in the current subthread
-   ESC n <next-subthread>     jump to the start of the next subthread
-   ESC p <previous-subthread> jump to the start of the previous subthread
-   ESC r <read-subthread>     mark the current subthread as read
-   ESC t <tag-thread>         toggle the tag on the current thread
-   ESC v <collapse-thread>    toggle collapse for the current thread
-   ESC V <collapse-all>       toggle collapse for all threads
-   P     <parent-message>     jump to parent message in thread
+   Key Function             Description
+   C-D <delete-thread>      delete all messages in the current thread
+   C-U <undelete-thread>    undelete all messages in the current thread
+   C-N <next-thread>        jump to the start of the next thread
+   C-P <previous-thread>    jump to the start of the previous thread
+   C-R <read-thread>        mark the current thread as read
+   E-d <delete-subthread>   delete all messages in the current subthread
+   E-u <undelete-subthread> undelete all messages in the current subthread
+   E-n <next-subthread>     jump to the start of the next subthread
+   E-p <previous-subthread> jump to the start of the previous subthread
+   E-r <read-subthread>     mark the current subthread as read
+   E-t <tag-thread>         toggle the tag on the current thread
+   E-v <collapse-thread>    toggle collapse for the current thread
+   E-V <collapse-all>       toggle collapse for all threads
+   P   <parent-message>     jump to parent message in thread
 
    Note: Collapsing a thread displays only the first message in the thread
    and hides the others. This is useful when threads contain so many messages
@@ -1063,7 +1069,7 @@ Chapter 2. Getting Started
    $alias_file does not add the aliases specified there-in, you must also
    source the file.
 
-   <check-traditional-pgp> (default: ESC P)
+   <check-traditional-pgp> (default: E-P)
 
    This function will search the current message for content signed or
    encrypted with PGP the "traditional" way, that is, without proper MIME
@@ -1082,8 +1088,8 @@ Chapter 2. Getting Started
    finished editing, the changed message will be appended to the current
    folder, and the original message will be marked for deletion.
 
-   <edit-type> (default: ) (default: ^E on the attachment menu, and in the
-   pager and index menus; ^T on the compose menu)
+   <edit-type> (default: ) (default: C-E on the attachment menu, and in the
+   pager and index menus; C-T on the compose menu)
 
    This command is used to temporarily edit an attachment's content type to
    fix, for instance, bogus character set parameters. When invoked from the
@@ -1101,12 +1107,12 @@ Chapter 2. Getting Started
    configuration file. A common use is to check the settings of variables, or
    in conjunction with macro to change settings on the fly.
 
-   <extract-keys> (default: ^K)
+   <extract-keys> (default: C-K)
 
    This command extracts PGP public keys from the current or tagged
    message(s) and adds them to your PGP public key ring.
 
-   <forget-passphrase> (default: ^F)
+   <forget-passphrase> (default: C-F)
 
    This command wipes the passphrase(s) from memory. It is useful, if you
    misspelled the passphrase.
@@ -1126,7 +1132,7 @@ Chapter 2. Getting Started
    message(s) to it. The variables $pipe_decode, $pipe_split, $pipe_decode
    and $wait_key control the exact behavior of this function.
 
-   <resend-message> (default: ESC e)
+   <resend-message> (default: E-e)
 
    With resend-message, mutt takes the current message as a template for a
    new message. This function is best described as "recall from arbitrary
@@ -1164,14 +1170,14 @@ Chapter 2. Getting Started
 
    Table 2.8. Most commonly used Mail Composition Bindings
 
-   Key   Function      Description
-   m     <compose>     compose a new message
-   r     <reply>       reply to sender
-   g     <group-reply> reply to all recipients
-   L     <list-reply>  reply to mailing list address
-   f     <forward>     forward message
-   b     <bounce>      bounce (remail) message
-   ESC k <mail-key>    mail a PGP public key to someone
+   Key Function      Description
+   m   <compose>     compose a new message
+   r   <reply>       reply to sender
+   g   <group-reply> reply to all recipients
+   L   <list-reply>  reply to mailing list address
+   f   <forward>     forward message
+   b   <bounce>      bounce (remail) message
+   E-k <mail-key>    mail a PGP public key to someone
 
    Bouncing a message sends the message as is to the recipient you specify.
    Forwarding a message allows you to add comments or modify the message you
@@ -1239,27 +1245,27 @@ Chapter 2. Getting Started
 
    Table 2.9. Most commonly used Compose Menu Bindings
 
-   Key   Function            Description
-   a     <attach-file>       attach a file
-   A     <attach-message>    attach message(s) to the message
-   ESC k <attach-key>        attach a PGP public key
-   d     <edit-description>  edit description on attachment
-   D     <detach-file>       detach a file
-   t     <edit-to>           edit the To field
-   ESC f <edit-from>         edit the From field
-   r     <edit-reply-to>     edit the Reply-To field
-   c     <edit-cc>           edit the Cc field
-   b     <edit-bcc>          edit the Bcc field
-   y     <send-message>      send the message
-   s     <edit-subject>      edit the Subject
-   S     <smime-menu>        select S/MIME options
-   f     <edit-fcc>          specify an ``Fcc'' mailbox
-   p     <pgp-menu>          select PGP options
-   P     <postpone-message>  postpone this message until later
-   q     <quit>              quit (abort) sending the message
-   w     <write-fcc>         write the message to a folder
-   i     <ispell>            check spelling (if available on your system)
-   ^F    <forget-passphrase> wipe passphrase(s) from memory
+   Key Function            Description
+   a   <attach-file>       attach a file
+   A   <attach-message>    attach message(s) to the message
+   E-k <attach-key>        attach a PGP public key
+   d   <edit-description>  edit description on attachment
+   D   <detach-file>       detach a file
+   t   <edit-to>           edit the To field
+   E-f <edit-from>         edit the From field
+   r   <edit-reply-to>     edit the Reply-To field
+   c   <edit-cc>           edit the Cc field
+   b   <edit-bcc>          edit the Bcc field
+   y   <send-message>      send the message
+   s   <edit-subject>      edit the Subject
+   S   <smime-menu>        select S/MIME options
+   f   <edit-fcc>          specify an ``Fcc'' mailbox
+   p   <pgp-menu>          select PGP options
+   P   <postpone-message>  postpone this message until later
+   q   <quit>              quit (abort) sending the message
+   w   <write-fcc>         write the message to a folder
+   i   <ispell>            check spelling (if available on your system)
+   C-F <forget-passphrase> wipe passphrase(s) from memory
 
    Note: The attach-message function will prompt you for a folder to attach
    messages from. You can now tag messages in that folder and theywill be
@@ -1385,7 +1391,7 @@ Chapter 2. Getting Started
    In these cases, you are dropped into a menu with a list of keys from which
    you can select one. When you quit this menu, or mutt can't find any
    matching keys, you are prompted for a user ID. You can, as usually, abort
-   this prompt using ^G. When you do so, mutt will return to the compose
+   this prompt using C-G. When you do so, mutt will return to the compose
    screen.
 
    Once you have successfully finished the key selection, the message will be
@@ -1813,7 +1819,7 @@ Chapter 3. Configuration
    differ from different manual sources. Where the manual is installed in can
    be queried (already using such a variable) by running:
 
- muttng -Q muttng_docdir
+ $ muttng -Q muttng_docdir
 
    To extend the example for viewing the manual via self-defined variables,
    it can be made more readable and more portable by changing the real path
@@ -1874,7 +1880,7 @@ Chapter 3. Configuration
 
 4. Defining/Using aliases
 
-   Usage: aliaskeyaddress [, address,...]
+   Usage: aliaskey address [, address,...]
 
    It's usually very cumbersome to remember or type out the address of
    someone you are communicating with. Mutt-ng allows you to create
@@ -1885,7 +1891,7 @@ Chapter 3. Configuration
 
    To remove an alias or aliases (``*'' means all aliases):
 
-   unalias [* | key...]
+   Usage: unalias[* | key ... ]
 
  alias muttdude me@cs.hmc.edu (Michael Elkins)
  alias theguys manny, moe, jack
@@ -1925,7 +1931,7 @@ Chapter 3. Configuration
 
 5. Changing the default key bindings
 
-   Usage: bindmapkeyfunction
+   Usage: bindmap key function
 
    This command allows you to change the default key bindings (operation
    invoked when pressing a key).
@@ -2074,7 +2080,7 @@ Chapter 3. Configuration
 
 8. Keyboard macros
 
-   Usage: macromenukeysequence [description]
+   Usage: macromenu key sequence [description]
 
    Macros are useful when you would like a single key to perform a series of
    actions. When you press key in menu menu ,Mutt-ng will behave as if you
@@ -2088,10 +2094,10 @@ Chapter 3. Configuration
    key and sequence are expanded by the same rules as the bind. There are
    some additions however. The first is that control characters in sequence
    can also be specified as ^x. In order to get a caret (`^'') you need to
-   use ^^. Secondly, to specify a certain key such as up or to invoke a
-   function directly, you can use the format <key name> and <function name>
-   .For a listing of key names see the section on bind. Functions are listed
-   in the functions.
+   specify it twice. Secondly, to specify a certain key such as up or to
+   invoke a function directly, you can use the format <key name> and
+   <function name> .For a listing of key names see the section on bind.
+   Functions are listed in the functions.
 
    The advantage with using function names directly is that the macros
    willwork regardless of the current key bindings, so they are not dependent
@@ -2107,11 +2113,11 @@ Chapter 3. Configuration
 
 9. Using color and mono video attributes
 
-   Usage: colorobjectforegroundbackground [regexp]
+   Usage: colorobject foreground background [regexp]
 
-   Usage: color index foregroundbackgroundpattern
+   Usage: colorindex foreground pattern
 
-   Usage: uncolor index pattern[pattern...]
+   Usage: uncolorindex pattern [pattern ...]
 
    If your terminal supports color, you can spice up Mutt-ng by creating your
    own color scheme. To define the color of an object (type of information),
@@ -2210,11 +2216,11 @@ Chapter 3. Configuration
    If your terminal does not support color, it is still possible change the
    video attributes through the use of the ``mono'' command:
 
-   Usage: mono<object> <attribute>[regexp]
+   Usage: monoobject attribute [regexp]
 
-   Usage: mono index attributepattern
+   Usage: monoindex attribute pattern
 
-   Usage: unmono index pattern [pattern...]
+   Usage: unmonoindex pattern [pattern ...]
 
    where attribute is one of the following:
 
@@ -2230,9 +2236,9 @@ Chapter 3. Configuration
 
 10. Ignoring (weeding) unwanted message headers
 
-   Usage: ignorepattern [pattern...]
+   Usage: ignorepattern [pattern ...]
 
-   Usage: unignorepattern [pattern...]
+   Usage: unignorepattern [pattern ...]
 
    Messages often have many header fields added by automatic processing
    systems, or which may not seem useful to display on the screen. This
@@ -2260,9 +2266,9 @@ Chapter 3. Configuration
 
 11. Alternative addresses
 
-   Usage: alternatesregexp [regexp...]
+   Usage: alternatesregexp [regexp ...]
 
-   Usage: unalternatesregexp [regexp...]
+   Usage: unalternatesregexp [regexp ...]
 
    With various functions, mutt will treat messages differently, depending on
    whether you sent them or whether you received them from someone else. For
@@ -2384,13 +2390,13 @@ Chapter 3. Configuration
 
 13. Mailing lists
 
-   Usage: listsregexp [regexp...]
+   Usage: listsregexp [regexp ...]
 
-   Usage: unlistsregexp [regexp...]
+   Usage: unlistsregexp [regexp ...]
 
-   Usage: subscriberegexp [regexp...]
+   Usage: subscriberegexp [regexp ...]
 
-   Usage: unsubscriberegexp [regexp...]
+   Usage: unsubscriberegexp [regexp ...]
 
    Mutt-ng has a few nice features for using-lists. In order to take
    advantage of them, you must specify which addresses belong to mailing
@@ -2445,9 +2451,9 @@ Chapter 3. Configuration
 
 15. Defining mailboxes which receive mail
 
-   Usage: mailboxes [!]filename [filename...]
+   Usage: mailboxes[!]filename [filename ... ]
 
-   Usage: unmailboxes [!]filename [filename...]
+   Usage: unmailboxes[!]filename [filename ... ]
 
    This command specifies folders which can receive mail and which will be
    checked for new messages. By default, the main menu status bar displays
@@ -2479,7 +2485,7 @@ Chapter 3. Configuration
 
    Usage: my_hdrstring
 
-   Usage: unmy_hdrfield [field...]
+   Usage: unmy_hdrfield [field ...]
 
    The ``my_hdr'' command allows you to create your own header fields which
    will be added to every message you send.
@@ -2509,7 +2515,9 @@ Chapter 3. Configuration
 
 17. Defining the order of headers when viewing messages
 
-   Usage: hdr_orderheader1header2header3
+   Usage: hdr_orderheader header [header ...]
+
+   Usage: unhdr_order[ * | header header ...]
 
    With this command, you can specify an order in which mutt will attempt to
    present headers to you when viewing messages.
@@ -2549,7 +2557,9 @@ Chapter 3. Configuration
 
    See pattern-hook for information on the exact format of pattern.
 
-   Example: fcc-hook [@.]aol\\.com$ +spammers
+   Example:
+
+ fcc-hook [@.]aol\\.com$ +spammers
 
    The above will save a copy of all messages going to the aol.com domain to
    the `+spammers' mailbox by default. Also see the fcc-save-hook command.
@@ -2649,19 +2659,18 @@ Chapter 3. Configuration
 
  folder-hook . 'push <collapse-all>'
 
-
 25. Executing functions
 
-   Usage: execfunction [function...]
+   Usage: execfunction [function ... ]
 
    This command can be used to execute any function. Functions are listed in
    the functions. ``exec function'' is equivalent to ``push <function>''.
 
 26. Message Scoring
 
-   Usage: scorepatternvalue
+   Usage: scorepattern value
 
-   Usage: unscorepattern [pattern...]
+   Usage: unscorepattern [pattern ... ]
 
    In situations where you have to cope with a lot of emails, e.g. when you
    read many different mailing lists, and take part in discussions, it is
@@ -2720,7 +2729,7 @@ Chapter 3. Configuration
 
 27. Spam detection
 
-   Usage: spampatternformat
+   Usage: spampattern format
 
    Usage: nospampattern
 
@@ -2812,13 +2821,13 @@ Chapter 3. Configuration
 
 28. Setting variables
 
-   Usage: set [no|inv]variable[=value] [variable...]
+   Usage: set[no|inv]variable [=value] [variable...]
 
-   Usage: togglevariable [variable...]
+   Usage: togglevariable [variable ...]
 
-   Usage: unsetvariable [variable...]
+   Usage: unsetvariable [variable ...]
 
-   Usage: resetvariable [variable...]
+   Usage: resetvariable [variable ...]
 
    This command is used to set (and unset) variables. There are four basic
    types of variables: boolean, number, string and quadoption. boolean
@@ -2869,7 +2878,7 @@ Chapter 3. Configuration
 
 29. Reading initialization commands from another file
 
-   Usage: sourcefilename [filename...]
+   Usage: sourcefilename [filename ...]
 
    This command allows the inclusion of initialization commands from other
    files. For example, I place all of my aliases in ~/.mail_aliases so that I
@@ -2884,7 +2893,7 @@ Chapter 3. Configuration
 
 30. Removing hooks
 
-   Usage: unhook [* | hook-type]
+   Usage: unhook[* | hook-type]
 
    This command permits you to flush hooks you have previously defined. You
    can either remove all hooks by giving the ``*'' character as an argument,
@@ -3533,7 +3542,7 @@ Chapter 4. Advanced Usage
    my_hdr directive:
 
  send-hook . 'unmy_hdr From:'
- send-hook ~C'^b@b\.b$' my-hdr from: c@c.c
+ send-hook '~C ^b@b\.b$' my-hdr from: c@c.c
 
   5.1. Message Matching in Hooks
 
@@ -4657,13 +4666,17 @@ Chapter 5. Mutt-ng's MIME Support
  image/*;xv %s; test=RunningX; edit=xpaint %s
 
  # Convert images to text using the netpbm tools
- image/*;  (anytopnm %s | pnmscale -xysize 80 46 | ppmtopgm | pgmtopbm |
- pbmtoascii -1x2 ) 2>&1 ; copiousoutput
+ image/*;  (anytopnm %s | pnmscale -xysize 80 46 | ppmtopgm | \
+ pgmtopbm | pbmtoascii -1x2 ) 2>&1 ; copiousoutput
 
  # Send excel spreadsheets to my NT box
  application/ms-excel; open.pl %s
 
 4. MIME Autoview
+
+   Usage: auto_viewmime-type [mime-type ...]
+
+   Usage: unauto_viewmime-type [mime-type ...]
 
    In addition to explicitly telling Mutt-ng to view an attachment with
    theMIME viewer defined in the mailcap file, Mutt-ng has support for
@@ -4697,6 +4710,10 @@ Chapter 5. Mutt-ng's MIME Support
 
 5. MIME Multipart/Alternative
 
+   Usage: alternative_ordermime-type [mime-type ...]
+
+   Usage: unalternative_ordermime-type [mime-type ...]
+
    Mutt-ng has some heuristics for determining which attachment of a
    multipart/alternative type to display. First, mutt will check the
    alternative_order list to determine if one of the available typesis
@@ -4715,6 +4732,10 @@ Chapter 5. Mutt-ng's MIME Support
    unalternative_order command.
 
 6. MIME Lookup
+
+   Usage: mime_lookupmime-type [mime-type ...]
+
+   Usage: unmime_lookupmime-type [mime-type ...]
 
    Mutt-ng's mime_lookup list specifies a list of mime-types that should not
    be treated according to their mailcap entry. This option is designed
@@ -6033,17 +6054,14 @@ Chapter 7. Reference
    The file which includes random data that is used to initialize SSL library
    functions.
 
-64. $envelope_from
+64. $envelope_from_address
 
-   Type: boolean
+   Type: e-mail address
 
-   Default: no
+   Default: ""
 
-   When set, Mutt-ng will try to derive the message's envelope sender from
-   the ``From:'' header field. Note that this information is passed to the
-   sendmail command using the ``-f" command line switch, so don't set this
-   option if you are using that switch in $sendmail yourself, or if the
-   sendmail on your machine doesn't support that command line switch.
+   Manually sets the envelope sender for outgoing messages. This value is
+   ignored if ``$use_envelope_from'' is unset.
 
 65. $escape
 
@@ -7371,7 +7389,7 @@ Chapter 7. Reference
 
    Type: system property
 
-   Value: 513
+   Value: 522
 
    This is a read-only system property and specifies muttng's subversion
    revision string.
@@ -9228,23 +9246,7 @@ Chapter 7. Reference
    This command is used to verify S/MIME signatures of type
    application/x-pkcs7-mime. (S/MIME only)
 
-302. $smtp_envelope
-
-   Type: string
-
-   Default: ""
-
-   Availability: SMTP
-
-   If this variable is non-empty, it'll be used as the envelope sender. If
-   it's empty (the default), the value of the regular From: header will be
-   used.
-
-   This may be necessary as some providers don't allow for arbitrary values
-   as the envelope sender but only a particular one which may not be the same
-   as the user's desired From: header.
-
-303. $smtp_host
+302. $smtp_host
 
    Type: string
 
@@ -9256,7 +9258,7 @@ Chapter 7. Reference
    invoking the sendmail binary. Setting this variable overrides the value of
    ``$sendmail'', and any associated variables.
 
-304. $smtp_pass
+303. $smtp_pass
 
    Type: string
 
@@ -9271,7 +9273,7 @@ Chapter 7. Reference
    since the superuser of your machine may read it regardless of the file's
    permissions.
 
-305. $smtp_port
+304. $smtp_port
 
    Type: number
 
@@ -9285,7 +9287,7 @@ Chapter 7. Reference
    Defaults to 25, the standard SMTP port, but RFC 2476-compliant SMTP
    servers will probably desire 587, the mail submission port.
 
-306. $smtp_use_tls
+305. $smtp_use_tls
 
    Type: string
 
@@ -9299,7 +9301,7 @@ Chapter 7. Reference
    to start TLS and continue without TLS in case of an error. Muttng still
    needs to have SSL support enabled in order to use it.
 
-307. $smtp_user
+306. $smtp_user
 
    Type: string
 
@@ -9310,7 +9312,7 @@ Chapter 7. Reference
    Defines the username to use with SMTP AUTH. Setting this variable will
    cause Mutt-ng to attempt to use SMTP AUTH when sending.
 
-308. $sort
+307. $sort
 
    Type: sort order
 
@@ -9333,7 +9335,7 @@ Chapter 7. Reference
    You may optionally use the ``reverse-'' prefix to specify reverse sorting
    order (example: set sort=reverse-date-sent).
 
-309. $sort_alias
+308. $sort_alias
 
    Type: sort order
 
@@ -9347,7 +9349,7 @@ Chapter 7. Reference
     unsorted (leave in order specified in .muttrc)
 
 
-310. $sort_aux
+309. $sort_aux
 
    Type: sort order
 
@@ -9370,7 +9372,7 @@ Chapter 7. Reference
    not the right thing to do, but kept to not break any existing
    configuration setting).
 
-311. $sort_browser
+310. $sort_browser
 
    Type: sort order
 
@@ -9388,7 +9390,7 @@ Chapter 7. Reference
    You may optionally use the ``reverse-'' prefix to specify reverse sorting
    order (example: set sort_browser=reverse-date).
 
-312. $sort_re
+311. $sort_re
 
    Type: boolean
 
@@ -9403,7 +9405,7 @@ Chapter 7. Reference
    whether or not this is the case, as long as the non-``$reply_regexp''
    parts of both messages are identical.
 
-313. $spam_separator
+312. $spam_separator
 
    Type: string
 
@@ -9414,7 +9416,7 @@ Chapter 7. Reference
    matches value for the spam label. If set, each successive match will
    append to the previous, using ``spam_separator'' as a separator.
 
-314. $spoolfile
+313. $spoolfile
 
    Type: path
 
@@ -9425,7 +9427,7 @@ Chapter 7. Reference
    automatically set this variable to the value of the environment variable
    $MAIL if it is not set.
 
-315. $ssl_ca_certificates_file
+314. $ssl_ca_certificates_file
 
    Type: path
 
@@ -9437,7 +9439,7 @@ Chapter 7. Reference
 
    Example: set ssl_ca_certificates_file=/etc/ssl/certs/ca-certificates.crt
 
-316. $ssl_client_cert
+315. $ssl_client_cert
 
    Type: path
 
@@ -9447,7 +9449,7 @@ Chapter 7. Reference
 
    The file containing a client certificate and its associated private key.
 
-317. $ssl_force_tls
+316. $ssl_force_tls
 
    Type: boolean
 
@@ -9459,7 +9461,7 @@ Chapter 7. Reference
    otherwise have to abort the connection anyway. This option supersedes
    ``$ssl_starttls''.
 
-318. $ssl_min_dh_prime_bits
+317. $ssl_min_dh_prime_bits
 
    Type: number
 
@@ -9471,7 +9473,7 @@ Chapter 7. Reference
    use in any Diffie-Hellman key exchange. A value of 0 will use the default
    from the GNUTLS library.
 
-319. $ssl_starttls
+318. $ssl_starttls
 
    Type: quadoption
 
@@ -9483,7 +9485,7 @@ Chapter 7. Reference
    advertising the capability. When unset, Mutt-ng will not attempt to use
    STARTTLS regardless of the server's capabilities.
 
-320. $ssl_use_sslv2
+319. $ssl_use_sslv2
 
    Type: boolean
 
@@ -9494,7 +9496,7 @@ Chapter 7. Reference
    This variables specifies whether to attempt to use SSLv2 in the SSL
    authentication process.
 
-321. $ssl_use_sslv3
+320. $ssl_use_sslv3
 
    Type: boolean
 
@@ -9505,7 +9507,7 @@ Chapter 7. Reference
    This variables specifies whether to attempt to use SSLv3 in the SSL
    authentication process.
 
-322. $ssl_use_tlsv1
+321. $ssl_use_tlsv1
 
    Type: boolean
 
@@ -9516,7 +9518,7 @@ Chapter 7. Reference
    This variables specifies whether to attempt to use TLSv1 in the SSL
    authentication process.
 
-323. $ssl_usesystemcerts
+322. $ssl_usesystemcerts
 
    Type: boolean
 
@@ -9528,7 +9530,7 @@ Chapter 7. Reference
    certificate store when checking if server certificate is signed by a
    trusted CA.
 
-324. $status_chars
+323. $status_chars
 
    Type: string
 
@@ -9545,7 +9547,7 @@ Chapter 7. Reference
    (Certain operations like composing a new mail, replying, forwarding, etc.
    are not permitted in this mode).
 
-325. $status_format
+324. $status_format
 
    Type: string
 
@@ -9689,7 +9691,7 @@ Chapter 7. Reference
    will replace any dots in the expansion by underscores. This might be
    helpful with IMAP folders that don't like dots in folder names.
 
-326. $status_on_top
+325. $status_on_top
 
    Type: boolean
 
@@ -9698,7 +9700,7 @@ Chapter 7. Reference
    Setting this variable causes the ``status bar'' to be displayed on the
    first line of the screen rather than near the bottom.
 
-327. $strict_mailto
+326. $strict_mailto
 
    Type: boolean
 
@@ -9713,7 +9715,7 @@ Chapter 7. Reference
    ``X-Mailto-'' and the message including headers will be shown in the
    editor regardless of what ``$edit_headers'' is set to.
 
-328. $strict_mime
+327. $strict_mime
 
    Type: boolean
 
@@ -9728,7 +9730,7 @@ Chapter 7. Reference
    *text to a single space to prevent the display of MIME-encoded
    ``Subject:'' header field from being devided into multiple lines.
 
-329. $strict_threads
+328. $strict_threads
 
    Type: boolean
 
@@ -9742,7 +9744,7 @@ Chapter 7. Reference
    which will get grouped together. See also ``$sort_re'' for a less drastic
    way of controlling this behaviour.
 
-330. $strip_was
+329. $strip_was
 
    Type: boolean
 
@@ -9752,7 +9754,7 @@ Chapter 7. Reference
    which matches $strip_was_regex when replying. This is useful to properly
    react on subject changes and reduce ``subject noise.'' (esp. in Usenet)
 
-331. $strip_was_regex
+330. $strip_was_regex
 
    Type: regular expression
 
@@ -9762,7 +9764,7 @@ Chapter 7. Reference
    part of the ``Subject'' line when replying if it won't be empty
    afterwards.
 
-332. $stuff_quoted
+331. $stuff_quoted
 
    Type: boolean
 
@@ -9772,7 +9774,7 @@ Chapter 7. Reference
    ``stuffed'', i.e. a space will be inserted between the quote characters
    and the actual text.
 
-333. $suspend
+332. $suspend
 
    Type: boolean
 
@@ -9782,7 +9784,7 @@ Chapter 7. Reference
    key, usually CTRL+Z. This is useful if you run Mutt-ng inside an xterm
    using a command like ``xterm -e muttng.''
 
-334. $text_flowed
+333. $text_flowed
 
    Type: boolean
 
@@ -9795,7 +9797,7 @@ Chapter 7. Reference
 
    Note that $indent_string is ignored when this option is set.
 
-335. $thorough_search
+334. $thorough_search
 
    Type: boolean
 
@@ -9806,7 +9808,7 @@ Chapter 7. Reference
    decoded before searching. If unset, messages are searched as they appear
    in the folder.
 
-336. $thread_received
+335. $thread_received
 
    Type: boolean
 
@@ -9815,7 +9817,7 @@ Chapter 7. Reference
    When set, Mutt-ng uses the date received rather than the date sent to
    thread messages by subject.
 
-337. $tilde
+336. $tilde
 
    Type: boolean
 
@@ -9824,7 +9826,7 @@ Chapter 7. Reference
    When set, the internal-pager will pad blank lines to the bottom of the
    screen with a tilde (~).
 
-338. $timeout
+337. $timeout
 
    Type: number
 
@@ -9834,7 +9836,7 @@ Chapter 7. Reference
    to be pressed in the main menu before timing out and checking for new
    mail. A value of zero or less will cause Mutt-ng to never time out.
 
-339. $tmpdir
+338. $tmpdir
 
    Type: path
 
@@ -9845,7 +9847,7 @@ Chapter 7. Reference
    not set, the environment variable $TMPDIR is used. If $TMPDIR is not set
    then "/tmp" is used.
 
-340. $to_chars
+339. $to_chars
 
    Type: string
 
@@ -9862,7 +9864,7 @@ Chapter 7. Reference
    character is used to indicate when a mail was sent to a mailing-list
    you're subscribe to (default: L).
 
-341. $trash
+340. $trash
 
    Type: path
 
@@ -9875,7 +9877,7 @@ Chapter 7. Reference
    Note: When you delete a message in the trash folder, it is really deleted,
    so that there is no way to recover mail.
 
-342. $tunnel
+341. $tunnel
 
    Type: string
 
@@ -9890,7 +9892,7 @@ Chapter 7. Reference
    Note: For this example to work you must be able to log in to the remote
    machine without having to enter a password.
 
-343. $umask
+342. $umask
 
    Type: number
 
@@ -9899,7 +9901,7 @@ Chapter 7. Reference
    This sets the umask that will be used by Mutt-ng when creating all kinds
    of files. If unset, the default value is 077.
 
-344. $uncollapse_jump
+343. $uncollapse_jump
 
    Type: boolean
 
@@ -9908,7 +9910,7 @@ Chapter 7. Reference
    When set, Mutt-ng will jump to the next unread message, if any, when the
    current thread is uncollapsed.
 
-345. $use_8bitmime
+344. $use_8bitmime
 
    Type: boolean
 
@@ -9923,7 +9925,7 @@ Chapter 7. Reference
    flag when sending 8-bit messages to enable ESMTP negotiation or tell
    libESMTP to do so.
 
-346. $use_domain
+345. $use_domain
 
    Type: boolean
 
@@ -9932,6 +9934,20 @@ Chapter 7. Reference
    When set, Mutt-ng will qualify all local addresses (ones without the @host
    portion) with the value of ``$hostname''. If unset, no addresses will be
    qualified.
+
+346. $use_envelope_from
+
+   Type: boolean
+
+   Default: no
+
+   When set, mutt-ng will use ``$envelope_from_address'' as the envelope
+   sender if that is set, otherwise it will attempt to derive it from the
+   "From:" header.
+
+   Note: This information is passed to sendmail command using the "-f"
+   command line switch and passed to the SMTP server for libESMTP (if support
+   is compiled in).
 
 347. $use_from
 
@@ -10105,9 +10121,9 @@ Chapter 7. Reference
 
    Function          Default Key Description
    <bottom-page>     L           move to the bottom of the page
-   <current-bottom>  not bound   move current entry to bottom of page
-   <current-middle>  not bound   move current entry to middle of page
-   <current-top>     not bound   move current entry to top of page
+   <current-bottom>              move current entry to bottom of page
+   <current-middle>              move current entry to middle of page
+   <current-top>                 move current entry to top of page
    <enter-command>   :           enter a muttngrc command
    <exit>            q           exit this menu
    <first-entry>     =           move to the first entry
@@ -10121,20 +10137,20 @@ Chapter 7. Reference
    <next-line>       >           scroll down one line
    <next-page>       z           move to the next page
    <previous-entry>  k           move to the previous entry
-   <previous-line>   <           scroll up one line
+   <previous-line>   >           scroll up one line
    <previous-page>   Z           move to the previous page
-   <refresh>         ^L          clear and redraw the screen
+   <refresh>         C-L         clear and redraw the screen
    <search>          /           search for a regular expression
    <search-next>     n           search for next match
-   <search-opposite> not bound   search for next match in opposite direction
-   <search-reverse>  ESC /       search backwards for a regular expression
-   <select-entry>    RET         select the current entry
+   <search-opposite>             search for next match in opposite direction
+   <search-reverse>  E-/         search backwards for a regular expression
+   <select-entry>    Return      select the current entry
    <shell-escape>    !           run a program in a subshell
    <tag-entry>       t           toggle the tag on the current entry
    <tag-prefix>      ;           apply next command to tagged entries
-   <tag-prefix-cond> not bound   apply next function ONLY to tagged messages
+   <tag-prefix-cond>             apply next function ONLY to tagged messages
    <top-page>        H           move to the top of the page
-   <what-key>        not bound   display the keycode for a key press
+   <what-key>                    display the keycode for a key press
 
   5.2. index
 
@@ -10143,79 +10159,79 @@ Chapter 7. Reference
    Function                   Default Key Description
    <bounce-message>           b           remail a message to another user
    <change-folder>            c           open a different folder
-   <change-folder-readonly>   ESC c       open a different folder in read
+   <change-folder-readonly>   E-c         open a different folder in read
                                           only mode
-   <check-traditional-pgp>    ESC P       check for classic pgp
+   <check-traditional-pgp>    E-P         check for classic pgp
    <clear-flag>               W           clear a status flag from a message
    <copy-message>             C           copy a message to a file/mailbox
    <create-alias>             a           create an alias from a message
                                           sender
-   <decode-copy>              ESC C       decode a message and copy it to a
+   <decode-copy>              E-C         decode a message and copy it to a
                                           file/mailbox
-   <decode-save>              ESC s       decode a message and save it to a
+   <decode-save>              E-s         decode a message and save it to a
                                           file/mailbox
    <delete-message>           d           delete the current entry
    <delete-pattern>           D           delete messages matching a pattern
-   <delete-subthread>         ESC d       delete all messages in subthread
-   <delete-thread>            ^D          delete all messages in thread
+   <delete-subthread>         E-d         delete all messages in subthread
+   <delete-thread>            C-D         delete all messages in thread
    <display-address>          @           display full address of sender
    <display-toggle-weed>      h           display message and toggle header
                                           weeding
-   <display-message>          RET         display a message
+   <display-message>          Return      display a message
    <edit>                     e           edit the current message
-   <edit-type>                ^E          edit the current message's
+   <edit-type>                C-E         edit the current message's
                                           Content-Type
    <exit>                     x           exit without saving changes
-   <extract-keys>             ^K          extract PGP public keys
+   <extract-keys>             C-K         extract PGP public keys
    <fetch-mail>               G           retrieve mail from POP server
    <flag-message>             F           toggle a message's 'important' flag
-   <forget-passphrase>        ^F          wipe PGP passphrase from memory
+   <forget-passphrase>        C-F         wipe PGP passphrase from memory
    <forward-message>          f           forward a message with comments
    <group-reply>              g           reply to all recipients
    <limit>                    l           show only messages matching a
                                           pattern
    <list-reply>               L           reply to specified mailing list
    <mail>                     m           compose a new mail message
-   <mail-key>                 ESC k       mail a PGP public key
-   <next-new>                 not bound   jump to the next new message
-   <next-new-then-unread>     TAB         jump to the next new or unread
+   <mail-key>                 E-k         mail a PGP public key
+   <next-new>                             jump to the next new message
+   <next-new-then-unread>     Tab         jump to the next new or unread
                                           message
-   <next-subthread>           ESC n       jump to the next subthread
-   <next-thread>              ^N          jump to the next thread
+   <next-subthread>           E-n         jump to the next subthread
+   <next-thread>              C-N         jump to the next thread
    <next-undeleted>           j           move to the next undeleted message
-   <next-unread>              not bound   jump to the next unread message
+   <next-unread>                          jump to the next unread message
    <parent-message>           P           jump to parent message in thread
    <pipe-message>             |           pipe message/attachment to a shell
                                           command
-   <previous-new>             not bound   jump to the previous new message
-   <previous-new-then-unread> ESC TAB     jump to the previous new or unread
+   <previous-new>                         jump to the previous new message
+   <previous-new-then-unread> E-Tab       jump to the previous new or unread
                                           message
    <previous-page>            Z           move to the previous page
-   <previous-subthread>       ESC p       jump to previous subthread
-   <previous-thread>          ^P          jump to previous thread
+   <previous-subthread>       E-p         jump to previous subthread
+   <previous-thread>          C-P         jump to previous thread
    <previous-undeleted>       k           move to the last undelete message
-   <previous-unread>          not bound   jump to the previous unread message
+   <previous-unread>                      jump to the previous unread message
    <print-message>            p           print the current entry
    <query>                    Q           query external program for
                                           addresses
    <quit>                     q           save changes to mailbox and quit
-   <read-subthread>           ESC r       mark the current subthread as read
-   <read-thread>              ^R          mark the current thread as read
+   <read-subthread>           E-r         mark the current subthread as read
+   <read-thread>              C-R         mark the current thread as read
    <recall-message>           R           recall a postponed message
    <reply>                    r           reply to a message
-   <resend-message>           ESC e       resend message and preserve MIME
+   <resend-message>           E-e         resend message and preserve MIME
                                           structure
    <save-message>             s           save message/attachment to a file
    <set-flag>                 w           set a status flag on a message
    <show-version>             V           show the Mutt-ng version number and
                                           date
-   <show-limit>               ESC l       show currently active limit
+   <show-limit>               E-l         show currently active limit
                                           pattern, if any
    <sort-mailbox>             o           sort messages
    <sort-reverse>             O           sort messages in reverse order
    <sync-mailbox>             $           save changes to mailbox
    <tag-pattern>              T           tag messages matching a pattern
-   <tag-thread>               ESC t       tag/untag all messages in the
+   <tag-thread>               E-t         tag/untag all messages in the
                                           current thread
    <toggle-new>               N           toggle a message's 'new' flag
    <toggle-write>             %           toggle whether the mailbox will be
@@ -10223,9 +10239,9 @@ Chapter 7. Reference
    <undelete-message>         u           undelete the current entry
    <undelete-pattern>         U           undelete messages matching a
                                           pattern
-   <undelete-subthread>       ESC u       undelete all messages in subthread
-   <undelete-thread>          ^U          undelete all messages in thread
-   <untag-pattern>            ^T          untag messages matching a pattern
+   <undelete-subthread>       E-u         undelete all messages in subthread
+   <undelete-thread>          C-U         undelete all messages in thread
+   <untag-pattern>            C-T         untag messages matching a pattern
    <view-attachments>         v           show MIME attachments
 
   5.3. pager
@@ -10233,77 +10249,77 @@ Chapter 7. Reference
    Table 7.6. Reference: Default Pager Function Bindings
 
    Function                   Default Key Description
-   <bottom>                   not bound   jump to the bottom of the message
+   <bottom>                               jump to the bottom of the message
    <bounce-message>           b           remail a message to another user
    <change-folder>            c           open a different folder
-   <change-folder-readonly>   ESC c       open a different folder in read
+   <change-folder-readonly>   E-c         open a different folder in read
                                           only mode
-   <check-traditional-pgp>    ESC P       check for classic pgp
+   <check-traditional-pgp>    E-P         check for classic pgp
    <copy-message>             C           copy a message to a file/mailbox
    <create-alias>             a           create an alias from a message
-   <senderdecode-copy>        ESC C       decode a message and copy it to a
+   <senderdecode-copy>        E-C         decode a message and copy it to a
                                           file/mailbox
-   <decode-save>              ESC s       decode a message and save it to a
+   <decode-save>              E-s         decode a message and save it to a
                                           file/mailbox
    <delete-message>           d           delete the current entry
-   <delete-subthread>         ESC d       delete all messages in subthread
-   <delete-thread>            ^D          delete all messages in thread
+   <delete-subthread>         E-d         delete all messages in subthread
+   <delete-thread>            C-D         delete all messages in thread
    <display-address>          @           display full address of sender
    <display-toggle-weed>      h           display message and toggle header
                                           weeding
    <edit>                     e           edit the current message
-   <edit-type>                ^E          edit the current message's
+   <edit-type>                C-E         edit the current message's
                                           Content-Type
    <enter-command>            :           enter a muttngrc command
    <exit>                     i           return to the main-menu
-   <extract-keys>             ^K          extract PGP public keys
+   <extract-keys>             C-K         extract PGP public keys
    <flag-message>             F           toggle a message's 'important' flag
-   <forget-passphrase>        ^F          wipe PGP passphrase from memory
+   <forget-passphrase>        C-F         wipe PGP passphrase from memory
    <forward-message>          f           forward a message with comments
    <group-reply>              g           reply to all recipients
-   <half-up>                  not bound   move up one-half page
-   <half-down>                not bound   move down one-half page
+   <half-up>                              move up one-half page
+   <half-down>                            move down one-half page
    <help>                     ?           this screen
    <list-reply>               L           reply to specified mailing list
    <mail>                     m           compose a new mail message
-   <mail-key>                 ESC k       mail a PGP public key
+   <mail-key>                 E-k         mail a PGP public key
    <mark-as-new>              N           toggle a message's 'new' flag
-   <next-line>                RET         scroll down one line
+   <next-line>                Return      scroll down one line
    <next-entry>               J           move to the next entry
-   <next-new>                 not bound   jump to the next new message
-   <next-new-then-unread>     TAB         jump to the next new or unread
+   <next-new>                             jump to the next new message
+   <next-new-then-unread>     Tab         jump to the next new or unread
                                           message
-   <next-page>                not bound   move to the next page
-   <next-subthread>           ESC n       jump to the next subthread
-   <next-thread>              ^N          jump to the next thread
+   <next-page>                            move to the next page
+   <next-subthread>           E-n         jump to the next subthread
+   <next-thread>              C-N         jump to the next thread
    <next-undeleted>           j           move to the next undeleted message
-   <next-unread>              not bound   jump to the next unread message
+   <next-unread>                          jump to the next unread message
    <parent-message>           P           jump to parent message in thread
    <pipe-message>             |           pipe message/attachment to a shell
                                           command
    <previous-line>            BackSpace   scroll up one line
    <previous-entry>           K           move to the previous entry
-   <previous-new>             not bound   jump to the previous new message
-   <previous-new-then-unread> not bound   jump to the previous new or unread
+   <previous-new>                         jump to the previous new message
+   <previous-new-then-unread>             jump to the previous new or unread
                                           message
    <previous-page>            -           move to the previous page
-   <previous-subthread>       ESC p       jump to previous subthread
-   <previous-thread>          ^P          jump to previous thread
+   <previous-subthread>       E-p         jump to previous subthread
+   <previous-thread>          C-P         jump to previous thread
    <previous-undeleted>       k           move to the last undelete message
-   <previous-unread>          not bound   jump to the previous unread message
+   <previous-unread>                      jump to the previous unread message
    <print-message>            p           print the current entry
    <quit>                     Q           save changes to mailbox and quit
-   <read-subthread>           ESC r       mark the current subthread as read
-   <read-thread>              ^R          mark the current thread as read
+   <read-subthread>           E-r         mark the current subthread as read
+   <read-thread>              C-R         mark the current thread as read
    <recall-message>           R           recall a postponed message
-   <redraw-screen>            ^L          clear and redraw the screen
+   <redraw-screen>            C-L         clear and redraw the screen
    <reply>                    r           reply to a message
    <save-message>             s           save message/attachment to a file
    <search>                   /           search for a regular expression
    <search-next>              n           search for next match
-   <search-opposite>          not bound   search for next match in opposite
+   <search-opposite>                      search for next match in opposite
                                           direction
-   <search-reverse>           ESC /       search backwards for a regular
+   <search-reverse>           E-/         search backwards for a regular
                                           expression
    <search-toggle>            \           toggle search pattern coloring
    <shell-escape>             !           invoke a command in a subshell
@@ -10315,8 +10331,8 @@ Chapter 7. Reference
    <toggle-quoted>            T           toggle display of quoted text
    <top>                      ^           jump to the top of the message
    <undelete-message>         u           undelete the current entry
-   <undelete-subthread>       ESC u       undelete all messages in subthread
-   <undelete-thread>          ^U          undelete all messages in thread
+   <undelete-subthread>       E-u         undelete all messages in subthread
+   <undelete-thread>          C-U         undelete all messages in thread
    <view-attachments>         v           show MIME attachments
 
   5.4. alias
@@ -10326,7 +10342,7 @@ Chapter 7. Reference
    Function         Default Key Description
    <search>         /           search for a regular expression
    <search-next>    n           search for next match
-   <search-reverse> ESC /       search backwards for a regular expression
+   <search-reverse> E-/         search backwards for a regular expression
 
   5.5. query
 
@@ -10339,8 +10355,8 @@ Chapter 7. Reference
    <query-append>    A           append new query results to current results
    <search>          /           search for a regular expression
    <search-next>     n           search for next match
-   <search-opposite> not bound   search for next match in opposite direction
-   <search-reverse>  ESC /       search backwards for a regular expression
+   <search-opposite>             search for next match in opposite direction
+   <search-reverse>  E-/         search backwards for a regular expression
 
   5.6. attach
 
@@ -10352,8 +10368,8 @@ Chapter 7. Reference
    <delete-entry>        d           delete the current entry
    <display-toggle-weed> h           display message and toggle header
                                      weeding
-   <edit-type>           ^E          edit the current entry's Content-Type
-   <extract-keys>        ^K          extract PGP public keys
+   <edit-type>           C-E         edit the current entry's Content-Type
+   <extract-keys>        C-K         extract PGP public keys
    <forward-message>     f           forward a message with comments
    <group-reply>         g           reply to all recipients
    <list-reply>          L           reply to specified mailing list
@@ -10361,11 +10377,11 @@ Chapter 7. Reference
                                      command
    <print-entry>         p           print the current entry
    <reply>               r           reply to a message
-   <resend-message>      ESC e       resend message and preserve MIME
+   <resend-message>      E-e         resend message and preserve MIME
                                      structure
    <save-entry>          s           save message/attachment to a file
    <undelete-entry>      u           undelete the current entry
-   <view-attach>         RET         view attachment using mailcap entry if
+   <view-attach>         Return      view attachment using mailcap entry if
                                      necessary
    <view-mailcap>        m           force viewing of attachment using
                                      mailcap
@@ -10378,7 +10394,7 @@ Chapter 7. Reference
    Function              Default Key Description
    <attach-file>         a           attach a file(s) to this message
    <attach-message>      A           attach message(s) to this message
-   <attach-key>          ESC k       attach a PGP public key
+   <attach-key>          E-k         attach a PGP public key
    <copy-file>           C           save message/attachment to a file
    <detach-file>         D           delete the current entry
    <display-toggle-weed> h           display message and toggle header
@@ -10386,21 +10402,21 @@ Chapter 7. Reference
    <edit-bcc>            b           edit the BCC list
    <edit-cc>             c           edit the CC list
    <edit-description>    d           edit attachment description
-   <edit-encoding>       ^E          edit attachment transfer-encoding
+   <edit-encoding>       C-E         edit attachment transfer-encoding
    <edit-fcc>            f           enter a file to save a copy of this
                                      message in
-   <edit-from>           ESC f       edit the from: field
-   <edit-file>           ^X e        edit the file to be attached
+   <edit-from>           E-f         edit the from: field
+   <edit-file>           C-X e       edit the file to be attached
    <edit-headers>        E           edit the message with headers
    <edit>                e           edit the message
    <edit-mime>           m           edit attachment using mailcap entry
    <edit-reply-to>       r           edit the Reply-To field
    <edit-subject>        s           edit the subject of this message
    <edit-to>             t           edit the TO list
-   <edit-type>           ^T          edit attachment type
+   <edit-type>           C-T         edit attachment type
    <filter-entry>        F           filter attachment through a shell
                                      command
-   <forget-passphrase>   ^F          wipe PGP passphrase from memory
+   <forget-passphrase>   C-F         wipe PGP passphrase from memory
    <ispell>              i           run ispell on the message
    <new-mime>            n           compose new attachment using mailcap
                                      entry
@@ -10413,7 +10429,7 @@ Chapter 7. Reference
    <send-message>        y           send the message
    <toggle-unlink>       u           toggle whether to delete file after
                                      sending it
-   <view-attach>         RET         view attachment using mailcap entry if
+   <view-attach>         Return      view attachment using mailcap entry if
                                      necessary
    <write-fcc>           w           write the message to a folder
 
@@ -10431,17 +10447,17 @@ Chapter 7. Reference
 
    Function            Default Key Description
    <change-dir>        c           change directories
-   <check-new>         TAB         check mailboxes for new mail
+   <check-new>         Tab         check mailboxes for new mail
    <enter-mask>        m           enter a file mask
    <search>            /           search for a regular expression
    <search-next>       n           search for next match
-   <search-reverse>    ESC /       search backwards for a regular expression
+   <search-reverse>    E-/         search backwards for a regular expression
    <select-new>        N           select a new file in this directory
    <sort>              o           sort messages
    <sort-reverse>      O           sort messages in reverse order
-   <toggle-mailboxes>  TAB         toggle whether to browse mailboxes or all
+   <toggle-mailboxes>  Tab         toggle whether to browse mailboxes or all
                                    files
-   <view-file>         SPACE       view file
+   <view-file>         Space       view file
    <subscribe>         s           subscribe to current mailbox (IMAP Only)
    <unsubscribe>       u           unsubscribe to current mailbox (IMAP Only)
    <toggle-subscribed> T           toggle view all/subscribed mailboxes (IMAP
@@ -10461,40 +10477,40 @@ Chapter 7. Reference
 
    Function          Default Key Description
    <backspace>       BackSpace   delete the char in front of the cursor
-   <backward-char>   ^B          move the cursor one character to the left
-   <backward-word>   ESC b       move the cursor to the previous word
-   <bol>             ^A          jump to the beginning of the line
+   <backward-char>   C-B         move the cursor one character to the left
+   <backward-word>   E-b         move the cursor to the previous word
+   <bol>             C-A         jump to the beginning of the line
    <buffy-cycle>     Space       cycle among incoming mailboxes
-   <capitalize-word> ESC c       uppercase the first character in the word
-   <complete>        TAB         complete filename or alias
-   <complete-query>  ^T          complete address with query
-   <delete-char>     ^D          delete the char under the cursor
-   <downcase-word>   ESC l       lowercase all characters in current word
-   <eol>             ^E          jump to the end of the line
-   <forward-char>    ^F          move the cursor one character to the right
-   <forward-word>    ESC f       move the cursor to the next word
-   <history-down>    not bound   scroll down through the history list
-   <history-up>      not bound   scroll up through the history list
-   <kill-eol>        ^K          delete chars from cursor to end of line
-   <kill-eow>        ESC d       delete chars from cursor to end of word
-   <kill-line>       ^U          delete all chars on the line
-   <kill-word>       ^W          delete the word in front of the cursor
-   <quote-char>      ^V          quote the next typed key
-   <transpose-chars> not bound   transpose character under cursor with
+   <capitalize-word> E-c         uppercase the first character in the word
+   <complete>        Tab         complete filename or alias
+   <complete-query>  C-T         complete address with query
+   <delete-char>     C-D         delete the char under the cursor
+   <downcase-word>   E-l         lowercase all characters in current word
+   <eol>             C-E         jump to the end of the line
+   <forward-char>    C-F         move the cursor one character to the right
+   <forward-word>    E-f         move the cursor to the next word
+   <history-down>                scroll down through the history list
+   <history-up>                  scroll up through the history list
+   <kill-eol>        C-K         delete chars from cursor to end of line
+   <kill-eow>        E-d         delete chars from cursor to end of word
+   <kill-line>       C-U         delete all chars on the line
+   <kill-word>       C-W         delete the word in front of the cursor
+   <quote-char>      C-V         quote the next typed key
+   <transpose-chars>             transpose character under cursor with
                                  previous
-   <upcase-word>     ESC u       uppercase all characters in current word
+   <upcase-word>     E-u         uppercase all characters in current word
 
   5.12. sidebar
 
    Table 7.15. Referene: Default Sidebar Function Bindings
 
-   Key  Function              Description
-   none <sidebar-scroll-up>   Scrolls the mailbox list up 1 page
-   none <sidebar-scroll-down> Scrolls the mailbox list down 1 page
-   none <sidebar-next>        Highlights the next mailbox
-   none <sidebar-next-new>    Highlights the next mailbox with new mail
-   none <sidebar-previous>    Highlights the previous mailbox
-   none <sidebar-open>        Opens the currently highlighted mailbox
+   Key Function              Description
+       <sidebar-scroll-up>   Scrolls the mailbox list up 1 page
+       <sidebar-scroll-down> Scrolls the mailbox list down 1 page
+       <sidebar-next>        Highlights the next mailbox
+       <sidebar-next-new>    Highlights the next mailbox with new mail
+       <sidebar-previous>    Highlights the previous mailbox
+       <sidebar-open>        Opens the currently highlighted mailbox
 
 Appendix A. Acknowledgments
 
@@ -10506,7 +10522,8 @@ Appendix A. Acknowledgments
 
      o Vikas Agnihotri <vikasa@writeme.com>
      o Francois Berjon < Francois.Berjon@aar.alcatel-alsthom.fr>
-     o Aric Blumer <aric@fore.com>, John Capo < jc@irbs.com >
+     o Aric Blumer <aric@fore.com>
+     o John Capo <jc@irbs.com>
      o David Champion <dgc@uchicago.edu>
      o Brendan Cully <brendan@kublai.com>
      o Liviu Daia <daia@stoilow.imar.ro>
@@ -10564,8 +10581,8 @@ Appendix A. Acknowledgments
 Appendix B. Hacking Documentation
 
    This manual is written in XML and transformed via a XSLT stylesheet into
-   valid DocBook/XML to be again transformed via a XSLT stylesheet into the
-   final formats.
+   valid DocBook/XML and/or LaTeX to be again transformed via a XSLT
+   stylesheet into the final formats.
 
    This two pass processing is required to keep the file size low and to
    sanitize use, i.e. drastically lower the typing overhead.
@@ -10584,50 +10601,50 @@ Appendix B. Hacking Documentation
 
            References to environment variables. The name parameter must
            contain upper-case letters only without the dollar sign as it'll
-           be added automatically. Auto-indexing under Environment Variables
-           is done.
+           be added automatically. Auto-indexing is done.
 
    <muttng-doc:hook name=""/>
 
            References to hooks. The string -hook will be added automatically
            to the value given in the name parameter. All entries will be
-           auto-indexed under Hooks.
-
-   <muttng-doc:command name=""/>
-
-           References to configuration commands. The name is given via the
-           name parameter and will be auto-indexed under Configuration
-           Commands.
+           auto-indexed.
 
    <muttng-doc:pattern name="" [full="1"]/>
 
            References to patterns. The name parameter must only contain the
            letter/symbol for the pattern as the tilde symbol/equal sign will
-           be added automatically. Auto-indexing is done under Patterns. If
-           the full is given the equal sign as well as tilde will be printed
+           be added automatically. Auto-indexing is done. If the full
+           parameter is given the equal sign as well as tilde will be printed
            for a fully complete reference.
 
-   <muttng-doc:funcdef name="" key=""/>
+   <muttng-doc:key [mod="C|E"]>key</muttng-doc:key>
+
+           Referencing a key.. Because it's somewhat untrivial to always get
+           the right escaping for LaTeX, there's a tag for it. The optional
+           modifiers C or E stand for Control and Escape respectively. To
+           still allow escaping, the actual key sequences must be given
+           within the tag.
+
+   <muttng-doc:funcdef name=""/>
 
            Defining a command.. It's used to define a command with the name
-           given in the name parameter and a default key binding given via
-           key. The string will be automatically enclosed in <>.
-           Auto-indexing is done under Functions. Also an anchor with id
-           func-[name] will be added with [name] being the value of the name
-           parameter.
+           given in the name parameter. The default key binding must be given
+           via <muttng-doc:key/> (see above). The string will be
+           automatically enclosed in <>. Auto-indexing is done. Also an
+           anchor with id func-[name] will be added with [name] being the
+           value of the name parameter.
 
    <muttng-doc:funcref name=""/>
 
            References to functions.. This is practically the same as the
            above except that there's no anchor defined.
 
-   <muttng-doc:vardef name="" id=""/>
+   <muttng-doc:vardef name=""/>
 
            Defining a variable. This is to be used by makedoc only to define
            a command with a given name and XML-normalized link given via id.
-           Auto-indexing is done under Configuration Variables. The name
-           parameter's value will be prefixed with a dollar sign as for
-           environment variables.
+           Auto-indexing is done. The name parameter's value will be prefixed
+           with a dollar sign as for environment variables.
 
    <muttng-doc:varref name=""/>
 
@@ -10646,1456 +10663,1611 @@ Appendix B. Hacking Documentation
 
            References to RfC documents. Use this to produce links to RfC
            document with number given as the num parameter. A link to
-           <http://www.faqs.org/> will be made. Auto-indexing is not done
-           yet.
+           <http://www.faqs.org/> will be made. Auto-indexing is done under
+           RfC.
+
+   <muttng-doc:cmddef name="" [noanchor="1"]/>
+
+           Defining a configuration command. The name of the command is given
+           as the name parameter. In case a single command has multiple
+           possible calling sequences, specify noanchor="1" for subsequent
+           use. Auto-indexing is done. Specify the arguments within the tag.
+
+   <muttng-doc:cmdref name=""/>
+
+           References to configuration commands. Use this to refer to
+           commands as it builds the proper internal reference name.
+           Auto-indexing is done.
+
+   <muttng-doc:lstconf/>, <muttng-doc:lstmail/>, <muttng-doc:lstshell/>
+
+           Screen layout by context. These are used to specify environments
+           for different types of screen output. For DocBook output, all of
+           these simply map to <screen/>. But as a possible future migration
+           to LaTeX may be ahead, different languages defined for the
+           listings.sty packages may be used to have proper syntax
+           highlighting for these so that there must be a context sensitive
+           distinction.
+
+   <muttng-doc:special [docbook=""] [latex=""]/>
+
+           This is intended for specifying special strings for either
+           DocBook/XML or LaTeX.
+
+   Additional notes follow.
+
+     o To not fully bloat the XSL stylesheet procuding the LaTeX code, all
+       tables must have an attribute called texstr which is directly passed
+       to longtable.
 
 Index
 
-  C
+  Symbols
 
+   ~$/ =$, Patterns
+
+   ~*/ =*, Patterns
+
+   ~=/ ==, Patterns
+
+   ~A/ =A, Patterns
+
+   ~b/ =b, Complex Patterns, Patterns
+
+   ~B/ =B, Patterns
+
+   ~c/ =c, Patterns
+
+   ~C/ =C, Patterns
+
+   ~d/ =d, Patterns and Dates, Patterns
+
+   ~D/ =D, Patterns
+
+   ~E/ =E, Patterns
+
+   ~e/ =e, Patterns
+
+   ~f/ =f, Complex Patterns, Patterns
+
+   ~F/ =F, Patterns
+
+   ~g/ =g, Patterns
+
+   ~G/ =G, Patterns
+
+   ~H/ =H, Spam detection, Patterns
+
+   ~h/ =h, Patterns
+
+   ~i/ =i, Patterns
+
+   ~k/ =k, Patterns
+
+   ~L/ =L, Patterns
+
+   ~l/ =l, Patterns
+
+   ~m/ =m, Patterns
+
+   ~M/ =M, Patterns
+
+   ~n/ =n, Message Scoring, Patterns
+
+   ~N/ =N, Patterns
+
+   ~O/ =O, Patterns
+
+   ~p/ =p, Patterns
+
+   ~P/ =P, Patterns
+
+   ~Q/ =Q, Patterns
+
+   ~R/ =R, Patterns
+
+   ~r/ =r, Patterns
+
+   ~s/ =s, Complex Patterns, Patterns
+
+   ~S/ =S, Patterns
+
+   ~T/ =T, Patterns
+
+   ~t/ =t, Patterns
+
+   ~U/ =U, Complex Patterns, Patterns
+
+   ~u/ =u, Patterns
+
+   ~v/ =v, Patterns
+
+   ~V/ =V, Patterns
+
+   ~w/ =w, Patterns
+
+   ~x/ =x, Complex Patterns, Patterns
+
+   ~y/ =y, Handling Mailing Lists, Patterns
+
+   ~z/ =z, Patterns
+
+  A
+
+   $abort_noattach , $abort_noattach
+
+   $abort_nosubject , $abort_nosubject
+
+   $abort_unmodified , $abort_unmodified
+
+   account-hook, Managing multiple IMAP/POP/NNTP accounts (OPTIONAL),
    Configuration Commands
 
-                alias, Miscellaneous Functions, Defining/Using aliases,
-                Configuration Commands
+   $agent_string , Configuration variables
 
-                alternates, Alternative addresses, Configuration Commands
+   $agent_string , $agent_string
 
-                alternative_order, Configuration Commands
+   alias, Miscellaneous Functions, Defining/Using aliases, Configuration
+   Commands
 
-                auto_view, The Pager, Optional Fields, Search Order, MIME
-                Multipart/Alternative, Configuration Commands
+   $alias_file, Miscellaneous Functions, Defining/Using aliases
 
-                bind, Editing Input Fields, Changing the default key
-                bindings, Keyboard macros, Configuration Commands
+   $alias_file , $alias_file
 
-                color, The Pager, Using color and mono video attributes,
-                Configuration Commands
+   $alias_format , $alias_format
 
-                exec, Executing functions, Configuration Commands
+   $allow_8bit , $allow_8bit
 
-                hdr_order, Defining the order of headers when viewing
-                messages, Configuration Commands
+   $allow_ansi , $allow_ansi
 
-                ignore, Miscellaneous Functions, Ignoring (weeding) unwanted
-                message headers, Configuration Commands
+   alternates, Alternative addresses, Configuration Commands
 
-                lists, Miscellaneous Functions, Mailing lists, Handling
-                Mailing Lists, Configuration Commands
+   alternative_order, MIME Multipart/Alternative, Configuration Commands
 
-                macro, Miscellaneous Functions, Keyboard macros, Adding key
-                sequences to the keyboard buffer, Using Tags, Configuration
-                Commands
+   append-hook, Compressed folders Support (OPTIONAL), Append a message to a
+   compressed mailbox, Encrypted folders, Configuration Commands
 
-                mailboxes, Defining mailboxes which receive mail,
-                Configuration Commands
+   $arrow_cursor , $arrow_cursor
 
-                mime_lookup, Configuration Commands
+   $ascii_chars , $ascii_chars
 
-                mono, Using color and mono video attributes, Configuration
-                Commands
+   $askbcc , $askbcc
 
-                my_hdr, User defined headers, Configuration Commands
+   $askcc , $askcc
 
-                nospam, Spam detection, Configuration Commands
+   $assumed_charset , $assumed_charset
 
-                push, Adding key sequences to the keyboard buffer, Using
-                Tags, Configuration Commands
+   <attach-file>, Composing new messages, compose
 
-                reset, Setting variables, Configuration Commands
+   <attach-key>, Composing new messages, compose
 
-                score, Message Scoring, Configuration Commands
+   <attach-message>, Composing new messages, compose
 
-                set, Setting variables, Configuration Commands
+   $attach_format , $attach_format
 
-                source, Miscellaneous Functions, Defining/Using aliases,
-                Reading initialization commands from another file,
-                Configuration Commands
+   $attach_remind_regexp , $attach_remind_regexp
 
-                spam, Spam detection, Configuration Commands
+   $attach_sep , $attach_sep
 
-                subscribe, Mailing lists, Configuration Commands
+   $attach_split , $attach_split
 
-                toggle, Setting variables, Configuration Commands
+   $attribution, Change settings based upon message recipients, $attribution
 
-                unalias, Configuration Commands
+   $auto_tag, Using Tags
 
-                unalternates, Alternative addresses, Configuration Commands
+   $autoedit , $autoedit
 
-                unalternative_order, Configuration Commands
+   $auto_tag , $auto_tag
 
-                unauto_view, Configuration Commands
+   auto_view, The Pager, Optional Fields, Search Order, MIME Autoview, MIME
+   Multipart/Alternative, Configuration Commands
 
-                uncolor, Using color and mono video attributes, Configuration
-                Commands
+  B
 
-                unhdr_order, Configuration Commands
+   <backspace>, Editing Input Fields, editor
 
-                unhook, Removing hooks, Configuration Commands
+   <backward-char>, Editing Input Fields, editor
 
-                unignore, Ignoring (weeding) unwanted message headers,
-                Configuration Commands
+   <backward-word>, Editing Input Fields, editor
 
-                unlists, Mailing lists, Configuration Commands
+   $beep , $beep
 
-                unmailboxes, Defining mailboxes which receive mail
+   $beep_new , $beep_new
 
-                unmime_lookup, Configuration Commands
+   bind, Editing Input Fields, Changing the default key bindings, Keyboard
+   macros, Configuration Commands
 
-                unmono, Using color and mono video attributes, Configuration
-                Commands
+   <bol>, Editing Input Fields, editor
 
-                unmy_hdr, User defined headers, Configuration Commands
+   <bottom>, pager
 
-                unscore, Message Scoring, Configuration Commands
+   <bottom-page>, generic
 
-                unset, Setting variables, Configuration Commands
+   <bounce>, Sending Mail, $bounce
 
-                unsubscribe, Mailing lists, Configuration Commands
+   <bounce-message>, index, pager, attach
 
-   Configuration Variables
+   $bounce_delivered , $bounce_delivered
 
-                $abort_noattach , $abort_noattach
+   $braille_friendly , $braille_friendly
 
-                $abort_nosubject , $abort_nosubject
+   <buffy-cycle>, editor
 
-                $abort_unmodified , $abort_unmodified
+  C
 
-                $agent_string , Configuration variables, $agent_string
+   <capitalize-word>, Editing Input Fields, editor
 
-                $alias_file, Miscellaneous Functions, Defining/Using aliases,
-                $alias_file
+   $certificate_file , $certificate_file
 
-                $alias_format , $alias_format
+   <change-dir>, browser
 
-                $allow_8bit , $allow_8bit
+   <change-folder>, index, pager
 
-                $allow_ansi , $allow_ansi
+   <change-folder-readonly>, index, pager
 
-                $arrow_cursor , $arrow_cursor
+   $charset , $charset
 
-                $ascii_chars , $ascii_chars
+   charset-hook, Defining aliases for character sets, Configuration Commands
 
-                $askbcc , $askbcc
+   <check-new>, browser
 
-                $askcc , $askcc
+   <check-traditional-pgp>, Miscellaneous Functions, index, pager
 
-                $assumed_charset , $assumed_charset
+   $check_new , $check_new
 
-                $attach_format , $attach_format
+   <clear-flag>, index
 
-                $attach_remind_regexp , $attach_remind_regexp
+   close-hook, Compressed folders Support (OPTIONAL), Write a compressed
+   mailbox, Append a message to a compressed mailbox, Configuration Commands
 
-                $attach_sep , $attach_sep
+   <collapse-all>, Threaded Mode
 
-                $attach_split , $attach_split
+   <collapse-parts>, attach
 
-                $attribution, Change settings based upon message recipients,
-                $attribution
+   <collapse-thread>, Threaded Mode
 
-                $autoedit , $autoedit
+   $collapse_unread , $collapse_unread
 
-                $auto_tag, Using Tags, $auto_tag
+   color, The Pager, Using color and mono video attributes, Configuration
+   Commands
 
-                $beep , $beep
+   $COLORFGBG, Using color and mono video attributes
 
-                $beep_new , $beep_new
+   <complete>, Editing Input Fields, editor
 
-                $bounce , $bounce
+   <complete-query>, Editing Input Fields, editor
 
-                $bounce_delivered , $bounce_delivered
+   <compose>, Sending Mail
 
-                $braille_friendly , $braille_friendly
+   $compose_format , $compose_format
 
-                $certificate_file , $certificate_file
+   $config_charset , $config_charset
 
-                $charset , $charset
+   $confirmappend , $confirmappend
 
-                $check_new , $check_new
+   $confirmcreate , $confirmcreate
 
-                $collapse_unread , $collapse_unread
+   $connect_timeout , $connect_timeout
 
-                $compose_format , $compose_format
+   $content_type , $content_type
 
-                $config_charset , $config_charset
+   $copy , $copy
 
-                $confirmappend , $confirmappend
+   <copy-file>, compose
 
-                $confirmcreate , $confirmcreate
+   <copy-message>, index, pager
 
-                $connect_timeout , $connect_timeout
+   <create-alias>, Miscellaneous Functions, Defining/Using aliases, index,
+   pager, query
 
-                $content_type , $content_type
+   $crypt_autoencrypt , Configuration variables
 
-                $copy , $copy
+   $crypt_autosign , Configuration variables
 
-                $crypt_autoencrypt , Configuration variables,
-                $crypt_autoencrypt
+   crypt-hook, Choosing the cryptographic key of the recipient, Configuration
+   Commands
 
-                $crypt_autopgp , $crypt_autopgp
+   $crypt_replyencrypt , Configuration variables
 
-                $crypt_autosign , Configuration variables, $crypt_autosign
+   $crypt_replysign , Configuration variables
 
-                $crypt_autosmime , $crypt_autosmime
+   $crypt_replysignencrypted , Configuration variables
 
-                $crypt_replyencrypt , Configuration variables,
-                $crypt_replyencrypt
+   $crypt_verify_sig , Configuration variables
 
-                $crypt_replysign , Configuration variables, $crypt_replysign
+   $crypt_autoencrypt , $crypt_autoencrypt
 
-                $crypt_replysignencrypted , Configuration variables,
-                $crypt_replysignencrypted
+   $crypt_autopgp , $crypt_autopgp
 
-                $crypt_timestamp , $crypt_timestamp
+   $crypt_autosign , $crypt_autosign
 
-                $crypt_use_gpgme , $crypt_use_gpgme
+   $crypt_autosmime , $crypt_autosmime
 
-                $crypt_verify_sig , Configuration variables,
-                $crypt_verify_sig
+   $crypt_replyencrypt , $crypt_replyencrypt
 
-                $date_format , $date_format
+   $crypt_replysign , $crypt_replysign
 
-                $debug_level , $debug_level
+   $crypt_replysignencrypted , $crypt_replysignencrypted
 
-                $default_hook , $default_hook
+   $crypt_timestamp , $crypt_timestamp
 
-                $delete , $delete
+   $crypt_use_gpgme , $crypt_use_gpgme
 
-                $delete_space, Additional Notes, $delete_space
+   $crypt_verify_sig , $crypt_verify_sig
 
-                $delete_untag , $delete_untag
+   <current-bottom>, generic
 
-                $digest_collapse , $digest_collapse
+   <current-middle>, generic
 
-                $display_filter , $display_filter
+   <current-top>, generic
 
-                $dotlock_program , $dotlock_program
+  D
 
-                $dsn_notify, Delivery Status Notification (DSN) Support,
-                $dsn_notify
+   $date_format , $date_format
 
-                $dsn_return, Delivery Status Notification (DSN) Support,
-                $dsn_return
+   $debug_level , $debug_level
 
-                $duplicate_threads , $duplicate_threads
+   <decode-copy>, index
 
-                $editor , $editor
+   <decode-save>, index, pager
 
-                $editor_headers, Editing the message header, Defining/Using
-                aliases, $editor_headers
+   default-hook, Message Matching in Hooks
 
-                $edit_headers, Editing the message header, User defined
-                headers, mailto:-style links, Configuration variables,
-                $edit_headers
+   $default_hook , $default_hook
 
-                $encode_from , $encode_from
+   $delete , $delete
 
-                $entropy_file , $entropy_file
+   <delete-char>, Editing Input Fields, editor
 
-                $envelope_from , $envelope_from
+   <delete-entry>, attach, postpone
 
-                $escape , $escape
+   <delete-message>, index, pager
 
-                $fast_reply , $fast_reply
+   <delete-pattern>, index
 
-                $fcc_attach , $fcc_attach
+   $delete_space, Additional Notes
 
-                $fcc_clear , $fcc_clear
+   <delete-subthread>, Threaded Mode, index, pager
 
-                $file_charset , $file_charset
+   <delete-thread>, Threaded Mode, index, pager
 
-                $folder, Configuration Variables, Defining mailboxes which
-                receive mail, Mailbox Shortcuts, $folder
+   $delete_space , $delete_space
 
-                $folder_format , $folder_format
+   $delete_untag , $delete_untag
 
-                $followup_to, Mailing lists, Handling Mailing Lists,
-                $followup_to
+   <detach-file>, Composing new messages, compose
 
-                $force_buffy_check , $force_buffy_check
+   $digest_collapse , $digest_collapse
 
-                $force_name , $force_name
+   <display-address>, index, pager
 
-                $forward_decode , Configuration variables, $forward_decode
+   <display-message>, index
 
-                $forward_decrypt , Configuration variables, $forward_decrypt
+   <display-toggle-weed>, Miscellaneous Functions, index, pager, attach,
+   compose
 
-                $forward_edit , $forward_edit
+   $display_filter , $display_filter
 
-                $forward_format , Configuration variables, $forward_format
+   $dotlock_program , $dotlock_program
 
-                $forward_quote , Configuration variables, $forward_quote
+   <downcase-word>, Editing Input Fields, editor
 
-                $from , $from
+   $dsn_notify, Delivery Status Notification (DSN) Support
 
-                $gecos_mask , $gecos_mask
+   $dsn_return, Delivery Status Notification (DSN) Support
 
-                $hdrs , $hdrs
+   $dsn_notify , $dsn_notify
 
-                $header , $header
+   $dsn_return , $dsn_return
 
-                $header_cache , $header_cache
-
-                $header_cache_compress , $header_cache_compress
-
-                $help , $help
-
-                $hidden_host , $hidden_host
-
-                $hide_limited , $hide_limited
-
-                $hide_missing , $hide_missing
-
-                $hide_thread_subject , $hide_thread_subject
-
-                $hide_top_limited , $hide_top_limited
-
-                $hide_top_missing , $hide_top_missing
-
-                $history , $history
-
-                $honor_followup_to, Miscellaneous Functions, Handling Mailing
-                Lists, $honor_followup_to
-
-                $hostname , $hostname
-
-                $ignore_list_reply_to , $ignore_list_reply_to
-
-                $imap_authenticators, Authentication, $imap_authenticators
-
-                $imap_check_subscribed , $imap_check_subscribed
-
-                $imap_delim_chars , $imap_delim_chars
-
-                $imap_headers , $imap_headers
-
-                $imap_home_namespace, Configuration Variables,
-                $imap_home_namespace
-
-                $imap_keepalive , $imap_keepalive
-
-                $imap_list_subscribed, IMAP Support (OPTIONAL),
-                $imap_list_subscribed
-
-                $imap_login , $imap_login
-
-                $imap_mail_check, Conditional parts, IMAP Support (OPTIONAL),
-                $imap_mail_check
-
-                $imap_pass, Authentication, $imap_pass
-
-                $imap_passive , $imap_passive
-
-                $imap_peek , $imap_peek
-
-                $imap_reconnect , $imap_reconnect
-
-                $imap_servernoise , $imap_servernoise
-
-                $imap_user, Authentication, $imap_user
-
-                $implicit_autoview , $implicit_autoview
-
-                $include , $include
-
-                $include_onlyfirst , $include_onlyfirst
-
-                $indent_string , Configuration variables, $indent_string
-
-                $index_format, Threaded Mode, Spam detection, Handling
-                Mailing Lists, Configuration variables, $index_format
-
-                $ispell , $ispell
-
-                $keep_flagged , $keep_flagged
-
-                $list_reply , $list_reply
-
-                $locale, Change settings based upon message recipients,
-                $locale
-
-                $mailcap_path, mailcap, $mailcap_path
-
-                $mailcap_sanitize, Secure use of mailcap, mailcap,
-                $mailcap_sanitize
-
-                $maildir_header_cache_verify , $maildir_header_cache_verify
-
-                $maildir_trash , $maildir_trash
-
-                $mail_check , $mail_check
-
-                $markers , $markers
-
-                $mark_old , $mark_old
-
-                $mask , $mask
-
-                $max_display_recips , $max_display_recips
-
-                $max_line_length , $max_line_length
-
-                $mbox, Mailbox Shortcuts, $mbox
-
-                $mbox_type, Mailbox Formats, Append a message to a compressed
-                mailbox, $mbox_type
-
-                $menu_context , $menu_context
-
-                $menu_move_off , $menu_move_off
-
-                $menu_scroll , $menu_scroll
-
-                $message_format , Configuration variables, $message_format
-
-                $meta_key , $meta_key
-
-                $metoo , $metoo
-
-                $mh_purge , $mh_purge
-
-                $mh_seq_flagged , $mh_seq_flagged
-
-                $mh_seq_replied , $mh_seq_replied
-
-                $mh_seq_unseen , $mh_seq_unseen
-
-                $mime_forward , Configuration variables, $mime_forward
-
-                $mime_forward_decode , $mime_forward_decode
-
-                $mime_forward_rest , $mime_forward_rest
-
-                $mixmaster , $mixmaster
-
-                $mix_entry_format, Sending anonymous messages via mixmaster,
-                $mix_entry_format
-
-                $move , $move
-
-                $msgid_format, Message-ID: headers, $msgid_format
-
-                $muttng_bindir , $muttng_bindir
-
-                $muttng_docdir , $muttng_docdir
-
-                $muttng_folder_name , $muttng_folder_name
-
-                $muttng_folder_path , $muttng_folder_path
-
-                $muttng_hcache_backend , $muttng_hcache_backend
-
-                $muttng_pwd , $muttng_pwd
-
-                $muttng_revision , $muttng_revision
-
-                $muttng_sysconfdir , $muttng_sysconfdir
-
-                $muttng_version , $muttng_version
-
-                $narrow_tree , $narrow_tree
-
-                $net_inc , $net_inc
-
-                $nntp_ask_followup_to , Configuration variables,
-                $nntp_ask_followup_to
-
-                $nntp_ask_x_comment_to , Configuration variables,
-                $nntp_ask_x_comment_to
-
-                $nntp_cache_dir , Configuration variables, $nntp_cache_dir
-
-                $nntp_catchup , Configuration variables, $nntp_catchup
-
-                $nntp_context , $nntp_context
-
-                $nntp_followup_to_poster , Configuration variables,
-                $nntp_followup_to_poster
-
-                $nntp_group_index_format , Configuration variables,
-                $nntp_group_index_format
-
-                $nntp_host , Configuration variables, $nntp_host
-
-                $nntp_inews , Configuration variables, $nntp_inews
-
-                $nntp_load_description , $nntp_load_description
-
-                $nntp_mail_check , Configuration variables, $nntp_mail_check
-
-                $nntp_mime_subject , Configuration variables,
-                $nntp_mime_subject
-
-                $nntp_newsrc, NNTP Support (OPTIONAL), Configuration
-                variables, $nntp_newsrc
-
-                $nntp_pass , $nntp_pass
-
-                $nntp_post_moderated , Configuration variables,
-                $nntp_post_moderated
-
-                $nntp_reconnect , $nntp_reconnect
-
-                $nntp_save_unsubscribed , Configuration variables,
-                $nntp_save_unsubscribed
-
-                $nntp_show_new_news , Configuration variables,
-                $nntp_show_new_news
-
-                $nntp_show_only_unread , Configuration variables,
-                $nntp_show_only_unread
-
-                $nntp_user , $nntp_user
-
-                $nntp_x_comment_to , Configuration variables,
-                $nntp_x_comment_to
-
-                $operating_system , $operating_system
-
-                $pager , $pager
-
-                $pager_context , $pager_context
-
-                $pager_format , $pager_format
-
-                $pager_index_lines, Conditional parts, $pager_index_lines
-
-                $pager_stop , $pager_stop
-
-                $pgp_autoinline , Configuration variables, $pgp_autoinline
-
-                $pgp_auto_decode , $pgp_auto_decode
-
-                $pgp_check_exit , $pgp_check_exit
-
-                $pgp_clearsign_command , $pgp_clearsign_command
-
-                $pgp_decode_command , $pgp_decode_command
-
-                $pgp_decrypt_command , $pgp_decrypt_command
-
-                $pgp_encrypt_only_command , $pgp_encrypt_only_command
-
-                $pgp_encrypt_sign_command , $pgp_encrypt_sign_command
-
-                $pgp_entry_format, Using Mutt-ng with PGP, $pgp_entry_format
-
-                $pgp_export_command , $pgp_export_command
-
-                $pgp_getkeys_command , $pgp_getkeys_command
-
-                $pgp_good_sign , $pgp_good_sign
-
-                $pgp_ignore_subkeys , $pgp_ignore_subkeys
-
-                $pgp_import_command , $pgp_import_command
-
-                $pgp_list_pubring_command , $pgp_list_pubring_command
-
-                $pgp_list_secring_command , $pgp_list_secring_command
-
-                $pgp_long_ids , $pgp_long_ids
-
-                $pgp_mime_auto , $pgp_mime_auto
-
-                $pgp_replyinline , Configuration variables, $pgp_replyinline
-
-                $pgp_retainable_sigs , $pgp_retainable_sigs
-
-                $pgp_show_unusable , $pgp_show_unusable
-
-                $pgp_sign_as, Using Mutt-ng with PGP, $pgp_sign_as
-
-                $pgp_sign_command , $pgp_sign_command
-
-                $pgp_sort_keys , $pgp_sort_keys
-
-                $pgp_strict_enc , $pgp_strict_enc
-
-                $pgp_timeout , $pgp_timeout
-
-                $pgp_use_gpg_agent , $pgp_use_gpg_agent
-
-                $pgp_verify_command , $pgp_verify_command
-
-                $pgp_verify_key_command , $pgp_verify_key_command
-
-                $pipe_decode, Miscellaneous Functions, $pipe_decode
-
-                $pipe_sep , $pipe_sep
-
-                $pipe_split, Miscellaneous Functions, $pipe_split
-
-                $pop_authenticators , $pop_authenticators
-
-                $pop_auth_try_all , $pop_auth_try_all
-
-                $pop_delete , $pop_delete
-
-                $pop_host , $pop_host
-
-                $pop_last , $pop_last
-
-                $pop_mail_check, POP3 Support (OPTIONAL), Configuration
-                variables, $pop_mail_check
-
-                $pop_pass , $pop_pass
-
-                $pop_reconnect , $pop_reconnect
-
-                $pop_user , $pop_user
-
-                $postpone, Postponing Mail, $postpone
-
-                $postponed, Postponing Mail, $postponed
-
-                $post_indent_string , Configuration variables,
-                $post_indent_string
-
-                $preconnect , $preconnect
-
-                $print , $print
-
-                $print_command , Configuration variables, $print_command
-
-                $print_decode , $print_decode
-
-                $print_split , $print_split
-
-                $prompt_after , $prompt_after
-
-                $query_command, External Address Queries, $query_command
-
-                $quit , $quit
-
-                $quote_empty , $quote_empty
-
-                $quote_quoted , $quote_quoted
-
-                $quote_regexp, Miscellaneous Functions, Using color and mono
-                video attributes, $quote_regexp
-
-                $read_inc , $read_inc
-
-                $read_only , $read_only
-
-                $realname , $realname
-
-                $recall , $recall
-
-                $record, Environment Variables, Specify default Fcc: mailbox
-                when composing, Mailbox Shortcuts, $record
-
-                $reply_regexp , $reply_regexp
-
-                $reply_self , $reply_self
-
-                $reply_to, Alternative addresses, Handling Mailing Lists,
-                $reply_to
-
-                $resolve , $resolve
-
-                $reverse_alias , $reverse_alias
-
-                $reverse_name , $reverse_name
-
-                $reverse_realname , $reverse_realname
-
-                $rfc2047_parameters , $rfc2047_parameters
-
-                $save_address , $save_address
-
-                $save_empty, Compressed folders Support (OPTIONAL),
-                $save_empty
-
-                $save_name , $save_name
-
-                $score , $score
-
-                $score_threshold_delete, Message Scoring,
-                $score_threshold_delete
-
-                $score_threshold_flag, Message Scoring, $score_threshold_flag
-
-                $score_threshold_read, Message Scoring, $score_threshold_read
-
-                $sendmail, Change settings based upon message recipients,
-                $sendmail
-
-                $sendmail_wait , $sendmail_wait
-
-                $send_charset , $send_charset
-
-                $shell , $shell
-
-                $sidebar_boundary , $sidebar_boundary
-
-                $sidebar_delim , $sidebar_delim
-
-                $sidebar_newmail_only , $sidebar_newmail_only
-
-                $sidebar_number_format , $sidebar_number_format
-
-                $sidebar_shorten_hierarchy , Configuration variables,
-                $sidebar_shorten_hierarchy
-
-                $sidebar_visible , $sidebar_visible
-
-                $sidebar_width , $sidebar_width
-
-                $signature, Change settings based upon message recipients,
-                $signature
-
-                $signoff_string , $signoff_string
-
-                $sig_dashes , $sig_dashes
-
-                $sig_on_top , $sig_on_top
-
-                $simple_search , $simple_search
-
-                $sleep_time , $sleep_time
-
-                $smart_wrap , $smart_wrap
-
-                $smileys , $smileys
-
-                $smime_ask_cert_label , $smime_ask_cert_label
-
-                $smime_ca_location , $smime_ca_location
-
-                $smime_certificates , $smime_certificates
-
-                $smime_decrypt_command , $smime_decrypt_command
-
-                $smime_decrypt_use_default_key ,
-                $smime_decrypt_use_default_key
-
-                $smime_default_key , Configuration variables,
-                $smime_default_key
-
-                $smime_encrypt_command , $smime_encrypt_command
-
-                $smime_encrypt_with , $smime_encrypt_with
-
-                $smime_get_cert_command , $smime_get_cert_command
-
-                $smime_get_cert_email_command , $smime_get_cert_email_command
-
-                $smime_get_signer_cert_command ,
-                $smime_get_signer_cert_command
-
-                $smime_import_cert_command , $smime_import_cert_command
-
-                $smime_is_default , $smime_is_default
-
-                $smime_keys , $smime_keys
-
-                $smime_pk7out_command , $smime_pk7out_command
-
-                $smime_sign_command , $smime_sign_command
-
-                $smime_sign_opaque_command , $smime_sign_opaque_command
-
-                $smime_timeout , $smime_timeout
-
-                $smime_verify_command , $smime_verify_command
-
-                $smime_verify_opaque_command , $smime_verify_opaque_command
-
-                $smtp_envelope, SMTP Support (OPTIONAL), $smtp_envelope
-
-                $smtp_host, SMTP Support (OPTIONAL), $smtp_host
-
-                $smtp_pass, SMTP Support (OPTIONAL), Configuration variables,
-                $smtp_pass
-
-                $smtp_port , $smtp_port
-
-                $smtp_user, SMTP Support (OPTIONAL), Configuration variables,
-                $smtp_user
-
-                $smtp_use_tls, SMTP Support (OPTIONAL), $smtp_use_tls
-
-                $sort , $sort
-
-                $sort_alias , $sort_alias
-
-                $sort_aux , $sort_aux
-
-                $sort_browser , $sort_browser
-
-                $sort_re , $sort_re
-
-                $spam_separator , $spam_separator
-
-                $spoolfile, Setting variables based upon mailbox, Defining
-                mailboxes which receive mail, Mailbox Shortcuts, POP3 Support
-                (OPTIONAL), $spoolfile
-
-                $ssl_ca_certificates_file , $ssl_ca_certificates_file
-
-                $ssl_client_cert , $ssl_client_cert
-
-                $ssl_force_tls , $ssl_force_tls
-
-                $ssl_min_dh_prime_bits , $ssl_min_dh_prime_bits
-
-                $ssl_starttls , $ssl_starttls
-
-                $ssl_usesystemcerts , $ssl_usesystemcerts
-
-                $ssl_use_sslv2 , $ssl_use_sslv2
-
-                $ssl_use_sslv3 , $ssl_use_sslv3
-
-                $ssl_use_tlsv1 , $ssl_use_tlsv1
-
-                $status_chars , $status_chars
-
-                $status_format, Composing new messages, Introduction,
-                $status_format
-
-                $status_on_top , $status_on_top
-
-                $strict_mailto, mailto:-style links, $strict_mailto
-
-                $strict_mime , $strict_mime
-
-                $strict_threads, Threaded Mode, $strict_threads
-
-                $strip_was , $strip_was
-
-                $strip_was_regex , $strip_was_regex
-
-                $stuff_quoted , $stuff_quoted
-
-                $suspend , $suspend
-
-                $text_flowed , $text_flowed
-
-                $thorough_search , $thorough_search
-
-                $thread_received , $thread_received
-
-                $tilde , $tilde
-
-                $timeout, IMAP Support (OPTIONAL), $timeout
-
-                $tmpdir, Temporary Files, $tmpdir
-
-                $to_chars, Status Flags, $to_chars
-
-                $trash , $trash
-
-                $tunnel , $tunnel
-
-                $umask, Temporary Files, $umask
-
-                $uncollapse_jump , $uncollapse_jump
-
-                $use_8bitmime, SMTP Support (OPTIONAL), $use_8bitmime
-
-                $use_domain , $use_domain
-
-                $use_from , $use_from
-
-                $use_idn , $use_idn
-
-                $use_ipv6 , $use_ipv6
-
-                $visual , $visual
-
-                $wait_key, Miscellaneous Functions, Optional Fields,
-                $wait_key
-
-                $weed, Miscellaneous Functions, $weed
-
-                $wrapmargin , $wrapmargin
-
-                $wrap_search , $wrap_search
-
-                $write_bcc , $write_bcc
-
-                $write_inc , $write_inc
-
-                $xterm_icon , $xterm_icon
-
-                $xterm_leave , $xterm_leave
-
-                $xterm_set_titles , $xterm_set_titles
-
-                $xterm_title , $xterm_title
+   $duplicate_threads , $duplicate_threads
 
   E
 
-   Environment Variables
+   <edit>, Miscellaneous Functions, index, pager, compose
 
-                $COLORFGBG, Using color and mono video attributes
+   <edit-bcc>, Composing new messages, compose
 
-                $EDITOR, Composing new messages
+   <edit-cc>, Composing new messages, compose
 
-                $HOME, MIME Type configuration with mime.types, MIME Viewer
-                configuration with mailcap
+   <edit-description>, Composing new messages, compose
 
-                $HOSTNAME, Environment Variables
+   <edit-encoding>, compose
 
-                $NNTPSERVER, NNTP Support (OPTIONAL)
+   <edit-fcc>, Composing new messages, compose
 
-                $VISUAL, Composing new messages
+   <edit-file>, compose
+
+   <edit-from>, Composing new messages, compose
+
+   $edit_headers, Editing the message header, User defined headers,
+   mailto:-style links, Configuration variables, compose
+
+   <edit-mime>, compose
+
+   <edit-reply-to>, Composing new messages, compose
+
+   <edit-subject>, Composing new messages, compose
+
+   <edit-to>, Composing new messages, compose
+
+   <edit-type>, Miscellaneous Functions, index, pager, attach, compose
+
+   $EDITOR, Manual Conventions, Composing new messages
+
+   $editor , $editor
+
+   $editor_headers, Editing the message header, Defining/Using aliases
+
+   $editor_headers , $editor_headers
+
+   $edit_headers , $edit_headers
+
+   $encode_from , $encode_from
+
+   <enter-command>, Miscellaneous Functions, generic, pager
+
+   <enter-mask>, browser
+
+   $entropy_file , $entropy_file
+
+   $envelope_from_address, $envelope_from_address
+
+   <eol>, Editing Input Fields, editor
+
+   $escape , $escape
+
+   exec, Executing functions, Configuration Commands
+
+   <exit>, generic, index, pager
+
+   <extract-keys>, Miscellaneous Functions, index, pager, attach
 
   F
 
-   Functions
+   $fast_reply , $fast_reply
 
-                <attach-file>, Composing new messages, compose
+   fcc-hook, Specify default Fcc: mailbox when composing, Specify default
+   save filename and default Fcc: mailbox at once, Using Hooks, Message
+   Matching in Hooks, Configuration Commands
 
-                <attach-key>, Composing new messages, compose
+   fcc-save-hook, Specify default save filename, Specify default Fcc: mailbox
+   when composing, Specify default save filename and default Fcc: mailbox at
+   once, Using Hooks, Configuration Commands
 
-                <attach-message>, Composing new messages, compose
+   $fcc_attach , $fcc_attach
 
-                <backspace>, Editing Input Fields, editor
+   $fcc_clear , $fcc_clear
 
-                <backward-char>, Editing Input Fields, editor
+   <fetch-mail>, index
 
-                <backward-word>, Editing Input Fields, editor
+   $file_charset , $file_charset
 
-                <bol>, Editing Input Fields, editor
+   <filter-entry>, compose
 
-                <bottom-page>, generic
+   <first-entry>, Moving Around in Menus, generic
 
-                <bottom>, pager
+   <flag-message>, index, pager
 
-                <bounce-message>, index, pager, attach
+   $folder, Configuration Variables, Defining mailboxes which receive mail,
+   Mailbox Shortcuts, $folder
 
-                <bounce>, Sending Mail
+   folder-hook, Setting variables based upon mailbox, Spam detection, Using
+   Hooks, Managing multiple IMAP/POP/NNTP accounts (OPTIONAL), Configuration
+   Commands
 
-                <buffy-cycle>, editor
+   $folder_format , $folder_format
 
-                <capitalize-word>, Editing Input Fields, editor
+   $followup_to, Mailing lists, Handling Mailing Lists
 
-                <change-dir>, browser
+   $followup_to , $followup_to
 
-                <change-folder-readonly>, index, pager
+   $force_buffy_check , $force_buffy_check
 
-                <change-folder>, index, pager
+   $force_name , $force_name
 
-                <check-new>, browser
+   <forget-passphrase>, Miscellaneous Functions, Composing new messages,
+   index, pager, compose
 
-                <check-traditional-pgp>, Miscellaneous Functions, index,
-                pager
+   <forward>, Sending Mail
 
-                <clear-flag>, index
+   <forward-char>, Editing Input Fields, editor
 
-                <collapse-all>, Threaded Mode
+   $forward_decode , Configuration variables
 
-                <collapse-parts>, attach
+   $forward_decrypt , Configuration variables
 
-                <collapse-thread>, Threaded Mode
+   $forward_format , Configuration variables
 
-                <complete-query>, Editing Input Fields, editor
+   <forward-message>, index, pager, attach
 
-                <complete>, Editing Input Fields, editor
+   $forward_quote , Configuration variables
 
-                <compose>, Sending Mail
+   <forward-word>, Editing Input Fields, editor
 
-                <copy-file>, compose
+   $forward_decode , $forward_decode
 
-                <copy-message>, index, pager
+   $forward_decrypt , $forward_decrypt
 
-                <create-alias>, Miscellaneous Functions, Defining/Using
-                aliases, index, pager, query
+   $forward_edit , $forward_edit
 
-                <current-bottom>, generic
+   $forward_format , $forward_format
 
-                <current-middle>, generic
+   $forward_quote , $forward_quote
 
-                <current-top>, generic
+   $from , $from
 
-                <decode-copy>, index
+  G
 
-                <decode-save>, index, pager
+   $gecos_mask , $gecos_mask
 
-                <delete-char>, Editing Input Fields, editor
-
-                <delete-entry>, attach, postpone
-
-                <delete-message>, index, pager
-
-                <delete-pattern>, index
-
-                <delete-subthread>, Threaded Mode, index, pager
-
-                <delete-thread>, Threaded Mode, index, pager
-
-                <detach-file>, Composing new messages, compose
-
-                <display-address>, index, pager
-
-                <display-message>, index
-
-                <display-toggle-weed>, Miscellaneous Functions, index, pager,
-                attach, compose
-
-                <downcase-word>, Editing Input Fields, editor
-
-                <edit-bcc>, Composing new messages, compose
-
-                <edit-cc>, Composing new messages, compose
-
-                <edit-description>, Composing new messages, compose
-
-                <edit-encoding>, compose
-
-                <edit-fcc>, Composing new messages, compose
-
-                <edit-file>, compose
-
-                <edit-from>, Composing new messages, compose
-
-                <edit-headers>, compose
-
-                <edit-mime>, compose
-
-                <edit-reply-to>, Composing new messages, compose
-
-                <edit-subject>, Composing new messages, compose
-
-                <edit-to>, Composing new messages, compose
-
-                <edit-type>, Miscellaneous Functions, index, pager, attach,
-                compose
-
-                <edit>, Miscellaneous Functions, index, pager, compose
-
-                <enter-command>, Miscellaneous Functions, generic, pager
-
-                <enter-mask>, browser
-
-                <eol>, Editing Input Fields, editor
-
-                <exit>, generic, index, pager
-
-                <extract-keys>, Miscellaneous Functions, index, pager, attach
-
-                <fetch-mail>, index
-
-                <filter-entry>, compose
-
-                <first-entry>, Moving Around in Menus, generic
-
-                <flag-message>, index, pager
-
-                <forget-passphrase>, Miscellaneous Functions, Composing new
-                messages, index, pager, compose
-
-                <forward-char>, Editing Input Fields, editor
-
-                <forward-message>, index, pager, attach
-
-                <forward-word>, Editing Input Fields, editor
-
-                <forward>, Sending Mail
-
-                <group-reply>, Sending Mail, index, pager, attach
-
-                <half-down>, generic, pager
-
-                <half-up>, generic, pager
-
-                <help>, Moving Around in Menus, generic, pager
-
-                <history-down>, Editing Input Fields, editor
-
-                <history-up>, Editing Input Fields, editor
-
-                <ispell>, Composing new messages, compose
-
-                <jump>, generic
-
-                <kill-eol>, Editing Input Fields, editor
-
-                <kill-eow>, Editing Input Fields, editor
-
-                <kill-line>, Editing Input Fields, editor
-
-                <kill-word>, Editing Input Fields, editor
-
-                <last-entry>, Moving Around in Menus, generic
-
-                <limit>, index
-
-                <list-reply>, Miscellaneous Functions, Sending Mail, index,
-                pager, attach
-
-                <mail-key>, Sending Mail, index, pager
-
-                <mail>, index, pager, query
-
-                <mark-as-new>, pager
-
-                <middle-page>, generic
-
-                <new-mime>, compose
-
-                <next-entry>, Moving Around in Menus, generic, pager
-
-                <next-line>, generic, pager
-
-                <next-new-then-unread>, index, pager
-
-                <next-new>, index, pager
-
-                <next-page>, generic, pager
-
-                <next-subthread>, Threaded Mode, index, pager
-
-                <next-thread>, Threaded Mode, index, pager
-
-                <next-undeleted>, index, pager
-
-                <next-unread>, index, pager
-
-                <page-down>, Moving Around in Menus
-
-                <page-up>, Moving Around in Menus
-
-                <parent-message>, Threaded Mode, index, pager
-
-                <pgp-menu>, Composing new messages, compose
-
-                <pipe-entry>, attach, compose
-
-                <pipe-message>, Miscellaneous Functions, index, pager
-
-                <postpone-message>, Composing new messages, compose
-
-                <previous-entry>, Moving Around in Menus, generic, pager
-
-                <previous-line>, generic, pager
-
-                <previous-new-then-unread>, index, pager
-
-                <previous-new>, index, pager
-
-                <previous-page>, generic, index, pager
-
-                <previous-subthread>, Threaded Mode, index, pager
-
-                <previous-thread>, Threaded Mode, index, pager
-
-                <previous-undeleted>, index, pager
-
-                <previous-unread>, index, pager
-
-                <print-entry>, attach, compose
-
-                <print-message>, index, pager
-
-                <query-append>, query
-
-                <query>, index, query
-
-                <quit>, Moving Around in Menus, Composing new messages,
-                index, pager
-
-                <quote-char>, Editing Input Fields, editor
-
-                <read-subthread>, Threaded Mode, index, pager
-
-                <read-thread>, Threaded Mode, index, pager
-
-                <recall-message>, index, pager
-
-                <redraw-screen>, pager
-
-                <refresh>, generic
-
-                <rename-file>, compose
-
-                <reply>, Sending Mail, index, pager, attach
-
-                <resend-message>, Miscellaneous Functions, The Attachment
-                Menu, index, attach
-
-                <save-entry>, attach
-
-                <save-message>, index, pager
-
-                <search-next>, generic, pager, alias, query, browser
-
-                <search-opposite>, generic, pager, query
-
-                <search-reverse>, generic, pager, alias, query, browser
-
-                <search-toggle>, pager
-
-                <search>, generic, pager, alias, query, browser
-
-                <select-entry>, generic
-
-                <select-new>, browser
-
-                <send-message>, Composing new messages, compose
-
-                <senderdecode-copy>, pager
-
-                <set-flag>, index
-
-                <shell-escape>, Miscellaneous Functions, generic, pager
-
-                <show-limit>, index
-
-                <show-version>, index, pager
-
-                <sidebar-next-new>, sidebar
-
-                <sidebar-next>, sidebar
-
-                <sidebar-open>, sidebar
-
-                <sidebar-previous>, sidebar
-
-                <sidebar-scroll-down>, sidebar
-
-                <sidebar-scroll-up>, sidebar
-
-                <skip-quoted>, Miscellaneous Functions, pager
-
-                <smime-menu>, Composing new messages
-
-                <sort-mailbox>, index
-
-                <sort-reverse>, index, browser
-
-                <sort>, browser
-
-                <subscribe>, browser
-
-                <sync-mailbox>, index, pager
-
-                <tag-entry>, generic
-
-                <tag-message>, pager
-
-                <tag-pattern>, index
-
-                <tag-prefix-cond>, generic
-
-                <tag-prefix>, generic
-
-                <tag-thread>, Threaded Mode, index
-
-                <toggle-mailboxes>, browser
-
-                <toggle-new>, index
-
-                <toggle-quoted>, Miscellaneous Functions, pager
-
-                <toggle-subscribed>, browser
-
-                <toggle-unlink>, compose
-
-                <toggle-write>, index
-
-                <top-page>, generic
-
-                <top>, pager
-
-                <transpose-chars>, editor
-
-                <undelete-entry>, attach, postpone
-
-                <undelete-message>, index, pager
-
-                <undelete-pattern>, index
-
-                <undelete-subthread>, Threaded Mode, index, pager
-
-                <undelete-thread>, Threaded Mode, index, pager
-
-                <unsubscribe>, browser
-
-                <untag-pattern>, index
-
-                <upcase-word>, Editing Input Fields, editor
-
-                <verify-key>, pgp
-
-                <view-attach>, attach, compose
-
-                <view-attachments>, index, pager
-
-                <view-file>, browser
-
-                <view-mailcap>, attach
-
-                <view-name>, pgp
-
-                <view-text>, attach
-
-                <what-key>, generic
-
-                <write-fcc>, Composing new messages, compose
+   <group-reply>, Sending Mail, index, pager, attach
 
   H
 
-   Hooks
+   <half-down>, generic, pager
 
-                account-hook, Managing multiple IMAP/POP/NNTP accounts
-                (OPTIONAL), Configuration Commands
+   <half-up>, generic, pager
 
-                append-hook, Compressed folders Support (OPTIONAL), Append a
-                message to a compressed mailbox, Encrypted folders,
-                Configuration Commands
+   $hdrs , $hdrs
 
-                charset-hook, Defining aliases for character sets,
-                Configuration Commands
+   hdr_order, Defining the order of headers when viewing messages,
+   Configuration Commands
 
-                close-hook, Compressed folders Support (OPTIONAL), Write a
-                compressed mailbox, Append a message to a compressed mailbox,
-                Configuration Commands
+   $header , $header
 
-                crypt-hook, Choosing the cryptographic key of the recipient,
-                Configuration Commands
+   $header_cache , $header_cache
 
-                default-hook, Message Matching in Hooks
+   $header_cache_compress , $header_cache_compress
 
-                fcc-hook, Specify default Fcc: mailbox when composing,
-                Specify default save filename and default Fcc: mailbox at
-                once, Using Hooks, Message Matching in Hooks, Configuration
-                Commands
+   <help>, Moving Around in Menus, $help, generic, pager
 
-                fcc-save-hook, Specify default save filename, Specify default
-                Fcc: mailbox when composing, Specify default save filename
-                and default Fcc: mailbox at once, Using Hooks, Configuration
-                Commands
+   $hidden_host , $hidden_host
 
-                folder-hook, Setting variables based upon mailbox, Spam
-                detection, Using Hooks, Managing multiple IMAP/POP/NNTP
-                accounts (OPTIONAL), Configuration Commands
+   $hide_limited , $hide_limited
 
-                iconv-hook, Defining aliases for character sets
+   $hide_missing , $hide_missing
 
-                mbox-hook, Using Multiple spool mailboxes, Using Hooks,
-                Configuration Commands
+   $hide_thread_subject , $hide_thread_subject
 
-                message-hook, Change settings before formatting a message,
-                Using Hooks, Message Matching in Hooks, MIME Autoview,
-                Configuration Commands
+   $hide_top_limited , $hide_top_limited
 
-                open-hook, Compressed folders Support (OPTIONAL), Open a
-                compressed mailbox for reading, Write a compressed mailbox,
-                Append a message to a compressed mailbox, Configuration
-                Commands
+   $hide_top_missing , $hide_top_missing
 
-                pattern-hook, Specify default save filename, Specify default
-                Fcc: mailbox when composing, Change settings based upon
-                message recipients, Change settings before formatting a
-                message
+   $history , $history
 
-                reply-hook, Change settings based upon message recipients,
-                Configuration Commands
+   <history-down>, Editing Input Fields, editor
 
-                save-hook, Specify default save filename, Specify default
-                save filename and default Fcc: mailbox at once, Using Hooks,
-                Message Matching in Hooks, Mailbox Shortcuts, Configuration
-                Commands
+   <history-up>, Editing Input Fields, editor
 
-                send-hook, Change settings based upon message recipients,
-                Using Hooks, Message Matching in Hooks, Configuration
-                Commands
+   $HOME, MIME Type configuration with mime.types, MIME Viewer configuration
+   with mailcap
 
-                send2-hook, Change settings based upon message recipients
+   $honor_followup_to, Miscellaneous Functions, Handling Mailing Lists
+
+   $honor_followup_to , $honor_followup_to
+
+   $HOSTNAME, Environment Variables
+
+   $hostname , $hostname
+
+  I
+
+   iconv-hook, Defining aliases for character sets
+
+   ignore, Miscellaneous Functions, Ignoring (weeding) unwanted message
+   headers, Configuration Commands
+
+   $ignore_list_reply_to , $ignore_list_reply_to
+
+   $imap_authenticators, Authentication
+
+   $imap_home_namespace, Configuration Variables
+
+   $imap_list_subscribed, IMAP Support (OPTIONAL)
+
+   $imap_mail_check, Manual Conventions, Conditional parts, IMAP Support
+   (OPTIONAL)
+
+   $imap_pass, Authentication
+
+   $imap_user, Authentication
+
+   $imap_authenticators , $imap_authenticators
+
+   $imap_check_subscribed , $imap_check_subscribed
+
+   $imap_delim_chars , $imap_delim_chars
+
+   $imap_headers , $imap_headers
+
+   $imap_home_namespace , $imap_home_namespace
+
+   $imap_keepalive , $imap_keepalive
+
+   $imap_list_subscribed , $imap_list_subscribed
+
+   $imap_login , $imap_login
+
+   $imap_mail_check , $imap_mail_check
+
+   $imap_pass , $imap_pass
+
+   $imap_passive , $imap_passive
+
+   $imap_peek , $imap_peek
+
+   $imap_reconnect , $imap_reconnect
+
+   $imap_servernoise , $imap_servernoise
+
+   $imap_user , $imap_user
+
+   $implicit_autoview , $implicit_autoview
+
+   $include , $include
+
+   $include_onlyfirst , $include_onlyfirst
+
+   $indent_string , Configuration variables
+
+   $indent_string , $indent_string
+
+   $index_format, Threaded Mode, Spam detection, Handling Mailing Lists,
+   Configuration variables
+
+   $index_format , $index_format
+
+   <ispell>, Composing new messages, $ispell, compose
+
+  J
+
+   <jump>, generic
+
+  K
+
+   $keep_flagged , $keep_flagged
+
+   <kill-eol>, Editing Input Fields, editor
+
+   <kill-eow>, Editing Input Fields, editor
+
+   <kill-line>, Editing Input Fields, editor
+
+   <kill-word>, Editing Input Fields, editor
+
+  L
+
+   <last-entry>, Moving Around in Menus, generic
+
+   <limit>, index
+
+   <list-reply>, Miscellaneous Functions, Sending Mail, index, pager, attach
+
+   lists, Miscellaneous Functions, Mailing lists, Handling Mailing Lists,
+   Configuration Commands
+
+   $list_reply , $list_reply
+
+   $locale, Change settings based upon message recipients, $locale
+
+  M
+
+   macro, Miscellaneous Functions, Keyboard macros, Adding key sequences to
+   the keyboard buffer, Using Tags, Configuration Commands
+
+   <mail>, index, pager, query
+
+   <mail-key>, Sending Mail, index, pager
+
+   mailboxes, Defining mailboxes which receive mail, Configuration Commands
+
+   $mailcap_path, mailcap
+
+   $mailcap_sanitize, Secure use of mailcap, mailcap
+
+   $mailcap_path , $mailcap_path
+
+   $mailcap_sanitize , $mailcap_sanitize
+
+   $maildir_header_cache_verify , $maildir_header_cache_verify
+
+   $maildir_trash , $maildir_trash
+
+   $mail_check , $mail_check
+
+   <mark-as-new>, pager
+
+   $markers , $markers
+
+   $mark_old , $mark_old
+
+   $mask , $mask
+
+   $max_display_recips , $max_display_recips
+
+   $max_line_length , $max_line_length
+
+   $mbox, Mailbox Shortcuts, $mbox
+
+   mbox-hook, Using Multiple spool mailboxes, Using Hooks, Configuration
+   Commands
+
+   $mbox_type, Mailbox Formats, Append a message to a compressed mailbox
+
+   $mbox_type , $mbox_type
+
+   $menu_context , $menu_context
+
+   $menu_move_off , $menu_move_off
+
+   $menu_scroll , $menu_scroll
+
+   $message_format , Configuration variables
+
+   message-hook, Change settings before formatting a message, Using Hooks,
+   Message Matching in Hooks, MIME Autoview, Configuration Commands
+
+   $message_format , $message_format
+
+   $meta_key , $meta_key
+
+   $metoo , $metoo
+
+   $mh_purge , $mh_purge
+
+   $mh_seq_flagged , $mh_seq_flagged
+
+   $mh_seq_replied , $mh_seq_replied
+
+   $mh_seq_unseen , $mh_seq_unseen
+
+   <middle-page>, generic
+
+   $mime_forward , Configuration variables
+
+   $mime_forward , $mime_forward
+
+   $mime_forward_decode , $mime_forward_decode
+
+   $mime_forward_rest , $mime_forward_rest
+
+   mime_lookup, MIME Lookup, Configuration Commands
+
+   $mix_entry_format, Sending anonymous messages via mixmaster
+
+   $mixmaster , $mixmaster
+
+   $mix_entry_format , $mix_entry_format
+
+   mono, Using color and mono video attributes, Configuration Commands
+
+   $move , $move
+
+   $msgid_format, Message-ID: headers
+
+   $msgid_format , $msgid_format
+
+   $muttng_bindir , $muttng_bindir
+
+   $muttng_docdir , $muttng_docdir
+
+   $muttng_folder_name , $muttng_folder_name
+
+   $muttng_folder_path , $muttng_folder_path
+
+   $muttng_hcache_backend , $muttng_hcache_backend
+
+   $muttng_pwd , $muttng_pwd
+
+   $muttng_revision , $muttng_revision
+
+   $muttng_sysconfdir , $muttng_sysconfdir
+
+   $muttng_version , $muttng_version
+
+   my_hdr, User defined headers, Configuration Commands
+
+  N
+
+   $narrow_tree , $narrow_tree
+
+   $net_inc , $net_inc
+
+   <new-mime>, compose
+
+   <next-entry>, Moving Around in Menus, generic, pager
+
+   <next-line>, generic, pager
+
+   <next-new>, index, pager
+
+   <next-new-then-unread>, index, pager
+
+   <next-page>, generic, pager
+
+   <next-subthread>, Threaded Mode, index, pager
+
+   <next-thread>, Threaded Mode, index, pager
+
+   <next-undeleted>, index, pager
+
+   <next-unread>, index, pager
+
+   $nntp_ask_followup_to , Configuration variables
+
+   $nntp_ask_x_comment_to , Configuration variables
+
+   $nntp_cache_dir , Configuration variables
+
+   $nntp_catchup , Configuration variables
+
+   $nntp_followup_to_poster , Configuration variables
+
+   $nntp_group_index_format , Configuration variables
+
+   $nntp_host , Configuration variables
+
+   $nntp_inews , Configuration variables
+
+   $nntp_mail_check , Configuration variables
+
+   $nntp_mime_subject , Configuration variables
+
+   $nntp_newsrc, NNTP Support (OPTIONAL), Configuration variables
+
+   $nntp_post_moderated , Configuration variables
+
+   $nntp_save_unsubscribed , Configuration variables
+
+   $nntp_show_new_news , Configuration variables
+
+   $nntp_show_only_unread , Configuration variables
+
+   $nntp_x_comment_to , Configuration variables
+
+   $NNTPSERVER, NNTP Support (OPTIONAL)
+
+   $nntp_ask_followup_to , $nntp_ask_followup_to
+
+   $nntp_ask_x_comment_to , $nntp_ask_x_comment_to
+
+   $nntp_cache_dir , $nntp_cache_dir
+
+   $nntp_catchup , $nntp_catchup
+
+   $nntp_context , $nntp_context
+
+   $nntp_followup_to_poster , $nntp_followup_to_poster
+
+   $nntp_group_index_format , $nntp_group_index_format
+
+   $nntp_host , $nntp_host
+
+   $nntp_inews , $nntp_inews
+
+   $nntp_load_description , $nntp_load_description
+
+   $nntp_mail_check , $nntp_mail_check
+
+   $nntp_mime_subject , $nntp_mime_subject
+
+   $nntp_newsrc , $nntp_newsrc
+
+   $nntp_pass , $nntp_pass
+
+   $nntp_post_moderated , $nntp_post_moderated
+
+   $nntp_reconnect , $nntp_reconnect
+
+   $nntp_save_unsubscribed , $nntp_save_unsubscribed
+
+   $nntp_show_new_news , $nntp_show_new_news
+
+   $nntp_show_only_unread , $nntp_show_only_unread
+
+   $nntp_user , $nntp_user
+
+   $nntp_x_comment_to , $nntp_x_comment_to
+
+   nospam, Spam detection, Configuration Commands
+
+  O
+
+   open-hook, Compressed folders Support (OPTIONAL), Open a compressed
+   mailbox for reading, Write a compressed mailbox, Append a message to a
+   compressed mailbox, Configuration Commands
+
+   $operating_system , $operating_system
 
   P
 
-   Patterns
+   <page-down>, Moving Around in Menus
 
-                ~$/ =$, Patterns
+   <page-up>, Moving Around in Menus
 
-                ~*/ =*, Again: Scoring, Patterns
+   $pager , $pager
 
-                ~=/ ==, Patterns
+   $pager_index_lines, Conditional parts
 
-                ~A/ =A, Change settings before formatting a message, Patterns
+   $pager_context , $pager_context
 
-                ~b/ =b, Complex Patterns, Patterns
+   $pager_format , $pager_format
 
-                ~B/ =B, Patterns
+   $pager_index_lines , $pager_index_lines
 
-                ~C/ =C, Using Hooks, Patterns
+   $pager_stop , $pager_stop
 
-                ~c/ =c, Patterns
+   <parent-message>, Threaded Mode, index, pager
 
-                ~d/ =d, Patterns and Dates, Patterns
+   pattern-hook, Specify default save filename, Specify default Fcc: mailbox
+   when composing, Change settings based upon message recipients, Change
+   settings before formatting a message
 
-                ~D/ =D, Patterns
+   $pgp_autoinline , Configuration variables
 
-                ~E/ =E, Patterns
+   $pgp_entry_format, Using Mutt-ng with PGP
 
-                ~e/ =e, Patterns
+   <pgp-menu>, Composing new messages, compose
 
-                ~f/ =f, Change settings before formatting a message, Message
-                Scoring, Complex Patterns, Patterns
+   $pgp_replyinline , Configuration variables
 
-                ~F/ =F, Patterns
+   $pgp_sign_as, Using Mutt-ng with PGP
 
-                ~g/ =g, Patterns
+   $pgp_autoinline , $pgp_autoinline
 
-                ~G/ =G, Patterns
+   $pgp_auto_decode , $pgp_auto_decode
 
-                ~H/ =H, Spam detection, Patterns
+   $pgp_check_exit , $pgp_check_exit
 
-                ~h/ =h, Patterns
+   $pgp_clearsign_command , $pgp_clearsign_command
 
-                ~i/ =i, Patterns
+   $pgp_decode_command , $pgp_decode_command
 
-                ~k/ =k, Patterns
+   $pgp_decrypt_command , $pgp_decrypt_command
 
-                ~L/ =L, Patterns
+   $pgp_encrypt_only_command , $pgp_encrypt_only_command
 
-                ~l/ =l, Patterns
+   $pgp_encrypt_sign_command , $pgp_encrypt_sign_command
 
-                ~m/ =m, Patterns
+   $pgp_entry_format , $pgp_entry_format
 
-                ~M/ =M, Patterns
+   $pgp_export_command , $pgp_export_command
 
-                ~n/ =n, Message Scoring, Patterns
+   $pgp_getkeys_command , $pgp_getkeys_command
 
-                ~N/ =N, Patterns
+   $pgp_good_sign , $pgp_good_sign
 
-                ~O/ =O, Patterns
+   $pgp_ignore_subkeys , $pgp_ignore_subkeys
 
-                ~p/ =p, Patterns
+   $pgp_import_command , $pgp_import_command
 
-                ~P/ =P, Patterns
+   $pgp_list_pubring_command , $pgp_list_pubring_command
 
-                ~Q/ =Q, Patterns
+   $pgp_list_secring_command , $pgp_list_secring_command
 
-                ~R/ =R, Patterns
+   $pgp_long_ids , $pgp_long_ids
 
-                ~r/ =r, Patterns
+   $pgp_mime_auto , $pgp_mime_auto
 
-                ~s/ =s, Complex Patterns, Patterns
+   $pgp_replyinline , $pgp_replyinline
 
-                ~S/ =S, Patterns
+   $pgp_retainable_sigs , $pgp_retainable_sigs
 
-                ~t/ =t, Message Matching in Hooks, Patterns
+   $pgp_show_unusable , $pgp_show_unusable
 
-                ~T/ =T, Patterns
+   $pgp_sign_as , $pgp_sign_as
 
-                ~U/ =U, Complex Patterns, Patterns
+   $pgp_sign_command , $pgp_sign_command
 
-                ~u/ =u, Patterns
+   $pgp_sort_keys , $pgp_sort_keys
 
-                ~v/ =v, Patterns
+   $pgp_strict_enc , $pgp_strict_enc
 
-                ~V/ =V, Patterns
+   $pgp_timeout , $pgp_timeout
 
-                ~w/ =w, Patterns
+   $pgp_use_gpg_agent , $pgp_use_gpg_agent
 
-                ~x/ =x, Complex Patterns, Patterns
+   $pgp_verify_command , $pgp_verify_command
 
-                ~y/ =y, Handling Mailing Lists, Patterns
+   $pgp_verify_key_command , $pgp_verify_key_command
 
-                ~z/ =z, Patterns
+   $pipe_decode, Miscellaneous Functions
+
+   <pipe-entry>, attach, compose
+
+   <pipe-message>, Miscellaneous Functions, index, pager
+
+   $pipe_split, Miscellaneous Functions
+
+   $pipe_decode , $pipe_decode
+
+   $pipe_sep , $pipe_sep
+
+   $pipe_split , $pipe_split
+
+   $pop_mail_check, POP3 Support (OPTIONAL), Configuration variables
+
+   $pop_authenticators , $pop_authenticators
+
+   $pop_auth_try_all , $pop_auth_try_all
+
+   $pop_delete , $pop_delete
+
+   $pop_host , $pop_host
+
+   $pop_last , $pop_last
+
+   $pop_mail_check , $pop_mail_check
+
+   $pop_pass , $pop_pass
+
+   $pop_reconnect , $pop_reconnect
+
+   $pop_user , $pop_user
+
+   $post_indent_string , Configuration variables
+
+   $postpone, Postponing Mail, $postpone
+
+   <postpone-message>, Composing new messages, compose
+
+   $postponed, Postponing Mail, $postponed
+
+   $post_indent_string , $post_indent_string
+
+   $preconnect , $preconnect
+
+   <previous-entry>, Moving Around in Menus, generic, pager
+
+   <previous-line>, generic, pager
+
+   <previous-new>, index, pager
+
+   <previous-new-then-unread>, index, pager
+
+   <previous-page>, generic, index, pager
+
+   <previous-subthread>, Threaded Mode, index, pager
+
+   <previous-thread>, Threaded Mode, index, pager
+
+   <previous-undeleted>, index, pager
+
+   <previous-unread>, index, pager
+
+   $print , $print
+
+   $print_command , Configuration variables
+
+   <print-entry>, attach, compose
+
+   <print-message>, index, pager
+
+   $print_command , $print_command
+
+   $print_decode , $print_decode
+
+   $print_split , $print_split
+
+   $prompt_after , $prompt_after
+
+   push, Adding key sequences to the keyboard buffer, Using Tags,
+   Configuration Commands
+
+  Q
+
+   <query>, index, query
+
+   <query-append>, query
+
+   $query_command, External Address Queries
+
+   $query_command , $query_command
+
+   <quit>, Moving Around in Menus, Composing new messages, $quit, index,
+   pager
+
+   <quote-char>, Editing Input Fields, editor
+
+   $quote_regexp, Miscellaneous Functions, Using color and mono video
+   attributes
+
+   $quote_empty , $quote_empty
+
+   $quote_quoted , $quote_quoted
+
+   $quote_regexp , $quote_regexp
+
+  R
+
+   <read-subthread>, Threaded Mode, index, pager
+
+   <read-thread>, Threaded Mode, index, pager
+
+   $read_inc , $read_inc
+
+   $read_only , $read_only
+
+   $realname , $realname
+
+   $recall , $recall
+
+   <recall-message>, index, pager
+
+   $record, Environment Variables, Specify default Fcc: mailbox when
+   composing, Mailbox Shortcuts, $record
+
+   <redraw-screen>, pager
+
+   <refresh>, generic
+
+   <rename-file>, compose
+
+   <reply>, Sending Mail, index, pager, attach
+
+   reply-hook, Change settings based upon message recipients, Configuration
+   Commands
+
+   $reply_to, Alternative addresses, Handling Mailing Lists
+
+   $reply_regexp , $reply_regexp
+
+   $reply_self , $reply_self
+
+   $reply_to , $reply_to
+
+   <resend-message>, Miscellaneous Functions, The Attachment Menu, index,
+   attach
+
+   reset, Setting variables, Configuration Commands
+
+   $resolve , $resolve
+
+   $reverse_alias , $reverse_alias
+
+   $reverse_name , $reverse_name
+
+   $reverse_realname , $reverse_realname
+
+   RfC
+
+                1524, MIME Viewer configuration with mailcap, Command
+                Expansion, mailcap
+
+                1894, Delivery Status Notification (DSN) Support
+
+                2822, Again: Scoring
+
+                3676, Sending
+
+                822, User defined headers
+
+   $rfc2047_parameters , $rfc2047_parameters
+
+  S
+
+   $save_empty, Compressed folders Support (OPTIONAL)
+
+   <save-entry>, attach
+
+   save-hook, Specify default save filename, Specify default save filename
+   and default Fcc: mailbox at once, Using Hooks, Message Matching in Hooks,
+   Mailbox Shortcuts, Configuration Commands
+
+   <save-message>, index, pager
+
+   $save_address , $save_address
+
+   $save_empty , $save_empty
+
+   $save_name , $save_name
+
+   score, Message Scoring, Configuration Commands, $score
+
+   $score_threshold_delete, Message Scoring
+
+   $score_threshold_flag, Message Scoring
+
+   $score_threshold_read, Message Scoring
+
+   $score_threshold_delete , $score_threshold_delete
+
+   $score_threshold_flag , $score_threshold_flag
+
+   $score_threshold_read , $score_threshold_read
+
+   <search>, generic, pager, alias, query, browser
+
+   <search-next>, generic, pager, alias, query, browser
+
+   <search-opposite>, generic, pager, query
+
+   <search-reverse>, generic, pager, alias, query, browser
+
+   <search-toggle>, pager
+
+   <select-entry>, generic
+
+   <select-new>, browser
+
+   send-hook, Change settings based upon message recipients, Using Hooks,
+   Message Matching in Hooks, Configuration Commands
+
+   <send-message>, Composing new messages, compose
+
+   send2-hook, Change settings based upon message recipients
+
+   <senderdecode-copy>, pager
+
+   $sendmail, Change settings based upon message recipients, $sendmail
+
+   $sendmail_wait , $sendmail_wait
+
+   $send_charset , $send_charset
+
+   set, Setting variables, Configuration Commands
+
+   <set-flag>, index
+
+   $shell , $shell
+
+   <shell-escape>, Miscellaneous Functions, generic, pager
+
+   <show-limit>, index
+
+   <show-version>, index, pager
+
+   <sidebar-next>, sidebar
+
+   <sidebar-next-new>, sidebar
+
+   <sidebar-open>, sidebar
+
+   <sidebar-previous>, sidebar
+
+   <sidebar-scroll-down>, sidebar
+
+   <sidebar-scroll-up>, sidebar
+
+   $sidebar_shorten_hierarchy , Configuration variables
+
+   $sidebar_boundary , $sidebar_boundary
+
+   $sidebar_delim , $sidebar_delim
+
+   $sidebar_newmail_only , $sidebar_newmail_only
+
+   $sidebar_number_format , $sidebar_number_format
+
+   $sidebar_shorten_hierarchy , $sidebar_shorten_hierarchy
+
+   $sidebar_visible , $sidebar_visible
+
+   $sidebar_width , $sidebar_width
+
+   $signature, Change settings based upon message recipients, $signature
+
+   $signoff_string , $signoff_string
+
+   $sig_dashes , $sig_dashes
+
+   $sig_on_top , $sig_on_top
+
+   $simple_search , $simple_search
+
+   <skip-quoted>, Miscellaneous Functions, pager
+
+   $sleep_time , $sleep_time
+
+   $smart_wrap , $smart_wrap
+
+   $smileys , $smileys
+
+   $smime_default_key , Configuration variables
+
+   <smime-menu>, Composing new messages
+
+   $smime_ask_cert_label , $smime_ask_cert_label
+
+   $smime_ca_location , $smime_ca_location
+
+   $smime_certificates , $smime_certificates
+
+   $smime_decrypt_command , $smime_decrypt_command
+
+   $smime_decrypt_use_default_key , $smime_decrypt_use_default_key
+
+   $smime_default_key , $smime_default_key
+
+   $smime_encrypt_command , $smime_encrypt_command
+
+   $smime_encrypt_with , $smime_encrypt_with
+
+   $smime_get_cert_command , $smime_get_cert_command
+
+   $smime_get_cert_email_command , $smime_get_cert_email_command
+
+   $smime_get_signer_cert_command , $smime_get_signer_cert_command
+
+   $smime_import_cert_command , $smime_import_cert_command
+
+   $smime_is_default , $smime_is_default
+
+   $smime_keys , $smime_keys
+
+   $smime_pk7out_command , $smime_pk7out_command
+
+   $smime_sign_command , $smime_sign_command
+
+   $smime_sign_opaque_command , $smime_sign_opaque_command
+
+   $smime_timeout , $smime_timeout
+
+   $smime_verify_command , $smime_verify_command
+
+   $smime_verify_opaque_command , $smime_verify_opaque_command
+
+   $smtp_envelope, SMTP Support (OPTIONAL)
+
+   $smtp_host, SMTP Support (OPTIONAL)
+
+   $smtp_pass, SMTP Support (OPTIONAL), Configuration variables
+
+   $smtp_use_tls, SMTP Support (OPTIONAL)
+
+   $smtp_user, SMTP Support (OPTIONAL), Configuration variables
+
+   $smtp_host , $smtp_host
+
+   $smtp_pass , $smtp_pass
+
+   $smtp_port , $smtp_port
+
+   $smtp_user , $smtp_user
+
+   $smtp_use_tls , $smtp_use_tls
+
+   $sort , $sort, browser
+
+   <sort-mailbox>, index
+
+   <sort-reverse>, index, browser
+
+   $sort_alias , $sort_alias
+
+   $sort_aux , $sort_aux
+
+   $sort_browser , $sort_browser
+
+   $sort_re , $sort_re
+
+   source, Miscellaneous Functions, Defining/Using aliases, Reading
+   initialization commands from another file, Configuration Commands
+
+   spam, Spam detection, Configuration Commands
+
+   $spam_separator , $spam_separator
+
+   $spoolfile, Setting variables based upon mailbox, Defining mailboxes which
+   receive mail, Mailbox Shortcuts, POP3 Support (OPTIONAL), $spoolfile
+
+   $ssl_ca_certificates_file , $ssl_ca_certificates_file
+
+   $ssl_client_cert , $ssl_client_cert
+
+   $ssl_force_tls , $ssl_force_tls
+
+   $ssl_min_dh_prime_bits , $ssl_min_dh_prime_bits
+
+   $ssl_starttls , $ssl_starttls
+
+   $ssl_usesystemcerts , $ssl_usesystemcerts
+
+   $ssl_use_sslv2 , $ssl_use_sslv2
+
+   $ssl_use_sslv3 , $ssl_use_sslv3
+
+   $ssl_use_tlsv1 , $ssl_use_tlsv1
+
+   $status_format, Composing new messages, Introduction
+
+   $status_chars , $status_chars
+
+   $status_format , $status_format
+
+   $status_on_top , $status_on_top
+
+   $strict_mailto, mailto:-style links
+
+   $strict_threads, Threaded Mode
+
+   $strict_mailto , $strict_mailto
+
+   $strict_mime , $strict_mime
+
+   $strict_threads , $strict_threads
+
+   $strip_was , $strip_was
+
+   $strip_was_regex , $strip_was_regex
+
+   $stuff_quoted , $stuff_quoted
+
+   subscribe, Mailing lists, Configuration Commands, browser
+
+   $suspend , $suspend
+
+   <sync-mailbox>, Manual Conventions, index, pager
+
+  T
+
+   <tag-entry>, generic
+
+   <tag-message>, pager
+
+   <tag-pattern>, index
+
+   <tag-prefix>, generic
+
+   <tag-prefix-cond>, generic
+
+   <tag-thread>, Threaded Mode, index
+
+   $text_flowed , $text_flowed
+
+   $thorough_search , $thorough_search
+
+   $thread_received , $thread_received
+
+   $tilde , $tilde
+
+   $timeout, IMAP Support (OPTIONAL), $timeout
+
+   $tmpdir, Temporary Files, $tmpdir
+
+   $to_chars, Status Flags
+
+   toggle, Setting variables, Configuration Commands
+
+   <toggle-mailboxes>, browser
+
+   <toggle-new>, index
+
+   <toggle-quoted>, Miscellaneous Functions, pager
+
+   <toggle-subscribed>, browser
+
+   <toggle-unlink>, compose
+
+   <toggle-write>, index
+
+   <top>, pager
+
+   <top-page>, generic
+
+   $to_chars , $to_chars
+
+   <transpose-chars>, editor
+
+   $trash , $trash
+
+   $tunnel , $tunnel
+
+  U
+
+   $umask, Temporary Files, $umask
+
+   unalias, Defining/Using aliases, Configuration Commands
+
+   unalternates, Alternative addresses, Configuration Commands
+
+   unalternative_order, MIME Multipart/Alternative, Configuration Commands
+
+   unauto_view, MIME Autoview, Configuration Commands
+
+   $uncollapse_jump , $uncollapse_jump
+
+   uncolor, Using color and mono video attributes, Configuration Commands
+
+   <undelete-entry>, attach, postpone
+
+   <undelete-message>, index, pager
+
+   <undelete-pattern>, index
+
+   <undelete-subthread>, Threaded Mode, index, pager
+
+   <undelete-thread>, Threaded Mode, index, pager
+
+   unhdr_order, Defining the order of headers when viewing messages,
+   Configuration Commands
+
+   unhook, Removing hooks, Configuration Commands
+
+   unignore, Ignoring (weeding) unwanted message headers, Configuration
+   Commands
+
+   unlists, Mailing lists, Configuration Commands
+
+   unmailboxes, Defining mailboxes which receive mail
+
+   unmime_lookup, MIME Lookup, Configuration Commands
+
+   unmono, Using color and mono video attributes, Configuration Commands
+
+   unmy_hdr, User defined headers, Configuration Commands
+
+   unscore, Message Scoring, Configuration Commands
+
+   unset, Setting variables, Configuration Commands
+
+   unsubscribe, Mailing lists, Configuration Commands, browser
+
+   <untag-pattern>, index
+
+   <upcase-word>, Editing Input Fields, editor
+
+   $use_8bitmime, SMTP Support (OPTIONAL)
+
+   $use_8bitmime , $use_8bitmime
+
+   $use_domain , $use_domain
+
+   $use_envelope_from , $use_envelope_from
+
+   $use_from , $use_from
+
+   $use_idn , $use_idn
+
+   $use_ipv6 , $use_ipv6
+
+  V
+
+   <verify-key>, pgp
+
+   <view-attach>, attach, compose
+
+   <view-attachments>, index, pager
+
+   <view-file>, browser
+
+   <view-mailcap>, attach
+
+   <view-name>, pgp
+
+   <view-text>, attach
+
+   $VISUAL, Composing new messages
+
+   $visual , $visual
+
+  W
+
+   $wait_key, Miscellaneous Functions, Optional Fields
+
+   $wait_key , $wait_key
+
+   $weed, Miscellaneous Functions, $weed
+
+   <what-key>, generic
+
+   $wrapmargin , $wrapmargin
+
+   $wrap_search , $wrap_search
+
+   <write-fcc>, Composing new messages, compose
+
+   $write_bcc , $write_bcc
+
+   $write_inc , $write_inc
+
+  X
+
+   $xterm_icon , $xterm_icon
+
+   $xterm_leave , $xterm_leave
+
+   $xterm_set_titles , $xterm_set_titles
+
+   $xterm_title , $xterm_title

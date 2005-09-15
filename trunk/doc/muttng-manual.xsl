@@ -88,7 +88,7 @@
   </xsl:template>
 
   <xsl:template match="muttng-doc:funcdef">
-     <literal>&lt;<xsl:value-of select="@name"/>&gt;</literal> (default: <xsl:value-of select="@key"/>)
+     <literal>&lt;<xsl:value-of select="@name"/>&gt;</literal> (default: <xsl:apply-templates/>)
      <anchor id="func-{@name}"/>
      <indexterm>
        <primary sortas="{@name}"><literal>&lt;<xsl:value-of select="@name"/>&gt;</literal></primary>
@@ -149,6 +149,19 @@
     <screen>
       <xsl:apply-templates/>
     </screen>
+  </xsl:template>
+
+  <xsl:template match="muttng-doc:key">
+    <literal>
+      <xsl:if test="@mod">
+        <xsl:value-of select="concat(@mod,'-')"/>
+      </xsl:if>
+      <xsl:apply-templates/>
+    </literal>
+  </xsl:template>
+
+  <xsl:template match="muttng-doc:special">
+    <xsl:value-of select="@docbook"/>
   </xsl:template>
 
 </xsl:stylesheet>

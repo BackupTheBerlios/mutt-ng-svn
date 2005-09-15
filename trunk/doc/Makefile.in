@@ -45,12 +45,14 @@ DISTFILES = Makefile.in dotlock.man  	\
 	muttrc.man.tail			\
 	mbox.man			\
 	mmdf.man			\
-	manual.xml.head		\
-	manual.xml.tail		\
+	manual.xml.head			\
+	manual.xml.tail			\
 	instdoc.sh.in			\
 	patch-notes.txt			\
 	smime-notes.txt			\
 	muttng-manual.xsl		\
+	muttng-tex.xsl			\
+	muttng.sty			\
 	html.xsl chunk.xsl
 
 BUILT_DISTFILES = stamp-doc-xml stamp-doc-man stamp-doc-chunked \
@@ -123,6 +125,24 @@ manual.tex stamp-doc-tex: manual.xml
 	  openjade -t tex -D $(DSLROOT) -d print/docbook.dsl dtds/decls/xml.dcl manual.xml; \
 	fi
 	touch stamp-doc-tex
+
+manual-ng.tex: manual.xml muttng-tex.xsl
+	xsltproc -o manual-ng.tex muttng-tex.xsl manual-pre.xml
+
+manual-ng.pdf: manual-ng.tex muttng.sty
+	pdflatex -file-line-error manual-ng.tex
+	pdflatex -file-line-error manual-ng.tex
+	touch manual-ng.idx
+	makeindex -s muttng.ist -o manual-ng.ind manual-ng.idx
+	pdflatex -file-line-error manual-ng.tex
+
+manual-ng.ps: manual-ng.tex muttng.sty
+	latex -file-line-error manual-ng.tex
+	latex -file-line-error manual-ng.tex
+	touch manual-ng.idx
+	makeindex -s muttng.ist -o manual-ng.ind manual-ng.idx
+	latex -file-line-error manual-ng.tex
+	dvips -o manual-ng.ps manual-ng.dvi
 
 clean: 
 	rm -f *~ *.html *.orig *.rej stamp-doc-* *.ps mutt.1 muttrc.man
