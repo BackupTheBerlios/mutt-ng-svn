@@ -1484,7 +1484,7 @@ struct option_t MuttVars[] = {
    ** \fIThis is a read-only system property and specifies the
    ** directory containing the muttng documentation.\fP
    */
-#if USE_HCACHE
+#ifdef USE_HCACHE
 #if HAVE_QDBM
   {"muttng_hcache_backend", DT_SYS, R_NONE, 0, "qdbm" },
 #elif HAVE_GDBM
