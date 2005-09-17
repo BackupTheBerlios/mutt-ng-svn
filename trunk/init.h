@@ -691,6 +691,7 @@ struct option_t MuttVars[] = {
    */
   {"envelope_from_address", DT_ADDR, R_NONE, UL &EnvFrom, "" },
   /*
+  ** .pp
   ** Manually sets the \fIenvelope\fP sender for outgoing messages.
   ** This value is ignored if ``$$use_envelope_from'' is unset.
   */
