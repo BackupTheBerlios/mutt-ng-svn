@@ -1176,6 +1176,15 @@
               </listitem>
             </varlistentry>
             <varlistentry>
+              <term>A</term>
+              <listitem>
+                <para>
+                message has one or more attachments.
+                </para>
+              </listitem>
+            </varlistentry>
+
+            <varlistentry>
               <term>S</term>
               <listitem>
                 <para>
