@@ -1004,6 +1004,8 @@ struct option_t MuttVars[] = {
    ** mailing list when this option is set, use the \fIlist-reply\fP
    ** function; \fIgroup-reply\fP will reply to both the sender and the
    ** list.
+   ** Remember: This option works only for mailing lists which are explicitly set in your muttngrc
+   ** configuration file.
    */
 #ifdef USE_IMAP
   {"imap_authenticators", DT_STR, R_NONE, UL &ImapAuthenticators, "" },
