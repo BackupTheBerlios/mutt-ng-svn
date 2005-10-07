@@ -104,18 +104,15 @@ void pgp_forget_passphrase (void)
 }
 
 int pgp_use_gpg_agent (void) {
-  char *tty;
+  char *tty, *ttybuf;
 
   if (!option (OPTUSEGPGAGENT) || !getenv ("GPG_AGENT_INFO"))
     return 0;
 
-  if ((tty = ttyname(0))) {
-    char tmp[SHORT_STRING];
-    snprintf (tmp, sizeof (tmp), "GPG_TTY=%s", tty);
-    putenv (tmp);
-#if 0
-    setenv("GPG_TTY", tty, 0);
-#endif
+  if ((tty = ttyname(0)) && 
+      ((ttybuf = mem_malloc (sizeof("GPG_TTY") + strlen(tty) + 1)))) {
+      snprintf (ttybuf, sizeof (ttybuf), "GPG_TTY=%s", tty);
+      putenv (ttybuf);
   }
 
   return 1;
