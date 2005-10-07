@@ -109,8 +109,14 @@ int pgp_use_gpg_agent (void) {
   if (!option (OPTUSEGPGAGENT) || !getenv ("GPG_AGENT_INFO"))
     return 0;
 
-  if ((tty = ttyname(0)))
+  if ((tty = ttyname(0))) {
+    char tmp[SHORT_STRING];
+    snprintf (tmp, sizeof (tmp), "GPG_TTY=%s", tty);
+    putenv (tmp);
+#if 0
     setenv("GPG_TTY", tty, 0);
+#endif
+  }
 
   return 1;
 }
