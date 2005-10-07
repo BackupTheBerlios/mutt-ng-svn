@@ -647,6 +647,9 @@ static struct q_class_t *classify_quote (struct q_class_t **QuoteList,
   return class;
 }
 
+static int brailleLine = -1;
+static int brailleCol = -1;
+
 static int check_attachment_marker (char *);
 
 static void
@@ -659,8 +662,10 @@ resolve_types (char *buf, char *raw, struct line_t *lineInfo, int n, int last,
   int found, offset, null_rx, i;
 
   if (n == 0 || ISHEADER (lineInfo[n - 1].type)) {
-    if (buf[0] == '\n')
+    if (buf[0] == '\n') {
       lineInfo[n].type = MT_COLOR_NORMAL;
+      getyx(stdscr, brailleLine, brailleCol);
+    }
     else if (n > 0 && (buf[0] == ' ' || buf[0] == '\t')) {
       lineInfo[n].type = lineInfo[n - 1].type;  /* wrapped line */
       (lineInfo[n].syntax)[0].color = (lineInfo[n - 1].syntax)[0].color;
@@ -1695,7 +1700,13 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
 
     redraw = 0;
 
-    move (statusoffset, COLS - 1);
+    if (option(OPTBRAILLEFRIENDLY)) {
+      if (brailleLine!=-1) {
+        move(brailleLine+1, 0);
+        brailleLine = -1;
+      }
+    } else
+      move (statusoffset, COLS-1);
     mutt_refresh ();
 
     if (IsHeader (extra) && OldHdr == extra->hdr && TopLine != topline

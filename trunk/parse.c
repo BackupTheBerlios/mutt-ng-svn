@@ -1101,7 +1101,7 @@ int mutt_parse_rfc822_line (ENVELOPE * e, HEADER * hdr, char *line, char *p,
       matched = 1;
     }
     else if (!ascii_strcasecmp (line + 1, "essage-id")) {
-      /* We add a new "Message-Id:" when building a message */
+      /* We add a new "Message-ID:" when building a message */
       mem_free (&e->message_id);
       e->message_id = extract_message_id (p);
       matched = 1;

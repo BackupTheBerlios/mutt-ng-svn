@@ -944,7 +944,7 @@ int nntp_save_cache_group (CONTEXT * ctx)
       fputs (buf, f);
       if (h->env->references)
         mutt_write_references (h->env->references, f);
-      snprintf (buf, sizeof (buf), "\t%ld\t%d\tXref: %s\n",
+      snprintf (buf, sizeof (buf), "\t" OFF_T_FMT "\t%d\tXref: %s\n",
                 h->content->length, h->lines, NONULL (h->env->xref));
       if (fputs (buf, f) == EOF) {
         fclose (f);

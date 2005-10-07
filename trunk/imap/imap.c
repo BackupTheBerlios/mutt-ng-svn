@@ -1257,8 +1257,6 @@ static int do_search (const pattern_t* search, int allpats)
 * match types, and does a better job (eg server doesn't support regexps). */
 static int imap_compile_search (const pattern_t* pat, BUFFER* buf)
 {
-  char term[STRING];
-
   if (! do_search (pat, 0))
     return 0;
 
@@ -1291,6 +1289,7 @@ static int imap_compile_search (const pattern_t* pat, BUFFER* buf)
       mutt_buffer_addch (buf, ')');
     }
   } else {
+    char term[STRING];
     char *delim;
 
     switch (pat->op) {

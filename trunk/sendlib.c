@@ -1012,7 +1012,7 @@ void mutt_message_to_7bit (BODY * a, FILE * fp)
   mutt_copy_hdr (fpin, fpout, a->offset, a->offset + a->length,
                  CH_MIME | CH_NONEWLINE | CH_XMIT, NULL);
 
-  fputs ("Mime-Version: 1.0\n", fpout);
+  fputs ("MIME-Version: 1.0\n", fpout);
   mutt_write_mime_header (a->parts, fpout);
   fputc ('\n', fpout);
   mutt_write_mime_body (a->parts, fpout);
@@ -1576,7 +1576,7 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
     }
 
     /* Add the MIME headers */
-    fputs ("Mime-Version: 1.0\n", fp);
+    fputs ("MIME-Version: 1.0\n", fp);
     mutt_write_mime_header (attach, fp);
   }
 
@@ -2500,7 +2500,7 @@ int mutt_write_fcc (const char *path, HEADER * hdr, const char *msgid,
     rewind (tempfp);
     while (fgets (sasha, sizeof (sasha), tempfp) != NULL)
       lines++;
-    fprintf (msg->fp, "Content-Length: %ld\n", (long) ftell (tempfp));
+    fprintf (msg->fp, "Content-Length: " OFF_T_FMT "\n", (long) ftell (tempfp));
     fprintf (msg->fp, "Lines: %d\n\n", lines);
 
     /* copy the body and clean up */

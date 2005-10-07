@@ -609,7 +609,7 @@ typedef struct body {
                                  * attachment
                                  */
   long offset;                  /* offset where the actual data begins */
-  long length;                  /* length (in bytes) of attachment */
+  LOFF_T length;                /* length (in bytes) of attachment */
   char *filename;               /* when sending a message, this is the file
                                  * to which this structure refers
                                  */
@@ -674,7 +674,7 @@ typedef struct header {
   unsigned int security:11;     /* bit 0-6: flags, bit 7,8: application.
                                    see: crypt.h pgplib.h, smime.h */
 
-  unsigned int mime:1;          /* has a Mime-Version header? */
+  unsigned int mime:1;          /* has a MIME-Version header? */
   unsigned int flagged:1;       /* marked important? */
   unsigned int tagged:1;
   unsigned int appended:1;      /* has been saved */

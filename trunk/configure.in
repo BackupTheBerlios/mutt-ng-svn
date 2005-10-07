@@ -44,6 +44,8 @@ AC_C_INLINE
 AC_C_CONST
 
 AC_SYS_LARGEFILE
+AC_FUNC_FSEEKO
+AC_CHECK_SIZEOF(off_t)
 
 AC_PATH_PROG(DBX, dbx, no)
 AC_PATH_PROG(GDB, gdb, no)
@@ -85,6 +87,21 @@ AH_TEMPLATE([ICONV_NONTRANS],
             [Define as 1 if iconv() only converts exactly and we should treat
              all return values other than (size_t)(-1) as equivalent.])
 
+AH_BOTTOM([/* fseeko portability defines */
+#ifdef HAVE_FSEEKO
+# define LOFF_T off_t
+# if SIZEOF_OFF_T == 8
+# define OFF_T_FMT "%lld"
+# else
+# define OFF_T_FMT "%ld"
+# endif
+#else
+# define LOFF_T long
+# define fseeko fseek
+# define ftello ftell
+# define OFF_T_FMT "%ld"
+#endif
+])
 MUTT_C99_INTTYPES
 
 ac_aux_path_sendmail=/usr/sbin:/usr/lib

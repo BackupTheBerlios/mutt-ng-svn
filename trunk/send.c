@@ -627,6 +627,11 @@ void mutt_fix_reply_recipients (ENVELOPE * env)
   env->to = mutt_remove_duplicates (env->to);
   env->cc = mutt_remove_duplicates (env->cc);
   env->cc = mutt_remove_xrefs (env->to, env->cc);
+
+  if (env->cc && !env->to) {
+    env->to = env->cc;
+    env->cc = NULL;
+  }
 }
 
 void mutt_make_forward_subject (ENVELOPE * env, CONTEXT * ctx, HEADER * cur)
@@ -1065,6 +1070,19 @@ static void decode_descriptions (BODY * b)
   }
 }
 
+static void fix_end_of_file (const char *data)
+{
+  FILE *fp;
+  int c;
+
+  if ((fp = safe_fopen (data, "a+")) == NULL)
+    return;
+  fseek (fp, -1, SEEK_END);
+  if ((c = fgetc (fp)) != '\n')
+    fputc ('\n', fp);
+  safe_fclose (&fp);
+}
+
 int mutt_resend_message (FILE * fp, CONTEXT * ctx, HEADER * cur)
 {
   HEADER *msg = mutt_new_header ();
@@ -1177,7 +1195,8 @@ int ci_send_message (int flags, /* send mode */
     pbody->next = msg->content; /* don't kill command-line attachments */
     msg->content = pbody;
 
-    ctype = str_dup (ContentType);
+    if (!(ctype = str_dup (ContentType)))
+      ctype = str_dup ("text/plain");
     mutt_parse_content_type (ctype, msg->content);
     mem_free (&ctype);
 
@@ -1439,8 +1458,15 @@ int ci_send_message (int flags, /* send mode */
                            sizeof (fcc));
         mutt_env_to_idna (msg->env, NULL, NULL);
       }
-      else
+      else {
         mutt_edit_file (Editor, msg->content->filename);
+
+        if (stat (msg->content->filename, &st) == 0) {
+          if (mtime != st.st_mtime)
+            fix_end_of_file (msg->content->filename);
+        } else
+          mutt_perror (msg->content->filename);
+      }
 
       if (option (OPTTEXTFLOWED))
         rfc3676_space_stuff (msg);

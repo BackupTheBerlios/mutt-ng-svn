@@ -99,7 +99,7 @@ int imap_parse_path (const char *path, IMAP_MBOX * mx)
   url_parse_ciss (&url, c);
 
   if (!(url.scheme == U_IMAP || url.scheme == U_IMAPS) ||
-      mutt_account_fromurl (&mx->account, &url) < 0) {
+      mutt_account_fromurl (&mx->account, &url) < 0 || !*mx->account.host) {
     mem_free (&c);
     return -1;
   }

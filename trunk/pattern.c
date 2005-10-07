@@ -246,9 +246,15 @@ int eat_regexp (pattern_t * pat, BUFFER * s, BUFFER * err)
   int r;
 
   memset (&buf, 0, sizeof (buf));
+
   if (mutt_extract_token (&buf, s, M_TOKEN_PATTERN | M_TOKEN_COMMENT) != 0 ||
       !buf.data) {
     snprintf (err->data, err->dsize, _("Error in expression: %s"), s->dptr);
+    return (-1);
+  }
+
+  if (!*buf.data) {
+    snprintf (err->data, err->dsize, _("Empty expression"));
     return (-1);
   }
 
@@ -995,7 +1001,7 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags,
   case M_WHOLE_MSG:
 #ifdef USE_IMAP
     /* IMAP search sets h->matched at search compile time */
-    if (Context->magic == M_IMAP && pat->stringmatch)
+    if (ctx->magic == M_IMAP && pat->stringmatch)
       return (h->matched);
 #endif
     return (pat->not ^ msg_search (ctx, pat, h->msgno));

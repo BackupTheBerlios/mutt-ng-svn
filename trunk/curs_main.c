@@ -594,10 +594,6 @@ int mutt_index_menu (void)
         move (menu->current - menu->top + menu->offset, COLS - 1);
       mutt_refresh ();
 
-      op = km_dokey (MENU_MAIN);
-
-      debug_print (4, ("Got op %d\n", op));
-
 #if defined (USE_SLANG_CURSES) || defined (HAVE_RESIZETERM)
       if (SigWinch) {
         mutt_flushinp ();
@@ -614,6 +610,10 @@ int mutt_index_menu (void)
         continue;
       }
 #endif
+
+      op = km_dokey (MENU_MAIN);
+
+      debug_print (4, ("Got op %d\n", op));
 
       if (op == -1)
         continue;               /* either user abort or timeout */
@@ -755,7 +755,7 @@ int mutt_index_menu (void)
 
         if (op == OP_GET_MESSAGE) {
           buf[0] = 0;
-          if (mutt_get_field (_("Enter Message-Id: "), buf, sizeof (buf), 0)
+          if (mutt_get_field (_("Enter Message-ID: "), buf, sizeof (buf), 0)
               != 0 || !buf[0])
             break;
         }
@@ -806,7 +806,7 @@ int mutt_index_menu (void)
         int old = CURHDR->index, i;
 
         if (!CURHDR->env->message_id) {
-          mutt_error (_("No Message-Id. Unable to perform operation"));
+          mutt_error (_("No Message-ID. Unable to perform operation"));
 
           break;
         }
@@ -1208,9 +1208,13 @@ int mutt_index_menu (void)
       if (op == OP_SIDEBAR_OPEN) {
         strncpy (buf, NONULL(sidebar_get_current ()), sizeof (buf));
       }
-      else if (mutt_enter_fname (cp, buf, sizeof (buf), &menu->redraw, 1) ==
-               -1)
-        break;
+      else if (mutt_enter_fname (cp, buf, sizeof (buf), &menu->redraw, 1) == -1) {
+        if (menu->menu == MENU_PAGER) {
+          op = OP_DISPLAY_MESSAGE;
+          continue;
+        } else
+          break;
+      }
       if (!buf[0]) {
         CLEARLINE (LINES - 1);
         break;
@@ -2103,6 +2107,14 @@ int mutt_index_menu (void)
       CHECK_MSGCOUNT;
       CHECK_VISIBLE;
       mutt_pipe_message (tag ? NULL : CURHDR);
+#ifdef USE_IMAP
+      /* in an IMAP folder index with imap_peek=no, piping could change
+       * * new or old messages status to read. Redraw what's needed.
+       */
+      if (Context->magic == M_IMAP && !option (OPTIMAPPEEK)) {
+        menu->redraw = (tag ? REDRAW_INDEX : REDRAW_CURRENT) | REDRAW_STATUS;
+      }
+#endif
       MAYBE_REDRAW (menu->redraw);
       break;
 
@@ -2111,6 +2123,14 @@ int mutt_index_menu (void)
       CHECK_MSGCOUNT;
       CHECK_VISIBLE;
       mutt_print_message (tag ? NULL : CURHDR);
+#ifdef USE_IMAP
+      /* in an IMAP folder index with imap_peek=no, piping could change
+       * * new or old messages status to read. Redraw what's needed.
+       */
+      if (Context->magic == M_IMAP && !option (OPTIMAPPEEK)) {
+        menu->redraw = (tag ? REDRAW_INDEX : REDRAW_CURRENT) | REDRAW_STATUS;
+      }
+#endif
       break;
 
     case OP_MAIN_READ_THREAD:

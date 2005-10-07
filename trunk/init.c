@@ -53,6 +53,15 @@
 #include <errno.h>
 #include <sys/wait.h>
 
+#define CHECK_PAGER \
+  if ((CurrentMenu == MENU_PAGER) && \
+      (!option || (option->flags & R_RESORT))) \
+  { \
+    snprintf (err->data, err->dsize, \
+              _("Not available in this menu.")); \
+    return (-1); \
+  } else
+
 /*
  * prototypes
  */
@@ -1204,7 +1213,8 @@ static int parse_alias (BUFFER * buf, BUFFER * s, unsigned long data,
   if (DebugLevel >= 2) {
     ADDRESS *a;
 
-    for (a = tmp->addr; a; a = a->next) {
+    /* A group is terminated with an empty address, so check a->mailbox */
+    for (a = tmp->addr; a && a->mailbox; a = a->next) {
       if (!a->group)
         debug_print (2, ("%s\n", a->mailbox));
       else
@@ -1622,15 +1632,27 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
       }
 
       if (!str_cmp ("all", tmp->data)) {
+        if (CurrentMenu == MENU_PAGER) {
+          snprintf (err->data, err->dsize, _("Not available in this menu."));
+          return (-1);
+        }
         hash_map (ConfigOptions, mutt_restore_default, 1);
+        set_option (OPTFORCEREDRAWINDEX);
+        set_option (OPTFORCEREDRAWPAGER);
+        set_option (OPTSORTSUBTHREADS);
+        set_option (OPTNEEDRESORT);
+        set_option (OPTRESORTINIT);
+        set_option (OPTREDRAWTREE);
         return (0);
       }
       else if (!FuncTable[DTYPE (option->type)].opt_from_string) {
         snprintf (err->data, err->dsize, _("$%s is read-only"), option->option);
         r = -1;
         break;
-      } else
+      } else {
+        CHECK_PAGER;
         mutt_restore_default (NULL, option, 1);
+      }
     }
     else if (DTYPE (option->type) == DT_BOOL) {
       /* XXX this currently ignores the function table
@@ -1658,6 +1680,7 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
         return 0;
       }
 
+      CHECK_PAGER;
       if (unset)
         unset_option (option->data);
       else if (inv)
@@ -1682,6 +1705,7 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
           DTYPE (option->type) == DT_USER ||
           DTYPE (option->type) == DT_SYS) {
         if (unset) {
+          CHECK_PAGER;
           if (!FuncTable[DTYPE (option->type)].opt_from_string) {
             snprintf (err->data, err->dsize, _("$%s is read-only"),
                       option->option);
@@ -1712,6 +1736,7 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
         r = -1;
         break;
       } else {
+        CHECK_PAGER;
         s->dptr++;
         mutt_extract_token (tmp, s, 0);
         if (!FuncTable[DTYPE (option->type)].opt_from_string
@@ -1727,6 +1752,7 @@ static int parse_set (BUFFER * tmp, BUFFER * s, unsigned long data,
       }
 
       if (*s->dptr == '=') {
+        CHECK_PAGER;
         s->dptr++;
         mutt_extract_token (tmp, s, 0);
         if (ascii_strcasecmp ("yes", tmp->data) == 0)

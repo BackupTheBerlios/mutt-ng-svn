@@ -1259,7 +1259,7 @@ static void clean_references (THREAD * brk, THREAD * cur)
     if (done) {
       HEADER *h = cur->message;
 
-      /* clearing the References: header from obsolete Message-Id(s) */
+      /* clearing the References: header from obsolete Message-ID(s) */
       mutt_free_list (&ref->next);
 
       h->env->refs_changed = h->changed = 1;
