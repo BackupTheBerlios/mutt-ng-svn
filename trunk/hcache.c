@@ -14,6 +14,8 @@
 
 #ifdef USE_HCACHE
 
+#define MUTTNG_HCACHE_ID        "0x001"
+
 # if HAVE_INTTYPES_H
 #  include <inttypes.h>
 # else
@@ -445,9 +447,9 @@ static int generate_crc32 ()
   int crc = 0;
 
   crc = crc32 (crc, (unsigned char const *)
-               "sithglan@stud.uni-erlangen.de[sithglan]|hcache.c|20041108231548|29613",
+               MUTTNG_HCACHE_ID "sithglan@stud.uni-erlangen.de[sithglan]|hcache.c|20041108231548|29613",
                str_len
-               ("sithglan@stud.uni-erlangen.de[sithglan]|hcache.c|20041108231548|29613"));
+               (MUTTNG_HCACHE_ID "sithglan@stud.uni-erlangen.de[sithglan]|hcache.c|20041108231548|29613"));
 
 #if HAVE_LANGINFO_CODESET
   crc = crc32 (crc, (unsigned char const *) Charset, str_len (Charset));
