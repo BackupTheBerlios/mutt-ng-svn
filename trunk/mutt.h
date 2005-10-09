@@ -201,6 +201,7 @@ enum {
   M_CRYPT_ENCRYPT,
   M_PGP_KEY,
   M_XLABEL,
+  M_MIMEATTACH,
 #ifdef USE_NNTP
   M_NEWSGROUPS,
 #endif
@@ -630,6 +631,8 @@ typedef struct body {
 
   struct attachptr *aptr;       /* Menu information, used in recvattach.c */
 
+  signed short attach_count;
+
   time_t stamp;                 /* time stamp of last
                                  * encoding update.
                                  */
@@ -667,6 +670,7 @@ typedef struct body {
   unsigned int badsig:1;        /* bad cryptographic signature (needed to check encrypted s/mime-signatures) */
 
   unsigned int collapsed:1;     /* used by recvattach */
+  unsigned int attach_qualifies:1;
 
 } BODY;
 
@@ -706,6 +710,9 @@ typedef struct header {
   unsigned int searched:1;
   unsigned int matched:1;
 
+  /* tells whether the attach count is valid */
+  unsigned int attach_valid:1;
+
   /* the following are used to support collapsing threads  */
   unsigned int collapsed:1;     /* is this message part of a collapsed thread? */
   unsigned int limited:1;       /* is this message in a limited view?  */
@@ -732,6 +739,8 @@ typedef struct header {
 
   char *tree;                   /* character string to print thread tree */
   struct thread *thread;
+
+  short attach_total;
 
 #ifdef MIXMASTER
   LIST *chain;
@@ -833,6 +842,18 @@ typedef struct {
   unsigned int closing:1;       /* mailbox is being closed */
   unsigned int counting:1;      /* do we just want to cound? */
 } CONTEXT;
+
+/* for attachment counter */
+typedef struct {
+  char *major;
+  int major_int;
+  char *minor;
+  regex_t minor_rx;
+} ATTACH_MATCH;
+
+/* Flags for mutt_count_body_parts() */
+#define M_PARTS_TOPLEVEL (1<<0) /* is the top-level part */
+#define M_PARTS_RECOUNT (1<<1) /* force recount */
 
 #include "protos.h"
 #include "lib.h"

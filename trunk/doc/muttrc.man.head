@@ -454,6 +454,7 @@ l l.
 ~u	message is addressed to a subscribed mailing list
 ~v	message is part of a collapsed thread.
 ~x \fIEXPR\fP	messages which contain \fIEXPR\fP in the \(lqReferences\(rq field
+~X \fIMIN\fP-\fiMAX\fP  messages with MIN to MAX attachments
 ~z \fIMIN\fP-\fIMAX\fP	messages with a size in the range \fIMIN\fP to \fIMAX\fP
 ~=	duplicated messages (see $duplicate_threads)
 ~$	unreferenced message (requries threaded view)
@@ -461,7 +462,7 @@ l l.
 .PP
 In the above, \fIEXPR\fP is a regular expression.
 .PP
-With the \fB~m\fP, \fB~n\fP, and \fB~z\fP operators, you can also
+With the \fB~m\fP, \fB~n\fP, \fB~X\fP and \fB~z\fP operators, you can also
 specify ranges in the forms \fB<\fP\fIMAX\fP, \fB>\fP\fIMIN\fP,
 \fIMIN\fP\fB-\fP, and \fB-\fP\fIMAX\fP.
 .SS Matching dates

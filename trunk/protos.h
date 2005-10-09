@@ -114,6 +114,7 @@ void mutt_block_signals (void);
 void mutt_block_signals_system (void);
 int mutt_bounce_message (FILE * fp, HEADER *, ADDRESS *);
 void mutt_canonical_charset (char *, size_t, const char *);
+int mutt_count_body_parts (HEADER *hdr, int flags);
 void mutt_check_rescore (CONTEXT *);
 void mutt_clear_error (void);
 void mutt_default_save (char *, size_t, HEADER *);

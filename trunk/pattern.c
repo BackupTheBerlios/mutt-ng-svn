@@ -95,6 +95,7 @@ struct pattern_flags {
 #endif
   {
   'x', M_REFERENCE, 0, eat_regexp}, {
+  'X', M_MIMEATTACH, 0, eat_range}, {
   'y', M_XLABEL, 0, eat_regexp}, {
   'z', M_SIZE, 0, eat_range}, {
   '=', M_DUPLICATED, 0, NULL}, {
@@ -1094,6 +1095,23 @@ mutt_pattern_exec (struct pattern_t *pat, pattern_exec_flag flags,
                    && patmatch (pat, h->env->spam->data) == 0));
   case M_DUPLICATED:
     return (pat->not ^ (h->thread && h->thread->duplicate_thread));
+
+  case M_MIMEATTACH:
+    {
+      int count;
+      
+      if (h->content->parts)
+        count = mutt_count_body_parts(h, 0);
+      else {
+        mutt_parse_mime_message(ctx, h);
+        count = mutt_count_body_parts(h, 0);
+        mutt_free_body(&h->content->parts);
+      }
+      
+      return (pat->not ^ (count >= pat->min && (pat->max == M_MAXRANGE ||
+                                                count <= pat->max)));
+    }
+
   case M_UNREFERENCED:
     return (pat->not ^ (h->thread && !h->thread->child));
   case M_MULTIPART:

@@ -17,7 +17,8 @@ enum {
   TYPEMODEL,
   TYPEMULTIPART,
   TYPETEXT,
-  TYPEVIDEO
+  TYPEVIDEO,
+  TYPEANY
 };
 
 /* Content-Transfer-Encoding */

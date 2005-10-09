@@ -207,6 +207,7 @@ int mutt_user_is_recipient (HEADER * h)
  * %u = user (login) name of author
  * %v = first name of author, unless from self
  * %W = where user is (organization)
+ * %X = number of MIME attachments
  * %y = `x-label:' field (if present)
  * %Y = `x-label:' field (if present, tree unfolded, and != parent's x-label)
  * %Z = status flags	*/
@@ -630,6 +631,27 @@ static const char *hdr_format_str (char *dest,
       optional = 0;
     break;
 
+  case 'X':
+    {
+      int count, flags = 0;
+      
+      if (hdr->content->parts)
+        count = mutt_count_body_parts(hdr, flags);
+      else {
+        mutt_parse_mime_message(ctx, hdr);
+        count = mutt_count_body_parts(hdr, flags);
+        mutt_free_body(&hdr->content->parts);
+      }
+
+      /* The recursion allows messages without depth to return 0. */
+      if (optional)
+        optional = count != 0;
+      
+      snprintf (fmt, sizeof (fmt), "%%%sd", prefix);
+      snprintf (dest, destlen, fmt, count);
+    }
+    break;
+
   case 'Z':
 
     ch = ' ';
@@ -644,7 +666,7 @@ static const char *hdr_format_str (char *dest,
       ch = 'K';
 
     snprintf (buf2, sizeof (buf2),
-              "%c%c%c%c", (THREAD_NEW ? 'n' : (THREAD_OLD ? 'o' :
+              "%c%c%c", (THREAD_NEW ? 'n' : (THREAD_OLD ? 'o' :
                                              ((hdr->read
                                                && (ctx
                                                    && ctx->msgnotreadyet !=
@@ -662,9 +684,7 @@ static const char *hdr_format_str (char *dest,
                                                       mutt_user_is_recipient
                                                       (hdr)) <
                                                      str_len (Tochars)) ?
-                                                    Tochars[i] : ' ')),
-              (hdr->content && hdr->content->type == TYPEMULTIPART) ?
-              'A' : ' ');
+                                                    Tochars[i] : ' ')));
     mutt_format_s (dest, destlen, prefix, buf2);
     break;
 

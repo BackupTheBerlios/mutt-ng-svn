@@ -10,6 +10,21 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-10-09:
+
+  The "attachments" and "unattachments" commands were added. The %X
+  expando has been added to $index_format. The ~X pattern has been
+  added. The %Q and %X expandos have been added to $attach_format.
+
+  As part of the above addition(s), the 'A' message status flag has been
+  removed again.
+
+2005-10-07:
+
+  When upgrading to after a revision after 528, header caches must be
+  completely removed and rebuild again. From r540 on, this problem is
+  solved so manual interaction will not be necessary any longer.
+
 2005-09-14:
 
   The $smtp_envelope_from variable has been removed in favor of the

@@ -1,3 +1,40 @@
+2005-10-06 06:15:00  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* browser.c: Sort browser entries after every IMAP browsing
+	operation instead of just when explicitly requested. Closes:
+	#2089.
+
+2005-10-06 05:13:55  Jeff Ito  <jeffi@rcn.com>  (brendan)
+
+	* smime.c: Add AES ciphers to S/MIME encryption options. Closes:
+	#2103.
+
+2005-10-05 19:24:40  David Champion  <dgc@uchicago.edu>  (brendan)
+
+	* doc/manual.xml.head, init.c: Fix 'unattachments'. Closes: #2102.
+
+2005-10-05 19:20:22  Jeff Ito  <jeffi@rcn.com>  (brendan)
+
+	* smime.c: S/MIME key selection truncates the last character of
+	the selected key for no apparent reason. Removed until someone
+	can justify it. Closes: #2081.
+
+2005-10-04 19:00:05  Brendan Cully  <brendan@kublai.com>  (brendan)
+
+	* init.h: Tweak description of pop_checkinterval slightly. Closes:
+	#2074.
+
+	* hcache.c: Bump hcache Id for attachment counting patch.
+
+2005-10-04 06:05:39  David Champion  <dgc@uchicago.edu>  (brendan)
+
+	* Muttrc.head.in, doc/manual.xml.head, doc/muttrc.man.head,
+	globals.h, hdrline.c, init.c, init.h, mime.h, mutt.h, parse.c,
+	pattern.c, protos.h, recvattach.c: Attachment counting for index
+	display (patch-1.5.11.dgc.attach.6). Modifications: attach_recurse
+	and attach_ignore_fundamental stripped, some debugging code
+	removed, some bones thrown to check_sec.sh.
+
 2005-10-04 05:24:00  Sebastien Hinderer  <Sebastien.Hinderer@libertysurf.fr>  (brendan)
 
 	* pager.c: The following patch has an effect only when the

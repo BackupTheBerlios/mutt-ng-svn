@@ -279,10 +279,12 @@ struct option_t MuttVars[] = {
    ** .dt %m  .dd major MIME type
    ** .dt %M  .dd MIME subtype
    ** .dt %n  .dd attachment number
+   ** .dt %Q  .dd "Q", if MIME part qualifies for attachment counting
    ** .dt %s  .dd size
    ** .dt %t  .dd tagged flag
    ** .dt %T  .dd graphic tree characters
    ** .dt %u  .dd unlink (=to delete) flag
+   ** .dt %X  .dd number of qualifying MIME parts in this part and its children
    ** .dt %>X .dd right justify the rest of the string and pad with character "X"
    ** .dt %|X .dd pad to the end of the line with character "X"
    ** .de
@@ -1260,6 +1262,7 @@ struct option_t MuttVars[] = {
    ** .dt %u .dd user (login) name of the author
    ** .dt %v .dd first name of the author, or the recipient if the message is from you
    ** .dt %W .dd name of organization of author (`organization:' field)
+   ** .dt %X .dd number of attachments
    ** .dt %y .dd `x-label:' field, if present
    ** .dt %Y .dd `x-label' field, if present, and (1) not at part of a thread tree,
    **            (2) at the top of a thread, or (3) `x-label' is different from
@@ -1638,9 +1641,9 @@ struct option_t MuttVars[] = {
    ** If \fIset\fP, forces Mutt-ng to interpret keystrokes with the high bit (bit 8)
    ** set as if the user had pressed the \fTESC\fP key and whatever key remains
    ** after having the high bit removed.  For example, if the key pressed
-   ** has an ASCII value of \fT0xf4\fP, then this is treated as if the user had
+   ** has an ASCII value of \fT0xf8\fP, then this is treated as if the user had
    ** pressed \fTESC\fP then ``\fTx\fP''.  This is because the result of removing the
-   ** high bit from ``\fT0xf4\fP'' is ``\fT0x74\fP'', which is the ASCII character
+   ** high bit from ``\fT0xf8\fP'' is ``\fT0x78\fP'', which is the ASCII character
    ** ``\fTx\fP''.
    */
   {"mh_purge", DT_BOOL, R_NONE, OPTMHPURGE, "no" },
@@ -2759,7 +2762,7 @@ struct option_t MuttVars[] = {
    ** Availability: POP
    **
    ** .pp
-   ** This variable configures how often (in seconds) POP should look for
+   ** This variable configures how often (in seconds) Mutt-ng should look for
    ** new mail.
    */
   {"pop_delete", DT_QUAD, R_NONE, OPT_POPDELETE, "ask-no" },
@@ -2803,7 +2806,7 @@ struct option_t MuttVars[] = {
    ** Availability: POP
    **
    ** .pp
-   ** Controls whether or not Mutt-ng will try to reconnect to a POP server when the
+   ** Controls whether or not Mutt-ng will try to reconnect to a POP server if the
    ** connection is lost.
    */
   {"pop_user", DT_STR, R_NONE, UL &PopUser, "" },
@@ -3965,7 +3968,8 @@ const struct mapping_t SortKeyMethods[] = {
 static int parse_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_spam_list (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unlist (BUFFER *, BUFFER *, unsigned long, BUFFER *);
-
+static int parse_attachments (BUFFER *, BUFFER *, unsigned long, BUFFER *);
+static int parse_unattachments (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_lists (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_unlists (BUFFER *, BUFFER *, unsigned long, BUFFER *);
 static int parse_alias (BUFFER *, BUFFER *, unsigned long, BUFFER *);
@@ -3992,6 +3996,8 @@ struct command_t {
 
 struct command_t Commands[] = {
   {"alternates", parse_alternates, 0},
+  {"attachments", parse_attachments, 0 },
+  {"unattachments",parse_unattachments,0 },
   {"unalternates", parse_unalternates, 0},
 #ifdef USE_SOCKET
   {"account-hook", mutt_parse_hook, M_ACCOUNTHOOK},
