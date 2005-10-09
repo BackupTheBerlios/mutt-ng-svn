@@ -8,7 +8,7 @@
 
    <me@cs.hmc.edu>
 
-   version devel-r522
+   version devel-r541
 
    Abstract
 
@@ -294,7 +294,9 @@
 
                 5. MIME Multipart/Alternative
 
-                6. MIME Lookup
+                6. Attachment Searching and Counting
+
+                7. MIME Lookup
 
    6. Security Considerations
 
@@ -491,8 +493,8 @@ Chapter 1. Introduction
    for more details.
 
    You should have received a copy of the GNU General Public License along
-   with this program; if not, write to the Free Software Foundation, Inc., 59
-   Temple Place - Suite 330, Boston, MA 02111, USA.
+   with this program; if not, write to the Free Software Foundation, Inc., 51
+   Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 
 8. Manual Conventions
 
@@ -4233,7 +4235,9 @@ Chapter 5. Mutt-ng's MIME Support
 
    5. MIME Multipart/Alternative
 
-   6. MIME Lookup
+   6. Attachment Searching and Counting
+
+   7. MIME Lookup
 
    Quite a bit of effort has been made to make Mutt-ng the premier text-mode
    MIME MUA. Every effort has been made to provide the functionality that the
@@ -4731,7 +4735,99 @@ Chapter 5. Mutt-ng's MIME Support
    To remove a MIME type from the alternative_order list, use the
    unalternative_order command.
 
-6. MIME Lookup
+6. Attachment Searching and Counting
+
+   If you ever lose track of attachments in your mailboxes, Mutt's
+   attachment-counting and -searching support might be for you. You can make
+   your message index display the number of qualifying attachments in each
+   message, or search for messages by attachment count. You also can
+   configure what kinds of attachments qualify for this feature with the
+   attachments and unattachments commands.
+
+   The syntax is:
+
+   Usage: attachments( {+|-}disposition mime-type | ? )
+
+   Usage: unattachments{+|-}disposition mime-type
+
+   Disposition is the attachment's Content-disposition type -- either
+   "inline" or "attachment". You can abbreviate this to I or A.
+
+   Disposition is prefixed by either a + symbolor a - symbol. If it's a +,
+   you're saying that you want to allow this disposition and MIME type to
+   qualify. If it's a -, you're saying that this disposition and MIME type is
+   an exception to previous + rules. There are examples below of how this is
+   useful.
+
+   Mime-type is, unsurprisingly, the MIME type of the attachment you want to
+   affect. A MIME type is always of the format "major/minor", where "major"
+   describes the broad category of document you're looking at, and "minor"
+   describes the specific type within that category. The major part of
+   mim-type must be literal text (or the special token "*"), but the minor
+   part may be a regular expression. (Therefore, "*/.*" matches any MIME
+   type.)
+
+   The MIME types you give to the attachments directive are a kind of
+   pattern. When you use the attachments directive, the patterns you specify
+   are added to a list. When you use unattachments, the pattern is removed
+   from the list. The patterns are not expanded and matched to specific MIME
+   types at this time -- they're just text in a list. They're only matched
+   when actually evaluating a message.
+
+   Some examples might help to illustrate. The examples that are not
+   commented out define the default configuration of the lists.
+
+ ## Removing a pattern from a list removes that pattern literally. It
+ ## does not remove any type matching the pattern.
+ ##
+ ## attachments +A */.*
+ ## attachments +A image/jpeg
+ ## unattachments +A */.*
+ ##
+ ## This leaves "attached" image/jpeg files on the allowed attachments
+ ## list. It does not remove all items, as you might expect, because the
+ ## second */.* is not a matching expression at this time.
+ ##
+ ## Remember: "unattachments" only undoes what "attachments" has done!
+ ## It does not trigger any matching on actual messages.
+
+
+ ## Qualify any MIME part with an "attachment" disposition, EXCEPT for
+ ## text/x-vcard and application/pgp parts. (PGP parts are already known
+ ## to mutt, and can be searched for with ~g, ~G, and ~k.)
+ ##
+ ## I've added x-pkcs7 to this, since it functions (for S/MIME)
+ ## analogously to PGP signature attachments. S/MIME isn't supported
+ ## in a stock mutt build, but we can still treat it specially here.
+ ##
+ attachments +A */.*
+ attachments -A text/x-vcard application/pgp.*
+ attachments -A application/x-pkcs7-.*
+
+ ## Discount all MIME parts with an "inline" disposition, unless they're
+ ## text/plain. (Why inline a text/plain part unless it's external to the
+ ## message flow?)
+ ##
+ attachments +I text/plain
+
+ ## These two lines make Mutt qualify MIME containers. (So, for example,
+ ## a message/rfc822 forward will count as an attachment.) The first
+ ## line is unnecessary if you already have "attach-allow */.*", of
+ ## course. These are off by default! The MIME elements contained
+ ## within a message/* or multipart/* are still examined, even if the
+ ## containers themseves don't qualify.
+ ##
+ #attachments +A message/.* multipart/.*
+ #attachments +I message/.* multipart/.*
+
+ ## You probably don't really care to know about deleted attachments.
+ attachments -A message/external-body
+ attachments -I message/external-body
+
+   "attachments ?" will list your current settings in Muttrc format, so that
+   it can be pasted elsewhere.
+
+7. MIME Lookup
 
    Usage: mime_lookupmime-type [mime-type ...]
 
@@ -5035,6 +5131,7 @@ Chapter 7. Reference
                                 support)
    ~x/=x            EXPR        messages which contain EXPR in the
                                 `References' field
+   ~X/=X            [MIN]-[MAX] messages with MIN to MAX attachments *)
    ~y/=y            EXPR        messages which contain EXPR in the `X-Label'
                                 field
    ~z/=z            [MIN]-[MAX] messages with a size in the range MIN to MAX
@@ -5443,6 +5540,10 @@ Chapter 7. Reference
 
            attachment number
 
+   %Q
+
+           "Q", if MIME part qualifies for attachment counting
+
    %s
 
            size
@@ -5458,6 +5559,10 @@ Chapter 7. Reference
    %u
 
            unlink (=to delete) flag
+
+   %X
+
+           number of qualifying MIME parts in this part and its children
 
    %>X
 
@@ -5988,7 +6093,7 @@ Chapter 7. Reference
    Default: yes
 
    This variable controls whether Mutt-ng, when sorting by threads, threads
-   messages with the same Message-Id: header field together. If it is set, it
+   messages with the same Message-ID: header field together. If it is set, it
    will indicate that it thinks they are duplicates of each other with an
    equals sign in the thread diagram.
 
@@ -6038,7 +6143,7 @@ Chapter 7. Reference
    Useful to avoid the tampering certain mail delivery and transport agents
    tend to do with messages.
 
-   Note: as mutt-ng currently violates RfC3676 defining format=flowed, it's
+   Note: as Mutt-ng currently violates RfC3676 defining format=flowed, it's
    <em/strongly/ advised to set this option although discouraged by the
    standard. Alternatively, you must take care of space-stuffing <tt/From /
    lines (with a trailing space) yourself.
@@ -6294,7 +6399,7 @@ Chapter 7. Reference
    ignored if ``$use_from'' is unset.
 
    E.g. you can use send-hook Mutt-ng-devel@lists.berlios.de 'my_hdr From:
-   Foo Bar <foo@bar.fb>' when replying to the mutt-ng developer's mailing
+   Foo Bar <foo@bar.fb>' when replying to the Mutt-ng developer's mailing
    list and Mutt-ng takes this email address.
 
    Defaults to the contents of the environment variable $EMAIL.
@@ -6463,7 +6568,7 @@ Chapter 7. Reference
    Default: ""
 
    Specifies the hostname to use after the ``@'' in local e-mail addresses
-   and during generation of Message-Id: headers.
+   and during generation of Message-ID: headers.
 
    Please be sure to really know what you are doing when changing this
    variable to configure a custom domain part of Message-IDs.
@@ -6480,7 +6585,9 @@ Chapter 7. Reference
    ``Reply-To:'' header field was set by the mailing list to automate
    responses to the list, and will ignore this field. To direct a response to
    the mailing list when this option is set, use the list-reply function;
-   group-reply will reply to both the sender and the list.
+   group-reply will reply to both the sender and the list. Remember: This
+   option works only for mailing lists which are explicitly set in your
+   muttngrc configuration file.
 
 97. $imap_authenticators
 
@@ -6862,6 +6969,10 @@ Chapter 7. Reference
 
            name of organization of author (`organization:' field)
 
+   %X
+
+           number of attachments
+
    %y
 
            `x-label:' field, if present
@@ -7126,9 +7237,9 @@ Chapter 7. Reference
    If set, forces Mutt-ng to interpret keystrokes with the high bit (bit 8)
    set as if the user had pressed the ESC key and whatever key remains after
    having the high bit removed. For example, if the key pressed has an ASCII
-   value of 0xf4, then this is treated as if the user had pressed ESC then
-   ``x''. This is because the result of removing the high bit from ``0xf4''
-   is ``0x74'', which is the ASCII character ``x''.
+   value of 0xf8, then this is treated as if the user had pressed ESC then
+   ``x''. This is because the result of removing the high bit from ``0xf8''
+   is ``0x78'', which is the ASCII character ``x''.
 
 138. $metoo
 
@@ -7265,8 +7376,8 @@ Chapter 7. Reference
 
    Default: "%Y%m%d%h%M%s.G%P%p"
 
-   This is the format for the ``local part'' of the Message-Id: header field
-   generated by Mutt-ng. If this variable is empty, no Message-Id: headers
+   This is the format for the ``local part'' of the Message-ID: header field
+   generated by Mutt-ng. If this variable is empty, no Message-ID: headers
    will be generated. The '%' character marks that certain data will be added
    to the string, similar to printf(3). The following characters are allowed:
 
@@ -7389,7 +7500,7 @@ Chapter 7. Reference
 
    Type: system property
 
-   Value: 522
+   Value: 541
 
    This is a read-only system property and specifies muttng's subversion
    revision string.
@@ -8300,8 +8411,8 @@ Chapter 7. Reference
 
    Availability: POP
 
-   This variable configures how often (in seconds) POP should look for new
-   mail.
+   This variable configures how often (in seconds) Mutt-ng should look for
+   new mail.
 
 226. $pop_pass
 
@@ -8326,7 +8437,7 @@ Chapter 7. Reference
 
    Availability: POP
 
-   Controls whether or not Mutt-ng will try to reconnect to a POP server when
+   Controls whether or not Mutt-ng will try to reconnect to a POP server if
    the connection is lost.
 
 228. $pop_user
@@ -8848,7 +8959,7 @@ Chapter 7. Reference
 
    This variable controls how message counts are printed when the sidebar is
    enabled. If this variable is empty (and only if), no numbers will be
-   printed and mutt-ng won't frequently count mail (which may be a great
+   printed and Mutt-ng won't frequently count mail (which may be a great
    speedup esp. with mbox-style mailboxes.)
 
    The following printf(3)-like sequences are supported all of which may be
@@ -9455,7 +9566,7 @@ Chapter 7. Reference
 
    Default: no
 
-   If this variable is set, mutt-ng will require that all connections to
+   If this variable is set, Mutt-ng will require that all connections to
    remote servers be encrypted. Furthermore it will attempt to negotiate TLS
    even if the server does not advertise the capability, since it would
    otherwise have to abort the connection anyway. This option supersedes
@@ -9710,7 +9821,7 @@ Chapter 7. Reference
    may be embedded. This may lead to (user) headers being overwriten without
    note if ``$edit_headers'' is unset.
 
-   If this variable is set, mutt-ng is strict and allows anything to be
+   If this variable is set, Mutt-ng is strict and allows anything to be
    changed. If it's unset, all headers given will be prefixed with
    ``X-Mailto-'' and the message including headers will be shown in the
    editor regardless of what ``$edit_headers'' is set to.
@@ -9750,7 +9861,7 @@ Chapter 7. Reference
 
    Default: no
 
-   When set, mutt-ng will remove the trailing part of the ``Subject:'' line
+   When set, Mutt-ng will remove the trailing part of the ``Subject:'' line
    which matches $strip_was_regex when replying. This is useful to properly
    react on subject changes and reduce ``subject noise.'' (esp. in Usenet)
 
@@ -9760,7 +9871,7 @@ Chapter 7. Reference
 
    Default: "\([Ww][Aa][RrSs]: .*\)[ ]*$"
 
-   When non-empty and $strip_was is set, mutt-ng will remove this trailing
+   When non-empty and $strip_was is set, Mutt-ng will remove this trailing
    part of the ``Subject'' line when replying if it won't be empty
    afterwards.
 
@@ -9941,7 +10052,7 @@ Chapter 7. Reference
 
    Default: no
 
-   When set, mutt-ng will use ``$envelope_from_address'' as the envelope
+   When set, Mutt-ng will use ``$envelope_from_address'' as the envelope
    sender if that is set, otherwise it will attempt to derive it from the
    "From:" header.
 
@@ -10074,8 +10185,8 @@ Chapter 7. Reference
    Default: ""
 
    If $xterm_set_titles is set, this string will be used to set the title
-   when leaving mutt-ng. For terminal-based programs, there's no easy and
-   portable way to read the current title so mutt-ng cannot read it upon
+   when leaving Mutt-ng. For terminal-based programs, there's no easy and
+   portable way to read the current title so Mutt-ng cannot read it upon
    startup and restore it when exiting.
 
    Based on the xterm FAQ, the following might work:
@@ -10558,7 +10669,7 @@ Appendix A. Acknowledgments
      o Roland Rosenfeld <roland@spinnaker.de>
      o TAKIZAWA Takashi <taki@luna.email.ne.jp>
      o Allain Thivillon <Allain.Thivillon@alma.fr>
-     o Gero Treuner <gero@faveve.uni-stuttgart.de>
+     o Gero Treuner <gero@70t.de>
      o Vsevolod Volkov <vvv@lucky.net>
      o Ken Weinert <kenw@ihs.com>
 
@@ -10788,6 +10899,8 @@ Index
 
    ~x/ =x, Complex Patterns, Patterns
 
+   ~X/ =X, Patterns
+
    ~y/ =y, Handling Mailing Lists, Patterns
 
    ~z/ =z, Patterns
@@ -10842,6 +10955,8 @@ Index
    <attach-key>, Composing new messages, compose
 
    <attach-message>, Composing new messages, compose
+
+   attachments, Attachment Searching and Counting
 
    $attach_format , $attach_format
 
@@ -11111,7 +11226,7 @@ Index
 
    $entropy_file , $entropy_file
 
-   $envelope_from_address, $envelope_from_address
+   $envelope_from_address , $envelope_from_address
 
    <eol>, Editing Input Fields, editor
 
@@ -12163,6 +12278,8 @@ Index
    unalternates, Alternative addresses, Configuration Commands
 
    unalternative_order, MIME Multipart/Alternative, Configuration Commands
+
+   unattachments, Attachment Searching and Counting
 
    unauto_view, MIME Autoview, Configuration Commands
 
