@@ -409,6 +409,18 @@ struct option_t MuttVars[] = {
    ** When \fIunset\fP, Mutt-ng will not collapse a thread if it contains any
    ** unread messages.
    */
+  {"count_attachments", DT_BOOL, R_NONE, OPTCOUNTATTACH, "yes"},
+  /*
+   ** .pp
+   ** This variable controls whether attachments should be counted for $$$index_format
+   ** and its \fT%X\fP expando or not. As for scoring, this variable can be used to
+   ** selectively turn counting on or off instead of removing and re-adding rules as
+   ** prefered because counting requires full loading of messages.
+   ** .pp
+   ** If it is \fIset\fP and rules were defined via the \fTattachments\fP and/or
+   ** \fTunattachments\fP commands, counting will be done. If it is \fIunset\fP no
+   ** counting will be done regardless whether rules were defined or not.
+   */
   {"uncollapse_jump", DT_BOOL, R_NONE, OPTUNCOLLAPSEJUMP, "no" },
   /*
    ** .pp

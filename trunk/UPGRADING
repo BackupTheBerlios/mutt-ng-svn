@@ -14,7 +14,9 @@ sources of information.
 
   The "attachments" and "unattachments" commands were added. The %X
   expando has been added to $index_format. The ~X pattern has been
-  added. The %Q and %X expandos have been added to $attach_format.
+  added. The %Q and %X expandos have been added to $attach_format. For
+  better control purpose, the $count_attachments variable has been
+  added, too.
 
   As part of the above addition(s), the 'A' message status flag has been
   removed again.

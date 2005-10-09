@@ -9363,6 +9363,14 @@ attachments -I message/external-body
 that it can be pasted elsewhere.
 </para>
 
+<para>
+  Please note that counting attachments may require lots of data be
+  loaded. This may cause noticeable slowdowns over network links
+  depending on the connection speed and message sizes. To fine-tune the
+  behavior on a per-folder or other basis, the <muttng-doc:varref
+    name="count-attachments"/> variable may be used.
+</para>
+
 </sect1>
 
     <sect1>

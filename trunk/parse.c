@@ -1551,6 +1551,8 @@ int count_body_parts (BODY *body, int flags) {
 }
 
 int mutt_count_body_parts (HEADER *hdr, int flags) {
+  if (!option (OPTCOUNTATTACH))
+    return (0);
   if (hdr->attach_valid && !(flags & M_PARTS_RECOUNT))
     return hdr->attach_total;
   
