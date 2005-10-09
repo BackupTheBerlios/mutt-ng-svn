@@ -1,0 +1,14 @@
+quote '+'
+headings_flag 1
+heading_prefix "{\\Large\\sf\\textbf{"
+heading_suffix "}}\\nopagebreak%\n  \\indexspace\\nopagebreak%"
+delim_0 "\\dotfill"
+delim_1 "\\dotfill"
+delim_2 "\\dotfill"
+delim_r "--"
+suffix_2p "f."
+suffix_3p "ff."
+line_max 200000
+item_2  "\n      \\subsubitem\\,\\,\\,\\,\\ "
+item_12 "\n      \\subsubitem\\,\\,\\,\\,\\ "
+item_x2 "\n      \\subsubitem\\,\\,\\,\\,\\ "
