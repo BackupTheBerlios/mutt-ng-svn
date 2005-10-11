@@ -104,16 +104,13 @@ void pgp_forget_passphrase (void)
 }
 
 int pgp_use_gpg_agent (void) {
-  char *tty, *ttybuf;
+  char *tty;
 
   if (!option (OPTUSEGPGAGENT) || !getenv ("GPG_AGENT_INFO"))
     return 0;
 
-  if ((tty = ttyname(0)) && 
-      ((ttybuf = mem_malloc (sizeof("GPG_TTY") + strlen(tty) + 1)))) {
-      snprintf (ttybuf, sizeof (ttybuf), "GPG_TTY=%s", tty);
-      putenv (ttybuf);
-  }
+  if ((tty = ttyname(0)))
+    setenv ("GPG_TTY", tty, 0);
 
   return 1;
 }
@@ -378,6 +375,7 @@ int pgp_application_pgp_handler (BODY * m, STATE * s)
         }
 
         /* treat empty result as sign of failure */
+        /* TODO: maybe on failure mutt should include the original undecoded text. */
         if (pgpout) {
           rewind (pgpout);
           c = fgetc (pgpout);
@@ -387,8 +385,10 @@ int pgp_application_pgp_handler (BODY * m, STATE * s)
             mutt_error _("Could not decrypt PGP message");
             mutt_sleep (1);
             pgp_void_passphrase ();
-            rc = -1;
-            goto out;
+            if (!(s->flags & M_DISPLAY)) {
+              rc = -1;
+              goto out;
+            }
         }
       }
 
