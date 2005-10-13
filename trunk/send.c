@@ -490,10 +490,9 @@ static int default_to (ADDRESS ** to, ENVELOPE * env, int flags, int hmfupto)
    */
   if (!(flags & SENDGROUPREPLY) && mutt_is_list_cc (0, env->to, env->cc)) {
     switch (query_quadoption (OPT_LISTREPLY,
-                              _
-                              ("Message came from a mailing list. Reply to author only?")))
+                              _("Message came from a mailing list. List-reply to mailing list?")))
     {
-    case M_NO:
+    case M_YES:
       tmp = find_mailing_lists (env->to, env->cc);
       rfc822_append (to, tmp);
       rfc822_free_address (&tmp);

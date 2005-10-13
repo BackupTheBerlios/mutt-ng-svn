@@ -1333,12 +1333,12 @@ struct option_t MuttVars[] = {
    ** The locale used by \fTstrftime(3)\fP to format dates. Legal values are
    ** the strings your system accepts for the locale variable \fTLC_TIME\fP.
    */
-  {"list_reply", DT_QUAD, R_NONE, OPT_LISTREPLY, "no" },
+  {"force_list_reply", DT_QUAD, R_NONE, OPT_LISTREPLY, "ask-no" },
   /*
    ** .pp
-   ** When \fIset\fP, address replies to the mailing list the original message came
-   ** from (instead to the author only). Setting this option to ``\fIask-yes\fP'' or
-   ** ``\fIask-no\fP'' will ask if you really intended to reply to the author only.
+   ** This variable controls what effect ordinary replies have on mailing list
+   ** messages: if \fIset\fP, a normal reply will be interpreted as list-reply
+   ** while if it's \fIunset\fP the reply functions work as usual.
    */
   {"max_display_recips", DT_NUM, R_PAGER, UL &MaxDispRecips, "0" },
   /*

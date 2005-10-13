@@ -10,6 +10,11 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-10-13:
+
+  The $list_reply variable has been removed and replaced by
+  $force_list_reply without a synonym.
+
 2005-10-09:
 
   The "attachments" and "unattachments" commands were added. The %X
