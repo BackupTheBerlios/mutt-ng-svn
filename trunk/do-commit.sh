@@ -1,5 +1,4 @@
 #!/bin/sh
 svn update
-CURREV=`svn info | grep '^Revision' | cut -d : -f 2`
-echo "`echo $CURREV+1 | bc`" > ./VERSION.svn
+echo $(($(svn info| awk -F': ' '/^Revision: / {print $2}')+1)) > ./VERSION.svn
 svn commit "$@"
