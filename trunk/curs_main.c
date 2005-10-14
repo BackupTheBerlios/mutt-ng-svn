@@ -2341,6 +2341,10 @@ int mutt_index_menu (void)
       mutt_what_key ();
       break;
 
+    case OP_REBUILD_CACHE:
+      mx_rebuild_cache ();
+      break;
+
     case OP_SIDEBAR_SCROLL_UP:
     case OP_SIDEBAR_SCROLL_DOWN:
     case OP_SIDEBAR_NEXT:

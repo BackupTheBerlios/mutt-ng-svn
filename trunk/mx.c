@@ -13,6 +13,7 @@
 #endif
 
 #include "mutt.h"
+#include "buffy.h"
 #include "ascii.h"
 #include "mx.h"
 #include "mbox.h"
@@ -42,10 +43,6 @@
 #ifdef USE_NNTP
 #include "nntp/nntp.h"
 #include "nntp/mx_nntp.h"
-#endif
-
-#ifdef BUFFY_SIZE
-#include "buffy.h"
 #endif
 
 #ifdef USE_DOTLOCK
@@ -1435,4 +1432,47 @@ void mx_init (void) {
   }
 #undef EXITWITHERR
 #endif /* DEBUG */
+}
+
+int mx_rebuild_cache (void) {
+#ifndef USE_HCACHE
+  mutt_error (_("Support for header caching was not build in."));
+  return (1);
+#else
+  int i = 0, magic = 0, imap = 0;
+  CONTEXT* ctx = NULL;
+  char* buf = NULL;
+  BUFFY* b = NULL;
+
+  if (list_empty(Incoming)) {
+    mutt_error (_("No mailboxes defined."));
+    return (1);
+  }
+
+  ReadInc = 0;
+
+  for (i = 0; i < Incoming->length; i++) {
+    b = (BUFFY*) Incoming->data[i];
+    magic = mx_get_magic (b->path);
+    if (magic != M_MAILDIR && magic != M_MH && magic != M_IMAP)
+      continue;
+    if (magic == M_IMAP)
+      imap = 1;
+    buf = str_dup (b->path);
+    mutt_pretty_mailbox (buf);
+    mutt_message (_("Rebuilding cache for %s..."), buf);
+    if ((ctx = mx_open_mailbox (b->path,
+                                M_READONLY | M_QUIET | M_NOSORT | M_COUNT,
+                                NULL)) != NULL)
+      mx_close_mailbox (ctx, 0);
+    mem_free (&buf);
+  }
+
+  if (imap)
+    imap_logout_all ();
+
+  mutt_clear_error ();
+
+  return (0);
+#endif
 }

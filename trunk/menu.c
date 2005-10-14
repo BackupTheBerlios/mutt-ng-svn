@@ -996,6 +996,10 @@ int mutt_menuLoop (MUTTMENU * menu)
       mutt_what_key ();
       break;
 
+    case OP_REBUILD_CACHE:
+      mx_rebuild_cache ();
+      break;
+
     case OP_REDRAW:
       clearok (stdscr, TRUE);
       menu->redraw = REDRAW_FULL;

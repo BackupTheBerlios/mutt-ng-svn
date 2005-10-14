@@ -54,6 +54,7 @@ struct binding_t OpGeneric[] = {
   {"current-middle", OP_CURRENT_MIDDLE, NULL},
   {"current-bottom", OP_CURRENT_BOTTOM, NULL},
   {"what-key", OP_WHAT_KEY, NULL},
+  {"rebuild-cache", OP_REBUILD_CACHE, NULL},
   {NULL, 0, NULL}
 };
 

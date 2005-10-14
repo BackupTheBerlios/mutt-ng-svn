@@ -10,6 +10,10 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2005-10-14:
+
+  The generic <rebuild-cache> function has been added.
+
 2005-10-13:
 
   The $list_reply variable has been removed and replaced by

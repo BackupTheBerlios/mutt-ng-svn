@@ -171,4 +171,6 @@ void mx_update_tables (CONTEXT *, int);
 int mx_lock_file (const char *, int, int, int, int);
 int mx_unlock_file (const char *path, int fd, int dot);
 
+int mx_rebuild_cache (void);
+
 #endif /* !_MX_H */
