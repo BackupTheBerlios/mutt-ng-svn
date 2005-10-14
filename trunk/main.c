@@ -85,14 +85,16 @@ Mutt-ng comes with ABSOLUTELY NO WARRANTY; for details type `muttng -vv'.\n\
 Mutt is free software, and you are welcome to redistribute it\n\
 under certain conditions; type `muttng -vv' for details.\n");
 
-static const char *Copyright = N_("\
+static const char *Copyright_Mutt = N_("\
 Copyright (C) 1996-2004 Michael R. Elkins <me@mutt.org>\n\
 Copyright (C) 1996-2002 Brandon Long <blong@fiction.net>\n\
 Copyright (C) 1997-2005 Thomas Roessler <roessler@does-not-exist.org>\n\
 Copyright (C) 1998-2005 Werner Koch <wk@isil.d.shuttle.de>\n\
 Copyright (C) 1999-2005 Brendan Cully <brendan@kublai.com>\n\
 Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n\
-Copyright (C) 2000-2002 Edmund Grimley Evans <edmundo@rano.org>\n\n\
+Copyright (C) 2000-2002 Edmund Grimley Evans <edmundo@rano.org>\n");
+
+static const char *Copyright_Mutt_NG = N_("\
 Copyright (C) 2005:\n\
   Parts were written/modified by:\n\
      Andreas Krennmair <ak@synflood.at>\n\
@@ -100,18 +102,22 @@ Copyright (C) 2005:\n\
      Rocco Rutte <pdmef@cs.tu-berlin.de>\n\
 \n\
 Lots of others not mentioned here contributed lots of code,\n\
-fixes, and suggestions.\n\
+fixes, and suggestions.");
+
+static const char* Copyright_GPL_1 = N_("\
 \n\
     This program is free software; you can redistribute it and/or modify\n\
     it under the terms of the GNU General Public License as published by\n\
     the Free Software Foundation; either version 2 of the License, or\n\
-    (at your option) any later version.\n\
-\n\
+    (at your option) any later version.\n");
+
+static const char* Copyright_GPL_2 = N_("\
     This program is distributed in the hope that it will be useful,\n\
     but WITHOUT ANY WARRANTY; without even the implied warranty of\n\
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n\
-    GNU General Public License for more details.\n\
-\n\
+    GNU General Public License for more details.\n");
+
+static const char* Copyright_GPL_3 = N_("\
     You should have received a copy of the GNU General Public License\n\
     along with this program; if not, write to the Free Software\n\
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
@@ -128,11 +134,12 @@ static void mutt_usage (void)
   puts (mutt_make_version (1));
 
   puts
-    _
-    ("usage: muttng [ -nRyzZ ] [ -e <cmd> ] [ -F <file> ] [ -m <type> ] [ -f <file> ]\n\
+    _("usage: muttng [ -nRyzZ ] [ -e <cmd> ] [ -F <file> ] [ -m <type> ] [ -f <file> ]\n\
        muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -Q <query> [ -Q <query> ] [...]\n\
        muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -A <alias> [ -A <alias> ] [...]\n\
-       muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -t\n\
+       muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -t");
+  puts
+    _("\
        muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -T\n\
        muttng [ -nx ] [ -e <cmd> ] [ -a <file> ] [ -F <file> ] [ -H <file> ] [ -i <file> ] [ -s <subj> ] [ -b <addr> ] [ -c <addr> ] <addr> [ ... ]\n\
        muttng [ -n ] [ -e <cmd> ] [ -F <file> ] -p\n\
@@ -153,14 +160,16 @@ options:\n\
   -g <server>\tspecify a newsserver (if compiled with NNTP)\n\
   -G\t\tselect a newsgroup (if compiled with NNTP)\n\
   -H <file>\tspecify a draft file to read header and body from\n\
-  -i <file>\tspecify a file which Mutt-ng should include in the body\n\
+  -i <file>\tspecify a file which Mutt-ng should include in the body");
+  puts _("\
   -d <level>\t specify debugging level of Mutt-ng\n\
   -m <type>\tspecify a default mailbox type\n\
   -n\t\tcauses Mutt-ng not to read the system Muttngrc\n\
   -p\t\trecall a postponed message\n\
   -Q <variable>\tquery a configuration variable\n\
   -R\t\topen mailbox in read-only mode\n\
-  -s <subj>\tspecify a subject (must be in quotes if it has spaces)\n\
+  -s <subj>\tspecify a subject (must be in quotes if it has spaces)");
+  puts _("\
   -t\t\tprint the value of all variables to stdout\n\
   -T\t\tprint the value of all changed variables to stdout\n\
   -v\t\tshow version and compile-time definitions\n\
@@ -727,7 +736,11 @@ int main (int argc, char **argv)
     break;
   default:
     puts (mutt_make_version (1));
-    puts (_(Copyright));
+    puts (_(Copyright_Mutt));
+    puts (_(Copyright_Mutt_NG));
+    puts (_(Copyright_GPL_1));
+    puts (_(Copyright_GPL_2));
+    puts (_(Copyright_GPL_3));
     puts (_(ReachingUs));
     exit (0);
   }
