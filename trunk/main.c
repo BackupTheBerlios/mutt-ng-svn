@@ -639,10 +639,11 @@ int main (int argc, char **argv)
       break;
 
     case 'd':
-      debug_setlevel(atoi(optarg));
-#ifndef DEBUG
-      printf _("DEBUG was not defined during compilation.  Ignored.\n");
-#endif
+      {
+        char puke[20];
+        snprintf (puke, sizeof (puke), "set debug_level=%d", atoi (optarg));
+        commands = mutt_add_list (commands, puke);
+      }
       break;
 
     case 't':
