@@ -1439,7 +1439,7 @@ int mx_rebuild_cache (void) {
   mutt_error (_("Support for header caching was not build in."));
   return (1);
 #else
-  int i = 0, magic = 0, imap = 0;
+  int i = 0, magic = 0;
   CONTEXT* ctx = NULL;
   char* buf = NULL;
   BUFFY* b = NULL;
@@ -1456,8 +1456,6 @@ int mx_rebuild_cache (void) {
     magic = mx_get_magic (b->path);
     if (magic != M_MAILDIR && magic != M_MH && magic != M_IMAP)
       continue;
-    if (magic == M_IMAP)
-      imap = 1;
     buf = str_dup (b->path);
     mutt_pretty_mailbox (buf);
     mutt_message (_("Rebuilding cache for %s..."), buf);
@@ -1467,9 +1465,6 @@ int mx_rebuild_cache (void) {
       mx_close_mailbox (ctx, 0);
     mem_free (&buf);
   }
-
-  if (imap)
-    imap_logout_all ();
 
   mutt_clear_error ();
 

@@ -135,6 +135,11 @@
               <entry>move to the previous page</entry>
             </row>
             <row>
+              <entry><muttng-doc:funcref name="rebuild-cache"/></entry>
+              <entry></entry>
+              <entry>cycle through all defined mailboxes to rebuild all header caches</entry>
+            </row>
+            <row>
               <entry><muttng-doc:funcref name="refresh"/></entry>
               <entry><muttng-doc:key mod="C">L</muttng-doc:key></entry>
               <entry>clear and redraw the screen</entry>
