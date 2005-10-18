@@ -708,7 +708,7 @@ int main (int argc, char **argv)
       {
         char buf[LONG_STRING];
 
-        snprintf (buf, sizeof (buf), "set news_server=%s", optarg);
+        snprintf (buf, sizeof (buf), "set nntp_host=%s", optarg);
         commands = mutt_add_list (commands, buf);
       }
 
