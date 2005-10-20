@@ -57,7 +57,8 @@ my %committers = (
 my %fmap = (
   "filesA"      => "Added",
   "filesM"      => "Modified",
-  "filesD"      => "Deleted"
+  "filesD"      => "Deleted",
+  "filesR"      => "Replaced"
 );
 
 # default config
