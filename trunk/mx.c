@@ -1454,7 +1454,11 @@ int mx_rebuild_cache (void) {
   for (i = 0; i < Incoming->length; i++) {
     b = (BUFFY*) Incoming->data[i];
     magic = mx_get_magic (b->path);
-    if (magic != M_MAILDIR && magic != M_MH && magic != M_IMAP)
+    if (magic != M_MAILDIR && magic != M_MH
+#ifdef USE_IMAP
+		    && magic != M_IMAP
+#endif
+		)
       continue;
     buf = str_dup (b->path);
     mutt_pretty_mailbox (buf);

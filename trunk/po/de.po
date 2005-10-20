@@ -787,7 +787,7 @@ msgstr "Dekomprimiere %s ..."
 #: compress.c:264
 #, c-format
 msgid "Error executing: %s : unable to open the mailbox!\n"
-msgstr ""
+msgstr "Fehler beim Ausführen: %s: konnte Mailbox nicht öffnen!\n"
 
 #: compress.c:348 compress.c:420
 #, c-format
@@ -920,7 +920,6 @@ msgstr ""
 "\"crypt_use_gpgme\" ist gesetzt aber ohne GPGME-Unterstützung kompiliert."
 
 #: cryptglue.c:105
-#, fuzzy
 msgid "Invoking S/MIME..."
 msgstr "Rufe SMIME auf..."
 
@@ -965,9 +964,8 @@ msgid "secret key `%s' not found: %s\n"
 msgstr "Geheimer Schlüssel '%s' nicht gefunden: %s\n"
 
 #: crypt-gpgme.c:607
-#, fuzzy, c-format
 msgid "ambiguous specification of secret key `%s'\n"
-msgstr "Mehrdeutige Angabe des geheimen Schlüssels '%s': %s\n"
+msgstr "Mehrdeutige Angabe des geheimen Schlüssels '%s'\n"
 
 #: crypt-gpgme.c:617
 #, c-format
@@ -1017,7 +1015,6 @@ msgid "A policy requirement was not met\n"
 msgstr "Ein Bedingung wurde nicht erfüllt.\n"
 
 #: crypt-gpgme.c:995
-#, fuzzy
 msgid "A system error occurred"
 msgstr "Ein Systemfehler ist aufgetreten"
 
@@ -1059,7 +1056,7 @@ msgstr "Gültige Signatur von: "
 
 #: crypt-gpgme.c:1176
 msgid "                aka: "
-msgstr ""
+msgstr "   auch bekannt als: "
 
 #: crypt-gpgme.c:1180 crypt-gpgme.c:1200
 msgid "            created: "
@@ -1230,31 +1227,29 @@ msgstr ""
 
 #: crypt-gpgme.c:2758
 msgid "Name ......: "
-msgstr ""
+msgstr "Name ......: "
 
 #: crypt-gpgme.c:2761 crypt-gpgme.c:2882
 msgid "[Invalid]"
 msgstr "[Ungültig]"
 
 #: crypt-gpgme.c:2780 crypt-gpgme.c:2903
-#, fuzzy, c-format
 msgid "Valid From : %s\n"
-msgstr "Ungültiger Monat: %s"
+msgstr "Gültig ab: %s\n"
 
 #: crypt-gpgme.c:2792 crypt-gpgme.c:2915
-#, fuzzy, c-format
 msgid "Valid To ..: %s\n"
-msgstr "Ungültiger Monat: %s"
+msgstr "Gültig bis : %s\n"
 
 #: crypt-gpgme.c:2805 crypt-gpgme.c:2928
 #, c-format
 msgid "Key Type ..: %s, %lu bit %s\n"
-msgstr ""
+msgstr "Schlüsseltyp: %s, %lu bit %s\n"
 
 #: crypt-gpgme.c:2807 crypt-gpgme.c:2930
 #, c-format
 msgid "Key Usage .: "
-msgstr ""
+msgstr "Schlüsselbenützung: "
 
 #: crypt-gpgme.c:2811 crypt-gpgme.c:2934
 msgid "encryption"
@@ -1285,9 +1280,8 @@ msgstr ""
 
 #. display only the short keyID
 #: crypt-gpgme.c:2875
-#, fuzzy, c-format
 msgid "Subkey ....: 0x%s"
-msgstr "Schlüssel ID: 0x%s"
+msgstr "Unterschlüssel: 0x%s"
 
 #: crypt-gpgme.c:2878
 msgid "[Revoked]"
@@ -1426,24 +1420,20 @@ msgid "Enter keyID for %s: "
 msgstr "KeyID für %s: "
 
 #: crypt-gpgme.c:3833
-#, fuzzy
 msgid "S/MIME (e)ncrypt, (s)ign, sign (a)s, (b)oth, (p)gp or (c)lear?"
-msgstr "PGP (v)erschl., (s)ign., sign. (a)ls, (b)eides, %s, (k)ein PGP? "
+msgstr "S/MIME (v)erschl., (s)ign., sign. (a)ls, (b)eides, (p)gp, (k)ein S/MIME? "
 
 #: crypt-gpgme.c:3834
-#, fuzzy
 msgid "esabpfc"
-msgstr "vsabikc"
+msgstr "vsabpkc"
 
 #: crypt-gpgme.c:3838
-#, fuzzy
 msgid "PGP (e)ncrypt, (s)ign, sign (a)s, (b)oth, s/(m)ime or (c)lear?"
-msgstr "PGP (v)erschl., (s)ign., sign. (a)ls, (b)eides, %s, (k)ein PGP? "
+msgstr "PGP (v)erschl., (s)ign., sign. (a)ls, (b)eides, s/(m)ime, (k)ein PGP? "
 
 #: crypt-gpgme.c:3839
-#, fuzzy
 msgid "esabmfc"
-msgstr "vsabikc"
+msgstr "vsabmkc"
 
 #. sign (a)s
 #. unset_option(OPTCRYPTCHECKTRUST);
@@ -1558,9 +1548,8 @@ msgid "Nothing to do."
 msgstr "Nichts zu erledigen."
 
 #: curs_main.c:758
-#, fuzzy
 msgid "Enter Message-ID: "
-msgstr "KeyID eingeben: "
+msgstr "Message-ID eingeben: "
 
 #: curs_main.c:766
 msgid "Article has no parent reference!"
@@ -1576,7 +1565,6 @@ msgid "Article %s not found on server"
 msgstr "Artikel %s auf Server nicht gefunden"
 
 #: curs_main.c:809
-#, fuzzy
 msgid "No Message-ID. Unable to perform operation"
 msgstr "Keine Message-Id. Kann Aktion nicht ausführen"
 
@@ -2280,7 +2268,6 @@ msgstr ""
 "Der Nachrichtenindex ist fehlerhaft. Versuche die Mailbox neu zu öffnen."
 
 #: imap/message.c:528
-#, fuzzy
 msgid "Uploading message..."
 msgstr "Lade Nachrichten auf den Server..."
 
@@ -2304,9 +2291,8 @@ msgid "Not available in this menu."
 msgstr "Funktion ist in diesem Menü nicht verfügbar."
 
 #: init.c:236 init.c:1327 init.c:1463 init.c:1488
-#, fuzzy, c-format
 msgid "'%s' is invalid for $%s"
-msgstr "%s ist ein ungültiger POP Pfad"
+msgstr "'%s' ist ungültig für $%s"
 
 #: init.c:397
 #, c-format
@@ -2377,14 +2363,12 @@ msgid "value is illegal with reset"
 msgstr "Wertzuweisung ist bei \"reset\" nicht zulässig."
 
 #: init.c:1649 init.c:1710 init.c:1734
-#, fuzzy, c-format
 msgid "$%s is read-only"
-msgstr "Mailbox kann nur gelesen, nicht geschrieben werden."
+msgstr "$%s kann nur gelesen werden"
 
 #: init.c:1767
-#, fuzzy, c-format
 msgid "'%s' is invalid for $%s\n"
-msgstr "%s ist ein ungültiger POP Pfad"
+msgstr "'%s' ist ungültig für $%s\n"
 
 #: init.c:1783
 #, c-format
@@ -3422,7 +3406,6 @@ msgstr ""
 "`muttng -vv' für weitere Details.\n"
 
 #: main.c:88
-#, fuzzy
 msgid ""
 "Copyright (C) 1996-2004 Michael R. Elkins <me@mutt.org>\n"
 "Copyright (C) 1996-2002 Brandon Long <blong@fiction.net>\n"
@@ -3491,7 +3474,6 @@ msgstr ""
 "02111, USA.\n"
 
 #: main.c:132
-#, fuzzy
 msgid ""
 "usage: muttng [ -nRyzZ ] [ -e <cmd> ] [ -F <file> ] [ -m <type> ] [ -f "
 "<file> ]\n"
@@ -3551,7 +3533,6 @@ msgid "  -d <level>\tlog debugging output to ~/.muttngdebug0"
 msgstr ""
 
 #: main.c:149
-#, fuzzy
 msgid ""
 "  -e <command>\tspecify a command to be executed after initialization\n"
 "  -f <file>\tspecify which mailbox to read\n"
@@ -3611,15 +3592,12 @@ msgstr ""
 "  -h\t\tDiese Hilfe"
 
 #: main.c:238
-#, fuzzy
 msgid "Compile Options:"
-msgstr ""
-"\n"
-"Einstellungen bei der Compilierung:"
+msgstr "Compile-Optionen:"
 
 #: main.c:465
 msgid "Built-In Defaults:"
-msgstr ""
+msgstr "Eingebaute Standardeinstellungen:"
 
 #: main.c:493
 msgid "Mutt-ng is based on the following patches written for mutt:\n"
@@ -3679,8 +3657,7 @@ msgstr "Fataler Fehler, konnte Mailbox nicht erneut öffnen!"
 
 #: mbox.c:628
 msgid "sync: mbox modified, but no modified messages! (report this bug)"
-msgstr ""
-"sync: Mailbox verändert, aber Nachrichten unverändert! (bitte Bug melden)"
+msgstr "sync: Mailbox verändert, aber Nachrichten unverändert! (bitte Bug melden)"
 
 #: mbox.c:665
 #, c-format
@@ -4038,7 +4015,6 @@ msgid "Certificate verification error (%s)"
 msgstr "Fehler bei Zertifikatsverifizierung (%s)"
 
 #: mutt_ssl_gnutls.c:490
-#, fuzzy
 msgid "Certificate is not X.509"
 msgstr "Fehler: Zertifikat entspricht nicht X.509-Standard"
 
@@ -4092,7 +4068,7 @@ msgstr "Verbinde zu \"%s\"..."
 #: mutt_tunnel.c:127
 #, c-format
 msgid "Tunnel to %s returned error %d (%s)"
-msgstr ""
+msgstr "Tunnel zu %s gab Fehler %d zurück (%s)"
 
 #: mutt_tunnel.c:143 mutt_tunnel.c:159
 #, c-format
@@ -4225,29 +4201,24 @@ msgid "%s is an invalid newsserver specification!"
 msgstr "%s ist keine gültige Newsserver-Angabe!"
 
 #: nntp/newsrc.c:647
-#, fuzzy, c-format
 msgid "Unable to open %s for reading"
-msgstr "Konnte temporäre Datei nicht öffnen!"
+msgstr "Konnte %s nicht zum Lesen öffnen"
 
 #: nntp/newsrc.c:652
-#, fuzzy, c-format
 msgid "Unable to lock %s"
-msgstr "Kann %s nicht anhängen!"
+msgstr "Kann %s nicht sperren!"
 
 #: nntp/newsrc.c:666
-#, fuzzy, c-format
 msgid "Unable to open %s for writing"
-msgstr "Konnte temporäre Datei nicht öffnen!"
+msgstr "Konnte %s nicht zum Schreiben öffnen"
 
 #: nntp/newsrc.c:731
-#, fuzzy, c-format
 msgid "Can't write %s"
-msgstr "Kann %s nicht anlegen."
+msgstr "Kann %s nicht schreiben."
 
 #: nntp/newsrc.c:740
-#, fuzzy, c-format
 msgid "Can't rename %s to %s"
-msgstr "Kann %s nicht anlegen: %s."
+msgstr "Kann %s nicht in %s umbenennen."
 
 #: nntp/nntp.c:134 pop/pop.c:656 pop/pop_lib.c:350
 msgid "Server closed connection!"
@@ -4429,9 +4400,8 @@ msgid "Error in expression: %s"
 msgstr "Fehler in Ausdruck: %s"
 
 #: pattern.c:257
-#, fuzzy, c-format
 msgid "Empty expression"
-msgstr "Fehler in Ausdruck."
+msgstr "Leerer Ausdruck"
 
 #: pattern.c:373
 #, c-format
@@ -4532,15 +4502,13 @@ msgstr ""
 "\n"
 
 #: pgp.c:384 pgp.c:919
-#, fuzzy
 msgid "Could not decrypt PGP message"
-msgstr "Konnte Nachricht nicht kopieren."
+msgstr "Konnte PGP-Nachricht nicht entschlüsseln"
 
 #. clear 'Invoking...' message, since there's no error
 #: pgp.c:428 pgp.c:917
-#, fuzzy
 msgid "PGP message successfully decrypted."
-msgstr "PGP Unterschrift erfolgreich überprüft."
+msgstr "PGP-Nachricht erfolgreich entschlüsselt."
 
 #: pgp.c:697
 msgid "Internal error. Inform <roessler@does-not-exist.org>."
@@ -4589,8 +4557,7 @@ msgstr "Hole PGP Schlüssel..."
 
 #: pgpkey.c:464
 msgid "All matching keys are expired, revoked, or disabled."
-msgstr ""
-"Alles passenden Schlüssel sind veraltet, zurückgezogen oder deaktiviert."
+msgstr "Alles passenden Schlüssel sind veraltet, zurückgezogen oder deaktiviert."
 
 #: pgpkey.c:507
 #, c-format
@@ -4631,7 +4598,7 @@ msgstr "Kann Header nicht in temporäre Datei schreiben!"
 
 #: pop/pop.c:114
 msgid "Can't fetch header: Not connected!"
-msgstr ""
+msgstr "Kann Header nicht abholen: Nicht verbunden!"
 
 #: pop/pop.c:192 pop/pop_lib.c:195
 #, c-format
@@ -4781,7 +4748,7 @@ msgstr "Drucke"
 
 #: recvattach.c:404
 msgid "Save to file ('#' for last used folder): "
-msgstr ""
+msgstr "In Datei speichern ('#' für letzten verwendeten Ordner): "
 
 #: recvattach.c:459
 msgid "Saving..."
@@ -4872,8 +4839,7 @@ msgstr "Als Anhänge weiterleiten?"
 
 #: recvcmd.c:437
 msgid "Can't decode all tagged attachments.  MIME-forward the others?"
-msgstr ""
-"Nicht alle markierten Anhänge dekodierbar. MIME für den Rest verwenden? "
+msgstr "Nicht alle markierten Anhänge dekodierbar. MIME für den Rest verwenden? "
 
 #: recvcmd.c:556
 msgid "Forward MIME encapsulated?"
@@ -4894,8 +4860,7 @@ msgstr "Keine Mailing-Listen gefunden!"
 
 #: recvcmd.c:791
 msgid "Can't decode all tagged attachments.  MIME-encapsulate the others?"
-msgstr ""
-"Nicht alle markierten Anhänge dekodierbar. MIME für den Rest verwenden?"
+msgstr "Nicht alle markierten Anhänge dekodierbar. MIME für den Rest verwenden?"
 
 #: remailer.c:456
 msgid "Append"
@@ -4924,8 +4889,7 @@ msgstr "Wähle eine Remailer Kette aus."
 #: remailer.c:569
 #, c-format
 msgid "Error: %s can't be used as the final remailer of a chain."
-msgstr ""
-"Fehler: %s kann nicht als letzter Remailer einer Kette verwendet werden."
+msgstr "Fehler: %s kann nicht als letzter Remailer einer Kette verwendet werden."
 
 #: remailer.c:597
 #, c-format
@@ -4987,7 +4951,7 @@ msgstr "score: Zu viele Parameter."
 
 #: send.c:283
 msgid "Ignoring $strip_was: Subject would be empty."
-msgstr ""
+msgstr "Ignoriere $strip_was: Betreff würde leer sein."
 
 #: send.c:292
 msgid "No subject, abort?"
@@ -4999,7 +4963,7 @@ msgstr "Kein Betreff, breche ab."
 
 #: send.c:494
 msgid "Message came from a mailing list. Reply to author only?"
-msgstr ""
+msgstr "Nachricht kam von einer Mailingliste. Nur dem Autor antworten?"
 
 #. There are quite a few mailing lists which set the Reply-To:
 #. * header field to the list address, which makes it quite impossible
@@ -5089,11 +5053,11 @@ msgstr "Kein Betreff."
 
 #: send.c:1619
 msgid "No attachments made but indicator found in text. Cancel sending?"
-msgstr ""
+msgstr "Keine Dateien angehängt, aber Hinweis darauf in Text gefunden. Senden abbrechen?"
 
 #: send.c:1622
 msgid "No attachments made but indicator found in text. Abort sending."
-msgstr ""
+msgstr "Keine Dateien angehängt, aber Hinweise darauf in Text gefunden. Senden abgebrochen."
 
 #: send.c:1682
 msgid "Sending message..."
@@ -5109,7 +5073,7 @@ msgstr "Verschicke im Hintergrund."
 
 #: send.c:1814
 msgid "Article posted."
-msgstr ""
+msgstr "Artikel gepostet."
 
 #: send.c:1815 send.c:1817
 msgid "Mail sent."
@@ -5164,9 +5128,8 @@ msgid "Caught signal %d...  Exiting.\n"
 msgstr "Signal %d... Abbruch.\n"
 
 #: smime.c:109
-#, fuzzy
 msgid "Enter S/MIME passphrase:"
-msgstr "S/MIME-Mantra eingeben:"
+msgstr "S/MIME-Passwort eingeben:"
 
 #: smime.c:310
 msgid "Trusted   "
@@ -5316,8 +5279,7 @@ msgstr "12345k"
 
 #: smime.c:1913
 msgid "Can't sign: No key specified. Use Sign As."
-msgstr ""
-"Kann nicht signieren: Kein Schlüssel angegeben. Verwenden Sie \"sign. als\"."
+msgstr "Kann nicht signieren: Kein Schlüssel angegeben. Verwenden Sie \"sign. als\"."
 
 #: sort.c:281
 msgid "Sorting mailbox..."
@@ -5350,6 +5312,8 @@ msgid ""
 "Fatal error in function '%s' called from file '%s', line '%d': %s\n"
 "(please report this error to <mutt-ng-devel@lists.berlios.de>\n"
 msgstr ""
+"Fataler Fehler in Funktion '%s', aufgerufen aus Datei '%s', Zeile '%d': %s\n"
+"(bitte melden sie diesen Fehler auf <mutt-ng-devel@lists.berlios.de>\n"
 
 #: lib/mem.c:20
 msgid "Integer overflow -- can't allocate memory!"
