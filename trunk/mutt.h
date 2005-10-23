@@ -605,12 +605,12 @@ typedef struct body {
   PARAMETER *parameter;         /* parameters of the content-type */
   char *description;            /* content-description */
   char *form_name;              /* Content-Disposition form-data name param */
-  long hdr_offset;              /* offset in stream where the headers begin.
+  LOFF_T hdr_offset;            /* offset in stream where the headers begin.
                                  * this info is used when invoking metamail,
                                  * where we need to send the headers of the
                                  * attachment
                                  */
-  long offset;                  /* offset where the actual data begins */
+  LOFF_T offset;                /* offset where the actual data begins */
   LOFF_T length;                /* length (in bytes) of attachment */
   char *filename;               /* when sending a message, this is the file
                                  * to which this structure refers
@@ -725,7 +725,7 @@ typedef struct header {
 
   time_t date_sent;             /* time when the message was sent (UTC) */
   time_t received;              /* time when the message was placed in the mailbox */
-  long offset;                  /* where in the stream does this message begin? */
+  LOFF_T offset;                /* where in the stream does this message begin? */
   int lines;                    /* how many lines in the body of this message? */
   int index;                    /* the absolute (unsorted) message number */
   int msgno;                    /* number displayed to the user */

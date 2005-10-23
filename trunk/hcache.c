@@ -14,7 +14,7 @@
 
 #ifdef USE_HCACHE
 
-#define MUTTNG_HCACHE_ID        "0x002"
+#define MUTTNG_HCACHE_ID        "0x003"
 
 # if HAVE_INTTYPES_H
 #  include <inttypes.h>

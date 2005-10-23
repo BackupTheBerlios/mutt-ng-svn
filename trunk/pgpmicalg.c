@@ -59,8 +59,8 @@ static const char *pgp_hash_to_micalg (short id)
 static void pgp_dearmor (FILE * in, FILE * out)
 {
   char line[HUGE_STRING];
-  long start;
-  long end;
+  LOFF_T start;
+  LOFF_T end;
   char *r;
 
   STATE state;
@@ -93,7 +93,7 @@ static void pgp_dearmor (FILE * in, FILE * out)
   }
 
   /* actual data starts here */
-  start = ftell (in);
+  start = ftello (in);
 
   /* find the checksum */
 
@@ -106,12 +106,12 @@ static void pgp_dearmor (FILE * in, FILE * out)
     return;
   }
 
-  if ((end = ftell (in) - str_len (line)) < start) {
+  if ((end = ftello (in) - str_len (line)) < start) {
     debug_print (1, ("end < start???\n"));
     return;
   }
 
-  if (fseek (in, start, SEEK_SET) == -1) {
+  if (fseeko (in, start, SEEK_SET) == -1) {
     debug_print (1, ("Can't seekto start.\n"));
     return;
   }

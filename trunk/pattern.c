@@ -187,13 +187,13 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
           return (0);
         }
 
-        fseek (msg->fp, h->offset, 0);
+        fseeko (msg->fp, h->offset, 0);
         mutt_body_handler (h->content, &s);
       }
 
       fp = s.fpout;
       fflush (fp);
-      fseek (fp, 0, 0);
+      fseeko (fp, 0, 0);
       fstat (fileno (fp), &st);
       lng = (long) st.st_size;
     }
@@ -201,12 +201,12 @@ msg_search (CONTEXT *ctx, pattern_t* pat, int msgno)
       /* raw header / body */
       fp = msg->fp;
       if (pat->op != M_BODY) {
-        fseek (fp, h->offset, 0);
+        fseeko (fp, h->offset, 0);
         lng = h->content->offset - h->offset;
       }
       if (pat->op != M_HEADER) {
         if (pat->op == M_BODY)
-          fseek (fp, h->content->offset, 0);
+          fseeko (fp, h->content->offset, 0);
         lng += h->content->length;
       }
     }

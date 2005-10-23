@@ -61,7 +61,7 @@ BODY *mutt_make_message_attach (CONTEXT *, HEADER *, int);
 BODY *mutt_remove_multipart (BODY *);
 BODY *mutt_make_multipart (BODY *);
 BODY *mutt_new_body (void);
-BODY *mutt_parse_multipart (FILE *, const char *, long, int);
+BODY *mutt_parse_multipart (FILE *, const char *, LOFF_T, int);
 BODY *mutt_parse_messageRFC822 (FILE *, BODY *);
 BODY *mutt_read_mime_header (FILE *, int);
 
@@ -388,7 +388,7 @@ extern int system ();
 extern int puts ();
 extern int fputs ();
 extern int fputc ();
-extern int fseek ();
+extern int fseeko ();
 extern char *strchr ();
 extern int getopt ();
 extern int fputs ();

@@ -52,16 +52,16 @@ static short BuffyNotify = 0;   /* # of unnotified new boxes */
 /* Find the last message in the file. 
  * upon success return 0. If no message found - return -1 */
 
-static int fseek_last_message (FILE * f)
+static int fseeko_last_message (FILE * f)
 {
-  long int pos;
+  LOFF_T pos;
   char buffer[BUFSIZ + 9];      /* 7 for "\n\nFrom " */
   int bytes_read;
   int i;                        /* Index into `buffer' for scanning.  */
 
   memset (buffer, 0, sizeof (buffer));
-  fseek (f, 0, SEEK_END);
-  pos = ftell (f);
+  fseeko (f, 0, SEEK_END);
+  pos = ftello (f);
 
   /* Set `bytes_read' to the size of the last, probably partial, buffer; 0 <
    * `bytes_read' <= `BUFSIZ'.  */
@@ -73,13 +73,13 @@ static int fseek_last_message (FILE * f)
   while ((pos -= bytes_read) >= 0) {
     /* we save in the buffer at the end the first 7 chars from the last read */
     strncpy (buffer + BUFSIZ, buffer, 5 + 2);   /* 2 == 2 * str_len(CRLF) */
-    fseek (f, pos, SEEK_SET);
+    fseeko (f, pos, SEEK_SET);
     bytes_read = fread (buffer, sizeof (char), bytes_read, f);
     if (bytes_read == -1)
       return -1;
     for (i = bytes_read; --i >= 0;)
       if (!str_ncmp (buffer + i, "\n\nFrom ", str_len ("\n\nFrom "))) { /* found it - go to the beginning of the From */
-        fseek (f, pos + i + 2, SEEK_SET);
+        fseeko (f, pos + i + 2, SEEK_SET);
         return 0;
       }
     bytes_read = BUFSIZ;
@@ -87,7 +87,7 @@ static int fseek_last_message (FILE * f)
 
   /* here we are at the beginning of the file */
   if (!str_ncmp ("From ", buffer, 5)) {
-    fseek (f, 0, 0);
+    fseeko (f, 0, 0);
     return (0);
   }
 
@@ -101,7 +101,7 @@ static int test_last_status_new (FILE * f)
   ENVELOPE *tmp_envelope;
   int result = 0;
 
-  if (fseek_last_message (f) == -1)
+  if (fseeko_last_message (f) == -1)
     return (0);
 
   hdr = mutt_new_header ();

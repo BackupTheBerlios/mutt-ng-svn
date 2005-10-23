@@ -1004,7 +1004,7 @@ void mutt_message_to_7bit (BODY * a, FILE * fp)
     goto cleanup;
   }
 
-  fseek (fpin, a->offset, 0);
+  fseeko (fpin, a->offset, 0);
   a->parts = mutt_parse_messageRFC822 (fpin, a);
 
   transform_to_7bit (a->parts, fpin);
@@ -2254,7 +2254,7 @@ static int _mutt_bounce_message (FILE * fp, HEADER * h, ADDRESS * to,
     if (!option (OPTBOUNCEDELIVERED))
       ch_flags |= CH_WEED_DELIVERED;
 
-    fseek (fp, h->offset, 0);
+    fseeko (fp, h->offset, 0);
     fprintf (f, "Resent-From: %s", resent_from);
     fprintf (f, "\nResent-%s", mutt_make_date (date, sizeof (date)));
     if (MsgIdFormat && *MsgIdFormat)
@@ -2479,9 +2479,9 @@ int mutt_write_fcc (const char *path, HEADER * hdr, const char *msgid,
      * this will happen, and it can cause problems parsing the mailbox   
      * later.
      */
-    fseek (tempfp, -1, 2);
+    fseeko (tempfp, -1, 2);
     if (fgetc (tempfp) != '\n') {
-      fseek (tempfp, 0, 2);
+      fseeko (tempfp, 0, 2);
       fputc ('\n', tempfp);
     }
 
@@ -2500,7 +2500,7 @@ int mutt_write_fcc (const char *path, HEADER * hdr, const char *msgid,
     rewind (tempfp);
     while (fgets (sasha, sizeof (sasha), tempfp) != NULL)
       lines++;
-    fprintf (msg->fp, "Content-Length: " OFF_T_FMT "\n", (off_t) ftell (tempfp));
+    fprintf (msg->fp, "Content-Length: " OFF_T_FMT "\n", ftello (tempfp));
     fprintf (msg->fp, "Lines: %d\n\n", lines);
 
     /* copy the body and clean up */

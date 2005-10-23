@@ -42,10 +42,10 @@
 /* struct used by mutt_sync_mailbox() to store new offsets */
 struct m_update_t {
   short valid;
-  long hdr;
-  long body;
+  LOFF_T hdr;
+  LOFF_T body;
   long lines;
-  long length;
+  LOFF_T length;
 };
 
 
@@ -312,8 +312,8 @@ static int mbox_parse_mailbox (CONTEXT * ctx)
           if (fseeko (ctx->fp, tmploc, SEEK_SET) != 0 ||
               fgets (buf, sizeof (buf), ctx->fp) == NULL ||
               str_ncmp ("From ", buf, 5) != 0) {
-            debug_print (1, ("bad content-length in message %d (cl=%ld)\n",
-                        curhdr->index, curhdr->content->length));
+            debug_print (1, ("bad content-length in message %d (cl="
+                             OFF_T_FMT ")\n", curhdr->index, curhdr->content->length));
             debug_print (1, ("LINE: %s\n", buf));
             if (fseeko (ctx->fp, loc, SEEK_SET) != 0) {  /* nope, return the previous position */
               debug_print (1, ("fseeko() failed\n"));

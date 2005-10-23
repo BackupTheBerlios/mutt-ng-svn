@@ -237,7 +237,8 @@ int pgp_application_pgp_handler (BODY * m, STATE * s)
   int c = 1;
   int clearsign = 0, rv, rc;
   long start_pos = 0;
-  long bytes, last_pos, offset;
+  long bytes;
+  LOFF_T last_pos, offset;
   char buf[HUGE_STRING];
   char outfile[_POSIX_PATH_MAX];
   char tmpfname[_POSIX_PATH_MAX];
@@ -254,14 +255,14 @@ int pgp_application_pgp_handler (BODY * m, STATE * s)
 
   rc = 0;                       /* silence false compiler warning if (s->flags & M_DISPLAY) */
 
-  fseek (s->fpin, m->offset, 0);
+  fseeko (s->fpin, m->offset, 0);
   last_pos = m->offset;
 
   for (bytes = m->length; bytes > 0;) {
     if (fgets (buf, sizeof (buf), s->fpin) == NULL)
       break;
 
-    offset = ftell (s->fpin);
+    offset = ftello (s->fpin);
     bytes -= (offset - last_pos);       /* don't rely on str_len(buf) */
     last_pos = offset;
 
@@ -299,7 +300,7 @@ int pgp_application_pgp_handler (BODY * m, STATE * s)
 
       fputs (buf, tmpfp);
       while (bytes > 0 && fgets (buf, sizeof (buf) - 1, s->fpin) != NULL) {
-        offset = ftell (s->fpin);
+        offset = ftello (s->fpin);
         bytes -= (offset - last_pos);   /* don't rely on str_len(buf) */
         last_pos = offset;
 
@@ -564,7 +565,7 @@ int pgp_verify_one (BODY * sigbdy, STATE * s, const char *tempfile)
     return -1;
   }
 
-  fseek (s->fpin, sigbdy->offset, 0);
+  fseeko (s->fpin, sigbdy->offset, 0);
   mutt_copy_bytes (s->fpin, fp, sigbdy->length);
   fclose (fp);
 
@@ -746,7 +747,7 @@ BODY *pgp_decrypt_part (BODY * a, STATE * s, FILE * fpout, BODY * p)
    * the temporary file.
    */
 
-  fseek (s->fpin, a->offset, 0);
+  fseeko (s->fpin, a->offset, 0);
   mutt_copy_bytes (s->fpin, pgptmp, a->length);
   fclose (pgptmp);
 

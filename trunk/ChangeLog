@@ -1,5 +1,12 @@
 Changes specific to mutt-ng:
 
+2005-10-23:
+  * As part of a merge, mutt-ng contains full large file support.
+
+2005-10-19:
+  * Mutt-ng contains better scoring support to score on both, addresses
+    and names.
+
 2005-09-07:
   * Mutt-ng no longer contains support for SASL 1.x.
 

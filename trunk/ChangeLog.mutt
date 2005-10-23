@@ -1,39 +1,22 @@
-2005-10-06 06:15:00  Brendan Cully  <brendan@kublai.com>  (brendan)
+2005-10-21 04:35:38  Brendan Cully  <brendan@kublai.com>  (brendan)
 
-	* browser.c: Sort browser entries after every IMAP browsing
-	operation instead of just when explicitly requested. Closes:
-	#2089.
+	* smime.c, attach.c, buffy.c, copy.c, copy.h, crypt-gpgme.c,
+	crypt.c, edit.c, handler.c, mbox.c, mutt.h, pager.c, parse.c,
+	pattern.c, pgp.c, pgpmicalg.c, pgppacket.c, pgppubring.c, pop.c,
+	postpone.c, protos.h, sendlib.c: Full large file support. Keep a
+	close watch on your mailboxes everyone!
 
-2005-10-06 05:13:55  Jeff Ito  <jeffi@rcn.com>  (brendan)
+2005-10-18 07:04:50  Vincent Lefevre  <vincent@vinc17.org>  (roessler)
 
-	* smime.c: Add AES ciphers to S/MIME encryption options. Closes:
-	#2103.
+	* po/fr.po: update
 
-2005-10-05 19:24:40  David Champion  <dgc@uchicago.edu>  (brendan)
+2005-10-17 09:14:58  TAKAHASHI Tamotsu  <ttakah@lapis.plala.or.jp>  (roessler)
 
-	* doc/manual.xml.head, init.c: Fix 'unattachments'. Closes: #2102.
+	* smime.c: Fix S/MIME algorithm choice.
 
-2005-10-05 19:20:22  Jeff Ito  <jeffi@rcn.com>  (brendan)
+2005-10-14 09:30:11  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
 
-	* smime.c: S/MIME key selection truncates the last character of
-	the selected key for no apparent reason. Removed until someone
-	can justify it. Closes: #2081.
-
-2005-10-04 19:00:05  Brendan Cully  <brendan@kublai.com>  (brendan)
-
-	* init.h: Tweak description of pop_checkinterval slightly. Closes:
-	#2074.
-
-	* hcache.c: Bump hcache Id for attachment counting patch.
-
-2005-10-04 06:05:39  David Champion  <dgc@uchicago.edu>  (brendan)
-
-	* Muttrc.head.in, doc/manual.xml.head, doc/muttrc.man.head,
-	globals.h, hdrline.c, init.c, init.h, mime.h, mutt.h, parse.c,
-	pattern.c, protos.h, recvattach.c: Attachment counting for index
-	display (patch-1.5.11.dgc.attach.6). Modifications: attach_recurse
-	and attach_ignore_fundamental stripped, some debugging code
-	removed, some bones thrown to check_sec.sh.
+	* imap/imap.c: Fix imap/2112.
 
 2005-10-10 18:26:31  Brendan Cully  <brendan@kublai.com>  (brendan)
 

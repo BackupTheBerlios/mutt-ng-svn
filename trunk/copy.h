@@ -44,7 +44,7 @@
 #define M_CM_DECODE_CRYPT       (M_CM_DECODE_PGP | M_CM_DECODE_SMIME)
 #define M_CM_VERIFY             (1<<11) /* do signature verification */
 
-int mutt_copy_hdr (FILE *, FILE *, long, long, int, const char *);
+int mutt_copy_hdr (FILE *, FILE *, LOFF_T, LOFF_T, int, const char *);
 int mutt_copy_header (FILE *, HEADER *, FILE *, int, const char *);
 int _mutt_copy_message (FILE * fpout, FILE * fpin,
                         HEADER * hdr, BODY * body, int flags, int chflags);

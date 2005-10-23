@@ -56,7 +56,7 @@ static char *EditorHelp = N_("\
 .		on a line by itself ends input\n");
 
 static char **be_snarf_data (FILE * f, char **buf, int *bufmax, int *buflen,
-                             int offset, int bytes, int prefix)
+                             LOFF_T offset, int bytes, int prefix)
 {
   char tmp[HUGE_STRING];
   char *p = tmp;
@@ -70,7 +70,7 @@ static char **be_snarf_data (FILE * f, char **buf, int *bufmax, int *buflen,
     tmplen = sizeof (tmp) - tmplen;
   }
 
-  fseek (f, offset, 0);
+  fseeko (f, offset, 0);
   while (bytes > 0) {
     if (fgets (p, tmplen - 1, f) == NULL)
       break;

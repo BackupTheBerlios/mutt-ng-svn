@@ -1535,7 +1535,7 @@ int smime_gpgme_decrypt_mime (FILE * fpin, FILE ** fpout, BODY * b,
   saved_b_length = b->length;
   memset (&s, 0, sizeof (s));
   s.fpin = fpin;
-  fseek (s.fpin, b->offset, 0);
+  fseeko (s.fpin, b->offset, 0);
   mutt_mktemp (tempfile);
   if (!(tmpfp = safe_fopen (tempfile, "w+"))) {
     mutt_perror (tempfile);
@@ -1546,7 +1546,7 @@ int smime_gpgme_decrypt_mime (FILE * fpin, FILE ** fpout, BODY * b,
   s.fpout = tmpfp;
   mutt_decode_attachment (b, &s);
   fflush (tmpfp);
-  b->length = ftell (s.fpout);
+  b->length = ftello (s.fpout);
   b->offset = 0;
   rewind (tmpfp);
 
@@ -1587,7 +1587,7 @@ int smime_gpgme_decrypt_mime (FILE * fpin, FILE ** fpout, BODY * b,
     saved_b_length = bb->length;
     memset (&s, 0, sizeof (s));
     s.fpin = *fpout;
-    fseek (s.fpin, bb->offset, 0);
+    fseeko (s.fpin, bb->offset, 0);
     mutt_mktemp (tempfile);
     if (!(tmpfp = safe_fopen (tempfile, "w+"))) {
       mutt_perror (tempfile);
@@ -1598,7 +1598,7 @@ int smime_gpgme_decrypt_mime (FILE * fpin, FILE ** fpout, BODY * b,
     s.fpout = tmpfp;
     mutt_decode_attachment (bb, &s);
     fflush (tmpfp);
-    bb->length = ftell (s.fpout);
+    bb->length = ftello (s.fpout);
     bb->offset = 0;
     rewind (tmpfp);
     fclose (*fpout);
@@ -1771,7 +1771,8 @@ int pgp_gpgme_application_handler (BODY * m, STATE * s)
   int needpass = -1, pgp_keyblock = 0;
   int clearsign = 0;
   long start_pos = 0;
-  long bytes, last_pos, offset;
+  long bytes;
+  LOFF_T last_pos, offset;
   char buf[HUGE_STRING];
   FILE *pgpout = NULL;
 
@@ -1791,14 +1792,14 @@ int pgp_gpgme_application_handler (BODY * m, STATE * s)
   if (!mutt_get_body_charset (body_charset, sizeof (body_charset), m))
     strfcpy (body_charset, "iso-8859-1", sizeof body_charset);
 
-  fseek (s->fpin, m->offset, 0);
+  fseeko (s->fpin, m->offset, 0);
   last_pos = m->offset;
 
   for (bytes = m->length; bytes > 0;) {
     if (fgets (buf, sizeof (buf), s->fpin) == NULL)
       break;
 
-    offset = ftell (s->fpin);
+    offset = ftello (s->fpin);
     bytes -= (offset - last_pos);       /* don't rely on str_len(buf) */
     last_pos = offset;
 
@@ -1831,7 +1832,7 @@ int pgp_gpgme_application_handler (BODY * m, STATE * s)
       armored_data = create_gpgme_data ();
       gpgme_data_write (armored_data, buf, str_len (buf));
       while (bytes > 0 && fgets (buf, sizeof (buf) - 1, s->fpin) != NULL) {
-        offset = ftell (s->fpin);
+        offset = ftello (s->fpin);
         bytes -= (offset - last_pos);   /* don't rely on str_len(buf) */
         last_pos = offset;
 

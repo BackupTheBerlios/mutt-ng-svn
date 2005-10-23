@@ -981,8 +981,8 @@ int nntp_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
   ctx->hdrs[msgno]->env =
     mutt_read_rfc822_header (msg->fp, ctx->hdrs[msgno], 0, 0);
   /* fix content length */
-  fseek (msg->fp, 0, SEEK_END);
-  ctx->hdrs[msgno]->content->length = ftell (msg->fp) -
+  fseeko (msg->fp, 0, SEEK_END);
+  ctx->hdrs[msgno]->content->length = ftello (msg->fp) -
     ctx->hdrs[msgno]->content->offset;
 
   /* this is called in mutt before the open which fetches the message, 

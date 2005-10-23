@@ -1441,7 +1441,7 @@ int imap_subscribe (char *path, int subscribe)
   BUFFER err, token;
   IMAP_MBOX mx;
 
-  if (mx_get_magic (path) != M_IMAP || imap_parse_path (path, &mx) < 0) {
+  if (mx_get_magic (path) == M_IMAP || imap_parse_path (path, &mx)) {
     mutt_error (_("Bad mailbox name"));
     return -1;
   }

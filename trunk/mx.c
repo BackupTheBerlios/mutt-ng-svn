@@ -487,7 +487,7 @@ static int mx_open_mailbox_append (CONTEXT * ctx, int flags)
       }
       return (-1);
     }
-    fseek (ctx->fp, 0, 2);
+    fseeko (ctx->fp, 0, 2);
     break;
 
   case M_MH:
