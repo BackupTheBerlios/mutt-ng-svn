@@ -1441,7 +1441,6 @@ int mx_rebuild_cache (void) {
 #else
   int i = 0, magic = 0;
   CONTEXT* ctx = NULL;
-  char* buf = NULL;
   BUFFY* b = NULL;
 
   if (list_empty(Incoming)) {
@@ -1449,27 +1448,20 @@ int mx_rebuild_cache (void) {
     return (1);
   }
 
-  ReadInc = 0;
-
   for (i = 0; i < Incoming->length; i++) {
     b = (BUFFY*) Incoming->data[i];
     magic = mx_get_magic (b->path);
     if (magic != M_MAILDIR && magic != M_MH
 #ifdef USE_IMAP
-		    && magic != M_IMAP
+        && magic != M_IMAP
 #endif
-		)
+    )
       continue;
-    buf = str_dup (b->path);
-    mutt_pretty_mailbox (buf);
-    mutt_message (_("Rebuilding cache for %s..."), buf);
     if ((ctx = mx_open_mailbox (b->path,
-                                M_READONLY | M_QUIET | M_NOSORT | M_COUNT,
+                                M_READONLY | M_NOSORT | M_COUNT,
                                 NULL)) != NULL)
       mx_close_mailbox (ctx, 0);
-    mem_free (&buf);
   }
-
   mutt_clear_error ();
 
   return (0);
