@@ -151,6 +151,14 @@ static const char* sidebar_number_format (char* dest, size_t destlen, char op,
     case 'n':
       if (!opt) {
         snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
+        snprintf (dest, destlen, tmp, c ? Context->new : b->new);
+      } else if ((c && Context->new == 0) || (!c && b->new == 0))
+        opt = 0;
+      break;
+    /* unread */
+    case 'u':
+      if (!opt) {
+        snprintf (tmp, sizeof (tmp), "%%%sd", fmt);
         snprintf (dest, destlen, tmp, c ? Context->unread : b->msg_unread);
       } else if ((c && Context->unread == 0) || (!c && b->msg_unread == 0))
         opt = 0;

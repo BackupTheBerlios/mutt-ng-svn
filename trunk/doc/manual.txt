@@ -8526,6 +8526,9 @@ Chapter 7. Reference
    %t
           Number of tagged messages. 1)
 
+   %u
+          Number of unread messages.
+
    1) These expandos only have a non-zero value for the current mailbox
    and will always be zero otherwise.
 

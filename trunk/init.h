@@ -1596,6 +1596,7 @@ struct option_t MuttVars[] = {
    ** .dt %M .dd Total number of messages shown, i.e. not hidden by a limit. 1)
    ** .dt %n .dd Number of new messages.
    ** .dt %t .dd Number of tagged messages. 1)
+   ** .dt %u .dd Number of unread messages.
    ** .de
    ** .pp
    ** 1) These expandos only have a non-zero value for the current mailbox and

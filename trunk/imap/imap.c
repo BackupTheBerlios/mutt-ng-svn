@@ -1136,9 +1136,12 @@ int imap_check_mailbox (CONTEXT * ctx, int *index_hint, int force)
   return result;
 }
 
-/* returns count of recent messages if new = 1, else count of total messages.
- * (useful for at least postponed function)
- * Question of taste: use RECENT or UNSEEN for new?
+/*
+ * count messages:
+ *      new == 1:  recent
+ *      new == 2:  unseen
+ *      otherwise: total
+ * return:
  *   0+   number of messages in mailbox
  *  -1    error while polling mailboxes
  */
@@ -1186,7 +1189,7 @@ int imap_mailbox_check (char *path, int new)
   else if (mutt_bit_isset (idata->capabilities, IMAP4REV1) ||
            mutt_bit_isset (idata->capabilities, STATUS)) {
     snprintf (buf, sizeof (buf), "STATUS %s (%s)", mbox,
-              new ? "RECENT" : "MESSAGES");
+              new == 1 ? "RECENT" : (new == 2 ? "UNSEEN" : "MESSAGES"));
   }
   else
     /* Server does not support STATUS, and this is not the current mailbox.

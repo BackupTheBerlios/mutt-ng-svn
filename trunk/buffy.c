@@ -463,14 +463,14 @@ int buffy_check (int force)
         /* only check on force or $imap_mail_check reached */
         if (force != 0 || (now - last2 >= ImapBuffyTimeout)) {
           tmp->msgcount = imap_mailbox_check (tmp->path, 0);
-          if ((tmp->new = imap_mailbox_check (tmp->path, 1)) > 0) {
+          tmp->new = imap_mailbox_check (tmp->path, 1);
+          tmp->msg_unread = imap_mailbox_check (tmp->path, 2);
+          if (tmp->new > 0)
             BuffyCount++;
-            tmp->msg_unread = tmp->new; /* for sidebar; wtf? */
-          }
-          else {
+          else
             tmp->new = 0;
+          if (tmp->msg_unread < 0)
             tmp->msg_unread = 0;
-          }
         }
         else if (tmp->new > 0)
           /* keep current stats if !force and !$imap_mail_check reached */
