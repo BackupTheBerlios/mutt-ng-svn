@@ -2664,7 +2664,7 @@ struct option_t MuttVars[] = {
    ** The file which includes random data that is used to initialize SSL
    ** library functions.
    */
-  {"ssl_use_sslv2", DT_BOOL, R_NONE, OPTSSLV2, "yes" },
+  {"ssl_use_sslv2", DT_BOOL, R_NONE, OPTSSLV2, "no" },
   /*
    ** .pp
    ** Availability: SSL

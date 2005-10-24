@@ -74,6 +74,10 @@
 #include <gpgme.h>
 #endif
 
+#ifdef USE_SSL
+#include <openssl/opensslv.h>
+#endif
+
 static const char *ReachingUs = N_("\
 To contact the developers, please mail to <mutt-ng-devel@lists.berlios.de>.\n\
 To visit the Mutt-ng homepage go to http://www.muttng.org.\n\
@@ -238,6 +242,10 @@ static void show_version (void)
 
 #ifdef USE_GNUTLS
   printf ("  gnutls %s\n", LIBGNUTLS_VERSION);
+#endif
+
+#ifdef USE_SSL
+  printf ("  %s\n",OPENSSL_VERSION_TEXT);
 #endif
 
 #ifdef CRYPT_BACKEND_GPGME
