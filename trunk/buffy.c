@@ -260,7 +260,7 @@ int buffy_parse_mailboxes (BUFFER * path, BUFFER * s, unsigned long data,
 /* values for force:
  * 0    don't force any checks + update sidebar
  * 1    force all checks + update sidebar
- * 2    force all checks + _don't_ update sidebar
+ * 2    don't force any checks + _don't_ update sidebar
  */
 int buffy_check (int force)
 {
@@ -277,7 +277,7 @@ int buffy_check (int force)
   time_t last2;
 
   /* update postponed count as well, on force */
-  if (force != 0)
+  if (force == 1)
     mutt_update_num_postponed ();
 #endif
 
@@ -294,11 +294,11 @@ int buffy_check (int force)
     return BuffyCount;
 
   last1 = BuffyTime;
-  if (force != 0 || now - BuffyTime >= BuffyTimeout)
+  if (force == 1 || now - BuffyTime >= BuffyTimeout)
     BuffyTime = now;
 #ifdef USE_IMAP
   last2 = ImapBuffyTime;
-  if (force != 0 || now - ImapBuffyTime >= ImapBuffyTimeout)
+  if (force == 1 || now - ImapBuffyTime >= ImapBuffyTimeout)
     ImapBuffyTime = now;
 #endif
   BuffyCount = 0;
@@ -337,7 +337,7 @@ int buffy_check (int force)
       case M_MBOX:
       case M_MMDF:
         /* only check on force or $mail_check reached */
-        if (force != 0 || (now - last1 >= BuffyTimeout)) {
+        if (force == 1 || (now - last1 >= BuffyTimeout)) {
           if (!count) {
             if (STAT_CHECK) {
               BuffyCount++;
@@ -373,7 +373,7 @@ int buffy_check (int force)
 
       case M_MAILDIR:
         /* only check on force or $mail_check reached */
-        if (force != 0 || (now - last1 >= BuffyTimeout)) {
+        if (force == 1 || (now - last1 >= BuffyTimeout)) {
           snprintf (path, sizeof (path), "%s/new", tmp->path);
           if ((dirp = opendir (path)) == NULL) {
             tmp->magic = 0;
@@ -431,7 +431,7 @@ int buffy_check (int force)
 
       case M_MH:
         /* only check on force or $mail_check reached */
-        if (force != 0 || (now - last1 >= BuffyTimeout)) {
+        if (force == 1 || (now - last1 >= BuffyTimeout)) {
           if ((tmp->new = mh_buffy (tmp->path)) > 0)
             BuffyCount++;
           if (count) {
@@ -461,7 +461,7 @@ int buffy_check (int force)
 #ifdef USE_IMAP
       case M_IMAP:
         /* only check on force or $imap_mail_check reached */
-        if (force != 0 || (now - last2 >= ImapBuffyTimeout)) {
+        if (force == 1 || (now - last2 >= ImapBuffyTimeout)) {
           tmp->msgcount = imap_mailbox_check (tmp->path, 0);
           tmp->new = imap_mailbox_check (tmp->path, 1);
           tmp->msg_unread = imap_mailbox_check (tmp->path, 2);

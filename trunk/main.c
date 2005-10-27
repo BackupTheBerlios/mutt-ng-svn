@@ -648,9 +648,12 @@ int main (int argc, char **argv)
 
     case 'd':
       {
-        char puke[20];
-        snprintf (puke, sizeof (puke), "set debug_level=%d", atoi (optarg));
-        commands = mutt_add_list (commands, puke);
+        char buf[LONG_STRING];
+        int level = atoi (optarg);
+
+        snprintf (buf, sizeof (buf), "set debug_level=%d", level);
+        commands = mutt_add_list (commands, buf);
+        debug_setlevel (level);
       }
       break;
 
