@@ -941,7 +941,7 @@ int nntp_fetch_message (MESSAGE * msg, CONTEXT * ctx, int msgno)
 
   /* clear the previous entry */
   unlink (cache->path);
-  free (cache->path);
+  mem_free (&cache->path);
 
   cache->index = ctx->hdrs[msgno]->index;
   mutt_mktemp (path);

@@ -397,7 +397,7 @@ Done:
   if (fp != NULL)
     fclose (fp);
   if (hostportstr != NULL)
-    free (hostportstr);
+    mem_free (&hostportstr);
   if (session != NULL)
     smtp_destroy_session (session);
   if (authctx != NULL)
