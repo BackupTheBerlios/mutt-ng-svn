@@ -185,7 +185,7 @@ if test -f /etc/debian_version ; then
 		DPKG=no
 		unset DEBIANVERSION
 	fi
-    if [ "$DPKG" == "yes" ] ; then
+    if [ "$DPKG" = "yes" ] ; then
     	echo "$DPKG"
     	echo $n "File this bug with Debian? [Y|n] $c"
     	read DPKG
@@ -198,7 +198,7 @@ else
 	DEBIAN=no
 	DPKG=no
 fi
-if [ "$DPKG" == "yes" ] ; then
+if [ "$DPKG" = "yes" ] ; then
     echo ""
     echo "Use reportbug muttng to report the bug to the debian bug tracking system..."
     exit
