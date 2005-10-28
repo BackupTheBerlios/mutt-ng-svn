@@ -694,7 +694,7 @@ static int trash_append (CONTEXT * ctx)
 }
 
 /* save changes and close mailbox */
-int mx_close_mailbox (CONTEXT * ctx, int *index_hint)
+static int _mx_close_mailbox (CONTEXT * ctx, int *index_hint)
 {
   int i, move_messages = 0, purge = 1, read_msgs = 0;
   int check;
@@ -899,6 +899,14 @@ int mx_close_mailbox (CONTEXT * ctx, int *index_hint)
   return 0;
 }
 
+int mx_close_mailbox (CONTEXT * ctx, int *index_hint) {
+  int ret = 0;
+  if (!ctx)
+    return (0);
+  ret = _mx_close_mailbox (ctx, index_hint);
+  sidebar_set_buffystats (ctx);
+  return (ret);
+}
 
 /* update a Context structure's internal tables. */
 
@@ -986,7 +994,7 @@ void mx_update_tables (CONTEXT * ctx, int committing)
  *	0		success
  *	-1		error
  */
-int mx_sync_mailbox (CONTEXT * ctx, int *index_hint)
+static int _mx_sync_mailbox (CONTEXT * ctx, int *index_hint)
 {
   int rc, i;
   int purge = 1;
@@ -1077,9 +1085,6 @@ int mx_sync_mailbox (CONTEXT * ctx, int *index_hint)
       return 0;
     }
 
-    /* update sidebar counts */
-    sidebar_set_buffystats (ctx);
-
     /* if we haven't deleted any messages, we don't need to resort */
     /* ... except for certain folder formats which need "unsorted" 
      * sort order in order to synchronize folders.
@@ -1100,6 +1105,12 @@ int mx_sync_mailbox (CONTEXT * ctx, int *index_hint)
   }
 
   return (rc);
+}
+
+int mx_sync_mailbox (CONTEXT* ctx, int* index_hint) {
+  int ret = _mx_sync_mailbox (ctx, index_hint);
+  sidebar_set_buffystats (ctx);
+  return (ret);
 }
 
 /* args:
