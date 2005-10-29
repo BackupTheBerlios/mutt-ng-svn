@@ -1468,12 +1468,18 @@ int mx_rebuild_cache (void) {
 #endif
     )
       continue;
+    sidebar_set_current (b->path);
+    sidebar_draw (CurrentMenu);
     if ((ctx = mx_open_mailbox (b->path,
                                 M_READONLY | M_NOSORT | M_COUNT,
                                 NULL)) != NULL)
       mx_close_mailbox (ctx, 0);
   }
   mutt_clear_error ();
+
+  if (Context && Context->path)
+    sidebar_set_current (Context->path);
+  sidebar_draw (CurrentMenu);
 
   return (0);
 #endif
