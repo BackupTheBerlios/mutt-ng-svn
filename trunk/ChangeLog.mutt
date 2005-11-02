@@ -1,3 +1,20 @@
+2005-11-01 08:42:00  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* menu.c: This should be a better patch for the menu break
+	dance. (#2019)
+
+2005-10-31 11:56:58  Thomas Glanzmann  <sithglan@stud.uni-erlangen.de>  (roessler)
+
+	* imap/message.c: Fix 2119.
+
+2005-10-31 10:51:54  Thomas Roessler  <roessler@does-not-exist.org>  (roessler)
+
+	* mutt_idna.c: Fix the underlying problem behind mutt/2107.
+
+	* menu.c: Fixing #2019.
+
+	* flags.c: Fix #2123.
+
 2005-10-21 04:35:38  Brendan Cully  <brendan@kublai.com>  (brendan)
 
 	* smime.c, attach.c, buffy.c, copy.c, copy.h, crypt-gpgme.c,
