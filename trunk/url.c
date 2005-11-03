@@ -33,6 +33,7 @@ static struct mapping_t UrlMap[] = {
   {"pop", U_POP},
   {"pops", U_POPS},
   {"nntp", U_NNTP},
+  {"news", U_NNTP},
   {"nntps", U_NNTPS},
   {"snews", U_NNTPS},
   {"mailto", U_MAILTO},
