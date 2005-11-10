@@ -1,0 +1,22 @@
+# vim:ft=make:
+
+# usage in a Makefile:
+# | SUBDIRS=foo bar
+# | all: subdirs
+# | clean: subdirclean
+
+.SILENT: subdirs subdirclean subdirdoc
+
+dosubdirs=for p in $(SUBDIRS) ; do $(MAKE) -C $$p $(1) || exit $?; done
+
+subdirs:
+	$(call dosubdirs,all)
+
+subdirclean:
+	$(call dosubdirs,clean)
+
+subdirdoc:
+	$(call dosubdirs,clean)
+
+subdirdepend:
+	$(call dosubdirs,depend)

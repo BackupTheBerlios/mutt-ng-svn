@@ -1,0 +1,35 @@
+# vim:ft=make
+
+CCSTYLE=gcc
+
+ifeq ($(CCSTYLE),gcc)
+CC=gcc
+CXX=g++
+AR=ar
+RANLIB=ranlib
+CFLAGS+=-Wall -Os -pipe -W -Wall -Wmissing-prototypes -Wmissing-declarations -Wparentheses -Wpointer-arith -Wredundant-decls -Wuninitialized -Wunused -Wno-format -Werror
+CXXFLAGS+=-Wall -Os -pipe -W -Wall -Wparentheses -Wpointer-arith -Wredundant-decls -Wuninitialized -Wunused -Wno-format -Werror
+DEPFLAG=-M
+endif # CCSTYLE == gcc
+
+ifeq ($(CCSTYLE),suncc)
+CC?=cc
+CXX?=c++
+AR?=ar
+RANLIB?=ranlib
+CFLAGS+=-Os -errwarn=%all -v
+CXXFLAGS+=$(CFLAGS)
+DEPFLAG=-xM
+endif
+
+ifneq ($(wildcard $(CURDIR)/.depend),)
+include $(CURDIR)/.depend
+else
+#$(warning "Run 'make depend' first...")
+endif
+
+ifeq ($(DEBUG),1)
+CFLAGS+=-g
+CXXFLAGS+=-g
+LDFLAGS+=-g
+endif

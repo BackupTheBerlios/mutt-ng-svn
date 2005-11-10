@@ -1,0 +1,19 @@
+# vim:ft=make
+
+OBJS=$(patsubst %,%.o,$(FILES))
+SRCS=$(patsubst %,%.c,$(FILES))
+
+all: $(OBJS) $(LIB)
+
+$(LIB): $(OBJS)
+	$(AR) -cru $@ $^
+	$(RANLIB) $@
+
+%.o: %.c
+	$(CC) $(CFLAGS) -o $@ -c $<
+
+clean:
+	rm -rf $(OBJS) $(LIB) .depend
+
+depend:
+	mkdep $(CFLAGS) $(SRCS) || ( ( $(CC) $(DEPFLAG) $(CFLAGS) $(SRCS) ) > ./.depend || true )

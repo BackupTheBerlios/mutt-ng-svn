@@ -1,0 +1,22 @@
+# vim:ft=make
+
+OBJS=$(patsubst %,%.o,$(FILES))
+SRCS=$(patsubst %,%.cpp,$(FILES))
+
+all: $(OBJS) $(LIB) $(BINARY)
+
+$(LIB): $(OBJS)
+	$(AR) -cru $@ $^
+	$(RANLIB) $@
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
+
+clean:
+	rm -rf $(OBJS) $(LIB) $(wildcard $(BINARY).o $(BINARY)) .depend
+
+depend:
+	mkdep $(CXXFLAGS) $(SRCS) || ( ( $(CXX) $(DEPFLAG) $(CXXFLAGS) $(SRCS) ) > ./.depend || true )
+
+$(BINARY): $(BINARY).o $(LIB) $(foreach lib,$(wildcard $(CURDIR)/$(lib)),$(LINKLIBS))
+	$(CXX) -o $@ $(LDFLAGS) $^
