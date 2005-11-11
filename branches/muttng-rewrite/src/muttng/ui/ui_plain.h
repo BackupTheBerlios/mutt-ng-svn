@@ -1,4 +1,8 @@
-/** @ingroup muttng */
+/**
+ * @ingroup muttng_ui
+ * @addtogroup muttng_ui_cli Command-line
+ * @{
+ * */
 /**
  * @file muttng/ui/ui_plain.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -8,6 +12,7 @@
 #define MUTTNG_UI_PLAIN_H
 
 #include "ui_text.h"
+#include "plain_config_screen.h"
 
 /**
  * Plain user interface.
@@ -29,3 +34,5 @@ class UIPlain : public UIText {
 };
 
 #endif /* !MUTTNG_UI_PLAIN_H */
+
+/** @} */

@@ -1,4 +1,8 @@
-/** @ingroup muttng */
+/**
+ * @ingroup muttng
+ * @addtogroup muttng_bin Binaries
+ * @{
+ */
 /**
  * @file muttng/tools/tool.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -115,3 +119,5 @@ class Tool {
 };
 
 #endif /* !MUTTNG_TOOL_H */
+
+/** @} */

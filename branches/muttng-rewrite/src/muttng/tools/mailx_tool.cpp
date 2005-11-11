@@ -1,4 +1,4 @@
-/** @ingroup muttng */
+/** @ingroup muttng_bin_mailx */
 /**
  * @file muttng/tools/mailx_tool.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>

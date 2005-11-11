@@ -1,4 +1,9 @@
-/** @ingroup muttng */
+/**
+ * @ingroup muttng_bin
+ * @addtogroup muttng_bin_muttng muttng(1)
+ * @{
+ * This class implements the interactive mail client.
+ */
 /**
  * @file muttng/tools/muttng_tool.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -29,3 +34,5 @@ class MuttngTool : public Tool {
 };
 
 #endif /* !MUTTNG_MUTTNG_TOOL_H */
+
+/** @} */

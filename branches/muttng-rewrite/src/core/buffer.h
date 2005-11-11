@@ -39,7 +39,7 @@ typedef struct {
 /**
  * Append initial portion of string to buffer.
  * Memory for buffer and contents will be @c malloc'd as needed.
- * @param buffer Pointer to pointer to buffer for storage.
+ * @param buffer Pointer to buffer for storage.
  * @param s Initial portion of string to append.
  * @param len How many characters to consider "initial". If @c -1,
  *        get length of string first via @c str_len().
@@ -49,7 +49,7 @@ void buffer_add_str (buffer_t* buffer, const char* s, int len);
 /**
  * Append single character to buffer.
  * Memory for buffer and contents will be @c malloc'd as needed.
- * @param buffer Pointer to pointer to buffer for storage.
+ * @param buffer Pointer to buffer for storage.
  * @param ch Character to append.
  */
 void buffer_add_ch (buffer_t* buffer, unsigned char ch);
@@ -57,7 +57,7 @@ void buffer_add_ch (buffer_t* buffer, unsigned char ch);
 /**
  * Append number to buffer.
  * Memory for buffer and contents will be @c malloc'd as needed.
- * @param buffer Pointer to pointer to buffer for storage.
+ * @param buffer Pointer to buffer for storage.
  * @param num Number to append.
  */
 void buffer_add_num (buffer_t* buffer, int num);
@@ -65,9 +65,16 @@ void buffer_add_num (buffer_t* buffer, int num);
 /**
  * @c free() all memory consumed for buffer.
  * @b NOTE: This does not @c free() the memory for the buffer itself.
- * @param buffer Pointer to pointer to storage of buffer.
+ * @param buffer Pointer to storage of buffer.
  */
 void buffer_free (buffer_t* buffer);
+
+/**
+ * Mark contents as empty but don't @c free() space.
+ * This should be used when using a buffer more than once in a routine.
+ * @param buffer Pointer to buffer for storage.
+ */
+void buffer_empty (buffer_t* buffer);
 
 #ifdef __cplusplus
 }

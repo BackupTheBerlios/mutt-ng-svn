@@ -8,6 +8,8 @@
 
 #include "core/buffer.h"
 
+#include "ui/config_screen.h"
+
 /**
  * Abstract superclass for configuration commands.
  */
@@ -28,13 +30,13 @@ class AbstractCommand {
     virtual bool handle (buffer_t* line, buffer_t* error, unsigned long data) = 0;
     /**
      * Print all known items for a command.
-     * @param dst Destination buffer.
+     * @param configScreen Destination.
      * @param changedOnly If @c true, print only changed ones.
      * @param annotated If @c true and value differs from default,
      *                  print default, too.
      * @return Success.
      */
-    virtual bool print (buffer_t* dst, bool changedOnly = false,
+    virtual bool print (ConfigScreen* configScreen, bool changedOnly = false,
                         bool annotated = false) = 0;
     /**
      * Init for a command.

@@ -51,10 +51,11 @@ bool Config::read (bool readGlobal, const char* file, buffer_t* error) {
   return (true);
 }
 
-bool Config::print (buffer_t* dst, bool changedOnly, bool annotated) {
+bool Config::print (ConfigScreen* configScreen, bool changedOnly,
+                    bool annotated) {
   int i = 0;
   for (i = 0; i < Config::C_INVALID; i++)
-    if (!this->handlers[i]->print (dst, changedOnly, annotated))
+    if (!this->handlers[i]->print (configScreen, changedOnly, annotated))
       return (false);
   return (true);
 }

@@ -1,4 +1,4 @@
-/** @ingroup muttng */
+/** @ingroup muttng_bin_muttng */
 /**
  * @file muttng/tools/muttng_tool.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -11,6 +11,7 @@
 #include "core/intl.h"
 
 #include "ui/ui_curses.h"
+#include "ui/curses_config_screen.h"
 
 #include "muttng_tool.h"
 
@@ -62,7 +63,7 @@ options:\n\
   -h\t\tthis help message");
 
 MuttngTool::MuttngTool (int argc, char** argv) : Tool (argc, argv) {
-  this->ui = new UICurses ();
+  this->ui = new UICurses (new CursesConfigScreen ());
 }
 
 MuttngTool::~MuttngTool () {}

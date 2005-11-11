@@ -1,4 +1,10 @@
-/** @ingroup muttng */
+/**
+ * @ingroup muttng_bin
+ * @addtogroup muttng_bin_mailx muttng-mailx(1)
+ * @{
+ * This class implements a @c mailx(1) command-line compatible send
+ * tool.
+ */
 /**
  * @file muttng/tools/mailx_tool.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -12,7 +18,7 @@
 #include "tool.h"
 
 /**
- * @c muttng(1) class.
+ * @c muttng-mailx(1) class.
  */
 class MailxTool : public Tool {
   public:
@@ -29,3 +35,5 @@ class MailxTool : public Tool {
 };
 
 #endif /* !MUTTNG_MAILX_TOOL_H */
+
+/** @} */

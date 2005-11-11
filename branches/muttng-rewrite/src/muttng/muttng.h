@@ -1,3 +1,3 @@
 /**
- * @defgroup muttng Muttng (UI)
+ * @defgroup muttng Muttng
  */

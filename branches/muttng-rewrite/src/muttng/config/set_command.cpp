@@ -50,7 +50,8 @@ void SetCommand::init (void) {
   }
 }
 
-bool SetCommand::print (buffer_t* dst, bool changedOnly, bool annotated) {
+bool SetCommand::print (ConfigScreen* configScreen, bool changedOnly,
+                        bool annotated) {
   int i = 0, eq = 0;
   buffer_t tmp;
 
@@ -62,21 +63,14 @@ bool SetCommand::print (buffer_t* dst, bool changedOnly, bool annotated) {
     }
     eq = str_eq (tmp.str, Options[i].init);
     if (changedOnly && eq) {
-      buffer_free (&tmp);
+      buffer_empty (&tmp);
       continue;
     }
-    buffer_add_str (dst, Options[i].name, -1);
-    buffer_add_str (dst, " = \"", 4);
-    buffer_add_str (dst, tmp.str, tmp.len);
-    buffer_add_str (dst, "\"", 1);
-    if (annotated && !eq) {
-      buffer_add_str (dst, " (default: \"", 12);
-      buffer_add_str (dst, Options[i].init, -1);
-      buffer_add_str (dst, "\")", 2);
-    }
-    if (Options[i+1].name)
-      buffer_add_ch (dst, '\n');
-    buffer_free ((&tmp));
+    configScreen->compile (Options[i].name, tmp.str,
+                           (annotated && !eq) ? Options[i].init : NULL,
+                           NULL);
+    buffer_empty (&tmp);
   }
+  buffer_free (&tmp);
   return (true);
 }

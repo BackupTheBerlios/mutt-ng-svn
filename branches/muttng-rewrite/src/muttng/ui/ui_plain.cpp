@@ -1,4 +1,4 @@
-/** @ingroup muttng */
+/** @ingroup muttng_ui_cli */
 /**
  * @file muttng/ui/ui_plain.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -10,9 +10,11 @@
 
 using namespace std;
 
-UIPlain::UIPlain (void) {}
+UIPlain::UIPlain (void) : UIText (new PlainConfigScreen ()) {
+}
 
-UIPlain::~UIPlain (void) {}
+UIPlain::~UIPlain (void) {
+}
 
 bool UIPlain::start (void) { return (true); }
 bool UIPlain::end (void) { return (true); }

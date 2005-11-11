@@ -5,11 +5,14 @@ include $(CURDIR)/../../GNUmakefile.config.default
 all: subdirs libmuttng.a
 
 clean: subdirclean
-	rm -rf libmuttng.a
+	rm -rf libmuttng.a abstract_class.o
 
-libmuttng.a:
+libmuttng.a: abstract_class.o
 	$(AR) -cru $@ $^ $(wildcard ./mailbox/*.o)
 	$(RANLIB) $@
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -o $@ -c $<
 
 depend: subdirdepend
 

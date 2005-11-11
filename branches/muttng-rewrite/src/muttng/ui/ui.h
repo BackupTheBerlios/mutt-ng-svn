@@ -1,4 +1,8 @@
-/** @ingroup muttng */
+/**
+ * @ingroup muttng
+ * @addtogroup muttng_ui User Interfaces
+ * @{
+ */
 /**
  * @file muttng/ui/ui.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -6,6 +10,10 @@
  */
 #ifndef MUTTNG_UI_H
 #define MUTTNG_UI_H
+
+#include <stdlib.h>
+
+#include "config_screen.h"
 
 /**
  * User interface superclass.
@@ -15,7 +23,7 @@
 class UI {
   public:
     /** constructor */
-    UI (void);
+    UI (ConfigScreen* configScreen = NULL);
     /** destructor */
     virtual ~UI (void);
     /**
@@ -81,6 +89,16 @@ class UI {
                                   const char* copyright,
                                   const char* license,
                                   const char* reach) = 0;
+    /**
+     * Get pointer to UI's config screen.
+     * @return Pointer.
+     */
+    ConfigScreen* getConfigScreen (void);
+  private:
+    /** UI's config screen */
+    ConfigScreen* configScreen;
 };
 
 #endif /* !MUTTNG_UI_H */
+
+/** @} */

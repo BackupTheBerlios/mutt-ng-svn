@@ -8,6 +8,8 @@
 
 #include "core/buffer.h"
 
+#include "ui/config_screen.h"
+
 #include "abstract_command.h"
 #include "abstract_option.h"
 
@@ -30,7 +32,7 @@ class SetCommand : public AbstractCommand {
      * @return Whether line is valid.
      */
     bool handle (buffer_t* line, buffer_t* error, unsigned long data);
-    bool print (buffer_t* dst, bool changedOnly = false,
+    bool print (ConfigScreen* configScreen, bool changedOnly = false,
                 bool annotated = false);
     /** Configuration commands we're reponsible for. */
     enum commands {

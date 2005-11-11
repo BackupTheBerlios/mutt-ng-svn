@@ -45,3 +45,10 @@ void buffer_free (buffer_t* buffer) {
   buffer->len = 0;
   buffer->size = 0;
 }
+
+void buffer_empty (buffer_t* buffer) {
+  if (buffer->size && buffer->len > 0 && *(buffer->str)) {
+    buffer->len = 0;
+    buffer->str[0] = '\0';
+  }
+}

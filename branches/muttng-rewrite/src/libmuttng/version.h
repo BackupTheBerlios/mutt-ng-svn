@@ -7,8 +7,8 @@
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Libmuttng version info
  */
-#ifndef MUTTNG_LIBMUTTNG_VERSION_H
-#define MUTTNG_LIBMUTTNG_VERSION_H
+#ifndef LIBMUTTNG_VERSION_H
+#define LIBMUTTNG_VERSION_H
 
 /**
  * Get version of libmuttng.
@@ -16,6 +16,6 @@
  */
 #define LIBMUTTNG_VERSION       "libmuttng 0.0"
 
-#endif /* !MUTTNG_LIBMUTTNG_VERSION_H */
+#endif /* !LIBMUTTNG_VERSION_H */
 
 /** @} */

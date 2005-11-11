@@ -1,4 +1,4 @@
-/** @ingroup muttng */
+/** @ingroup muttng_bin_conf */
 /**
  * @file muttng/tools/conf_tool.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -45,10 +45,7 @@ void ConfTool::getUsage (buffer_t* dst) {
 
 int ConfTool::main (void) {
   int ch = 0, rc = 0;
-  buffer_t out;
   bool changedOnly = false, annotated = false;
-
-  buffer_init ((&out));
 
   while ((ch = getopt (this->argc, this->argv, "ad" GENERIC_ARGS)) != -1) {
     switch (ch) {
@@ -61,9 +58,8 @@ int ConfTool::main (void) {
   }
 
   this->start ();
-  if ((rc = this->config->print (&out, changedOnly, annotated)) == true)
-    ui->displayMessage (out.str);
-  buffer_free (&out);
+  rc = this->config->print (this->ui->getConfigScreen (),
+                            changedOnly, annotated);
   this->end ();
   return (rc ? 0 : 1);
 }

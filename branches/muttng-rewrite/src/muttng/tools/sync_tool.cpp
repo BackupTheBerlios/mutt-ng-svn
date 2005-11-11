@@ -1,4 +1,4 @@
-/** @ingroup muttng */
+/** @ingroup muttng_bin_sync */
 /**
  * @file muttng/tools/sync_tool.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>

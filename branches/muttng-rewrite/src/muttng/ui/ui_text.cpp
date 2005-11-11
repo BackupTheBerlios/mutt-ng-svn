@@ -1,4 +1,4 @@
-/** @ingroup muttng */
+/** @ingroup muttng_ui */
 /**
  * @file muttng/ui/ui_text.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -10,7 +10,7 @@
 
 using namespace std;
 
-UIText::UIText (void) {}
+UIText::UIText (ConfigScreen* configScreen) : UI (configScreen) {}
 
 UIText::~UIText (void) {}
 

@@ -1,4 +1,4 @@
-/** @ingroup muttng */
+/** @ingroup muttng_bin */
 /**
  * @file muttng/tools/main.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>

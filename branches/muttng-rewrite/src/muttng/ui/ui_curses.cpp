@@ -1,4 +1,4 @@
-/** @ingroup muttng */
+/** @ingroup muttng_ui_curses */
 /**
  * @file muttng/ui/ui_curses.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -10,7 +10,7 @@
 
 using namespace std;
 
-UICurses::UICurses (void) {
+UICurses::UICurses (ConfigScreen* configScreen) : UIText (configScreen) {
   this->isCurses = false;
 }
 

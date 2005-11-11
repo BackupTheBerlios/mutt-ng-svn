@@ -1,4 +1,8 @@
-/** @ingroup muttng */
+/**
+ * @ingroup muttng_ui
+ * @addtogroup muttng_ui_curses Curses
+ * @{
+ */
 /**
  * @file muttng/ui/ui_curses.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -16,7 +20,11 @@
  */
 class UICurses : public UIText {
   public:
-    UICurses ();
+    /**
+     * Constructor.
+     * @param configScreen CursesConfigScreen.
+     */
+    UICurses (ConfigScreen* configScreen = NULL);
     ~UICurses ();
     bool start (void);
     bool end (void);
@@ -31,3 +39,5 @@ class UICurses : public UIText {
 };
 
 #endif /* !MUTTNG_UI_CURSES_H */
+
+/** @} */

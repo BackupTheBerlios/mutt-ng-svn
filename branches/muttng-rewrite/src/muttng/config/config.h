@@ -8,6 +8,7 @@
 
 #include "core/buffer.h"
 
+#include "ui/config_screen.h"
 #include "set_command.h"
 
 /**
@@ -41,13 +42,13 @@ class Config {
     void init (void);
     /**
      * Print configuration to buffer.
-     * @param dst Destination buffer.
+     * @param configScreen Destination.
      * @param changedOnly If @c true, print only changed values.
      * @param annotated If @c true and value differs from default,
      *                  print default, too.
      * @return Success. See AbstractOption for why it may fail.
      */
-    bool print (buffer_t* dst, bool changedOnly = false,
+    bool print (ConfigScreen* configScreen, bool changedOnly = false,
                 bool annotated = false);
   private:
     /** Table mapping Config::commands to AbstractCommand classes. */
