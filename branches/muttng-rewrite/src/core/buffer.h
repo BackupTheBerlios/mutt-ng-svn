@@ -49,6 +49,14 @@ void buffer_add_str (buffer_t* buffer, const char* s, int len);
 /**
  * Append single character to buffer.
  * Memory for buffer and contents will be @c malloc'd as needed.
+ * @param dst Pointer to buffer for storage.
+ * @param src Source buffer.
+ */
+void buffer_add_buffer (buffer_t* dst, buffer_t* src);
+
+/**
+ * Append single character to buffer.
+ * Memory for buffer and contents will be @c malloc'd as needed.
  * @param buffer Pointer to buffer for storage.
  * @param ch Character to append.
  */
@@ -59,8 +67,10 @@ void buffer_add_ch (buffer_t* buffer, unsigned char ch);
  * Memory for buffer and contents will be @c malloc'd as needed.
  * @param buffer Pointer to buffer for storage.
  * @param num Number to append.
+ * @param pad Number of digits for destination. If too few, buffer
+ *            will be filled with 0 and truncated otherwise.
  */
-void buffer_add_num (buffer_t* buffer, int num);
+void buffer_add_num (buffer_t* buffer, int num, int pad);
 
 /**
  * @c free() all memory consumed for buffer.
@@ -71,10 +81,12 @@ void buffer_free (buffer_t* buffer);
 
 /**
  * Mark contents as empty but don't @c free() space.
- * This should be used when using a buffer more than once in a routine.
+ * This should be used when using a buffer more than once in a routine
+ * with len == 0.
  * @param buffer Pointer to buffer for storage.
+ * @param len New length.
  */
-void buffer_empty (buffer_t* buffer);
+void buffer_shrink (buffer_t* buffer, size_t len);
 
 #ifdef __cplusplus
 }

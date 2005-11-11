@@ -12,7 +12,7 @@ libmuttng.a: abstract_class.o
 	$(RANLIB) $@
 
 %.o: %.cpp
-	$(CXX) $(CXXFLAGS) -o $@ -c $<
+	$(CXX) $(CXXFLAGS) -I.. -o $@ -c $<
 
 depend: subdirdepend
 

@@ -26,7 +26,7 @@ usage: muttng-conf [-d] [-a]\n\
 static const char* Options = N_("\
 options:\n\
   -a\t\tAnnotated: print defaults if value differs\n\
-  -d\t\tDump all non-default variable values\n\
+  -D\t\tDump all non-default variable values\n\
   -v\t\tshow version and compile-time definitions\n\
   -V\t\tshow warranty and license\n\
   ");
@@ -47,13 +47,17 @@ int ConfTool::main (void) {
   int ch = 0, rc = 0;
   bool changedOnly = false, annotated = false;
 
-  while ((ch = getopt (this->argc, this->argv, "ad" GENERIC_ARGS)) != -1) {
+  while ((ch = getopt (this->argc, this->argv, "aD" GENERIC_ARGS)) != -1) {
     switch (ch) {
       case 'a': annotated = true; break;
-      case 'd': changedOnly = true; break;
+      case 'D': changedOnly = true; break;
       default:
-        if (genericArg (ch, optarg))
-          return (1);
+        rc = genericArg (ch, optarg);
+        if (rc == -1)
+          displayUsage ();
+        if (rc != 1)
+          return (rc == 0);
+        break;
     }
   }
 

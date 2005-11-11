@@ -3,9 +3,15 @@
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Configuration implementation
  */
-#include "stdlib.h"
+#include <sys/types.h>
+#include <stdlib.h>
+#include <pwd.h>
+#include <unistd.h>
+
+#include "global_variables.h"
 
 #include "core/buffer.h"
+#include "core/str.h"
 
 #include "set_command.h"
 #include "config.h"
@@ -37,11 +43,20 @@ Config::Config (void) { (void) Commands; }
 Config::~Config (void) {}
 
 void Config::init (void) {
+  char* p = NULL;
 
+  /* setup handlers and init */
   this->handlers[C_SET] = new SetCommand ();
-
   for (int i = 0; i < Config::C_INVALID; i++)
     this->handlers[i]->init ();
+  /* setup misc. */
+  if ((p = getenv ("HOME")) == NULL) {
+    struct passwd* pw;
+    if ((pw = getpwuid (getuid ())))
+      p = pw->pw_dir;
+  }
+  if (p)
+    Homedir = str_dup (p);
 }
 
 bool Config::read (bool readGlobal, const char* file, buffer_t* error) {

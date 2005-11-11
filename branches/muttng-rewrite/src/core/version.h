@@ -1,6 +1,11 @@
 /**
  * @addtogroup core Muttng Core
  * @{
+ * This is a more or less general purpose library in C. Some of the
+ * routines is legacy we still having its root in mutt(-ng). It's
+ * self-contained, i.e. doesn't have any dependency on libmuttng or
+ * muttng itself. Maybe we switch to using other projects like libowfat
+ * (or so) in the future.
  */
 /**
  * @file core/version.h

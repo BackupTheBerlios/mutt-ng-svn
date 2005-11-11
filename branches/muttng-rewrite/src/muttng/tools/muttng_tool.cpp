@@ -75,13 +75,17 @@ void MuttngTool::getUsage (buffer_t* dst) {
 }
 
 int MuttngTool::main (void) {
-  int ch;
+  int ch = 0, rc = 0;
 
   while ((ch = getopt (this->argc, this->argv, "" GENERIC_ARGS)) != -1) {
     switch (ch) {
       default:
-        if (genericArg (ch, optarg))
-          return (1);
+        rc = genericArg (ch, optarg);
+        if (rc == -1)
+          displayUsage ();
+        if (rc != 1)
+          return (rc == 0);
+        break;
     }
   }
 

@@ -27,6 +27,7 @@
 int main (int argc, char** argv) {
   Tool* tool;
   char* p = NULL;
+  int rc = 0;
 
   /* get our binary name */
   if (!argv || !(p = strrchr (argv[0], '/')) || !*(p++))
@@ -44,5 +45,7 @@ int main (int argc, char** argv) {
     tool = new SyncTool (argc, argv);
   else
     tool = new MuttngTool (argc, argv);
-  return (tool->main ());
+  rc = tool->main ();
+  delete (tool);
+  return (rc);
 }

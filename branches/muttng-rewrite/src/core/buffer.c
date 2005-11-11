@@ -12,6 +12,7 @@
 #include "buffer.h"
 #include "mem.h"
 #include "str.h"
+#include "conv.h"
 
 /** we grow buffer on demond by this size */
 #define BUF_INC         256
@@ -38,6 +39,13 @@ void buffer_add_ch (buffer_t* buffer, unsigned char ch) {
   buffer_add_str (buffer, buf, 1);
 }
 
+void buffer_add_num (buffer_t* buffer, int num, int pad) {
+  char buf[NUMBUF];
+  if (!buffer)
+    return;
+  buffer_add_str (buffer, conv_itoa (buf, num, pad), -1);
+}
+
 void buffer_free (buffer_t* buffer) {
   if (!buffer)
     return;
@@ -46,9 +54,14 @@ void buffer_free (buffer_t* buffer) {
   buffer->size = 0;
 }
 
-void buffer_empty (buffer_t* buffer) {
-  if (buffer->size && buffer->len > 0 && *(buffer->str)) {
-    buffer->len = 0;
-    buffer->str[0] = '\0';
+void buffer_add_buffer (buffer_t* dst, buffer_t* src) {
+  if (src && src->len)
+    buffer_add_str (dst, (const char*) src->str, src->len);
+}
+
+void buffer_shrink (buffer_t* buffer, size_t len) {
+  if (buffer->size && buffer->size > len) {
+    buffer->len = len;
+    buffer->str[len] = '\0';
   }
 }

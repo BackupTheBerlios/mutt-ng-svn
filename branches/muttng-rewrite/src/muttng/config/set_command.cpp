@@ -38,6 +38,8 @@ void SetCommand::init (void) {
   int i = 0;
   buffer_t tmp;
 
+  (void) Homedir;
+
   this->handlers[T_STRING] = new StringOption ();
 
   /* dump Options[] into hash table */
@@ -63,13 +65,13 @@ bool SetCommand::print (ConfigScreen* configScreen, bool changedOnly,
     }
     eq = str_eq (tmp.str, Options[i].init);
     if (changedOnly && eq) {
-      buffer_empty (&tmp);
+      buffer_shrink (&tmp, 0);
       continue;
     }
     configScreen->compile (Options[i].name, tmp.str,
                            (annotated && !eq) ? Options[i].init : NULL,
                            NULL);
-    buffer_empty (&tmp);
+    buffer_shrink (&tmp, 0);
   }
   buffer_free (&tmp);
   return (true);

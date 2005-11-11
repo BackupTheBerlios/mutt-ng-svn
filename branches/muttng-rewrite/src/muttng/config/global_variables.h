@@ -8,7 +8,7 @@
 
 #if SET_COMMAND_CPP
 /** modifier for actual storage of variables */
-#define WHERE static
+#define WHERE
 /** set initial value for static and none for extern */
 #define INITVAL(X)      =X
 #else
@@ -17,6 +17,9 @@
 /** set initial value for static and none for extern */
 #define INITVAL(X)
 #endif
+
+/** $HOME */
+WHERE const char* Homedir INITVAL(NULL);
 
 /** no comment */
 WHERE const char* Foo INITVAL(NULL);

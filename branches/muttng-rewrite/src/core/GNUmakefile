@@ -1,4 +1,4 @@
-FILES:=buffer mem exit str
+FILES:=buffer mem exit str io conv
 LIB:=libcore.a
 
 all: $(LIB)

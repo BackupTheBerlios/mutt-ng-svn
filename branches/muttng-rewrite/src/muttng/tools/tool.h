@@ -16,11 +16,10 @@
 #include "core/buffer.h"
 
 #include "config/config.h"
-
 #include "ui/ui.h"
 
 /** generic command-line arguments common for all tools. */
-#define GENERIC_ARGS    "vVhnF:"
+#define GENERIC_ARGS    "vVhnF:d:"
 
 /**
  * Abstract superclass for building binaries with a user interface based
@@ -91,9 +90,12 @@ class Tool {
      * one for all tools. This already does handle it.
      * @param c Command-line switch.
      * @param arg Optional argument for switch.
-     * @return Whether argument was generic.
+     * @return
+     *   - @c 1: argument known, continue
+     *   - @c 0: argument known, we did action, exit with 0
+     *   - @c -1: argument unknown, exit with 1
      */
-    bool genericArg (unsigned char c, const char* arg);
+    int genericArg (unsigned char c, const char* arg);
     /**
      * Start after command-line handling.
      * This is supposed to be called from Tool::main().
@@ -116,6 +118,8 @@ class Tool {
     const char* altConfig;
     /** global configuration */
     Config* config;
+    /** whether we want to start with debugging turned on */
+    int debug;
 };
 
 #endif /* !MUTTNG_TOOL_H */

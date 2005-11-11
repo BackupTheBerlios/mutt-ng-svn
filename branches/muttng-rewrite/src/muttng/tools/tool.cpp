@@ -13,7 +13,9 @@
 #include "core/buffer.h"
 
 #include "libmuttng/version.h"
+#include "libmuttng/abstract_class.h"
 
+#include "config/global_variables.h"
 #include "tool.h"
 
 using namespace std;
@@ -73,22 +75,28 @@ Tool::Tool (int argc, char** argv) {
   this->argv = argv;
   this->readGlobal = true;
   this->altConfig = NULL;
+  this->debug = 0;
 }
 
 Tool::~Tool () {
+  Debug::end ();
   delete (this->ui);
 }
 
-bool Tool::genericArg (unsigned char c, const char* arg) {
+int Tool::genericArg (unsigned char c, const char* arg) {
+  int rc = 1;
   switch (c) {
-    case 'v': displayVersion (); break;
-    case 'V': displayWarranty (); break;
-    case 'h': displayUsage (); break;
+    case 'v': displayVersion (); rc = 0; break;
+    case 'V': displayWarranty (); rc = 0; break;
+    case 'h': displayUsage (); rc = 0; break;
     case 'n': readGlobal = false; break;
     case 'F': altConfig = arg; break;
-    default: return (false);
+    case 'd': debug = atoi (optarg); break;
+    case '?':
+    default:
+      return (-1);
   }
-  return (true);
+  return (rc);
 }
 
 bool Tool::start (void) {
@@ -97,6 +105,11 @@ bool Tool::start (void) {
   buffer_init ((&error));
   config = new Config ();
   config->init ();
+  if (debug) {
+    Debug::init (Homedir, getName ());
+    Debug::setLevel (debug);
+    Debug::start ();
+  }
   if (!config->read (this->readGlobal, this->altConfig, &error))
     return (false);
   return (this->ui->start ());
