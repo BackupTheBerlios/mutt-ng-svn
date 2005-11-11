@@ -98,6 +98,7 @@ bool Debug::start (void) {
   DEBUGPRINT(1,Prefix.str);
   print (1, ":\n");
   DEBUGPRINT(1,fname.str);
+  buffer_free (&fname);
 
   return (true);
 }
