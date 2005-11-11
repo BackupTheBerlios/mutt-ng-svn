@@ -21,7 +21,7 @@ void exit_fatal (const char* func, const char* msg, int line,
   fprintf (stderr, _("Fatal error in function '%s' called from "
                      "file '%s', line '%d': %s\n"
                      "(please report this error to "
-                     "<mutt-ng-devel@lists.berlios.de>\n"),
+                     "<mutt-ng-devel@lists.berlios.de>)\n"),
            NONULL(func), NONULL(fname), line, NONULL(msg));
   exit (code);
 }
