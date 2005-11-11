@@ -1,6 +1,6 @@
 /** @ingroup libmuttng */
 /**
- * @file libmuttng/abstract_class.cpp
+ * @file libmuttng/debug.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Abstract base class.
  */
@@ -17,7 +17,7 @@
 #include "core/conv.h"
 #include "core/str.h"
 
-#include "abstract_class.h"
+#include "debug.h"
 
 /** Pointer for debug file */
 static FILE* FP = NULL;

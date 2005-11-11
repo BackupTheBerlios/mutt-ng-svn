@@ -13,7 +13,7 @@
 #include "core/buffer.h"
 
 #include "libmuttng/version.h"
-#include "libmuttng/abstract_class.h"
+#include "libmuttng/debug.h"
 
 #include "config/global_variables.h"
 #include "tool.h"

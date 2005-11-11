@@ -1,6 +1,6 @@
 /** @ingroup libmuttng */
 /**
- * @file libmuttng/abstract_class.h
+ * @file libmuttng/debug.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Abstract base class.
  */
