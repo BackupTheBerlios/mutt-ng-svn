@@ -10,6 +10,7 @@
 #include <sys/uio.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <stdarg.h>
 
 #include "core/io.h"
 #include "core/buffer.h"
@@ -19,54 +20,59 @@
 
 #include "debug.h"
 
-/** Pointer for debug file */
-static FILE* FP = NULL;
-/** Directory debugfile is stored in */
-static buffer_t Dir = { NULL, 0, 0 };
-/** Prefix */
-static buffer_t Prefix = { NULL, 0, 0 };
-/** Current debug level */
-static int Level = 0;
-
-Debug::Debug (void) {}
-Debug::~Debug (void) {}
-
-void Debug::init (const char* dir, const char* prefix) {
-  FP = NULL;
-  buffer_init ((&Dir));
-  buffer_init ((&Prefix));
+Debug::Debug (const char* dir, const char* prefix, int u) {
+  this->fp = NULL;
+  this->level = 0;
+  buffer_init ((&this->dir));
+  buffer_init ((&this->prefix));
   if (dir)
-    buffer_add_str (&Dir, dir, -1);
+    buffer_add_str (&this->dir, dir, -1);
   else
-    buffer_add_ch (&Dir, '.');
-  if (Dir.len && Dir.str[Dir.len-1] != '/')
-      buffer_add_ch (&Dir, '/');
-  buffer_add_str (&Prefix, prefix ? prefix : "libmuttng", -1);
+    buffer_add_ch (&this->dir, '.');
+  if (this->dir.len && this->dir.str[this->dir.len-1] != '/')
+    buffer_add_ch (&this->dir, '/');
+  buffer_add_str (&this->prefix, prefix ? prefix : "libmuttng", -1);
+  this->u = u;
 }
 
-void Debug::setLevel (int level) {
-  if (level >= 1 && level <= 5)
-    Level = level;
-  else if (level <= 0)
-    Debug::end ();
+Debug::~Debug (void) {
+  buffer_free (&this->dir);
+  buffer_free (&this->prefix);
+  this->fp = NULL;
 }
 
-/**
- * @bug When config works, pass $umask in here for io_fopen().
- */
+bool Debug::setLevel (int level) {
+  bool rc = true;
+
+  if (level >= 1 && level <= 5) {
+    if (this->level < 1 || this->level > 5) {
+      this->level = level;
+      rc = start ();
+    } else
+      this->level = level;
+    return (rc);
+  }
+  if (level <= 0 || level > 5) {
+    rc = end ();
+    this->level = 0;
+    return (rc);
+  }
+  return (true);
+}
+
 bool Debug::start (void) {
   buffer_t fname;
   size_t len = 0, i = 0;
   struct stat st;
 
-  if (Level <= 0 || Level > 5)
+  if (this->level <= 0 || this->level > 5)
     return (false);
 
   buffer_init ((&fname));
 
-  buffer_add_buffer (&fname, &Dir);
+  buffer_add_buffer (&fname, &this->dir);
   buffer_add_ch (&fname, '.');
-  buffer_add_buffer (&fname, &Prefix);
+  buffer_add_buffer (&fname, &this->prefix);
   buffer_add_ch (&fname, '.');
   buffer_add_num (&fname, getpid (), -1);
   buffer_add_ch (&fname, '.');
@@ -86,54 +92,41 @@ bool Debug::start (void) {
 
   buffer_add_str (&fname, ".log", 4);
 
-  if (!(FP = io_fopen (fname.str, "w", 0077))) {
+  if (!(this->fp = io_fopen (fname.str, "w", this->u < 0 ? 0077 : this->u))) {
     buffer_free (&fname);
     return (false);
   }
-
-  buffer_shrink (&fname, 0);
-  buffer_add_str (&fname, _("debug started at level "), -1);
-  buffer_add_num (&fname, Level, -1);
-  buffer_add_ch (&fname, '\n');
-  DEBUGPRINT(1,Prefix.str);
-  print (1, ":\n");
-  DEBUGPRINT(1,fname.str);
   buffer_free (&fname);
 
+  DEBUGPRINT(this,1,(_("debug started at level %d for '%s'"),
+                     this->level, NONULL (this->prefix.str)));
   return (true);
 }
 
 bool Debug::end (void) {
-  if (!FP)
+  bool rc = true;
+  if (!this->fp)
     return (true);
-  return (fclose (FP) >= 0);
+  rc = fclose (this->fp) >= 0;
+  this->fp = NULL;
+  return (rc);
 }
 
-void Debug::intro (int level, const char* file, int line, const char* func) {
-  buffer_t str;
+bool Debug::printIntro (const char* file, int line, const char* function,
+                        int level) {
+  if (level > this->level || !this->fp)
+    return (false);
+  fprintf (fp, "[%s:%s:%d:%s%s] ", NONULL (this->prefix.str),
+           NONULL (file), line, NONULL (function), function ? "()" : "");
+  return (true);
+}
 
-  if (!FP || Level < level)
+void Debug::printLine (const char* fmt, ...) {
+  va_list ap;
+  if (!this->fp)
     return;
-  buffer_init ((&str));
-  buffer_add_ch (&str, '[');
-  buffer_add_str (&str, file, -1); buffer_add_ch (&str, ':');
-  buffer_add_num (&str, line, -1);
-  if (func) {
-    buffer_add_ch (&str, ':');
-    buffer_add_str (&str, func, -1);
-    buffer_add_str (&str, "()", 2);
-  }
-  buffer_add_str (&str, "] ", 2);
-  write (fileno (FP), str.str, str.len);
-  buffer_free (&str);
-}
-
-void Debug::print (int level, const char* msg) {
-  if (FP && Level >= level)
-    write (fileno (FP), msg, str_len (msg));
-}
-
-void Debug::print (int level, int num) {
-  char buf[NUMBUF];
-  Debug::print (level, conv_itoa (buf, num, -1));
+  va_start (ap, fmt);
+  vfprintf (fp, fmt, ap);
+  va_end (ap);
+  fputc ('\n', fp);
 }

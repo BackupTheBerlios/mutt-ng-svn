@@ -15,6 +15,9 @@
 
 #include "core/buffer.h"
 
+#include "libmuttng/libmuttng.h"
+
+#include "muttng.h"
 #include "config/config.h"
 #include "ui/ui.h"
 
@@ -25,7 +28,7 @@
  * Abstract superclass for building binaries with a user interface based
  * on the core and libmuttng.
  */
-class Tool {
+class Tool : public Muttng {
   public:
     /**
      * Constructor.
@@ -119,7 +122,9 @@ class Tool {
     /** global configuration */
     Config* config;
     /** whether we want to start with debugging turned on */
-    int debug;
+    int startDebug;
+    /** lib object */
+    LibMuttng* libmuttng;
 };
 
 #endif /* !MUTTNG_TOOL_H */

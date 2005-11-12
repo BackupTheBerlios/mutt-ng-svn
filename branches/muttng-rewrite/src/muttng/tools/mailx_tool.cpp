@@ -17,22 +17,16 @@
 using namespace std;
 
 /** Usage string for @c muttng(1). */
-static const char* Usage = N_("\
-usage: muttng-mailx -v\n\
-       muttng-mailx -V\n");
+static const char* Usage = N_("");
 
 /** Help string for @c muttng(1). */
-static const char* Options = N_("\
-options:\n\
-  -v\t\tshow version and compile-time definitions\n\
-  -V\t\tshow warranty and license\n\
-  ");
+static const char* Options = N_("");
 
 MailxTool::MailxTool (int argc, char** argv) : Tool (argc, argv) {
   this->ui = new UIPlain ();
 }
 
-MailxTool::~MailxTool () {}
+MailxTool::~MailxTool (void) {}
 
 void MailxTool::getUsage (buffer_t* dst) {
   buffer_add_str (dst, Usage, -1);
@@ -55,7 +49,8 @@ int MailxTool::main (void) {
     }
   }
 
-  this->start ();
+  if (!this->start ())
+    return (1);
   /* do something */
   this->end ();
   return (0);

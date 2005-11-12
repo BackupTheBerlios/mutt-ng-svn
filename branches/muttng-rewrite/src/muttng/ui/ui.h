@@ -78,6 +78,7 @@
 
 #include <stdlib.h>
 
+#include "muttng.h"
 #include "config_screen.h"
 
 /**
@@ -85,7 +86,7 @@
  * The Tool class and its children only rely on these abstract
  * functions.
  */
-class UI {
+class UI : public Muttng {
   public:
     /** constructor */
     UI (ConfigScreen* configScreen = NULL);
@@ -124,9 +125,9 @@ class UI {
     virtual bool answerQuestion (void) = 0;
     /**
      * Display an error message to user.
-     * @return Success.
+     * @param message Error message.
      */
-    virtual bool displayError (void) = 0;
+    virtual void displayError (const char* message) = 0;
     /**
      * Display a normal message to user.
      * @param message The message's text.

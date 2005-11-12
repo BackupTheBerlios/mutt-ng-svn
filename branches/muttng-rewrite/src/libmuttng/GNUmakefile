@@ -5,9 +5,9 @@ include $(CURDIR)/../../GNUmakefile.config.default
 all: subdirs libmuttng.a
 
 clean: subdirclean
-	rm -rf libmuttng.a debug.o
+	rm -rf libmuttng.a debug.o libmuttng.o
 
-libmuttng.a: debug.o
+libmuttng.a: debug.o libmuttng.o
 	$(AR) -cru $@ $^ $(wildcard ./mailbox/*.o)
 	$(RANLIB) $@
 

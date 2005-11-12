@@ -18,17 +18,14 @@ using namespace std;
 
 /** Usage string for @c muttng(1). */
 static const char* Usage = N_("\
-usage: muttng-conf [-d] [-a]\n\
-       muttng-conf -v\n\
-       muttng-conf -V\n");
+Usage: muttng-conf [-d] [-a]\n\
+  ");
 
 /** Help string for @c muttng(1). */
 static const char* Options = N_("\
-options:\n\
+Options:\n\
   -a\t\tAnnotated: print defaults if value differs\n\
   -D\t\tDump all non-default variable values\n\
-  -v\t\tshow version and compile-time definitions\n\
-  -V\t\tshow warranty and license\n\
   ");
 
 ConfTool::ConfTool (int argc, char** argv) : Tool (argc, argv) {
@@ -61,7 +58,8 @@ int ConfTool::main (void) {
     }
   }
 
-  this->start ();
+  if (!this->start ())
+    return (1);
   rc = this->config->print (this->ui->getConfigScreen (),
                             changedOnly, annotated);
   this->end ();

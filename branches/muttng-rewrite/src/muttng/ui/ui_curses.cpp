@@ -7,10 +7,12 @@
 #include <iostream>
 
 #include "ui_curses.h"
+#include "curses_config_screen.h"
+#include "ui_plain.h"
 
 using namespace std;
 
-UICurses::UICurses (ConfigScreen* configScreen) : UIText (configScreen) {
+UICurses::UICurses (void) : UIText (new CursesConfigScreen ()) {
   this->isCurses = false;
 }
 
@@ -21,7 +23,13 @@ bool UICurses::end (void) { return (true); }
 bool UICurses::enterFilename (void) { return (true); }
 bool UICurses::enterPassword (void) { return (true); }
 bool UICurses::answerQuestion (void) { return (true); }
-bool UICurses::displayError (void) { return (true); }
+
+void UICurses::displayError (const char* message) {
+  if (isCurses) {
+    /* former mutt error */
+  } else if (message)
+    cerr << message << endl;
+}
 
 void UICurses::displayMessage (const char* message) {
   if (isCurses) {

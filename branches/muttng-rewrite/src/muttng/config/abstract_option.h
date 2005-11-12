@@ -8,6 +8,7 @@
 
 #include "core/buffer.h"
 
+#include "muttng.h"
 #include "option.h"
 
 /**
@@ -27,24 +28,46 @@
  * events as they'd like to (e.g. redraw a menu when a layout-specific
  * variable was changed.)
  */
-class AbstractOption {
+class AbstractOption : public Muttng {
   public:
     AbstractOption (void);
     virtual ~AbstractOption (void) = 0;
+    /** all configuration commands known for config variables */
+    enum commands {
+      /** @c set */
+      T_SET = 0,
+      /** @c unset */
+      T_UNSET,
+      /** @c reset */
+      T_RESET,
+      /** @c toggle */
+      T_TOGGLE,
+      /** @c query */
+      T_QUERY
+    };
+    /** return values for AbstractOption::fromString(). */
+    enum state {
+      /** all okay */
+      S_OK = 0,
+      /** command invalid for option type (eg @c toggle for string) */
+      S_CMD,
+      /** value invalid for option type */
+      S_VALUE
+    };
     /**
      * Read option from string, to be overwritten by derived classes.
      * @param src Configuration line with value.
      * @param dst Destination storage.
      * @return Whether operation succeeded.
      */
-    virtual bool fromString (buffer_t* src, option_t* dst) = 0;
+    virtual AbstractOption::state fromString (AbstractOption::commands command,
+                                              buffer_t* src, option_t* dst) = 0;
     /**
      * Write option to string, to be overwritten by derived classes.
      * @param src Option.
      * @param dst Destination buffer.
-     * @return Whether operation succeeded.
      */
-    virtual bool toString (option_t* src, buffer_t* dst) = 0;
+    virtual void toString (option_t* src, buffer_t* dst) = 0;
 };
 
 #endif /* !MUTTNG_CONFIG_ABSTRACT_OPTION_H */

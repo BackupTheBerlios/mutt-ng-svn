@@ -17,16 +17,10 @@
 using namespace std;
 
 /** Usage string for @c muttng(1). */
-static const char* Usage = N_("\
-usage: muttng-sync -v\n\
-       muttng-sync -V\n");
+static const char* Usage = N_("");
 
 /** Help string for @c muttng(1). */
-static const char* Options = N_("\
-options:\n\
-  -v\t\tshow version and compile-time definitions\n\
-  -V\t\tshow warranty and license\n\
-  ");
+static const char* Options = N_("");
 
 SyncTool::SyncTool (int argc, char** argv) : Tool (argc, argv) {
   this->ui = new UIPlain ();
@@ -55,7 +49,8 @@ int SyncTool::main (void) {
     }
   }
 
-  this->start ();
+  if (!this->start ())
+    return (1);
   /* do something */
   this->end ();
   return (0);

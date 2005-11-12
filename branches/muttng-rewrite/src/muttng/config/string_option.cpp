@@ -12,13 +12,22 @@
 StringOption::StringOption () {}
 StringOption::~StringOption () {}
 
-bool StringOption::fromString (buffer_t* src, option_t* dst) {
+AbstractOption::state StringOption::fromString (AbstractOption::commands command, buffer_t* src, option_t* dst) {
   char** str = (char**) dst->data;
-  str_replace (str, src->str);
-  return (true);
+  char* p = NULL;
+
+  switch (command) {
+    case T_SET: p = src->str; break;
+    case T_UNSET: break;
+    case T_RESET: p = (char*) dst->init; break;
+    case T_TOGGLE:
+    case T_QUERY:
+      return (S_CMD);
+  }
+  str_replace (str, p);
+  return (S_OK);
 }
 
-bool StringOption::toString (option_t* src, buffer_t* dst) {
+void StringOption::toString (option_t* src, buffer_t* dst) {
   buffer_add_str (dst, *((char**) src->data), -1);
-  return (true);
 }

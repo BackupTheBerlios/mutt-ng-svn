@@ -46,6 +46,13 @@ void buffer_add_num (buffer_t* buffer, int num, int pad) {
   buffer_add_str (buffer, conv_itoa (buf, num, pad), -1);
 }
 
+int buffer_equal1 (buffer_t* buffer, const char* s, int len) {
+  size_t l = (len >= 0 ? (size_t) len : str_len (s));
+  if (!buffer || !s)
+    return (!buffer && !s);
+  return (buffer->len == l && strncmp (buffer->str, s, l) == 0);
+}
+
 void buffer_free (buffer_t* buffer) {
   if (!buffer)
     return;

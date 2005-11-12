@@ -26,64 +26,70 @@
  *    "libmuttng".
  *  - $pid is the current process' PID
  *  - id is some number to avoid conflicts with existing files
- *
- * @bug we need to switch to @c printf() style here.
  */
 class Debug {
   public:
-    /** constructor */
-    Debug ();
+    /**
+     * Constructor.
+     * @param dir Where debug file will be placed.
+     * @param prefix How debug file will be named.
+     * @param u Umask for files created.
+     */
+    Debug (const char* dir = NULL, const char* prefix = NULL, int u = -1);
     /** destructor */
     ~Debug (void);
     /**
-     * Initialize.
-     * @param dir Where to put debug file.
-     * @param prefix How to prefix filename.
-     */
-    static void init (const char* dir = NULL, const char* prefix = NULL);
-    /**
      * Change debug level.
-     * If level is <= 0, do Debug::end().
+     * If current level is invalid and new is valid, do start().
+     * If current level is valid and new is invalid, do end().
      * @param level New level.
      */
-    static void setLevel (int level);
+    bool setLevel (int level);
+    /**
+     * Print line prefix.
+     * <b>DO NOT USE</b>.
+     * @param file @c __FILE__
+     * @param line @c __LINE__
+     * @param function @c __FUNCTION__
+     * @param level Debug level.
+     * @return Whether line may be printed.
+     * @sa DEBUGPRINT()
+     */
+    bool printIntro (const char* file, int line,
+                     const char* function, int level);
+    /**
+     * Print line.
+     * <b>DO NOT USE</b>.
+     * @param fmt Format string.
+     */
+    void printLine (const char* fmt, ...);
+  private:
+    /** output file pointer */
+    FILE* fp;
+    /** directory */
+    buffer_t dir;
+    /** prefix */
+    buffer_t prefix;
+    /** current level */
+    int level;
+    /** umask */
+    int u;
     /** Start debugging: open debug file. */
-    static bool start (void);
+    bool start (void);
     /** Finish debugging: close debug file. */
-    static bool end (void);
-    /**
-     * Print debug line intro.
-     * Format: '[file:line:function()] '.
-     * @param level Level.
-     * @param file Source file.
-     * @param line Souce line.
-     * @param func Source Function.
-     */
-    static void intro (int level, const char* file, int line, const char* func);
-    /**
-     * Print string to debug file.
-     * @param level Level.
-     * @param msg Message.
-     */
-    static void print (int level, const char* msg);
-    /**
-     * Print number to debug file.
-     * @param level Level.
-     * @param num Number.
-     */
-    static void print (int level, int num);
+    bool end (void);
 };
 
 #ifdef __GNUG__
-#define DEBUGPRINT(L,X) do { \
-  Debug::intro(L,__FILE__,__LINE__,__FUNCTION__); \
-  Debug::print(L,X); \
-} while (0);
+#define DEBUGPRINT(D,L,X) do { \
+  if (D->printIntro (__FILE__,__LINE__,__FUNCTION__,L)) \
+    D->printLine X; \
+} while (0)
 #else
-#define DEBUGPRINT(L,X) do { \
-  Debug::intro(L,__FILE__,__LINE__,NULL); \
-  Debug::print(L,X); \
-} while (0);
+#define DEBUGPRINT(D,L,X) do { \
+  if (D->printIntro (__FILE__,__LINE__,NULL,L)) \
+    D->printLine X; \
+} while (0)
 #endif
 
 #endif /* !LIBMUTTNG_ABSTRACT_CLASS_H */

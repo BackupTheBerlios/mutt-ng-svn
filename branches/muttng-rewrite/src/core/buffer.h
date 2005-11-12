@@ -73,6 +73,15 @@ void buffer_add_ch (buffer_t* buffer, unsigned char ch);
 void buffer_add_num (buffer_t* buffer, int num, int pad);
 
 /**
+ * Compare buffer to string.
+ * @param buffer Pointer to buffer.
+ * @param s String.
+ * @param slen Length of string. If negative, it will be computed first.
+ * @return Yes/No.
+ */
+int buffer_equal1 (buffer_t* buffer, const char* s, int len);
+
+/**
  * @c free() all memory consumed for buffer.
  * @b NOTE: This does not @c free() the memory for the buffer itself.
  * @param buffer Pointer to storage of buffer.

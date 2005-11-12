@@ -21,6 +21,8 @@ bool PlainConfigScreen::compile (const char* name,
                                  const char* value,
                                  const char* type, const char* init) {
   cout << name << " = \"" << value << "\"";
+  if (type || init)
+    cout << " #";
   if (type)
     cout << " (type: " << type << ")";
   if (init)

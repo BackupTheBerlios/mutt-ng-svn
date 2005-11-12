@@ -8,12 +8,14 @@
 
 #include "core/buffer.h"
 
+#include "muttng.h"
+#include "ui/ui.h"
 #include "ui/config_screen.h"
 
 /**
  * Abstract superclass for configuration commands.
  */
-class AbstractCommand {
+class AbstractCommand : public Muttng {
   public:
     /** constructor */
     AbstractCommand (void);
@@ -40,8 +42,10 @@ class AbstractCommand {
                         bool annotated = false) = 0;
     /**
      * Init for a command.
+     * @param ui User interface for error reporting.
+     * @return Success.
      */
-    virtual void init (void) = 0;
+    virtual bool init (UI* ui) = 0;
 };
 
 #endif /* !MUTTNG_CONFIG_ABSTRACT_COMMAND_H */

@@ -7,9 +7,11 @@
 #ifndef MUTTNG_UI_ABSTRACT_SCREEN_MOTION_H
 #define MUTTNG_UI_ABSTRACT_SCREEN_MOTION_H
 
+#include "muttng.h"
+
 /**
  * Screen motion abstraction */
-class AbstractScreenMotion {
+class AbstractScreenMotion : public Muttng {
   public:
     /** constructor */
     AbstractScreenMotion (void);

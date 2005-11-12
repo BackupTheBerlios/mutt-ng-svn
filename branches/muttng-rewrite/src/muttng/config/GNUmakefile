@@ -1,4 +1,4 @@
-FILES=config set_command abstract_command abstract_option string_option
+FILES=config set_command abstract_command abstract_option string_option num_option bool_option
 LIB=libconfig.a
 
 all: $(LIB)

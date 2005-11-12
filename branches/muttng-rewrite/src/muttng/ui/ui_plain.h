@@ -12,7 +12,6 @@
 #define MUTTNG_UI_PLAIN_H
 
 #include "ui_text.h"
-#include "plain_config_screen.h"
 
 /**
  * Plain user interface.
@@ -22,14 +21,14 @@
  */
 class UIPlain : public UIText {
   public:
-    UIPlain ();
-    ~UIPlain ();
+    UIPlain (void);
+    ~UIPlain (void);
     bool start (void);
     bool end (void);
     bool enterFilename (void);
     bool enterPassword (void);
     bool answerQuestion (void);
-    bool displayError (void);
+    void displayError (const char* message);
     void displayMessage (const char* message);
 };
 

@@ -15,7 +15,10 @@
 #include "libmuttng/version.h"
 #include "libmuttng/debug.h"
 
+#include "ui/ui_plain.h"
+
 #include "config/global_variables.h"
+
 #include "tool.h"
 
 using namespace std;
@@ -70,16 +73,27 @@ along with this program; if not, write to the Free Software\n\
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.\n\
 ");
 
+static const char* GenericOptions = N_("\
+Generic options:\n\
+  -d <level>\tDebug at <level>\n\
+  -F <file>\tRead <file> instead of default user configuration\n\
+  -h\t\tThis help screen\n\
+  -n\t\tDo not read the system configuration file\n\
+  -v\t\tShow version info and compile-time options\n\
+  -V\t\tShow warranty and license");
+
 Tool::Tool (int argc, char** argv) {
   this->argc = argc;
   this->argv = argv;
   this->readGlobal = true;
   this->altConfig = NULL;
-  this->debug = 0;
+  this->startDebug = 0;
+  this->libmuttng = NULL;
 }
 
 Tool::~Tool () {
-  Debug::end ();
+  if (this->libmuttng)
+    delete (this->libmuttng);
   delete (this->ui);
 }
 
@@ -91,7 +105,7 @@ int Tool::genericArg (unsigned char c, const char* arg) {
     case 'h': displayUsage (); rc = 0; break;
     case 'n': readGlobal = false; break;
     case 'F': altConfig = arg; break;
-    case 'd': debug = atoi (optarg); break;
+    case 'd': startDebug = atoi (optarg); break;
     case '?':
     default:
       return (-1);
@@ -101,14 +115,17 @@ int Tool::genericArg (unsigned char c, const char* arg) {
 
 bool Tool::start (void) {
   buffer_t error;
+  UIPlain ui;
 
   buffer_init ((&error));
   config = new Config ();
-  config->init ();
-  if (debug) {
-    Debug::init (Homedir, getName ());
-    Debug::setLevel (debug);
-    Debug::start ();
+  if (!config->init (&ui))
+    return (false);
+  muttngInit (Homedir, getName (), Umask);
+  this->libmuttng = new LibMuttng (Homedir, Umask);
+  if (startDebug) {
+    setDebugLevel (startDebug);
+    this->libmuttng->setDebugLevel (startDebug);
   }
   if (!config->read (this->readGlobal, this->altConfig, &error))
     return (false);
@@ -221,6 +238,8 @@ void Tool::displayUsage (void) {
   doName (&usage);
   buffer_add_ch (&usage, '\n');
   getUsage (&usage);
+  buffer_add_ch (&usage, '\n');
+  buffer_add_str (&usage, GenericOptions, -1);
   ui->displayMessage (usage.str);
   buffer_free (&usage);
 }

@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "ui_plain.h"
+#include "plain_config_screen.h"
 
 using namespace std;
 
@@ -21,7 +22,12 @@ bool UIPlain::end (void) { return (true); }
 bool UIPlain::enterFilename (void) { return (true); }
 bool UIPlain::enterPassword (void) { return (true); }
 bool UIPlain::answerQuestion (void) { return (true); }
-bool UIPlain::displayError (void) { return (true); }
+
+void UIPlain::displayError (const char* message) {
+  if (message)
+    cerr << message << endl;
+}
+
 void UIPlain::displayMessage (const char* message) {
   if (message)
     cout << message << endl;

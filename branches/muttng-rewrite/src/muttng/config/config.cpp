@@ -31,10 +31,10 @@ typedef struct {
 
 /** Table of known commands */
 static command_t Commands[] = {
-  { Config::C_SET,      "set",          SetCommand::T_SET },
-  { Config::C_SET,      "unset",        SetCommand::T_UNSET },
-  { Config::C_SET,      "reset",        SetCommand::T_RESET },
-  { Config::C_SET,      "toggle",       SetCommand::T_TOGGLE },
+  { Config::C_SET,      "set",          AbstractOption::T_SET },
+  { Config::C_SET,      "unset",        AbstractOption::T_UNSET },
+  { Config::C_SET,      "reset",        AbstractOption::T_RESET },
+  { Config::C_SET,      "toggle",       AbstractOption::T_TOGGLE },
   /* last */
   { Config::C_INVALID,  NULL,           0 }
 };
@@ -42,13 +42,14 @@ static command_t Commands[] = {
 Config::Config (void) { (void) Commands; }
 Config::~Config (void) {}
 
-void Config::init (void) {
+bool Config::init (UI* ui) {
   char* p = NULL;
 
   /* setup handlers and init */
   this->handlers[C_SET] = new SetCommand ();
   for (int i = 0; i < Config::C_INVALID; i++)
-    this->handlers[i]->init ();
+    if (!this->handlers[i]->init (ui))
+      return (false);
   /* setup misc. */
   if ((p = getenv ("HOME")) == NULL) {
     struct passwd* pw;
@@ -57,6 +58,7 @@ void Config::init (void) {
   }
   if (p)
     Homedir = str_dup (p);
+  return (true);
 }
 
 bool Config::read (bool readGlobal, const char* file, buffer_t* error) {

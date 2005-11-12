@@ -8,6 +8,7 @@
 
 #include "core/buffer.h"
 
+#include "ui/ui.h"
 #include "ui/config_screen.h"
 
 #include "abstract_command.h"
@@ -34,33 +35,21 @@ class SetCommand : public AbstractCommand {
     bool handle (buffer_t* line, buffer_t* error, unsigned long data);
     bool print (ConfigScreen* configScreen, bool changedOnly = false,
                 bool annotated = false);
-    /** Configuration commands we're reponsible for. */
-    enum commands {
-      /** @c set keyword */
-      T_SET = 0,
-      /** @c unset keyword */
-      T_UNSET,
-      /** @c reset keyword */
-      T_RESET,
-      /** @c toggle keyword */
-      T_TOGGLE
-    };
     /** Variable types we know */
     enum types {
       /** @c string */
       T_STRING = 0,
-#if 0
       /** @c boolean */
       T_BOOL,
       /** @c number */
       T_NUM,
-#endif
       /** last */
       T_LAST
     };
-    void init (void);
+    bool init (UI* ui);
   private:
     AbstractOption* handlers[T_LAST];
+    const char* types[T_LAST];
 };
 
 #endif /* !MUTTNG_CONFIG_SET_COMMAND_H */

@@ -8,6 +8,8 @@
 
 #include "core/buffer.h"
 
+#include "muttng.h"
+#include "ui/ui.h"
 #include "ui/config_screen.h"
 #include "set_command.h"
 
@@ -16,7 +18,7 @@
  * @bug I'd love this static only but we get in trouble with pointer and
  * class tables here... ;-((
  */
-class Config {
+class Config : public Muttng {
   public:
     /** constructor */
     Config (void);
@@ -38,8 +40,12 @@ class Config {
       /** last */
       C_INVALID
     };
-    /** Initialize config prior to reading config files. */
-    void init (void);
+    /**
+     * Initialize config prior to reading config files.
+     * @param ui User interface for error reporting.
+     * @return Success.
+     */
+    bool init (UI* ui);
     /**
      * Print configuration to buffer.
      * @param configScreen Destination.

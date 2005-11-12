@@ -7,10 +7,12 @@
 #ifndef MUTTNG_UI_ABSTRACT_SCREEN_H
 #define MUTTNG_UI_ABSTRACT_SCREEN_H
 
+#include "muttng.h"
+
 /**
  * Screen abstraction superclass.
  */
-class AbstractScreen {
+class AbstractScreen : public Muttng {
   public:
     /** constructor */
     AbstractScreen (void);

@@ -24,14 +24,14 @@ class UICurses : public UIText {
      * Constructor.
      * @param configScreen CursesConfigScreen.
      */
-    UICurses (ConfigScreen* configScreen = NULL);
-    ~UICurses ();
+    UICurses (void);
+    ~UICurses (void);
     bool start (void);
     bool end (void);
     bool enterFilename (void);
     bool enterPassword (void);
     bool answerQuestion (void);
-    bool displayError (void);
+    void displayError (const char* message);
     void displayMessage (const char* message);
   private:
     /** whether curses is already running */

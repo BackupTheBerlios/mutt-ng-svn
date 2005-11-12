@@ -6,6 +6,8 @@
 #ifndef MUTTNG_CONFIG_GLOBAL_VARIABLES_H
 #define MUTTNG_CONFIG_GLOBAL_VARIABLES_H
 
+#include "core/array.h"
+
 #if SET_COMMAND_CPP
 /** modifier for actual storage of variables */
 #define WHERE
@@ -21,7 +23,29 @@
 /** $HOME */
 WHERE const char* Homedir INITVAL(NULL);
 
-/** no comment */
-WHERE const char* Foo INITVAL(NULL);
+/** array for all boolean options */
+WHERE int* BoolOptions INITVAL(NULL);
+
+/** Set boolean option. @sa array_bit_set(). */
+#define set_option(x) array_bit_set(BoolOptions,x)
+/** Unset boolean option. @sa array_bit_unset(). */
+#define unset_option(x) array_bit_unset(BoolOptions,x)
+/** Toggle boolean option. @sa array_bit_toggle(). */
+#define toggle_option(x) array_bit_toggle(BoolOptions,x)
+/** Query boolean option. @sa array_bit_isset(). */
+#define option(x) array_bit_isset(BoolOptions,x)
+
+/** $assumed_charset */
+WHERE char* AssumedCharset INITVAL(NULL);
+/** $umask */
+WHERE int Umask INITVAL(0);
+
+/** all boolean options we know */
+enum {
+  /** $allow_8bit */
+  OPT_ALLOW8BIT = 0,
+  /** last */
+  OPT_LAST
+};
 
 #endif /* !MUTTNG_CONFIG_GLOBAL_VARIABLES_H */
