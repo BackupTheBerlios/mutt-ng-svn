@@ -53,6 +53,12 @@ int buffer_equal1 (buffer_t* buffer, const char* s, int len) {
   return (buffer->len == l && strncmp (buffer->str, s, l) == 0);
 }
 
+int buffer_equal2 (buffer_t* buffer1, buffer_t* buffer2) {
+  if (!buffer1 || !buffer2)
+    return (!buffer1 && !buffer2);
+  return (buffer_equal1 (buffer1, buffer2->str, buffer2->len));
+}
+
 void buffer_free (buffer_t* buffer) {
   if (!buffer)
     return;

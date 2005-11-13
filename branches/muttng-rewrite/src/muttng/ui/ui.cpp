@@ -6,13 +6,5 @@
  */
 #include "ui.h"
 
-UI::UI (ConfigScreen* configScreen) {
-  this->configScreen = configScreen;
-}
-UI::~UI (void) {
-  delete (this->configScreen);
-}
-
-ConfigScreen* UI::getConfigScreen (void) {
-  return (this->configScreen);
-}
+UI::UI (void) {}
+UI::~UI (void) {}

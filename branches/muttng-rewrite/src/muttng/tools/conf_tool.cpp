@@ -41,8 +41,9 @@ void ConfTool::getUsage (buffer_t* dst) {
 }
 
 int ConfTool::main (void) {
-  int ch = 0, rc = 0;
+  int ch = 0, rc = 0, idx = 0;
   bool changedOnly = false, annotated = false;
+  buffer_t name, type, init, value;
 
   while ((ch = getopt (this->argc, this->argv, "aD" GENERIC_ARGS)) != -1) {
     switch (ch) {
@@ -60,8 +61,32 @@ int ConfTool::main (void) {
 
   if (!this->start ())
     return (1);
-  rc = this->config->print (this->ui->getConfigScreen (),
-                            changedOnly, annotated);
+
+  buffer_init ((&name));
+  buffer_init ((&type));
+  buffer_init ((&init));
+  buffer_init ((&value));
+
+  idx = 0;
+  while (config->getSingleOption (&idx, &name, &type, &init, &value)) {
+    int eq = buffer_equal2 (&init, &value);
+    if (changedOnly && eq)
+      continue;
+    cout << name.str << " = \"" << value.str << "\"";
+    if (annotated) {
+      cout << " #";
+      if (!eq)
+        cout << " (default: \"" << init.str << "\")";
+      cout << " (type: " << type.str << ")";
+    }
+    cout << endl;
+  }
+
+  buffer_free (&name);
+  buffer_free (&type);
+  buffer_free (&init);
+  buffer_free (&value);
+
   this->end ();
   return (rc ? 0 : 1);
 }

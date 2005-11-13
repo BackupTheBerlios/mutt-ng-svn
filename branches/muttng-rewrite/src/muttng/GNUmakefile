@@ -1,4 +1,4 @@
-SUBDIRS=ui config tools
+SUBDIRS=ui config event tools
 
 include $(CURDIR)/../../GNUmakefile.config.default
 

@@ -1,7 +1,7 @@
 FILES=conf_tool mailx_tool muttng_tool sync_tool tool
 LIB=libtool.a
 BINARY=main
-LINKLIBS=../muttng.o ../ui/libui.a ../config/libconfig.a ../../libmuttng/libmuttng.a ../../core/libcore.a
+LINKLIBS=../muttng.o ../event/libevent.a ../ui/libui.a ../config/libconfig.a ../../libmuttng/libmuttng.a ../../core/libcore.a
 
 all: $(OBJS) $(LIB) $(BINARY)
 	ln -s main muttng || true

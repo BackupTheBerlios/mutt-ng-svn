@@ -9,7 +9,6 @@
 #include "core/buffer.h"
 
 #include "ui/ui.h"
-#include "ui/config_screen.h"
 
 #include "abstract_command.h"
 #include "abstract_option.h"
@@ -33,8 +32,8 @@ class SetCommand : public AbstractCommand {
      * @return Whether line is valid.
      */
     bool handle (buffer_t* line, buffer_t* error, unsigned long data);
-    bool print (ConfigScreen* configScreen, bool changedOnly = false,
-                bool annotated = false);
+    bool getSingleOption (int* idx, buffer_t* name, buffer_t* type,
+                          buffer_t* init, buffer_t* value);
     /** Variable types we know */
     enum types {
       /** @c string */

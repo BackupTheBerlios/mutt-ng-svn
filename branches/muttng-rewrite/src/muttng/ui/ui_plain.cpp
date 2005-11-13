@@ -7,15 +7,11 @@
 #include <iostream>
 
 #include "ui_plain.h"
-#include "plain_config_screen.h"
 
 using namespace std;
 
-UIPlain::UIPlain (void) : UIText (new PlainConfigScreen ()) {
-}
-
-UIPlain::~UIPlain (void) {
-}
+UIPlain::UIPlain (void) {}
+UIPlain::~UIPlain (void) {}
 
 bool UIPlain::start (void) { return (true); }
 bool UIPlain::end (void) { return (true); }

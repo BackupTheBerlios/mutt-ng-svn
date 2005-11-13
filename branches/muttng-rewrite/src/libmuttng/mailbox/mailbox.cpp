@@ -7,18 +7,16 @@
  */
 #include <stdlib.h>
 
+#include "core/str.h"
+
 #include "mailbox.h"
 
-Mailbox::Mailbox (void) {
+Mailbox::Mailbox (const char* url) {
   this->haveCaching = 0;
   this->haveAuthentication = 0;
   this->haveEncryption = 0;
-  this->url = NULL;
-}
-
-Mailbox::Mailbox (const char* url) {
-  Mailbox ();
   this->url = url;
+  DEBUGPRINT(1,("create mailbox '%s'", NONULL(url)));
 }
 
 Mailbox::~Mailbox (void) {

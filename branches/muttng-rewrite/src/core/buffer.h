@@ -82,6 +82,14 @@ void buffer_add_num (buffer_t* buffer, int num, int pad);
 int buffer_equal1 (buffer_t* buffer, const char* s, int len);
 
 /**
+ * Compare buffer to buffer
+ * @param buffer1 1st buffer.
+ * @param buffer2 2nd buffer.
+ * @return Yes/No.
+ */
+int buffer_equal2 (buffer_t* buffer1, buffer_t* buffer2);
+
+/**
  * @c free() all memory consumed for buffer.
  * @b NOTE: This does not @c free() the memory for the buffer itself.
  * @param buffer Pointer to storage of buffer.

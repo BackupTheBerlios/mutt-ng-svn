@@ -10,7 +10,6 @@
 
 #include "muttng.h"
 #include "ui/ui.h"
-#include "ui/config_screen.h"
 #include "set_command.h"
 
 /**
@@ -46,16 +45,10 @@ class Config : public Muttng {
      * @return Success.
      */
     bool init (UI* ui);
-    /**
-     * Print configuration to buffer.
-     * @param configScreen Destination.
-     * @param changedOnly If @c true, print only changed values.
-     * @param annotated If @c true and value differs from default,
-     *                  print default, too.
-     * @return Success. See AbstractOption for why it may fail.
-     */
-    bool print (ConfigScreen* configScreen, bool changedOnly = false,
-                bool annotated = false);
+
+    bool getSingleOption (int* idx, buffer_t* name, buffer_t* type,
+                          buffer_t* init, buffer_t* value);
+
   private:
     /** Table mapping Config::commands to AbstractCommand classes. */
     AbstractCommand* handlers[C_INVALID];

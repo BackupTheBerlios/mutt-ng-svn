@@ -7,12 +7,11 @@
 #include <iostream>
 
 #include "ui_curses.h"
-#include "curses_config_screen.h"
 #include "ui_plain.h"
 
 using namespace std;
 
-UICurses::UICurses (void) : UIText (new CursesConfigScreen ()) {
+UICurses::UICurses (void) {
   this->isCurses = false;
 }
 

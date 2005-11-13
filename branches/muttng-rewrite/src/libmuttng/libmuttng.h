@@ -9,9 +9,22 @@
  */
 class LibMuttng {
   public:
+    /**
+     * Constructor.
+     * @param dir Directory for debug files
+     * @param u Umask for debug files.
+     */
     LibMuttng (const char* dir = NULL, int u = -1);
+    /** destructor */
     ~LibMuttng (void);
+    /**
+     * Adjust debug level.
+     * @param level New debug level.
+     * @return Success.
+     */
     bool setDebugLevel (int level);
+    /** Cleanup after use of library. */
+    void cleanup (void);
   protected:
     Debug* debug;
 };

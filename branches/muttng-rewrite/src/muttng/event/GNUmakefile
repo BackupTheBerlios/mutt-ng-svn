@@ -1,5 +1,5 @@
-FILES=ui ui_curses ui_plain ui_text
-LIB=libui.a
+FILES=event
+LIB=libevent.a
 
 all: $(LIB)
 

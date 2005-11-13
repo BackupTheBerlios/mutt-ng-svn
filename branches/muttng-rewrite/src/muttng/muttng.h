@@ -3,6 +3,8 @@
 
 #include "libmuttng/debug.h"
 
+#include "event/event.h"
+
 /**
  * Base class for all classes of muttng to have application-wide
  * debugging.
@@ -15,6 +17,7 @@ class Muttng {
     void muttngInit (const char* dir, const char* prefix, int u);
   protected:
     Debug* debug;
+    Event* event;
 };
 
 #endif /* !MUTTNG_MUTTNG_H */

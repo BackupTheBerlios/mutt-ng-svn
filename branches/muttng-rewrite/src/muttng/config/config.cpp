@@ -68,11 +68,15 @@ bool Config::read (bool readGlobal, const char* file, buffer_t* error) {
   return (true);
 }
 
-bool Config::print (ConfigScreen* configScreen, bool changedOnly,
-                    bool annotated) {
-  int i = 0;
-  for (i = 0; i < Config::C_INVALID; i++)
-    if (!this->handlers[i]->print (configScreen, changedOnly, annotated))
-      return (false);
-  return (true);
+bool Config::getSingleOption (int* idx, buffer_t* name, buffer_t* type,
+                              buffer_t* init, buffer_t* value) {
+  if (name)
+    buffer_shrink (name, 0);
+  if (type)
+    buffer_shrink (type, 0);
+  if (init)
+    buffer_shrink (init, 0);
+  if (value)
+    buffer_shrink (value, 0);
+  return (this->handlers[C_SET]->getSingleOption (idx, name, type, init, value));
 }

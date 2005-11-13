@@ -98,8 +98,9 @@ bool Debug::start (void) {
   }
   buffer_free (&fname);
 
-  DEBUGPRINT(this,1,(_("debug started at level %d for '%s'"),
-                     this->level, NONULL (this->prefix.str)));
+  if (printIntro (__FILE__, __LINE__, NULL, 1))
+    printLine (_("debug started at level %d for %s"),
+               this->level, NONULL (this->prefix.str));
   return (true);
 }
 
@@ -116,8 +117,9 @@ bool Debug::printIntro (const char* file, int line, const char* function,
                         int level) {
   if (level > this->level || !this->fp)
     return (false);
-  fprintf (fp, "[%s:%s:%d:%s%s] ", NONULL (this->prefix.str),
-           NONULL (file), line, NONULL (function), function ? "()" : "");
+  fprintf (fp, "%d [%s:%s:%d%s%s%s] ", level,
+           NONULL (this->prefix.str), NONULL (file), line, 
+           function ? ":" : "", NONULL (function), function ? "()" : "");
   return (true);
 }
 

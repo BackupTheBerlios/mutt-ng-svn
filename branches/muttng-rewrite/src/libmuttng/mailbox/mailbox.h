@@ -9,17 +9,15 @@
  * @version $Id$
  * @brief Mailbox interface.
  */
-#include "libmuttng.h"
+#include "../libmuttng.h"
 
 /**
  * Base class for mailbox abstraction.
  */
 class Mailbox : public LibMuttng {
   public:
-    /** construct empty mailbox */
-    Mailbox ();
     /** construct mailbox form URL already */
-    Mailbox (const char* url);
+    Mailbox (const char* url = NULL);
     /** cleanup */
     ~Mailbox ();
     /**

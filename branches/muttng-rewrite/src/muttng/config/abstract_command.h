@@ -9,8 +9,8 @@
 #include "core/buffer.h"
 
 #include "muttng.h"
+#include "option.h"
 #include "ui/ui.h"
-#include "ui/config_screen.h"
 
 /**
  * Abstract superclass for configuration commands.
@@ -38,8 +38,8 @@ class AbstractCommand : public Muttng {
      *                  print default, too.
      * @return Success.
      */
-    virtual bool print (ConfigScreen* configScreen, bool changedOnly = false,
-                        bool annotated = false) = 0;
+    virtual bool getSingleOption (int* idx, buffer_t* name, buffer_t* type,
+                                  buffer_t* init, buffer_t* value) = 0;
     /**
      * Init for a command.
      * @param ui User interface for error reporting.

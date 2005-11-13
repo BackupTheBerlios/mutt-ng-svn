@@ -90,24 +90,20 @@ bool SetCommand::init (UI* ui) {
   return (true);
 }
 
-bool SetCommand::print (ConfigScreen* configScreen, bool changedOnly,
-                        bool annotated) {
-  int i = 0, eq = 0;
-  buffer_t tmp;
-
-  for (i = 0; Options[i].name; i++) {
-    buffer_init ((&tmp));
-    this->handlers[Options[i].type]->toString (&Options[i], &tmp);
-    eq = str_eq (tmp.str, Options[i].init);
-    if (changedOnly && eq) {
-      buffer_shrink (&tmp, 0);
-      continue;
-    }
-    configScreen->compile (Options[i].name, tmp.str,
-                           annotated ? types[Options[i].type] : NULL,
-                           (annotated && !eq) ? Options[i].init : NULL);
-    buffer_shrink (&tmp, 0);
-  }
-  buffer_free (&tmp);
+bool SetCommand::getSingleOption (int* idx, buffer_t* name, buffer_t* type,
+                                  buffer_t* init, buffer_t* value) {
+  option_t* opt = NULL;
+  if (*idx >= (int) (sizeof (Options) / sizeof (option_t) - 1))
+    return (false);
+  opt = &Options[*idx];
+  if (name)
+    buffer_add_str (name, opt->name, -1);
+  if (type)
+    buffer_add_str (type, types[opt->type], -1);
+  if (init)
+    buffer_add_str (init, opt->init, -1);
+  if (value)
+    handlers[opt->type]->toString (opt, value);
+  (*idx)++;
   return (true);
 }

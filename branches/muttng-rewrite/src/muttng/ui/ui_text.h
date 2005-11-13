@@ -8,7 +8,6 @@
 #define MUTTNG_UI_TEXT_H
 
 #include "ui.h"
-#include "config_screen.h"
 
 /**
  * Text-based user interface.
@@ -23,7 +22,7 @@ class UIText : public UI {
      * Constructor.
      * @param configScreen Specific UI's config screen.
      */
-    UIText (ConfigScreen* configScreen = NULL);
+    UIText (void);
     virtual ~UIText ();
     virtual bool start (void) = 0;
     virtual bool end (void) = 0;

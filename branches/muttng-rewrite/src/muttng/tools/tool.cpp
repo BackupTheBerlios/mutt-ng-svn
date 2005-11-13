@@ -14,6 +14,8 @@
 
 #include "libmuttng/version.h"
 #include "libmuttng/debug.h"
+/* XXX */
+#include "libmuttng/mailbox/mailbox.h"
 
 #include "ui/ui_plain.h"
 
@@ -92,8 +94,10 @@ Tool::Tool (int argc, char** argv) {
 }
 
 Tool::~Tool () {
-  if (this->libmuttng)
+  if (this->libmuttng) {
+    this->libmuttng->cleanup ();
     delete (this->libmuttng);
+  }
   delete (this->ui);
 }
 
@@ -118,15 +122,22 @@ bool Tool::start (void) {
   UIPlain ui;
 
   buffer_init ((&error));
+
   config = new Config ();
+
   if (!config->init (&ui))
     return (false);
   muttngInit (Homedir, getName (), Umask);
+
   this->libmuttng = new LibMuttng (Homedir, Umask);
   if (startDebug) {
     setDebugLevel (startDebug);
     this->libmuttng->setDebugLevel (startDebug);
   }
+
+  if (!event->init ())
+    return (false);
+
   if (!config->read (this->readGlobal, this->altConfig, &error))
     return (false);
   return (this->ui->start ());

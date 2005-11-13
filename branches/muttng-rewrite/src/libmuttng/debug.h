@@ -81,14 +81,14 @@ class Debug {
 };
 
 #ifdef __GNUG__
-#define DEBUGPRINT(D,L,X) do { \
-  if (D->printIntro (__FILE__,__LINE__,__FUNCTION__,L)) \
-    D->printLine X; \
+#define DEBUGPRINT(L,X) do { \
+  if (this->debug->printIntro (__FILE__,__LINE__,__FUNCTION__,L)) \
+    this->debug->printLine X; \
 } while (0)
 #else
-#define DEBUGPRINT(D,L,X) do { \
-  if (D->printIntro (__FILE__,__LINE__,NULL,L)) \
-    D->printLine X; \
+#define DEBUGPRINT(L,X) do { \
+  if (this->debug->printIntro (__FILE__,__LINE__,NULL,L)) \
+    this->debug->printLine X; \
 } while (0)
 #endif
 

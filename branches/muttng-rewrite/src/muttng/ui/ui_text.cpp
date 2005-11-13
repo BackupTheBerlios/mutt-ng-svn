@@ -10,8 +10,7 @@
 
 using namespace std;
 
-UIText::UIText (ConfigScreen* configScreen) : UI (configScreen) {}
-
+UIText::UIText (void) {}
 UIText::~UIText (void) {}
 
 void UIText::displayVersion (const char* name, const char* copyright,
