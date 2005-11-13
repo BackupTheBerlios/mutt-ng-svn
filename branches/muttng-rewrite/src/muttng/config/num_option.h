@@ -1,5 +1,5 @@
 /**
- * @file muttng/config/string_option.h
+ * @file muttng/config/num_option.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Num variable interface
  */

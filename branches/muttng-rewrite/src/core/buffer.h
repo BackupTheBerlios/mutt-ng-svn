@@ -79,7 +79,7 @@ void buffer_add_num (buffer_t* buffer, int num, int pad);
  * @param slen Length of string. If negative, it will be computed first.
  * @return Yes/No.
  */
-int buffer_equal1 (buffer_t* buffer, const char* s, int len);
+int buffer_equal1 (buffer_t* buffer, const char* s, int slen);
 
 /**
  * Compare buffer to buffer

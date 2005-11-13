@@ -18,10 +18,6 @@
  */
 class UIText : public UI {
   public:
-    /**
-     * Constructor.
-     * @param configScreen Specific UI's config screen.
-     */
     UIText (void);
     virtual ~UIText ();
     virtual bool start (void) = 0;

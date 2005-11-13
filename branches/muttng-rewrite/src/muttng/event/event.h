@@ -84,7 +84,7 @@
  *   The following won't work any longer:
  *
  *   <pre>
- * macro pager \cx ,r13on</pre>
+ * macro pager \\cx ,r13on</pre>
  *
  *    (which is the entry point for a toggle-rot13-macro) because we can't
  *    make a GUI believe it got the key sequence <code>,r13on</code>
@@ -93,7 +93,7 @@
  *    the new type of event handling, this would have to be written as:
  *
  *    <pre>
- * macro pager \cx '<call>,r13on<enter>'</pre>
+ * macro pager \\cx '&lt;call&gt;,r13on&lt;enter&gt;'</pre>
  *
  *    Another example not working any longer:
  *
@@ -101,32 +101,32 @@
  * macro index I "c!\n"</pre>
  *
  *    since the event handler doesn't know what to do with @c c and that
- *    @c \n means "finish input." Correct will be:
+ *    @c \\n means "finish input." Correct will be:
  *
  *    <pre>
- * macro index I '<change-folder>!<enter></pre>
+ * macro index I '<change-folder>!&lt;enter&gt;</pre>
  *
  *    The same counts for all magic keys which must be written as their
  *    function names.
  *
  *    When scanning such sequences, function names will be converted
  *    into events to trigger. After the function name, we'll look for
- *    more input until we find <code><enter></code>. The registered
+ *    more input until we find <code>&lt;enter&gt;</code>. The registered
  *    handler will get everything we think is input as input. The input
  *    in:
  *
  *    <pre>
- * macro index I '<change-folder>!<exit>'</pre>
+ * macro index I '<change-folder>!&lt;exit&gt;'</pre>
  *
- *    is just <code>!</code> since <code><exit></code> is a function. In
+ *    is just <code>!</code> since <code>&lt;exit&gt;</code> is a function. In
  *    this case, the input is unfinished which the handler will be told.
  *    On the contrary, the following is complete input and runs without
  *    interaction:
  *
  *    <pre>
- * macro index I '<change-folder>!<enter><exit></pre>
+ * macro index I '<change-folder>!&lt;enter&gt;&lt;exit&gt;</pre>
  *
- *    As a consequence, any input not terminated with <code><enter></code>
+ *    As a consequence, any input not terminated with <code>&lt;enter&gt;</code>
  *    will cause a break in processing (well, the UI may decide to
  *    ignore waiting for input which we cannot know due to separation.)
  *
@@ -236,7 +236,7 @@ class Event {
      * @param context New context.
      * @param data Any data passed to event handler.
      */
-    void setContext (Event::context, unsigned long data);
+    void setContext (Event::context context, unsigned long data);
 
     /**
      * Internally unset the current to an undefined context.

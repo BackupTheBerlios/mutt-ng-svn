@@ -56,6 +56,7 @@ class AbstractOption : public Muttng {
     };
     /**
      * Read option from string, to be overwritten by derived classes.
+     * @param command For which config command to read value.
      * @param src Configuration line with value.
      * @param dst Destination storage.
      * @return Whether operation succeeded.

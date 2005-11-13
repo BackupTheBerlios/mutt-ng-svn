@@ -45,10 +45,20 @@ class Config : public Muttng {
      * @return Success.
      */
     bool init (UI* ui);
-
+    /**
+     * Get a single option with current and default value.
+     * @b NOTE: All buffers passed in will be shrinked using
+     * @c buffer_shrink().
+     * @param idx Pointer to integer. This will be increased by 1 for
+     *            every call (for easy iteration.)
+     * @param name Where name of variable will be stored.
+     * @param type Where type of variable will be stored.
+     * @param init Where initial value of variable will be stored.
+     * @param value Where value of variable will be stored.
+     * @return Success, ie variable exists.
+     */
     bool getSingleOption (int* idx, buffer_t* name, buffer_t* type,
                           buffer_t* init, buffer_t* value);
-
   private:
     /** Table mapping Config::commands to AbstractCommand classes. */
     AbstractCommand* handlers[C_INVALID];

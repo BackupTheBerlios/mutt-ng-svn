@@ -13,10 +13,23 @@ class Muttng {
   public:
     Muttng (void);
     ~Muttng (void);
+    /**
+     * Set application-wide debug level.
+     * @param level Level.
+     * @return Success.
+     */
     bool setDebugLevel (int level);
+    /**
+     * Initialize debugging.
+     * @param dir Directory for Debug.
+     * @param prefix Prefix for Debug.
+     * @param u Umask for Debug.
+     */
     void muttngInit (const char* dir, const char* prefix, int u);
   protected:
+    /** application-wide debug object */
     Debug* debug;
+    /** application-wide event object */
     Event* event;
 };
 

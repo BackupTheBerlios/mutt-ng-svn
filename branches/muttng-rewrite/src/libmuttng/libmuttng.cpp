@@ -1,3 +1,9 @@
+/** @ingroup libmuttng */
+/**
+ * @file libmuttng/libmuttng.cpp
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
+ * @brief Library base class implementation
+ */
 #include <iostream>
 #include "libmuttng.h"
 

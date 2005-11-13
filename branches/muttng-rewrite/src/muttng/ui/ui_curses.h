@@ -20,10 +20,6 @@
  */
 class UICurses : public UIText {
   public:
-    /**
-     * Constructor.
-     * @param configScreen CursesConfigScreen.
-     */
     UICurses (void);
     ~UICurses (void);
     bool start (void);

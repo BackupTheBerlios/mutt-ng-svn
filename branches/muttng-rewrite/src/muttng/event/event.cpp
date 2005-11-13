@@ -19,7 +19,11 @@ bool Event::init (void) {
 void Event::bindInternal (Event::context context,
                           Event::event event,
                           bool input,
-                          eventhandler_t* handler) {
+                          Event::state (*handler) (Event::context context,
+                                                   Event::event event,
+                                                   const char* input,
+                                                   bool complete,
+                                                   unsigned long data)) {
   (void) context;
   (void) event;
   (void) input;

@@ -2,7 +2,7 @@
 /**
  * @file libmuttng/debug.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Abstract base class.
+ * @brief Debug interface
  */
 #ifndef LIBMUTTNG_ABSTRACT_CLASS_H
 #define LIBMUTTNG_ABSTRACT_CLASS_H
@@ -10,6 +10,8 @@
 #include <stdio.h>
 
 #include "core/buffer.h"
+
+#ifdef DEBUG
 
 /**
  * Library-wide debug interface. It's recommended to use the
@@ -81,15 +83,42 @@ class Debug {
 };
 
 #ifdef __GNUG__
+/**
+ * For GNU g++: debug print macro.
+ * Use with classes derived from Muttng or LibMuttng only.
+ * @param L Message's debug level.
+ * @param X @c printf()-style message in brackets,
+ *          eg <code>("foo %s", bar)</code>
+ */
 #define DEBUGPRINT(L,X) do { \
   if (this->debug->printIntro (__FILE__,__LINE__,__FUNCTION__,L)) \
     this->debug->printLine X; \
 } while (0)
 #else
+/**
+ * For non-GNU g++: debug print macro.
+ * Use with classes derived from Muttng or LibMuttng only.
+ * @param L Message's debug level.
+ * @param X @c printf()-style message in brackets,
+ *          eg <code>("foo %s", bar)</code>
+ */
 #define DEBUGPRINT(L,X) do { \
   if (this->debug->printIntro (__FILE__,__LINE__,NULL,L)) \
     this->debug->printLine X; \
 } while (0)
 #endif
+
+#else /* DEBUG */
+
+/** dummy */
+class Debug {};
+/**
+ * Dummy.
+ * @param L unused
+ * @param X unused
+ */
+#define DEBUGPRINT(L,X)
+
+#endif /* !DEBUG */
 
 #endif /* !LIBMUTTNG_ABSTRACT_CLASS_H */

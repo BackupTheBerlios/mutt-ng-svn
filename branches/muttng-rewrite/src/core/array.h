@@ -46,5 +46,3 @@
 #define array_bit_isset(v,n) (v[n/8] & (1 << (n % 8)))
 
 #endif /* !MUTTNG_CORE_ARRAY_H */
-
-/** @} */

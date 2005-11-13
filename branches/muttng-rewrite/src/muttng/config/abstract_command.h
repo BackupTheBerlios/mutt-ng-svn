@@ -29,14 +29,19 @@ class AbstractCommand : public Muttng {
      * @param data Arbitraty data.
      * @return Whether line is valid.
      */
-    virtual bool handle (buffer_t* line, buffer_t* error, unsigned long data) = 0;
+    virtual bool handle (buffer_t* line, buffer_t* error,
+                         unsigned long data) = 0;
     /**
-     * Print all known items for a command.
-     * @param configScreen Destination.
-     * @param changedOnly If @c true, print only changed ones.
-     * @param annotated If @c true and value differs from default,
-     *                  print default, too.
-     * @return Success.
+     * Get a single option with current and default value.
+     * @b NOTE: All buffers passed in will be shrinked using
+     * @c buffer_shrink().
+     * @param idx Pointer to integer. This will be increased by 1 for
+     *            every call (for easy iteration.)
+     * @param name Where name of variable will be stored.
+     * @param type Where type of variable will be stored.
+     * @param init Where initial value of variable will be stored.
+     * @param value Where value of variable will be stored.
+     * @return Success, ie variable exists.
      */
     virtual bool getSingleOption (int* idx, buffer_t* name, buffer_t* type,
                                   buffer_t* init, buffer_t* value) = 0;
