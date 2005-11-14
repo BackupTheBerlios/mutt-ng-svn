@@ -3,11 +3,10 @@
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Bool variable implementation
  */
-#include <alloca.h>
-
 #include "core/buffer.h"
 #include "core/mem.h"
 #include "core/str.h"
+#include "core/alloca.h"
 
 #include "bool_option.h"
 #include "global_variables.h"

@@ -34,5 +34,7 @@ CXXFLAGS+=-g
 LDFLAGS+=-g
 endif
 
-CFLAGS+=-DDEBUG
-CXXFLAGS+=-DDEBUG
+MYOS=$(strip $(shell uname -s | tr 'a-z' 'A-Z' | sed 's/_.*$$//'))
+
+CFLAGS+=-D$(MYOS)
+CXXFLAGS+=-D$(MYOS)
