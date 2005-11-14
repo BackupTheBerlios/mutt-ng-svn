@@ -288,7 +288,7 @@ Event::state Tool::handleOptionChange (Event::context context, Event::event even
 
   DEBUGPRINT2(me,2,("caught event: ctx=%s, ev=%s, opt='%s'",
                     Event::getContextName (context),
-                    Event::getEventName (event), opt->name));
+                    Event::getEventName (event), NONULL (opt->name)));
 
   if (str_eq2 (opt->name, "debug_level", 11)) {
     me->setDebugLevel (DebugLevel);

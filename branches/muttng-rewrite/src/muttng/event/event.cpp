@@ -7,6 +7,7 @@
  * @brief Event handling implementation
  */
 #include "core/mem.h"
+#include "core/str.h"
 
 #include "event.h"
 
@@ -31,6 +32,7 @@ Event::Event (Debug* debug) {
 
   this->debug = debug;
   this->active = true;
+  this->contextStack = NULL;
 
   for (i = 0; i < C_LAST; i++)
     for (j = 0; j < E_LAST; j++) {
@@ -77,7 +79,8 @@ bool Event::_emit (const char* file, int line, Event::context context, Event::ev
   Event::state state = S_OK;
 
   DEBUGPRINT(2,("emit: ctx=%s, ev=%s, in='%s', compl=%d, d=0x%x from %s:%d",
-                CtxStr[context], EvStr[event], input, complete, data, file, line));
+                CtxStr[context], EvStr[event], NONULL (input), complete,
+                data, NONULL (file), line));
 
   if (!active || !(list = this->handlers[context][event]))
     return (false);
@@ -106,7 +109,7 @@ bool Event::bindUser (Event::context context, const char* key,
 
 void Event::_setContext (const char* file, int line,
                         Event::context context, unsigned long data) {
-  DEBUGPRINT(2,("enter ctx=%s from %s:%d", CtxStr[context], file, line));
+  DEBUGPRINT(2,("enter ctx=%s from %s:%d", CtxStr[context], NONULL (file), line));
   emit (context, E_CONTEXT_ENTER, NULL, false, data);
   list_push_back (&contextStack, (LIST_ITEMTYPE) context);
 }
@@ -115,11 +118,11 @@ void Event::_unsetContext (const char* file, int line, unsigned long data) {
   Event::context context;
 
   context = (Event::context) list_pop_back (contextStack);
-  DEBUGPRINT(2,("leave ctx=%s from %s:%d", CtxStr[context], file, line));
+  DEBUGPRINT(2,("leave ctx=%s from %s:%d", CtxStr[context], NONULL (file), line));
   emit (context, E_CONTEXT_LEAVE, NULL, false, data);
   if (!list_empty (contextStack)) {
     context = (Event::context) contextStack->data[contextStack->length-1];
-    DEBUGPRINT(2,("re-enter ctx=%s from %s:%d", CtxStr[context], file, line));
+    DEBUGPRINT(2,("re-enter ctx=%s from %s:%d", CtxStr[context], NONULL (file), line));
     emit (context, E_CONTEXT_REENTER, NULL, false, data);
   }
 }
