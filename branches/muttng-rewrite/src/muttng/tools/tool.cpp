@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include <sys/utsname.h>
+#include <unistd.h>
 
 #include "core/version.h"
 #include "core/intl.h"

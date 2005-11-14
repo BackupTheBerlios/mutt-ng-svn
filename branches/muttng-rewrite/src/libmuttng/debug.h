@@ -11,8 +11,6 @@
 
 #include "core/buffer.h"
 
-#ifdef DEBUG
-
 #define MAX_DBG_FILES           20
 #define DEBUG_MIN               0
 #define DEBUG_MAX               5
@@ -116,18 +114,5 @@ class Debug {
 #endif
 
 #define DEBUGPRINT(L,X) DEBUGPRINT2(this,L,X)
-
-#else /* DEBUG */
-
-/** dummy */
-class Debug {};
-/**
- * Dummy.
- * @param L unused
- * @param X unused
- */
-#define DEBUGPRINT(L,X)
-
-#endif /* !DEBUG */
 
 #endif /* !LIBMUTTNG_ABSTRACT_CLASS_H */

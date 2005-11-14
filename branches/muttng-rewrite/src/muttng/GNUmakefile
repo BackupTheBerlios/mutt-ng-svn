@@ -1,10 +1,11 @@
-SUBDIRS=ui config event tools
+SUBDIRS=event ui config tools
 
 include $(CURDIR)/../../GNUmakefile.config.default
 
 all: muttng.o subdirs
 
 clean: subdirclean
+	rm -rf muttng.o
 
 depend: subdirdepend
 

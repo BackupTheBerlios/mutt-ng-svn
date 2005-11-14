@@ -16,12 +16,14 @@ typedef struct {
   bool input;
 } handle_t;
 
-static const char* CtxStr[Event::C_LAST] = {
-  "C_GENERIC",  "C_INDEX", "C_PAGER", "C_PAGER"
+static const char* CtxStr[Event::C_LAST+1] = {
+#include "contextlist.cpp"
+  NULL
 };
 
-static const char* EvStr[Event::E_LAST] = {
-  "E_CONTEXT_ENTER", "E_CONTEXT_LEAVE", "E_OPTION_CHANGE"
+static const char* EvStr[Event::E_LAST+1] = {
+#include "eventlist.cpp"
+  NULL
 };
 
 Event::Event (Debug* debug) {
