@@ -174,10 +174,20 @@ class Event {
       C_LAST
     };
 
+    /** Valid events */
     enum event {
+      /** enter completly new context */
       E_CONTEXT_ENTER,
+      /** eventuall leave context */
       E_CONTEXT_LEAVE,
+      /**
+       * re-enter a context after eventually leaving another.
+       * This is emitted automatically.
+       */
+      E_CONTEXT_REENTER,
+      /** a config option has changed */
       E_OPTION_CHANGE,
+      /** For static array sizes. */
       E_LAST
     };
 

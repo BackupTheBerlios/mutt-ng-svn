@@ -110,9 +110,16 @@ void Event::_setContext (const char* file, int line,
 }
 
 void Event::_unsetContext (const char* file, int line, unsigned long data) {
-  Event::context context = (Event::context) list_pop_back (contextStack);
-  DEBUGPRINT(2,("leave ctx=%d from %s:%d", context, file, line));
+  Event::context context;
+
+  context = (Event::context) list_pop_back (contextStack);
+  DEBUGPRINT(2,("leave ctx=%s from %s:%d", CtxStr[context], file, line));
   emit (context, E_CONTEXT_LEAVE, NULL, false, data);
+  if (!list_empty (contextStack)) {
+    context = (Event::context) contextStack->data[contextStack->length-1];
+    DEBUGPRINT(2,("re-enter ctx=%s from %s:%d", CtxStr[context], file, line));
+    emit (context, E_CONTEXT_REENTER, NULL, false, data);
+  }
 }
 
 const char* Event::getKey (Event::event event) {
