@@ -15,9 +15,9 @@ extern "C" {
 
 /**
  * Buffer size for converting int to string via conv_itoa().
- * This is just enough for [INT_MIN,INT_MAX].
+ * As we may convert to binary: sign + 32 bits + \0 = 34.
  */
-#define NUMBUF  12
+#define NUMBUF  34
 
 /**
  * Convert int to string.
@@ -29,9 +29,12 @@ extern "C" {
  * @param num Number to convert.
  * @param pad To how many digits to 0-pad the number. If negative,
  *            the number will be converted as-is.
+ * @param base Number base (2, 8, 10, 16).
  * @return Offset into buf.
  */
-char* conv_itoa (char* buf, int num, int pad);
+char* conv_itoa2 (char* buf, int num, int pad, int base);
+
+#define conv_itoa(B,N,P)        conv_itoa2(B,N,P,10)
 
 #ifdef __cplusplus
 }

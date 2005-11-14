@@ -11,6 +11,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <stdarg.h>
+#include <time.h>
 
 #include "core/io.h"
 #include "core/buffer.h"
@@ -36,6 +37,7 @@ Debug::Debug (const char* dir, const char* prefix, int u) {
 }
 
 Debug::~Debug (void) {
+  end ();
   buffer_free (&this->dir);
   buffer_free (&this->prefix);
   this->fp = NULL;
@@ -44,19 +46,20 @@ Debug::~Debug (void) {
 bool Debug::setLevel (int level) {
   bool rc = true;
 
-  if (level >= 1 && level <= 5) {
-    if (this->level < 1 || this->level > 5) {
+  if (level >= DEBUG_MIN+1 && level <= DEBUG_MAX) {
+    if (this->level < DEBUG_MIN+1 || this->level > DEBUG_MAX) {
       this->level = level;
       rc = start ();
     } else
       this->level = level;
     return (rc);
   }
-  if (level <= 0 || level > 5) {
+  if (level <= DEBUG_MIN || level > DEBUG_MAX) {
     rc = end ();
     this->level = 0;
     return (rc);
   }
+  this->level = level;
   return (true);
 }
 
@@ -64,8 +67,9 @@ bool Debug::start (void) {
   buffer_t fname;
   size_t len = 0, i = 0;
   struct stat st;
+  time_t now = 0;
 
-  if (this->level <= 0 || this->level > 5)
+  if (this->level <= DEBUG_MIN || this->level > DEBUG_MAX)
     return (false);
 
   buffer_init ((&fname));
@@ -78,36 +82,47 @@ bool Debug::start (void) {
   buffer_add_ch (&fname, '.');
   len = fname.len;
 
-  while (i++ < 5) {
+  while (i++ < MAX_DBG_FILES) {
     buffer_shrink (&fname, len);
     buffer_add_num (&fname, i, -1);
+    buffer_add_str (&fname, ".log", 4);
     if (stat (fname.str, &st) == -1)
       break;
   }
 
-  if (i == 5+1) {
+  if (i == MAX_DBG_FILES+1) {
     buffer_free (&fname);
     return (false);
   }
 
-  buffer_add_str (&fname, ".log", 4);
-
-  if (!(this->fp = io_fopen (fname.str, "w", this->u < 0 ? 0077 : this->u))) {
+  if (!(this->fp = io_fopen (fname.str, "w", this->u))) {
     buffer_free (&fname);
     return (false);
   }
   buffer_free (&fname);
 
+  now = time (NULL);
+
   if (printIntro (__FILE__, __LINE__, NULL, 1))
-    printLine (_("debug started at level %d for %s"),
-               this->level, NONULL (this->prefix.str));
+    printLine (_("debug %sstarted at level %d for %s at %s"),
+               i == 1 ? "" : "re-", this->level, NONULL (this->prefix.str),
+               asctime (localtime (&now)));
   return (true);
 }
 
 bool Debug::end (void) {
   bool rc = true;
+  time_t now = 0;
+
   if (!this->fp)
     return (true);
+
+  now = time (NULL);
+  if (printIntro (__FILE__, __LINE__, NULL, 1))
+    printLine (_("debug finished at level %d for %s at %s"),
+               this->level, NONULL (this->prefix.str),
+               asctime (localtime (&now)));
+
   rc = fclose (this->fp) >= 0;
   this->fp = NULL;
   return (rc);

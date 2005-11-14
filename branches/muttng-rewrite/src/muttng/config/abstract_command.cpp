@@ -5,5 +5,5 @@
  */
 #include "abstract_command.h"
 
-AbstractCommand::AbstractCommand (void) {}
+AbstractCommand::AbstractCommand (void) : Muttng () {}
 AbstractCommand::~AbstractCommand (void) {}

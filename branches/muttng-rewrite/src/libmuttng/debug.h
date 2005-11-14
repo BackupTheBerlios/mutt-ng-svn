@@ -13,6 +13,10 @@
 
 #ifdef DEBUG
 
+#define MAX_DBG_FILES           20
+#define DEBUG_MIN               0
+#define DEBUG_MAX               5
+
 /**
  * Library-wide debug interface. It's recommended to use the
  * DEBUGPRINT() macro only instead of Debug::print() and
@@ -86,27 +90,32 @@ class Debug {
 /**
  * For GNU g++: debug print macro.
  * Use with classes derived from Muttng or LibMuttng only.
+ * @param H Who wants debugging.
  * @param L Message's debug level.
  * @param X @c printf()-style message in brackets,
  *          eg <code>("foo %s", bar)</code>
  */
-#define DEBUGPRINT(L,X) do { \
-  if (this->debug->printIntro (__FILE__,__LINE__,__FUNCTION__,L)) \
-    this->debug->printLine X; \
+#define DEBUGPRINT2(H,L,X) do { \
+  if (H->debug->printIntro (__FILE__,__LINE__,__FUNCTION__,L)) \
+    H->debug->printLine X; \
 } while (0)
+
 #else
 /**
  * For non-GNU g++: debug print macro.
  * Use with classes derived from Muttng or LibMuttng only.
+ * @param H Who wants debugging.
  * @param L Message's debug level.
  * @param X @c printf()-style message in brackets,
  *          eg <code>("foo %s", bar)</code>
  */
-#define DEBUGPRINT(L,X) do { \
-  if (this->debug->printIntro (__FILE__,__LINE__,NULL,L)) \
-    this->debug->printLine X; \
+#define DEBUGPRINT2(H,L,X) do { \
+  if (H->debug->printIntro (__FILE__,__LINE__,NULL,L)) \
+    H->debug->printLine X; \
 } while (0)
 #endif
+
+#define DEBUGPRINT(L,X) DEBUGPRINT2(this,L,X)
 
 #else /* DEBUG */
 

@@ -39,6 +39,7 @@ class Config : public Muttng {
       /** last */
       C_INVALID
     };
+    static void preinit (void);
     /**
      * Initialize config prior to reading config files.
      * @param ui User interface for error reporting.

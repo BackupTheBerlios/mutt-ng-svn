@@ -64,6 +64,7 @@ char *str_substrdup (const char*, const char*);
 void str_replace (char**, const char*);
 void str_adjust (char**);
 int str_eq (const char*, const char*);
+int str_eq2 (const char* s1, const char* s2, size_t s2len);
 const char *str_isstr (const char*, const char*);
 char* str_skip_initws (char*);
 void str_skip_trailws (char*);

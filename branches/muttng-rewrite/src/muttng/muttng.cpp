@@ -2,23 +2,30 @@
 
 #include "muttng.h"
 
+static Debug* debugObj = NULL;
+static Event* eventObj = NULL;
+
 Muttng::Muttng (void) {
-  Muttng::debug = NULL;
-  Muttng::event = NULL;
+  Muttng::debug = debugObj;
+  Muttng::event = eventObj;
 }
 
-Muttng::~Muttng (void) {
-  if (Muttng::debug)
-    delete (Muttng::debug);
-  if (Muttng::event)
-    delete (Muttng::event);
-}
+Muttng::~Muttng (void) {}
 
 void Muttng::muttngInit (const char* dir, const char* prefix, int u) {
-  Muttng::debug = new Debug (dir, prefix, u);
-  Muttng::event = new Event (Muttng::debug);
+  debugObj = new Debug (dir, prefix, u);
+  eventObj = new Event (debugObj);
+  Muttng::debug = debugObj;
+  Muttng::event = eventObj;
+}
+
+void Muttng::muttngCleanup (void) {
+  if (eventObj)
+    delete (eventObj);
+  if (debugObj)
+    delete (debugObj);
 }
 
 bool Muttng::setDebugLevel (int level) {
-  return (Muttng::debug->setLevel (level));
+  return (debug->setLevel (level));
 }

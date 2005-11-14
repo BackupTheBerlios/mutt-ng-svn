@@ -26,6 +26,7 @@ class Muttng {
      * @param u Umask for Debug.
      */
     void muttngInit (const char* dir, const char* prefix, int u);
+    void muttngCleanup (void);
   protected:
     /** application-wide debug object */
     Debug* debug;

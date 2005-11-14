@@ -10,19 +10,31 @@
 
 #include "conv.h"
 
-char* conv_itoa (char* buf, int num, int pad) {
+static const char* Alph = "0123456789abcdef";
+
+char* conv_itoa2 (char* buf, int num, int pad, int base) {
   int i = NUMBUF-2, p = pad, sign = num < 0;
 
   buf[NUMBUF-1] = '\0';
-  if (num == 0) {
+  switch (base) {
+    case 2:
+    case 8:
+    case 10:
+    case 16:
+      break;
+    default:
+      base = 10;
+      break;
+  }
+  if (num == 0 && pad < 0) {
     buf[i--] = '0';
     return (buf+i+1);
   }
   if (pad < 0)
     pad = i;
   while ((num != 0 || p > 0) && i >= sign && pad > 0) {
-    buf[i--] = '0' + abs (num % 10);
-    num /= 10;
+    buf[i--] = Alph[abs (num % base)];
+    num /= base;
     pad--;
   }
   if (sign)

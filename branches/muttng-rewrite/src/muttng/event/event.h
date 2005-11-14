@@ -19,7 +19,7 @@
  *        to a list of callback functions.
  *     -# The second one maps a key or a sequence to types of events we
  *        know. User interfaces will be responsible to get key sequences
- *        and queue them in.
+ *        and emit events.
  *
  * @section muttng_event_ctx Contexts
  *
@@ -63,7 +63,7 @@
  *   everything it wants with it. The other way will work too: UIs can
  *   have methods to obtain keys we don't know details about (example: a
  *   GUI menu which calls a previously setup callback function) and
- *   request to queue them. We'll perform event lookup and emit them.
+ *   request to emit them. We'll perform event lookup and emit them.
  *
  * @section muttng_event_event Events
  *
@@ -144,6 +144,7 @@
 #define MUTTNG_EVENT_H
 
 #include "core/buffer.h"
+#include "core/list.h"
 
 #include "libmuttng/debug.h"
 
@@ -161,8 +162,7 @@ class Event {
 
     /** Valid contexts, ie menus or screens */
     enum context {
-      /**
-       * Generic. These will be always tried first. */
+      /** Generic. These will be always tried first. */
       C_GENERIC = 0,
       /** Index screen. */
       C_INDEX,
@@ -174,13 +174,10 @@ class Event {
       C_LAST
     };
 
-    /** Valid events, ie the former @c OP_* and more */
     enum event {
-      /** Triggered when entering any menu */
-      E_CONTEXT_ENTER = 0,
-      /** Triggered when leaving any menu */
+      E_CONTEXT_ENTER,
       E_CONTEXT_LEAVE,
-      /** For static array sizes. */
+      E_OPTION_CHANGE,
       E_LAST
     };
 
@@ -202,17 +199,26 @@ class Event {
      * @param context Context to bind to.
      * @param event Specific event within context to bind to.
      * @param input Whether handler expects user input.
+     * @param self Pointer to this. All callbacks must be static so
+     *             we need a pointer to the object for dynamic member
+     *             access.
      * @param handler Handler callback function.
      * @sa eventhandler_t.
      */
     void bindInternal (Event::context context,
                        Event::event event,
-                       bool input,
+                       bool input, void* self,
                        Event::state (*handler) (Event::context context,
                                                 Event::event event,
                                                 const char* input,
                                                 bool complete,
+                                                void* self,
                                                 unsigned long data));
+
+    bool _emit (const char* file, int line, Event::context context,
+                Event::event event, const char* input, bool complete,
+                unsigned long data);
+#define emit(C,E,I,F,D) _emit(__FILE__,__LINE__,C,E,I,F,D)
 
     /**
      * Bind a "user" function to an event.
@@ -236,27 +242,56 @@ class Event {
      * @param context New context.
      * @param data Any data passed to event handler.
      */
-    void setContext (Event::context context, unsigned long data);
+    void _setContext (const char* file, int line, Event::context context, unsigned long data);
+#define setContext(C,D) _setContext(__FILE__,__LINE__,C,D)
 
     /**
      * Internally unset the current to an undefined context.
      * This will trigger the Event::E_CONTEXT_LEAVE event.
      * @param data Abitrary data passed to handler.
      */
-    void unsetContext (unsigned long data);
+    void _unsetContext (const char* file, int line, unsigned long data);
+#define unsetContext(D) _unsetContext(__FILE__,__LINE__,D)
 
     /**
-     * Enqueue an event.
-     * @param event Event to put into queue.
-     * @param data Any data passed to the event handler.
+     * Get event for a given key of current context.
+     * This is to be used for a GUI building up its menu shortcuts.
+     * A GUI likely wants to disable event handler to not trigger enter
+     * or leave events as it needs to switch contexts for
+     * initialization.
+     * @param event Event
+     * @return Key.
+     * @sa disable(), enable().
      */
-    void enqueue (Event::event event, unsigned long data);
+    const char* getKey (Event::event event);
+
+    /**
+     * Get event for a given key of current context.
+     * This is to be used for curses' @c getch() to get event to
+     * enqeue().
+     * @param event Event
+     * @return Key.
+     */
+    Event::event getEvent (const char* key);
+
+    /** Temporarily disable event handler. */
+    void disable (void);
+
+    /** Enable again after disabling */
+    void enable (void);
+
+    static const char* getContextName (Event::context context);
+    static const char* getEventName (Event::event event);
 
   private:
     /** Context stack. */
-    Event::context currentContext;
+    list_t* contextStack;
     /** debug */
     Debug* debug;
+    /** active? */
+    bool active;
+    list_t* handlers[C_LAST][E_LAST];
+    char* keys[C_LAST][E_LAST];
 };
 
 /**
@@ -274,13 +309,16 @@ class Event {
  *                 may want to have unbuffered input, i.e. by intention
  *                 do something like <code>push s=some.folder</code> to
  *                 let muttng prompt and wait.
- * @param data Arbitrary data passed through Event::enqueue().
+ * @param self Pointer to this. All callbacks must be static so
+ *             we need a pointer to the object for dynamic member access.
+ * @param data Arbitrary data passed through.
  * @return State after execution.
  */
 typedef Event::state eventhandler_t (Event::context context,
                                      Event::event event,
                                      const char* input,
                                      bool complete,
+                                     void* self,
                                      unsigned long data);
 
 #endif /* !MUTTNG_EVENT_H */

@@ -11,7 +11,7 @@
 #include "abstract_option.h"
 
 /**
- * Class handling all string options.
+ * Class handling all numeric options.
  */
 class NumOption : public AbstractOption {
   public:
@@ -20,6 +20,15 @@ class NumOption : public AbstractOption {
     AbstractOption::state fromString (AbstractOption::commands command,
                                       buffer_t* src, option_t* dst);
     void toString (option_t* src, buffer_t* dst);
+  private:
+    /**
+     * See if value would be valid for an option.
+     * @param src Source input.
+     * @param dst Option.
+     * @param num Pointer to number storage.
+     * @return Whether number is valid.
+     */
+    bool checkVal (const char* src, option_t* dst, int* num);
 };
 
 #endif /* !MUTTNG_CONFIG_NUM_OPTION_H */

@@ -175,11 +175,15 @@ const char *str_isstr (const char *haystack, const char *needle)
 }
 
 int str_eq (const char* s1, const char* s2) {
-  size_t l = str_len (s1);
+  return (str_eq2 (s1, s2, str_len (s2)));
+}
 
-  if (l != str_len (s2))
+int str_eq2 (const char* s1, const char* s2, size_t s2len) {
+  size_t s1len = str_len (s1);
+
+  if (s1len != s2len)
     return (0);
-  return (str_ncmp (s1, s2, l) == 0);
+  return (str_ncmp (s1, s2, s1len) == 0);
 }
 
 char* str_skip_initws (char* s) {

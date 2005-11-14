@@ -69,8 +69,19 @@ void buffer_add_ch (buffer_t* buffer, unsigned char ch);
  * @param num Number to append.
  * @param pad Number of digits for destination. If too few, buffer
  *            will be filled with 0 and truncated otherwise.
+ * @param base Number base.
  */
-void buffer_add_num (buffer_t* buffer, int num, int pad);
+void buffer_add_num2 (buffer_t* buffer, int num, int pad, int base);
+
+/**
+ * Append number to buffer.
+ * Memory for buffer and contents will be @c malloc'd as needed.
+ * @param buffer Pointer to buffer for storage.
+ * @param num Number to append.
+ * @param pad Number of digits for destination. If too few, buffer
+ *            will be filled with 0 and truncated otherwise.
+ */
+#define buffer_add_num(B,N,P)   buffer_add_num2(B,N,P,10)
 
 /**
  * Compare buffer to string.

@@ -37,6 +37,8 @@ WHERE int* BoolOptions INITVAL(NULL);
 
 /** $assumed_charset */
 WHERE char* AssumedCharset INITVAL(NULL);
+/** $debug_level */
+WHERE int DebugLevel INITVAL(0);
 /** $umask */
 WHERE int Umask INITVAL(0);
 

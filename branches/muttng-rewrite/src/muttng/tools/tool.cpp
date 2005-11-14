@@ -11,11 +11,10 @@
 #include "core/version.h"
 #include "core/intl.h"
 #include "core/buffer.h"
+#include "core/str.h"
 
 #include "libmuttng/version.h"
 #include "libmuttng/debug.h"
-/* XXX */
-#include "libmuttng/mailbox/mailbox.h"
 
 #include "ui/ui_plain.h"
 
@@ -89,7 +88,6 @@ Tool::Tool (int argc, char** argv) {
   this->argv = argv;
   this->readGlobal = true;
   this->altConfig = NULL;
-  this->startDebug = 0;
   this->libmuttng = NULL;
 }
 
@@ -98,18 +96,25 @@ Tool::~Tool () {
     this->libmuttng->cleanup ();
     delete (this->libmuttng);
   }
+  muttngCleanup ();
   delete (this->ui);
 }
 
 int Tool::genericArg (unsigned char c, const char* arg) {
-  int rc = 1;
+  int rc = 1, num = 0;
   switch (c) {
     case 'v': displayVersion (); rc = 0; break;
     case 'V': displayWarranty (); rc = 0; break;
     case 'h': displayUsage (); rc = 0; break;
     case 'n': readGlobal = false; break;
     case 'F': altConfig = arg; break;
-    case 'd': startDebug = atoi (optarg); break;
+    case 'd':
+      num = atoi (optarg);
+      if (num >= DEBUG_MIN && num <= DEBUG_MAX) {
+        DebugLevel = num;
+        break;
+      }
+      /* fall through for invalid values */
     case '?':
     default:
       return (-1);
@@ -123,23 +128,31 @@ bool Tool::start (void) {
 
   buffer_init ((&error));
 
+  /* setup homedir and umask first... */
+  Config::preinit ();
+  /* since we need it for debugging and... */
+  muttngInit (Homedir, getName (), Umask);
+  /* this is derived from Muttng and needs debug, too */
   config = new Config ();
 
   if (!config->init (&ui))
     return (false);
-  muttngInit (Homedir, getName (), Umask);
 
   this->libmuttng = new LibMuttng (Homedir, Umask);
-  if (startDebug) {
-    setDebugLevel (startDebug);
-    this->libmuttng->setDebugLevel (startDebug);
-  }
+  setDebugLevel (DebugLevel);
+  this->libmuttng->setDebugLevel (DebugLevel);
 
   if (!event->init ())
     return (false);
 
+  /* we don't want to get E_OPTION_CHANGE during config read */
+  event->disable ();
   if (!config->read (this->readGlobal, this->altConfig, &error))
     return (false);
+  event->enable ();
+
+  setupEventHandlers ();
+
   return (this->ui->start ());
 }
 
@@ -253,4 +266,32 @@ void Tool::displayUsage (void) {
   buffer_add_str (&usage, GenericOptions, -1);
   ui->displayMessage (usage.str);
   buffer_free (&usage);
+}
+
+void Tool::setupEventHandlers (void) {
+  event->bindInternal (Event::C_GENERIC, Event::E_OPTION_CHANGE,
+                       false, (void*) this,
+                       handleOptionChange);
+}
+
+Event::state Tool::handleOptionChange (Event::context context, Event::event event,
+                                              const char* input, bool complete,
+                                              void* self, unsigned long data) {
+  (void) context;
+  (void) event;
+  (void) input;
+  (void) complete;
+
+  Tool* me = (Tool*) self;
+  option_t* opt = (option_t*) data;
+
+  DEBUGPRINT2(me,2,("caught event: ctx=%s, ev=%s, opt='%s'",
+                    Event::getContextName (context),
+                    Event::getEventName (event), opt->name));
+
+  if (str_eq2 (opt->name, "debug_level", 11)) {
+    me->setDebugLevel (DebugLevel);
+    me->libmuttng->setDebugLevel (DebugLevel);
+  }
+  return (Event::S_OK);
 }

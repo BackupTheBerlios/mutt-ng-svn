@@ -42,14 +42,9 @@ static command_t Commands[] = {
 Config::Config (void) { (void) Commands; }
 Config::~Config (void) {}
 
-bool Config::init (UI* ui) {
+void Config::preinit (void) {
   char* p = NULL;
 
-  /* setup handlers and init */
-  this->handlers[C_SET] = new SetCommand ();
-  for (int i = 0; i < Config::C_INVALID; i++)
-    if (!this->handlers[i]->init (ui))
-      return (false);
   /* setup misc. */
   if ((p = getenv ("HOME")) == NULL) {
     struct passwd* pw;
@@ -58,6 +53,14 @@ bool Config::init (UI* ui) {
   }
   if (p)
     Homedir = str_dup (p);
+}
+
+bool Config::init (UI* ui) {
+  /* setup handlers and init */
+  this->handlers[C_SET] = new SetCommand ();
+  for (int i = 0; i < Config::C_INVALID; i++)
+    if (!this->handlers[i]->init (ui))
+      return (false);
   return (true);
 }
 

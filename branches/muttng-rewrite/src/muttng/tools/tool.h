@@ -61,32 +61,6 @@ class Tool : public Muttng {
      * @param dst Destination buffer for string.
      */
     virtual void getUsage (buffer_t* dst) = 0;
-  private:
-    /**
-     * Compose a string with name and version info.
-     * @param dst Desination buffer for string.
-     */
-    void doName (buffer_t* dst);
-    /**
-     * Compose a string with legal info.
-     * @param dst Desination buffer for string.
-     */
-    void doCopyright (buffer_t* dst);
-    /**
-     * Compose a string with info how to contact us.
-     * @param dst Desination buffer for string.
-     */
-    void doContact (buffer_t* dst);
-    /**
-     * Compose a string with system and compile-time info.
-     * @param dst Desination buffer for string.
-     */
-    void doSystem (buffer_t* dst);
-    /**
-     * Compose a string with license and warranty info.
-     * @param dst Desination buffer for string.
-     */
-    void doLicense (buffer_t* dst);
   protected:
     /**
      * For use by inheriting classes: see if some argument is a generic
@@ -121,10 +95,40 @@ class Tool : public Muttng {
     const char* altConfig;
     /** global configuration */
     Config* config;
-    /** whether we want to start with debugging turned on */
-    int startDebug;
     /** lib object */
     LibMuttng* libmuttng;
+  private:
+    /**
+     * Compose a string with name and version info.
+     * @param dst Desination buffer for string.
+     */
+    void doName (buffer_t* dst);
+    /**
+     * Compose a string with legal info.
+     * @param dst Desination buffer for string.
+     */
+    void doCopyright (buffer_t* dst);
+    /**
+     * Compose a string with info how to contact us.
+     * @param dst Desination buffer for string.
+     */
+    void doContact (buffer_t* dst);
+    /**
+     * Compose a string with system and compile-time info.
+     * @param dst Desination buffer for string.
+     */
+    void doSystem (buffer_t* dst);
+    /**
+     * Compose a string with license and warranty info.
+     * @param dst Desination buffer for string.
+     */
+    void doLicense (buffer_t* dst);
+    /** setup all event handlers */
+    void setupEventHandlers (void);
+    /** event handler catching E_OPTION_CHANGED */
+    static Event::state handleOptionChange (Event::context context, Event::event event,
+                                            const char* input, bool complete,
+                                            void* self, unsigned long data);
 };
 
 #endif /* !MUTTNG_TOOL_H */

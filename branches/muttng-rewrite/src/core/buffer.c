@@ -39,11 +39,11 @@ void buffer_add_ch (buffer_t* buffer, unsigned char ch) {
   buffer_add_str (buffer, buf, 1);
 }
 
-void buffer_add_num (buffer_t* buffer, int num, int pad) {
+void buffer_add_num2 (buffer_t* buffer, int num, int pad, int base) {
   char buf[NUMBUF];
   if (!buffer)
     return;
-  buffer_add_str (buffer, conv_itoa (buf, num, pad), -1);
+  buffer_add_str (buffer, conv_itoa2 (buf, num, pad, base), -1);
 }
 
 int buffer_equal1 (buffer_t* buffer, const char* s, int len) {
