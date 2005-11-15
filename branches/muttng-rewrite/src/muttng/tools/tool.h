@@ -6,7 +6,7 @@
 /**
  * @file muttng/tools/tool.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Common tool superclass interface
+ * @brief Interface: Common tool base class
  */
 #ifndef MUTTNG_TOOL_H
 #define MUTTNG_TOOL_H

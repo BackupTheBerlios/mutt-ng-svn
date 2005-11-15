@@ -10,7 +10,7 @@
 /**
  * @file core/version.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Muttng core version number
+ * @brief Interface: Muttng core version
  */
 #ifndef MUTTNG_CORE_VERSION_H
 #define MUTTNG_CORE_VERSION_H

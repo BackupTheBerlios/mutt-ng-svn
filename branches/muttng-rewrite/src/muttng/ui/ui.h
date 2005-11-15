@@ -8,7 +8,7 @@
 /**
  * @file muttng/ui/ui.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief UI superclass interface.
+ * @brief Interface: UI base class
  */
 #ifndef MUTTNG_UI_H
 #define MUTTNG_UI_H

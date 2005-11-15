@@ -1,9 +1,7 @@
 /** @ingroup libmuttng_mailbox */
 /**
- * @file nntp_mailbox.cpp
- * @author Someone
- * @version $Id$
- * @brief NNTP Mailbox implementation.
+ * @file libmuttng/mailbox/nntp_mailbox.cpp
+ * @brief Implementation: NNTP Mailbox
  */
 #include <stdlib.h>
 

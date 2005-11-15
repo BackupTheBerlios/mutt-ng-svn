@@ -1,3 +1,12 @@
+/**
+ * @addtogroup muttng Muttng
+ * @{
+ */
+/**
+ * @file muttng/muttng.h
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
+ * @brief Interface: Application base class
+ */
 #ifndef MUTTNG_MUTTNG_H
 #define MUTTNG_MUTTNG_H
 
@@ -26,6 +35,10 @@ class Muttng {
      * @param u Umask for Debug.
      */
     void muttngInit (const char* dir, const char* prefix, int u);
+    /**
+     * Cleanup after run.
+     * E.g. shutdown event handler, shutdown debgging, etc.
+     */
     void muttngCleanup (void);
   protected:
     /** application-wide debug object */
@@ -35,3 +48,5 @@ class Muttng {
 };
 
 #endif /* !MUTTNG_MUTTNG_H */
+
+/** @} */

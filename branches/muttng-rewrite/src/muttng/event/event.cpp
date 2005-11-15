@@ -1,10 +1,8 @@
-/**
- * @ingroup muttng_event
- */
+/** @ingroup muttng_event */
 /**
  * @file muttng/event/event.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Event handling implementation
+ * @brief Implementation: Event handling
  */
 #include "core/mem.h"
 #include "core/str.h"

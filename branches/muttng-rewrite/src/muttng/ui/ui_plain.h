@@ -6,7 +6,7 @@
 /**
  * @file muttng/ui/ui_plain.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Plain UI interface
+ * @brief Interface: CLI user interface
  */
 #ifndef MUTTNG_UI_PLAIN_H
 #define MUTTNG_UI_PLAIN_H

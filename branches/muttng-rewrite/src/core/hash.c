@@ -2,7 +2,7 @@
 /**
  * @file core/hash.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Generic Hash Table implementation
+ * @brief Implementation: Generic Hash Table
  */
 #include <stdlib.h>
 #include <string.h>
@@ -190,5 +190,3 @@ void hash_map (void* t, void (*map) (const void*, HASH_ITEMTYPE, unsigned long),
         map (cur->key, cur->data, moredata);
 #undef cur
 }
-
-/** @} */

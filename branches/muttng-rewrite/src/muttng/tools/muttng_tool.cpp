@@ -2,7 +2,7 @@
 /**
  * @file muttng/tools/muttng_tool.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief muttng(1) implementation
+ * @brief Implementation: muttng(1)
  */
 #include <unistd.h>
 

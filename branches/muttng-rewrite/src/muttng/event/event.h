@@ -138,7 +138,7 @@
 /**
  * @file muttng/event/event.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Event handling interface
+ * @brief Interface: Event handling
  */
 #ifndef MUTTNG_EVENT_H
 #define MUTTNG_EVENT_H
@@ -208,9 +208,29 @@ class Event {
                                                 void* self,
                                                 unsigned long data));
 
+    /**
+     * Emit an event and deliver to all registered handlers.
+     * @param file Source file calling us (for debugging).
+     * @param line Line in source file (for debugging).
+     * @param context Context of event
+     * @param event Event to emit.
+     * @param input User input for handler.
+     * @param complete Whether input for handler is complete or
+     *                 prompting is to be done by handler.
+     * @param data Arbitrary data passed through.
+     */
     bool _emit (const char* file, int line, Event::context context,
                 Event::event event, const char* input, bool complete,
                 unsigned long data);
+
+    /**
+     * Macro to get occurance of call into _emit().
+     * @param C Context.
+     * @param E Event.
+     * @param I Input.
+     * @param F Complete.
+     * @param D Data.
+     */
 #define emit(C,E,I,F,D) _emit(__FILE__,__LINE__,C,E,I,F,D)
 
     /**
@@ -232,18 +252,36 @@ class Event {
     /**
      * Internally set the current to a different context.
      * This will trigger the Event::E_CONTEXT_ENTER event.
+     * @param file Source file calling us (for debugging).
+     * @param line Line in source file (for debugging).
      * @param context New context.
      * @param data Any data passed to event handler.
      */
-    void _setContext (const char* file, int line, Event::context context, unsigned long data);
+    void _setContext (const char* file, int line, Event::context context,
+                      unsigned long data);
+
+    /**
+     * Macro to get occurance of call into _setContext().
+     * @param C Context.
+     * @param D Data.
+     */
 #define setContext(C,D) _setContext(__FILE__,__LINE__,C,D)
 
     /**
      * Internally unset the current to an undefined context.
-     * This will trigger the Event::E_CONTEXT_LEAVE event.
+     * This will trigger the Event::E_CONTEXT_LEAVE event
+     * after leaving it and trigger Event::E_CONTEXT_REENTER for
+     * the new topmost context on our stack.
+     * @param file Source file calling us (for debugging).
+     * @param line Line in source file (for debugging).
      * @param data Abitrary data passed to handler.
      */
     void _unsetContext (const char* file, int line, unsigned long data);
+
+    /**
+     * Macro to get occurance of call into _unsetContext().
+     * @param D Data.
+     */
 #define unsetContext(D) _unsetContext(__FILE__,__LINE__,D)
 
     /**
@@ -262,8 +300,8 @@ class Event {
      * Get event for a given key of current context.
      * This is to be used for curses' @c getch() to get event to
      * enqeue().
-     * @param event Event
-     * @return Key.
+     * @param key Key
+     * @return Event
      */
     Event::event getEvent (const char* key);
 
@@ -273,7 +311,18 @@ class Event {
     /** Enable again after disabling */
     void enable (void);
 
+    /**
+     * Get textual name of a context.
+     * @param context Context.
+     * @return Name.
+     */
     static const char* getContextName (Event::context context);
+
+    /**
+     * Get textual name of event.
+     * @param event Event.
+     * @return Name.
+     */
     static const char* getEventName (Event::event event);
 
   private:
@@ -283,7 +332,9 @@ class Event {
     Debug* debug;
     /** active? */
     bool active;
+    /** big table of all event handlers */
     list_t* handlers[C_LAST][E_LAST];
+    /** big table of all keys for events */
     char* keys[C_LAST][E_LAST];
 };
 

@@ -1,9 +1,7 @@
 /** @ingroup libmuttng_mailbox */
 /**
- * @file nntp_mailbox.h
- * @author Someone
- * @version $Id$
- * @brief NNTP Mailbox interface.
+ * @file libmuttng/mailbox/nntp_mailbox.h
+ * @brief Interface: NNTP Mailbox
  */
 #include "remote_mailbox.h"
 

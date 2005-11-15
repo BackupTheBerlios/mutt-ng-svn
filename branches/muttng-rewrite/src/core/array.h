@@ -4,7 +4,7 @@
 /**
  * @file core/array.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Array handling
+ * @brief Interface: Array handling
  */
 #ifndef MUTTNG_CORE_ARRAY_H
 #define MUTTNG_CORE_ARRAY_H

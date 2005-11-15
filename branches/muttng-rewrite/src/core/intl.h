@@ -3,8 +3,7 @@
  */
 /**
  * @file core/intl.h
- * @brief Internationalization interface
- * @b NOTE: config.h must be included by source file!
+ * @brief Interface: Internationalization
  */
 #ifndef MUTTNG_CORE_INTL_H
 #define MUTTNG_CORE_INTL_H

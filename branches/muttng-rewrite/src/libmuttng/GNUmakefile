@@ -1,4 +1,4 @@
-SUBDIRS=mailbox
+SUBDIRS=mailbox crypto message
 
 include $(CURDIR)/../../GNUmakefile.config.default
 
@@ -8,7 +8,7 @@ clean: subdirclean
 	rm -rf libmuttng.a debug.o libmuttng.o
 
 libmuttng.a: debug.o libmuttng.o
-	$(AR) -cru $@ $^ $(wildcard ./mailbox/*.o)
+	$(AR) -cru $@ $^ $(wildcard ./mailbox/*.o) $(wildcard ./crypto/*.o) $(wildcard ./message/*.o)
 	$(RANLIB) $@
 
 %.o: %.cpp

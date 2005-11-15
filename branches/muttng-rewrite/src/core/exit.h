@@ -4,7 +4,7 @@
 /**
  * @file core/exit.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Fatal error handling interface
+ * @brief Interface: Fatal error handling
  */
 #ifndef MUTTNG_CORE_EXIT_H
 #define MUTTNG_CORE_EXIT_H

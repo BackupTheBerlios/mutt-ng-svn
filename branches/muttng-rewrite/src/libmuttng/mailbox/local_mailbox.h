@@ -1,9 +1,7 @@
 /** @ingroup libmuttng_mailbox */
 /**
- * @file local_mailbox.h
- * @author Someone
- * @version $Id$
- * @brief Local Mailbox interface.
+ * @file libmuttng/mailbox/local_mailbox.h
+ * @brief Interface: Local Mailbox base class
  */
 #include "mailbox.h"
 

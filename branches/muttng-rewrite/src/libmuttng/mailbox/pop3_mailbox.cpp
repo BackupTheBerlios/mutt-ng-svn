@@ -1,9 +1,7 @@
 /** @ingroup libmuttng_mailbox */
 /**
- * @file pop3_mailbox.cpp
- * @author Someone
- * @version $Id$
- * @brief POP3 Mailbox implementation.
+ * @file libmuttng/mailbox/pop3_mailbox.cpp
+ * @brief Implementation: POP3 Mailbox
  */
 #include <stdlib.h>
 

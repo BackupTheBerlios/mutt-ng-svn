@@ -2,7 +2,7 @@
 /**
  * @file muttng/tools/tool.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Common tool superclass implementation
+ * @brief Implementation: Common tool base class
  */
 #include <iostream>
 

@@ -4,7 +4,7 @@
 /**
  * @file core/conv.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Conversion routines interface
+ * @brief Interface: Conversion routines
  */
 #ifndef MUTTNG_CORE_CONV_H
 #define MUTTNG_CORE_CONV_H
@@ -15,7 +15,7 @@ extern "C" {
 
 /**
  * Buffer size for converting int to string via conv_itoa().
- * As we may convert to binary: sign + 32 bits + \0 = 34.
+ * As we may convert to binary: sign + 32 bits + \\0 = 34.
  */
 #define NUMBUF  34
 
@@ -34,6 +34,18 @@ extern "C" {
  */
 char* conv_itoa2 (char* buf, int num, int pad, int base);
 
+/**
+ * Convert int to string.
+ * @b NOTE: when padding is requested, the number will have exactly the
+ * number of digits given, i.e. padding does @b not mean to optionally
+ * fill with leading zeros to at least get a given lenght but to always
+ * exactly get the given length.
+ * @param B Buffer of size NUMBUF.
+ * @param N Number to convert.
+ * @param P To how many digits to 0-pad the number. If negative,
+ *          the number will be converted as-is.
+ * @return Offset into buf.
+ */
 #define conv_itoa(B,N,P)        conv_itoa2(B,N,P,10)
 
 #ifdef __cplusplus

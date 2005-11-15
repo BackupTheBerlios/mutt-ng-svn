@@ -1,7 +1,8 @@
+/** @ingroup muttng_conf */
 /**
  * @file muttng/config/set_command.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief @c set Command handler interface
+ * @brief Interface: @c set Command handler
  */
 #ifndef MUTTNG_CONFIG_SET_COMMAND_H
 #define MUTTNG_CONFIG_SET_COMMAND_H

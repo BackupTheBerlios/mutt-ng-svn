@@ -5,7 +5,7 @@
  * @file core/str.c
  * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
  * @author Copyright (C) 1999-2000 Thomas Roessler <roessler@does-not-exist.org>
- * @brief Sanity string handling implementation
+ * @brief Implementation: Sanity string handling
  */
 #include <stdlib.h>
 #include <string.h>

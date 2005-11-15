@@ -1,8 +1,16 @@
+/** @ingroup muttng */
+/**
+ * @file muttng/muttng.cpp
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
+ * @brief Implementation: Application base class
+ */
 #include <iostream>
 
 #include "muttng.h"
 
+/** application-wide debug object */
 static Debug* debugObj = NULL;
+/** application-wide event handler */
 static Event* eventObj = NULL;
 
 Muttng::Muttng (void) {

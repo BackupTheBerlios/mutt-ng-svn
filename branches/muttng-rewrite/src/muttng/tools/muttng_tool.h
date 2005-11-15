@@ -7,7 +7,7 @@
 /**
  * @file muttng/tools/muttng_tool.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief muttng(1) interface
+ * @brief Interface: muttng(1)
  */
 #ifndef MUTTNG_MUTTNG_TOOL_H
 #define MUTTNG_MUTTNG_TOOL_H

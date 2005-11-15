@@ -1,9 +1,7 @@
 /** @ingroup libmuttng_mailbox */
 /**
- * @file pop3_mailbox.h
- * @author Someone
- * @version $Id$
- * @brief POP3 Mailbox interface.
+ * @file libmuttng/mailbox/pop3_mailbox.h
+ * @brief Interface: POP3 Mailbox
  */
 #include "remote_mailbox.h"
 

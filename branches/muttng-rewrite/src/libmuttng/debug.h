@@ -2,7 +2,7 @@
 /**
  * @file libmuttng/debug.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Debug interface
+ * @brief Interface: Basic debug support
  */
 #ifndef LIBMUTTNG_ABSTRACT_CLASS_H
 #define LIBMUTTNG_ABSTRACT_CLASS_H
@@ -11,8 +11,11 @@
 
 #include "core/buffer.h"
 
+/** maximum number of IDs to try for filename generation. */
 #define MAX_DBG_FILES           20
+/** minimum debug level */
 #define DEBUG_MIN               0
+/** maxmimum debug level */
 #define DEBUG_MAX               5
 
 /**
@@ -113,6 +116,12 @@ class Debug {
 } while (0)
 #endif
 
+/**
+ * Print a debug line.
+ * @param L Level.
+ * @param X @c printf()-style message in brackets,
+ *          eg <code>("foo %s", bar)</code>
+ */
 #define DEBUGPRINT(L,X) DEBUGPRINT2(this,L,X)
 
 #endif /* !LIBMUTTNG_ABSTRACT_CLASS_H */

@@ -2,7 +2,7 @@
 /**
  * @file muttng/ui/ui_text.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Text-based UI superclass implementation
+ * @brief Implementation: Text-based UI base class
  */
 #include <iostream>
 

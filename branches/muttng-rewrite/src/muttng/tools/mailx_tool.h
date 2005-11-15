@@ -8,7 +8,7 @@
 /**
  * @file muttng/tools/mailx_tool.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief muttng(1) interface
+ * @brief Interface: muttng-mailx(1)
  */
 #ifndef MUTTNG_MAILX_TOOL_H
 #define MUTTNG_MAILX_TOOL_H

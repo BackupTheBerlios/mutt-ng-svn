@@ -2,7 +2,7 @@
 /**
  * @file muttng/ui/ui_text.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Text-based UI superclass interface
+ * @brief Interface: Text-based UI base class
  */
 #ifndef MUTTNG_UI_TEXT_H
 #define MUTTNG_UI_TEXT_H

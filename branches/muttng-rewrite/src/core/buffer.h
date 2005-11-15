@@ -4,7 +4,7 @@
 /**
  * @file core/buffer.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief String buffer interface
+ * @brief Interface: String buffer
  */
 #ifndef MUTTNG_CORE_BUFFER_H
 #define MUTTNG_CORE_BUFFER_H
@@ -76,10 +76,10 @@ void buffer_add_num2 (buffer_t* buffer, int num, int pad, int base);
 /**
  * Append number to buffer.
  * Memory for buffer and contents will be @c malloc'd as needed.
- * @param buffer Pointer to buffer for storage.
- * @param num Number to append.
- * @param pad Number of digits for destination. If too few, buffer
- *            will be filled with 0 and truncated otherwise.
+ * @param B Pointer to buffer for storage.
+ * @param N Number to append.
+ * @param P Number of digits for destination. If too few, buffer
+ *          will be filled with 0 and truncated otherwise.
  */
 #define buffer_add_num(B,N,P)   buffer_add_num2(B,N,P,10)
 

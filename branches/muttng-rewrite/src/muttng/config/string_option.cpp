@@ -1,7 +1,8 @@
+/** @ingroup muttng_conf */
 /**
  * @file muttng/config/string_option.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief String variable implementation
+ * @brief Implementation: String variable
  */
 #include "core/buffer.h"
 #include "core/mem.h"

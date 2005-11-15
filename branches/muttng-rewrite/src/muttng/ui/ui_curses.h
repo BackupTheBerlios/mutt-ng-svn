@@ -6,7 +6,7 @@
 /**
  * @file muttng/ui/ui_curses.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Curses-based UI interface
+ * @brief Interface: Curses-based UI
  */
 #ifndef MUTTNG_UI_CURSES_H
 #define MUTTNG_UI_CURSES_H

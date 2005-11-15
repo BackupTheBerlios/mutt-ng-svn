@@ -2,7 +2,7 @@
 /**
  * @file libmuttng/libmuttng.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Library base class implementation
+ * @brief Implementation: Library base class
  */
 #include <iostream>
 #include "libmuttng.h"

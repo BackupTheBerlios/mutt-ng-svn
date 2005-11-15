@@ -1,7 +1,8 @@
+/** @ingroup muttng_conf */
 /**
  * @file muttng/config/abstract_command.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Configuration command superclass interface
+ * @brief Interface: Configuration command base class
  */
 #ifndef MUTTNG_CONFIG_ABSTRACT_COMMAND_H
 #define MUTTNG_CONFIG_ABSTRACT_COMMAND_H

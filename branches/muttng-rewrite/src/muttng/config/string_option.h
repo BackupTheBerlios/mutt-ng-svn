@@ -1,7 +1,8 @@
+/** @ingroup muttng_conf */
 /**
  * @file muttng/config/string_option.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief String variable interface
+ * @brief Interface: String variable
  */
 #ifndef MUTTNG_CONFIG_STRING_OPTION_H
 #define MUTTNG_CONFIG_STRING_OPTION_H

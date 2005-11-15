@@ -2,7 +2,7 @@
 /**
  * @file muttng/ui/ui_curses.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Curses-based UI implementation
+ * @brief Implementation: Curses-based UI
  */
 #include <iostream>
 

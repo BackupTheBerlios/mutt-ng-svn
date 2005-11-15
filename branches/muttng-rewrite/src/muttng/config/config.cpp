@@ -1,7 +1,16 @@
 /**
+ * @ingroup muttng
+ * @addtogroup muttng_conf Configuration
+ * @{
+ *
+ *   @section muttng_config_types Option types
+ *
+ *   @section muttng_config_doc Documentation
+ */
+/**
  * @file muttng/config/config.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Configuration implementation
+ * @brief Implementation: Configuration
  */
 #include <sys/types.h>
 #include <stdlib.h>

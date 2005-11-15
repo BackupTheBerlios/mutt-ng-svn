@@ -2,7 +2,7 @@
 /**
  * @file core/list.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Generic List implementation
+ * @brief Implementation: Generic List
  */
 #include <stddef.h>
 #include <string.h>
@@ -120,16 +120,6 @@ int list_lookup (list_t* l, int (*cmp) (const LIST_ITEMTYPE, const LIST_ITEMTYPE
     return (-1);
   for (i = 0; i < l->length; i++)
     if (cmp (l->data[i], p) == 0)
-      return (i);
-  return (-1);
-}
-
-int list_map (list_t* l, int (*mapfunc) (LIST_ITEMTYPE)) {
-  int i = 0;
-  if (list_empty(l) || !*mapfunc)
-    return (-1);
-  for (i = 0; i < l->length; i++)
-    if (!mapfunc (l->data[i]))
       return (i);
   return (-1);
 }

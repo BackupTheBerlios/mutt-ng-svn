@@ -1,9 +1,7 @@
 /** @ingroup libmuttng_mailbox */
 /**
- * @file remote_mailbox.cpp
- * @author Someone
- * @version $Id$
- * @brief Remote Mailbox implementation.
+ * @file libmuttng/mailbox/remote_mailbox.cpp
+ * @brief Implementation: Remote Mailbox base class
  */
 #include <stdlib.h>
 

@@ -2,7 +2,7 @@
 /**
  * @file muttng/ui/ui_plain.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Plain UI implementation.
+ * @brief Implementation: CLI user interface
  */
 #include <iostream>
 

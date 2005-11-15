@@ -2,7 +2,7 @@
 /**
  * @file core/list.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Generic List interface
+ * @brief Interface: Generic List
  */
 #ifndef MUTTNG_CORE_LIST_H
 #define MUTTNG_CORE_LIST_H
@@ -24,72 +24,96 @@ typedef struct list_t {
   int length;
 } list_t;
 
-/*
- * basics
+/**
+ * Creates empty list.
+ * @return Pointer to list.
  */
-
-/** Creates empty list */
 list_t* list_new (void);
+
 /**
  * Creates list of given size
- *
  * Useful to avoid malloc() for hash tables and friends.
+ * @return Pointer to list.
  */
-list_t* list_new2 (int);
+list_t* list_new2 (int size);
 
-/* Free() memory consumed
- *
- * If edel is not @c NULL, it'll be used to free() items
- * as well
+/**
+ * For readability: typedef of deletion callback.
  */
 typedef void list_del_t (LIST_ITEMTYPE*);
-void list_del (list_t**, list_del_t* del);
+
+/**
+ * Free() all memory for list.
+ * @param list List to delete.
+ * @param del Callback used to free items (if passed.)
+ */
+void list_del (list_t** list, list_del_t* del);
 
 /** shorthand for checking whether list is empty */
 #define list_empty(l) (!l || l->length == 0 || !l->data)
 
-/*
- * insertion, removal
- * the list_push_* functions create a list if empty so far
- * for convenience
- */
-
 /**
  * Append item.
- *
- * Also creates a list if not done yet
+ * Also creates a list if not done yet.
+ * @param list Pointer to list.
+ * @param data Data to append.
  */
-void list_push_back (list_t**, LIST_ITEMTYPE);
+void list_push_back (list_t** list, LIST_ITEMTYPE data);
+
 /**
  * Prepend item.
- *
- * Also creates a list if not done yet
+ * Also creates a list if not done yet.
+ * @param list Pointer to list.
+ * @param data Data to append.
  */
-void list_push_front (list_t**, LIST_ITEMTYPE);
-/** Remove and return last item */
-LIST_ITEMTYPE list_pop_back (list_t*);
-/** Remove and return first item */
-LIST_ITEMTYPE list_pop_front (list_t*);
-/** Remove and return given item */
-LIST_ITEMTYPE list_pop_idx (list_t*, int);
+void list_push_front (list_t** list, LIST_ITEMTYPE data);
 
-/*
- * copying
+/**
+ * Remove and return last item.
+ * @param list List.
+ * @return Item (if any.)
  */
+LIST_ITEMTYPE list_pop_back (list_t* list);
 
-/** plain copy of pointers */
-list_t* list_cpy (list_t*);
-/** duplicate ("hard copy") using callback to copy items */
-list_t* list_dup (list_t*, LIST_ITEMTYPE (*dup) (LIST_ITEMTYPE));
-
-/*
- * misc
+/**
+ * Remove and return first item.
+ * @param list List.
+ * @return Item (if any.)
  */
+LIST_ITEMTYPE list_pop_front (list_t* list);
 
-/** Lookup item. */
-int list_lookup (list_t*, int (*cmp) (const LIST_ITEMTYPE, const LIST_ITEMTYPE), const LIST_ITEMTYPE);
-/** map function to all items */
-int list_map (list_t*, int (*) (LIST_ITEMTYPE));
+/**
+ * Remove and return specific item.
+ * @param list List.
+ * @param idx Index at which to pop.
+ * @return Item (if any.)
+ */
+LIST_ITEMTYPE list_pop_idx (list_t* list, int idx);
+
+/**
+ * Copy list by copying pointers only.
+ * @param list List.
+ * @return Copy.
+ */
+list_t* list_cpy (list_t* list);
+
+/**
+ * Duplicate ("hard copy") using callback to copy items.
+ * @param list List.
+ * @param dup Function to copy items.
+ * @return Copy.
+ */
+list_t* list_dup (list_t* list, LIST_ITEMTYPE (*dup) (LIST_ITEMTYPE));
+
+/**
+ * Lookup item.
+ * @param list List.
+ * @param cmp Comparing function for items. It must return 0 on equality.
+ * @param a Item to lookup.
+ * @return Index of item in list or negative if not found.
+ */
+int list_lookup (list_t* list, int (*cmp) (const LIST_ITEMTYPE, const LIST_ITEMTYPE),
+                 const LIST_ITEMTYPE a);
 
 #ifdef __cplusplus
 }

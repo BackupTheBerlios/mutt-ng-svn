@@ -1,7 +1,8 @@
+/** @ingroup muttng_conf */
 /**
  * @file muttng/config/option.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Configuration option definition
+ * @brief Interface: Configuration option
  */
 #ifndef MUTTNG_CONFIG_OPTION_H
 #define MUTTNG_CONFIG_OPTION_H

@@ -8,7 +8,7 @@
 /**
  * @file muttng/tools/sync_tool.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief muttng(1) interface
+ * @brief Interface: muttng-sync(1)
  */
 #ifndef MUTTNG_SYNC_TOOL_H
 #define MUTTNG_SYNC_TOOL_H

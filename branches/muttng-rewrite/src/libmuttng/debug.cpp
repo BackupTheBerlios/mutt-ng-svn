@@ -2,7 +2,7 @@
 /**
  * @file libmuttng/debug.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Debug implementation
+ * @brief Implementation: Basic debug support
  */
 #include <iostream>
 

@@ -2,7 +2,7 @@
 /**
  * @file core/hash.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Generic Hash Table Interface.
+ * @brief Interface: Generic Hash Table
  */
 #ifndef MUTTNG_CORE_HASH_H
 #define MUTTNG_CORE_HASH_H
@@ -21,9 +21,7 @@ extern "C" {
  * Hash function for strings.
  * This is the long version for debugging purpose so that we can more
  * easily track keycode computations.
- * @param key Key.
- * @param file Source file.
- * @param line Line in source file where it's called.
+ * @param k Key.
  * @return key's code for use with hash_*_hash()
  */
 unsigned int hash_key (const char* k);

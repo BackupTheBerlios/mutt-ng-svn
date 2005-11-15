@@ -4,10 +4,8 @@
  * @{
  */
 /**
- * @file mailbox.h
- * @author Someone
- * @version $Id$
- * @brief Mailbox interface.
+ * @file libmuttng/mailbox/mailbox.h
+ * @brief Interface: Mailbox base class
  */
 #include "../libmuttng.h"
 

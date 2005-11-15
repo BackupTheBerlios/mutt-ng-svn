@@ -1,17 +1,8 @@
-/**
- * @ingroup muttng
- * @addtogroup muttng_config Configuration
- * @{
- *
- *   @section muttng_config_types Option types
- *
- *   @section muttng_config_doc Documentation
- *
- */
+/** @ingroup muttng_conf */
 /**
  * @file muttng/config/set_command.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief @c set Command handler implementation
+ * @brief Implementation: @c set Command handler
  */
 #include <iostream>
 
@@ -177,5 +168,3 @@ bool SetCommand::getSingleOption (int* idx, buffer_t* name, buffer_t* type,
   (*idx)++;
   return (true);
 }
-
-/** @} */

@@ -1,7 +1,8 @@
+/** @ingroup muttng_conf */
 /**
  * @file muttng/config/global_variables.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief UI internal configuration variables
+ * @brief Interface: UI internal configuration
  */
 #ifndef MUTTNG_CONFIG_GLOBAL_VARIABLES_H
 #define MUTTNG_CONFIG_GLOBAL_VARIABLES_H

@@ -1,11 +1,8 @@
-/**
- * @addtogroup libmuttng libmuttng
- * @{
- */
+/** @ingroup libmuttng */
 /**
  * @file libmuttng/version.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Libmuttng version info
+ * @brief Interface: Version info
  */
 #ifndef LIBMUTTNG_VERSION_H
 #define LIBMUTTNG_VERSION_H
@@ -17,5 +14,3 @@
 #define LIBMUTTNG_VERSION       "libmuttng 0.0"
 
 #endif /* !LIBMUTTNG_VERSION_H */
-
-/** @} */

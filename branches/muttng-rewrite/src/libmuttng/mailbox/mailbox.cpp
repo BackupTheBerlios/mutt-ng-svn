@@ -1,9 +1,7 @@
 /** @ingroup libmuttng_mailbox */
 /**
- * @file mailbox.cpp
- * @author Someone
- * @version $Id$
- * @brief Mailbox implementation.
+ * @file libmuttng/mailbox/mailbox.cpp
+ * @brief Implementation: Mailbox bass class
  */
 #include <stdlib.h>
 

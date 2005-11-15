@@ -4,12 +4,13 @@
 /**
  * @file core/conv.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Conversion routines implementation
+ * @brief Implementation: Conversion routines
  */
 #include <stdlib.h>
 
 #include "conv.h"
 
+/** alphabet of numbers */
 static const char* Alph = "0123456789abcdef";
 
 char* conv_itoa2 (char* buf, int num, int pad, int base) {

@@ -4,7 +4,7 @@
 /**
  * @file core/exit.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Fatal error handling implementation
+ * @brief Implementation: Fatal error handling
  */
 #include <stdlib.h>
 #include <stdio.h>

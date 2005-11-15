@@ -2,7 +2,7 @@
 /**
  * @file muttng/tools/main.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Common wrapper for <code>main()</code>
+ * @brief Implementation: Common wrapper for <code>main()</code>
  */
 #include <stdlib.h>
 #include <string.h>

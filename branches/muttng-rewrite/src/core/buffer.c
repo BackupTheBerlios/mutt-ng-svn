@@ -4,7 +4,7 @@
 /**
  * @file core/buffer.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief String buffer implementation
+ * @brief Implementation: String buffer
  */
 #include <stdlib.h>
 #include <string.h>

@@ -1,7 +1,8 @@
+/** @ingroup muttng_conf */
 /**
  * @file muttng/config/num_option.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Num variable interface
+ * @brief Interface: Numeric variable
  */
 #ifndef MUTTNG_CONFIG_NUM_OPTION_H
 #define MUTTNG_CONFIG_NUM_OPTION_H

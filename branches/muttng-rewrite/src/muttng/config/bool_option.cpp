@@ -1,7 +1,8 @@
+/** @ingroup muttng_conf */
 /**
  * @file muttng/config/bool_option.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Bool variable implementation
+ * @brief Implementation: Bool variable
  */
 #include "core/buffer.h"
 #include "core/mem.h"

@@ -1,8 +1,43 @@
-/** @ingroup libmuttng */
+/* doxygen documentation {{{ */
+/**
+ * @addtogroup libmuttng libmuttng
+ * @{
+ *
+ *   @section libmuttng_intro Introduction
+ *
+ *     This is a library containing the e-mail logic. It only depends on
+ *     the core and thus can be re-used easily. It consists of the
+ *     following parts:
+ *
+ *       - @b mailbox Support for the following types of folders: IMAP,
+ *         POP, NNTP, Maildir, MH, MBOX and MMDF. The abstraction layer
+ *         is URL-driven, so that for applications the whole handling is
+ *         fully transparent. For remote folders, features like
+ *         authentication and encryption are supported, too.
+ *       - @b cache Support for transparent caching of certain mailbox
+ *         types: IMAP, NNTP, Maildir and MH.
+ *       - @b crypto Support for PGP/GnuPG and S/MIME. Either gpgme or
+ *         locally installed tools such as gpg/pgp and openssl can be
+ *         used.
+ *       - @b mime Fully functional, transparent and modular
+ *         MIME-handling.
+ *
+ *   @section libmuttng_mailbox Mailbox handling
+ *
+ *     The mailbox handling part is URL-driven to achieve transparency
+ *     for applications.
+ *
+ *   @section libmuttng_cache Caching
+ *
+ *   @section libmuttng_crypto Cryptography
+ *
+ *   @section libmuttng_mime MIME handling
+ */
+/* }}} */
 /**
  * @file libmuttng/libmuttng.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Library base class interface
+ * @brief Interface: Library base class
  */
 #ifndef LIBMUTTNG_LIBMUTTNG_H
 #define LIBMUTTNG_LIBMUTTNG_H

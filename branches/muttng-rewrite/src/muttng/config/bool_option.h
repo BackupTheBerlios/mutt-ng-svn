@@ -1,7 +1,8 @@
+/** @ingroup muttng_conf */
 /**
  * @file muttng/config/bool_option.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Bool variable interface
+ * @brief Interface: Bool variable
  */
 #ifndef MUTTNG_CONFIG_BOOL_OPTION_H
 #define MUTTNG_CONFIG_BOOL_OPTION_H

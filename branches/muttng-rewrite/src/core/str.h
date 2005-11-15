@@ -5,7 +5,7 @@
  * @file core/str.h
  * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
  * @author Copyright (C) 1999-2000 Thomas Roessler <roessler@does-not-exist.org>
- * @brief Sanity string handling interface
+ * @brief Interface: Sanity string handling
  */
 #ifndef MUTTNG_CORE_STR_H
 #define MUTTNG_CORE_STR_H

@@ -1,9 +1,7 @@
 /** @ingroup libmuttng_mailbox */
 /**
- * @file local_mailbox.cpp
- * @author Someone
- * @version $Id$
- * @brief Local Mailbox implementation.
+ * @file libmuttng/mailbox/local_mailbox.cpp
+ * @brief Implementation: Local Mailbox base class
  */
 #include <stdlib.h>
 

@@ -1,7 +1,8 @@
+/** @ingroup muttng_conf */
 /**
  * @file muttng/config/abstract_option.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Configuration variable superclass interface
+ * @brief Interface: Configuration variable base class
  */
 #ifndef MUTTNG_CONFIG_ABSTRACT_OPTION_H
 #define MUTTNG_CONFIG_ABSTRACT_OPTION_H

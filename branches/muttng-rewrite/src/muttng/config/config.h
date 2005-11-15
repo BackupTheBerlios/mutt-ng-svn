@@ -1,7 +1,8 @@
+/** @ingroup muttng_conf */
 /**
  * @file muttng/config/config.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Configuration interface
+ * @brief Interface: Configuration
  */
 #ifndef MUTTNG_MUTTNG_CONFIG_H
 #define MUTTNG_MUTTNG_CONFIG_H
@@ -39,6 +40,11 @@ class Config : public Muttng {
       /** last */
       C_INVALID
     };
+    /**
+     * Pre-Init.
+     * Do very early pre-initialization, e.g obtain $HOME, etc, which
+     * are required to initialize other parts, e.g. Debug
+     */
     static void preinit (void);
     /**
      * Initialize config prior to reading config files.
