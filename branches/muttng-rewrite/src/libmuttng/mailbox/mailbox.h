@@ -7,12 +7,12 @@
  * @file libmuttng/mailbox/mailbox.h
  * @brief Interface: Mailbox base class
  */
-#include "../libmuttng.h"
+#include "../cache/cache.h"
 
 /**
  * Base class for mailbox abstraction.
  */
-class Mailbox : public LibMuttng {
+class Mailbox : public Cache {
   public:
     /** construct mailbox form URL already */
     Mailbox (const char* url = NULL);
@@ -23,6 +23,10 @@ class Mailbox : public LibMuttng {
      * @return URL or @c NULL if none set (yet.)
      */
     const char* getUrl ();
+    /**
+     * Implementation of Cache::key().
+     */
+    virtual const char* key (Message* msg) = 0;
   protected:
     /** whether mailbox supports caching */
     unsigned int haveCaching:1;

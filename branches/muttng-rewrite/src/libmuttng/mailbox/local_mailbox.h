@@ -12,4 +12,5 @@ class LocalMailbox : public Mailbox {
   public:
     LocalMailbox ();
     ~LocalMailbox ();
+    virtual const char* key (Message* msg) = 0;
 };

@@ -12,4 +12,5 @@ class NNTPMailbox : public RemoteMailbox {
   public:
     NNTPMailbox ();
     ~NNTPMailbox ();
+    const char* key (Message* msg);
 };

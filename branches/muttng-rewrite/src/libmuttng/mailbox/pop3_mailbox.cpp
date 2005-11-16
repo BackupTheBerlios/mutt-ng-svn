@@ -15,3 +15,8 @@ POP3Mailbox::POP3Mailbox (void) {
 
 POP3Mailbox::~POP3Mailbox (void) {
 }
+
+const char* POP3Mailbox::key (Message* msg) {
+  (void) msg;
+  return (NULL);
+}

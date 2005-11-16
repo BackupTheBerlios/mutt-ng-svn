@@ -15,3 +15,8 @@ NNTPMailbox::NNTPMailbox (void) {
 
 NNTPMailbox::~NNTPMailbox (void) {
 }
+
+const char* NNTPMailbox::key (Message* msg) {
+  (void) msg;
+  return (NULL);
+}

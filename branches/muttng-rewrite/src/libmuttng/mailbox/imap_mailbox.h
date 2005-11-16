@@ -12,4 +12,5 @@ class ImapMailbox : public RemoteMailbox {
   public:
     ImapMailbox ();
     ~ImapMailbox ();
+    const char* key (Message* msg);
 };
