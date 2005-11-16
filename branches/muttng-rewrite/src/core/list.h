@@ -70,25 +70,28 @@ void list_push_front (list_t** list, LIST_ITEMTYPE data);
 
 /**
  * Remove and return last item.
+ * Also @c free() list if empty afterwards.
  * @param list List.
  * @return Item (if any.)
  */
-LIST_ITEMTYPE list_pop_back (list_t* list);
+LIST_ITEMTYPE list_pop_back (list_t** list);
 
 /**
  * Remove and return first item.
+ * Also @c free() list if empty afterwards.
  * @param list List.
  * @return Item (if any.)
  */
-LIST_ITEMTYPE list_pop_front (list_t* list);
+LIST_ITEMTYPE list_pop_front (list_t** list);
 
 /**
  * Remove and return specific item.
+ * Also @c free()'s list if empty afterwards.
  * @param list List.
  * @param idx Index at which to pop.
  * @return Item (if any.)
  */
-LIST_ITEMTYPE list_pop_idx (list_t* list, int idx);
+LIST_ITEMTYPE list_pop_idx (list_t** list, int idx);
 
 /**
  * Copy list by copying pointers only.

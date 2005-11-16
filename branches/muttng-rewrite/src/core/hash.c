@@ -151,9 +151,7 @@ static HASH_ITEMTYPE _hash_find_hash (void* t, const void* key, int remove,
   if ((col = _hash_exists (tab, row, key)) < 0)
     return (0);
   if (remove) {
-    ret = (hash_item_t*) list_pop_idx (tab->rows[row], col);
-    if (tab->rows[row]->length == 0)
-      list_del (&tab->rows[row], (void (*) (HASH_ITEMTYPE*)) _mem_free);
+    ret = (hash_item_t*) list_pop_idx (&tab->rows[row], col);
     mem_free (&ret->key);
     tab->fill--;
   } else

@@ -59,34 +59,45 @@ void list_push_front (list_t** l, LIST_ITEMTYPE p) {
   (*l)->data[0] = p;
 }
 
-LIST_ITEMTYPE list_pop_back (list_t* l) {
+LIST_ITEMTYPE list_pop_back (list_t** l) {
   LIST_ITEMTYPE p = 0;
-  if (list_empty(l))
+  if (!l || list_empty((*l)))
     return (0);
-  p = l->data[l->length-1];
-  mem_realloc (&l->data, --(l->length)*sizeof(LIST_ITEMTYPE));
+  p = (*l)->data[(*l)->length-1];
+  if ((*l)->length-1 == 0)
+    mem_free (l);
+  else 
+    mem_realloc (&(*l)->data, --((*l)->length)*sizeof(LIST_ITEMTYPE));
   return (p);
 }
 
-LIST_ITEMTYPE list_pop_front (list_t* l) {
+LIST_ITEMTYPE list_pop_front (list_t** l) {
   LIST_ITEMTYPE p = 0;
-  if (list_empty(l))
+  if (!l || list_empty((*l)))
     return (0);
-  p = l->data[0];
-  memmove (&l->data[0], &l->data[1], (--(l->length))*sizeof(LIST_ITEMTYPE));
-  mem_realloc (&l->data, l->length*sizeof(LIST_ITEMTYPE));
+  p = (*l)->data[0];
+  if ((*l)->length-1 == 0)
+    mem_free (l);
+  else {
+    memmove (&(*l)->data[0], &(*l)->data[1], (--((*l)->length))*sizeof(LIST_ITEMTYPE));
+    mem_realloc (&(*l)->data, (*l)->length*sizeof(LIST_ITEMTYPE));
+  }
   return (p);
 }
 
-LIST_ITEMTYPE list_pop_idx (list_t* l, int c) {
+LIST_ITEMTYPE list_pop_idx (list_t** l, int c) {
   LIST_ITEMTYPE p = 0;
-  if (list_empty(l) || c < 0 || c >= l->length)
+  if (!l || list_empty((*l)) || c < 0 || c >= (*l)->length)
     return (0);
-  if (c == l->length-1)
+  if (c == (*l)->length-1)
     return (list_pop_back (l));
-  p = l->data[c];
-  memmove (&l->data[c], &l->data[c+1], (l->length-c)*sizeof(LIST_ITEMTYPE));
-  mem_realloc (&l->data, (--(l->length))*sizeof(LIST_ITEMTYPE));
+  p = (*l)->data[c];
+  if ((*l)->length-1 == 0)
+    mem_free (l);
+  else {
+    memmove (&(*l)->data[c], &(*l)->data[c+1], ((*l)->length-c)*sizeof(LIST_ITEMTYPE));
+    mem_realloc (&(*l)->data, (--((*l)->length))*sizeof(LIST_ITEMTYPE));
+  }
   return (p);
 }
 

@@ -93,6 +93,7 @@ Tool::Tool (int argc, char** argv) {
 }
 
 Tool::~Tool () {
+  this->event->unbindInternal ((void*) this);
   if (this->libmuttng) {
     this->libmuttng->cleanup ();
     delete (this->libmuttng);

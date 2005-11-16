@@ -41,10 +41,28 @@ Event::Event (Debug* debug) {
 
 Event::~Event (void) {
   int i = 0, j = 0;
+  handle_t* handler = NULL;
+
   DEBUGPRINT(1,("cleanup event handler"));
+
+  /*
+   * when doing cleanup, loop over all handlers and print
+   * a big fat warning if some handler is still bound; with the
+   * void* cast of 'this' and friends all of this is pretty
+   * dangerous so be strict here
+   */
   for (i = 0; i < C_LAST; i++)
-    for (j = 0; j < E_LAST; j++)
-      list_del (&handlers[i][j], (list_del_t*) _mem_free);
+    for (j = 0; j < E_LAST; j++) {
+      if (!list_empty (handlers[i][j])) {
+        while (!list_empty (handlers[i][j])) {
+          handler = (handle_t*) list_pop_front (&handlers[i][j]);
+          DEBUGPRINT(2,("+++ WARNING +++ callback 0x%x of 0x%x still "
+                        "bound for ctx=%s ev=%s", handler->handler,
+                        handler->self, NONULL (CtxStr[i]), NONULL (EvStr[j])));
+          mem_free (&handler);
+        }
+      }
+    }
   list_del (&contextStack, NULL);
 }
 
@@ -54,6 +72,9 @@ bool Event::init (void) {
   return (true);
 }
 
+/**
+ * @bug Maybe we need to check for duplicates here.
+ */
 void Event::bindInternal (Event::context context,
                           Event::event event,
                           bool input, void* self,
@@ -67,6 +88,42 @@ void Event::bindInternal (Event::context context,
   handle->self = self;
   handle->input = input;
   list_push_back (&handlers[context][event], (LIST_ITEMTYPE) handle);
+  DEBUGPRINT(2,("bound callback 0x%x of 0x%x to ctx=%s ev=%s",
+                handler, self, NONULL (CtxStr[context]),
+                NONULL (EvStr[event])));
+}
+
+void Event::unbindInternal (void* self) {
+  int i = 0, j = 0;
+  for (i = 0; i < C_LAST; i++)
+    for (j = 0; j < E_LAST; j++)
+      unbindInternal ((Event::context) i, (Event::event) j, self);
+}
+
+/**
+ * @bug Maybe we need to check for duplicates here.
+ */
+void Event::unbindInternal (Event::context context, Event::event event,
+                            void* self) {
+  list_t** list = NULL;
+  handle_t* handler = NULL;
+  int i = 0;
+
+  if (!(list = &handlers[context][event]))
+    return;
+  for (i = 0; !list_empty((*list)) && i < (int) (*list)->length; i++) {
+    handler = (handle_t*) (*list)->data[i];
+    if (handler->self == self) {
+      DEBUGPRINT(2,("unbound callback 0x%x of 0x%x from ctx=%s ev=%s",
+                    handler->handler, self, NONULL (CtxStr[context]),
+                    NONULL (EvStr[event])));
+      handler = (handle_t*) list_pop_idx (list, i);
+      mem_free (&handler);
+      i--;
+    }
+  }
+  if (!list_empty ((*list)))
+    mem_free (list);
 }
 
 bool Event::_emit (const char* file, int line, Event::context context, Event::event event,
@@ -115,7 +172,7 @@ void Event::_setContext (const char* file, int line,
 void Event::_unsetContext (const char* file, int line, unsigned long data) {
   Event::context context;
 
-  context = (Event::context) list_pop_back (contextStack);
+  context = (Event::context) list_pop_back (&contextStack);
   DEBUGPRINT(2,("leave ctx=%s from %s:%d", CtxStr[context], NONULL (file), line));
   emit (context, E_CONTEXT_LEAVE, NULL, false, data);
   if (!list_empty (contextStack)) {

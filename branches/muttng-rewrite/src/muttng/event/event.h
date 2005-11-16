@@ -209,6 +209,21 @@ class Event {
                                                 unsigned long data));
 
     /**
+     * Unbind all internal event handlers for an object.
+     * @param self Object's @c this casted to <b>void*</b>.
+     */
+    void unbindInternal (void* self);
+
+    /**
+     * Unbind handler for specific event and context.
+     * @param context Context
+     * @param event Event
+     * @param self Object's @c this casted to @c void*.
+     */
+    void unbindInternal (Event::context context, Event::event event,
+                         void* self);
+
+    /**
      * Emit an event and deliver to all registered handlers.
      * @param file Source file calling us (for debugging).
      * @param line Line in source file (for debugging).
