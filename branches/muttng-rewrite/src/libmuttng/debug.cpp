@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 #include <time.h>
+#include <string.h>
 
 #include "core/io.h"
 #include "core/buffer.h"
