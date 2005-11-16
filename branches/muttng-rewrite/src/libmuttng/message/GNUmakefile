@@ -1,7 +1,9 @@
 FILES=message body header
 LIB=
 
-include $(CURDIR)/../../../GNUmakefile.config.default
+include $(CURDIR)/../../../GNUmakefile.whereis
+include $(CURDIR)/../../../GNUmakefile.config.mine
+include $(CURDIR)/../../../GNUmakefile.config
 
 CXXFLAGS+=-I.. -I../..
 

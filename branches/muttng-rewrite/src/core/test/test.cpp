@@ -4,6 +4,7 @@ using namespace unitpp;
 
 #include "buffer_tests.h"
 #include "hash_tests.h"
+#include "list_tests.h"
 
 namespace {
 
@@ -12,6 +13,7 @@ namespace {
 			core_tests() : suite("core_tests") {
 				suite::main().add("core_test_suite",new buffer_tests());
 				suite::main().add("core_test_suite",new hash_tests());
+				suite::main().add("core_test_suite",new list_tests());
 			}
 	};
 

@@ -1,0 +1,15 @@
+# vim:ft=make:
+
+# guess what...
+path=$(subst :, ,$(PATH))
+
+# finds _all_ binaries in $(PATH)
+find_all=$(foreach dir,$(path),$(wildcard $(dir)/$(1)))
+
+# returns (stripped) $(1) $(2) of first binary found and
+# some non-existing name upon failure (useful to only
+# report error(s) during runtime!)
+find_first=$(if $(strip $(1)),$(strip $(word 1,$(1))),$(2))
+
+# one more wrapper which is to be used as mentioned above
+whereis=$(call find_first,$(call find_all,$(1)),$(2))

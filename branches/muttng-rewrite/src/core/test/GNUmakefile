@@ -1,17 +1,21 @@
 CXXFLAGS+=-I..
 LDFLAGS+=-L.. -lcore -lunit++
-LINKLIBS=test.o buffer_tests.o hash_tests.o
+LINKLIBS=test.o buffer_tests.o hash_tests.o list_tests.o
 
-include $(CURDIR)/../../../GNUmakefile.config.default
+include $(CURDIR)/../../../GNUmakefile.whereis
+include $(CURDIR)/../../../GNUmakefile.config.mine
+include $(CURDIR)/../../../GNUmakefile.config
 
 all: 
 	@echo "run 'make test' in order to compile the tests"
 
-test: $(LINKLIBS)
+test: run_test
+	./$^ -v
+
+run_test: $(LINKLIBS)
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
-	./$@ -v
 
 clean:
-	$(RM) test *.o
+	$(RM) run_test $(LINKLIBS)
 
 include $(CURDIR)/../../../GNUmakefile.subdirs

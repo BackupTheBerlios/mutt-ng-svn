@@ -1,6 +1,8 @@
 SUBDIRS=mailbox crypto message cache
 
-include $(CURDIR)/../../GNUmakefile.config.default
+include $(CURDIR)/../../GNUmakefile.whereis
+include $(CURDIR)/../../GNUmakefile.config.mine
+include $(CURDIR)/../../GNUmakefile.config
 
 all: subdirs libmuttng.a
 

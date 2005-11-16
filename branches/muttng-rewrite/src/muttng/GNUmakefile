@@ -1,6 +1,8 @@
 SUBDIRS=event ui config tools
 
-include $(CURDIR)/../../GNUmakefile.config.default
+include $(CURDIR)/../../GNUmakefile.whereis
+include $(CURDIR)/../../GNUmakefile.config.mine
+include $(CURDIR)/../../GNUmakefile.config
 
 all: muttng.o subdirs
 
@@ -15,4 +17,4 @@ depend: subdirdepend
 test:
 	@echo no tests implemented yet
 
-include ./../../GNUmakefile.subdirs
+include $(CURDIR)/../../GNUmakefile.subdirs

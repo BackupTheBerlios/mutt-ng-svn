@@ -1,7 +1,9 @@
 FILES=cache cache_qdbm
 LIB=
 
-include $(CURDIR)/../../../GNUmakefile.config.default
+include $(CURDIR)/../../../GNUmakefile.whereis
+include $(CURDIR)/../../../GNUmakefile.config.mine
+include $(CURDIR)/../../../GNUmakefile.config
 
 CXXFLAGS+=-I.. -I../..
 

@@ -9,8 +9,10 @@ all: $(OBJS) $(LIB) $(BINARY)
 	ln -s main muttng-sync || true
 	ln -s main muttng-mailx || true
 
-include ../../../GNUmakefile.config.default
+include $(CURDIR)/../../../GNUmakefile.whereis
+include $(CURDIR)/../../../GNUmakefile.config.mine
+include $(CURDIR)/../../../GNUmakefile.config
 
 CXXFLAGS+=-I.. -I../..
 
-include ../../../GNUmakefile.compile_cpp
+include $(CURDIR)/../../../GNUmakefile.compile_cpp

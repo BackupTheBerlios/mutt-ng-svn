@@ -9,6 +9,8 @@ clean: subdirclean
 
 test: subdirtest
 
-include $(CURDIR)/../../GNUmakefile.config.default
+include $(CURDIR)/../../GNUmakefile.whereis
+include $(CURDIR)/../../GNUmakefile.config.mine
+include $(CURDIR)/../../GNUmakefile.config
 include $(CURDIR)/../../GNUmakefile.compile_c
 include $(CURDIR)/../../GNUmakefile.subdirs
