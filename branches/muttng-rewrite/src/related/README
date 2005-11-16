@@ -1,0 +1,4 @@
+This directory contains some documentation to be picked up by doxygen.
+These will be available from the "Related Pages" navigation item.
+
+The file mainpage.h describes the main page.
