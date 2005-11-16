@@ -80,6 +80,7 @@ static option_t Options[] = {
   { 0,                          NULL,   NULL,   0 }
 };
 
+/** for faster access: hash table of options we know */
 static void* OptHash = NULL;
 
 SetCommand::SetCommand (void) : AbstractCommand () {}
@@ -97,7 +98,7 @@ bool SetCommand::handle (buffer_t* line, buffer_t* error, unsigned long data) {
 bool SetCommand::init (UI* ui) {
   int i = 0;
   buffer_t tmp, error;
-  AbstractOption::state state = AbstractOption::S_OK;
+  AbstractCommand::state state = AbstractCommand::S_OK_UNCHANGED;
 
   (void) Homedir;
 
@@ -128,13 +129,18 @@ bool SetCommand::init (UI* ui) {
     state = this->handlers[Options[i].type]->fromString (AbstractOption::T_SET,
                                                          &tmp, &Options[i]);
     switch (state) {
-      case AbstractOption::S_OK: break;
-      case AbstractOption::S_VALUE:
-      case AbstractOption::S_CMD:
+      case AbstractCommand::S_OK_CHANGED:
+        event->emit (Event::C_GENERIC, Event::E_OPTION_CHANGE, NULL, 0,
+                     (unsigned long) &Options[i]);
+        /* fall through */
+      case AbstractCommand::S_OK_UNCHANGED:
+        break;
+      case AbstractCommand::S_VALUE:
+      case AbstractCommand::S_CMD:
         buffer_init ((&error));
         buffer_add_str (&error, _("Error for option $"), -1);
         buffer_add_str (&error, Options[i].name, -1);
-        if (state == AbstractOption::S_VALUE) {
+        if (state == AbstractCommand::S_VALUE) {
           buffer_add_str (&error, _(": invalid default value: \""), -1);
           buffer_add_buffer (&error, &tmp);
           buffer_add_ch (&error, '"');

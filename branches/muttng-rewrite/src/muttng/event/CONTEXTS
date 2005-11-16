@@ -1,4 +1,4 @@
-C_GENERIC
-C_INDEX
-C_PAGER
-C_HELP
+C_GENERIC       generic
+C_INDEX         index
+C_PAGER         pager
+C_HELP          help

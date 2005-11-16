@@ -85,6 +85,8 @@ class Debug {
     bool start (void);
     /** Finish debugging: close debug file. */
     bool end (void);
+    /** spaces for indentation */
+    char sp[((DEBUG_MAX-1)*2)+2];
 };
 
 #ifdef __GNUG__

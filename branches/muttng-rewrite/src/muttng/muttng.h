@@ -14,6 +14,15 @@
 
 #include "event/event.h"
 
+/** module init/cleanup debug level (plus basics) */
+#define D_MOD           1
+/** parser debug level */
+#define D_PARSE         2
+/** event handler debug level */
+#define D_EVENT         3
+/** socket debug level */
+#define D_SOCKET        5
+
 /**
  * Base class for all classes of muttng to have application-wide
  * debugging.

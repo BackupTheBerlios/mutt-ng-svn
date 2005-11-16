@@ -1,4 +1,0 @@
-"C_GENERIC",
-"C_INDEX",
-"C_PAGER",
-"C_HELP",

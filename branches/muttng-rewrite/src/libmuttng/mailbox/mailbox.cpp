@@ -14,7 +14,7 @@ Mailbox::Mailbox (const char* url) {
   this->haveAuthentication = 0;
   this->haveEncryption = 0;
   this->url = url;
-  DEBUGPRINT(1,("create mailbox '%s'", NONULL(url)));
+  DEBUGPRINT(D_MOD,("create mailbox '%s'", NONULL(url)));
 }
 
 Mailbox::~Mailbox (void) {

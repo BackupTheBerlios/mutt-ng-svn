@@ -44,6 +44,13 @@
 
 #include "debug.h"
 
+/** module init/cleanup debug level */
+#define D_MOD           1
+/** parser debug level */
+#define D_PARSE         2
+/** socket debug level */
+#define D_SOCKET        5
+
 /**
  * Base class for all classes of libmuttng to have library-wide
  * debugging.

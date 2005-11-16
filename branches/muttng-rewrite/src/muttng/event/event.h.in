@@ -26,30 +26,14 @@ class Event {
 
     /** Valid contexts, ie menus or screens */
     enum context {
-      /** context ID for "generic" */
-      C_GENERIC = 0,
-      /** context ID for "index" */
-      C_INDEX,
-      /** context ID for "pager" */
-      C_PAGER,
-      /** context ID for "help" */
-      C_HELP,
+__CONTEXT_ENUM__
       /** For static array sizes. */
       C_LAST
     };
 
     /** Valid events */
     enum event {
-      /** event ID for <code>&lt;NULL&gt;</code> */
-      E_CONTEXT_ENTER = 0,
-      /** event ID for <code>&lt;NULL&gt;</code> */
-      E_CONTEXT_LEAVE,
-      /** event ID for <code>&lt;NULL&gt;</code> */
-      E_CONTEXT_REENTER,
-      /** event ID for <code>&lt;NULL&gt;</code> */
-      E_OPTION_CHANGE,
-      /** event ID for <code>&lt;help&gt;</code> */
-      E_HELP,
+__EVENT_ENUM__
       /** For static array sizes. */
       E_LAST
     };

@@ -137,9 +137,6 @@ bool Tool::start (void) {
   /* this is derived from Muttng and needs debug, too */
   config = new Config ();
 
-  if (!config->init (&ui))
-    return (false);
-
   this->libmuttng = new LibMuttng (Homedir, Umask);
   setDebugLevel (DebugLevel);
   this->libmuttng->setDebugLevel (DebugLevel);
@@ -147,13 +144,13 @@ bool Tool::start (void) {
   if (!event->init ())
     return (false);
 
-  /* we don't want to get E_OPTION_CHANGE during config read */
-  event->disable ();
+  setupEventHandlers ();
+
+  if (!config->init (&ui))
+    return (false);
+
   if (!config->read (this->readGlobal, this->altConfig, &error))
     return (false);
-  event->enable ();
-
-  setupEventHandlers ();
 
   return (this->ui->start ());
 }
@@ -287,9 +284,9 @@ Event::state Tool::handleOptionChange (Event::context context, Event::event even
   Tool* me = (Tool*) self;
   option_t* opt = (option_t*) data;
 
-  DEBUGPRINT2(me,2,("caught event: ctx=%s, ev=%s, opt='%s'",
-                    Event::getContextName (context),
-                    Event::getEventName (event), NONULL (opt->name)));
+  DEBUGPRINT2(me,D_EVENT,("caught event: ctx=%s, ev=%s, opt='%s'",
+                          Event::getContextName (context),
+                          Event::getEventName (event), NONULL (opt->name)));
 
   if (str_eq2 (opt->name, "debug_level", 11)) {
     me->setDebugLevel (DebugLevel);

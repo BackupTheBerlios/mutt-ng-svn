@@ -212,14 +212,7 @@ typedef struct {
 
 /** Table mapping Event::context to string */
 static const char* CtxStr[Event::C_LAST+1] = {
-  /** context string for C_GENERIC */
-  "generic",
-  /** context string for C_INDEX */
-  "index",
-  /** context string for C_PAGER */
-  "pager",
-  /** context string for C_HELP */
-  "help",
+__CONTEXT_DESCR__
   /** context string for C_LAST */
   NULL
 };
@@ -229,16 +222,7 @@ static const char* CtxStr[Event::C_LAST+1] = {
 
 /** Table mapping events to string */
 static const char* EvStr[Event::E_LAST+1] = {
-  /** event string for E_CONTEXT_ENTER */
-  "E_CONTEXT_ENTER",
-  /** event string for E_CONTEXT_LEAVE */
-  "E_CONTEXT_LEAVE",
-  /** event string for E_CONTEXT_REENTER */
-  "E_CONTEXT_REENTER",
-  /** event string for E_OPTION_CHANGE */
-  "E_OPTION_CHANGE",
-  /** event string for E_HELP */
-  "E_HELP",
+__EVENT_DESCR__
   /** event string for E_LAST */
   NULL
 };
@@ -248,16 +232,7 @@ static const char* EvStr[Event::E_LAST+1] = {
 
 /** Table telling us for which context an event is valid */
 static const int EvValid[Event::E_LAST+1] = {
-  /** for which contexts E_CONTEXT_ENTER is valid */
-  CTX(Event::C_GENERIC),
-  /** for which contexts E_CONTEXT_LEAVE is valid */
-  CTX(Event::C_GENERIC),
-  /** for which contexts E_CONTEXT_REENTER is valid */
-  CTX(Event::C_GENERIC),
-  /** for which contexts E_OPTION_CHANGE is valid */
-  CTX(Event::C_GENERIC),
-  /** for which contexts E_HELP is valid */
-  CTX(Event::C_INDEX) | CTX(Event::C_PAGER),
+__EVENT_VALID__
   /** for which contexts E_LAST is valid */
   0
 };

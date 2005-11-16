@@ -13,10 +13,11 @@
 NumOption::NumOption () {}
 NumOption::~NumOption () {}
 
-AbstractOption::state NumOption::fromString (AbstractOption::commands command, buffer_t* src, option_t* dst) {
+AbstractCommand::state NumOption::fromString (AbstractOption::commands command, buffer_t* src, option_t* dst) {
   int* ptr = (int*) dst->data;
   int num = 0;
   const char* b = NULL;
+  bool changed = false;
 
   switch (command) {
     case T_SET: b = src->str; break;
@@ -24,12 +25,13 @@ AbstractOption::state NumOption::fromString (AbstractOption::commands command, b
     case T_RESET: b = dst->init; break;
     case T_TOGGLE:
     case T_QUERY:
-      return (S_CMD);
+      return (AbstractCommand::S_CMD);
   }
   if (!checkVal (b, dst, &num))
-    return (S_VALUE);
+    return (AbstractCommand::S_VALUE);
+  changed = (*ptr != num);
   *ptr = num;
-  return (S_OK);
+  return (changed ? AbstractCommand::S_OK_CHANGED : AbstractCommand::S_OK_UNCHANGED);
 }
 
 void NumOption::toString (option_t* src, buffer_t* dst) {

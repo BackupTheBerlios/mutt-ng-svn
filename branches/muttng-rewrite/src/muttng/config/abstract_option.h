@@ -11,6 +11,7 @@
 
 #include "muttng.h"
 #include "option.h"
+#include "abstract_command.h"
 
 /**
  * Abstract class for configuration variable handlers.
@@ -46,15 +47,6 @@ class AbstractOption : public Muttng {
       /** @c query */
       T_QUERY
     };
-    /** return values for AbstractOption::fromString(). */
-    enum state {
-      /** all okay */
-      S_OK = 0,
-      /** command invalid for option type (eg @c toggle for string) */
-      S_CMD,
-      /** value invalid for option type */
-      S_VALUE
-    };
     /**
      * Read option from string, to be overwritten by derived classes.
      * @param command For which config command to read value.
@@ -62,7 +54,7 @@ class AbstractOption : public Muttng {
      * @param dst Destination storage.
      * @return Whether operation succeeded.
      */
-    virtual AbstractOption::state fromString (AbstractOption::commands command,
+    virtual AbstractCommand::state fromString (AbstractOption::commands command,
                                               buffer_t* src, option_t* dst) = 0;
     /**
      * Write option to string, to be overwritten by derived classes.

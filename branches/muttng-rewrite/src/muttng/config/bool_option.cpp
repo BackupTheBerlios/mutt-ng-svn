@@ -15,15 +15,18 @@
 BoolOption::BoolOption () {}
 BoolOption::~BoolOption () {}
 
-AbstractOption::state BoolOption::fromString (AbstractOption::commands command,
+AbstractCommand::state BoolOption::fromString (AbstractOption::commands command,
                                               buffer_t* src, option_t* dst) {
   buffer_t* tmp;
+  bool changed = false;
 
   switch (command) {
     case T_UNSET:
+      changed = option (dst->data);
       unset_option (dst->data);
       break;
     case T_TOGGLE:
+      changed = true;
       toggle_option (dst->data);
       break;
     case T_RESET:
@@ -35,18 +38,20 @@ AbstractOption::state BoolOption::fromString (AbstractOption::commands command,
       } else
         tmp = src;
       if (buffer_equal1 (tmp, "yes", 3) || buffer_equal1 (tmp, "true", 4) ||
-          buffer_equal1 (tmp, "1", 1))
+          buffer_equal1 (tmp, "1", 1)) {
+        changed = !option (dst->data);
         set_option (dst->data);
-      else if (buffer_equal1 (tmp, "no", 2) || buffer_equal1 (tmp, "false", 5) ||
-               buffer_equal1 (tmp, "0", 1))
+      } else if (buffer_equal1 (tmp, "no", 2) || buffer_equal1 (tmp, "false", 5) ||
+                 buffer_equal1 (tmp, "0", 1)) {
+        changed = option (dst->data);
         unset_option (dst->data);
-      else
-        return (S_VALUE);
+      } else
+        return (AbstractCommand::S_VALUE);
       break;
     case T_QUERY:
-      return (S_CMD);
+      return (AbstractCommand::S_CMD);
   }
-  return (S_OK);
+  return (changed ? AbstractCommand::S_OK_CHANGED : AbstractCommand::S_OK_UNCHANGED);
 }
 
 void BoolOption::toString (option_t* src, buffer_t* dst) {

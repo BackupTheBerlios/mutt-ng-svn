@@ -19,7 +19,7 @@ LibMuttng::LibMuttng (const char* dir, int u) {
 LibMuttng::~LibMuttng (void) {}
 
 bool LibMuttng::setDebugLevel (int level) {
-  DEBUGPRINT(1,("set level to %d", level));
+  DEBUGPRINT(D_MOD,("set level to %d", level));
   return (debugObj->setLevel (level));
 }
 

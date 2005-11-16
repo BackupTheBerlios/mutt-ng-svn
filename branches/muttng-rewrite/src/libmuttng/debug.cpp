@@ -34,6 +34,8 @@ Debug::Debug (const char* dir, const char* prefix, int u) {
     buffer_add_ch (&this->dir, '/');
   buffer_add_str (&this->prefix, prefix ? prefix : "libmuttng", -1);
   this->u = u;
+  memset (this->sp, ' ', ((DEBUG_MAX-1)*2)+1);
+  this->sp[((DEBUG_MAX-1)*2)+1] = '\0';
 }
 
 Debug::~Debug (void) {
@@ -132,9 +134,11 @@ bool Debug::printIntro (const char* file, int line, const char* function,
                         int level) {
   if (level > this->level || !this->fp)
     return (false);
-  fprintf (fp, "%d [%s:%s:%d%s%s%s] ", level,
+  this->sp[((level-1)*2)] = '\0';
+  fprintf (fp, "%s[%d:%s:%s:%d%s%s%s] ", this->sp, level,
            NONULL (this->prefix.str), NONULL (file), line, 
            function ? ":" : "", NONULL (function), function ? "()" : "");
+  this->sp[((level-1)*2)] = ' ';
   return (true);
 }
 

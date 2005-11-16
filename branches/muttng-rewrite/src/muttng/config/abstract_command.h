@@ -52,6 +52,19 @@ class AbstractCommand : public Muttng {
      * @return Success.
      */
     virtual bool init (UI* ui) = 0;
+
+    /** return values for all command handlers */
+    enum state {
+      /** okay, value not changed */
+      S_OK_UNCHANGED = 0,
+      /** okay, value changed */
+      S_OK_CHANGED,
+      /** command invalid (eg for options: @c toggle for string) */
+      S_CMD,
+      /** value invalid */
+      S_VALUE
+    };
+
 };
 
 #endif /* !MUTTNG_CONFIG_ABSTRACT_COMMAND_H */

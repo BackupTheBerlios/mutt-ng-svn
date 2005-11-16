@@ -18,7 +18,7 @@ class StringOption : public AbstractOption {
   public:
     StringOption (void);
     ~StringOption (void);
-    AbstractOption::state fromString (AbstractOption::commands command,
+    AbstractCommand::state fromString (AbstractOption::commands command,
                                       buffer_t* src, option_t* dst);
     void toString (option_t* src, buffer_t* dst);
 };

@@ -13,9 +13,10 @@
 StringOption::StringOption () {}
 StringOption::~StringOption () {}
 
-AbstractOption::state StringOption::fromString (AbstractOption::commands command, buffer_t* src, option_t* dst) {
+AbstractCommand::state StringOption::fromString (AbstractOption::commands command, buffer_t* src, option_t* dst) {
   char** str = (char**) dst->data;
   char* p = NULL;
+  bool change = false;
 
   switch (command) {
     case T_SET: p = src->str; break;
@@ -23,10 +24,11 @@ AbstractOption::state StringOption::fromString (AbstractOption::commands command
     case T_RESET: p = (char*) dst->init; break;
     case T_TOGGLE:
     case T_QUERY:
-      return (S_CMD);
+      return (AbstractCommand::S_CMD);
   }
+  change = !str_eq ((str && *str ? *str : ""), p);
   str_replace (str, p);
-  return (S_OK);
+  return (change ? AbstractCommand::S_OK_CHANGED : AbstractCommand::S_OK_UNCHANGED);
 }
 
 void StringOption::toString (option_t* src, buffer_t* dst) {

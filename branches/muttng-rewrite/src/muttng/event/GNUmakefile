@@ -1,13 +1,13 @@
 FILES=event
 LIB=libevent.a
 
-all: eventlist.h eventlist.cpp contextlist.h contextlist.cpp $(LIB)
+all: event.cpp event.h $(LIB)
 
-eventlist.%: EVENTS
-	./events.sh
+event.cpp: EVENTS CONTEXTS event.pl event.cpp.in
+	./event.pl
 
-contextslist.%: CONTEXTS
-	./contexts.sh
+event.h: EVENTS CONTEXTS event.pl event.h.in
+	./event.pl
 
 include $(CURDIR)/../../../GNUmakefile.config.default
 
