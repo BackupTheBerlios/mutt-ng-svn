@@ -8,6 +8,8 @@ clean: subdirclean
 srcdoc:
 	doxygen
 
+test: subdirtest
+
 depend: subdirdepend
 
 include ./../GNUmakefile.subdirs

@@ -12,4 +12,7 @@ depend: subdirdepend
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -I.. -o $@ -c $<
 
+test:
+	@echo no tests implemented yet
+
 include ./../../GNUmakefile.subdirs

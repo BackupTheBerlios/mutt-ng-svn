@@ -14,6 +14,9 @@ libmuttng.a: debug.o libmuttng.o
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -I.. -o $@ -c $<
 
+test:
+	@echo no tests implemented yet
+
 depend: subdirdepend
 
 include ./../../GNUmakefile.subdirs

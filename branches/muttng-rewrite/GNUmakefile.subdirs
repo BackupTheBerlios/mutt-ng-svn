@@ -20,3 +20,6 @@ subdirdoc:
 
 subdirdepend:
 	$(call dosubdirs,depend)
+
+subdirtest:
+	$(call dosubdirs,test)
