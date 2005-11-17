@@ -7,10 +7,25 @@
 #ifndef MUTTNG_EVENT_H
 #define MUTTNG_EVENT_H
 
+#include <vector>
+
 #include "core/buffer.h"
 #include "core/list.h"
 
 #include "libmuttng/debug.h"
+
+/**
+ * Info about an event bound.
+ * Returned by Event::getHelp()
+ */
+typedef struct {
+  /** key (sequence) the event is bound to */
+  char* key;
+  /** function name */
+  const char* name;
+  /** translated help string */
+  const char* help;
+} binding_t;
 
 /**
  * Core event handler class.
@@ -38,6 +53,22 @@ class Event {
       C_LAST
     };
 
+    /** Valid groups */
+    enum group {
+      /** group ID for "Internal" */
+      G_INTERNAL = 0,
+      /** group ID for "Misc." */
+      G_GENERIC,
+      /** group ID for "Movement" */
+      G_MOVE,
+      /** group ID for "Reply/Forward" */
+      G_REPLY,
+      /** group ID for "Editing" */
+      G_EDIT,
+      /** For static array sizes. */
+      G_LAST
+    };
+
     /** Valid events */
     enum event {
       /** event ID for <code>&lt;NULL&gt;</code> */
@@ -50,6 +81,22 @@ class Event {
       E_OPTION_CHANGE,
       /** event ID for <code>&lt;help&gt;</code> */
       E_HELP,
+      /** event ID for <code>&lt;show-version&gt;</code> */
+      E_SHOW_VERSION,
+      /** event ID for <code>&lt;reply&gt;</code> */
+      E_REPLY,
+      /** event ID for <code>&lt;list-reply&gt;</code> */
+      E_LIST_REPLY,
+      /** event ID for <code>&lt;group-reply&gt;</code> */
+      E_GROUP_REPLY,
+      /** event ID for <code>&lt;page-up&gt;</code> */
+      E_PAGE_UP,
+      /** event ID for <code>&lt;edit-message&gt;</code> */
+      E_EDIT_MESSAGE,
+      /** event ID for <code>&lt;break-thread&gt;</code> */
+      E_BREAK_THREAD,
+      /** event ID for <code>&lt;link-thread&gt;</code> */
+      E_LINK_THREAD,
       /** For static array sizes. */
       E_LAST
     };
@@ -220,9 +267,48 @@ class Event {
      */
     static const char* getEventName (Event::event event);
 
+    /**
+     * Get textual name of group.
+     * @param group Event.
+     * @return Name.
+     */
+    static const char* getGroupName (Event::group group);
+
+    /**
+     * See whether an event is allowed within a context.
+     * @param context Context.
+     * @param event Event.
+     * @return Yes/No.
+     */
+    bool eventValid (Event::context context, Event::event event);
+
+    /**
+     * For a given context, get all groups within.
+     * @param context Context.
+     * @return Vector of groups or @c NULL.
+     */
+    std::vector<Event::group>* getGroups (Event::context context);
+
+    /**
+     * For a context and a group, get all valid events.
+     * @param context Context.
+     * @param group Group.
+     * @return Vector of events or @c NULL.
+     */
+    std::vector<Event::event>* getEvents (Event::context context, Event::group group);
+
+    /**
+     * For a given context and event, get binding_t* info for help
+     * screens.
+     * @param context Context.
+     * @param event Event.
+     * @return Binding.
+     */
+    binding_t* getHelp (Event::context context, Event::event event);
+
   private:
     /** Context stack. */
-    list_t* contextStack;
+    std::vector<Event::context>* contextStack;
     /** debug */
     Debug* debug;
     /** active? */
@@ -230,7 +316,7 @@ class Event {
     /** big table of all event handlers */
     list_t* handlers[C_LAST][E_LAST];
     /** big table of all keys for events */
-    char* keys[C_LAST][E_LAST];
+    binding_t bindings[C_LAST][E_LAST];
 };
 
 /**

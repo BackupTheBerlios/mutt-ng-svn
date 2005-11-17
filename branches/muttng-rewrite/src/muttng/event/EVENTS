@@ -1,5 +1,13 @@
-C_GENERIC       E_CONTEXT_ENTER         NULL    NULL    NULL    NULL
-C_GENERIC       E_CONTEXT_LEAVE         NULL    NULL    NULL    NULL
-C_GENERIC       E_CONTEXT_REENTER       NULL    NULL    NULL    NULL
-C_GENERIC       E_OPTION_CHANGE         NULL    NULL    NULL    NULL
-C_INDEX|C_PAGER E_HELP                  help    Misc.   h       Show help screen
+C_GENERIC       E_CONTEXT_ENTER         NULL    G_INTERNAL    NULL    NULL
+C_GENERIC       E_CONTEXT_LEAVE         NULL    G_INTERNAL    NULL    NULL
+C_GENERIC       E_CONTEXT_REENTER       NULL    G_INTERNAL    NULL    NULL
+C_GENERIC       E_OPTION_CHANGE         NULL    G_INTERNAL    NULL    NULL
+C_INDEX|C_PAGER E_HELP                  help    G_GENERIC     h       Show help screen
+C_GENERIC       E_SHOW_VERSION          show-version    G_GENERIC       V       Show version information
+C_INDEX|C_PAGER E_REPLY                 reply           G_REPLY         r       Reply to current message
+C_INDEX|C_PAGER E_LIST_REPLY            list-reply      G_REPLY         L       List-reply to current message
+C_INDEX|C_PAGER E_GROUP_REPLY           group-reply     G_REPLY         g       Group-reply to current message
+C_GENERIC       E_PAGE_UP               page-up         G_MOVE          pgup    Page up
+C_INDEX|C_PAGER E_EDIT_MESSAGE          edit-message    G_EDIT          e       Edit current message
+C_INDEX         E_BREAK_THREAD          break-thread    G_EDIT          #       Break thread at current message
+C_INDEX         E_LINK_THREAD           link-thread     G_EDIT          &       Link tagged to current message in thread

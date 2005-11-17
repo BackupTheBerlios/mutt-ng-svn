@@ -98,6 +98,8 @@ class Tool : public Muttng {
     /** lib object */
     LibMuttng* libmuttng;
   private:
+    /** whether event handler was initialized */
+    bool haveEvent;
     /**
      * Compose a string with name and version info.
      * @param dst Desination buffer for string.

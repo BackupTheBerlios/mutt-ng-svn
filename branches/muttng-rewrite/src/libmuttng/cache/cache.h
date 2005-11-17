@@ -23,7 +23,7 @@ class Cache : public LibMuttng {
     /**
      * Compute key for message.
      * This must be implmented by Mailbox classes.
-     * @param Message.
+     * @param msg Message.
      * @return Key.
      */
     virtual const char* key (Message* msg) = 0;

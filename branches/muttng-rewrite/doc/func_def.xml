@@ -1,0 +1,24 @@
+<definitions>
+  <context name="generic">
+    <function name="page-up"/>
+    <function name="show-version"/>
+  </context>
+  <context name="help">
+  </context>
+  <context name="index">
+    <function name="break-thread"/>
+    <function name="edit-message"/>
+    <function name="group-reply"/>
+    <function name="help"/>
+    <function name="link-thread"/>
+    <function name="list-reply"/>
+    <function name="reply"/>
+  </context>
+  <context name="pager">
+    <function name="edit-message"/>
+    <function name="group-reply"/>
+    <function name="help"/>
+    <function name="list-reply"/>
+    <function name="reply"/>
+  </context>
+</definitions>

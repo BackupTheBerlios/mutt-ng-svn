@@ -19,7 +19,7 @@
  *       - all @c bind and @c macro implementations
  *       - ...
  *
- *     The implementation is based on the following two concepts:
+ *     The implementation is based on the following concepts:
  *
  *       -# There are so called "contexts", that is a semantic grouping
  *          of events. Currently these are the former screens/menus, but
@@ -34,6 +34,10 @@
  *          code can demand the central event handler to emit a specific
  *          event which will then notify all handlers. This way the
  *          logic and many parts are really de-coupled.
+ *       -# In addition to these, for user interfaces, events are also
+ *          sorted into groups. For example, a user interface could want
+ *          to sort functions by semantic instead of only by assigned
+ *          keys.
  *
  *   @section muttng_event_context Context (stack)
  *
@@ -93,7 +97,7 @@
  *
  *     @subsection muttng_event_impl_bind Binding
  *
- *       As the lookup for the list works in O(1), there's not really
+ *       As the lookup for the arrays works in O(1), there's not really
  *       much overhead for binding.
  *
  *       Unfortunately, we cannot register dynamic (i.e. non-static)
@@ -131,8 +135,9 @@
  *       being compiled is created automatically by the
  *       <code>event.pl</code> script in the <code>muttng/event/</code>
  *       directory. It reads the files
- *       <code>muttng/event/CONTEXTS</code> and
- *       <code>muttng/event/EVENTS</code> and replaces magic words in
+ *       <code>muttng/event/CONTEXTS</code>,
+ *       <code>muttng/event/EVENTS</code> and 
+ *       <code>muttng/event/GROUPS</code> and replaces magic words in
  *       <code>event.cpp.in</code> and <code>event.h.in</code>
  *       respectively. Doxygen documentation is created, too.
  *
@@ -145,17 +150,30 @@
  *
  *         -# @c _CONTEXT_ENUM_ builds up Event::context
  *         -# @c _EVENT_ENUM_ builds up Event::event
+ *         -# @c _GROUP_ENUM_ builds up Event::group
  *         -# @c _CONTEXT__DESCR_ builds up CtxStr
  *         -# @c _EVENT_DESCR_ builds up EvStr
+ *         -# @c _GROUP_DESCR_ builds up GroupStr
  *         -# @c _EVENT_VALID_ builds up EvValid
+ *         -# @c _GROUP_VALID_ builds up GroupValid
+ *         -# @c _EVENT_HELP_ builds up EvHelp
+ *       
+ *       In addition, @c _BIND_ produces the code to setup the default
+ *       bindings for functions, i.e. the bindings array.
  *
- *       <code>CONTEXTS</code> and <code>EVENTS</code> contain simple
- *       space-separated fields.
+ *       <code>CONTEXTS</code>, <code>muttng/event/GROUPS</code> and
+ *       <code>EVENTS</code> contain simple space-separated fields.
  *
  *       The fields of <code>CONTEXTS</code> have the following meaning:
  *
  *         -# context ID for Event::context (i.e. <code>C_GENERIC</code>)
  *         -# context description for the @c bind and @c macro features
+ *
+ *       Similarily, the fileds of <code>GROUPS</code> have the
+ *       following meaning:
+ *
+ *         -# group ID for Event::group (i.e. <code>G_INTERNAL</code>)
+ *         -# group description the fancy help screens
  *
  *       The fields of <code>EVENTS</code> have the followin meaning:
  *
@@ -167,9 +185,8 @@
  *         -# event ID for Event::event (i.e. <code>E_HELP</code>)
  *         -# the function name for the event the user can bind to or
  *            @c NULL if none, i.e. the event is internal.
- *         -# event category for functions and @c NULL otherwise. This
- *            can be used by the UI to group functions in the help
- *            screen by category and key rather than only by key.
+ *         -# the group ID of the event (use @c G_INTERNAL for all
+ *            non-functions)
  *         -# the default key binding for functions and @c NULL
  *            otherwise.
  *         -# the description of a function for the help screen and
@@ -177,6 +194,29 @@
  *
  *       This format currently implies that a function must always have
  *       the same default keybinding for all contexts it's valid in.
+ *
+ *     @subsection muttng_event_bind_usage Using the event handler
+ *
+ *       It can be used in the following ways:
+ *
+ *         -# bind to and thus catch any event
+ *         -# emit any event
+ *         -# query for listings of events
+ *
+ *       The first is achieved via the @c bind* functions.
+ *
+ *       The second is achieved via the emit() function.
+ *
+ *       For the third, here are some usage scenarios:
+ *
+ *         - a full listing (including everything application-interal,
+ *           i.e. non-functions) can be obtained via getHelp() and
+ *           looping over Event::context and Event::event
+ *         - @c muttng-conf(1) uses filters available: it retrieves a
+ *           list of valid groups for every context. While ignoring
+ *           @c G_INTERNAL, it retrieves the list of all known events
+ *           for all groups it got. For every event, it then uses
+ *           getHelp() to get data to display.
  */
 /* }}} */
 /**
@@ -186,6 +226,7 @@
  */
 #include "core/mem.h"
 #include "core/str.h"
+#include "core/intl.h"
 
 #include "event.h"
 #include "../muttng.h"
@@ -228,6 +269,28 @@ __EVENT_DESCR__
 };
 
 /* }}} */
+/* event2help table {{{ */
+
+/** Table mapping events to string */
+static const char* EvHelp[Event::E_LAST+1] = {
+__EVENT_HELP__
+  /** help string for E_LAST */
+  NULL
+};
+
+/* }}} */
+/* group2str table {{{ */
+
+/** Table mapping events to string */
+static const char* GroupStr[Event::G_LAST+1] = {
+__GROUP_DESCR__
+  /** group string for G_LAST */
+  NULL
+};
+
+/* }}} */
+
+
 /* event validity table {{{ */
 
 /** Table telling us for which context an event is valid */
@@ -236,20 +299,31 @@ __EVENT_VALID__
   /** for which contexts E_LAST is valid */
   0
 };
-
 /* }}} */
+/* group validity table {{{ */
+
+/** Table telling us for which context a group is valid */
+static const int GroupValid[Event::C_LAST+1] = {
+__GROUP_VALID__
+  /** for which contexts G_LAST is valid */
+  0
+};
+/* }}} */
+
 
 Event::Event (Debug* debug) {
   int i = 0, j = 0;
 
   this->debug = debug;
   this->active = true;
-  this->contextStack = NULL;
+  this->contextStack = new std::vector<Event::context>;
 
   for (i = 0; i < C_LAST; i++)
     for (j = 0; j < E_LAST; j++) {
       handlers[i][j] = NULL;
-      keys[i][j] = NULL;
+      bindings[i][j].key = NULL;
+      bindings[i][j].name = NULL;
+      bindings[i][j].help = NULL;
     }
 }
 
@@ -259,7 +333,7 @@ Event::~Event (void) {
 
   DEBUGPRINT(1,("cleanup event handler"));
 
-  while (!(list_empty (contextStack)))
+  while (contextStack->size () != 0)
     unsetContext (0);
 
   /*
@@ -280,11 +354,12 @@ Event::~Event (void) {
         }
       }
     }
-  list_del (&contextStack, NULL);
+  delete (contextStack);
 }
 
 bool Event::init (void) {
   DEBUGPRINT(1,("init event handler"));
+__BIND__
   setContext (C_GENERIC, 0);
   return (true);
 }
@@ -375,6 +450,7 @@ bool Event::_emit (const char* file, int line, Event::context context,
     handle = (handle_t*) list->data[i];
     if (handle->input && !input) {
       /* error */
+      return (false);
     }
     if ((state = handle->handler (context, event, input, complete,
                                   handle->self, data)) != S_OK) {
@@ -396,19 +472,22 @@ bool Event::bindUser (Event::context context, const char* key,
 
 void Event::_setContext (const char* file, int line,
                         Event::context context, unsigned long data) {
-  DEBUGPRINT(D_EVENT,("enter ctx=%s from %s:%d", CtxStr[context], NONULL (file), line));
+  DEBUGPRINT(D_EVENT,("enter ctx=%s from %s:%d", CtxStr[context],
+                      NONULL (file), line));
   emit (context, E_CONTEXT_ENTER, NULL, false, data);
-  list_push_back (&contextStack, (LIST_ITEMTYPE) context);
+  contextStack->push_back (context);
 }
 
 void Event::_unsetContext (const char* file, int line, unsigned long data) {
   Event::context context;
 
-  context = (Event::context) list_pop_back (&contextStack);
-  DEBUGPRINT(D_EVENT,("leave ctx=%s from %s:%d", CtxStr[context], NONULL (file), line));
+  context = contextStack->at (contextStack->size ()-1);
+  contextStack->pop_back ();
+  DEBUGPRINT(D_EVENT,("leave ctx=%s from %s:%d", CtxStr[context],
+                      NONULL (file), line));
   emit (context, E_CONTEXT_LEAVE, NULL, false, data);
-  if (!list_empty (contextStack)) {
-    context = (Event::context) contextStack->data[contextStack->length-1];
+  if (contextStack->size () != 0) {
+    context = contextStack->at (contextStack->size ()-1);
     DEBUGPRINT(D_EVENT,("re-enter ctx=%s from %s:%d", CtxStr[context],
                   NONULL (file), line));
     emit (context, E_CONTEXT_REENTER, NULL, false, data);
@@ -441,4 +520,52 @@ const char* Event::getContextName (Event::context context) {
 
 const char* Event::getEventName (Event::event event) {
   return (EvStr[event]);
+}
+
+const char* Event::getGroupName (Event::group group) {
+  return (GroupStr[group]);
+}
+
+bool Event::eventValid (Event::context context, Event::event event) {
+  return (EvValid[event] & CTX(context));
+}
+
+std::vector<Event::group>* Event::getGroups (Event::context context) {
+  int i = 0;
+  std::vector<Event::group>* ret = new std::vector<Event::group>;
+
+  for (i = 0; i < Event::G_LAST; i++)
+    if (GroupValid[context] & CTX(i))
+      ret->push_back ((Event::group) i);
+
+  if (ret->size () == 0) {
+    delete (ret);
+    return (NULL);
+  }
+
+  return (ret);
+}
+
+std::vector<Event::event>* Event::getEvents (Event::context context, Event::group group) {
+  int i = 0;
+  std::vector<Event::event>* ret = new std::vector<Event::event>;
+
+  for (i = 0; i < (int) Event::E_LAST; i++)
+    /*
+     * - for all events, check wheter they're part of a context
+     * - if event valid for context, check group, too
+     */
+    if (EvValid[i] & CTX(context) && (GroupValid[context] & CTX(group)))
+      ret->push_back ((Event::event) i);
+
+  if (ret->size () == 0) {
+    delete (ret);
+    return (NULL);
+  }
+
+  return (ret);
+}
+
+binding_t* Event::getHelp (Event::context context, Event::event event) {
+  return (&bindings[context][event]);
 }

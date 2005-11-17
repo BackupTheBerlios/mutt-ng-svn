@@ -17,9 +17,9 @@ class Crypto : public LibMuttng {
   public:
     Crypto (void);
     virtual ~Crypto (void) = 0;
-
+    /** dummy */
     virtual void pgpFoo (void) = 0;
-
+    /** dummy */
     virtual void smimeFoo (void) = 0;
 };
 

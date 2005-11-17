@@ -1,3 +1,9 @@
+/** @ingroup core_unit */
+/**
+ * @file core/test/list_tests.cpp
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
+ * @brief Implementation: list_t unit tests
+ */
 #include <unit++/unit++.h>
 #include "list_tests.h"
 
@@ -37,7 +43,7 @@ void list_tests::test_pop3() {
 }
 
 list_tests::list_tests() : suite("list_tests") {
-	add("pop1()",testcase(this,"test_pop1()",&list_tests::test_pop1));
-	add("pop2()",testcase(this,"test_pop2()",&list_tests::test_pop2));
-	add("pop3()",testcase(this,"test_pop3()",&list_tests::test_pop3));
+  add("pop1()",testcase(this,"test_pop1()",&list_tests::test_pop1));
+  add("pop2()",testcase(this,"test_pop2()",&list_tests::test_pop2));
+  add("pop3()",testcase(this,"test_pop3()",&list_tests::test_pop3));
 }

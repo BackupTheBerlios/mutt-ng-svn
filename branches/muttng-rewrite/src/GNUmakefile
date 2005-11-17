@@ -12,4 +12,9 @@ test: subdirtest
 
 depend: subdirdepend
 
+.PHONY: po
+
+po:
+	$(MAKE) -C ./po all
+
 include ./../GNUmakefile.subdirs

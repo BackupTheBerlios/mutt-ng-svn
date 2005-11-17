@@ -90,10 +90,12 @@ Tool::Tool (int argc, char** argv) {
   this->readGlobal = true;
   this->altConfig = NULL;
   this->libmuttng = NULL;
+  this->haveEvent = false;
 }
 
 Tool::~Tool () {
-  this->event->unbindInternal ((void*) this);
+  if (this->haveEvent)
+    this->event->unbindInternal ((void*) this);
   if (this->libmuttng) {
     this->libmuttng->cleanup ();
     delete (this->libmuttng);
@@ -271,6 +273,7 @@ void Tool::setupEventHandlers (void) {
   event->bindInternal (Event::C_GENERIC, Event::E_OPTION_CHANGE,
                        false, (void*) this,
                        handleOptionChange);
+  haveEvent = true;
 }
 
 Event::state Tool::handleOptionChange (Event::context context, Event::event event,

@@ -1,0 +1,6 @@
+<definitions>
+  <variable name="allow_8bit"/>
+  <variable name="assumed_charset"/>
+  <variable name="debug_level"/>
+  <variable name="umask"/>
+</definitions>

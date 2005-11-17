@@ -31,6 +31,16 @@ class ConfTool : public Tool {
     int main (void);
     const char* getName (void);
     void getUsage (buffer_t* dst);
+  private:
+    /** what to print */
+    enum modes {
+      /** print options */
+      M_OPTS = 0,
+      /** print bindings */
+      M_BIND
+    };
+    void do_opts (bool annotated, bool changed);
+    void do_bind (bool annotated);
 };
 
 #endif /* !MUTTNG_CONF_TOOL_H */

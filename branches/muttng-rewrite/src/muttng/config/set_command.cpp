@@ -27,7 +27,7 @@
 
 /** All configuration options we know */
 static option_t Options[] = {
-  /* START options Variable Reference */
+  /* START */
 
   { SetCommand::T_BOOL,         "allow_8bit",           "yes",          OPT_ALLOW8BIT   },
   /*

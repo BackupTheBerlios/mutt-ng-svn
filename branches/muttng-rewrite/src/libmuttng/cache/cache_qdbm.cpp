@@ -9,5 +9,3 @@ QDBMCache::QDBMCache (void) {}
 QDBMCache::~QDBMCache (void) {}
 void QDBMCache::open (void) {}
 void QDBMCache::close (void) {}
-
-/** @} */
