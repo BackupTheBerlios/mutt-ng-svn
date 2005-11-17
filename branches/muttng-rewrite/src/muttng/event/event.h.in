@@ -21,6 +21,8 @@
 typedef struct {
   /** key (sequence) the event is bound to */
   char* key;
+  /** default key */
+  const char* defkey;
   /** function name */
   const char* name;
   /** translated help string */

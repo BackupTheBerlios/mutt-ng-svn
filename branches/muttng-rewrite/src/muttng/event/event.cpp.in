@@ -290,7 +290,6 @@ __GROUP_DESCR__
 
 /* }}} */
 
-
 /* event validity table {{{ */
 
 /** Table telling us for which context an event is valid */
@@ -309,7 +308,15 @@ __GROUP_VALID__
   0
 };
 /* }}} */
+/* group validity table #2 {{{ */
 
+/** Table telling us for which group an event is valid */
+static const Event::group GroupValid2[Event::E_LAST+1] = {
+__GROUP_VALID2__
+  /** for which group E_LAST is valid */
+  Event::G_LAST
+};
+/* }}} */
 
 Event::Event (Debug* debug) {
   int i = 0, j = 0;
@@ -555,7 +562,7 @@ std::vector<Event::event>* Event::getEvents (Event::context context, Event::grou
      * - for all events, check wheter they're part of a context
      * - if event valid for context, check group, too
      */
-    if (EvValid[i] & CTX(context) && (GroupValid[context] & CTX(group)))
+    if (EvValid[i] & CTX(context) && (GroupValid2[(Event::event) i] == group))
       ret->push_back ((Event::event) i);
 
   if (ret->size () == 0) {

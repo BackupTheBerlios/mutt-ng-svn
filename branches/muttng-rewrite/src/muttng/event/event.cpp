@@ -356,7 +356,6 @@ static const char* GroupStr[Event::G_LAST+1] = {
 
 /* }}} */
 
-
 /* event validity table {{{ */
 
 /** Table telling us for which context an event is valid */
@@ -408,7 +407,41 @@ static const int GroupValid[Event::C_LAST+1] = {
   0
 };
 /* }}} */
+/* group validity table #2 {{{ */
 
+/** Table telling us for which group an event is valid */
+static const Event::group GroupValid2[Event::E_LAST+1] = {
+  /** valid groups for event Event::E_CONTEXT_ENTER */
+  Event::G_INTERNAL,
+  /** valid groups for event Event::E_CONTEXT_LEAVE */
+  Event::G_INTERNAL,
+  /** valid groups for event Event::E_CONTEXT_REENTER */
+  Event::G_INTERNAL,
+  /** valid groups for event Event::E_OPTION_CHANGE */
+  Event::G_INTERNAL,
+  /** valid groups for event Event::E_HELP */
+  Event::G_GENERIC,
+  /** valid groups for event Event::E_SHOW_VERSION */
+  Event::G_GENERIC,
+  /** valid groups for event Event::E_REPLY */
+  Event::G_REPLY,
+  /** valid groups for event Event::E_LIST_REPLY */
+  Event::G_REPLY,
+  /** valid groups for event Event::E_GROUP_REPLY */
+  Event::G_REPLY,
+  /** valid groups for event Event::E_PAGE_UP */
+  Event::G_MOVE,
+  /** valid groups for event Event::E_EDIT_MESSAGE */
+  Event::G_EDIT,
+  /** valid groups for event Event::E_BREAK_THREAD */
+  Event::G_EDIT,
+  /** valid groups for event Event::E_LINK_THREAD */
+  Event::G_EDIT,
+
+  /** for which group E_LAST is valid */
+  Event::G_LAST
+};
+/* }}} */
 
 Event::Event (Debug* debug) {
   int i = 0, j = 0;
@@ -459,45 +492,59 @@ Event::~Event (void) {
 bool Event::init (void) {
   DEBUGPRINT(1,("init event handler"));
   bindings[C_INDEX][E_HELP].key = str_dup ("h");
+  bindings[C_INDEX][E_HELP].defkey = "h";
   bindings[C_INDEX][E_HELP].name = EvStr[E_HELP];
   bindings[C_INDEX][E_HELP].help = EvHelp[E_HELP];
   bindings[C_PAGER][E_HELP].key = str_dup ("h");
+  bindings[C_PAGER][E_HELP].defkey = "h";
   bindings[C_PAGER][E_HELP].name = EvStr[E_HELP];
   bindings[C_PAGER][E_HELP].help = EvHelp[E_HELP];
   bindings[C_GENERIC][E_SHOW_VERSION].key = str_dup ("V");
+  bindings[C_GENERIC][E_SHOW_VERSION].defkey = "V";
   bindings[C_GENERIC][E_SHOW_VERSION].name = EvStr[E_SHOW_VERSION];
   bindings[C_GENERIC][E_SHOW_VERSION].help = EvHelp[E_SHOW_VERSION];
   bindings[C_INDEX][E_REPLY].key = str_dup ("r");
+  bindings[C_INDEX][E_REPLY].defkey = "r";
   bindings[C_INDEX][E_REPLY].name = EvStr[E_REPLY];
   bindings[C_INDEX][E_REPLY].help = EvHelp[E_REPLY];
   bindings[C_PAGER][E_REPLY].key = str_dup ("r");
+  bindings[C_PAGER][E_REPLY].defkey = "r";
   bindings[C_PAGER][E_REPLY].name = EvStr[E_REPLY];
   bindings[C_PAGER][E_REPLY].help = EvHelp[E_REPLY];
   bindings[C_INDEX][E_LIST_REPLY].key = str_dup ("L");
+  bindings[C_INDEX][E_LIST_REPLY].defkey = "L";
   bindings[C_INDEX][E_LIST_REPLY].name = EvStr[E_LIST_REPLY];
   bindings[C_INDEX][E_LIST_REPLY].help = EvHelp[E_LIST_REPLY];
   bindings[C_PAGER][E_LIST_REPLY].key = str_dup ("L");
+  bindings[C_PAGER][E_LIST_REPLY].defkey = "L";
   bindings[C_PAGER][E_LIST_REPLY].name = EvStr[E_LIST_REPLY];
   bindings[C_PAGER][E_LIST_REPLY].help = EvHelp[E_LIST_REPLY];
   bindings[C_INDEX][E_GROUP_REPLY].key = str_dup ("g");
+  bindings[C_INDEX][E_GROUP_REPLY].defkey = "g";
   bindings[C_INDEX][E_GROUP_REPLY].name = EvStr[E_GROUP_REPLY];
   bindings[C_INDEX][E_GROUP_REPLY].help = EvHelp[E_GROUP_REPLY];
   bindings[C_PAGER][E_GROUP_REPLY].key = str_dup ("g");
+  bindings[C_PAGER][E_GROUP_REPLY].defkey = "g";
   bindings[C_PAGER][E_GROUP_REPLY].name = EvStr[E_GROUP_REPLY];
   bindings[C_PAGER][E_GROUP_REPLY].help = EvHelp[E_GROUP_REPLY];
   bindings[C_GENERIC][E_PAGE_UP].key = str_dup ("pgup");
+  bindings[C_GENERIC][E_PAGE_UP].defkey = "pgup";
   bindings[C_GENERIC][E_PAGE_UP].name = EvStr[E_PAGE_UP];
   bindings[C_GENERIC][E_PAGE_UP].help = EvHelp[E_PAGE_UP];
   bindings[C_INDEX][E_EDIT_MESSAGE].key = str_dup ("e");
+  bindings[C_INDEX][E_EDIT_MESSAGE].defkey = "e";
   bindings[C_INDEX][E_EDIT_MESSAGE].name = EvStr[E_EDIT_MESSAGE];
   bindings[C_INDEX][E_EDIT_MESSAGE].help = EvHelp[E_EDIT_MESSAGE];
   bindings[C_PAGER][E_EDIT_MESSAGE].key = str_dup ("e");
+  bindings[C_PAGER][E_EDIT_MESSAGE].defkey = "e";
   bindings[C_PAGER][E_EDIT_MESSAGE].name = EvStr[E_EDIT_MESSAGE];
   bindings[C_PAGER][E_EDIT_MESSAGE].help = EvHelp[E_EDIT_MESSAGE];
   bindings[C_INDEX][E_BREAK_THREAD].key = str_dup ("#");
+  bindings[C_INDEX][E_BREAK_THREAD].defkey = "#";
   bindings[C_INDEX][E_BREAK_THREAD].name = EvStr[E_BREAK_THREAD];
   bindings[C_INDEX][E_BREAK_THREAD].help = EvHelp[E_BREAK_THREAD];
   bindings[C_INDEX][E_LINK_THREAD].key = str_dup ("&");
+  bindings[C_INDEX][E_LINK_THREAD].defkey = "&";
   bindings[C_INDEX][E_LINK_THREAD].name = EvStr[E_LINK_THREAD];
   bindings[C_INDEX][E_LINK_THREAD].help = EvHelp[E_LINK_THREAD];
 
@@ -696,7 +743,7 @@ std::vector<Event::event>* Event::getEvents (Event::context context, Event::grou
      * - for all events, check wheter they're part of a context
      * - if event valid for context, check group, too
      */
-    if (EvValid[i] & CTX(context) && (GroupValid[context] & CTX(group)))
+    if (EvValid[i] & CTX(context) && (GroupValid2[(Event::event) i] == group))
       ret->push_back ((Event::event) i);
 
   if (ret->size () == 0) {

@@ -40,7 +40,7 @@ class ConfTool : public Tool {
       M_BIND
     };
     void do_opts (bool annotated, bool changed);
-    void do_bind (bool annotated);
+    void do_bind (bool annotated, bool changed);
 };
 
 #endif /* !MUTTNG_CONF_TOOL_H */

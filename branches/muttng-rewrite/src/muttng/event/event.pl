@@ -63,18 +63,21 @@ $first = 1;
 # }}}
 
 # parse ./EVENTS {{{
+my @events = ();
 my $event_enum = "";
 my $event_descr = "";
 my $event_help = "";
 my $event_valid = "";
 my %event_doc = ();
 my %map1 = ();
+my %map2 = ();
 my $bind = "";
 open (IN, "< ./EVENTS") or die "cannot open ./EVENTS: $!\n";
 while (<IN>) {
   chomp;
   if ($_ =~ /^([A-Z|_]+)[\s\t]+(E_[A-Z_]+)[\s\t]+([^\s]+)[\s\t]+([^\s]+)[\s\t]+([^\s]+)[\s\t]+(.+)$/) {
     #warn "ctx='$1', ev='$2', func='$3', cat='$4', key='$5', descr='$6'\n";
+    push (@events, $2);
     if (!$first) {
       $event_enum .= "\n";
       $event_cat .= "\n";
@@ -82,6 +85,7 @@ while (<IN>) {
       $event_help .= "\n";
       $event_valid .= "\n";
     }
+    $map2{$4}{$2} = 1;
     $event_enum .= "      /** event ID for <code>\&lt;$3\&gt;</code> */\n";
     $event_enum .= "      $2";
     $event_cat .= "  /** event category for $2 */\n";
@@ -122,6 +126,7 @@ while (<IN>) {
         $event_doc{$c}{$3}{'key'} = $5;
         $event_doc{$c}{$3}{'descr'} = $6;
         $bind .= "  bindings[$c][$2].key = str_dup (\"$5\");\n";
+        $bind .= "  bindings[$c][$2].defkey = \"$5\";\n";
         $bind .= "  bindings[$c][$2].name = EvStr[$2];\n";
         $bind .= "  bindings[$c][$2].help = EvHelp[$2];\n";
       }
@@ -152,6 +157,24 @@ foreach my $c (@contexts) {
   $group_valid .= ",\n";
 }
 
+my $group_valid2 = "";
+foreach my $c (@events) {
+  my $first1 = "  ";
+  my $count = 0;
+  $group_valid2 .= "  /** valid groups for event Event::$c */\n";
+  foreach my $g (@groups) {
+    if (defined ($map2{$g}{$c})) {
+      $group_valid2 .= "${first1}Event::$g";
+      $first1 = "|";
+      $count++;
+    }
+  }
+  if ($count == 0) {
+    $group_valid2 .= "  0";
+  }
+  $group_valid2 .= ",\n";
+}
+
 open (IN, "< event.h.in") or die "cannot open event.in.h: $!\n";
 $content = "";
 while (<IN>) { $content .= $_; }
@@ -173,6 +196,7 @@ $content =~ s#__EVENT_HELP__#$event_help#g;
 $content =~ s#__GROUP_DESCR__#$group_descr#g;
 $content =~ s#__EVENT_VALID__#$event_valid#g;
 $content =~ s#__GROUP_VALID__#$group_valid#g;
+$content =~ s#__GROUP_VALID2__#$group_valid2#g;
 $content =~ s#__BIND__#$bind#g;
 open (OUT, "> event.cpp") or die "cannot open event.cpp: $!\n";
 print OUT $content;

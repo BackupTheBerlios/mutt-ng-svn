@@ -75,7 +75,7 @@ void ConfTool::do_opts (bool annotated, bool changed) {
 
 }
 
-void ConfTool::do_bind (bool annotated) {
+void ConfTool::do_bind (bool annotated, bool changed) {
   int i = 0, j = 0, k = 0;
   const binding_t* descr = NULL;
   std::vector<Event::group>* groups = NULL;
@@ -102,7 +102,7 @@ void ConfTool::do_bind (bool annotated) {
       for (k = 0; k < (int) events->size (); k++) {
         descr = event->getHelp ((Event::context) i, events->at (k));
         /* only functions have a help text, read: ignore internal */
-        if (!descr->help)
+        if (!descr->help || (changed && str_eq (descr->key, descr->defkey)))
           continue;
         cout << "bind " << event->getContextName ((Event::context) i) << " " 
              << descr->key << " '<" << descr->name << ">'";
@@ -143,7 +143,7 @@ int ConfTool::main (void) {
 
   switch (mode) {
     case M_OPTS: do_opts (annotated, changedOnly); break;
-    case M_BIND: do_bind (annotated); break;
+    case M_BIND: do_bind (annotated, changedOnly); break;
   }
 
   this->end ();
