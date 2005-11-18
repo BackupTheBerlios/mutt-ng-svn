@@ -93,6 +93,8 @@ void buffer_tests::test_buffer_add_ch() {
 	buffer_add_ch(b,'\0');
 	buffer_add_ch(b,'x');
 	assert_true("buffer contains '3 \\0x'",buffer_equal1(b,"3 \0x",4));
+
+	delete b;
 }
 
 /** test for buffer_add_num2() */
@@ -112,6 +114,25 @@ void buffer_tests::test_buffer_add_num2() {
 
 	buffer_add_num2(b,383833,-1,16);
 	assert_true("buffer contains 5db59",buffer_equal1(b,"5db59",-1));
+
+	/**
+	 * - Test edge case: when converting INT_MIN to binary we have
+	 *   a sign and the largest number of digits, i.e. verify here
+	 *   that conv_itoa() doesn't run into buffer overflow
+	 */
+	buffer_shrink(b,0);
+	buffer_add_num2(b,INT_MIN,-1,2);
+	assert_true("buffer contains INT_MIN (binary)",b->len == (sizeof(int)*8)+1);
+
+	buffer_shrink(b,0);
+	buffer_add_num2(b,INT_MAX,-1,2);
+	/*
+	 * we have two's complement, i.e. largest positive is:
+	 * 01111...1, i.e. leading 0 -> do -1
+	 */
+	assert_true("buffer contains INT_MAX (binary)",b->len == (sizeof(int)*8)-1);
+
+	delete b;
 }
 
 buffer_tests::buffer_tests() : suite("buffer_tests") {

@@ -7,7 +7,7 @@ include $(CURDIR)/../../../GNUmakefile.config.mine
 include $(CURDIR)/../../../GNUmakefile.config
 
 all: 
-	@echo "run 'make test' in order to compile the tests"
+	@echo "run '$(MAKE) test' in order to compile the tests"
 
 test: run_test
 	./$^ -v

@@ -15,9 +15,12 @@ extern "C" {
 
 /**
  * Buffer size for converting int to string via conv_itoa().
- * As we may convert to binary: sign + 32 bits + \\0 = 34.
+ * As we may convert to binary:
+ *   - we need 8*sizeof(int) bits, i.e. character cells
+ *   - we may have a sign: +1
+ *   - trailing \\0: +1
  */
-#define NUMBUF  34
+#define NUMBUF  ((sizeof(int)*8)+2)
 
 /**
  * Convert int to string.
@@ -31,6 +34,7 @@ extern "C" {
  *            the number will be converted as-is.
  * @param base Number base (2, 8, 10, 16).
  * @return Offset into buf.
+ * @test buffer_tests::test_buffer_add_num2().
  */
 char* conv_itoa2 (char* buf, int num, int pad, int base);
 
@@ -45,6 +49,7 @@ char* conv_itoa2 (char* buf, int num, int pad, int base);
  * @param P To how many digits to 0-pad the number. If negative,
  *          the number will be converted as-is.
  * @return Offset into buf.
+ * @test buffer_tests::test_buffer_add_num2().
  */
 #define conv_itoa(B,N,P)        conv_itoa2(B,N,P,10)
 
