@@ -1,6 +1,6 @@
 CXXFLAGS+=-I..
 LDFLAGS+=-L.. -lcore -lunit++
-LINKLIBS=test.o buffer_tests.o hash_tests.o list_tests.o
+LINKLIBS=test.o buffer_tests.o hash_tests.o list_tests.o io_tests.o
 
 include $(CURDIR)/../../../GNUmakefile.whereis
 include $(CURDIR)/../../../GNUmakefile.config.mine

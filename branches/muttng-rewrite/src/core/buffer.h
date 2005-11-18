@@ -29,6 +29,7 @@ typedef struct {
 /**
  * Initialize buffer to zero.
  * @param B Pointer to buffer.
+ * @test buffer_tests::test_buffer_init().
  */
 #define buffer_init(B) do { \
   B->str = NULL; \
@@ -43,6 +44,7 @@ typedef struct {
  * @param s Initial portion of string to append.
  * @param len How many characters to consider "initial". If @c -1,
  *        get length of string first via @c str_len().
+ * @test buffer_tests::test_buffer_add_str().
  */
 void buffer_add_str (buffer_t* buffer, const char* s, int len);
 
@@ -51,6 +53,7 @@ void buffer_add_str (buffer_t* buffer, const char* s, int len);
  * Memory for buffer and contents will be @c malloc'd as needed.
  * @param dst Pointer to buffer for storage.
  * @param src Source buffer.
+ * @test buffer_tests::test_buffer_add_buffer().
  */
 void buffer_add_buffer (buffer_t* dst, buffer_t* src);
 
@@ -59,6 +62,7 @@ void buffer_add_buffer (buffer_t* dst, buffer_t* src);
  * Memory for buffer and contents will be @c malloc'd as needed.
  * @param buffer Pointer to buffer for storage.
  * @param ch Character to append.
+ * @test buffer_tests::test_buffer_add_ch().
  */
 void buffer_add_ch (buffer_t* buffer, unsigned char ch);
 
@@ -70,6 +74,7 @@ void buffer_add_ch (buffer_t* buffer, unsigned char ch);
  * @param pad Number of digits for destination. If too few, buffer
  *            will be filled with 0 and truncated otherwise.
  * @param base Number base.
+ * @test buffer_tests::test_buffer_add_num2().
  */
 void buffer_add_num2 (buffer_t* buffer, int num, int pad, int base);
 
@@ -89,6 +94,7 @@ void buffer_add_num2 (buffer_t* buffer, int num, int pad, int base);
  * @param s String.
  * @param slen Length of string. If negative, it will be computed first.
  * @return Yes/No.
+ * @test buffer_tests::test_buffer_equal1().
  */
 int buffer_equal1 (buffer_t* buffer, const char* s, int slen);
 

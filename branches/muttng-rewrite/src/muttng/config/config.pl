@@ -112,7 +112,7 @@ foreach my $v (sort keys (%vars)) {
 #  $init =~ s#<#&lt;#g;
 #  $init =~ s#>#&gt;#g;
   $init =~ s#\\#\\\\#g;
-  warn "$init\n";
+  #warn "$init\n";
   print OUT "* \@section option_$v \$$v\n";
   print OUT "*   Type: <code>$vars{$v}{'type'}</code>, ";
   print OUT " Initial value: <code>'$init'</code>";

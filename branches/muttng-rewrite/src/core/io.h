@@ -1,23 +1,69 @@
+/** @ingroup core */
+/**
+ * @file core/io.h
+ * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
+ * @author Copyright (C) 1999-2000 Thomas Roessler <roessler@does-not-exist.org>
+ * @brief Interface: I/O routines
+ */
 #ifndef MUTTNG_CORE_IO_H
 #define MUTTNG_CORE_IO_H
 
-/*
- * Copyright notice from original mutt:
- * Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
- * Copyright (C) 1999-2000 Thomas Roessler <roessler@does-not-exist.org>
- *
- * This file is part of mutt-ng, see http://www.muttng.org/.
- * It's licensed under the GNU General Public License,
- * please see the file GPL in the top level source directory.
- */
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include <stdio.h>
 
-int io_open (const char *path, int flags, int u);
+#include "buffer.h"
+
+/**
+ * Like @c open(2) but fails for symlinks.
+ * @param path File to open.
+ * @param flags Flags to pass to @c open(2).
+ * @param u If positive, pass to @c umask(2) first.
+ * @return Open file descriptor or @c -1 in case of error.
+ * @test io_tests::test_io_open().
+ */
+int io_open (const char* path, int flags, int u);
+
+/**
+ * Like @c fopen(3) but tries to prevent symlink attacks.
+ * @param path File to open.
+ * @param flags Flags to pass to @c fopen(3).
+ * @param u If positive, pass via io_open() to @c umask(2) first.
+ * @return File pointer or @c NULL in case of error.
+ */
 FILE* io_fopen (const char *path, const char *mode, int u);
+
+/**
+ * Obtain opened temporary file.
+ * This routine has a series of features:
+ *   -# If @c dir is given, the temporary file will be created
+ *      under it. If none given, @c /tmp will be used.
+ *   -# If @c name is given, the name will be used as a template
+ *      for the filename. If none given, @c muttng will be used.
+ *      Also, if the name contains a period, it's believed the
+ *      name has an extension to be kept since several applications
+ *      seem to rely on filenames. For example, for a template of
+ *      @c foo.html one way want to have a temporary file for it,
+ *      e.g. @c foo.XXXXXXXX.html to keep the @c .html suffix.
+ *      <b>BIG FAT WARNING: IN THIS CASE AND ONLY THIS CASE,
+ *      @c mktemp() HAS TO BE USED AS BOTH, @c mktemp() AND
+ *      @c mkstemp(), EXPECT THE PLACEHOLDERS AT THE END OF THE PASSED
+ *      NAME WHICH DOESN'T WORK WHEN WANTING TO KEEP THE EXTENSION.
+ *      SO TRY TO AVOID PASSING IN NAMES WITH EXTENSIONS TO ENSURE USE
+ *      OF @c mkstemp().</b>
+ * @param dir Directory or @c NULL.
+ * @param name If not @c NULL, take this as suggestion for filename.
+ * @param tempfile Buffer where filename will be stored. It is
+ *                 shrinked to zero length using @c buffer_shrink()
+ *                 so any data will be lost.
+ * @return Opon success, the open file descriptor is returned and
+ *         @c -1 otherwise.
+ * @bug This <i>may</i> use @c mktemp().
+ * @test io_tests::test_io_tempfile().
+ */
+int io_tempfile (const char* dir, const char* name, buffer_t* tempfile);
 
 #ifdef __cplusplus
 }

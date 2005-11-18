@@ -73,6 +73,7 @@ void list_push_front (list_t** list, LIST_ITEMTYPE data);
  * Also @c free() list if empty afterwards.
  * @param list List.
  * @return Item (if any.)
+ * @test list_tests::test_pop_back().
  */
 LIST_ITEMTYPE list_pop_back (list_t** list);
 
@@ -81,6 +82,7 @@ LIST_ITEMTYPE list_pop_back (list_t** list);
  * Also @c free() list if empty afterwards.
  * @param list List.
  * @return Item (if any.)
+ * @test list_tests::test_pop_front().
  */
 LIST_ITEMTYPE list_pop_front (list_t** list);
 
@@ -90,6 +92,7 @@ LIST_ITEMTYPE list_pop_front (list_t** list);
  * @param list List.
  * @param idx Index at which to pop.
  * @return Item (if any.)
+ * @test list_tests::test_pop_idx().
  */
 LIST_ITEMTYPE list_pop_idx (list_t** list, int idx);
 

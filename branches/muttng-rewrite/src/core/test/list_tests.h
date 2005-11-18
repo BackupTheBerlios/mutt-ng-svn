@@ -16,9 +16,12 @@ using namespace unitpp;
  * list_t unit testing class
  */
 class list_tests : public suite {
-    void test_pop1();
-    void test_pop2();
-    void test_pop3();
+    /** test for list_pop_front() */
+    void test_pop_front();
+    /** test for list_pop_back() */
+    void test_pop_back();
+    /** test for list_pop_idx() */
+    void test_pop_idx();
   public:
     list_tests();
 };

@@ -10,6 +10,7 @@
 
 using namespace unitpp;
 
+/** test for buffer_init() */
 void buffer_tests::test_buffer_init() {
 	buffer_t * b = new buffer_t;
 	buffer_init(b);
@@ -21,18 +22,19 @@ void buffer_tests::test_buffer_init() {
 	delete b;
 }
 
+/**
+ * test for buffer_equal1().
+ * @todo implement more tests
+ */
 void buffer_tests::test_buffer_equal1() {
 	buffer_t * b = new buffer_t;
 	buffer_init(b);
 
 	assert_true("buffer is empty",buffer_equal1(b,"",-1));
-	/**
-	 * @todo: implement more tests
-	 */
-
 	delete b;
 }
 
+/** test for buffer_add_str(). */
 void buffer_tests::test_buffer_add_str() {
 	buffer_t * b = new buffer_t;
 	buffer_init(b);
@@ -49,6 +51,7 @@ void buffer_tests::test_buffer_add_str() {
 	delete b;
 }
 
+/** test for buffer_add_buffer() */
 void buffer_tests::test_buffer_add_buffer() {
 	buffer_t * b1 = new buffer_t;
 	buffer_t * b2 = new buffer_t;
@@ -75,6 +78,7 @@ void buffer_tests::test_buffer_add_buffer() {
 	delete b3;
 }
 
+/** test for buffer_add_ch() */
 void buffer_tests::test_buffer_add_ch() {
 	buffer_t * b = new buffer_t;
 	buffer_init(b);
@@ -91,6 +95,7 @@ void buffer_tests::test_buffer_add_ch() {
 	assert_true("buffer contains '3 \\0x'",buffer_equal1(b,"3 \0x",4));
 }
 
+/** test for buffer_add_num2() */
 void buffer_tests::test_buffer_add_num2() {
 	buffer_t * b = new buffer_t;
 	buffer_init(b);

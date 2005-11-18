@@ -8,7 +8,7 @@ clean: subdirclean
 srcdoc:
 	doxygen
 
-test: subdirtest
+test: all subdirtest
 
 depend: subdirdepend
 

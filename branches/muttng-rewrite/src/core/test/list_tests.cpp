@@ -9,7 +9,7 @@
 
 using namespace unitpp;
 
-void list_tests::test_pop1() {
+void list_tests::test_pop_front () {
   list_t* test = NULL;
   int pop = 42;
   list_push_back (&test, 23);
@@ -20,7 +20,7 @@ void list_tests::test_pop1() {
   assert_eq("list_pop_front() == 0", 0, pop);
 }
 
-void list_tests::test_pop2() {
+void list_tests::test_pop_back () {
   list_t* test = NULL;
   int pop = 42;
   list_push_back (&test, 23);
@@ -31,7 +31,7 @@ void list_tests::test_pop2() {
   assert_eq("list_pop_back() == 0", 0, pop);
 }
 
-void list_tests::test_pop3() {
+void list_tests::test_pop_idx () {
   list_t* test = NULL;
   int pop = 42;
   list_push_back (&test, 23);
@@ -43,7 +43,7 @@ void list_tests::test_pop3() {
 }
 
 list_tests::list_tests() : suite("list_tests") {
-  add("pop1()",testcase(this,"test_pop1()",&list_tests::test_pop1));
-  add("pop2()",testcase(this,"test_pop2()",&list_tests::test_pop2));
-  add("pop3()",testcase(this,"test_pop3()",&list_tests::test_pop3));
+  add("list_pop_front()",testcase(this,"test_pop_fron()",&list_tests::test_pop_front));
+  add("list_pop_back()",testcase(this,"test_pop_back()",&list_tests::test_pop_back));
+  add("list_pop_idx()",testcase(this,"test_pop_idx()",&list_tests::test_pop_idx));
 }

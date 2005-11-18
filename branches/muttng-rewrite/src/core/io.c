@@ -1,23 +1,16 @@
-/*
- * Copyright notice from original mutt:
- * Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
- * Copyright (C) 1999-2000 Thomas Roessler <roessler@does-not-exist.org>
- *
- * This file is part of mutt-ng, see http://www.muttng.org/.
- * It's licensed under the GNU General Public License,
- * please see the file GPL in the top level source directory.
- */
-
-/*
- * This file used to contain some more functions, namely those
- * which are now in muttlib.c.  They have been removed, so we have
- * some of our "standard" functions in external programs, too.
+/** @ingroup core */
+/**
+ * @file core/io.c
+ * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
+ * @author Copyright (C) 1999-2000 Thomas Roessler <roessler@does-not-exist.org>
+ * @brief Implementation: I/O routines
  */
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string.h>
 
 #include "io.h"
 
@@ -48,9 +41,6 @@ int io_open (const char *path, int flags, int u) {
   return (fd);
 }
 
-/* when opening files for writing, make sure the file doesn't already exist
- * to avoid race conditions.
- */
 FILE *io_fopen (const char *path, const char *mode, int u) {
   /* first set the current umask */
   if (mode[0] == 'w') {
@@ -76,4 +66,46 @@ FILE *io_fopen (const char *path, const char *mode, int u) {
       umask (u);
     return (fopen (path, mode));
   }
+}
+
+int io_tempfile (const char* dir, const char* name, buffer_t* tempfile) {
+  const char* tmpdir = (dir && *dir ? dir : "/tmp");
+  const char* name2 = (name && *name ? name : "muttng");
+  char x[8] = "XXXXXXXX";
+  char* period = NULL;
+
+  if (!tempfile)
+    return (-1);
+
+  /* append 'tempdir/' */
+  buffer_shrink (tempfile, 0);
+  buffer_add_str (tempfile, tmpdir, -1);
+  buffer_add_ch (tempfile, '/');
+
+  if ((period = strrchr (name2, '.'))) {
+    /*
+     * if we were given an extension, append name
+     * upto period, run mktemp() since Xs must be _trailing_,
+     * add extension and try to open file
+     */
+    buffer_add_str (tempfile, name2, period-name2);
+    /* add '.XXXXXXXX' */
+    buffer_add_ch (tempfile, '.');
+    buffer_add_str (tempfile, x, 8);
+    mktemp (tempfile->str);
+    /* if name given contain '.', append extension */
+    buffer_add_str (tempfile, period, -1);
+    return (io_open (tempfile->str, O_CREAT | O_EXCL |
+#ifdef O_NOFOLLOW
+                                   O_NOFOLLOW |
+#endif
+                                   O_RDWR, 0600));
+  }
+
+  /* no extension in name: add '$name.XXXXXXXX' */
+  buffer_add_str (tempfile, name2, -1);
+  buffer_add_ch (tempfile, '.');
+  buffer_add_str (tempfile, x, 8);
+
+  return (mkstemp (tempfile->str));
 }

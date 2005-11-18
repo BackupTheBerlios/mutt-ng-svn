@@ -15,6 +15,7 @@ using namespace unitpp;
 #include "buffer_tests.h"
 #include "hash_tests.h"
 #include "list_tests.h"
+#include "io_tests.h"
 
 namespace {
 
@@ -27,6 +28,7 @@ namespace {
         suite::main().add("core_test_suite",new buffer_tests());
         suite::main().add("core_test_suite",new hash_tests());
         suite::main().add("core_test_suite",new list_tests());
+        suite::main().add("core_test_suite",new io_tests());
       }
   };
 
