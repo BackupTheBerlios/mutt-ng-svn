@@ -1,0 +1,6 @@
+G_INTERNAL      Internal
+G_GENERIC       Generic
+G_REPLY         Reply/Forward
+G_MOVE          Movement
+G_EDIT          Editing
+G_THREAD        Threading

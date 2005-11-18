@@ -343,13 +343,15 @@ static const char* GroupStr[Event::G_LAST+1] = {
   /** group string for G_INTERNAL */
   "Internal",
   /** group string for G_GENERIC */
-  "Misc.",
-  /** group string for G_MOVE */
-  "Movement",
+  "Generic",
   /** group string for G_REPLY */
   "Reply/Forward",
+  /** group string for G_MOVE */
+  "Movement",
   /** group string for G_EDIT */
   "Editing",
+  /** group string for G_THREAD */
+  "Threading",
   /** group string for G_LAST */
   NULL
 };
@@ -397,7 +399,7 @@ static const int GroupValid[Event::C_LAST+1] = {
   /** valid groups for context Event::C_GENERIC */
   CTX(Event::G_INTERNAL)|CTX(Event::G_GENERIC)|CTX(Event::G_MOVE),
   /** valid groups for context Event::C_INDEX */
-  CTX(Event::G_GENERIC)|CTX(Event::G_REPLY)|CTX(Event::G_EDIT),
+  CTX(Event::G_GENERIC)|CTX(Event::G_REPLY)|CTX(Event::G_EDIT)|CTX(Event::G_THREAD),
   /** valid groups for context Event::C_PAGER */
   CTX(Event::G_GENERIC)|CTX(Event::G_REPLY)|CTX(Event::G_EDIT),
   /** valid groups for context Event::C_HELP */
@@ -434,9 +436,9 @@ static const Event::group GroupValid2[Event::E_LAST+1] = {
   /** valid groups for event Event::E_EDIT_MESSAGE */
   Event::G_EDIT,
   /** valid groups for event Event::E_BREAK_THREAD */
-  Event::G_EDIT,
+  Event::G_THREAD,
   /** valid groups for event Event::E_LINK_THREAD */
-  Event::G_EDIT,
+  Event::G_THREAD,
 
   /** for which group E_LAST is valid */
   Event::G_LAST
@@ -734,17 +736,35 @@ std::vector<Event::group>* Event::getGroups (Event::context context) {
   return (ret);
 }
 
-std::vector<Event::event>* Event::getEvents (Event::context context, Event::group group) {
-  int i = 0;
+std::vector<Event::event>* Event::getEvents (Event::context context,
+                                             Event::group group) {
+  Event::event i = E_LAST;
   std::vector<Event::event>* ret = new std::vector<Event::event>;
 
-  for (i = 0; i < (int) Event::E_LAST; i++)
+  for (i = E_0; i < (int) Event::E_LAST; i++)
     /*
      * - for all events, check wheter they're part of a context
      * - if event valid for context, check group, too
      */
     if (EvValid[i] & CTX(context) && (GroupValid2[(Event::event) i] == group))
       ret->push_back ((Event::event) i);
+
+  if (ret->size () == 0) {
+    delete (ret);
+    return (NULL);
+  }
+
+  return (ret);
+}
+
+std::vector<Event::event>* Event::getEvents (Event::context context) {
+  Event::event i = E_LAST;
+  std::vector<Event::event>* ret = new std::vector<Event::event>;
+
+  for (i = E_0; i < Event::E_LAST; i++)
+    /* for all events, check wheter they're part of a context */
+    if (EvValid[i] & CTX(context))
+      ret->push_back (i);
 
   if (ret->size () == 0) {
     delete (ret);

@@ -9,5 +9,5 @@ C_INDEX|C_PAGER E_LIST_REPLY            list-reply      G_REPLY         L       
 C_INDEX|C_PAGER E_GROUP_REPLY           group-reply     G_REPLY         g       Group-reply to current message
 C_GENERIC       E_PAGE_UP               page-up         G_MOVE          pgup    Page up
 C_INDEX|C_PAGER E_EDIT_MESSAGE          edit-message    G_EDIT          e       Edit current message
-C_INDEX         E_BREAK_THREAD          break-thread    G_EDIT          #       Break thread at current message
-C_INDEX         E_LINK_THREAD           link-thread     G_EDIT          &       Link tagged to current message in thread
+C_INDEX         E_BREAK_THREAD          break-thread    G_THREAD        #       Break thread at current message
+C_INDEX         E_LINK_THREAD           link-thread     G_THREAD        &       Link tagged to current message in thread

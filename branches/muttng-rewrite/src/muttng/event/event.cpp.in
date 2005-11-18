@@ -553,17 +553,35 @@ std::vector<Event::group>* Event::getGroups (Event::context context) {
   return (ret);
 }
 
-std::vector<Event::event>* Event::getEvents (Event::context context, Event::group group) {
-  int i = 0;
+std::vector<Event::event>* Event::getEvents (Event::context context,
+                                             Event::group group) {
+  Event::event i = E_LAST;
   std::vector<Event::event>* ret = new std::vector<Event::event>;
 
-  for (i = 0; i < (int) Event::E_LAST; i++)
+  for (i = E_0; i < (int) Event::E_LAST; i++)
     /*
      * - for all events, check wheter they're part of a context
      * - if event valid for context, check group, too
      */
     if (EvValid[i] & CTX(context) && (GroupValid2[(Event::event) i] == group))
       ret->push_back ((Event::event) i);
+
+  if (ret->size () == 0) {
+    delete (ret);
+    return (NULL);
+  }
+
+  return (ret);
+}
+
+std::vector<Event::event>* Event::getEvents (Event::context context) {
+  Event::event i = E_LAST;
+  std::vector<Event::event>* ret = new std::vector<Event::event>;
+
+  for (i = E_0; i < Event::E_LAST; i++)
+    /* for all events, check wheter they're part of a context */
+    if (EvValid[i] & CTX(context))
+      ret->push_back (i);
 
   if (ret->size () == 0) {
     delete (ret);

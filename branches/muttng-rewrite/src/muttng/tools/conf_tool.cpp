@@ -76,16 +76,18 @@ void ConfTool::do_opts (bool annotated, bool changed) {
 }
 
 void ConfTool::do_bind (bool annotated, bool changed) {
-  int i = 0, j = 0, k = 0;
   const binding_t* descr = NULL;
   std::vector<Event::group>* groups = NULL;
   std::vector<Event::event>* events = NULL;
+  Event::context i = C_0;
+  Event::group j = G_0;
+  Event::event k = E_0;
 
-  for (i = 0; i < (int) Event::C_LAST; i++) {
+  for (i = C_0; i < Event::C_LAST; i++) {
     /* first: continue if no groups within context */
-    if (!(groups = event->getGroups ((Event::context) i)))
+    if (!(groups = event->getGroups (i)))
       continue;
-    for (j = 0; j < (int) groups->size (); j++) {
+    for (j = G_0; j < (int) groups->size (); j++) {
 
       /* ignore internal groups */
       if (groups->at (j) == Event::G_INTERNAL)
@@ -93,18 +95,18 @@ void ConfTool::do_bind (bool annotated, bool changed) {
 
       /* for each group, print context and group name */
       if (annotated)
-        cout << _("# Context: ") << event->getContextName ((Event::context) i) <<
+        cout << _("# Context: ") << event->getContextName (i) <<
                 _(", group: ") << event->getGroupName (groups->at (j)) << endl;
       /* now try to get all events so we can sort functions by group */
-      if (!(events = event->getEvents ((Event::context) i, groups->at (j))))
+      if (!(events = event->getEvents (i, groups->at (j))))
         continue;
 
-      for (k = 0; k < (int) events->size (); k++) {
-        descr = event->getHelp ((Event::context) i, events->at (k));
+      for (k = E_0; k < (int) events->size (); k++) {
+        descr = event->getHelp (i, events->at (k));
         /* only functions have a help text, read: ignore internal */
         if (!descr->help || (changed && str_eq (descr->key, descr->defkey)))
           continue;
-        cout << "bind " << event->getContextName ((Event::context) i) << " " 
+        cout << "bind " << event->getContextName (i) << " " 
              << descr->key << " '<" << descr->name << ">'";
         if (annotated)
           cout << " # " << descr->help;

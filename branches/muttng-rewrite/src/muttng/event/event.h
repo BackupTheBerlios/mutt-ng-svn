@@ -59,14 +59,16 @@ class Event {
     enum group {
       /** group ID for "Internal" */
       G_INTERNAL = 0,
-      /** group ID for "Misc." */
+      /** group ID for "Generic" */
       G_GENERIC,
-      /** group ID for "Movement" */
-      G_MOVE,
       /** group ID for "Reply/Forward" */
       G_REPLY,
+      /** group ID for "Movement" */
+      G_MOVE,
       /** group ID for "Editing" */
       G_EDIT,
+      /** group ID for "Threading" */
+      G_THREAD,
       /** For static array sizes. */
       G_LAST
     };
@@ -297,7 +299,15 @@ class Event {
      * @param group Group.
      * @return Vector of events or @c NULL.
      */
-    std::vector<Event::event>* getEvents (Event::context context, Event::group group);
+    std::vector<Event::event>* getEvents (Event::context context,
+                                          Event::group group);
+
+    /**
+     * For a context, get all valid events.
+     * @param context Context.
+     * @return Vector of events or @c NULL.
+     */
+    std::vector<Event::event>* getEvents (Event::context context);
 
     /**
      * For a given context and event, get binding_t* info for help
@@ -347,5 +357,18 @@ typedef Event::state eventhandler_t (Event::context context,
                                      bool complete,
                                      void* self,
                                      unsigned long data);
+
+/**
+ * Postfix @c ++ operator for Event::context and other enums.
+ */
+template<typename T>
+inline T operator++ (T& t, int value) { (void) value; return t = (T)(t+1); }
+
+/** first event */
+#define E_0     ((Event::event) 0)
+/** first context */
+#define C_0     ((Event::context) 0)
+/** first group */
+#define G_0     ((Event::group) 0)
 
 #endif /* !MUTTNG_EVENT_H */
