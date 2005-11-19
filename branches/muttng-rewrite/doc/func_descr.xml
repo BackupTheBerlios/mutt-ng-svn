@@ -8,7 +8,7 @@
   <context name="help">
   </context>
   <context name="index">
-    <function name="break-thread" default="#" category="G_EDIT">
+    <function name="break-thread" default="#" category="G_THREAD">
       Break thread at current message</function>
     <function name="edit-message" default="e" category="G_EDIT">
       Edit current message</function>
@@ -16,7 +16,7 @@
       Group-reply to current message</function>
     <function name="help" default="h" category="G_GENERIC">
       Show help screen</function>
-    <function name="link-thread" default="&" category="G_EDIT">
+    <function name="link-thread" default="&" category="G_THREAD">
       Link tagged to current message in thread</function>
     <function name="list-reply" default="L" category="G_REPLY">
       List-reply to current message</function>

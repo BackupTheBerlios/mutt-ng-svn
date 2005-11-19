@@ -17,6 +17,14 @@
 #define DEBUG_MIN               0
 /** maxmimum debug level */
 #define DEBUG_MAX               5
+/** module init/cleanup debug level (plus basics) */
+#define D_MOD                   1
+/** parser debug level */
+#define D_PARSE                 2
+/** default signal/event level */
+#define D_EVENT                 3
+/** socket debug level */
+#define D_SOCKET                5
 
 /**
  * Library-wide debug interface. It's recommended to use the
@@ -93,28 +101,28 @@ class Debug {
 /**
  * For GNU g++: debug print macro.
  * Use with classes derived from Muttng or LibMuttng only.
- * @param H Who wants debugging.
+ * @param O Who wants debugging.
  * @param L Message's debug level.
  * @param X @c printf()-style message in brackets,
  *          eg <code>("foo %s", bar)</code>
  */
-#define DEBUGPRINT2(H,L,X) do { \
-  if (H->debug->printIntro (__FILE__,__LINE__,__FUNCTION__,L)) \
-    H->debug->printLine X; \
+#define DEBUGPRINT2(O,L,X) do { \
+  if (O->printIntro (__FILE__,__LINE__,__FUNCTION__,L)) \
+    O->printLine X; \
 } while (0)
 
 #else
 /**
  * For non-GNU g++: debug print macro.
  * Use with classes derived from Muttng or LibMuttng only.
- * @param H Who wants debugging.
+ * @param O Who wants debugging.
  * @param L Message's debug level.
  * @param X @c printf()-style message in brackets,
  *          eg <code>("foo %s", bar)</code>
  */
-#define DEBUGPRINT2(H,L,X) do { \
-  if (H->debug->printIntro (__FILE__,__LINE__,NULL,L)) \
-    H->debug->printLine X; \
+#define DEBUGPRINT2(O,L,X) do { \
+  if (O->printIntro (__FILE__,__LINE__,NULL,L)) \
+    O->printLine X; \
 } while (0)
 #endif
 
@@ -124,6 +132,6 @@ class Debug {
  * @param X @c printf()-style message in brackets,
  *          eg <code>("foo %s", bar)</code>
  */
-#define DEBUGPRINT(L,X) DEBUGPRINT2(this,L,X)
+#define DEBUGPRINT(L,X) DEBUGPRINT2(this->debug,L,X)
 
 #endif /* !LIBMUTTNG_ABSTRACT_CLASS_H */

@@ -19,6 +19,7 @@
 
 #include "muttng.h"
 #include "config/config.h"
+#include "config/option.h"
 #include "ui/ui.h"
 
 /** generic command-line arguments common for all tools. */
@@ -98,8 +99,6 @@ class Tool : public Muttng {
     /** lib object */
     LibMuttng* libmuttng;
   private:
-    /** whether event handler was initialized */
-    bool haveEvent;
     /**
      * Compose a string with name and version info.
      * @param dst Desination buffer for string.
@@ -127,10 +126,27 @@ class Tool : public Muttng {
     void doLicense (buffer_t* dst);
     /** setup all event handlers */
     void setupEventHandlers (void);
-    /** event handler catching E_OPTION_CHANGED */
-    static Event::state handleOptionChange (Event::context context, Event::event event,
-                                            const char* input, bool complete,
-                                            void* self, unsigned long data);
+
+    /**
+     * Catch any option changes.
+     * Connected to Event::sigOptChange. This is currently only used to
+     * adjust debug levels when @ref option_debug_level changes.
+     * @param context Context signal was emitted in.
+     * @param option Option which changed.
+     * @return @c true
+     */
+    bool catchOptChange (Event::context context, option_t* option);
+
+    /**
+     * Catch any context change.
+     * Connected to Event::sigContextChange. This is currently only used
+     * for testing.
+     * @param context New or old context we go to/leave.
+     * @param event Which type of change: Event::E_CONTEXT_ENTER,
+     *              Event::E_CONTEXT_REENTER or E_CONTEXT_LEAVE.
+     * @return @c true
+     */
+    bool catchContextChange (Event::context context, Event::event event);
 };
 
 #endif /* !MUTTNG_TOOL_H */

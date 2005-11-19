@@ -47,8 +47,11 @@ class SetCommand : public AbstractCommand {
       T_LAST
     };
     bool init (UI* ui);
+
   private:
+    /** handlers for different option types */
     AbstractOption* handlers[T_LAST];
+    /** string representation of types */
     const char* types[T_LAST];
 };
 

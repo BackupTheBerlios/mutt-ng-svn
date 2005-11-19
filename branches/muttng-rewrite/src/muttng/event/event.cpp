@@ -31,7 +31,7 @@
  *          handler is a property of Muttng and all application classes
  *          must be derived from it, all classes have access to the
  *          event handler.) Any piece of
- *          code can demand the central event handler to emit a specific
+ *          code can demand the central event handler to release a specific
  *          event which will then notify all handlers. This way the
  *          logic and many parts are really de-coupled.
  *       -# In addition to these, for user interfaces, events are also
@@ -45,18 +45,18 @@
  *     parts. As certain parts may want to perform some action upon a
  *     context switch, there must be an event for it. However, when only
  *     knowing about the current context, the part triggering the switch
- *     would have to save the old context to emit a re-entering of the
+ *     would have to save the old context to release a re-entering of the
  *     old context after leaving the new one. To centralize this within
  *     the event handler itself, there's a stack. The current context
  *     can be set and unset with Event::setContext() and
- *     Event::unsetContext() and the event handler will emit the
+ *     Event::unsetContext() and the event handler will release the
  *     following events on its own:
  *
- *       -# Event::setContext() will emit Event::E_CONTEXT_ENTER and
+ *       -# Event::setContext() will release Event::E_CONTEXT_ENTER and
  *          push the new context on the stack.
- *       -# Event::unsetContext() will first emit Event::E_CONTEXT_LEAVE,
+ *       -# Event::unsetContext() will first release Event::E_CONTEXT_LEAVE,
  *          of course, and pop the context we're leaving. If afterwards
- *          the stack is not empty, it will emit
+ *          the stack is not empty, it will release
  *          Event::E_CONTEXT_REENTER.
  *
  *     This approach is useful in implementing a <code>context-hook</code>
@@ -200,12 +200,12 @@
  *       It can be used in the following ways:
  *
  *         -# bind to and thus catch any event
- *         -# emit any event
+ *         -# release any event
  *         -# query for listings of events
  *
  *       The first is achieved via the @c bind* functions.
  *
- *       The second is achieved via the emit() function.
+ *       The second is achieved via the release() function.
  *
  *       For the third, here are some usage scenarios:
  *
@@ -230,16 +230,6 @@
 
 #include "event.h"
 #include "../muttng.h"
-
-/** how we internally register a handler */
-typedef struct {
-  /** the handler itself */
-  eventhandler_t* handler;
-  /** casted pointer of objects 'this' to be passed back */
-  void* self;
-  /** whether handler expects input */
-  bool input;
-} handle_t;
 
 /**
  * For @c OR'ing the valid contexts for an event, we use some bit
@@ -449,12 +439,10 @@ Event::Event (Debug* debug) {
   int i = 0, j = 0;
 
   this->debug = debug;
-  this->active = true;
   this->contextStack = new std::vector<Event::context>;
 
   for (i = 0; i < C_LAST; i++)
     for (j = 0; j < E_LAST; j++) {
-      handlers[i][j] = NULL;
       bindings[i][j].key = NULL;
       bindings[i][j].name = NULL;
       bindings[i][j].help = NULL;
@@ -462,32 +450,9 @@ Event::Event (Debug* debug) {
 }
 
 Event::~Event (void) {
-  int i = 0, j = 0;
-  handle_t* handler = NULL;
-
   DEBUGPRINT(1,("cleanup event handler"));
-
   while (contextStack->size () != 0)
     unsetContext (0);
-
-  /*
-   * when doing cleanup, loop over all handlers and print
-   * a big fat warning if some handler is still bound; with the
-   * void* cast of 'this' and friends all of this is pretty
-   * dangerous so be strict here
-   */
-  for (i = 0; i < C_LAST; i++)
-    for (j = 0; j < E_LAST; j++) {
-      if (!list_empty (handlers[i][j])) {
-        while (!list_empty (handlers[i][j])) {
-          handler = (handle_t*) list_pop_front (&handlers[i][j]);
-          DEBUGPRINT(D_EVENT,("+++ WARNING +++ callback 0x%x of 0x%x still "
-                        "bound for ctx=%s ev=%s", handler->handler,
-                        handler->self, NONULL (CtxStr[i]), NONULL (EvStr[j])));
-          mem_free (&handler);
-        }
-      }
-    }
   delete (contextStack);
 }
 
@@ -550,104 +515,7 @@ bool Event::init (void) {
   bindings[C_INDEX][E_LINK_THREAD].name = EvStr[E_LINK_THREAD];
   bindings[C_INDEX][E_LINK_THREAD].help = EvHelp[E_LINK_THREAD];
 
-  setContext (C_GENERIC, 0);
-  return (true);
-}
-
-/**
- * @bug Maybe we need to check for duplicates here.
- */
-void Event::bindInternal (Event::context context,
-                          Event::event event,
-                          bool input, void* self,
-                          Event::state (*handler) (Event::context context,
-                                                   Event::event event,
-                                                   const char* input,
-                                                   bool complete, void* self,
-                                                   unsigned long data)) {
-  handle_t* handle = (handle_t*) mem_malloc (sizeof (handle_t));
-  handle->handler = handler;
-  handle->self = self;
-  handle->input = input;
-  list_push_back (&handlers[context][event], (LIST_ITEMTYPE) handle);
-  DEBUGPRINT(D_EVENT,("bound callback 0x%x of 0x%x to ctx=%s ev=%s",
-                handler, self, NONULL (CtxStr[context]),
-                NONULL (EvStr[event])));
-}
-
-void Event::unbindInternal (void* self) {
-  int i = 0, j = 0;
-  for (i = 0; i < C_LAST; i++)
-    for (j = 0; j < E_LAST; j++)
-      unbindInternal ((Event::context) i, (Event::event) j, self);
-}
-
-/**
- * @bug Maybe we need to check for duplicates here.
- */
-void Event::unbindInternal (Event::context context, Event::event event,
-                            void* self) {
-  list_t** list = NULL;
-  handle_t* handler = NULL;
-  int i = 0;
-
-  if (!(list = &handlers[context][event]))
-    return;
-  for (i = 0; !list_empty((*list)) && i < (int) (*list)->length; i++) {
-    handler = (handle_t*) (*list)->data[i];
-    if (handler->self == self) {
-      DEBUGPRINT(D_EVENT,("unbound callback 0x%x of 0x%x from ctx=%s ev=%s",
-                    handler->handler, self, NONULL (CtxStr[context]),
-                    NONULL (EvStr[event])));
-      handler = (handle_t*) list_pop_idx (list, i);
-      mem_free (&handler);
-      i--;
-    }
-  }
-  if (!list_empty ((*list)))
-    mem_free (list);
-}
-
-bool Event::_emit (const char* file, int line, Event::context context,
-                   Event::event event, const char* input, bool complete,
-                   unsigned long data) {
-  list_t* list = NULL;
-  int i = 0;
-  handle_t* handle = NULL;
-  Event::state state = S_OK;
-
-  DEBUGPRINT(D_EVENT,("emit: ctx=%s, ev=%s, in='%s', compl=%d, d=0x%x from %s:%d",
-                CtxStr[context], EvStr[event], NONULL (input), complete,
-                data, NONULL (file), line));
-
-  if (!active) {
-    DEBUGPRINT(D_EVENT,("event handler disabled, skipping"));
-    return (true);
-  }
-
-  if (!(list = this->handlers[context][event]) &&
-      !(list = this->handlers[Event::C_GENERIC][event])) {
-    DEBUGPRINT(D_EVENT,("no handlers found, skipping"));
-    return (true);
-  }
-
-  if (!(EvValid[event] & CTX(context))) {
-    DEBUGPRINT(D_EVENT,("event not allowed for context"));
-    return (false);
-  }
-
-  for (i = 0; i < list->length; i++) {
-    handle = (handle_t*) list->data[i];
-    if (handle->input && !input) {
-      /* error */
-      return (false);
-    }
-    if ((state = handle->handler (context, event, input, complete,
-                                  handle->self, data)) != S_OK) {
-      /* error */
-      return (false);
-    }
-  }
+  setContext (C_GENERIC);
   return (true);
 }
 
@@ -660,27 +528,26 @@ bool Event::bindUser (Event::context context, const char* key,
   return (true);
 }
 
-void Event::_setContext (const char* file, int line,
-                        Event::context context, unsigned long data) {
+void Event::_setContext (const char* file, int line, Event::context context) {
   DEBUGPRINT(D_EVENT,("enter ctx=%s from %s:%d", CtxStr[context],
                       NONULL (file), line));
-  emit (context, E_CONTEXT_ENTER, NULL, false, data);
   contextStack->push_back (context);
+  sigContextChange.emit (context, E_CONTEXT_ENTER);
 }
 
-void Event::_unsetContext (const char* file, int line, unsigned long data) {
+void Event::_unsetContext (const char* file, int line) {
   Event::context context;
 
-  context = contextStack->at (contextStack->size ()-1);
+  context = contextStack->back ();
   contextStack->pop_back ();
   DEBUGPRINT(D_EVENT,("leave ctx=%s from %s:%d", CtxStr[context],
                       NONULL (file), line));
-  emit (context, E_CONTEXT_LEAVE, NULL, false, data);
+  sigContextChange.emit (context, E_CONTEXT_LEAVE);
   if (contextStack->size () != 0) {
-    context = contextStack->at (contextStack->size ()-1);
+    context = contextStack->back ();
     DEBUGPRINT(D_EVENT,("re-enter ctx=%s from %s:%d", CtxStr[context],
                   NONULL (file), line));
-    emit (context, E_CONTEXT_REENTER, NULL, false, data);
+    sigContextChange.emit (context, E_CONTEXT_REENTER);
   }
 }
 
@@ -694,14 +561,10 @@ Event::event Event::getEvent (const char* key) {
   return (E_LAST);
 }
 
-void Event::disable (void) {
-  active = false;
-  DEBUGPRINT(D_EVENT,("event handler disabled"));
-}
-
-void Event::enable (void) {
-  DEBUGPRINT(D_EVENT,("event handler enabled"));
-  active = true;
+Event::context Event::getContext (void) {
+  if (!contextStack->size())
+    return (C_LAST);
+  return (contextStack->back());
 }
 
 const char* Event::getContextName (Event::context context) {

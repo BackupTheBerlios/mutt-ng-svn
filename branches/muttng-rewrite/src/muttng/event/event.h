@@ -13,6 +13,9 @@
 #include "core/list.h"
 
 #include "libmuttng/debug.h"
+#include "libmuttng/signal.h"
+
+#include "../config/option.h"
 
 /**
  * Info about an event bound.
@@ -116,70 +119,6 @@ class Event {
     };
 
     /**
-     * Bind an internal function to an event.
-     * This is to be used to bind UI functions to events and
-     * bind any core logic handlers to events. To separate between UI
-     * and core logic, this doesn't involve key sequences.
-     * @param context Context to bind to.
-     * @param event Specific event within context to bind to.
-     * @param input Whether handler expects user input.
-     * @param self Pointer to this. All callbacks must be static so
-     *             we need a pointer to the object for dynamic member
-     *             access.
-     * @param handler Handler callback function.
-     * @sa eventhandler_t.
-     */
-    void bindInternal (Event::context context,
-                       Event::event event,
-                       bool input, void* self,
-                       Event::state (*handler) (Event::context context,
-                                                Event::event event,
-                                                const char* input,
-                                                bool complete,
-                                                void* self,
-                                                unsigned long data));
-
-    /**
-     * Unbind all internal event handlers for an object.
-     * @param self Object's @c this casted to <b>void*</b>.
-     */
-    void unbindInternal (void* self);
-
-    /**
-     * Unbind handler for specific event and context.
-     * @param context Context
-     * @param event Event
-     * @param self Object's @c this casted to @c void*.
-     */
-    void unbindInternal (Event::context context, Event::event event,
-                         void* self);
-
-    /**
-     * Emit an event and deliver to all registered handlers.
-     * @param file Source file calling us (for debugging).
-     * @param line Line in source file (for debugging).
-     * @param context Context of event
-     * @param event Event to emit.
-     * @param input User input for handler.
-     * @param complete Whether input for handler is complete or
-     *                 prompting is to be done by handler.
-     * @param data Arbitrary data passed through.
-     */
-    bool _emit (const char* file, int line, Event::context context,
-                Event::event event, const char* input, bool complete,
-                unsigned long data);
-
-    /**
-     * Macro to get occurance of call into _emit().
-     * @param C Context.
-     * @param E Event.
-     * @param I Input.
-     * @param F Complete.
-     * @param D Data.
-     */
-#define emit(C,E,I,F,D) _emit(__FILE__,__LINE__,C,E,I,F,D)
-
-    /**
      * Bind a "user" function to an event.
      * To separate between core logic and UI, this maps a key sequence
      * to an event within a context.
@@ -201,17 +140,14 @@ class Event {
      * @param file Source file calling us (for debugging).
      * @param line Line in source file (for debugging).
      * @param context New context.
-     * @param data Any data passed to event handler.
      */
-    void _setContext (const char* file, int line, Event::context context,
-                      unsigned long data);
+    void _setContext (const char* file, int line, Event::context context);
 
     /**
      * Macro to get occurance of call into _setContext().
      * @param C Context.
-     * @param D Data.
      */
-#define setContext(C,D) _setContext(__FILE__,__LINE__,C,D)
+#define setContext(C) _setContext(__FILE__,__LINE__,C)
 
     /**
      * Internally unset the current to an undefined context.
@@ -220,15 +156,13 @@ class Event {
      * the new topmost context on our stack.
      * @param file Source file calling us (for debugging).
      * @param line Line in source file (for debugging).
-     * @param data Abitrary data passed to handler.
      */
-    void _unsetContext (const char* file, int line, unsigned long data);
+    void _unsetContext (const char* file, int line);
 
     /**
      * Macro to get occurance of call into _unsetContext().
-     * @param D Data.
      */
-#define unsetContext(D) _unsetContext(__FILE__,__LINE__,D)
+#define unsetContext(D) _unsetContext(__FILE__,__LINE__)
 
     /**
      * Get event for a given key of current context.
@@ -238,7 +172,6 @@ class Event {
      * initialization.
      * @param event Event
      * @return Key.
-     * @sa disable(), enable().
      */
     const char* getKey (Event::event event);
 
@@ -251,11 +184,11 @@ class Event {
      */
     Event::event getEvent (const char* key);
 
-    /** Temporarily disable event handler. */
-    void disable (void);
-
-    /** Enable again after disabling */
-    void enable (void);
+    /**
+     * Get current context.
+     * @return Event.
+     */
+    Event::context getContext (void);
 
     /**
      * Get textual name of a context.
@@ -318,45 +251,19 @@ class Event {
      */
     binding_t* getHelp (Event::context context, Event::event event);
 
+    /** signal emitted when context changes */
+    Signal2<Event::context,Event::event> sigContextChange;
+    /** signal emitted when config option changes */
+    Signal2<Event::context,option_t*> sigOptChange;
+
   private:
     /** Context stack. */
     std::vector<Event::context>* contextStack;
     /** debug */
     Debug* debug;
-    /** active? */
-    bool active;
-    /** big table of all event handlers */
-    list_t* handlers[C_LAST][E_LAST];
     /** big table of all keys for events */
     binding_t bindings[C_LAST][E_LAST];
 };
-
-/**
- * Typedef of an event handler's signature for better readability.
- * @param context Current context the event occured in.
- * @param event The actual event.
- * @param input Any user input. If none given but the handler expects
- *              input, it has to get it and wait. This is required to
- *              implement the @c push command for all interfaces. Given
- *              we really add a GUI and it needs to query some input via
- *              a popup dialog, there's no portable way to push some
- *              input given in a macro into the dialog. Thus, we parse
- *              the input already and hand it over.
- * @param complete Whether the input is complete. Within macros, users
- *                 may want to have unbuffered input, i.e. by intention
- *                 do something like <code>push s=some.folder</code> to
- *                 let muttng prompt and wait.
- * @param self Pointer to this. All callbacks must be static so
- *             we need a pointer to the object for dynamic member access.
- * @param data Arbitrary data passed through.
- * @return State after execution.
- */
-typedef Event::state eventhandler_t (Event::context context,
-                                     Event::event event,
-                                     const char* input,
-                                     bool complete,
-                                     void* self,
-                                     unsigned long data);
 
 /**
  * Postfix @c ++ operator for Event::context and other enums.

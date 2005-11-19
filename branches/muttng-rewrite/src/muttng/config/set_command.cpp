@@ -116,10 +116,11 @@ bool SetCommand::init (UI* ui) {
 
   for (i = 0; Options[i].name; i++) {
 
+    bool isDebug = str_eq2 (Options[i].name, "debug_level", 11);
+
     hash_add (OptHash, Options[i].name, (HASH_ITEMTYPE) &Options[i]);
 
-    if (str_eq2 (Options[i].name, "debug_level", 11) &&
-        DebugLevel != 0)
+    if (isDebug && DebugLevel != 0)
       continue;
 
     buffer_init ((&tmp));
@@ -130,8 +131,7 @@ bool SetCommand::init (UI* ui) {
                                                          &tmp, &Options[i]);
     switch (state) {
       case AbstractCommand::S_OK_CHANGED:
-        event->emit (Event::C_GENERIC, Event::E_OPTION_CHANGE, NULL, 0,
-                     (unsigned long) &Options[i]);
+        event->sigOptChange.emit (event->getContext (), &Options[i]);
         /* fall through */
       case AbstractCommand::S_OK_UNCHANGED:
         break;

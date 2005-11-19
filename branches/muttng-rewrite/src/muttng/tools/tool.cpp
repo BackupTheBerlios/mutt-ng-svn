@@ -90,12 +90,9 @@ Tool::Tool (int argc, char** argv) {
   this->readGlobal = true;
   this->altConfig = NULL;
   this->libmuttng = NULL;
-  this->haveEvent = false;
 }
 
 Tool::~Tool () {
-  if (this->haveEvent)
-    this->event->unbindInternal ((void*) this);
   if (this->libmuttng) {
     this->libmuttng->cleanup ();
     delete (this->libmuttng);
@@ -136,6 +133,9 @@ bool Tool::start (void) {
   Config::preinit ();
   /* since we need it for debugging and... */
   muttngInit (Homedir, getName (), Umask);
+
+  setupEventHandlers ();
+
   /* this is derived from Muttng and needs debug, too */
   config = new Config ();
 
@@ -145,8 +145,6 @@ bool Tool::start (void) {
 
   if (!event->init ())
     return (false);
-
-  setupEventHandlers ();
 
   if (!config->init (&ui))
     return (false);
@@ -270,30 +268,26 @@ void Tool::displayUsage (void) {
 }
 
 void Tool::setupEventHandlers (void) {
-  event->bindInternal (Event::C_GENERIC, Event::E_OPTION_CHANGE,
-                       false, (void*) this,
-                       handleOptionChange);
-  haveEvent = true;
+  connectSignal (event->sigOptChange, this, &Tool::catchOptChange);
+  connectSignal (event->sigContextChange, this, &Tool::catchContextChange);
 }
 
-Event::state Tool::handleOptionChange (Event::context context, Event::event event,
-                                              const char* input, bool complete,
-                                              void* self, unsigned long data) {
-  (void) context;
-  (void) event;
-  (void) input;
-  (void) complete;
-
-  Tool* me = (Tool*) self;
-  option_t* opt = (option_t*) data;
-
-  DEBUGPRINT2(me,D_EVENT,("caught event: ctx=%s, ev=%s, opt='%s'",
-                          Event::getContextName (context),
-                          Event::getEventName (event), NONULL (opt->name)));
-
-  if (str_eq2 (opt->name, "debug_level", 11)) {
-    me->setDebugLevel (DebugLevel);
-    me->libmuttng->setDebugLevel (DebugLevel);
+bool Tool::catchOptChange (Event::context context, option_t* option) {
+  DEBUGPRINT(D_EVENT,("caught option change: ctx=%s, opt='%s'",
+                      Event::getContextName (context), NONULL (option->name)));
+  if (str_eq2 (option->name, "debug_level", 11)) {
+    setDebugLevel (DebugLevel);
+    libmuttng->setDebugLevel (DebugLevel);
   }
-  return (Event::S_OK);
+  return (true);
+}
+
+bool Tool::catchContextChange (Event::context context, Event::event event) {
+  const char* type = (event == Event::E_CONTEXT_ENTER ? "enter" :
+                      ( event == Event::E_CONTEXT_REENTER ? "re-enter" : "leave"));
+  const char* dir = (event == Event::E_CONTEXT_ENTER ? "to" :
+                     ( event == Event::E_CONTEXT_REENTER ? "to" : "from"));
+  DEBUGPRINT(D_EVENT,("caught context %s %s %s", type, dir,
+                      Event::getContextName(context)));
+  return (true);
 }

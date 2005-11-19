@@ -29,7 +29,7 @@ int io_open (const char* path, int flags, int u);
 /**
  * Like @c fopen(3) but tries to prevent symlink attacks.
  * @param path File to open.
- * @param flags Flags to pass to @c fopen(3).
+ * @param mode Mode to pass to @c fopen(3).
  * @param u If positive, pass via io_open() to @c umask(2) first.
  * @return File pointer or @c NULL in case of error.
  */
