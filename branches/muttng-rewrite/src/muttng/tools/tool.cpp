@@ -156,6 +156,8 @@ bool Tool::start (void) {
 }
 
 bool Tool::end (void) {
+  disconnectSignals (event->sigOptChange, this);
+  disconnectSignals (event->sigContextChange, this);
   return (this->ui->end ());
 }
 

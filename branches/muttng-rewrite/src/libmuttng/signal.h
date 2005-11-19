@@ -105,6 +105,14 @@ class Func1Interface {
     virtual bool call(a1 x) = 0;
     /** destructor */
     virtual ~Func1Interface() {}
+    /**
+     * get pointer to object the callback is a member of
+     * @c void* is okay since we compare pointers only. Hopefully
+     * they're constant during lifetime of an object (otherwise we
+     * couldn't call the function anyway.)
+     * @return Pointer.
+     */
+    virtual void* object() = 0;
 };
 
 /**
@@ -132,6 +140,7 @@ class Func1 : public Func1Interface<a1> {
      */
     Func1 (T* obj_, callback f) : obj(obj_),func(f) {}
     bool call(a1 x) { return ((obj->*func)(x)); }
+    void* object () { return ((void*) obj); }
 };
 
 /**
@@ -166,6 +175,30 @@ class Signal1 {
     void insert(callbacks item) {
       item->next = first;
       first = item;
+    }
+    /**
+     * Remove all bindings for given object to signal.
+     * @param object Object.
+     */
+    template <class T> void remove (T* object) {
+      callbacks last = first;
+      callbacks i = first;
+      while (i) {
+        if ((void*) object == i->object()) {
+          if (first == i) {
+            first = i->next;
+            delete i;
+            i = first;
+          } else {
+            last->next = i->next;
+            delete i;
+            i = last->next;
+          }
+        } else {
+          last = i;
+          i = i->next;
+        }
+      }
     }
     /**
      * Emit a signal, ie call all connected functions.
@@ -212,6 +245,7 @@ class Func2Interface {
     virtual bool call(a1 x, a2 y) = 0;
     /** destructor */
     virtual ~Func2Interface() {}
+    virtual void* object() = 0;
 };
 
 /**
@@ -239,6 +273,7 @@ class Func2 : public Func2Interface<a1,a2> {
      */
     Func2 (T* obj_, callback f) : obj(obj_),func(f) {}
     bool call(a1 x, a2 y) { return ((obj->*func)(x,y)); }
+    void* object () { return ((void*) obj); }
 };
 
 /**
@@ -273,6 +308,30 @@ class Signal2 {
     void insert(callbacks item) {
       item->next = first;
       first = item;
+    }
+    /**
+     * Remove all bindings for given object to signal.
+     * @param object Object.
+     */
+    template <class T> void remove (T* object) {
+      callbacks last = first;
+      callbacks i = first;
+      while (i) {
+        if ((void*) object == i->object()) {
+          if (first == i) {
+            first = i->next;
+            delete i;
+            i = first;
+          } else {
+            last->next = i->next;
+            delete i;
+            i = last->next;
+          }
+        } else {
+          last = i;
+          i = i->next;
+        }
+      }
     }
     /**
      * Emit a signal, ie call all connected functions.
@@ -311,6 +370,16 @@ void connectSignal (Signal1<a1>& signal, T* object, bool (T::*callback)(a1)) {
 }
 
 /**
+ * Remove all bindings of an object to a signal.
+ * @param signal Signal.
+ * @param object Object.
+ */
+template<class T, class a1>
+void disconnectSignals (Signal1<a1>& signal, T* object) {
+  signal.remove (object);
+}
+
+/**
  * Connect a function to a signal.
  * @param signal Target signal to connect to.
  * @param object The object the handler is a member of.
@@ -319,6 +388,16 @@ void connectSignal (Signal1<a1>& signal, T* object, bool (T::*callback)(a1)) {
 template<class T, class a1, class a2>
 void connectSignal (Signal2<a1,a2>& signal, T* object, bool (T::*callback)(a1,a2)) {
   signal.insert (new Func2<T,a1,a2>(object,callback));
+}
+
+/**
+ * Remove all bindings of an object to a signal.
+ * @param signal Signal.
+ * @param object Object.
+ */
+template<class T, class a1, class a2>
+void disconnectSignals (Signal2<a1,a2>& signal, T* object) {
+  signal.remove (object);
 }
 
 /* }}} */
