@@ -206,17 +206,16 @@ class Signal1 {
      * @return Whether all calls succeeded.
      */
     bool emit (a1 x) {
-      bool ret = false;
-      if (!running) {
-        running = true;
-        for (callbacks i = first; i; i = i->next)
-          if (!(ret = i->call (x))) {
-            break;
-          }
-      } else {
-      }
+      if (running)
+        return (false);
+      running = true;
+      for (callbacks i = first; i; i = i->next)
+        if (!i->call (x)) {
+          running = false;
+          return (false);
+        }
       running = false;
-      return (ret);
+      return (true);
     }
 };
 
@@ -340,17 +339,16 @@ class Signal2 {
      * @return Whether all calls succeeded.
      */
     bool emit (a1 x, a2 y) {
-      bool ret = false;
-      if (!running) {
-        running = true;
-        for (callbacks i = first; i; i = i->next)
-          if (!(ret = i->call (x,y))) {
-            break;
-          }
-      } else {
-      }
+      if (running)
+        return (false);
+      running = true;
+      for (callbacks i = first; i; i = i->next)
+        if (!i->call (x,y)) {
+          running = false;
+          return (false);
+        }
       running = false;
-      return (ret);
+      return (true);
     }
 };
 

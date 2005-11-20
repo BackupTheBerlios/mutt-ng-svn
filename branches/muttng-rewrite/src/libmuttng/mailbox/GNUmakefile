@@ -7,4 +7,7 @@ include $(CURDIR)/../../../GNUmakefile.config
 
 CXXFLAGS+=-I.. -I../..
 
+test:
+	@true
+
 include $(CURDIR)/../../../GNUmakefile.compile_cpp

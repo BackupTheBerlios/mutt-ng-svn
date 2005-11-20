@@ -1,4 +1,4 @@
-SUBDIRS=mailbox crypto message cache
+SUBDIRS=mailbox crypto message cache test
 
 include $(CURDIR)/../../GNUmakefile.whereis
 include $(CURDIR)/../../GNUmakefile.config.mine
@@ -17,8 +17,7 @@ libmuttng.a: debug.o libmuttng.o
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -I.. -o $@ -c $<
 
-test:
-	@echo no tests implemented yet
+test: libmuttng.a subdirtest
 
 depend: subdirdepend
 
