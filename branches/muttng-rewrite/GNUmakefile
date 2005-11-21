@@ -1,4 +1,4 @@
-SUBDIRS=src
+SUBDIRS=doc src
 
 all: subdirs
 

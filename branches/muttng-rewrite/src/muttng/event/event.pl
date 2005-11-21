@@ -2,6 +2,15 @@
 
 my $first = 1;
 
+sub xmlclean ($) { # {{{
+  my ($input) = (@_);
+  my $output = $input;
+  $output =~ s#&#&amp;#g;
+  $output =~ s#<#&lt;#g;
+  $output =~ s#>#&gt;#g;
+  return ("$output");
+} # }}}
+
 # parse ./CONTEXTS {{{
 my @contexts = ();
 my $context_enum = "";
@@ -123,7 +132,7 @@ while (<IN>) {
         $event_doc{$c}{$3}{'context'} = $context_str{$c};
         $event_doc{$c}{$3}{'func'} = $3;
         $event_doc{$c}{$3}{'cat'} = $4;
-        $event_doc{$c}{$3}{'key'} = $5;
+        $event_doc{$c}{$3}{'key'} = &xmlclean("$5");
         $event_doc{$c}{$3}{'descr'} = $6;
         $bind .= "  bindings[$c][$2].key = str_dup (\"$5\");\n";
         $bind .= "  bindings[$c][$2].defkey = \"$5\";\n";
@@ -202,7 +211,7 @@ open (OUT, "> event.cpp") or die "cannot open event.cpp: $!\n";
 print OUT $content;
 close (OUT);
 
-open (OUT, "> ./../../../doc/func_def.xml") or die "Cannot open func_def.xml: $!\n";
+open (OUT, "> ./../../../doc/en/func_def.xml") or die "Cannot open func_def.xml: $!\n";
 print OUT "<definitions>\n";
 foreach my $ctx (sort keys (%context_str)) {
   my $key = 
@@ -215,7 +224,7 @@ foreach my $ctx (sort keys (%context_str)) {
 print OUT "</definitions>\n";
 close (OUT);
 
-open (OUT, "> ./../../../doc/func_descr.xml") or die "Cannot open func_descr.xml: $!\n";
+open (OUT, "> ./../../../doc/en/func_descr.xml") or die "Cannot open func_descr.xml: $!\n";
 print OUT "<descriptions>\n";
 foreach my $ctx (sort keys (%context_str)) {
   my $key = 
@@ -223,25 +232,10 @@ foreach my $ctx (sort keys (%context_str)) {
   foreach my $func (sort keys (%{$event_doc{$ctx}})) {
     print OUT "    <function name=\"$func\" ".
                          "default=\"$event_doc{$ctx}{$func}{'key'}\" ".
-                         "category=\"$event_doc{$ctx}{$func}{'cat'}\"".
+                         "group=\"$group_str{$event_doc{$ctx}{$func}{'cat'}}\"".
           ">\n      $event_doc{$ctx}{$func}{'descr'}</function>\n";
   }
   print OUT "  </context>\n";
 }
 print OUT "</descriptions>\n";
-close (OUT);
-
-open (OUT, "> ./funcs.h") or die "Cannot open funcs.h: $!\n";
-print OUT "/**\n* \@file muttng/event/funcs.h\n* \@brief (AUTO) Function Reference\n*/\n";
-print OUT "/**\n* \@page page_funcs Function Reference\n* \n";
-foreach my $ctx (sort keys (%context_str)) {
-  print OUT "* \@section funcs_ctx_$context_str{$ctx} Screen: $context_str{$ctx}\n";
-  foreach my $func (sort keys (%{$event_doc{$ctx}})) {
-    print OUT "*   - <tt><b>&lt;$func&gt;</b></tt>: ";
-    print OUT "       Default binding: <code>$event_doc{$ctx}{$func}{'key'}</code>,";
-    print OUT " Group: $group_str{$event_doc{$ctx}{$func}{'cat'}},";
-    print OUT " Description: $event_doc{$ctx}{$func}{'descr'}\n";
-   }
-}
-print OUT "*/\n";
 close (OUT);

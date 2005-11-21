@@ -58,6 +58,7 @@ static option_t Options[] = {
   ** <p>
   ** By default, all the header fields and message body without any charset
   ** indication are assumed to be in <enc>us-ascii</enc>.
+  ** </p>
   ** <p>
   ** For example, Japanese users might prefer this:
   ** <pre>
@@ -67,6 +68,7 @@ static option_t Options[] = {
   ** <p>
   ** However, only the first content is valid for the message body.
   ** This variable is valid only if <varref>strict_mime</varref> is <val>unset</val>.
+  ** </p>
   */
 
   { SetCommand::T_NUM,          "debug_level",          "0",            (UL) &DebugLevel     },

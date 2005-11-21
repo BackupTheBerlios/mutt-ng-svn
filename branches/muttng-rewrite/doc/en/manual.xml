@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manual>
+
+  <head>
+    <title>The Mutt Next Generation E-Mail Client</title>
+    <authors>
+      <author>
+        <firstname>Andreas</firstname><surname>Krennmair</surname>
+        <email>ak@synflood.at</email>
+      </author>
+      <author>
+        <firstname>Michael</firstname><surname>Elkins</surname>
+        <email>me@cs.hmc.edu</email>
+      </author>
+    </authors>
+  </head>
+
+  <content>
+    
+    <chapter id="introduction">
+      <title>Introduction</title>
+    </chapter>
+
+    <chapter id="reference">
+      <title>Reference</title>
+
+      <section id="funcref">
+        <title>Functions</title>
+        <xi:include href="func_descr.xml"
+          xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      </section>
+
+      <section id="varref">
+        <title>Variables</title>
+        <xi:include href="var_descr.xml"
+          xmlns:xi="http://www.w3.org/2001/XInclude"/>
+      </section>
+
+    </chapter>
+
+    <xi:include href="../common/ack.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+    <index/>
+
+  </content>
+</manual>

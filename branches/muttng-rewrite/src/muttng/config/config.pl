@@ -84,7 +84,7 @@ while (<STDIN>) {
 }
 
 # dump XML definitions file
-open (OUT, "> ./../../../doc/var_def.xml") or die "Cannot open var_def.xml: $!\n";
+open (OUT, "> ./../../../doc/en/var_def.xml") or die "Cannot open var_def.xml: $!\n";
 print OUT "<definitions>\n";
 foreach my $v (sort keys (%vars)) {
   print OUT "  <variable name=\"$v\"/>\n";
@@ -93,7 +93,7 @@ print OUT "</definitions>\n";
 close (OUT);
 
 # dump XML descriptions file
-open (OUT, "> ./../../../doc/var_descr.xml") or die "Cannot open var_descr.xml: $!\n";
+open (OUT, "> ./../../../doc/en/var_descr.xml") or die "Cannot open var_descr.xml: $!\n";
 print OUT "<descriptions>\n";
 foreach my $v (sort keys (%vars)) {
   print OUT "  <variable name=\"$v\" type=\"$vars{$v}{'type'}\">\n";
@@ -112,31 +112,4 @@ foreach my $v (sort keys (%vars)) {
   print OUT "  </variable>\n";
 }
 print OUT "</descriptions>\n";
-close (OUT);
-
-# dump doxygen related page
-open (OUT, "> ./vars.h") or die "Cannot open vars.h: $!\n";
-print OUT "/**\n* \@file muttng/config/vars.h\n* \@brief (AUTO) Option Reference\n*/\n";
-print OUT "/**\n* \@page page_options Option Reference\n* \n";
-foreach my $v (sort keys (%vars)) {
-  my $init = $vars{$v}{'init'};
-#  $init =~ s#&#&amp;#g;
-#  $init =~ s#<#&lt;#g;
-#  $init =~ s#>#&gt;#g;
-  $init =~ s#\\#\\\\#g;
-  #warn "$init\n";
-  print OUT "* \@section option_$v \$$v\n";
-  print OUT "*   Type: <code>$vars{$v}{'type'}</code>, ";
-  print OUT " Initial value: <code>'$init'</code>";
-  if (defined $vars{$v}{'avail'}) {
-    print OUT ", Availability: $vars{$v}{'avail'}";
-  }
-  print OUT "<br> <br>\n";
-  if (defined $vars{$v}{'descr'}) {
-    foreach my $l (split (/\n/, $vars{$v}{'descr'})) {
-      print OUT "*   ".&todoxy("$l")."\n";
-    }
-  }
-}
-print OUT "*/\n";
 close (OUT);
