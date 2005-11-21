@@ -20,6 +20,7 @@
 #include "string_option.h"
 #include "num_option.h"
 #include "bool_option.h"
+#include "quad_option.h"
 #include "option.h"
 
 /** shortcut */
@@ -29,12 +30,43 @@
 static option_t Options[] = {
   /* START */
 
+  { SetCommand::T_QUAD,         "abort_unmodified",     "yes",          Q_ABORT },
+  /*
+  ** If set to <val>yes</val>, composition will automatically abort after
+  ** editing the message body if no changes are made to the file (this
+  ** check only happens after the <em>first</em> edit of the file).
+  ** When set to <val>no</val>, composition will never be aborted.
+  */
+
   { SetCommand::T_BOOL,         "allow_8bit",           "yes",          OPT_ALLOW8BIT   },
   /*
   ** <p>
   ** Controls whether 8-bit data is converted to 7-bit using either
-  ** <tt>quoted-printable</tt> or <tt>base64</tt> encoding when sending mail.
+  ** <enc>quoted-printable</enc> or <enc>base64</enc> encoding when
+  ** sending mail.
   ** </p>
+  */
+
+  { SetCommand::T_STRING,       "assumed_charset",      "us-ascii",     (UL) &AssumedCharset    },
+  /*
+  ** <p>
+  ** This variable is a colon-separated list of character encoding
+  ** schemes for messages without character encoding indication.
+  ** Header field values and message body content without character encoding
+  ** indication would be assumed that they are written in one of this list.
+  ** </p>
+  ** <p>
+  ** By default, all the header fields and message body without any charset
+  ** indication are assumed to be in <enc>us-ascii</enc>.
+  ** <p>
+  ** For example, Japanese users might prefer this:
+  ** <pre>
+  ** set assumed_charset="iso-2022-jp:euc-jp:shift_jis:utf-8"
+  ** </pre>
+  ** </p>
+  ** <p>
+  ** However, only the first content is valid for the message body.
+  ** This variable is valid only if <varref>strict_mime</varref> is <val>unset</val>.
   */
 
   { SetCommand::T_NUM,          "debug_level",          "0",            (UL) &DebugLevel     },
@@ -64,8 +96,6 @@ static option_t Options[] = {
   ** </ul>
   ** </p>
   */
-
-  { SetCommand::T_STRING,       "assumed_charset",      "us-ascii",     (UL) &AssumedCharset    },
 
   { SetCommand::T_NUM,          "umask",                "0077",         (UL) &Umask     },
   /*
@@ -103,14 +133,17 @@ bool SetCommand::init (UI* ui) {
   (void) Homedir;
 
   BoolOptions = (int*) array_bit_alloc (OPT_LAST);
+  QuadOptions = (int*) array_bit_alloc ((Q_LAST * 2 + 7) / 8);
 
   this->handlers[T_STRING] = new StringOption ();
   this->handlers[T_BOOL] = new BoolOption ();
   this->handlers[T_NUM] = new NumOption ();
+  this->handlers[T_QUAD] = new QuadOption ();
 
   this->types[T_STRING] = _("string");
   this->types[T_BOOL] = _("boolean");
   this->types[T_NUM] = _("number");
+  this->types[T_QUAD] = _("quad-option");
 
   OptHash = hash_new ((sizeof (Options) / sizeof (option_t))*2, 0);
 

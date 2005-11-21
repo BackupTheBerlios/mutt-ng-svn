@@ -1,4 +1,5 @@
 <definitions>
+  <variable name="abort_unmodified"/>
   <variable name="allow_8bit"/>
   <variable name="assumed_charset"/>
   <variable name="debug_level"/>

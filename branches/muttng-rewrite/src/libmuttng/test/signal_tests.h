@@ -1,6 +1,6 @@
 /** @ingroup libmuttng_unit */
 /**
- * @file libmuttng/test/signal_tests.cpp
+ * @file libmuttng/test/signal_tests.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Signal unit tests
  */

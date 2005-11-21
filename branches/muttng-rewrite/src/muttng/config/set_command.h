@@ -43,6 +43,8 @@ class SetCommand : public AbstractCommand {
       T_BOOL,
       /** @c number */
       T_NUM,
+      /** @c quad-option */
+      T_QUAD,
       /** last */
       T_LAST
     };

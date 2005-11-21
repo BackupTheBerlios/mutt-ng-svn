@@ -23,9 +23,10 @@
 
 /** $HOME */
 WHERE const char* Homedir INITVAL(NULL);
-
 /** array for all boolean options */
 WHERE int* BoolOptions INITVAL(NULL);
+/** array for all quad options */
+WHERE int* QuadOptions INITVAL(NULL);
 
 /** Set boolean option. @sa array_bit_set(). */
 #define set_option(x) array_bit_set(BoolOptions,x)
@@ -36,19 +37,26 @@ WHERE int* BoolOptions INITVAL(NULL);
 /** Query boolean option. @sa array_bit_isset(). */
 #define option(x) array_bit_isset(BoolOptions,x)
 
-/** $assumed_charset */
+/** storage for @ref option_assumed_charset */
 WHERE char* AssumedCharset INITVAL(NULL);
-/** $debug_level */
+/** storage for @ref option_debug_level */
 WHERE int DebugLevel INITVAL(0);
-/** $umask */
+/** storage for @ref option_umask */
 WHERE int Umask INITVAL(0);
 
 /** all boolean options we know */
 enum {
-  /** $allow_8bit */
+  /** @ref option_allow_8bit */
   OPT_ALLOW8BIT = 0,
   /** last */
   OPT_LAST
+};
+
+enum {
+  /** @ref option_abort_unmodified */
+  Q_ABORT = 0,
+  /** last */
+  Q_LAST
 };
 
 #endif /* !MUTTNG_CONFIG_GLOBAL_VARIABLES_H */

@@ -13,11 +13,15 @@
 NumOption::NumOption () {}
 NumOption::~NumOption () {}
 
-AbstractCommand::state NumOption::fromString (AbstractOption::commands command, buffer_t* src, option_t* dst) {
+AbstractCommand::state NumOption::fromString (AbstractOption::commands command,
+                                              buffer_t* src, option_t* dst) {
   int* ptr = (int*) dst->data;
   int num = 0;
   const char* b = NULL;
   bool changed = false;
+
+  if (!src || !src->len)
+    return (AbstractCommand::S_VALUE);
 
   switch (command) {
     case T_SET: b = src->str; break;
@@ -31,7 +35,8 @@ AbstractCommand::state NumOption::fromString (AbstractOption::commands command, 
     return (AbstractCommand::S_VALUE);
   changed = (*ptr != num);
   *ptr = num;
-  return (changed ? AbstractCommand::S_OK_CHANGED : AbstractCommand::S_OK_UNCHANGED);
+  return (changed ? AbstractCommand::S_OK_CHANGED :
+                    AbstractCommand::S_OK_UNCHANGED);
 }
 
 void NumOption::toString (option_t* src, buffer_t* dst) {
@@ -43,6 +48,9 @@ void NumOption::toString (option_t* src, buffer_t* dst) {
 
 bool NumOption::checkVal (const char* src, option_t* dst, int* num) {
   char* error = NULL;
+
+  if (!src || !*src)
+    return (false);
 
   *num = strtol (src, &error, str_eq2 (dst->name, "umask", 5) ? 8 : 10);
 

@@ -1,15 +1,45 @@
 <descriptions>
+  <variable name="abort_unmodified" type="quad-option">
+    <init>yes</init>
+    <descr>
+      If set to <val>yes</val>, composition will automatically abort after
+      editing the message body if no changes are made to the file (this
+      check only happens after the <em>first</em> edit of the file).
+      When set to <val>no</val>, composition will never be aborted.
+    </descr>
+  </variable>
   <variable name="allow_8bit" type="boolean">
     <init>yes</init>
     <descr>
       <p>
       Controls whether 8-bit data is converted to 7-bit using either
-      <tt>quoted-printable</tt> or <tt>base64</tt> encoding when sending mail.
+      <enc>quoted-printable</enc> or <enc>base64</enc> encoding when
+      sending mail.
       </p>
     </descr>
   </variable>
   <variable name="assumed_charset" type="string">
     <init>us-ascii</init>
+    <descr>
+      <p>
+      This variable is a colon-separated list of character encoding
+      schemes for messages without character encoding indication.
+      Header field values and message body content without character encoding
+      indication would be assumed that they are written in one of this list.
+      </p>
+      <p>
+      By default, all the header fields and message body without any charset
+      indication are assumed to be in <enc>us-ascii</enc>.
+      <p>
+      For example, Japanese users might prefer this:
+      <pre>
+      set assumed_charset="iso-2022-jp:euc-jp:shift_jis:utf-8"
+      </pre>
+      </p>
+      <p>
+      However, only the first content is valid for the message body.
+      This variable is valid only if <varref>strict_mime</varref> is <val>unset</val>.
+    </descr>
   </variable>
   <variable name="debug_level" type="number">
     <init>0</init>

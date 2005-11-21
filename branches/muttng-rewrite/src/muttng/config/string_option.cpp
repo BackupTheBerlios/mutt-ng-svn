@@ -18,6 +18,9 @@ AbstractCommand::state StringOption::fromString (AbstractOption::commands comman
   char* p = NULL;
   bool change = false;
 
+  if (!src || !src->len)
+    return (AbstractCommand::S_VALUE);
+
   switch (command) {
     case T_SET: p = src->str; break;
     case T_UNSET: break;

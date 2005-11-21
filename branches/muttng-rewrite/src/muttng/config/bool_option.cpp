@@ -22,10 +22,14 @@ AbstractCommand::state BoolOption::fromString (AbstractOption::commands command,
 
   switch (command) {
     case T_UNSET:
+      if (src && src->len)
+        return (AbstractCommand::S_VALUE);
       changed = option (dst->data);
       unset_option (dst->data);
       break;
     case T_TOGGLE:
+      if (src && src->len)
+        return (AbstractCommand::S_VALUE);
       changed = true;
       toggle_option (dst->data);
       break;
@@ -37,12 +41,13 @@ AbstractCommand::state BoolOption::fromString (AbstractOption::commands command,
         tmp->len = str_len (tmp->str);
       } else
         tmp = src;
-      if (buffer_equal1 (tmp, "yes", 3) || buffer_equal1 (tmp, "true", 4) ||
-          buffer_equal1 (tmp, "1", 1)) {
+      if (!src || !src->len || buffer_equal1 (tmp, "yes", 3) ||
+          buffer_equal1 (tmp, "true", 4) || buffer_equal1 (tmp, "1", 1)) {
         changed = !option (dst->data);
         set_option (dst->data);
-      } else if (buffer_equal1 (tmp, "no", 2) || buffer_equal1 (tmp, "false", 5) ||
-                 buffer_equal1 (tmp, "0", 1)) {
+      } else if (src && src->len && (buffer_equal1 (tmp, "no", 2) ||
+                                     buffer_equal1 (tmp, "false", 5) ||
+                                     buffer_equal1 (tmp, "0", 1))) {
         changed = option (dst->data);
         unset_option (dst->data);
       } else

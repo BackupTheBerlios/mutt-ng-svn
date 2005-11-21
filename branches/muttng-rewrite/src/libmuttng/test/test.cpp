@@ -19,15 +19,15 @@ namespace {
   /**
    * libmuttng/ unit testing class
    */
-  class core_tests : public suite {
+  class libmuttng_tests : public suite {
     public:
-      core_tests() : suite("libmuttng_tests") {
+      libmuttng_tests() : suite("libmuttng_tests") {
         suite::main().add("libmuttng_test_suite",new signal_tests());
       }
   };
 
   /** main() */
-  core_tests * theTest = new core_tests();
+  libmuttng_tests * theTest = new libmuttng_tests();
 
 }
 

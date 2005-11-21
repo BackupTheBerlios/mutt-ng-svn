@@ -161,7 +161,7 @@ class Func1 : public Func1Interface<A1> {
     /**
      * Constructor.
      * @param obj_ Object
-     * @param f Callback function.
+     * @param func_ Callback function.
      */
     Func1 (T* obj_, callback func_) : obj(obj_),func(func_) {}
     bool call(A1 a) { return ((obj->*func)(a)); }
@@ -235,7 +235,7 @@ class Signal1 {
      * @test signal_tests::test_signal_connect().
      * @test signal_tests::test_signal_loop().
      * @test signal_tests::test_signal_disconnect().
- * @param A1 Type of argument 1.
+     * @param a Argument passed to signal's emit(). 
      * @return Whether all calls succeeded.
      */
     bool emit (A1 a) {
@@ -333,7 +333,7 @@ class Func2 : public Func2Interface<A1,A2> {
     /**
      * Constructor.
      * @param obj_ Object
-     * @param f Callback function.
+     * @param func_ Callback function.
      */
     Func2 (T* obj_, callback func_) : obj(obj_),func(func_) {}
     bool call(A1 a,A2 b) { return ((obj->*func)(a,b)); }
@@ -408,8 +408,8 @@ class Signal2 {
      * @test signal_tests::test_signal_connect().
      * @test signal_tests::test_signal_loop().
      * @test signal_tests::test_signal_disconnect().
- * @param A1 Type of argument 1.
- * @param A2 Type of argument 2.
+     * @param a Argument passed to signal's emit(). 
+     * @param b Argument passed to signal's emit(). 
      * @return Whether all calls succeeded.
      */
     bool emit (A1 a,A2 b) {
@@ -510,7 +510,7 @@ class Func3 : public Func3Interface<A1,A2,A3> {
     /**
      * Constructor.
      * @param obj_ Object
-     * @param f Callback function.
+     * @param func_ Callback function.
      */
     Func3 (T* obj_, callback func_) : obj(obj_),func(func_) {}
     bool call(A1 a,A2 b,A3 c) { return ((obj->*func)(a,b,c)); }
@@ -586,9 +586,9 @@ class Signal3 {
      * @test signal_tests::test_signal_connect().
      * @test signal_tests::test_signal_loop().
      * @test signal_tests::test_signal_disconnect().
- * @param A1 Type of argument 1.
- * @param A2 Type of argument 2.
- * @param A3 Type of argument 3.
+     * @param a Argument passed to signal's emit(). 
+     * @param b Argument passed to signal's emit(). 
+     * @param c Argument passed to signal's emit(). 
      * @return Whether all calls succeeded.
      */
     bool emit (A1 a,A2 b,A3 c) {
@@ -692,7 +692,7 @@ class Func4 : public Func4Interface<A1,A2,A3,A4> {
     /**
      * Constructor.
      * @param obj_ Object
-     * @param f Callback function.
+     * @param func_ Callback function.
      */
     Func4 (T* obj_, callback func_) : obj(obj_),func(func_) {}
     bool call(A1 a,A2 b,A3 c,A4 d) { return ((obj->*func)(a,b,c,d)); }
@@ -769,10 +769,10 @@ class Signal4 {
      * @test signal_tests::test_signal_connect().
      * @test signal_tests::test_signal_loop().
      * @test signal_tests::test_signal_disconnect().
- * @param A1 Type of argument 1.
- * @param A2 Type of argument 2.
- * @param A3 Type of argument 3.
- * @param A4 Type of argument 4.
+     * @param a Argument passed to signal's emit(). 
+     * @param b Argument passed to signal's emit(). 
+     * @param c Argument passed to signal's emit(). 
+     * @param d Argument passed to signal's emit(). 
      * @return Whether all calls succeeded.
      */
     bool emit (A1 a,A2 b,A3 c,A4 d) {
@@ -879,7 +879,7 @@ class Func5 : public Func5Interface<A1,A2,A3,A4,A5> {
     /**
      * Constructor.
      * @param obj_ Object
-     * @param f Callback function.
+     * @param func_ Callback function.
      */
     Func5 (T* obj_, callback func_) : obj(obj_),func(func_) {}
     bool call(A1 a,A2 b,A3 c,A4 d,A5 e) { return ((obj->*func)(a,b,c,d,e)); }
@@ -957,11 +957,11 @@ class Signal5 {
      * @test signal_tests::test_signal_connect().
      * @test signal_tests::test_signal_loop().
      * @test signal_tests::test_signal_disconnect().
- * @param A1 Type of argument 1.
- * @param A2 Type of argument 2.
- * @param A3 Type of argument 3.
- * @param A4 Type of argument 4.
- * @param A5 Type of argument 5.
+     * @param a Argument passed to signal's emit(). 
+     * @param b Argument passed to signal's emit(). 
+     * @param c Argument passed to signal's emit(). 
+     * @param d Argument passed to signal's emit(). 
+     * @param e Argument passed to signal's emit(). 
      * @return Whether all calls succeeded.
      */
     bool emit (A1 a,A2 b,A3 c,A4 d,A5 e) {
@@ -1071,7 +1071,7 @@ class Func6 : public Func6Interface<A1,A2,A3,A4,A5,A6> {
     /**
      * Constructor.
      * @param obj_ Object
-     * @param f Callback function.
+     * @param func_ Callback function.
      */
     Func6 (T* obj_, callback func_) : obj(obj_),func(func_) {}
     bool call(A1 a,A2 b,A3 c,A4 d,A5 e,A6 f) { return ((obj->*func)(a,b,c,d,e,f)); }
@@ -1150,12 +1150,12 @@ class Signal6 {
      * @test signal_tests::test_signal_connect().
      * @test signal_tests::test_signal_loop().
      * @test signal_tests::test_signal_disconnect().
- * @param A1 Type of argument 1.
- * @param A2 Type of argument 2.
- * @param A3 Type of argument 3.
- * @param A4 Type of argument 4.
- * @param A5 Type of argument 5.
- * @param A6 Type of argument 6.
+     * @param a Argument passed to signal's emit(). 
+     * @param b Argument passed to signal's emit(). 
+     * @param c Argument passed to signal's emit(). 
+     * @param d Argument passed to signal's emit(). 
+     * @param e Argument passed to signal's emit(). 
+     * @param f Argument passed to signal's emit(). 
      * @return Whether all calls succeeded.
      */
     bool emit (A1 a,A2 b,A3 c,A4 d,A5 e,A6 f) {
@@ -1268,7 +1268,7 @@ class Func7 : public Func7Interface<A1,A2,A3,A4,A5,A6,A7> {
     /**
      * Constructor.
      * @param obj_ Object
-     * @param f Callback function.
+     * @param func_ Callback function.
      */
     Func7 (T* obj_, callback func_) : obj(obj_),func(func_) {}
     bool call(A1 a,A2 b,A3 c,A4 d,A5 e,A6 f,A7 g) { return ((obj->*func)(a,b,c,d,e,f,g)); }
@@ -1348,13 +1348,13 @@ class Signal7 {
      * @test signal_tests::test_signal_connect().
      * @test signal_tests::test_signal_loop().
      * @test signal_tests::test_signal_disconnect().
- * @param A1 Type of argument 1.
- * @param A2 Type of argument 2.
- * @param A3 Type of argument 3.
- * @param A4 Type of argument 4.
- * @param A5 Type of argument 5.
- * @param A6 Type of argument 6.
- * @param A7 Type of argument 7.
+     * @param a Argument passed to signal's emit(). 
+     * @param b Argument passed to signal's emit(). 
+     * @param c Argument passed to signal's emit(). 
+     * @param d Argument passed to signal's emit(). 
+     * @param e Argument passed to signal's emit(). 
+     * @param f Argument passed to signal's emit(). 
+     * @param g Argument passed to signal's emit(). 
      * @return Whether all calls succeeded.
      */
     bool emit (A1 a,A2 b,A3 c,A4 d,A5 e,A6 f,A7 g) {

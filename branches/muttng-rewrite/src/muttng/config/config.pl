@@ -7,7 +7,8 @@ my $last = "";
 my %pretty = (
   "BOOL"        => "boolean",
   "NUM"         => "number",
-  "STRING"      => "string"
+  "STRING"      => "string",
+  "QUAD"        => "quad-option"
 );
 
 sub get_init ($) { # get initial value from initial portion of string {{{
@@ -36,6 +37,17 @@ sub clean ($) { # strip one level of \ from string {{{
   }
   return (join ('', @line));
 } # }}}
+
+sub todoxy($) {
+  my ($line) = (@_);
+  my $clean = $line;
+  $clean =~ s#<man>([^<]+)</man>#<tt>$1(1)</tt>#g;
+  $clean =~ s#<varref>([^<]+)</varref>#\@ref option_$1#g;
+  $clean =~ s#<man sect="([1-9])">([^<]+)</man>#<tt>$2($1)</tt>#g;
+  $clean =~ s#([</])val>#$1tt>#g;
+  $clean =~ s#([</])enc>#$1tt>#g;
+  return ("$clean");
+}
 
 while (<STDIN>) {
   chomp;
@@ -122,7 +134,7 @@ foreach my $v (sort keys (%vars)) {
   print OUT "<br> <br>\n";
   if (defined $vars{$v}{'descr'}) {
     foreach my $l (split (/\n/, $vars{$v}{'descr'})) {
-      print OUT "*   $l\n";
+      print OUT "*   ".&todoxy("$l")."\n";
     }
   }
 }

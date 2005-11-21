@@ -195,7 +195,7 @@ for (my $i = 1; $i <= $max; $i++) {
   print "    /**\n";
   print "     * Constructor.\n";
   print "     * \@param obj_ Object\n";
-  print "     * \@param f Callback function.\n";
+  print "     * \@param func_ Callback function.\n";
   print "     */\n";
   print "    Func${i} (T* obj_, callback func_) : obj(obj_),func(func_) {}\n";
   print "    bool call($template_funcXint3) { return ((obj->*func)($call_args)); }\n";
@@ -269,7 +269,7 @@ for (my $i = 1; $i <= $max; $i++) {
   print "     * \@test signal_tests::test_signal_connect().\n";
   print "     * \@test signal_tests::test_signal_loop().\n";
   print "     * \@test signal_tests::test_signal_disconnect().\n";
-  print $template_funcXint4;
+  print $template_funcXcalldoc;
   print "     * \@return Whether all calls succeeded.\n";
   print "     */\n";
   print "    bool emit ($template_funcXint3) {\n";
