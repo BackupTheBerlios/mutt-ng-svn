@@ -55,7 +55,8 @@ class AbstractOption : public Muttng {
      * @return Whether operation succeeded.
      */
     virtual AbstractCommand::state fromString (AbstractOption::commands command,
-                                              buffer_t* src, option_t* dst) = 0;
+                                              buffer_t* src, option_t* dst,
+                                              buffer_t* error) = 0;
     /**
      * Write option to string, to be overwritten by derived classes.
      * @param src Option.

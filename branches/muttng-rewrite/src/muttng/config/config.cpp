@@ -41,6 +41,15 @@
  *         a prompt will query for a result highlighting the given
  *         choice, @c yes or @c no respectively. With settings of @c yes
  *         or @c no, the question is assumed to be answered already.
+ *       - @c url. A URL for specifying folders. Basically, the
+ *         following syntax is allowed:
+ *         <pre>
+ * proto[s]://[username[:password]@]host[:port]/path</pre>
+ *         where valid protocols are: @c imap, @c nntp, @c pop, @c smtp
+ *         and @c file. The @c file protocol is treated specially as it
+ *         doesn't allow the secure pointer @c [s] and only contains a
+ *         path. For compatibility reasons, if an URL doesn't contain a
+ *         protocoll, @c file is assumed.
  *
  *   @section muttng_config_commands Commands
  *
@@ -56,7 +65,7 @@
  *
  *       - @c bool and @c quad-option: @c no
  *       - @c number: @c 0
- *       - @c string: the empty string ""
+ *       - @c string and @c url: the empty string/url ""
  *
  *     The @c reset command changes a value to its default.
  *

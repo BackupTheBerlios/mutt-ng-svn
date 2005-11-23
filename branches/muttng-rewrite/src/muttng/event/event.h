@@ -14,8 +14,7 @@
 
 #include "libmuttng/debug.h"
 #include "libmuttng/signal.h"
-
-#include "../config/option.h"
+#include "libmuttng/util/url.h"
 
 /**
  * Info about an event bound.
@@ -253,8 +252,10 @@ class Event {
 
     /** signal emitted when context changes */
     Signal2<Event::context,Event::event> sigContextChange;
-    /** signal emitted when config option changes */
-    Signal2<Event::context,option_t*> sigOptChange;
+    /** signal emitted when numeric config option changes */
+    Signal3<Event::context,const char*,int> sigNumOptChange;
+    /** signal emitted when url config option changes */
+    Signal3<Event::context,const char*,url_t*> sigURLOptChange;
 
   private:
     /** Context stack. */

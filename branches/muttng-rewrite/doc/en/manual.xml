@@ -38,7 +38,7 @@
 
     </chapter>
 
-    <xi:include href="../common/ack.xml"
+    <xi:include href="ack.xml"
       xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
     <index/>

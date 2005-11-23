@@ -8,6 +8,7 @@
 #include "core/mem.h"
 #include "core/str.h"
 #include "core/alloca.h"
+#include "core/intl.h"
 
 #include "quad_option.h"
 #include "global_variables.h"
@@ -16,7 +17,8 @@ QuadOption::QuadOption () {}
 QuadOption::~QuadOption () {}
 
 AbstractCommand::state QuadOption::fromString (AbstractOption::commands command,
-                                               buffer_t* src, option_t* dst) {
+                                               buffer_t* src, option_t* dst,
+                                               buffer_t* error) {
   buffer_t* tmp;
   bool changed = false;
 
@@ -48,8 +50,13 @@ AbstractCommand::state QuadOption::fromString (AbstractOption::commands command,
         changed = setQuad (dst->data, Q_NO);
       else if (src && src->len && buffer_equal1 (tmp, "ask-no", 6))
         changed = setQuad (dst->data, Q_ASKNO);
-      else
+      else {
+        if (error) {
+          buffer_add_str (error, _("unknown value for quad-option: "), -1);
+          buffer_add_buffer (error, tmp);
+        }
         return (AbstractCommand::S_VALUE);
+      }
       break;
     case T_QUERY:
       return (AbstractCommand::S_CMD);

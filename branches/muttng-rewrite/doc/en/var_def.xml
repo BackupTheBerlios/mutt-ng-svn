@@ -3,5 +3,9 @@
   <variable name="allow_8bit"/>
   <variable name="assumed_charset"/>
   <variable name="debug_level"/>
+  <variable name="folder"/>
+  <variable name="mbox"/>
+  <variable name="postponed"/>
+  <variable name="record"/>
   <variable name="umask"/>
 </definitions>

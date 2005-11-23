@@ -156,7 +156,7 @@ bool Tool::start (void) {
 }
 
 bool Tool::end (void) {
-  disconnectSignals (event->sigOptChange, this);
+  disconnectSignals (event->sigNumOptChange, this);
   disconnectSignals (event->sigContextChange, this);
   return (this->ui->end ());
 }
@@ -270,16 +270,17 @@ void Tool::displayUsage (void) {
 }
 
 void Tool::setupEventHandlers (void) {
-  connectSignal (event->sigOptChange, this, &Tool::catchOptChange);
+  connectSignal (event->sigNumOptChange, this, &Tool::catchNumOptChange);
   connectSignal (event->sigContextChange, this, &Tool::catchContextChange);
 }
 
-bool Tool::catchOptChange (Event::context context, option_t* option) {
-  DEBUGPRINT(D_EVENT,("caught option change: ctx=%s, opt='%s'",
-                      Event::getContextName (context), NONULL (option->name)));
-  if (str_eq2 (option->name, "debug_level", 11)) {
-    setDebugLevel (DebugLevel);
-    libmuttng->setDebugLevel (DebugLevel);
+bool Tool::catchNumOptChange (Event::context context, const char* name,
+                              int value) {
+  DEBUGPRINT(D_EVENT,("caught num option change: ctx=%s, opt='%s'",
+                      Event::getContextName (context), name));
+  if (str_eq2 (name, "debug_level", 11)) {
+    setDebugLevel (value);
+    libmuttng->setDebugLevel (value);
   }
   return (true);
 }

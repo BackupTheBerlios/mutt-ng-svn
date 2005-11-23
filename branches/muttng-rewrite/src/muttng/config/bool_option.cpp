@@ -8,6 +8,7 @@
 #include "core/mem.h"
 #include "core/str.h"
 #include "core/alloca.h"
+#include "core/intl.h"
 
 #include "bool_option.h"
 #include "global_variables.h"
@@ -16,7 +17,8 @@ BoolOption::BoolOption () {}
 BoolOption::~BoolOption () {}
 
 AbstractCommand::state BoolOption::fromString (AbstractOption::commands command,
-                                              buffer_t* src, option_t* dst) {
+                                              buffer_t* src, option_t* dst,
+                                              buffer_t* error) {
   buffer_t* tmp;
   bool changed = false;
 
@@ -50,8 +52,13 @@ AbstractCommand::state BoolOption::fromString (AbstractOption::commands command,
                                      buffer_equal1 (tmp, "0", 1))) {
         changed = option (dst->data);
         unset_option (dst->data);
-      } else
+      } else {
+        if (error) {
+          buffer_add_str (error, _("unknown value for boolean option: "), -1);
+          buffer_add_buffer (error, tmp);
+        }
         return (AbstractCommand::S_VALUE);
+      }
       break;
     case T_QUERY:
       return (AbstractCommand::S_CMD);

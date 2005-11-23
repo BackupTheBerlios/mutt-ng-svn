@@ -19,7 +19,8 @@ class NumOption : public AbstractOption {
     NumOption (void);
     ~NumOption (void);
     AbstractCommand::state fromString (AbstractOption::commands command,
-                                      buffer_t* src, option_t* dst);
+                                      buffer_t* src, option_t* dst,
+                                      buffer_t* error);
     void toString (option_t* src, buffer_t* dst);
   private:
     /**
@@ -29,7 +30,8 @@ class NumOption : public AbstractOption {
      * @param num Pointer to number storage.
      * @return Whether number is valid.
      */
-    bool checkVal (const char* src, option_t* dst, int* num);
+    bool checkVal (const char* src, option_t* dst, int* num,
+                   buffer_t* error);
 };
 
 #endif /* !MUTTNG_CONFIG_NUM_OPTION_H */

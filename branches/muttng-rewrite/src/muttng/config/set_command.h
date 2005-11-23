@@ -45,6 +45,8 @@ class SetCommand : public AbstractCommand {
       T_NUM,
       /** @c quad-option */
       T_QUAD,
+      /** @c url */
+      T_URL,
       /** last */
       T_LAST
     };

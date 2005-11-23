@@ -8,6 +8,7 @@
 #define MUTTNG_CONFIG_GLOBAL_VARIABLES_H
 
 #include "core/array.h"
+#include "libmuttng/util/url.h"
 
 #if SET_COMMAND_CPP
 /** modifier for actual storage of variables */
@@ -43,6 +44,14 @@ WHERE char* AssumedCharset INITVAL(NULL);
 WHERE int DebugLevel INITVAL(0);
 /** storage for @ref option_umask */
 WHERE int Umask INITVAL(0);
+/** storage for @ref option_folder */
+WHERE url_t* Maildir INITVAL(NULL);
+/** storage for @ref option_mbox */
+WHERE url_t* Mbox INITVAL(NULL);
+/** storage for @ref option_postponed */
+WHERE url_t* Postponed INITVAL(NULL);
+/** storage for @ref option_record */
+WHERE url_t* Outbox INITVAL(NULL);
 
 /** all boolean options we know */
 enum {

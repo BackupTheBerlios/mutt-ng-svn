@@ -13,10 +13,14 @@
 StringOption::StringOption () {}
 StringOption::~StringOption () {}
 
-AbstractCommand::state StringOption::fromString (AbstractOption::commands command, buffer_t* src, option_t* dst) {
+AbstractCommand::state StringOption::fromString (AbstractOption::commands command,
+                                                 buffer_t* src, option_t* dst,
+                                                 buffer_t* error) {
   char** str = (char**) dst->data;
   char* p = NULL;
   bool change = false;
+
+  (void) error;
 
   if (!src || !src->len)
     return (AbstractCommand::S_VALUE);

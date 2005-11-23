@@ -132,10 +132,13 @@ class Tool : public Muttng {
      * Connected to Event::sigOptChange. This is currently only used to
      * adjust debug levels when @ref option_debug_level changes.
      * @param context Context signal was emitted in.
-     * @param option Option which changed.
+     * @param name Name of option changed
+     * @þaram value New value.
      * @return @c true
      */
-    bool catchOptChange (Event::context context, option_t* option);
+    bool catchNumOptChange (Event::context context,
+                            const char* name,
+                            int value);
 
     /**
      * Catch any context change.

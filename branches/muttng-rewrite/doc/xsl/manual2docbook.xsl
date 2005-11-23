@@ -61,6 +61,7 @@
 
   <xsl:template match="function">
     <listitem>
+      <anchor id="func-{@name}"/>
       <code>&lt;<xsl:value-of select="@name"/>&gt;</code> (default binding: '<code><xsl:value-of select="@default"/></code>', group: <xsl:value-of select="@group"/>): <xsl:value-of select="text()"/>
     </listitem>
   </xsl:template>
@@ -98,6 +99,8 @@
 
   <xsl:template match="init"/>
 
+  <xsl:template match="sig"/>
+
   <xsl:template match="descr">
     <xsl:apply-templates/>
   </xsl:template>
@@ -133,6 +136,16 @@
       <code>$<xsl:value-of select="."/></code></link>
   </xsl:template>
 
+  <xsl:template match="cmdref">
+    <link linkend="cmd-{translate(text(),'_','-')}">
+      <code><xsl:value-of select="."/></code></link>
+  </xsl:template>
+
+  <xsl:template match="funcref">
+    <link linkend="func-{translate(text(),'_','-')}">
+      <code>&lt;<xsl:value-of select="."/>&gt;</code></link>
+  </xsl:template>
+
   <xsl:template match="man">
     <code><xsl:value-of select="."/>(<xsl:choose><xsl:when test="@sect"><xsl:value-of select="@sect"/></xsl:when><xsl:otherwise>1</xsl:otherwise></xsl:choose>)</code>
   </xsl:template>
@@ -150,6 +163,16 @@
     <code><xsl:value-of select="text()"/></code>
     <indexterm>
       <primary>Encodings</primary>
+      <secondary sortas="{text()}">
+        <code><xsl:value-of select="text()"/></code>
+      </secondary>
+    </indexterm>
+  </xsl:template>
+
+  <xsl:template match="hdr">
+    <code><xsl:value-of select="text()"/></code>
+    <indexterm>
+      <primary>Header</primary>
       <secondary sortas="{text()}">
         <code><xsl:value-of select="text()"/></code>
       </secondary>

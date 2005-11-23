@@ -1,4 +1,4 @@
-SUBDIRS=mailbox crypto message cache test
+SUBDIRS=mailbox crypto message cache test util
 
 include $(CURDIR)/../../GNUmakefile.whereis
 include $(CURDIR)/../../GNUmakefile.config.mine
@@ -11,7 +11,7 @@ clean: subdirclean
 
 libmuttng.a: debug.o libmuttng.o
 	$(AR) -cru $@ $^ $(wildcard ./mailbox/*.o) $(wildcard ./crypto/*.o) \
-	  $(wildcard ./message/*.o) $(wildcard ./cache/*.o)
+	  $(wildcard ./message/*.o) $(wildcard ./cache/*.o) $(wildcard ./util/*.o)
 	$(RANLIB) $@
 
 %.o: %.cpp

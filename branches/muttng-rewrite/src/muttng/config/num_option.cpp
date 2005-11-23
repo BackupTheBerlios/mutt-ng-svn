@@ -7,6 +7,7 @@
 #include "core/buffer.h"
 #include "core/mem.h"
 #include "core/str.h"
+#include "core/intl.h"
 
 #include "num_option.h"
 
@@ -14,9 +15,11 @@ NumOption::NumOption () {}
 NumOption::~NumOption () {}
 
 AbstractCommand::state NumOption::fromString (AbstractOption::commands command,
-                                              buffer_t* src, option_t* dst) {
+                                              buffer_t* src, option_t* dst,
+                                              buffer_t* error) {
   int* ptr = (int*) dst->data;
   int num = 0;
+  size_t len = (error ? error->len : 0);
   const char* b = NULL;
   bool changed = false;
 
@@ -31,8 +34,13 @@ AbstractCommand::state NumOption::fromString (AbstractOption::commands command,
     case T_QUERY:
       return (AbstractCommand::S_CMD);
   }
-  if (!checkVal (b, dst, &num))
+  if (!checkVal (b, dst, &num, error)) {
+    if (error && error->len == len) {
+      buffer_add_str (error, _("value out of range: "), -1);
+      buffer_add_buffer (error, src);
+    }
     return (AbstractCommand::S_VALUE);
+  }
   changed = (*ptr != num);
   *ptr = num;
   return (changed ? AbstractCommand::S_OK_CHANGED :
@@ -46,16 +54,22 @@ void NumOption::toString (option_t* src, buffer_t* dst) {
     buffer_add_num (dst, *((int*) src->data), -1);
 }
 
-bool NumOption::checkVal (const char* src, option_t* dst, int* num) {
-  char* error = NULL;
+bool NumOption::checkVal (const char* src, option_t* dst, int* num,
+                          buffer_t* error) {
+  char* e = NULL;
 
   if (!src || !*src)
     return (false);
 
-  *num = strtol (src, &error, str_eq2 (dst->name, "umask", 5) ? 8 : 10);
+  *num = strtol (src, &e, str_eq2 (dst->name, "umask", 5) ? 8 : 10);
 
-  if (error && *error)
+  if (e && *e) {
+    if (error) {
+      buffer_add_str (error, _("not a number: "), -1);
+      buffer_add_str (error, src, -1);
+    }
     return (false);
+  }
 
   if (str_eq2 (dst->name, "debug_level", 11))
     return (*num >= DEBUG_MIN && *num <= DEBUG_MAX);

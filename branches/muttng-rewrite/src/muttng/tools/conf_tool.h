@@ -39,7 +39,21 @@ class ConfTool : public Tool {
       /** print bindings */
       M_BIND
     };
+    /**
+     * Handle default: print options.
+     * @param annotated Whether to print default values and types as
+     *                  comments: @c -a command line switch.
+     * @param changed Whether to print only changed options:
+     *                @c -D command line option.
+     */
     void do_opts (bool annotated, bool changed);
+    /**
+     * Handle default: print bindings: @c -B command line option.
+     * @param annotated Whether to print contexts, groups and
+     *                  descriptions as comments: @c -a command line switch.
+     * @param changed Whether to print only changed bindings:
+     *                @c -D command line option.
+     */
     void do_bind (bool annotated, bool changed);
 };
 

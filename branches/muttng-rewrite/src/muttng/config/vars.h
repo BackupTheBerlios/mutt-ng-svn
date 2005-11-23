@@ -5,7 +5,7 @@
 /**
 @page page_options Reference: Configuration Options
     @section option_abort_unmodified $abort_unmodified
-      Type: @c quad-option, Initial value: '@c yes'
+      Type: @c quad-option, Initial value: '@c yes', Signal notification: no
 
     
       If set to @c yes, composition will automatically abort after
@@ -15,7 +15,7 @@
     
 
     @section option_allow_8bit $allow_8bit
-      Type: @c boolean, Initial value: '@c yes'
+      Type: @c boolean, Initial value: '@c yes', Signal notification: no
 
     
       Controls whether 8-bit data is converted to 7-bit using either
@@ -24,7 +24,7 @@
       
 
     @section option_assumed_charset $assumed_charset
-      Type: @c string, Initial value: '@c us-ascii'
+      Type: @c string, Initial value: '@c us-ascii', Signal notification: no
 
     
       This variable is a colon-separated list of character encoding
@@ -44,7 +44,7 @@
       
 
     @section option_debug_level $debug_level
-      Type: @c number, Initial value: '@c 0'
+      Type: @c number, Initial value: '@c 0', Signal notification: yes
 
     
       This variable specifies the current debug level and, currently,
@@ -66,8 +66,55 @@
           subsequent enabling/disabling of debug output via this variable
     
 
+    @section option_folder $folder
+      Type: @c url, Initial value: '@c file:///tmp/Mail', Signal notification: yes
+
+    
+      Specifies the default location of your mailboxes.
+      
+      A + or = at the beginning of a pathname will be expanded
+      to the value of this variable.
+      
+      Note that if you change this variable from
+      the default value you need to make sure that the assignment occurs
+      <em>before</em> you use + or = for any other variables
+      since expansion takes place during the set command.
+      
+
+    @section option_mbox $mbox
+      Type: @c url, Initial value: '@c file:///tmp/mbox', Signal notification: no
+
+    
+      This specifies the folder into which read mail in your
+      @ref option_spoolfile folder will be appended.
+      
+
+    @section option_postponed $postponed
+      Type: @c url, Initial value: '@c file:///tmp/postponed', Signal notification: yes
+
+    
+      Mutt-ng allows you to indefinitely ``postpone sending a message'' which
+      you are editing. When you choose to postpone a message, Mutt-ng saves it
+      in the mailbox specified by this variable.
+      
+      Also see the @ref option_postpone variable.
+      
+
+    @section option_record $record
+      Type: @c url, Initial value: '@c ', Signal notification: no
+
+    
+      This specifies the file into which your outgoing messages should be
+      appended. (This is meant as the primary method for saving a copy of
+      your messages, but another way to do this is using the my_hdr
+      command to create a Bcc: header field with your email address in it.)
+      
+      The value of @ref option_record is overridden by the @ref option_force_name
+      and @ref option_save_name variables, and the fcc-hook command.
+      
+
     @section option_umask $umask
-      Type: @c number, Initial value: '@c 0077'
+      Type: @c number, Initial value: '@c 0077', Signal notification: no
 
     
       This variable specifies the <em>octal</em> permissions for

@@ -19,7 +19,8 @@ class BoolOption : public AbstractOption {
     BoolOption (void);
     ~BoolOption (void);
     AbstractCommand::state fromString (AbstractOption::commands command,
-                                      buffer_t* src, option_t* dst);
+                                      buffer_t* src, option_t* dst,
+                                      buffer_t* error);
     void toString (option_t* src, buffer_t* dst);
 };
 

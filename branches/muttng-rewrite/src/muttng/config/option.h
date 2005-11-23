@@ -22,6 +22,8 @@ typedef struct option_t {
   const char* init;
   /** pointer to storage for content, ID or whatever */
   unsigned long data;
+  /** whether to emit a signal upon change */
+  unsigned int emit:1;
 } option_t;
 
 #endif /* !MUTTNG_CONFIG_OPTION_H */

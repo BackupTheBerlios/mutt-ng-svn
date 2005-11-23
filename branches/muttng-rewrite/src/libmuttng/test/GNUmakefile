@@ -1,6 +1,6 @@
-CXXFLAGS+=-I..
+CXXFLAGS+=-I.. -I../..
 LDFLAGS+=-L.. -lunit++
-LINKLIBS=test.o signal_tests.o
+LINKLIBS=test.o signal_tests.o url_tests.o ../libmuttng.a  ../../core/libcore.a
 
 include $(CURDIR)/../../../GNUmakefile.whereis
 include $(CURDIR)/../../../GNUmakefile.config.mine

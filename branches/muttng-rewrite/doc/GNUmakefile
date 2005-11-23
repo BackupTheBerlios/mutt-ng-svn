@@ -10,6 +10,7 @@ manual:
 	  xsltproc --nonet --stringparam html.stylesheet muttng.css -o $$l/manual.html xsl/docbook2html.xsl $$l/manual-docbook.xml ; \
 	  xsltproc --nonet --stringparam html.stylesheet muttng.css -o $$l/ xsl/docbook2chunkhtml.xsl $$l/manual-docbook.xml ; \
 	  cp css/muttng.css $$l/ ; \
+	  tidy -q -i -m -utf8 $$l/*.html >/dev/null 2>&1 || true ; \
         done
 
 vars:
@@ -17,3 +18,6 @@ vars:
 
 funcs:
 	xsltproc -o ../src/muttng/event/funcs.h xsl/functions2doxygen.xsl en/func_descr.xml
+
+test:
+	@ true

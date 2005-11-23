@@ -21,6 +21,7 @@
 #include "num_option.h"
 #include "bool_option.h"
 #include "quad_option.h"
+#include "url_option.h"
 #include "option.h"
 
 /** shortcut */
@@ -30,7 +31,7 @@
 static option_t Options[] = {
   /* START */
 
-  { SetCommand::T_QUAD,         "abort_unmodified",     "yes",          Q_ABORT },
+  { SetCommand::T_QUAD,         "abort_unmodified",     "yes",          Q_ABORT,        0 },
   /*
   ** If set to <val>yes</val>, composition will automatically abort after
   ** editing the message body if no changes are made to the file (this
@@ -38,7 +39,7 @@ static option_t Options[] = {
   ** When set to <val>no</val>, composition will never be aborted.
   */
 
-  { SetCommand::T_BOOL,         "allow_8bit",           "yes",          OPT_ALLOW8BIT   },
+  { SetCommand::T_BOOL,         "allow_8bit",           "yes",          OPT_ALLOW8BIT,  0 },
   /*
   ** <p>
   ** Controls whether 8-bit data is converted to 7-bit using either
@@ -47,7 +48,7 @@ static option_t Options[] = {
   ** </p>
   */
 
-  { SetCommand::T_STRING,       "assumed_charset",      "us-ascii",     (UL) &AssumedCharset    },
+  { SetCommand::T_STRING,       "assumed_charset",      "us-ascii",     (UL) &AssumedCharset,   0 },
   /*
   ** <p>
   ** This variable is a colon-separated list of character encoding
@@ -71,7 +72,7 @@ static option_t Options[] = {
   ** </p>
   */
 
-  { SetCommand::T_NUM,          "debug_level",          "0",            (UL) &DebugLevel     },
+  { SetCommand::T_NUM,          "debug_level",          "0",            (UL) &DebugLevel,       1},
   /*
   ** <p>
   ** This variable specifies the current debug level and, currently,
@@ -99,7 +100,58 @@ static option_t Options[] = {
   ** </p>
   */
 
-  { SetCommand::T_NUM,          "umask",                "0077",         (UL) &Umask     },
+  { SetCommand::T_URL,          "folder",               "file:///tmp/Mail",    (UL) Maildir,      1 },
+  /*
+  ** <p>
+  ** Specifies the default location of your mailboxes.
+  ** </p>
+  ** <p>
+  ** A <tt>+</tt> or <tt>=</tt> at the beginning of a pathname will be expanded
+  ** to the value of this variable.
+  ** </p>
+  ** <p>
+  ** Note that if you change this variable from
+  ** the default value you need to make sure that the assignment occurs
+  ** <em>before</em> you use <tt>+</tt> or <tt>=</tt> for any other variables
+  ** since expansion takes place during the <cmdref>set</cmdref> command.
+  ** </p>
+  */
+
+  { SetCommand::T_URL,          "mbox",                 "file:///tmp/mbox",    (UL) Mbox,      0 },
+  /*
+  ** <p>
+  ** This specifies the folder into which read mail in your
+  ** <varref>spoolfile</varref> folder will be appended.
+  ** </p>
+  */
+
+  { SetCommand::T_URL,          "postponed",            "file:///tmp/postponed",    (UL) Postponed,      1 },
+  /*
+  ** <p>
+  ** Mutt-ng allows you to indefinitely ``<funcref>postpone</funcref> sending a message'' which
+  ** you are editing. When you choose to postpone a message, Mutt-ng saves it
+  ** in the mailbox specified by this variable.
+  ** </p>
+  ** <p>
+  ** Also see the <varref>postpone</varref> variable.
+  ** </p>
+  */
+
+  { SetCommand::T_URL,          "record",               "",                      (UL) Outbox,      0 },
+  /*
+  ** <p>
+  ** This specifies the file into which your outgoing messages should be
+  ** appended. (This is meant as the primary method for saving a copy of
+  ** your messages, but another way to do this is using the <cmdref>my_hdr</cmdref>
+  ** command to create a <hdr>Bcc:</hdr> header field with your email address in it.)
+  ** </p>
+  ** <p>
+  ** The value of <varref>record</varref> is overridden by the <varref>force_name</varref>
+  ** and <varref>save_name</varref> variables, and the <cmdref>fcc-hook</cmdref> command.
+  ** </p>
+  */
+
+  { SetCommand::T_NUM,          "umask",                "0077",         (UL) &Umask,    0 },
   /*
   ** <p>
   ** This variable specifies the <em>octal</em> permissions for
@@ -109,7 +161,7 @@ static option_t Options[] = {
   */
 
   /* END */
-  { 0,                          NULL,   NULL,   0 }
+  { 0,                          NULL,   NULL,   0,      0 }
 };
 
 /** for faster access: hash table of options we know */
@@ -129,7 +181,7 @@ bool SetCommand::handle (buffer_t* line, buffer_t* error, unsigned long data) {
 
 bool SetCommand::init (UI* ui) {
   int i = 0;
-  buffer_t tmp, error;
+  buffer_t tmp, error, error2;
   AbstractCommand::state state = AbstractCommand::S_OK_UNCHANGED;
 
   (void) Homedir;
@@ -141,13 +193,17 @@ bool SetCommand::init (UI* ui) {
   this->handlers[T_BOOL] = new BoolOption ();
   this->handlers[T_NUM] = new NumOption ();
   this->handlers[T_QUAD] = new QuadOption ();
+  this->handlers[T_URL] = new URLOption ();
 
   this->types[T_STRING] = _("string");
   this->types[T_BOOL] = _("boolean");
   this->types[T_NUM] = _("number");
   this->types[T_QUAD] = _("quad-option");
+  this->types[T_URL] = _("url");
 
   OptHash = hash_new ((sizeof (Options) / sizeof (option_t))*2, 0);
+
+  buffer_init ((&error2));
 
   for (i = 0; Options[i].name; i++) {
 
@@ -162,12 +218,25 @@ bool SetCommand::init (UI* ui) {
     tmp.str = (char*) Options[i].init;
     tmp.len = str_len (tmp.str);
     tmp.size = tmp.len;
+    buffer_shrink (&error2, 0);
     state = this->handlers[Options[i].type]->fromString (AbstractOption::T_SET,
-                                                         &tmp, &Options[i]);
+                                                         &tmp, &Options[i],
+                                                         &error2);
     switch (state) {
       case AbstractCommand::S_OK_CHANGED:
-        event->sigOptChange.emit (event->getContext (), &Options[i]);
-        /* fall through */
+        if (Options[i].emit)
+          switch (Options[i].type) {
+          case T_NUM:
+            event->sigNumOptChange.emit (event->getContext (), Options[i].name,
+                                         *((int*) Options[i].data));
+            break;
+          case T_URL:
+            event->sigURLOptChange.emit (event->getContext (), Options[i].name,
+                                         (url_t*) Options[i].data);
+          default:
+            break;
+          }
+      /* fall through */
       case AbstractCommand::S_OK_UNCHANGED:
         break;
       case AbstractCommand::S_VALUE:
@@ -179,6 +248,10 @@ bool SetCommand::init (UI* ui) {
           buffer_add_str (&error, _(": invalid default value: \""), -1);
           buffer_add_buffer (&error, &tmp);
           buffer_add_ch (&error, '"');
+          if (error2.len) {
+            buffer_add_str (&error, ": ", 2);
+            buffer_add_buffer (&error, &error2);
+          }
         } else
           buffer_add_str (&error, _(": invalid command"), -1);
         buffer_add_str (&error, _(" (report this)"), -1);

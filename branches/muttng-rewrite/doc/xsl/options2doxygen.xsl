@@ -24,7 +24,7 @@
   <xsl:template match="variable">
 
     <xsl:text>@section option_</xsl:text><xsl:value-of select="@name"/><xsl:text> $</xsl:text><xsl:value-of select="@name"/><xsl:text>
-      Type: @c </xsl:text><xsl:value-of select="@type"/><xsl:text>, Initial value: </xsl:text><xsl:apply-templates select="init"/>
+      Type: @c </xsl:text><xsl:value-of select="@type"/><xsl:text>, Initial value: </xsl:text><xsl:apply-templates select="init"/><xsl:text>, Signal notification: </xsl:text><xsl:apply-templates select="sig"/>
     <xsl:text>
 
     </xsl:text>

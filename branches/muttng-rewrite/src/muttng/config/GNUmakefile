@@ -1,4 +1,5 @@
-FILES=config set_command abstract_command abstract_option string_option num_option bool_option quad_option
+FILES=config abstract_command abstract_option \
+      set_command string_option num_option bool_option quad_option url_option
 LIB=libconfig.a
 
 all: $(LIB) vars.h

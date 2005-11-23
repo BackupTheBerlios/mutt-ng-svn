@@ -8,7 +8,13 @@ my %pretty = (
   "BOOL"        => "boolean",
   "NUM"         => "number",
   "STRING"      => "string",
-  "QUAD"        => "quad-option"
+  "QUAD"        => "quad-option",
+  "URL"         => "url"
+);
+
+my %sigs = (
+  "0"           => "no",
+  "1"           => "yes"
 );
 
 sub get_init ($) { # get initial value from initial portion of string {{{
@@ -61,18 +67,20 @@ while (<STDIN>) {
   }
 
   # match against variable descr
-  if ($_ =~ /^[\s\t]+{[\s\t]+([^\s\t,]+)[\s\t]*,[\s\t]+([^\s\t,]+)[\s\t]*,[\s\t]+"(.+)$/) {
+  if ($_ =~ /^[\s\t]+{[\s\t]+([^\s\t,]+)[\s\t]*,[\s\t]+([^\s\t,]+)[\s\t]*,[\s\t]+"(.+)[\s\t]*([0-9])[\s\t]*}[\s\t]*,[\s\t]*$/) {
     if ($1 eq "0") {
       next;
     }
     my $type = $1;
     my $var = $2;
     my $init = clean (get_init ($3));
+    my $sig = $4;
     $type =~ s#^[^:]+::T_##,
     $var =~ s#^"##; $var =~ s#"$##;
-    # warn ":: type=$pretty{$type} name=$var init=$init\n";
+    # warn ":: type=$pretty{$type} name=$var init=$init sig=$sig\n";
     $vars{$var}{'type'} = $pretty{$type};
     $vars{$var}{'init'} = $init;
+    $vars{$var}{'sig'} = $sig;
     $last = $var;
   } elsif ($_ =~ /^[\s\t]+\*\* (.+)$/) {
     if ($1 =~ /^avail: (.+)$/) {
@@ -101,6 +109,7 @@ foreach my $v (sort keys (%vars)) {
   if (defined $vars{$v}{'avail'}) {
     print OUT "    <avail>$vars{$v}{'avail'}</avail>\n";
   }
+  print OUT "    <sig>$sigs{$vars{$v}{'sig'}}</sig>\n";
   if (defined $vars{$v}{'descr'}) {
     my @descr = split (/\n/, $vars{$v}{'descr'});
     print OUT "    <descr>\n";

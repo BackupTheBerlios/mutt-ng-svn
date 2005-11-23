@@ -13,6 +13,7 @@
 using namespace unitpp;
 
 #include "signal_tests.h"
+#include "url_tests.h"
 
 namespace {
 
@@ -23,6 +24,7 @@ namespace {
     public:
       libmuttng_tests() : suite("libmuttng_tests") {
         suite::main().add("libmuttng_test_suite",new signal_tests());
+        suite::main().add("libmuttng_test_suite",new url_tests());
       }
   };
 

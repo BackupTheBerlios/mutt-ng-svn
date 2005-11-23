@@ -1,6 +1,7 @@
 <descriptions>
   <variable name="abort_unmodified" type="quad-option">
     <init>yes</init>
+    <sig>no</sig>
     <descr>
       If set to <val>yes</val>, composition will automatically abort after
       editing the message body if no changes are made to the file (this
@@ -10,6 +11,7 @@
   </variable>
   <variable name="allow_8bit" type="boolean">
     <init>yes</init>
+    <sig>no</sig>
     <descr>
       <p>
       Controls whether 8-bit data is converted to 7-bit using either
@@ -20,6 +22,7 @@
   </variable>
   <variable name="assumed_charset" type="string">
     <init>us-ascii</init>
+    <sig>no</sig>
     <descr>
       <p>
       This variable is a colon-separated list of character encoding
@@ -45,6 +48,7 @@
   </variable>
   <variable name="debug_level" type="number">
     <init>0</init>
+    <sig>yes</sig>
     <descr>
       <p>
       This variable specifies the current debug level and, currently,
@@ -72,8 +76,68 @@
       </p>
     </descr>
   </variable>
+  <variable name="folder" type="url">
+    <init>file:///tmp/Mail</init>
+    <sig>yes</sig>
+    <descr>
+      <p>
+      Specifies the default location of your mailboxes.
+      </p>
+      <p>
+      A <tt>+</tt> or <tt>=</tt> at the beginning of a pathname will be expanded
+      to the value of this variable.
+      </p>
+      <p>
+      Note that if you change this variable from
+      the default value you need to make sure that the assignment occurs
+      <em>before</em> you use <tt>+</tt> or <tt>=</tt> for any other variables
+      since expansion takes place during the <cmdref>set</cmdref> command.
+      </p>
+    </descr>
+  </variable>
+  <variable name="mbox" type="url">
+    <init>file:///tmp/mbox</init>
+    <sig>no</sig>
+    <descr>
+      <p>
+      This specifies the folder into which read mail in your
+      <varref>spoolfile</varref> folder will be appended.
+      </p>
+    </descr>
+  </variable>
+  <variable name="postponed" type="url">
+    <init>file:///tmp/postponed</init>
+    <sig>yes</sig>
+    <descr>
+      <p>
+      Mutt-ng allows you to indefinitely ``<funcref>postpone</funcref> sending a message'' which
+      you are editing. When you choose to postpone a message, Mutt-ng saves it
+      in the mailbox specified by this variable.
+      </p>
+      <p>
+      Also see the <varref>postpone</varref> variable.
+      </p>
+    </descr>
+  </variable>
+  <variable name="record" type="url">
+    <init></init>
+    <sig>no</sig>
+    <descr>
+      <p>
+      This specifies the file into which your outgoing messages should be
+      appended. (This is meant as the primary method for saving a copy of
+      your messages, but another way to do this is using the <cmdref>my_hdr</cmdref>
+      command to create a <hdr>Bcc:</hdr> header field with your email address in it.)
+      </p>
+      <p>
+      The value of <varref>record</varref> is overridden by the <varref>force_name</varref>
+      and <varref>save_name</varref> variables, and the <cmdref>fcc-hook</cmdref> command.
+      </p>
+    </descr>
+  </variable>
   <variable name="umask" type="number">
     <init>0077</init>
+    <sig>no</sig>
     <descr>
       <p>
       This variable specifies the <em>octal</em> permissions for

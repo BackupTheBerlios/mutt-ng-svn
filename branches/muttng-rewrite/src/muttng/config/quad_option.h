@@ -19,7 +19,8 @@ class QuadOption : public AbstractOption {
     QuadOption (void);
     ~QuadOption (void);
     AbstractCommand::state fromString (AbstractOption::commands command,
-                                      buffer_t* src, option_t* dst);
+                                      buffer_t* src, option_t* dst,
+                                      buffer_t* error);
     void toString (option_t* src, buffer_t* dst);
   private:
     /** possible values */
