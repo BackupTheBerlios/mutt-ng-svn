@@ -13,6 +13,11 @@ Doxyfile: Doxyfile.in GNUmakefile
 
 srcdoc: Doxyfile
 	doxygen
+	@ for i in $(shell find ./../doxygen -name '*.html') ; do \
+	  echo "cleanup $$i" ; \
+	  tidy -q -i -m -utf8 $$i >/dev/null 2>&1 || true ; \
+	done
+	find ./../doxygen -name '*.html' | ./../contrib/html_head_number.pl
 
 test: all subdirtest
 

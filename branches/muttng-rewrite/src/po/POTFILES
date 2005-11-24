@@ -9,6 +9,9 @@
 ./../libmuttng/message/message.cpp
 ./../libmuttng/message/body.cpp
 ./../libmuttng/message/header.cpp
+./../libmuttng/test/test.cpp
+./../libmuttng/test/signal_tests.cpp
+./../libmuttng/test/url_tests.cpp
 ./../libmuttng/cache/cache.cpp
 ./../libmuttng/cache/cache_qdbm.cpp
 ./../libmuttng/crypto/crypto.cpp
@@ -16,6 +19,7 @@
 ./../libmuttng/crypto/classic_pgp.cpp
 ./../libmuttng/crypto/classic_smime.cpp
 ./../libmuttng/crypto/crypto_gpgme.cpp
+./../libmuttng/util/url.cpp
 ./../core/mem.c
 ./../core/buffer.c
 ./../core/str.c
@@ -28,6 +32,7 @@
 ./../core/test/buffer_tests.cpp
 ./../core/test/hash_tests.cpp
 ./../core/test/list_tests.cpp
+./../core/test/io_tests.cpp
 ./../muttng/tools/conf_tool.cpp
 ./../muttng/tools/main.cpp
 ./../muttng/tools/mailx_tool.cpp
@@ -42,6 +47,8 @@
 ./../muttng/config/abstract_option.cpp
 ./../muttng/config/num_option.cpp
 ./../muttng/config/set_command.cpp
+./../muttng/config/quad_option.cpp
+./../muttng/config/url_option.cpp
 ./../muttng/ui/ui_plain.cpp
 ./../muttng/ui/ui_curses.cpp
 ./../muttng/ui/ui_text.cpp

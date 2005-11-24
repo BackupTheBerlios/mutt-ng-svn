@@ -7,6 +7,7 @@
 #include <unit++/unit++.h>
 
 #ifndef LIBMUTTNG_IMAP
+/** define IMAP feature by force to have something to test */
 #define LIBMUTTNG_IMAP  1
 #endif
 
@@ -15,72 +16,118 @@
 #include "core/buffer.h"
 #include "core/str.h"
 
+/** we need this to avoid default initializer for url_t */
+#define LIBMUTTNG_TEST
 #include "util/url.h"
+
+/**
+ * Test table of invalid protocols or valid protocols but
+ * invalid specs (eg a host for @c file://).
+ */
+static const char* InvalidProtoTable[] = {
+  "mailto:foo@bar", "file://host/path", "file://user@host/path",
+  NULL
+};
+
+/**
+ * Test table for detecting invalid fields.
+ */
+static const char* InvalidURLTable[] = {
+  "imaps://@location/",                 /* empty username */
+  "imaps://user:@location/",            /* empty password */
+  "imaps:///path",                      /* empty host */
+  NULL
+};
+
+/**
+ * Test table for valid urls.
+ */
+static struct {
+  /** url string to parse */
+  const char* urlstr;
+  /** assumed result for url_eq(). */
+  url_t url;
+} ValidURLTable[] = {
+
+  { "imap://location/",                          { NULL,   NULL,     "location", 0,   false, NULL,   P_IMAP } },
+  { "imap://location/path",                      { NULL,   NULL,     "location", 0,   false, "path", P_IMAP } },
+  { "imap://user@location/path",                 { "user", NULL,     "location", 0,   false, "path", P_IMAP } },
+  { "imap://user:secret@location/path",          { "user", "secret", "location", 0,   false, "path", P_IMAP } },
+  { "imap://user:secret@location:0815/path",     { "user", "secret", "location", 815, false, "path", P_IMAP } },
+  { "imap://user@host:secret@location:0815/path",
+    { "user@host", "secret", "location", 815, false, "path", P_IMAP } },
+
+  { "imaps://location/",                         { NULL,   NULL,     "location", 0,   true,  NULL,   P_IMAP } },
+  { "imaps://location/path",                     { NULL,   NULL,     "location", 0,   true,  "path", P_IMAP } },
+  { "imaps://user@location/path",                { "user", NULL,     "location", 0,   true,  "path", P_IMAP } },
+  { "imaps://user:secret@location/path",         { "user", "secret", "location", 0,   true,  "path", P_IMAP } },
+  { "imaps://user:secret@location:0815/path",    { "user", "secret", "location", 815, true,  "path", P_IMAP } },
+
+  { "file:///tmp",                               { NULL,   NULL,     NULL,       0,   false, "/tmp", P_FILE } },
+  { "file:///",                                  { NULL,   NULL,     NULL,       0,   false, "/",    P_FILE } },
+  { "file:///dev%2Fn%75ll",                      { NULL,   NULL,     NULL,       0,   false, "/dev/null",    P_FILE } },
+  { "file:///dev%2fn%75ll",                      { NULL,   NULL,     NULL,       0,   false, "/dev/null",    P_FILE } },
+
+  { NULL,               { EMPTYURL } }
+};
 
 using namespace unitpp;
 
 void url_tests::test_invalid_proto() {
   url_t* url = NULL;
-  buffer_t error;
+  buffer_t error, msg;
+  int i = 0;
 
   buffer_init((&error));
+  buffer_init((&msg));
 
-  buffer_shrink (&error, 0);
-  url = url_from_string ("mailto:foo@bar", &error);
-  assert_true (error.str, url == NULL);
-
-  buffer_shrink (&error, 0);
-  url = url_from_string ("file://host/path", &error);
-  assert_true (error.str, url == NULL);
-
-  buffer_shrink (&error, 0);
-  url = url_from_string ("file://user@host/path", &error);
-  assert_true (error.str, url == NULL);
+  for (i = 0; InvalidProtoTable[i]; i++) {
+    buffer_shrink (&error, 0);
+    buffer_shrink (&msg, 0);
+    buffer_add_str (&msg, "URL: '", 6);
+    buffer_add_str (&msg, InvalidProtoTable[i], -1);
+    buffer_add_str (&msg, "' has invalid proto: ", 21);
+    url = url_from_string (InvalidProtoTable[i], &error);
+    buffer_add_buffer (&msg, &error);
+    assert_true (msg.str, url == NULL);
+  }
 
   buffer_free (&error);
+  buffer_free (&msg);
 }
 
 void url_tests::test_parse() {
   url_t* url = NULL;
-  buffer_t error;
+  buffer_t error, msg;
+  int i = 0;
 
   buffer_init((&error));
+  buffer_init((&msg));
 
-  buffer_shrink (&error, 0);
-  url = url_from_string ("imap://location/", &error);
-  assert_true ("got host+no path",
-               url != NULL && str_eq ("location", url->host) &&
-               !url->path);
+  for (i = 0; ValidURLTable[i].urlstr; i++) {
+    buffer_shrink (&error, 0);
+    buffer_shrink (&msg, 0);
+    buffer_add_str (&msg, "URL '", 5);
+    buffer_add_str (&msg, ValidURLTable[i].urlstr, -1);
+    buffer_add_str (&msg, "' is valid: ", 12);
+    url = url_from_string (ValidURLTable[i].urlstr, &error);
+    buffer_add_buffer (&msg, &error);
+    assert_true (msg.str, url && url_eq (url, &ValidURLTable[i].url));
+  }
 
-  buffer_shrink (&error, 0);
-  url = url_from_string ("imap://location/path", &error);
-  assert_true ("got host+path",
-               url != NULL && str_eq ("location", url->host) &&
-                              str_eq ("path", url->path));
+  for (i = 0; InvalidURLTable[i]; i++) {
+    buffer_shrink (&error, 0);
+    buffer_shrink (&msg, 0);
+    buffer_add_str (&msg, "URL: '", 6);
+    buffer_add_str (&msg, InvalidURLTable[i], -1);
+    buffer_add_str (&msg, "' is invalid: ", 14);
+    url = url_from_string (InvalidURLTable[i], &error);
+    buffer_add_buffer (&msg, &error);
+    assert_true (msg.str, url == NULL);
+  }
 
-  buffer_shrink (&error, 0);
-  url = url_from_string ("imap://user@location/path", &error);
-  assert_true ("got user+host+path",
-               url != NULL && str_eq ("location", url->host) &&
-                              str_eq ("path", url->path) &&
-                              str_eq ("user", url->username));
-
-  buffer_shrink (&error, 0);
-  url = url_from_string ("imap://user:secret@location/path", &error);
-  assert_true ("got user+password+host+path",
-               url != NULL && str_eq ("location", url->host) &&
-                              str_eq ("path", url->path) &&
-                              str_eq ("user", url->username) &&
-                              str_eq ("secret", url->password));
-
-  buffer_shrink (&error, 0);
-  url = url_from_string ("imap://user:secret@location:0815/path", &error);
-  assert_true ("got user+password+host+port+path",
-               url != NULL && str_eq ("location", url->host) &&
-                              str_eq ("path", url->path) &&
-                              str_eq ("user", url->username) &&
-                              str_eq ("secret", url->password) &&
-                              url->port == 815);
+  buffer_free (&error);
+  buffer_free (&msg);
 }
 
 void url_tests::test_decode() {
@@ -104,7 +151,6 @@ void url_tests::test_decode() {
   assert_true ("evil %00 blocked",
                url == NULL && strstr (error.str, "%00Foo"));
 }
-
 
 url_tests::url_tests() : suite("url_tests") {
   add("url",testcase(this,"test_url_invalid_proto",

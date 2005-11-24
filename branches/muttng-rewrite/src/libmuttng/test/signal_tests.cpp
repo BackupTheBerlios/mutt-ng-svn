@@ -14,10 +14,10 @@ void signal_tests::test_signal_connect (void) {
 
   /** - connect signal1 handlers to signal_tests::sig1 */
   connectSignal (sig1, test1, &testSig1::sig1_handler_1);
-  connectSignal (sig1, test1, &testSig1::sig1_handler_2);
+  connectSignal (sig1, test2, &testSig2::sig1_handler_2);
   connectSignal (sig1, test1, &testSig1::sig1_handler_3);
   connectSignal (sig1, test2, &testSig2::sig1_handler_1);
-  connectSignal (sig1, test2, &testSig2::sig1_handler_2);
+  connectSignal (sig1, test1, &testSig1::sig1_handler_2);
   connectSignal (sig1, test2, &testSig2::sig1_handler_3);
   /** - all handlers must succeed */
   assert_true ("sig1: all handlers succeeded", sig1.emit (&a));
@@ -27,10 +27,10 @@ void signal_tests::test_signal_connect (void) {
   a = 0;
   /** - connect signal2 handlers to signal_tests::sig2 */
   connectSignal (sig2, test1, &testSig1::sig2_handler_1);
-  connectSignal (sig2, test1, &testSig1::sig2_handler_2);
+  connectSignal (sig2, test2, &testSig2::sig2_handler_2);
   connectSignal (sig2, test1, &testSig1::sig2_handler_3);
   connectSignal (sig2, test2, &testSig2::sig2_handler_1);
-  connectSignal (sig2, test2, &testSig2::sig2_handler_2);
+  connectSignal (sig2, test1, &testSig1::sig2_handler_2);
   connectSignal (sig2, test2, &testSig2::sig2_handler_3);
   /** - all handlers must succeed */
   assert_true ("sig2: all handlers succeeded", sig2.emit (&a, b));

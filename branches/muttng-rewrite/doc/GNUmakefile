@@ -1,6 +1,6 @@
 LANGUAGES=en
 
-all: vars funcs
+all: doxygen
 
 manual:
 	@ for l in $(LANGUAGES) ; do \
@@ -13,11 +13,8 @@ manual:
 	  tidy -q -i -m -utf8 $$l/*.html >/dev/null 2>&1 || true ; \
         done
 
-vars:
-	xsltproc -o ../src/muttng/config/vars.h xsl/options2doxygen.xsl en/var_descr.xml
-
-funcs:
-	xsltproc -o ../src/muttng/event/funcs.h xsl/functions2doxygen.xsl en/func_descr.xml
+doxygen:
+	xsltproc --xinclude -o ../src/related/manual.h xsl/manual2doxygen.xsl en/manual.xml
 
 test:
 	@ true

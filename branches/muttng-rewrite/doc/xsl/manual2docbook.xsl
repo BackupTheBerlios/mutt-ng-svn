@@ -136,6 +136,10 @@
       <code>$<xsl:value-of select="."/></code></link>
   </xsl:template>
 
+  <xsl:template match="web">
+    <ulink url="text()"><xsl:value-of select="."/></ulink>
+  </xsl:template>
+
   <xsl:template match="cmdref">
     <link linkend="cmd-{translate(text(),'_','-')}">
       <code><xsl:value-of select="."/></code></link>
@@ -157,6 +161,10 @@
 
   <xsl:template match="em">
     <emphasis><xsl:apply-templates/></emphasis>
+  </xsl:template>
+
+  <xsl:template match="b">
+    <emphasis role="bold"><xsl:apply-templates/></emphasis>
   </xsl:template>
 
   <xsl:template match="enc">

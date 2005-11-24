@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter id="configuration">
+  <title>Configuration</title>
+
+  <section id="config-syntax"> <!--{{{-->
+    <title>Syntax of configuration files</title>
+  </section> <!--}}}-->
+
+  <section id="config-commands"> <!--{{{-->
+    <title>Configuration commands</title>
+
+    <p>
+      The following commands are available for dealing with options:
+      <tt>set,</tt> <tt>unset,</tt> <tt>reset,</tt> <tt>toggle</tt> and <tt>query</tt>.
+    </p>
+
+    <p>
+      The <tt>set</tt> command sets an option to a value. If no particular
+      value is given for <tt>quad-option</tt> and <tt>bool</tt> types, <tt>yes</tt> is
+      assumed.
+    </p>
+
+    <p>
+      The <tt>unset</tt> command unsets a value to a neutral value. The
+      neutral values depend on the option's type:
+    </p>
+
+    <ul>
+      <li><tt>boolean</tt> and <tt>quad-option</tt>: <tt>no</tt></li>
+      <li><tt>number</tt>; <tt>0</tt></li>
+      <li><tt>string</tt> and <tt>url</tt>: the empty string/url ""</li>
+    </ul>
+
+    <p>
+      The <tt>reset</tt> command changes a value to its default.
+    </p>
+
+    <p>   
+      The <tt>toggle</tt> command inverts a <tt>bool</tt> or <tt>quad-option</tt> value
+      and is not allowed for other option types.
+    </p>
+
+    <p>
+      The <tt>query</tt> command displays the current value for any option.
+    </p>
+
+  </section> <!--}}}-->
+
+  <section id="config-types"> <!--{{{-->
+    <title>Configuration options</title>
+
+    <p>The following types of configuration options are supported:</p>
+
+    <ul>
+      <li><b><tt>boolean</tt></b>: A boolean option. Possible values are:
+        <tt>yes</tt>, <tt>no</tt>.</li>
+      <li><b><tt>number</tt></b>: A numeric option. Most of the options are
+        positive-only numbers but some allow negative values. The
+        documentation for the options list these and, in addition,
+        mutt-ng will perform strict checks and report error for
+        invalid ranges.</li>
+      <li><b><tt>string</tt></b>: A string. As for numbers, most options allow any
+        value but some allow only for a few magic words given in the
+        option documentation. Mutt-ng will perform strict checks and
+        print errors for invalid values, i.e. non-magic words.</li>
+      <li><b><tt>quad-option</tt></b>: A "question" with the feature to already
+        answer it and thus skip any prompts with a given value.
+        Possible values are: <tt>yes,</tt> <tt>no,</tt> <tt>ask-yes</tt> and <tt>ask-no.</tt>
+        When an option is used and it's either <tt>ask-yes</tt> and <tt>ask-no,</tt>
+        a prompt will query for a result highlighting the given
+        choice, <tt>yes</tt> or <tt>no</tt> respectively. With settings of <tt>yes</tt>
+        or <tt>no,</tt> the question is assumed to be answered already.</li>
+      <li><b><tt>url</tt></b>: A URL for specifying folders. Basically, the
+        following syntax is allowed:
+        <pre>
+proto[s]://[username[:password]@]host[:port]/path</pre>
+        where valid protocols are: <tt>imap,</tt> <tt>nntp,</tt> <tt>pop,</tt> <tt>smtp</tt>
+        and <tt>file.</tt> The <tt>file</tt> protocol is treated specially as it
+        doesn't allow the secure pointer <tt>[s]</tt> and only contains a
+        path. For compatibility reasons, if an URL doesn't contain a
+        protocoll, <tt>file</tt> is assumed.</li>
+    </ul>
+
+  </section> <!--}}}-->
+
+  <section id="config-incompat"> <!--{{{-->
+    <title>Incompatible changes</title>
+
+    <p>
+      Compared to mutt and mutt-ng, there're some incompatible changes:
+    </p>
+
+    <ul>
+      <li>The <code>set <b>?</b>foo</code> syntax isn't allowed any longer. For
+        this purpose, the <tt>query</tt> command is to be used instead:
+        <code>query foo</code></li>
+      <li>The <code>set <b>no</b>foo</code> syntax isn't allowed any
+        longer. For this purpose, use <code>unset foo</code> instead.</li>
+      <li>The <code>set <b>inv</b>foo</code> syntax isn't allowed any
+        longer. For this purpose, use <code>toggle foo</code> instead.</li>
+      <li>The <code>set <b>&amp;</b>foo</code> syntax isn't allowed any
+        longer. For this purpose, use <code>reset foo</code> instead.</li>
+    </ul>
+
+  </section> <!--}}}-->
+
+</chapter>

@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter id="hacking">
+  <title>Hacking</title>
+
+  <section id="hacking-style"> <!--{{{-->
+    <title>Coding style</title>
+
+    <subsection id="hacking-style-doc"> <!--{{{-->
+      <title>Documentation</title>
+
+      <p>
+        To keep the code documented and consistent, this section lists
+        some rules to keep.
+      </p>
+
+      <p>
+        In general: document all files! Specify a doxygen header with at
+        least the <code>@@file</code> and <code>@@brief</code> tags. For
+        headers, the brief tag looks like:
+      </p>
+
+      <pre>
+@@brief Interface: ...</pre>
+
+      <p>and</p>
+      <pre>
+@@brief Implementation: ...</pre>
+
+      <p>for source files.</p>
+
+    </subsection>
+    <!--}}}-->
+   
+    <subsection id="hacking-style-hdr"> <!--{{{-->
+      <title>Header files</title>
+
+      <p>
+        For each source file, there is a header file listing all
+        publicly accessable protos for the functions in the source
+        file. All functions not listed in the header are to be declared
+        static.
+      </p>
+
+      <p>
+        Each header file is wrapped within the following preprocessor
+        magic:
+      </p>
+
+      <pre>
+#ifndef LIBMUTTNG_FOO_BAR_H
+#define LIBMUTTNG_FOO_BAR_H
+...
+#endif</pre>
+
+      <p>
+        whereby the identifier is constructed from the filename under
+        the <code>src/</code> directory,
+        <code>libmuttng/foo/bar.h</code> in this case.
+      </p>
+
+    </subsection> <!--}}}-->
+
+    <subsection id="hacking-style-misc"> <!--{{{-->
+      <title>Misc.</title>
+
+      <p>
+        For debugging, make the code print debug info by semantic, not
+        just any number.
+      </p>
+
+    </subsection> <!--}}}-->
+
+  </section>
+
+  <!--}}}-->
+
+</chapter>

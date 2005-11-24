@@ -16,27 +16,21 @@
   </head>
 
   <content>
-    
-    <chapter id="introduction">
-      <title>Introduction</title>
-    </chapter>
 
-    <chapter id="reference">
-      <title>Reference</title>
+    <xi:include href="intro.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-      <section id="funcref">
-        <title>Functions</title>
-        <xi:include href="func_descr.xml"
-          xmlns:xi="http://www.w3.org/2001/XInclude"/>
-      </section>
+    <xi:include href="build.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-      <section id="varref">
-        <title>Variables</title>
-        <xi:include href="var_descr.xml"
-          xmlns:xi="http://www.w3.org/2001/XInclude"/>
-      </section>
+    <xi:include href="config.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-    </chapter>
+    <xi:include href="reference.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+    <xi:include href="hacking.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
     <xi:include href="ack.xml"
       xmlns:xi="http://www.w3.org/2001/XInclude"/>

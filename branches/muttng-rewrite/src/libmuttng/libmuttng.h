@@ -33,6 +33,7 @@
  *
  *   @section libmuttng_mime MIME handling
  */
+/** @defgroup libmuttng_util Utility classes */
 /* }}} */
 /**
  * @file libmuttng/libmuttng.h

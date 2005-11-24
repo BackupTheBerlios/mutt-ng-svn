@@ -28,6 +28,7 @@ class NumOption : public AbstractOption {
      * @param src Source input.
      * @param dst Option.
      * @param num Pointer to number storage.
+     * @param error Error message buffer.
      * @return Whether number is valid.
      */
     bool checkVal (const char* src, option_t* dst, int* num,

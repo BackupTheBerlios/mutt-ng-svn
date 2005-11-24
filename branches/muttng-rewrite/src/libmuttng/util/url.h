@@ -51,6 +51,7 @@ typedef struct url_t {
   char* path;
   /** mandatory: protocol */
   urlproto_t proto;
+#ifndef LIBMUTTNG_TEST
   /**
    * Init new url_t structure.
    * @param proto_ protocol.
@@ -64,24 +65,42 @@ typedef struct url_t {
     secure = secure_;
     proto = proto_; 
   }
+#endif
 } url_t;
 
 /**
  * Parse string into url_t.
  * @param url URL as string.
+ * @param error Buffer where to put error messages.
  * @return url_t structure or @c NULL for failure.
+ * @test url_tests::test_invalid_proto().
+ * @test url_tests::test_parse().
+ * @test url_tests::test_decode().
  */
 url_t* url_from_string (const char* url, buffer_t* error);
 
 /**
  * Convert url_t back into string.
- * As passwords will be internally used for authentication only, they're
- * never added to destination buffer.
  * @param url URL to convert.
  * @param dst Destination buffer.
+ * @param pwd Whether to print passwords.
  */
-void url_to_string (url_t* url, buffer_t* dst, bool secure);
+void url_to_string (url_t* url, buffer_t* dst, bool pwd);
 
+/**
+ * Free all memory internally used to url.
+ * @b NOTE: this does not free url itself.
+ * @param url URL.
+ */
 void url_free (url_t* url);
+
+/**
+ * Test whether to URLs are equal.
+ * @param url1 1st url.
+ * @param url2 2nd url.
+ * @return Yes/No.
+ * @test url_tests::test_parse().
+ */
+bool url_eq (url_t* url1, url_t* url2);
 
 #endif /* !LIBMUTTNG_MESSGAGE_BODY_H */

@@ -1,80 +1,15 @@
 /* doxygen documentation {{{ */
 /**
- * @page page_incompat_config Incompatible Changes: Configuration
- *
- * Compared to mutt and mutt-ng, there're some incompatible changes:
- *
- *   - The <code>set ?foo</code> syntax isn't allowed any longer. For
- *     this purpose, the @c query command is to be used instead:
- *     <code>query foo</code>
- *   - The <code>set <b>no</b>foo</code> syntax isn't allowed any
- *     longer. For this purpose, use <code>unset foo</code> instead.
- *   - The <code>set <b>inv</b>foo</code> syntax isn't allowed any
- *     longer. For this purpose, use <code>toggle foo</code> instead.
- *   - The <code>set <b>&</b>foo</code> syntax isn't allowed any
- *     longer. For this purpose, use <code>reset foo</code> instead.
- */
-/**
  * @ingroup muttng
  * @addtogroup muttng_conf Configuration
  * @{
  *
- *   @section muttng_config_types Option types
+ * This implementation doesn't support a number old syntax constructs,
+ * see @ref sect_config-incompat for details.
  *
- *     The following types of options are known:
+ * For supported option types, see @ref sect_config-types.
  *
- *       - @c bool: A boolean option. Possible values are: @c yes, @c no,
- *         @c true, @c false, @c 1, @c 0.
- *       - @c number: A numeric option. Most of the options are
- *         positive-only numbers but some allow negative values. The
- *         documentation for the options list these and, in addition,
- *         mutt-ng will perform strict checks and report error for
- *         invalid ranges.
- *       - @c string: A string. As for numbers, most options allow any
- *         value but some allow only for a few magic words given in the
- *         option documentation. Mutt-ng will perform strict checks and
- *         print errors for invalid values, i.e. non-magic words.
- *       - @c quad-option. A "question" with the feature to already
- *         answer it and thus skip any prompts with a given value.
- *         Possible values are: @c yes, @c no, @c ask-yes and @c ask-no.
- *         When an option is used and it's either @c ask-yes and @c ask-no,
- *         a prompt will query for a result highlighting the given
- *         choice, @c yes or @c no respectively. With settings of @c yes
- *         or @c no, the question is assumed to be answered already.
- *       - @c url. A URL for specifying folders. Basically, the
- *         following syntax is allowed:
- *         <pre>
- * proto[s]://[username[:password]@]host[:port]/path</pre>
- *         where valid protocols are: @c imap, @c nntp, @c pop, @c smtp
- *         and @c file. The @c file protocol is treated specially as it
- *         doesn't allow the secure pointer @c [s] and only contains a
- *         path. For compatibility reasons, if an URL doesn't contain a
- *         protocoll, @c file is assumed.
- *
- *   @section muttng_config_commands Commands
- *
- *     The following commands are available for dealing with options:
- *     @c set, @c unset, @c reset, @c toggle and @c query.
- *
- *     The @c set command sets an option to a value. If no particular
- *     value is given for @c quad-option and @c bool types, @c yes is
- *     assumed.
- *
- *     The @c unset command unsets a value to a neutral value. The
- *     neutral values depend on the option's type:
- *
- *       - @c bool and @c quad-option: @c no
- *       - @c number: @c 0
- *       - @c string and @c url: the empty string/url ""
- *
- *     The @c reset command changes a value to its default.
- *
- *     The @c toggle command inverts a @c bool or @c quad-option value
- *     and is not allowed for other option types.
- *
- *     The @c query command displays the current value for any option.
- *
- *   @section muttng_config_doc Documentation
+ * For supported config commands, see @ref sect_config-commands.
  */
 /* }}} */
 /**

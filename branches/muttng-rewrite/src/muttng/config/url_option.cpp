@@ -32,9 +32,10 @@ AbstractCommand::state URLOption::fromString (AbstractOption::commands command,
     case T_SET:
     case T_RESET:
       p = (char*) (command == T_SET ? src->str : dst->init);
-      if ((url = url_from_string (p, error)) || !src || !src->len)
+      if ((url = url_from_string (p, error)) || !src || !src->len) {
         dst->data = (unsigned long) url;
-      else
+        change = !url_eq (url, old);
+      } else
         return (AbstractCommand::S_VALUE);
       break;
     case T_TOGGLE:

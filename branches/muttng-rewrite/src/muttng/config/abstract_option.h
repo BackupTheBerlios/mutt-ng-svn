@@ -52,6 +52,7 @@ class AbstractOption : public Muttng {
      * @param command For which config command to read value.
      * @param src Configuration line with value.
      * @param dst Destination storage.
+     * @param error Error message buffer.
      * @return Whether operation succeeded.
      */
     virtual AbstractCommand::state fromString (AbstractOption::commands command,
