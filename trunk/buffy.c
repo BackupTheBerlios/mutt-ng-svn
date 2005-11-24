@@ -390,10 +390,11 @@ int buffy_check (int force)
               /* one new and undeleted message is enough */
               if (tmp->new == 0) {
                 BuffyCount++;
-                tmp->new = 1;
-                if (!count)
+                if (!count) {
                   /* if sidebar invisible -> done */
+                  tmp->new = 1;
                   break;
+                }
               }
               tmp->msgcount++;
               tmp->msg_unread++;
