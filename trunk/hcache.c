@@ -14,7 +14,7 @@
 
 #ifdef USE_HCACHE
 
-#define MUTTNG_HCACHE_ID        "0x003"
+#define MUTTNG_HCACHE_ID        "0x004"
 
 # if HAVE_INTTYPES_H
 #  include <inttypes.h>
@@ -376,6 +376,7 @@ static unsigned char *dump_envelope (ENVELOPE * e, unsigned char *d, int *off)
   d = dump_char (e->supersedes, d, off);
   d = dump_char (e->date, d, off);
   d = dump_char (e->x_label, d, off);
+  d = dump_char (e->list_post, d, off);
 
 #ifdef USE_NNTP
   d = dump_char (e->newsgroups, d, off);
@@ -416,7 +417,8 @@ static void restore_envelope (ENVELOPE * e, const unsigned char *d, int *off)
   restore_char (&e->supersedes, d, off);
   restore_char (&e->date, d, off);
   restore_char (&e->x_label, d, off);
-  
+  restore_char (&e->list_post, d, off);
+
 #ifdef USE_NNTP
   restore_char (&e->newsgroups, d, off);
   restore_char (&e->xref, d, off);
