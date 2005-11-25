@@ -1304,16 +1304,24 @@ void mutt_decode_attachment (BODY * b, STATE * s)
   fseeko (s->fpin, b->offset, 0);
   switch (b->encoding) {
   case ENCQUOTEDPRINTABLE:
-    mutt_decode_quoted (s, b->length, istext, cd);
+    mutt_decode_quoted (s, b->length, istext ||
+                        ((WithCrypto & APPLICATION_PGP) &&
+                         mutt_is_application_pgp (b)), cd);
     break;
   case ENCBASE64:
-    mutt_decode_base64 (s, b->length, istext, cd);
+    mutt_decode_base64 (s, b->length, istext ||
+                        ((WithCrypto & APPLICATION_PGP) &&
+                         mutt_is_application_pgp (b)), cd);
     break;
   case ENCUUENCODED:
-    mutt_decode_uuencoded (s, b->length, istext, cd);
+    mutt_decode_uuencoded (s, b->length, istext
+                           || ((WithCrypto & APPLICATION_PGP) &&
+                               mutt_is_application_pgp (b)), cd);
     break;
   default:
-    mutt_decode_xbit (s, b->length, istext, cd);
+    mutt_decode_xbit (s, b->length, istext
+                      || ((WithCrypto & APPLICATION_PGP) &&
+                          mutt_is_application_pgp (b)), cd);
     break;
   }
 

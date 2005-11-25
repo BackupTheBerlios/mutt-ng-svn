@@ -373,23 +373,18 @@ void menu_check_recenter (MUTTMENU * menu)
       menu->top = 0;
       set_option (OPTNEEDREDRAW);
     }
-  }
-  else if (menu->current >= menu->top + menu->pagelen - c) {    /* indicator below bottom threshold */
-    if (option (OPTMENUSCROLL) || (menu->pagelen <= 0))
-      menu->top = menu->current - menu->pagelen + c;
-    else
-      menu->top +=
-        (menu->pagelen -
-         c) * ((menu->current - menu->top) / (menu->pagelen - c)) - c;
-  }
-  else if (menu->current < menu->top + c) {     /* indicator above top threshold */
-    if (option (OPTMENUSCROLL) || (menu->pagelen <= 0))
-      menu->top = menu->current - c;
-    else
-      menu->top -=
-        (menu->pagelen -
-         c) * ((menu->top + menu->pagelen - 1 -
-                menu->current) / (menu->pagelen - c)) - c;
+  } else {
+    if (option (OPTMENUSCROLL) || (menu->pagelen <= 0) || (c <= MenuContext)) {
+      if (menu->current < menu->top + c)
+        menu->top = menu->current - c;
+      else if (menu->current >= menu->top + menu->pagelen - c)
+        menu->top = menu->current - menu->pagelen + c + 1;
+    } else {
+      if (menu->current < menu->top + c)
+        menu->top -= (menu->pagelen - c) * ((menu->top + menu->pagelen - 1 - menu->current) / (menu->pagelen - c)) - c;
+      else if ((menu->current >= menu->top + menu->pagelen - c))
+        menu->top += (menu->pagelen - c) * ((menu->current - menu->top) / (menu->pagelen - c)) - c;
+    }
   }
 
   if (!option (OPTMENUMOVEOFF)) /* make entries stick to bottom */
