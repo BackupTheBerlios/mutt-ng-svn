@@ -3,7 +3,7 @@
 @brief (AUTO) manual
 */
 /**
-@page page_manual Manual
+@page page_manual Mutt-ng Manual
 
     @section sect_introduction Introduction
     
@@ -12,6 +12,8 @@
           
       For building mutt-ng, you need to have the following software installed
       and working:
+    
+
     <ul>
     <li>GNU make. Others won't work.</li>
     <li>A C and C++ compiler such as part of the GNU Compiler Collection.</li>
@@ -24,7 +26,11 @@
       a file called <code> GNUmakefile.config.mine</code> in the top-level
       directory, i.e. in <code> mutt-ng/branches/muttng-rewrite</code>.
     
+
+    
       There you can set various options. Most important are the following:
+    
+
     <ul>
     <li><code> CCSTYLE=(gcc|suncc)</code>. Wether to assume use of GNU or Sun
         C/C++ compilers. Default: <code> gcc</code>.</li>
@@ -41,6 +47,8 @@
     @subsection sect_build-app Building applications
     
       From the <code> src</code> subdirectory, the following are important targets:
+    
+
     <ul>
     <li><code> depend.</code> Please always run "make depend" first.</li>
     <li><code> all.</code> Build everything.</li>
@@ -54,10 +62,14 @@
       </ul>
     
       Building the main applications should be as easy as the following:
+    
+
     <pre>
 $ cd ./src && make depend && make</pre>
       If any build process fails, please notify the developers via
       <a href="mailto:mutt-ng-devel@lists.berlios.de">&lt;mutt-ng-devel@lists.berlios.de&gt;</a>.
+    
+
     
     
     @section sect_configuration Configuration
@@ -68,12 +80,18 @@ $ cd ./src && make depend && make</pre>
       The following commands are available for dealing with options:
       <code> set,</code><code> unset,</code><code> reset,</code><code> toggle</code> and <code> query</code>.
     
+
+    
       The <code> set</code> command sets an option to a value. If no particular
       value is given for <code> quad-option</code> and <code> bool</code> types, <code> yes</code> is
       assumed.
     
+
+    
       The <code> unset</code> command unsets a value to a neutral value. The
       neutral values depend on the option's type:
+    
+
     <ul>
     <li><code> boolean</code> and <code> quad-option</code>: <code> no</code></li>
     <li><code> number</code>; <code> 0</code></li>
@@ -82,14 +100,22 @@ $ cd ./src && make depend && make</pre>
       </ul>
     
       The <code> reset</code> command changes a value to its default.
+    
+
        
       The <code> toggle</code> command inverts a <code> bool</code> or <code> quad-option</code> value
       and is not allowed for other option types.
     
+
+    
       The <code> query</code> command displays the current value for any option.
     
+
+    
     @subsection sect_config-types Configuration options
-    The following types of configuration options are supported:<ul>
+    The following types of configuration options are supported:
+
+    <ul>
     <li><b> <code> boolean</code></b>: A boolean option. Possible values are:
         <code> yes</code>, <code> no</code>.</li>
     <li><b> <code> number</code></b>: A numeric option. Most of the options are
@@ -123,6 +149,8 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @subsection sect_config-incompat Incompatible changes
     
       Compared to mutt and mutt-ng, there're some incompatible changes:
+    
+
     <ul>
     <li>The set <b> ?</b>foo syntax isn't allowed any longer. For
         this purpose, the <code> query</code> command is to be used instead:
@@ -190,7 +218,9 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       Controls whether 8-bit data is converted to 7-bit using either
       <code> quoted-printable</code> or <code> base64</code> encoding when
       sending mail.
-      @subsubsection option_assumed_charset $assumed_charset
+      
+
+    @subsubsection option_assumed_charset $assumed_charset
       Type: @c string<br>
       Initial value: '@c us-ascii'<br>
       Change signaled: no
@@ -200,16 +230,24 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       Header field values and message body content without character encoding
       indication would be assumed that they are written in one of this list.
       
+
+    
       By default, all the header fields and message body without any charset
       indication are assumed to be in <code> us-ascii</code>.
       
+
+    
       For example, Japanese users might prefer this:
       <pre>
       set assumed_charset="iso-2022-jp:euc-jp:shift_jis:utf-8"
       </pre>
+
+    
       However, only the first content is valid for the message body.
       This variable is valid only if @ref option_strict_mime is <code> unset</code>.
-      @subsubsection option_debug_level $debug_level
+      
+
+    @subsubsection option_debug_level $debug_level
       Type: @c number<br>
       Initial value: '@c 0'<br>
       Change signaled: yes
@@ -219,9 +257,13 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       that no debug is to be generated. From a value of 1 to 5 the
       amount of debug info written increases drastically.
       
+
+    
       Debug files will be written to the home directory by default and to
       the current if the home directory cannot be determinded.
       
+
+    
       Debug files will have a name of the following format:
       <code> .[scope].[pid].[id].log</code>, whereby:
       <ul>
@@ -234,6 +276,8 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           subsequent enabling/disabling of debug output via this variable</li>
     
       </ul>
+    
+
     @subsubsection option_folder $folder
       Type: @c url<br>
       Initial value: '@c file:///tmp/Mail'<br>
@@ -241,21 +285,29 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
       Specifies the default location of your mailboxes.
       
+
+    
       A <code> +</code> or <code> =</code> at the beginning of a pathname will be expanded
       to the value of this variable.
       
+
+    
       Note that if you change this variable from
       the default value you need to make sure that the assignment occurs
       <em>before</em> you use <code> +</code> or <code> =</code> for any other variables
       since expansion takes place during the @ref command_set command.
-      @subsubsection option_mbox $mbox
+      
+
+    @subsubsection option_mbox $mbox
       Type: @c url<br>
       Initial value: '@c file:///tmp/mbox'<br>
       Change signaled: no
     
       This specifies the folder into which read mail in your
       @ref option_spoolfile folder will be appended.
-      @subsubsection option_postponed $postponed
+      
+
+    @subsubsection option_postponed $postponed
       Type: @c url<br>
       Initial value: '@c file:///tmp/postponed'<br>
       Change signaled: yes
@@ -264,8 +316,12 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       you are editing. When you choose to postpone a message, Mutt-ng saves it
       in the mailbox specified by this variable.
       
+
+    
       Also see the @ref option_postpone variable.
-      @subsubsection option_record $record
+      
+
+    @subsubsection option_record $record
       Type: @c url<br>
       Initial value: '@c '<br>
       Change signaled: no
@@ -275,9 +331,13 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       your messages, but another way to do this is using the @ref command_my_hdr
       command to create a <code> Bcc:</code> header field with your email address in it.)
       
+
+    
       The value of @ref option_record is overridden by the @ref option_force_name
       and @ref option_save_name variables, and the @ref command_fcc-hook command.
-      @subsubsection option_umask $umask
+      
+
+    @subsubsection option_umask $umask
       Type: @c number<br>
       Initial value: '@c 0077'<br>
       Change signaled: no
@@ -286,29 +346,184 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       @c umask(2). See @c chmod(1) for possible
       value.
       
+
     
-    @section sect_hacking Hacking
-    @subsection sect_hacking-style Coding style
-    Documentation
+    
+    @section sect_devguide Developer's Guide
+    @subsection sect_devguide-tour Developer Tour
+    
+      This section is brief introduction describing how things are
+      organized.
+    
+
+    @subsubsection sect_devguide-source-organisation Source organisation
+    
+        The source code is organized into the following three major
+        parts: 
+      
+
+    <ul>
+    <li><em>core</em> in <code> src/core/</code>. This is the base
+          library written in C containing very basic functionality. This
+          includes a generic hash table, a generic list, a safe
+          growing-buffer implementation, lightweight type conversions,
+          etc. This is considered legacy and contains all
+          implementations which do <em>not</em> deal with e-mail (and
+          related topics) or the user interface(s) (and related topics.)
+          This is eventually to be separated into an souvereign project,
+          maybe. The API already is designed a little towards
+          <code> libowfat</code> so that a future migratation will be not so
+          painful. The migration isn't done as the first step in the
+          rewrite process since we're focusing on the core (logic)
+          design and not on efficient sanity wrappers for system
+          functions.</li>
+    <li><em>libmuttng</em> in <code> src/libmuttng/</code>. This is the core
+          part of the whole project as it contains most of the mail logic. It
+          will provide one simple interface to mail storage independent from
+          ``details'' like whether the actual storage is IMAP, POP3, NNTP or
+          local storage methods such as Maildir or MBOX, whether there's
+          support for a local cache or not, etc. Even the fact that some
+          storage or transport methods may use network connections (thus
+          involving encryption and authentication features, for example), will
+          be be hidden from the application's point of view to achieve maximum
+          portability and transparency. Also, it will contain transparent
+          MIME-handling including digital encryption and signing, content types
+          and handlers, etc. Besides these two major features, it'll provide
+          utility classes and functions not at all related to mail but useful
+          for the library and application implementation like a centralized
+          debug output interface and generic signal handling.</li>
+    <li><em>muttng</em> in <code> src/muttng/</code>. Built on top of the
+          <em>core</em> and <em>libmuttng</em> layers, this group represents
+          user interfaces and everything related. This includes support for
+          reading configuration files, presenting data provided by the two
+          underlying layers, etc. It will provide a convenient way to write new
+          binaries with few code having access to all mail-related tasks. It
+          will be split into two major parts: the actual user interface on side
+          and all common logic (configuration, mail logic, etc.) on the other
+          so that user interfaces only have to implement presenting data and
+          nothing more.</li>
+    
+      </ul>
+    
+        A very important design goal to keep by any means is the
+        relationship between these three parts:
+      
+
+    <ul>
+    <li><em>core</em> must not depend on or make any kind of
+          assumptions about either <em>libmuttng</em> or
+          <em>muttng</em>. It may only rely on the standard C
+          library.</li>
+    <li><em>libmuttng</em> must not depend on or make any kind of
+          assumptions about <em>muttng</em> but may utilize
+          <em>core</em> and yet not make assumptions about how it
+          internally works.</li>
+    <li><em>muttng</em> may use any library it finds useful but, as
+          all parts, must not make assumptions about internal
+          implementation details or choices.</li>
+    
+      </ul>
+    
+        The reason for this separation is to have good information
+        hiding and a modular structure not only within these parts but
+        also between them. As our main intention is to write a
+        mail <em>user</em> agent, we move as much mail logic as possible
+        out to libmuttng which then will be split into a separate
+        project as core will be, too. In the end, mutt-ng is supposed to
+        be a flexible client just using powerful libraries without
+        implementing much logic itself.
+      
+
+    
+    @subsubsection sect_devguide-doc-organisation Documentation organisation
+    
+        The documentation building process works slightly different
+        than before.
+      
+
+    
+        Now, all documentation in all places is written in a custom XML
+        dialect to be translated via XSL into all other formats we need.
+        These include DocBook as well as @c doxygen(1)-based
+        documentation. Language-independent parts are put in a separate
+        directory and automated mechanisms for validity and completeness
+        checks will be provided to ensure correct translated documentation.
+      
+
+    
+        The basic organization is this:
+      
+
+    <ul>
+    <li>The ``master'' documentation is English. Where appropriate (see
+          below), it'll be auto-generated and validated from the source code to
+          avoid out-of-sync problems as far as possible.</li>
+    <li>New is the goal to have all parts split over several files rather
+          then only one big file and have all files be valid XML to be checked
+          for validity and completenes (where appropriate.)</li>
+    <li>The basic manual structure for both, the user-only manual and this
+          developer manual, is placed in <code> doc/common/</code> which contains
+          other language-independent parts. For every language supported, upon
+          change these will be copied to the language directories to have them
+          under version control, too, on the one hand and to ease (the release)
+          build process for users.</li>
+    
+      </ul>
+    
+        The following parts of the documentation are auto-generated:
+      
+
+    <ul>
+    <li><code> doc/en/var_descr.xml</code> and <code> doc/en/var_def.xml</code>:
+          These contain variable descriptions and definitions created from
+          <code> src/muttng/config/set_command.cpp</code> by
+          <code> src/muttng/config/config.pl</code>. For other languages, an automated
+          mechanism to update and check translations will be provided.</li>
+    <li><code> doc/en/func_descr.xml</code> and <code> doc/en/func_def.xml</code>:
+          These contain variable descriptions and definitions created by
+          <code> src/muttng/event/event.pl</code>. For other languages, an automated
+          mechanism to update and check translations will be provided.</li>
+    <li><code> src/related/manual.h</code>: This is a dummy header file for
+          @c doxygen(1) which contains the full manual with proper tags so that
+          the manual can be added as a ``related page.''</li>
+    
+      </ul>
+    
+    
+    @subsection sect_devguide-style Coding style
+    @subsubsection sect_hacking-style-doc Documentation
     
         To keep the code documented and consistent, this section lists
         some rules to keep.
       
+
+    
         In general: document all files! Specify a doxygen header with at
         least the @@file and @@brief tags. For
         headers, the brief tag looks like:
-      <pre>
-@@brief Interface: ...</pre>and<pre>
-@@brief Implementation: ...</pre>for source files.Header files
+      
+
+    <pre>
+@@brief Interface: ...</pre>and
+
+    <pre>
+@@brief Implementation: ...</pre>for source files.
+
+    
+    @subsubsection sect_hacking-style-hdr Header files
     
         For each source file, there is a header file listing all
         publicly accessable protos for the functions in the source
         file. All functions not listed in the header are to be declared
         static.
       
+
+    
         Each header file is wrapped within the following preprocessor
         magic:
-      <pre>
+      
+
+    <pre>
 #ifndef LIBMUTTNG_FOO_BAR_H
 #define LIBMUTTNG_FOO_BAR_H
 ...
@@ -316,11 +531,347 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         whereby the identifier is constructed from the filename under
         the src/ directory,
         libmuttng/foo/bar.h in this case.
-      Misc.
+      
+
+    
+    @subsubsection sect_hacking-style-misc Misc.
     
         For debugging, make the code print debug info by semantic, not
         just any number.
       
+
+    
+    
+    @subsection sect_devguide-docs Documentation
+    @subsubsection sect_devguide-docs-dialect XML Dialect
+     This section describes the custom XML dialect used for writing all of
+        the documentation (including descriptions for variables and everything
+        else.)
+
+    
+        The manual is wrapped in a <code> manual</code> tag. It contains the following two
+        tags:
+      
+
+    <ul>
+    <li><code> head</code>: This describes a header for the document. Its title
+          is enclosed in a <code> title</code> tag, the list of all authors in an
+          <code> authors</code> tag. Within the latter, the <code> author</code> tag
+          lists any number of authors with the following tags:
+          <code> surname</code>, <code> firstname</code> and <code> email</code>.</li>
+    <li><code> content</code>: This describes the content for the document, that
+          is, one or more <code> chapter</code> tags.</li>
+    
+      </ul>
+    
+        Within the mentioned <code> chapter</code> tags, the following tags are to
+        be used for grouping text: <code> section</code> and <code> subsection</code>.
+        All sectioning tags <em>must</em> have an <code> id</code> attribute with
+        the name of the section. For nesting them, please specify prefixes to
+        avoid clashes. For example, within a chapter with <code> id="intro"</code>
+        and there for a section mentioning the mailing lists, use
+        <code> id="intro-mailing"</code>. As all output formats we use have a flat
+        ``labeling'' or ``anchor'' namespace, we create our namespaces like
+        this.
+      
+
+            
+        All texts are to be grouped within <code> p</code> tags (``p'' as in
+        paragraph.)
+      
+
+    
+        For ordinary text, please use the following to fill the manual with
+        semantics rather than flat text or any layout:
+      
+
+    <ul>
+    <li><em>(cross-)referencing</em>. For making any type of references, the followin
+          tags are to be used:
+          <ul>
+    <li><code> email</code>: an email address</li>
+    <li><code> web</code>: a web address</li>
+    <li><code> varref</code>: referencing a configuration variable</li>
+    <li><code> cmdref</code>: referencing a configuration command</li>
+    <li><code> funcref</code>: referencing a function</li>
+    <li><code> man</code>: referencing a manual page. Optionally,
+              it may contain a <code> sect</code> attribute to specify the
+              section. If none given, 1 will be used by default.</li>
+    
+      </ul>
+    </li>
+    <li><em>special semantics</em>. There will be much more, but currently
+          the following tags are to be used for specifying a special semantic
+          for a word (mainly these are needed for auto-indexing so that
+          one can actually find something in the documentation):
+          <ul>
+    <li><code> val</code>: when refering to (possible/default/...) values
+              for variables.</li>
+    <li><code> hdr</code>: when refering to a commonly used header</li>
+    <li><code> enc</code>: when refering to transport encodings (such
+              as <code> quoted-printable</code> or <code> us-ascii</code></li>
+    
+      </ul>
+    </li>
+    <li><em>listings</em>. To specify lists or listings, the following tags
+          are available:
+          <ul>
+    <li><code> ul</code>: a non-numbered itemized list</li>
+    <li><code> li</code>: an item of any of these lists</li>
+    
+      </ul>
+    </li>
+    <li><em>misc.</em>: The following are not the optimal solution as they
+          imply layout semantics already but here we go:
+          <ul>
+    <li><code> tt</code>: typewriter font</li>
+    <li><code> em</code>: emphasise</li>
+    <li><code> b</code>: bold font</li>
+    
+      </ul>
+    </li>
+    
+      </ul>
+    
+        Internally, variables are documented like this (this does <em>not</em> count for
+        the description of a variable but the variable as a whole within the
+        manual) (<em>note: this is auto-generated</em>):
+      
+
+    <ul>
+    <li>all variables are wrapped within a <code> descriptions</code> tag</li>
+    <li>within this, there's any number of <code> variable</code> tags containing
+          the following attributes: <code> name</code> specifies the name of the
+          variable, <code> type</code> specifies its type</li>
+    <li>within a <code> variable</code> tag, the following tags will be used:
+          <ul>
+    <li><code> init</code>: initial or default value</li>
+    <li><code> sig</code>: whether a change of it will cause a signal be emitted</li>
+    <li><code> descr</code>: its description</li>
+    
+      </ul>
+    </li>
+    
+      </ul>
+    
+        Internally, functions are documented like this
+        (<em>note: this is auto-generated</em>):
+      
+
+    <ul>
+    <li>all functions are wrapped within a <code> descriptions</code> tag</li>
+    <li>within this, there's any number of <code> context</code> tags containing
+          the following attributes: <code> name</code> specifies the name of the
+          context. As functions are grouped by context (that is: by menu) where
+          they may have different bindings, each function may appear several
+          times within different <code> context</code> tags.</li>
+    <li>within the <code> context</code> tag, all functions it contains are
+          given via <code> function</code> tags. Each <code> function</code> tag must contain the
+          following attributes: <code> name</code> specifies the name a user
+          may bind to it, <code> default</code> specifies the default key binding
+          and <code> group</code> specifies to which semantic group the function belongs
+          within the context.</li>
+    <li>the text within the <code> function</code> tag is just the functions's
+          (English) summary to appear in the help menus</li>
+    
+      </ul>
+    
+    @subsubsection sect_devguide-docs-auto Auto-generation
+    
+        The function and variable descriptions are generated
+        to our custom XML dialect automatically.
+      
+
+    
+        For variables, <code> src/muttng/config/config.pl</code> is used. The
+        documentation process for variables is the same as it was before:
+      
+
+    <ul>
+    <li>all documentation is expected between the words <code> START</code>
+          and <code> END</code> (commented) in set_command.cpp</li>
+    <li>the variable definition for the source is one line</li>
+    <li><em>below</em> is a comment block whereby each line to be
+          treated as part of the description for a variable starts with
+          <em>two</em> asterisks. The tags are the same as for
+          all other documentation.
+        </li>
+    
+      </ul>
+    
+        For functions, <code> src/muttng/event/event.pl</code> is used. It parses the
+        following file in the subdirectory for documentation: <code> EVENTS</code>. This
+        has space or tab separated fields with the following meanings for documentation:
+      
+
+    <ul>
+    <li>1st field: the context IDs defined in <code> CONTEXTS</code></li>
+    <li>3rd field: the function's name</li>
+    <li>4th field: the group IDs defined in <code> GROUPS</code></li>
+    <li>5th field: the default keybinding</li>
+    <li>rest of the line: short description</li>
+    
+      </ul>
+    
+    
+    @subsection sect_devguide-core Core
+    @subsubsection sect_devguide-core-extending Extending the library
+    
+        When making any extensions are chaning an implementation,
+        please make sure to run and maybe add/change/extend one
+        of the unit tests to verify it's working.
+      
+
+    
+    
+    @subsection sect_devguide-libmuttng Libmuttng
+    @subsubsection sect_devguide-libmuttng-features Features
+    
+        Libmuttng is in the <code> src/libmuttng/</code> subdirectory
+        and provides the following features:
+      
+
+    <ul>
+    <li><em>basic services</em> of interest for the whole library and
+          application: signal handling and debug support.</li>
+    <li><em>mailbox support</em> includes: IMAP, POP3, NNTP, Maildir, MH,
+          MBOX and MMDF. The Mailbox abstraction layer works transparently and is
+          URL-driven, that is, the client doesn't need to care about and that
+          there are different storage formats</li>
+    <li><em>caching</em> is transparent for some mailbox types: IMAP, NNTP,
+          Maildir and MH. Again, as the Mailbox layer is abstract, so is the
+          caching layer which means that clients don't take note of caching
+          existing.</li>
+    <li><em>MIME and crypto</em> support via either local utilities such as
+          @c pgp(1)/@c gpg(1) or via gpgme for crypto and support for
+          the mailcap mechanism, using @c file(1) and the like. Decoding
+          will be transparent for client, too.</li>
+    
+      </ul>
+    
+    @subsubsection sect_devguide-libmuttng-signal Signal handling
+    
+        Libmuttng contains a very simple, easy to use and typesafe signal
+        handling interface. Though signals will be used within the library,
+        too, it's use is not limited to connecting handlers in the client
+        to events in the library but may also be used to pass signals
+        only within the client.
+      
+
+    
+        We started off with the implementation from:
+        <a href="http://lists.trolltech.com/qt-interest/1997-07/msg00158.html">http://lists.trolltech.com/qt-interest/1997-07/msg00158.html</a>
+        and extended/modified it to fit our needs.
+      
+
+    <em>Declaring</em> a signal is as easy as:
+      
+
+    <pre>
+SignalX<type of arg1,type of arg2,...,type of argX> signalname;</pre>
+        whereby <code> X</code> is the number of arguments. An example may be:
+      
+
+    <pre>
+Signal1<Mailbox*> mailboxHasNewMail;</pre>
+        saying that all handlers will get one argument being a pointer to a
+        Mailbox class instance.
+      
+
+    <em>Connecting</em> to a signal is easy, too. Each handler must fullfill
+        the following two requirements:
+      
+
+    <ul>
+    <li>it must return <code> bool</code> specifying whether it succeeded
+          or not</li>
+    <li>it must take exactly the number and type of arguments the
+          signal was declared with</li>
+    
+      </ul>
+    
+        For the above example, given a class <code> foo</code> with a method
+        <code> bool foo::bar(Mailbox* mailbox)</code>, connecting to the
+        signal is as easy as:
+      
+
+    <pre>
+connectSignal (someObject.mailboxHasNewMail, this, &foo::bar);</pre><em>Emitting</em> a signal can be done by every method having access to
+        the signal's declaration and works like this:
+      
+
+    <pre>
+this.mailboxHasNewMail.emit (this);</pre>
+        ...assuming the signal is defined in a Mailbox class.
+      
+
+    
+        For a given signal, all handlers are executed in some order while
+        each of them returns success. As soon as one handlers reports failure,
+        the emit process will abort.
+      
+
+    <em>Disconnecting</em> from a signal is highly recommended to take
+        place in the object's destructor as a crash upon the next emit after
+        destruction is likely. Though any object may connect as many handlers as it
+        likes to a signal, it's currently only supported to unbind all
+        handlers of an object <em>for a specific signal</em> at once like so:
+      
+
+    <pre>
+disconnectSignals (someObject.mailboxHasNewMail, this);</pre>
+        This must be done for every signal the object connected a(ny) handler(s)
+        to.
+      
+
+    
+    @subsubsection sect_devguide-libmuttng-auto Auto-generated code
+    <em>Signal implementation.</em> As unfortunately we cannot overload
+        templates by the number of arguments, we need to specify the same
+        implementation for every argument count we need. Thus, this is done by
+        a script: <code> src/libmuttng/signal.pl</code> prints the commented
+        implementation to <code> stdout</code> so that the makefile puts it into
+        <code> signal.h</code>. When making changes, modify signal.h to verify it
+        works (plus maybe add a unit test) and adjust signal.pl to print the
+        changed code.
+      
+
+    
+    @subsubsection sect_devguide-libmuttng-extending Extending the library
+    
+        When making extensions to the library and adding classes,
+        please make sure to derive them from the Libmuttng base
+        class to have debugging support and future extensions
+        already in your class.
+      
+
+    
+        When making any extensions are chaning an implementation,
+        please make sure to run and maybe add/change/extend one
+        of the unit tests to verify it's working.
+      
+
+    
+    
+    @subsection sect_devguide-muttng Muttng
+    @subsubsection sect_devguide-muttng-auto Auto-generated code
+    
+    @subsubsection sect_devguide-muttng-extending Extending
+    
+        When making extensions to the library and adding classes,
+        please make sure to derive them from the Muttng base
+        class to have debugging support and future extensions
+        already in your class.
+      
+
+    
+        When making any extensions are chaning an implementation,
+        please make sure to run and maybe add/change/extend one
+        of the unit tests to verify it's working.
+      
+
+    
+    
     
     @section sect_acknowledgements Acknowledgements
     
@@ -331,6 +882,8 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li>Rocco Rutte <a href="mailto:pdmef@cs.tu-berlin.de">&lt;pdmef@cs.tu-berlin.de&gt;</a></li>
     
       </ul>
+    
+
     
     The following people have been very helpful to the
     development of mutt-ng:
@@ -343,6 +896,8 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li>Elimar Riesebieter <a href="mailto:riesebie@lxtec.de">&lt;riesebie@lxtec.de&gt;</a></li>
     
       </ul>
+    
+
     
     The following people have been very helpful to the
     development of mutt:
@@ -391,6 +946,8 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li>Ken Weinert <a href="mailto:kenw@ihs.com">&lt;kenw@ihs.com&gt;</a></li>
     
       </ul>
+    
+
     
     
 */

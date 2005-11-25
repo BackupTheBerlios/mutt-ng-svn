@@ -1,19 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manual>
 
-  <head>
-    <title>The Mutt Next Generation E-Mail Client</title>
-    <authors>
-      <author>
-        <firstname>Andreas</firstname><surname>Krennmair</surname>
-        <email>ak@synflood.at</email>
-      </author>
-      <author>
-        <firstname>Michael</firstname><surname>Elkins</surname>
-        <email>me@cs.hmc.edu</email>
-      </author>
-    </authors>
-  </head>
+  <xi:include href="head.xml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
   <content>
 
@@ -29,7 +18,7 @@
     <xi:include href="reference.xml"
       xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
-    <xi:include href="hacking.xml"
+    <xi:include href="devguide.xml"
       xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
     <xi:include href="ack.xml"

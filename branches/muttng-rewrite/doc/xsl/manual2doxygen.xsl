@@ -42,6 +42,13 @@
     </xsl:text>
   </xsl:template>
 
+  <xsl:template match="subsection">
+    <xsl:text>@subsubsection sect_</xsl:text><xsl:value-of select="@id"/><xsl:text> </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>
+    </xsl:text>
+  </xsl:template>
+
   <xsl:template match="title">
     <xsl:value-of select="."/><xsl:text>
     </xsl:text>
@@ -91,6 +98,9 @@
 
   <xsl:template match="p">
     <xsl:apply-templates/>
+    <xsl:text>
+
+    </xsl:text>
   </xsl:template>
 
   <xsl:template match="val">

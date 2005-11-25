@@ -32,19 +32,21 @@ while (<STDIN>) {
   open (INPUT, "<".$filename) or 
     die "Couldn't open ".$filename." for reading: ".$!."\n";
   while (<INPUT>) {
-    if ($_ =~ /<h([1-6])([^>]*)>/) {
+    if ($_ =~ /<h([2-6])([^>]*)>/) {
 
       if ($2 =~ /class="nonumber"/) {
         push (@file, $_);
         next;
       }
       
-      $curlevel = $1;
+      $curlevel = $1-1;
       my $info = $2;
       
       my $nostr = "";
       if ($curlevel < $oldlevel) {
-        $no[$oldlevel + 1] = 0;
+        for (my $i = $curlevel+2; $i <= 6; $i++) {
+          $no[$i] = 0;
+        }
       }
       $no[$curlevel + 1]++;
       for (@no) {
@@ -58,7 +60,7 @@ while (<STDIN>) {
       if ($trail) {
         $nostr .= $trailseq;
       }
-      $_ =~ s/(<h[1-6]$info>)/$1$nostr /;
+      $_ =~ s/(<h[2-6]$info>)/$1$nostr /;
       $oldlevel = $curlevel;
     }
     push (@file, $_);

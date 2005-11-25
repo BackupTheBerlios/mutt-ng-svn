@@ -6,107 +6,11 @@ my $max = 7;
 my @params = ("", "a", "b", "c", "d", "e", "f", "g");
 
 my $head =
-"/* doxygen documentation {{{ */\n" .
 "/**\n" .
 " * \@ingroup libmuttng\n" .
 " * \@addtogroup libmuttng_sig Signal handling\n" .
 " * \@{\n" .
-" *\n" .
-" * This is a very simple signal implementation I stole from:\n" .
-" * <a href=\"http://lists.trolltech.com/qt-interest/1997-07/msg00158.html\n" .
-" * \">http://lists.trolltech.com/qt-interest/1997-07/msg00158.html</a>.\n" .
-" *\n" .
-" * \@section libmuttng_sig_decl Signal declaration\n" .
-" *\n" .
-" *   Declaring a signal is as easy as:\n" .
-" *\n" .
-" *   <pre>\n" .
-" * SignalX<X0,X1,...> SignalFunction;</pre>\n" .
-" *\n" .
-" *   ...whereby \@c X is a number between 1 and $max. As the implementation\n" .
-" *   here is very simple, the number specifies how many parameters\n" .
-" *   will be passed down to handlers. For X=1 one needs to specify one\n" .
-" *   argument, and two for X=2, etc. An example we use is this:\n" .
-" *\n" .
-" *   <pre>\n" .
-" * Signal2<Event::context,option_t*> sigOptChange;</pre>\n" .
-" *\n" .
-" *   ...as a member of the Event class. Any function taking a context and\n" .
-" *   a pointer to option_t as argument can now bind to the handler.\n" .
-" *\n" .
-" * \@section libmuttng_sig_bind Binding/Connecting\n" .
-" *\n" .
-" *   \@c signal.h provides an overloaded function called \@c\n" .
-" *   connectSignal() which takes three arguments:\n" .
-" *\n" .
-" *     -# the signal\n" .
-" *     -# a pointer to the object the callback is a member of\n" .
-" *        (in the vast majority of cases this is \@c this)\n" .
-" *     -# a pointer to the actual callback member function.\n" .
-" *\n" .
-" *   All handlers for signals must return \@c bool.\n" .
-" *\n" .
-" *   For example, for the Tool class we catch changes of options to\n" .
-" *   adjust debug level internally. The function \@c\n" .
-" *   Tool::catchOptChange() takes the context and the pointer to the\n" .
-" *   option changed as arguments. Binding is done via:\n" .
-" *\n" .
-" *   <pre>\n" .
-" * connectSignal (event->sigOptChange, this, &Tool::catchOptChange);</pre>\n" .
-" *\n" .
-" *   Due to overloading, this always is the same independent from what\n" .
-" *   argument a function takes and how many there are.\n" .
-" *\n" .
-" * \@section libmuttng_sig_unbind Unbinding/Disconnecting\n" .
-" *\n" .
-" *   Currently it's only supported to completely unbind all handlers of an object\n" .
-" *   to a specific signal (every object may connect any number of handlers to a signal).\n" .
-" *\n" .
-" *   Disconnecting is as easy as:\n" .
-" *\n" .
-" *   <pre>\n" .
-" * disconnectSignals (signal, object);</pre>\n" .
-" *\n" .
-" *   ...which is:\n" .
-" *\n" .
-" *   <pre>\n" .
-" * disconnectSignals (event->sigOptChange, this);</pre>\n" .
-" *\n" .
-" *   for the Tool class.\n" .
-" *\n" .
-" * \@section libmuttng_sig_emit Emitting\n" .
-" *\n" .
-" *   The various SignalX classes have a method called \@c emit() which\n" .
-" *   takes the arguments the signal was declared with. It returns\n" .
-" *   \@c bool only and executes the registered callbacks while none of\n" .
-" *   them failed. The value returned specifies whether all callbacks\n" .
-" *   succeeded.\n" .
-" *\n" .
-" *   For example, in \@c set_command.cpp a change of an option is\n" .
-" *   detected and emitted like this:\n" .
-" *\n" .
-" *   <pre>\n" .
-" * event->sigOptChange.emit (event->getContext(), &Options[i]);</pre>\n" .
-" *\n" .
-" *   \@b NOTE: For functions passing a context, we still have bad\n" .
-" *   modularization meaning the event handler doesn't intersect the emit\n" .
-" *   process to ensure the context passed is the current. This means\n" .
-" *   that routines emitting a signal with an Event::context should\n" .
-" *   always use \@c Event::getContext() to retrieve the current.\n" .
-" *\n" .
-" * \@section libmuttng_sig_hacking Hacking\n" .
-" *\n" .
-" *   As unfortunately we cannot overload templates by the number of\n" .
-" *   arguments, we need to specify the same implementation for every\n" .
-" *   argument count we need. Thus, this is done by a script:\n" .
-" *   \@c libmuttng/signal.pl prints the commented implementation to\n" .
-" *   \@c stdout so that the makefile puts it into \@c signal.h.\n" .
-" *\n" .
-" *   When making changes, modify signal.h to verify it works (plus\n" .
-" *   maybe add a unit test) and adjust signal.pl to print the\n" .
-" *   changed code.\n" .
 " */\n" .
-"/* }}} */\n" .
 "/**\n" .
 " * \@file libmuttng/signal.h\n" .
 " * \@author Tero Pulkkinen <terop\@modeemi.cs.tut.fi>\n" .

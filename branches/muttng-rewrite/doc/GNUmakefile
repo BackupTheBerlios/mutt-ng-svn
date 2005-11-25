@@ -1,11 +1,16 @@
 LANGUAGES=en
 
-all: doxygen
+all: prepare doxygen
+
+prepare: common/manual-full.xml common/manual-user.xml
+	@ for l in $(LANGUAGES) ; do \
+	  cp $^ $$l/ ; \
+	done
 
 manual:
 	@ for l in $(LANGUAGES) ; do \
-	  echo "xsltproc --xinclude -o $$l/manual-docbook.xml xsl/manual2docbook.xsl $$l/manual.xml" ; \
-	  xsltproc --xinclude -o $$l/manual-docbook.xml xsl/manual2docbook.xsl $$l/manual.xml ; \
+	  echo "xsltproc --xinclude -o $$l/manual-docbook.xml xsl/manual2docbook.xsl $$l/manual-user.xml" ; \
+	  xsltproc --xinclude -o $$l/manual-docbook.xml xsl/manual2docbook.xsl $$l/manual-user.xml ; \
 	  echo "xsltproc -o $$l/manual.html xsl/docbook2html.xsl $$l/manual-docbook.xml" ; \
 	  xsltproc --nonet --stringparam html.stylesheet muttng.css -o $$l/manual.html xsl/docbook2html.xsl $$l/manual-docbook.xml ; \
 	  xsltproc --nonet --stringparam html.stylesheet muttng.css -o $$l/ xsl/docbook2chunkhtml.xsl $$l/manual-docbook.xml ; \
@@ -14,7 +19,7 @@ manual:
         done
 
 doxygen:
-	xsltproc --xinclude -o ../src/related/manual.h xsl/manual2doxygen.xsl en/manual.xml
+	xsltproc --xinclude -o ../src/related/manual.h xsl/manual2doxygen.xsl en/manual-full.xml
 
 test:
 	@ true

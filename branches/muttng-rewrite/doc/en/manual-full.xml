@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manual>
+
+  <xi:include href="head.xml"
+    xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+  <content>
+
+    <xi:include href="intro.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+    <xi:include href="build.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+    <xi:include href="config.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+    <xi:include href="reference.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+    <xi:include href="devguide.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+    <xi:include href="ack.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
+    <index/>
+
+  </content>
+</manual>
