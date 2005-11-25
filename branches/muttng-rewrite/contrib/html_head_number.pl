@@ -19,7 +19,7 @@
 
 # if $trail==1 => the sequence in $tailseq is appended (e.g. a dot)
 my $trail = 1;
-my $trailseq = '&nbsp;';
+my $trailseq = '.&nbsp;';
 
 while (<STDIN>) {
   chomp;

@@ -22,6 +22,22 @@
     </xsl:text>
   </xsl:template>
 
+  <xsl:template match="mainpage">
+    <xsl:text>/**
+@file mainpage.h
+@brief (AUTO) mainpage
+*/
+/**
+@mainpage
+
+    </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>
+*/
+    </xsl:text>
+  </xsl:template>
+
+
   <xsl:template match="head"/>
 
   <xsl:template match="content">

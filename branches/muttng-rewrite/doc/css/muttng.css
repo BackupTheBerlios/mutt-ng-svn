@@ -4,8 +4,7 @@
     color: black;
     background: transparent;
     text-align: justify;
-    margin-left: 1cm;
-    margin-right: 1cm;
+    margin: 1cm;
   }
 
   h1,h2,h3,h4,h5,p.title,div.toc,span.appendix,
@@ -14,11 +13,11 @@
     font-family: sans-serif;
   }
 
-  h1.title,div.author,p.pubdate,div.abstract {
+  h1,h1.title,div.author,p.pubdate,div.abstract {
     text-align: center;
   }
 
-  pre.screen {
+  div.qindex,pre,pre.screen,div.nav {
     margin-left: 1cm;
     margin-right: 1cm;
     padding: 2mm;
@@ -26,6 +25,12 @@
     border-style: solid;
     border-color: black;
     background-color: #efefef;
+  }
+
+  div.qindex,div.nav {
+    font-size: small;
+    font-family: sans-serif;
+    text-align: center;
   }
 
   thead {
@@ -40,5 +45,38 @@
     border-width: 0.4pt;
     border-color: black;
     border-style: solid;
+  }
+
+  td.indexvalue,.mdescRight {
+    font-style: italic;
+  }
+
+  .mdescRight,.memItemLeft,.memItemRight,.md,.mdname,.mdname1 {
+    padding: 1mm;
+  }
+
+  .memItemLeft,.memItemRight,.md,.mdname,.mdname1,.indexkey {
+    font-family: monospace;
+  }
+
+  .md,.mdname,.mdname1 {
+    font-weight: bold;
+  }
+
+  .memItemLeft,.memItemRight,.mdescRight,.mdescLeft,.md,.mdname,.mdname1,div.ah {
+    background-color: #efefef;
+  }
+
+  .mdescRight,.mdescLeft,.indexkey,.indexvalue {
+    border-bottom-width: 0.4pt;
+    border-bottom-style: solid;
+    border-bottom-color: black;
+  }
+
+  div.ah {
+    font-weight: bold;
+    border-width: 0.4pt;
+    border-style: solid;
+    border-color: black;
   }
 }

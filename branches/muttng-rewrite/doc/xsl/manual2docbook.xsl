@@ -27,6 +27,13 @@
     </book>
   </xsl:template>
 
+  <xsl:template match="mainpage">
+    <book>
+      <xsl:apply-templates select="head"/>
+      <xsl:apply-templates select="content"/>
+    </book>
+  </xsl:template>
+
   <xsl:template match="head">
     <bookinfo>
       <xsl:apply-templates select="title" mode="head"/>
