@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter id="building">
+  <title>Übersetzen und Installieren</title>
+
+  <section id="build-requirements"> <!--{{{-->
+    <title>Voraussetzungen</title>
+
+    <p> 
+      Um mutt-ng zu übersetzen, müssen die folgenden Programme
+      installiert und einsatzfähig sein:
+    </p>
+
+    <ul>
+      <li>GNU make. Andere make-Varianten funktionieren nicht.</li>
+      <li>Ein C und C++ Übersetzer wie sie Teil der GNU Compiler Collection sind.</li>
+    </ul>
+
+  </section>
+
+  <!--}}}-->
+
+  <section id="build-config"> <!--{{{-->
+    <title>Konfiguration</title>
+
+    <p>
+      In order to make the build process work at all, you need to create
+      a file called <tt>GNUmakefile.config.mine</tt> in the top-level
+      directory, i.e. in <tt>mutt-ng/branches/muttng-rewrite</tt>.
+    </p>
+
+    <p>
+      There you can set various options. Most important are the following:
+    </p>
+
+    <ul>
+      <li><tt>CCSTYLE=(gcc|suncc)</tt>. Wether to assume use of GNU or Sun
+        C/C++ compilers. Default: <tt>gcc</tt>.</li>
+      <li><tt>DEBUG=(0|1).</tt> Whether to pass <tt>-g</tt> to the
+        compilers/linkers. This is useful for running a debuger. This is not
+        the same as the feature to make mutt-ng print debug messages (which
+        currently cannot be turned off). Default: <tt>0</tt>.</li>
+      <li><tt>UNITPPDIR=/path</tt>. Where Unit++ (see
+        <web>http://unitpp.sf.net/</web>) for
+        running the unit tests is installed. Default: <tt>/usr</tt>.</li>
+    </ul>
+
+  </section>
+  
+  <!--}}}-->
+
+  <section id="build-app"> <!--{{{-->
+    <title>Anwendungen übersetzen</title>
+
+    <p>
+      From the <tt>src</tt> subdirectory, the following are important targets:
+    </p>
+
+    <ul>
+      <li><tt>depend.</tt> Please always run "make depend" first.</li>
+      <li><tt>all.</tt> Build everything.</li>
+      <li><tt>test.</tt> Build an run all unit tests.</li>
+      <li><tt>srcdoc.</tt> Run <man>doxygen</man> to generate the docs from source.
+        The output will be placed in the <tt>doxygen</tt> directory. <b>NOTE:</b> you
+        need the graphviz package, too. If not, look through the file
+        <tt>src/Doxyfile</tt> and there for a line called
+        <tt>HAVE_DOT</tt>. Change the <tt>YES</tt> into <tt>NO.</tt></li>
+    </ul>
+
+    <p>
+      Building the main applications should be as easy as the following:
+    </p>
+
+    <pre>
+$ cd ./src &amp;&amp; make depend &amp;&amp; make</pre>
+
+    <p>
+      If any build process fails, please notify the developers via
+      <email>mutt-ng-devel@lists.berlios.de</email>.
+    </p>
+ 
+  </section> <!--}}}-->
+
+</chapter>

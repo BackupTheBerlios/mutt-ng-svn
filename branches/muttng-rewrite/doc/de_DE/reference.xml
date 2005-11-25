@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter id="reference">
+  <title>Referenz</title>
+
+  <section id="funcref">
+    <title>Funktionen</title>
+    <xi:include href="func_descr.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
+  </section>
+
+  <section id="varref">
+    <title>Variablen</title>
+    <xi:include href="var_descr.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
+  </section>
+
+</chapter>

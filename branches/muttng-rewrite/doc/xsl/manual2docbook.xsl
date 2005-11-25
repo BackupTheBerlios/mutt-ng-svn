@@ -137,7 +137,7 @@
   </xsl:template>
 
   <xsl:template match="web">
-    <ulink url="text()"><xsl:value-of select="."/></ulink>
+    <ulink url="{text()}"><xsl:value-of select="."/></ulink>
   </xsl:template>
 
   <xsl:template match="cmdref">

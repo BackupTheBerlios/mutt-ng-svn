@@ -1,0 +1,38 @@
+<descriptions>
+  <context name="generic">
+    <function name="page-up" default="pgup" group="Movement">
+      Page up</function>
+    <function name="show-version" default="V" group="Generic">
+      Show version information</function>
+  </context>
+  <context name="help">
+  </context>
+  <context name="index">
+    <function name="break-thread" default="#" group="Threading">
+      Break thread at current message</function>
+    <function name="edit-message" default="e" group="Editing">
+      Edit current message</function>
+    <function name="group-reply" default="g" group="Reply/Forward">
+      Group-reply to current message</function>
+    <function name="help" default="h" group="Generic">
+      Show help screen</function>
+    <function name="link-thread" default="&amp;" group="Threading">
+      Link tagged to current message in thread</function>
+    <function name="list-reply" default="L" group="Reply/Forward">
+      List-reply to current message</function>
+    <function name="reply" default="r" group="Reply/Forward">
+      Reply to current message</function>
+  </context>
+  <context name="pager">
+    <function name="edit-message" default="e" group="Editing">
+      Edit current message</function>
+    <function name="group-reply" default="g" group="Reply/Forward">
+      Group-reply to current message</function>
+    <function name="help" default="h" group="Generic">
+      Show help screen</function>
+    <function name="list-reply" default="L" group="Reply/Forward">
+      List-reply to current message</function>
+    <function name="reply" default="r" group="Reply/Forward">
+      Reply to current message</function>
+  </context>
+</descriptions>

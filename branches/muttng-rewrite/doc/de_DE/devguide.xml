@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter id="devguide">
+  <title>Entwicklerhandbuch</title>
+
+  <section id="devguide-tour"> <!--{{{-->
+    <title>Entwicklertour</title>
+
+    <p>
+      This section is brief introduction describing how things are
+      organized.
+    </p>
+
+    <subsection id="devguide-source-organisation"> <!--{{{-->
+      <title>Organisation des Source</title>
+
+      <p>
+        The source code is organized into the following three major
+        parts: 
+      </p>
+
+      <ul>
+
+        <li><em>core</em> in <tt>src/core/</tt>. This is the base
+          library written in C containing very basic functionality. This
+          includes a generic hash table, a generic list, a safe
+          growing-buffer implementation, lightweight type conversions,
+          etc. This is considered legacy and contains all
+          implementations which do <em>not</em> deal with e-mail (and
+          related topics) or the user interface(s) (and related topics.)
+          This is eventually to be separated into an souvereign project,
+          maybe. The API already is designed a little towards
+          <tt>libowfat</tt> so that a future migratation will be not so
+          painful. The migration isn't done as the first step in the
+          rewrite process since we're focusing on the core (logic)
+          design and not on efficient sanity wrappers for system
+          functions.</li>
+
+        <li><em>libmuttng</em> in <tt>src/libmuttng/</tt>. This is the core
+          part of the whole project as it contains most of the mail logic. It
+          will provide one simple interface to mail storage independent from
+          ``details'' like whether the actual storage is IMAP, POP3, NNTP or
+          local storage methods such as Maildir or MBOX, whether there's
+          support for a local cache or not, etc. Even the fact that some
+          storage or transport methods may use network connections (thus
+          involving encryption and authentication features, for example), will
+          be be hidden from the application's point of view to achieve maximum
+          portability and transparency. Also, it will contain transparent
+          MIME-handling including digital encryption and signing, content types
+          and handlers, etc. Besides these two major features, it'll provide
+          utility classes and functions not at all related to mail but useful
+          for the library and application implementation like a centralized
+          debug output interface and generic signal handling.</li>
+
+        <li><em>muttng</em> in <tt>src/muttng/</tt>. Built on top of the
+          <em>core</em> and <em>libmuttng</em> layers, this group represents
+          user interfaces and everything related. This includes support for
+          reading configuration files, presenting data provided by the two
+          underlying layers, etc. It will provide a convenient way to write new
+          binaries with few code having access to all mail-related tasks. It
+          will be split into two major parts: the actual user interface on side
+          and all common logic (configuration, mail logic, etc.) on the other
+          so that user interfaces only have to implement presenting data and
+          nothing more.</li>
+
+      </ul>
+
+      <p>
+        A very important design goal to keep by any means is the
+        relationship between these three parts:
+      </p>
+
+      <ul>
+        <li><em>core</em> must not depend on or make any kind of
+          assumptions about either <em>libmuttng</em> or
+          <em>muttng</em>. It may only rely on the standard C
+          library.</li>
+        <li><em>libmuttng</em> must not depend on or make any kind of
+          assumptions about <em>muttng</em> but may utilize
+          <em>core</em> and yet not make assumptions about how it
+          internally works.</li>
+        <li><em>muttng</em> may use any library it finds useful but, as
+          all parts, must not make assumptions about internal
+          implementation details or choices.</li>
+      </ul>
+
+      <p>
+        The reason for this separation is to have good information
+        hiding and a modular structure not only within these parts but
+        also between them. As our main intention is to write a
+        mail <em>user</em> agent, we move as much mail logic as possible
+        out to libmuttng which then will be split into a separate
+        project as core will be, too. In the end, mutt-ng is supposed to
+        be a flexible client just using powerful libraries without
+        implementing much logic itself.
+      </p>
+
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-doc-organisation"> <!--{{{-->
+      <title>Organisation der Dokumentation</title>
+
+      <p>
+        The documentation building process works slightly different
+        than before.
+      </p>
+
+      <p>
+        Now, all documentation in all places is written in a custom XML
+        dialect to be translated via XSL into all other formats we need.
+        These include DocBook as well as <man>doxygen</man>-based
+        documentation. Language-independent parts are put in a separate
+        directory and automated mechanisms for validity and completeness
+        checks will be provided to ensure correct translated documentation.
+      </p>
+
+      <p>
+        The basic organization is this:
+      </p>
+
+      <ul>
+
+        <li>The ``master'' documentation is English. Where appropriate (see
+          below), it'll be auto-generated and validated from the source code to
+          avoid out-of-sync problems as far as possible.</li>
+
+        <li>New is the goal to have all parts split over several files rather
+          then only one big file and have all files be valid XML to be checked
+          for validity and completenes (where appropriate.)</li>
+
+        <li>The basic manual structure for both, the user-only manual and this
+          developer manual, is placed in <tt>doc/common/</tt> which contains
+          other language-independent parts. For every language supported, upon
+          change these will be copied to the language directories to have them
+          under version control, too, on the one hand and to ease (the release)
+          build process for users.</li>
+
+      </ul>
+
+      <p>
+        The following parts of the documentation are auto-generated:
+      </p>
+
+      <ul>
+
+        <li><tt>doc/en/var_descr.xml</tt> and <tt>doc/en/var_def.xml</tt>:
+          These contain variable descriptions and definitions created from
+          <tt>src/muttng/config/set_command.cpp</tt> by
+          <tt>src/muttng/config/config.pl</tt>. For other languages, an automated
+          mechanism to update and check translations will be provided.</li>
+
+        <li><tt>doc/en/func_descr.xml</tt> and <tt>doc/en/func_def.xml</tt>:
+          These contain variable descriptions and definitions created by
+          <tt>src/muttng/event/event.pl</tt>. For other languages, an automated
+          mechanism to update and check translations will be provided.</li>
+
+        <li><tt>src/related/manual.h</tt>: This is a dummy header file for
+          <man>doxygen</man> which contains the full manual with proper tags so that
+          the manual can be added as a ``related page.''</li>
+
+      </ul>
+
+    </subsection>
+    <!--}}}-->
+
+  </section>
+  <!--}}}-->
+ 
+  <section id="devguide-style"> <!--{{{-->
+    <title>Programmierstil</title>
+
+    <subsection id="hacking-style-doc"> <!--{{{-->
+      <title>Dokumentation</title>
+
+      <p>
+        To keep the code documented and consistent, this section lists
+        some rules to keep.
+      </p>
+
+      <p>
+        In general: document all files! Specify a doxygen header with at
+        least the <code>@@file</code> and <code>@@brief</code> tags. For
+        headers, the brief tag looks like:
+      </p>
+
+      <pre>
+@@brief Interface: ...</pre>
+
+      <p>and</p>
+      <pre>
+@@brief Implementation: ...</pre>
+
+      <p>for source files.</p>
+
+    </subsection>
+    <!--}}}-->
+  
+    <subsection id="hacking-style-hdr"> <!--{{{-->
+      <title>Header Dateien</title>
+
+      <p>
+        For each source file, there is a header file listing all
+        publicly accessable protos for the functions in the source
+        file. All functions not listed in the header are to be declared
+        static.
+      </p>
+
+      <p>
+        Each header file is wrapped within the following preprocessor
+        magic:
+      </p>
+
+      <pre>
+#ifndef LIBMUTTNG_FOO_BAR_H
+#define LIBMUTTNG_FOO_BAR_H
+...
+#endif</pre>
+
+      <p>
+        whereby the identifier is constructed from the filename under
+        the <code>src/</code> directory,
+        <code>libmuttng/foo/bar.h</code> in this case.
+      </p>
+
+    </subsection> <!--}}}-->
+
+    <subsection id="hacking-style-misc"> <!--{{{-->
+      <title>Verschiedenes</title>
+
+      <p>
+        For debugging, make the code print debug info by semantic, not
+        just any number.
+      </p>
+
+    </subsection> <!--}}}-->
+
+  </section>
+  <!--}}}-->
+
+  <section id="devguide-docs"> <!--{{{-->
+    <title>Dokumentation</title>
+
+    <subsection id="devguide-docs-dialect"> <!--{{{-->
+      <title>XML Dialekt</title>
+
+      <p> This section describes the custom XML dialect used for writing all of
+        the documentation (including descriptions for variables and everything
+        else.)</p>
+
+      <p>
+        The manual is wrapped in a <tt>manual</tt> tag. It contains the following two
+        tags:
+      </p>
+
+      <ul>
+
+        <li><tt>head</tt>: This describes a header for the document. Its title
+          is enclosed in a <tt>title</tt> tag, the list of all authors in an
+          <tt>authors</tt> tag. Within the latter, the <tt>author</tt> tag
+          lists any number of authors with the following tags:
+          <tt>surname</tt>, <tt>firstname</tt> and <tt>email</tt>.</li>
+
+        <li><tt>content</tt>: This describes the content for the document, that
+          is, one or more <tt>chapter</tt> tags.</li>
+
+      </ul>
+
+      <p>
+        Within the mentioned <tt>chapter</tt> tags, the following tags are to
+        be used for grouping text: <tt>section</tt> and <tt>subsection</tt>.
+        All sectioning tags <em>must</em> have an <tt>id</tt> attribute with
+        the name of the section. For nesting them, please specify prefixes to
+        avoid clashes. For example, within a chapter with <tt>id="intro"</tt>
+        and there for a section mentioning the mailing lists, use
+        <tt>id="intro-mailing"</tt>. As all output formats we use have a flat
+        ``labeling'' or ``anchor'' namespace, we create our namespaces like
+        this.
+      </p>
+
+      <p>        
+        All texts are to be grouped within <tt>p</tt> tags (``p'' as in
+        paragraph.)
+      </p>
+
+      <p>
+        For ordinary text, please use the following to fill the manual with
+        semantics rather than flat text or any layout:
+      </p>
+
+      <ul>
+
+        <li><em>(cross-)referencing</em>. For making any type of references, the followin
+          tags are to be used:
+          <ul>
+            <li><tt>email</tt>: an email address</li>
+            <li><tt>web</tt>: a web address</li>
+            <li><tt>varref</tt>: referencing a configuration variable</li>
+            <li><tt>cmdref</tt>: referencing a configuration command</li>
+            <li><tt>funcref</tt>: referencing a function</li>
+            <li><tt>man</tt>: referencing a manual page. Optionally,
+              it may contain a <tt>sect</tt> attribute to specify the
+              section. If none given, 1 will be used by default.</li>
+          </ul>
+        </li>
+
+        <li><em>special semantics</em>. There will be much more, but currently
+          the following tags are to be used for specifying a special semantic
+          for a word (mainly these are needed for auto-indexing so that
+          one can actually find something in the documentation):
+          <ul>
+            <li><tt>val</tt>: when refering to (possible/default/...) values
+              for variables.</li>
+            <li><tt>hdr</tt>: when refering to a commonly used header</li>
+            <li><tt>enc</tt>: when refering to transport encodings (such
+              as <enc>quoted-printable</enc> or <enc>us-ascii</enc></li>
+          </ul>
+        </li>
+
+        <li><em>listings</em>. To specify lists or listings, the following tags
+          are available:
+          <ul>
+            <li><tt>ul</tt>: a non-numbered itemized list</li>
+            <li><tt>li</tt>: an item of any of these lists</li>
+          </ul>
+        </li>
+
+        <li><em>misc.</em>: The following are not the optimal solution as they
+          imply layout semantics already but here we go:
+          <ul>
+            <li><tt>tt</tt>: typewriter font</li>
+            <li><tt>em</tt>: emphasise</li>
+            <li><tt>b</tt>: bold font</li>
+          </ul>
+        </li>
+
+      </ul>
+
+      <p>
+        Internally, variables are documented like this (this does <em>not</em> count for
+        the description of a variable but the variable as a whole within the
+        manual) (<em>note: this is auto-generated</em>):
+      </p>
+
+      <ul>
+        <li>all variables are wrapped within a <tt>descriptions</tt> tag</li>
+        <li>within this, there's any number of <tt>variable</tt> tags containing
+          the following attributes: <tt>name</tt> specifies the name of the
+          variable, <tt>type</tt> specifies its type</li>
+        <li>within a <tt>variable</tt> tag, the following tags will be used:
+          <ul>
+            <li><tt>init</tt>: initial or default value</li>
+            <li><tt>sig</tt>: whether a change of it will cause a signal be emitted</li>
+            <li><tt>descr</tt>: its description</li>
+          </ul>
+        </li>
+      </ul>
+
+      <p>
+        Internally, functions are documented like this
+        (<em>note: this is auto-generated</em>):
+      </p>
+
+      <ul>
+        <li>all functions are wrapped within a <tt>descriptions</tt> tag</li>
+        <li>within this, there's any number of <tt>context</tt> tags containing
+          the following attributes: <tt>name</tt> specifies the name of the
+          context. As functions are grouped by context (that is: by menu) where
+          they may have different bindings, each function may appear several
+          times within different <tt>context</tt> tags.</li>
+        <li>within the <tt>context</tt> tag, all functions it contains are
+          given via <tt>function</tt> tags. Each <tt>function</tt> tag must contain the
+          following attributes: <tt>name</tt> specifies the name a user
+          may bind to it, <tt>default</tt> specifies the default key binding
+          and <tt>group</tt> specifies to which semantic group the function belongs
+          within the context.</li>
+        <li>the text within the <tt>function</tt> tag is just the functions's
+          (English) summary to appear in the help menus</li>
+      </ul>
+          
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-docs-auto"> <!--{{{-->
+      <title>Automatische Erzeugung</title>
+
+      <p>
+        The function and variable descriptions are generated
+        to our custom XML dialect automatically.
+      </p>
+
+      <p>
+        For variables, <tt>src/muttng/config/config.pl</tt> is used. The
+        documentation process for variables is the same as it was before:
+      </p>
+
+      <ul>
+        <li>all documentation is expected between the words <tt>START</tt>
+          and <tt>END</tt> (commented) in set_command.cpp</li>
+        <li>the variable definition for the source is one line</li>
+        <li><em>below</em> is a comment block whereby each line to be
+          treated as part of the description for a variable starts with
+          <em>two</em> asterisks. The tags are the same as for
+          all other documentation.
+        </li>
+      </ul>
+
+      <p>
+        For functions, <tt>src/muttng/event/event.pl</tt> is used. It parses the
+        following file in the subdirectory for documentation: <tt>EVENTS</tt>. This
+        has space or tab separated fields with the following meanings for documentation:
+      </p>
+
+      <ul>
+        <li>1st field: the context IDs defined in <tt>CONTEXTS</tt></li>
+        <li>3rd field: the function's name</li>
+        <li>4th field: the group IDs defined in <tt>GROUPS</tt></li>
+        <li>5th field: the default keybinding</li>
+        <li>rest of the line: short description</li>
+      </ul>
+
+    </subsection>
+    <!--}}}-->
+  
+  </section>
+  <!--}}}-->
+
+  <section id="devguide-core"> <!--{{{-->
+    <title>Core</title>
+ 
+    <!-- this should be the last one!!!1!! -->
+
+      <subsection id="devguide-core-extending"> <!--{{{-->
+      <title>Bibliothek erweitern</title>
+
+      <p>
+        When making any extensions are chaning an implementation,
+        please make sure to run and maybe add/change/extend one
+        of the unit tests to verify it's working.
+      </p>
+
+    </subsection>
+    <!--}}}-->
+    
+  </section>
+  <!--}}}-->
+
+  <section id="devguide-libmuttng"> <!--{{{-->
+    <title>Libmuttng</title>
+
+    <subsection id="devguide-libmuttng-features"> <!--{{{-->
+      <title>Funktionen</title>
+
+      <p>
+        Libmuttng is in the <tt>src/libmuttng/</tt> subdirectory
+        and provides the following features:
+      </p>
+
+      <ul>
+
+        <li><em>basic services</em> of interest for the whole library and
+          application: signal handling and debug support.</li>
+
+        <li><em>mailbox support</em> includes: IMAP, POP3, NNTP, Maildir, MH,
+          MBOX and MMDF. The Mailbox abstraction layer works transparently and is
+          URL-driven, that is, the client doesn't need to care about and that
+          there are different storage formats</li>
+
+        <li><em>caching</em> is transparent for some mailbox types: IMAP, NNTP,
+          Maildir and MH. Again, as the Mailbox layer is abstract, so is the
+          caching layer which means that clients don't take note of caching
+          existing.</li>
+
+        <li><em>MIME and crypto</em> support via either local utilities such as
+          <man>pgp</man>/<man>gpg</man> or via gpgme for crypto and support for
+          the mailcap mechanism, using <man>file</man> and the like. Decoding
+          will be transparent for client, too.</li>
+
+      </ul>
+
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-libmuttng-signal"> <!--{{{-->
+      <title>Signalverarbeitung</title>
+
+      <p>
+        Libmuttng contains a very simple, easy to use and typesafe signal
+        handling interface. Though signals will be used within the library,
+        too, it's use is not limited to connecting handlers in the client
+        to events in the library but may also be used to pass signals
+        only within the client.
+      </p>
+
+      <p>
+        We started off with the implementation from:
+        <web>http://lists.trolltech.com/qt-interest/1997-07/msg00158.html</web>
+        and extended/modified it to fit our needs.
+      </p>
+
+      <p>
+        <em>Declaring</em> a signal is as easy as:
+      </p>
+
+      <pre>
+SignalX&lt;type of arg1,type of arg2,...,type of argX&gt; signalname;</pre>
+
+      <p>
+        whereby <tt>X</tt> is the number of arguments. An example may be:
+      </p>
+
+      <pre>
+Signal1&lt;Mailbox*&gt; mailboxHasNewMail;</pre>
+
+      <p>
+        saying that all handlers will get one argument being a pointer to a
+        Mailbox class instance.
+      </p>
+
+      <p>
+        <em>Connecting</em> to a signal is easy, too. Each handler must fullfill
+        the following two requirements:
+      </p>
+
+      <ul>
+        <li>it must return <tt>bool</tt> specifying whether it succeeded
+          or not</li>
+        <li>it must take exactly the number and type of arguments the
+          signal was declared with</li>
+      </ul>
+
+      <p>
+        For the above example, given a class <tt>foo</tt> with a method
+        <tt>bool foo::bar(Mailbox* mailbox)</tt>, connecting to the
+        signal is as easy as:
+      </p>
+
+      <pre>
+connectSignal (someObject.mailboxHasNewMail, this, &amp;foo::bar);</pre>
+
+      <p>
+        <em>Emitting</em> a signal can be done by every method having access to
+        the signal's declaration and works like this:
+      </p>
+
+      <pre>
+this.mailboxHasNewMail.emit (this);</pre>
+
+      <p>
+        ...assuming the signal is defined in a Mailbox class.
+      </p>
+
+      <p>
+        For a given signal, all handlers are executed in some order while
+        each of them returns success. As soon as one handlers reports failure,
+        the emit process will abort.
+      </p>
+
+      <p>
+        <em>Disconnecting</em> from a signal is highly recommended to take
+        place in the object's destructor as a crash upon the next emit after
+        destruction is likely. Though any object may connect as many handlers as it
+        likes to a signal, it's currently only supported to unbind all
+        handlers of an object <em>for a specific signal</em> at once like so:
+      </p>
+
+      <pre>
+disconnectSignals (someObject.mailboxHasNewMail, this);</pre>
+
+      <p>
+        This must be done for every signal the object connected a(ny) handler(s)
+        to.
+      </p>
+
+    </subsection>
+    <!--}}}-->
+
+    <!-- these should be the last -->
+
+    <subsection id="devguide-libmuttng-auto"> <!--{{{-->
+      <title>Automatisch erzeugter Source</title>
+
+      <p>
+        <em>Signal implementation.</em> As unfortunately we cannot overload
+        templates by the number of arguments, we need to specify the same
+        implementation for every argument count we need. Thus, this is done by
+        a script: <tt>src/libmuttng/signal.pl</tt> prints the commented
+        implementation to <tt>stdout</tt> so that the makefile puts it into
+        <tt>signal.h</tt>. When making changes, modify signal.h to verify it
+        works (plus maybe add a unit test) and adjust signal.pl to print the
+        changed code.
+      </p>
+
+    </subsection>
+    <!--}}}-->
+
+      <subsection id="devguide-libmuttng-extending"> <!--{{{-->
+      <title>Bibliothek erweitern</title>
+
+      <p>
+        When making extensions to the library and adding classes,
+        please make sure to derive them from the Libmuttng base
+        class to have debugging support and future extensions
+        already in your class.
+      </p>
+
+      <p>
+        When making any extensions are chaning an implementation,
+        please make sure to run and maybe add/change/extend one
+        of the unit tests to verify it's working.
+      </p>
+
+    </subsection>
+    <!--}}}-->
+    
+  </section>
+  <!--}}}-->
+
+  <section id="devguide-muttng"> <!--{{{-->
+    <title>Muttng</title>
+ 
+    <!-- these should be the last -->
+
+    <subsection id="devguide-muttng-auto"> <!--{{{-->
+      <title>Automatisch erzeugter Source</title>
+
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-muttng-extending"> <!--{{{-->
+      <title>Bibliothek erweitern</title>
+
+      <p>
+        When making extensions to the library and adding classes,
+        please make sure to derive them from the Muttng base
+        class to have debugging support and future extensions
+        already in your class.
+      </p>
+
+      <p>
+        When making any extensions are chaning an implementation,
+        please make sure to run and maybe add/change/extend one
+        of the unit tests to verify it's working.
+      </p>
+
+    </subsection>
+    <!--}}}-->
+    
+  </section>
+  <!--}}}-->
+
+</chapter>
