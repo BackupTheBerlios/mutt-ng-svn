@@ -36,8 +36,8 @@ static struct {
   { "\0",       "\0",           "\0"    },
 };
 
-int io_tests::test_io_tempfile (const char* dir, const char* name,
-                                buffer_t* tempfile) {
+int io_tests::test_io_tempfile2 (const char* dir, const char* name,
+                                 buffer_t* tempfile) {
   int fd = io_tempfile (dir, name, tempfile);
   struct stat st;
 
@@ -73,7 +73,7 @@ void io_tests::test_io_tempfile (void) {
      * we can create the tempfile
      */
     assert_eq ("test_io_tempfile()", 1,
-               test_io_tempfile (TempfileTests[i].dir, name.str, &tempfile));
+               test_io_tempfile2 (TempfileTests[i].dir, name.str, &tempfile));
     /**
      * - 2nd assertion:
      * if we have a directory passed down to io_tempfile(),

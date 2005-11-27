@@ -123,7 +123,8 @@ static urlproto_t url_get_proto (const char* s, bool* secure, buffer_t* error) {
   char *t = NULL;
   int i = 0;
 
-  if (!s || !(t = strchr (s, ':')) || (t - s) + 1 >= (int) sizeof (sbuf)) {
+  if (!s || !(t = (char*) strchr (s, ':')) ||
+      (t - s) + 1 >= (int) sizeof (sbuf)) {
     if (error)
       buffer_add_str (error, _("internal error"), -1);
     return P_LAST;

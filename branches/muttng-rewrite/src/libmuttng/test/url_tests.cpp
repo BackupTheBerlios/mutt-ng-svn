@@ -68,7 +68,7 @@ static struct {
   { "file:///dev%2Fn%75ll",                      { NULL,   NULL,     NULL,       0,   false, "/dev/null",    P_FILE } },
   { "file:///dev%2fn%75ll",                      { NULL,   NULL,     NULL,       0,   false, "/dev/null",    P_FILE } },
 
-  { NULL,               { EMPTYURL } }
+  { NULL,               { NULL, NULL, NULL, 0, false, NULL, P_LAST } }
 };
 
 using namespace unitpp;
