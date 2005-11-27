@@ -1,4 +1,4 @@
-LANGUAGES=en de_DE
+LANGUAGES=en de
 
 all: prepare doxygen
 
@@ -19,8 +19,6 @@ manual:
 doxygen:
 	xsltproc --xinclude -o ../src/related/manual.h xsl/manual2doxygen.xsl en/manual-full.xml
 	xsltproc --xinclude -o ../src/related/mainpage.h xsl/manual2doxygen.xsl homepage_en/homepage.xml
-
-.PHONY: homepage
 
 homepage:
 	@ for l in $(LANGUAGES) ; do \
