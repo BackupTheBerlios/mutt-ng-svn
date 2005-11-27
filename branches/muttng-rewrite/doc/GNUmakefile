@@ -4,7 +4,7 @@ all: prepare doxygen
 
 prepare: common/manual-full.xml common/manual-user.xml
 	@ for l in $(LANGUAGES) ; do \
-	  cp $^ manual_$$l/ ; \
+	  cp $^ css/muttng.css manual_$$l/ ; \
 	  cp css/muttng.css homepage_$$l ; \
 	done
 
