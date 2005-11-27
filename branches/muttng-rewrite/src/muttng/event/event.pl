@@ -211,7 +211,7 @@ open (OUT, "> event.cpp") or die "cannot open event.cpp: $!\n";
 print OUT $content;
 close (OUT);
 
-open (OUT, "> ./../../../doc/en/func_def.xml") or die "Cannot open func_def.xml: $!\n";
+open (OUT, "> ./../../../doc/manual_en/func_def.xml") or die "Cannot open func_def.xml: $!\n";
 print OUT "<definitions>\n";
 foreach my $ctx (sort keys (%context_str)) {
   my $key = 
@@ -224,7 +224,7 @@ foreach my $ctx (sort keys (%context_str)) {
 print OUT "</definitions>\n";
 close (OUT);
 
-open (OUT, "> ./../../../doc/en/func_descr.xml") or die "Cannot open func_descr.xml: $!\n";
+open (OUT, "> ./../../../doc/manual_en/func_descr.xml") or die "Cannot open func_descr.xml: $!\n";
 print OUT "<descriptions>\n";
 foreach my $ctx (sort keys (%context_str)) {
   my $key = 

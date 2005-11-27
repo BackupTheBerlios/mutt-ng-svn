@@ -92,7 +92,7 @@ while (<STDIN>) {
 }
 
 # dump XML definitions file
-open (OUT, "> ./../../../doc/en/var_def.xml") or die "Cannot open var_def.xml: $!\n";
+open (OUT, "> ./../../../doc/manual_en/var_def.xml") or die "Cannot open var_def.xml: $!\n";
 print OUT "<definitions>\n";
 foreach my $v (sort keys (%vars)) {
   print OUT "  <variable name=\"$v\"/>\n";
@@ -101,7 +101,7 @@ print OUT "</definitions>\n";
 close (OUT);
 
 # dump XML descriptions file
-open (OUT, "> ./../../../doc/en/var_descr.xml") or die "Cannot open var_descr.xml: $!\n";
+open (OUT, "> ./../../../doc/manual_en/var_descr.xml") or die "Cannot open var_descr.xml: $!\n";
 print OUT "<descriptions>\n";
 foreach my $v (sort keys (%vars)) {
   print OUT "  <variable name=\"$v\" type=\"$vars{$v}{'type'}\">\n";

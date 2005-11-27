@@ -2,6 +2,22 @@
 <chapter id="building">
   <title>Building and installation</title>
 
+  <section id="build-systems"> <!--{{{-->
+    <title>Supported systems</title>
+
+    <p>
+      Mutt-ng is known to work on the following systems:
+    </p>
+
+    <ul>
+      <li>Linux: gcc</li>
+      <li>FreeBSD: 5.x with gcc 3.4/4.0</li>
+      <li>Solaris: 5.9 with gcc 3.4/Sun Workshop Pro 9.0</li>
+    </ul>
+
+  </section>
+  <!--}}}-->
+
   <section id="build-requirements"> <!--{{{-->
     <title>Build Requirements</title>
 
@@ -11,12 +27,37 @@
     </p>
 
     <ul>
-      <li>GNU make. Others won't work.</li>
-      <li>A C and C++ compiler such as part of the GNU Compiler Collection.</li>
+      <li>GNU make. Others won't work as the makefiles use GNU make-only constructs.</li>
+      <li>A C and C++ compiler. Currently supported are the GNU Compiler Collection and
+        Sun Microsystems' workshop pro compiler suite.</li>
+      <li>Optionally, for building and running the unit tests, Unit++ (see
+        <web>http://unitpp.sf.net/</web>) must be installed.</li>
     </ul>
 
-  </section>
+    <p>
+      Everything should build if these requirements are met. However, as Perl scripts are
+      used to generate some parts of the source code automatically which are already
+      under version control, Perl isn't mandatory. On the other hand it can't
+      do any harm if it's installed.
+    </p>
 
+    <p>
+      For building muttng's homepage as well as the manual, the following tools must be
+      installed and setup properly:
+    </p>
+
+    <ul>
+      <li>XSL processor. Currently only <man>xsltproc</man> is supported though patches
+        for others such as xalan are highly welcome.</li>
+      <li>DocBook stylesheets for version 4.3.</li>
+    </ul>
+
+    <p>
+      In addition, for building the source code's documentation,
+      <man>doxygen</man> (see <web>http://www.doxygen.org/</web>) is required.
+    </p>
+
+  </section>
   <!--}}}-->
 
   <section id="build-config"> <!--{{{-->

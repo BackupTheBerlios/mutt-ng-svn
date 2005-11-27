@@ -2,6 +2,22 @@
 <chapter id="building">
   <title>Übersetzen und Installieren</title>
 
+  <section id="build-systems"> <!--{{{-->
+    <title>Unterstützte Systeme</title>
+
+    <p>
+      Mutt-ng funktioniert auf folgenden Systemen:
+    </p>
+
+    <ul>
+      <li>Linux: gcc ?</li>
+      <li>FreeBSD: 5.x mit gcc 3.4/4.0</li>
+      <li>Solaris: 5.9 mit gcc 3.4/Sun Workshop Pro 9.0</li>
+    </ul>
+
+  </section>
+  <!--}}}-->
+  
   <section id="build-requirements"> <!--{{{-->
     <title>Voraussetzungen</title>
 
@@ -11,12 +27,39 @@
     </p>
 
     <ul>
-      <li>GNU make. Andere make-Varianten funktionieren nicht.</li>
-      <li>Ein C und C++ Übersetzer wie sie Teil der GNU Compiler Collection sind.</li>
+      <li>GNU make. Andere make-Varianten funktionieren nicht, weil spezielle
+        Konstrukte verwenden werden, die nur GNU make unterstützt.</li>
+      <li>Ein C und C++ Übersetzer. Derzeit werden die 
+        GNU Compiler Collection als auch Sun Microsystems' Workshop Pro
+        Compiler Suite unterstützt.</li>
+      <li>Für das Übersetzen und Ausführen der Testsuite wird optional
+        Unit++ (siehe <web>http://unitpp.sf.net/</web>) benötigt.</li>
     </ul>
 
-  </section>
+    <p>
+      Alle Teile sollten sich übersetzen lassen, wenn diese Bedingungen erfüllt
+      sind. Weil aber einige Teile der Quellen automatisch mit Perlskripten
+      erzeugt werden und diese Teile aber ebenfalls unter Versionskontrolle stehen,
+      sollte Perl nicht zwingend benötigt werden. Es kann aber nicht schaden.
+    </p>
 
+    <p>
+      Um entweder die Internetseiten für mutt-ng oder das Handbuch zu
+      erstellen, müssen die folgenden Programme vorhanden und einsatzfähig sein:
+    </p>
+
+    <ul>
+      <li>Ein XSL Prozessor. Derzeit wird nur <man>xsltproc</man> unterstützt,
+        nötige Anpassungen für Prozessoren wie xalan sind sehr willkommen.</li>
+      <li>DocBook Stylesheets für Version 4.3.</li>
+    </ul>
+
+    <p>
+      Um die Dokumentation der Quellen zu erstellen, wird zusätzlich
+      <man>doxygen</man> (siehe <web>http://www.doxygen.org/</web>) benötigt.
+    </p>
+
+  </section>
   <!--}}}-->
 
   <section id="build-config"> <!--{{{-->
@@ -45,7 +88,6 @@
     </ul>
 
   </section>
-  
   <!--}}}-->
 
   <section id="build-app"> <!--{{{-->
