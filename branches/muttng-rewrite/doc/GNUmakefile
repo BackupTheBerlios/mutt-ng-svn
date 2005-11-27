@@ -4,16 +4,16 @@ all: prepare doxygen
 
 prepare: common/manual-full.xml common/manual-user.xml
 	@ for l in $(LANGUAGES) ; do \
-	  cp $^ $$l/ ; \
+	  cp $^ manual_$$l/ ; \
 	  cp css/muttng.css homepage_$$l ; \
 	done
 
 manual:
 	@ for l in $(LANGUAGES) ; do \
-	  xsltproc --xinclude -o $$l/manual-docbook.xml xsl/manual2docbook.xsl $$l/manual-user.xml ; \
-	  xsltproc --nonet --stringparam l10n.gentext.default.language $$l --stringparam html.stylesheet muttng.css -o $$l/manual.html xsl/docbook2html.xsl $$l/manual-docbook.xml ; \
-	  xsltproc --nonet --stringparam l10n.gentext.default.language $$l --stringparam html.stylesheet muttng.css -o $$l/ xsl/docbook2chunkhtml.xsl $$l/manual-docbook.xml ; \
-	  tidy -q -i -m -utf8 $$l/*.html >/dev/null 2>&1 || true ; \
+	  xsltproc --xinclude -o manual_$$l/manual-docbook.xml xsl/manual2docbook.xsl manual_$$l/manual-user.xml ; \
+	  xsltproc --nonet --stringparam l10n.gentext.default.language $$l --stringparam html.stylesheet muttng.css -o manual_$$l/manual.html xsl/docbook2html.xsl manual_$$l/manual-docbook.xml ; \
+	  xsltproc --nonet --stringparam l10n.gentext.default.language $$l --stringparam html.stylesheet muttng.css -o manual_$$l/ xsl/docbook2chunkhtml.xsl manual_$$l/manual-docbook.xml ; \
+	  tidy -q -i -m -utf8 manual_$$l/*.html >/dev/null 2>&1 || true ; \
         done
 
 doxygen:
