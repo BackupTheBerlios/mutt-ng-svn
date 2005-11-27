@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<mainpage>
+  
+  <head>
+    <title>Die Mutt Next Generation E-Mail Anwendung</title>
+  </head>
+
+  <content>
+
+    <chapter id="introduction"> <!--{{{-->
+      <title>Einführung</title>
+
+      <p>
+        <em>Mutt next generation</em> (kurz <em>mutt-ng</em>) ist eine Abspaltung
+        von der bekannten E-Mail Anwendung <em>mutt</em> mit dem Ziel,
+        sowohl die im Internet verfügbaren Erweiterungen zu integrieren als auch
+        die kleinen Unannehmlichkeiten von mutt zu beheben.
+      </p>
+
+      <p>
+        Weil wir früh wegen der Qualität und Dokumentation der Originalquellen
+        auf Probleme stießen, entwickeln wir gegenwärtig einige Teile komplett neu.
+        Daher gibt es derzeit noch nichts zum Ausführen und Testen.
+      </p>
+
+      <p>
+        Weil einer der Dinge, die wir verbessern wollen, die Dokumentation im
+        allgemeinen ist, wird sie hier veröffentlicht und sehr regelmäßig aktualisiert.
+      </p>
+
+    </chapter>
+    <!--}}}-->
+
+    <chapter id="docs"> <!--{{{-->
+      <title>Dokumentation</title>
+
+      <section id="docs-users"> <!--{{{-->
+        <title>Für Nutzer</title>
+
+        <p>
+          Weil auch das Handbuch komplett überarbeitet werden wird,
+          ist es gegenwärtig noch weit von der Fertigstellung entfernt.
+          Es ist in folgenden Sprachen verfügbar:
+        </p>
+
+        <ul>
+          <li><web>http://mutt-ng.berlios.de/rewrite/manual/en/</web>: Englisch</li>
+          <li><web>http://mutt-ng.berlios.de/rewrite/manual/de_DE/</web>: Deutsch</li>
+        </ul>
+
+      </section>
+      <!--}}}-->
+
+      <section id="docs-devel"> <!--{{{-->
+        <title>Für Entwickler</title>
+
+        <p>
+          Der ganze Quellcode wird vollständig mit doxygen
+          (siehe <web>http://www.doxygen.org/</web>) dokumentiert sein.
+        </p>
+
+        <p>
+          Diese Dokumentation ist nur ein English verfügbar:
+          <web>http://mutt-ng.berlios.de/rewrite/doxygen/</web>
+        </p>
+
+      </section>
+      <!--}}}-->
+
+    </chapter>
+    <!--}}}-->
+  
+    <chapter id="download"> <!--{{{-->
+      <title>Download</title>
+
+      <p>
+        Der neu geschriebene Quellcode ist noch nicht als komprimiertes Archiv
+        verfügbar sondern nur mittels Subversion. Um eine Arbeitskopie zu erhalten,
+        muss folgender Befehl ausgeführt werden:
+      </p>
+
+      <pre>
+$ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewrite</pre>
+
+    </chapter>
+    <!--}}}-->
+
+    <chapter id="feedback"> <!--{{{-->
+      <title>Rückmeldung</title>
+
+      <p>
+        Weil die Neuentwicklung noch in einem frühen Stadium ist,
+        bitten wir darum <em>keine</em> Fehlermeldungen oder Wünsche über
+        die BerliOS-Seite zu öffnen.
+      </p>
+
+      <p>
+        Statt dessen bitten wir um E-Mail Kontakt über die Mailingliste für
+        Entwickler:
+        <email>mutt-ng-devel@lists.berlios.de</email>.
+      </p>
+
+    </chapter>
+    <!--}}}-->
+
+    <chapter id="feeds"> <!--{{{-->
+      <title>Ticker</title>
+
+      <p>
+        Die folgenden Ticker bzw. ähnliche Informationsquellen
+        stehen zur Verfügung, um stets auf dem aktuellsten Stand
+        bezüglich der Neuentwicklung zu bleiben:
+      </p>
+
+      <ul>
+        <li>diese Seitehis</li>
+        <li>das Blog der Entwickler:
+          <web>http://mutt-ng.supersized.org/</web></li>
+        <li>die Änderungen am Neuentwicklungszweig sind verfügbar unter:
+          <web>http://user.cs.tu-berlin.de/~pdmef/muttng.cgi?c=muttng-rewrite</web>
+          (es stehen auch verschiedene Newsfeeds im RSS-, Atom- und
+          MBOX-Format zur Verfügung)</li>
+      </ul>
+
+    </chapter>
+    <!--}}}-->
+
+  </content>
+
+</mainpage>
