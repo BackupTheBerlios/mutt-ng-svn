@@ -17,7 +17,7 @@ manual:
         done
 
 doxygen:
-	xsltproc --xinclude -o ../src/related/manual.h xsl/manual2doxygen.xsl en/manual-full.xml
+	xsltproc --xinclude -o ../src/related/manual.h xsl/manual2doxygen.xsl manual_en/manual-full.xml
 	xsltproc --xinclude -o ../src/related/mainpage.h xsl/manual2doxygen.xsl homepage_en/homepage.xml
 
 homepage:
