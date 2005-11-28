@@ -32,6 +32,8 @@
         Sun Microsystems' workshop pro compiler suite.</li>
       <li>Optionally, for building and running the unit tests, Unit++ (see
         <web>http://unitpp.sf.net/</web>) must be installed.</li>
+      <li>Optionally, for building localized versions of the applications,
+        GNU gettext is required to be installed.</li>
     </ul>
 
     <p>
@@ -47,8 +49,8 @@
     </p>
 
     <ul>
-      <li>XSL processor. Currently only <man>xsltproc</man> is supported though patches
-        for others such as xalan are highly welcome.</li>
+      <li>XSL processor. Currently only <tt>xsltproc</tt> and <tt>xalan</tt> are supported
+        whereby <tt>xalan</tt> has problems with XInclude still to be resolved.</li>
       <li>DocBook stylesheets for version 4.3.</li>
     </ul>
 
@@ -74,8 +76,10 @@
     </p>
 
     <ul>
-      <li><tt>CCSTYLE=(gcc|suncc)</tt>. Wether to assume use of GNU or Sun
-        C/C++ compilers. Default: <tt>gcc</tt>.</li>
+      <li><tt>CCSTYLE=(gcc|suncc)</tt>. Wether to assume use of GNU or Sun's
+        Workshop Pro C/C++ compilers. Default: <tt>gcc</tt>.</li>
+      <li><tt>XSLPROC=(xsltproc|xalanj)</tt>. Whether to use <man>xsltproc</man>
+        or Xalan Java for as XSL processor. Default: <tt>xsltproc</tt>.</li>
       <li><tt>DEBUG=(0|1).</tt> Whether to pass <tt>-g</tt> to the
         compilers/linkers. This is useful for running a debuger. This is not
         the same as the feature to make mutt-ng print debug messages (which

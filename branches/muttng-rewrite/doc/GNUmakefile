@@ -1,6 +1,8 @@
 LANGUAGES=en de
 
-all: prepare doxygen
+all: prepare
+
+depend: doxygen
 
 prepare: common/manual-full.xml common/manual-user.xml
 	@ for l in $(LANGUAGES) ; do \
@@ -8,24 +10,36 @@ prepare: common/manual-full.xml common/manual-user.xml
 	  cp css/muttng.css homepage_$$l ; \
 	done
 
+include $(CURDIR)/../GNUmakefile.config.mine
+include $(CURDIR)/../GNUmakefile.whereis
+include $(CURDIR)/../GNUmakefile.config
+
 manual:
 	@ for l in $(LANGUAGES) ; do \
-	  xsltproc --xinclude -o manual_$$l/manual-docbook.xml xsl/manual2docbook.xsl manual_$$l/manual-user.xml ; \
-	  xsltproc --nonet --stringparam l10n.gentext.default.language $$l --stringparam html.stylesheet muttng.css -o manual_$$l/manual.html xsl/docbook2html.xsl manual_$$l/manual-docbook.xml ; \
-	  xsltproc --nonet --stringparam l10n.gentext.default.language $$l --stringparam html.stylesheet muttng.css -o manual_$$l/ xsl/docbook2chunkhtml.xsl manual_$$l/manual-docbook.xml ; \
-	  tidy -q -i -m -utf8 manual_$$l/*.html >/dev/null 2>&1 || true ; \
+	  $(call doxslt_m,manual_$$l/manual-docbook.xml,xsl/docbook2chunkhtml.xsl,manual_$$l/,$$l) ; \
+	  $(call doxslt_s,manual_$$l/manual-user.xml,xsl/manual2docbook.xsl,manual_$$l/manual-docbook.xml,$$l) ; \
+	  $(call doxslt_s,manual_$$l/manual-docbook.xml,xsl/docbook2html.xsl,manual_$$l/manual.html,$$l) ; \
         done
+ifneq ($(TIDY),)
+	@ for l in $(LANGUAGES) ; do \
+	  $(TIDY) -q -i -m -utf8 manual_$$l/*.html >/dev/null 2>&1 || true ; \
+	done
+endif
 
 doxygen:
-	xsltproc --xinclude -o ../src/related/manual.h xsl/manual2doxygen.xsl manual_en/manual-full.xml
-	xsltproc --xinclude -o ../src/related/mainpage.h xsl/manual2doxygen.xsl homepage_en/homepage.xml
+	@ $(call doxslt_s,manual_en/manual-full.xml,xsl/manual2doxygen.xsl,./../src/related/manual.h,en)
+	@ $(call doxslt_s,homepage_en/homepage.xml,xsl/manual2doxygen.xsl,./../src/related/mainpage.h,en)
 
 homepage:
 	@ for l in $(LANGUAGES) ; do \
-	  xsltproc --xinclude -o homepage_$$l/homepage-docbook.xml xsl/manual2docbook.xsl homepage_$$l/homepage.xml ; \
-	  xsltproc --nonet --stringparam l10n.gentext.default.language $$l --stringparam html.stylesheet muttng.css -o homepage_$$l/index.html xsl/docbook2html.xsl homepage_$$l/homepage-docbook.xml ; \
-	  tidy -q -i -m -utf8 homepage_$$l/*.html >/dev/null 2>&1 || true ; \
+	  $(call doxslt_s,homepage_$$l/homepage.xml,xsl/manual2docbook.xsl,homepage_$$l/homepage-docbook.xml,$$l) ; \
+	  $(call doxslt_s,homepage_$$l/homepage-docbook.xml,xsl/docbook2html.xsl,homepage_$$l/index.html,$$l) ; \
 	done
+ifneq ($(TIDY),)
+	@ for l in $(LANGUAGES) ; do \
+	  $(TIDY) -q -i -m -utf8 homepage_$$l/*.html >/dev/null 2>&1 || true ; \
+	done
+endif
 
 clean:
 	@ true

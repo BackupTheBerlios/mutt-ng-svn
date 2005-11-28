@@ -34,6 +34,8 @@
         Compiler Suite unterstützt.</li>
       <li>Für das Übersetzen und Ausführen der Testsuite wird optional
         Unit++ (siehe <web>http://unitpp.sf.net/</web>) benötigt.</li>
+      <li>Für das optionale Erstellen von lokalisierten Versionen der
+        Anwendungen wird GNU gettext benötigt.</li>
     </ul>
 
     <p>
@@ -49,8 +51,9 @@
     </p>
 
     <ul>
-      <li>Ein XSL Prozessor. Derzeit wird nur <man>xsltproc</man> unterstützt,
-        nötige Anpassungen für Prozessoren wie xalan sind sehr willkommen.</li>
+      <li>Ein XSL Prozessor. Derzeit werden <tt>xsltproc</tt> und <tt>xalan</tt>
+        unterstützt, wobei mit <tt>xalan</tt> und dem XInclude-Standard noch
+        Probleme beseitigt werden müssen.</li>
       <li>DocBook Stylesheets für Version 4.3.</li>
     </ul>
 
@@ -66,25 +69,30 @@
     <title>Konfiguration</title>
 
     <p>
-      In order to make the build process work at all, you need to create
-      a file called <tt>GNUmakefile.config.mine</tt> in the top-level
-      directory, i.e. in <tt>mutt-ng/branches/muttng-rewrite</tt>.
+      Um den Übersetzungsprozess lauffähig zu machen, muss eine Datei namens
+      <tt>GNUmakefile.config.mine</tt> im obersten Quellenverzeichnis erstellt
+      werden, also in <tt>mutt-ng/branches/muttng-rewrite</tt>.
     </p>
 
     <p>
-      There you can set various options. Most important are the following:
+      Darin lassen sich verschiedene Optionen individuell setzen. Die wichtigsten sind:
     </p>
 
     <ul>
-      <li><tt>CCSTYLE=(gcc|suncc)</tt>. Wether to assume use of GNU or Sun
-        C/C++ compilers. Default: <tt>gcc</tt>.</li>
-      <li><tt>DEBUG=(0|1).</tt> Whether to pass <tt>-g</tt> to the
-        compilers/linkers. This is useful for running a debuger. This is not
-        the same as the feature to make mutt-ng print debug messages (which
-        currently cannot be turned off). Default: <tt>0</tt>.</li>
-      <li><tt>UNITPPDIR=/path</tt>. Where Unit++ (see
-        <web>http://unitpp.sf.net/</web>) for
-        running the unit tests is installed. Default: <tt>/usr</tt>.</li>
+      <li><tt>CCSTYLE=(gcc|suncc)</tt>. Welche Übersetzer angenommen werden
+        sollen: entweder GNU GCC oder Sun's Workshop Pro C/C++ Übersetzer.
+        Vorgabe: <tt>gcc</tt>.</li>
+      <li><tt>XSLPROC=(xsltproc|xalanj)</tt>. Welcher XSL Prozessor verwendet
+        werden soll: entweder <man>xsltproc</man> oder Xalan Java. Vorgabe:
+        <tt>xsltproc</tt>.</li>
+      <li><tt>DEBUG=(0|1).</tt> Ob die Option <tt>-g</tt> and die
+        Übersetzer übergeben werden soll. Dies ist für das Verwenden von
+        Debuggern notwendig. Dies ist nicht das gleiche wie das Erzeugen von
+        Debugausgaben in mutt-ng (, was gegenwärtig nicht abgeschaltet werden
+        kann). Vorgabe: <tt>0</tt>.</li>
+      <li><tt>UNITPPDIR=/path</tt>. Pfad in dem Unit++ (siehe
+        <web>http://unitpp.sf.net/</web>) für die Testsuite installiert
+        ist. Vorgabe: <tt>/usr</tt>.</li>
     </ul>
 
   </section>

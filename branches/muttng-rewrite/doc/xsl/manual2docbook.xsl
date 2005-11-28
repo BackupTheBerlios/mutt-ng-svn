@@ -8,7 +8,6 @@
     doctype-public="-//OASIS//DTD DocBook XML V4.3//EN"
     doctype-system="http://www.oasis-open.org/docbook/xml/4.3/docbookx.dtd"
     indent="yes"
-    output-encoding="utf-8"
     />
 
   <xsl:strip-space elements="*"/>
