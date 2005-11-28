@@ -1,0 +1,318 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2005-11-28 09:30+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../libmuttng/debug.cpp:110
+#, c-format
+msgid "debug %sstarted at level %d for %s at %s"
+msgstr ""
+
+#: ../libmuttng/debug.cpp:125
+#, c-format
+msgid "debug finished at level %d for %s at %s"
+msgstr ""
+
+#: ../libmuttng/util/url.cpp:128
+msgid "internal error"
+msgstr ""
+
+#: ../libmuttng/util/url.cpp:143
+msgid "unsupported protocol: "
+msgstr ""
+
+#: ../libmuttng/util/url.cpp:229
+msgid "decoding error in: "
+msgstr ""
+
+#: ../libmuttng/util/url.cpp:237
+msgid "empty field in URL"
+msgstr ""
+
+#: ../libmuttng/util/url.cpp:269
+msgid "no remote files supported for \"file\" protocol"
+msgstr ""
+
+#: ../libmuttng/util/url.cpp:276
+msgid "no host given for protocol"
+msgstr ""
+
+#: ../core/mem.c:23
+msgid "Integer overflow -- can't allocate memory!"
+msgstr ""
+
+#. __MEM_CHECKED__
+#: ../core/mem.c:29 ../core/mem.c:41 ../core/mem.c:67
+msgid "Out of memory!"
+msgstr ""
+
+#: ../core/exit.c:21
+#, c-format
+msgid ""
+"Fatal error in function '%s' called from file '%s', line '%d': %s\n"
+"(please report this error to <mutt-ng-devel@lists.berlios.de>)\n"
+msgstr ""
+
+#. * Usage string for @c muttng(1).
+#: ../muttng/tools/conf_tool.cpp:22
+msgid ""
+"Usage: muttng-conf [-D] [-a]\n"
+"       muttng-conf -B [-a]\n"
+"  "
+msgstr ""
+
+#. * Help string for @c muttng(1).
+#: ../muttng/tools/conf_tool.cpp:28
+msgid ""
+"Options:\n"
+"  -a\t\tAnnotated: print defaults if value differs\n"
+"  -B\t\tList all bindings\n"
+"  -D\t\tDump all non-default variable values\n"
+"  "
+msgstr ""
+
+#: ../muttng/tools/conf_tool.cpp:98
+msgid "# Context: "
+msgstr ""
+
+#: ../muttng/tools/conf_tool.cpp:99
+msgid ", group: "
+msgstr ""
+
+#. * Usage string for @c muttng(1).
+#. * Help string for @c muttng(1).
+#. * Usage string for @c muttng(1).
+#. * Help string for @c muttng(1).
+#: ../muttng/tools/mailx_tool.cpp:20 ../muttng/tools/mailx_tool.cpp:23
+#: ../muttng/tools/sync_tool.cpp:20 ../muttng/tools/sync_tool.cpp:23
+msgid " "
+msgstr ""
+
+#. * Usage string for @c muttng(1).
+#: ../muttng/tools/muttng_tool.cpp:20
+msgid ""
+"Usage: muttng [ -nRyzZ ] [ -e <cmd> ] [ -F <file> ] [ -m <type> ] [ -f "
+"<file> ]\n"
+"       muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -Q <query> [ -Q <query> ] "
+"[...]\n"
+"       muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -A <alias> [ -A <alias> ] "
+"[...]\n"
+"       muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -t\n"
+"       muttng [ -nR ] [ -e <cmd> ] [ -F <file> ] -T\n"
+"       muttng [ -nx ] [ -e <cmd> ] [ -a <file> ] [ -F <file> ] [ -H <file> ] "
+"[ -i <file> ]\n"
+"              [ -s <subj> ] [ -b <addr> ] [ -c <addr> ] <addr> [ ... ]\n"
+"       muttng [ -n ] [ -e <cmd> ] [ -F <file> ] -p\n"
+"       muttng -v\n"
+"       muttng -V\n"
+msgstr ""
+
+#. * Help string for @c muttng(1).
+#: ../muttng/tools/muttng_tool.cpp:33
+msgid ""
+"Options:\n"
+"  -A <alias>\texpand the given alias\n"
+"  -a <file>\tattach a file to the message\n"
+"  -b <address>\tspecify a blind carbon-copy (BCC) address\n"
+"  -c <address>\tspecify a carbon-copy (CC) address\n"
+"  -e <command>\tspecify a command to be executed after initialization\n"
+"  -f <file>\tspecify which mailbox to read\n"
+"  -g <server>\tspecify a newsserver (if compiled with NNTP)\n"
+"  -G\t\tselect a newsgroup (if compiled with NNTP)\n"
+"  -H <file>\tspecify a draft file to read header and body from\n"
+"  -i <file>\tspecify a file which Mutt-ng should include in the body\n"
+"  -d <level>\t specify debugging level of Mutt-ng\n"
+"  -m <type>\tspecify a default mailbox type\n"
+"  -p\t\trecall a postponed message\n"
+"  -Q <variable>\tquery a configuration variable\n"
+"  -R\t\topen mailbox in read-only mode\n"
+"  -s <subj>\tspecify a subject (must be in quotes if it has spaces)\n"
+"  -t\t\tprint the value of all variables to stdout\n"
+"  -T\t\tprint the value of all changed variables to stdout\n"
+"  -x\t\tsimulate the mailx send mode\n"
+"  -y\t\tselect a mailbox specified in your `mailboxes' list\n"
+"  -z\t\texit immediately if there are no messages in the mailbox\n"
+"  -Z\t\topen the first folder with new message, exit immediately if none\n"
+"  "
+msgstr ""
+
+#. * How to reach us
+#: ../muttng/tools/tool.cpp:29
+msgid ""
+"To contact the developers, please mail to <mutt-ng-devel@lists.berlios.de>.\n"
+"To visit the Mutt-ng homepage go to http://www.muttng.org.\n"
+"To report a bug, please use the fleang(1) utility.\n"
+msgstr ""
+
+#. * Warranty notice
+#: ../muttng/tools/tool.cpp:35
+msgid ""
+"Muttng comes with ABSOLUTELY NO WARRANTY; for details type `muttng -V'.\n"
+"Muttng is free software, and you are welcome to redistribute it\n"
+"under certain conditions; type `muttng -V' for details.\n"
+msgstr ""
+
+#. * Copyright for original mutt
+#: ../muttng/tools/tool.cpp:41
+msgid ""
+"Muttng is partially based on Mutt:\n"
+"  Copyright (C) 1996-2004 Michael R. Elkins <me@mutt.org>\n"
+"  Copyright (C) 1996-2002 Brandon Long <blong@fiction.net>\n"
+"  Copyright (C) 1997-2005 Thomas Roessler <roessler@does-not-exist.org>\n"
+"  Copyright (C) 1998-2005 Werner Koch <wk@isil.d.shuttle.de>\n"
+"  Copyright (C) 1999-2005 Brendan Cully <brendan@kublai.com>\n"
+"  Copyright (C) 1999-2002 Tommi Komulainen <Tommi.Komulainen@iki.fi>\n"
+"  Copyright (C) 2000-2002 Edmund Grimley Evans <edmundo@rano.org>\n"
+msgstr ""
+
+#. * Copyright from us
+#: ../muttng/tools/tool.cpp:52
+msgid ""
+"Muttng is Copyright (C) 2005:\n"
+"  Copyright (C) 2005 Andreas Krennmair <ak@synflood.at>\n"
+"  Copyright (C) 2005 Nico Golde <nico@ngolde.de>\n"
+"  Copyright (C) 2005 Rocco Rutte <pdmef@cs.tu-berlin.de>\n"
+"\n"
+"  Lots of others not mentioned here contributed lots of code,\n"
+"  fixes, and suggestions.\n"
+msgstr ""
+
+#. * short license pointer
+#: ../muttng/tools/tool.cpp:62
+msgid ""
+"This program is free software; you can redistribute it and/or modify\n"
+"it under the terms of the GNU General Public License as published by\n"
+"the Free Software Foundation; either version 2 of the License, or\n"
+"(at your option) any later version.\n"
+"\n"
+"This program is distributed in the hope that it will be useful,\n"
+"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+"GNU General Public License for more details.\n"
+"\n"
+"You should have received a copy of the GNU General Public License\n"
+"along with this program; if not, write to the Free Software\n"
+"Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, "
+"USA.\n"
+msgstr ""
+
+#: ../muttng/tools/tool.cpp:78
+msgid ""
+"Generic options:\n"
+"  -d <level>\tDebug at <level>\n"
+"  -F <file>\tRead <file> instead of default user configuration\n"
+"  -h\t\tThis help screen\n"
+"  -n\t\tDo not read the system configuration file\n"
+"  -v\t\tShow version info and compile-time options\n"
+"  -V\t\tShow warranty and license"
+msgstr ""
+
+#. * help string for E_HELP
+#: ../muttng/event/event.cpp:307
+msgid "Show help screen"
+msgstr ""
+
+#. * help string for E_SHOW_VERSION
+#: ../muttng/event/event.cpp:309
+msgid "Show version information"
+msgstr ""
+
+#. * help string for E_REPLY
+#: ../muttng/event/event.cpp:311
+msgid "Reply to current message"
+msgstr ""
+
+#. * help string for E_LIST_REPLY
+#: ../muttng/event/event.cpp:313
+msgid "List-reply to current message"
+msgstr ""
+
+#. * help string for E_GROUP_REPLY
+#: ../muttng/event/event.cpp:315
+msgid "Group-reply to current message"
+msgstr ""
+
+#. * help string for E_PAGE_UP
+#: ../muttng/event/event.cpp:317
+msgid "Page up"
+msgstr ""
+
+#. * help string for E_EDIT_MESSAGE
+#: ../muttng/event/event.cpp:319
+msgid "Edit current message"
+msgstr ""
+
+#. * help string for E_BREAK_THREAD
+#: ../muttng/event/event.cpp:321
+msgid "Break thread at current message"
+msgstr ""
+
+#. * help string for E_LINK_THREAD
+#: ../muttng/event/event.cpp:323
+msgid "Link tagged to current message in thread"
+msgstr ""
+
+#: ../muttng/config/bool_option.cpp:57
+msgid "unknown value for boolean option: "
+msgstr ""
+
+#: ../muttng/config/num_option.cpp:39
+msgid "value out of range: "
+msgstr ""
+
+#: ../muttng/config/num_option.cpp:68
+msgid "not a number: "
+msgstr ""
+
+#: ../muttng/config/set_command.cpp:198
+msgid "string"
+msgstr ""
+
+#: ../muttng/config/set_command.cpp:199
+msgid "boolean"
+msgstr ""
+
+#: ../muttng/config/set_command.cpp:200
+msgid "number"
+msgstr ""
+
+#: ../muttng/config/set_command.cpp:201
+msgid "quad-option"
+msgstr ""
+
+#: ../muttng/config/set_command.cpp:202
+msgid "url"
+msgstr ""
+
+#: ../muttng/config/set_command.cpp:245
+msgid "Error for option $"
+msgstr ""
+
+#: ../muttng/config/set_command.cpp:248
+msgid ": invalid default value: \""
+msgstr ""
+
+#: ../muttng/config/set_command.cpp:256
+msgid ": invalid command"
+msgstr ""
+
+#: ../muttng/config/set_command.cpp:257
+msgid " (report this)"
+msgstr ""
+
+#: ../muttng/config/quad_option.cpp:55
+msgid "unknown value for quad-option: "
+msgstr ""

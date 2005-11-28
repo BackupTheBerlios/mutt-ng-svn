@@ -17,10 +17,10 @@
 using namespace std;
 
 /** Usage string for @c muttng(1). */
-static const char* Usage = N_("");
+static const char* Usage = N_(" ");
 
 /** Help string for @c muttng(1). */
-static const char* Options = N_("");
+static const char* Options = N_(" ");
 
 MailxTool::MailxTool (int argc, char** argv) : Tool (argc, argv) {
   this->ui = new UIPlain ();
