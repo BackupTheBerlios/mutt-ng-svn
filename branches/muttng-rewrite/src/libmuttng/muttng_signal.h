@@ -4,7 +4,7 @@
  * @{
  */
 /**
- * @file libmuttng/signal.h
+ * @file libmuttng/muttng_signal.h
  * @author Tero Pulkkinen <terop@modeemi.cs.tut.fi>
  * @author Esa Pulkkinen
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>

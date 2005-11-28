@@ -12,7 +12,7 @@ my $head =
 " * \@{\n" .
 " */\n" .
 "/**\n" .
-" * \@file libmuttng/signal.h\n" .
+" * \@file libmuttng/muttng_signal.h\n" .
 " * \@author Tero Pulkkinen <terop\@modeemi.cs.tut.fi>\n" .
 " * \@author Esa Pulkkinen\n" .
 " * \@author Rocco Rutte <pdmef\@cs.tu-berlin.de>\n" .

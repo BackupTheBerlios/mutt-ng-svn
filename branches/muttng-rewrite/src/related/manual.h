@@ -869,7 +869,7 @@ disconnectSignals (someObject.mailboxHasNewMail, this);</pre>
         implementation for every argument count we need. Thus, this is done by
         a script: <code> src/libmuttng/signal.pl</code> prints the commented
         implementation to <code> stdout</code> so that the makefile puts it into
-        <code> signal.h</code>. When making changes, modify signal.h to verify it
+        <code> muttng_signal.h</code>. When making changes, modify muttng_signal.h to verify it
         works (plus maybe add a unit test) and adjust signal.pl to print the
         changed code.
       
