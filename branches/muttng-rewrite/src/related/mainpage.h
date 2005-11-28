@@ -33,8 +33,8 @@
         
 
     <ul>
-    <li><a href="http://mutt-ng.berlios.de/rewrite/manual/en/">http://mutt-ng.berlios.de/rewrite/manual/en/</a>: English</li>
-    <li><a href="http://mutt-ng.berlios.de/rewrite/manual/de_DE/">http://mutt-ng.berlios.de/rewrite/manual/de_DE/</a>: German</li>
+    <li><a href="http://mutt-ng.berlios.de/rewrite/en/manual/">http://mutt-ng.berlios.de/rewrite/en/manual/</a>: English</li>
+    <li><a href="http://mutt-ng.berlios.de/rewrite/de/manual/">http://mutt-ng.berlios.de/rewrite/de/manual/</a>: German</li>
     
       </ul>
     

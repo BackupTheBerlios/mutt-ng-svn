@@ -4,7 +4,7 @@ include $(CURDIR)/../../GNUmakefile.whereis
 include $(CURDIR)/../../GNUmakefile.config.mine
 include $(CURDIR)/../../GNUmakefile.config
 
-all: signal.h subdirs libmuttng.a
+all: muttng_signal.h subdirs libmuttng.a
 
 clean: subdirclean
 	rm -rf libmuttng.a debug.o libmuttng.o
@@ -17,8 +17,9 @@ libmuttng.a: debug.o libmuttng.o
 %.o: %.cpp
 	$(CXX) $(CXXFLAGS) -I.. -o $@ -c $<
 
-signal.h: signal.pl
-	./signal.pl > ./signal.h
+muttng_signal.h: signal.pl
+	./signal.pl > ./muttng_signal.h
+
 test: libmuttng.a subdirtest
 
 depend: subdirdepend

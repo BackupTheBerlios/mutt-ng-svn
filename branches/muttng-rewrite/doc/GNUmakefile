@@ -27,5 +27,8 @@ homepage:
 	  tidy -q -i -m -utf8 homepage_$$l/*.html >/dev/null 2>&1 || true ; \
 	done
 
+clean:
+	@ true
+
 test:
 	@ true

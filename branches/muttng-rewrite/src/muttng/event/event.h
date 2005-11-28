@@ -13,7 +13,7 @@
 #include "core/list.h"
 
 #include "libmuttng/debug.h"
-#include "libmuttng/signal.h"
+#include "libmuttng/muttng_signal.h"
 #include "libmuttng/util/url.h"
 
 /**

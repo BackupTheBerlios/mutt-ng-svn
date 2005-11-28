@@ -8,7 +8,7 @@
 #define LIBMUTTNG_TEST_SIGNAL_TESTS_H
 
 #include <unit++/unit++.h>
-#include "../signal.h"
+#include "../muttng_signal.h"
 
 using namespace unitpp;
 

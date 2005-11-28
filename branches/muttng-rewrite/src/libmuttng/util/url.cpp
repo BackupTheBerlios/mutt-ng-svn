@@ -6,8 +6,8 @@
  * @brief Implementation: URL handling
  */
 #include <ctype.h>
-#include <string.h>
 #include <iostream>
+#include <cstring>
 
 #include "core/buffer.h"
 #include "core/str.h"

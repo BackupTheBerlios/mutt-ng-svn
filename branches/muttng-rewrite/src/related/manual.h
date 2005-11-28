@@ -8,6 +8,18 @@
     @section sect_introduction Introduction
     
     @section sect_building Building and installation
+    @subsection sect_build-systems Supported systems
+    
+      Mutt-ng is known to work on the following systems:
+    
+
+    <ul>
+    <li>Linux: gcc</li>
+    <li>FreeBSD: 5.x with gcc 3.4/4.0</li>
+    <li>Solaris: 5.9 with gcc 3.4/Sun Workshop Pro 9.0</li>
+    
+      </ul>
+    
     @subsection sect_build-requirements Build Requirements
           
       For building mutt-ng, you need to have the following software installed
@@ -15,10 +27,36 @@
     
 
     <ul>
-    <li>GNU make. Others won't work.</li>
-    <li>A C and C++ compiler such as part of the GNU Compiler Collection.</li>
+    <li>GNU make. Others won't work as the makefiles use GNU make-only constructs.</li>
+    <li>A C and C++ compiler. Currently supported are the GNU Compiler Collection and
+        Sun Microsystems' workshop pro compiler suite.</li>
+    <li>Optionally, for building and running the unit tests, Unit++ (see
+        <a href="http://unitpp.sf.net/">http://unitpp.sf.net/</a>) must be installed.</li>
     
       </ul>
+    
+      Everything should build if these requirements are met. However, as Perl scripts are
+      used to generate some parts of the source code automatically which are already
+      under version control, Perl isn't mandatory. On the other hand it can't
+      do any harm if it's installed.
+    
+
+    
+      For building muttng's homepage as well as the manual, the following tools must be
+      installed and setup properly:
+    
+
+    <ul>
+    <li>XSL processor. Currently only @c xsltproc(1) is supported though patches
+        for others such as xalan are highly welcome.</li>
+    <li>DocBook stylesheets for version 4.3.</li>
+    
+      </ul>
+    
+      In addition, for building the source code's documentation,
+      @c doxygen(1) (see <a href="http://www.doxygen.org/">http://www.doxygen.org/</a>) is required.
+    
+
     
     @subsection sect_build-config Build Configuration
     

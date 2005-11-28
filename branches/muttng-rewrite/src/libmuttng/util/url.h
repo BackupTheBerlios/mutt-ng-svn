@@ -10,7 +10,7 @@
 #include "core/buffer.h"
 
 #include "../libmuttng.h"
-#include "../features.h"
+#include "../muttng_features.h"
 
 /** all valid protocols */
 typedef enum {
