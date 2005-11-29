@@ -1,6 +1,7 @@
 CXXFLAGS+=-I.. -I../..
 LDFLAGS+=-L.. -lunit++
-LINKLIBS=test.o signal_tests.o url_tests.o ../libmuttng.a  ../../core/libcore.a
+LINKOBJS=test.o signal_tests.o url_tests.o
+LINKLIBS=./../libmuttng.a ./../../core/libcore.a
 
 include $(CURDIR)/../../../GNUmakefile.whereis
 include $(CURDIR)/../../../GNUmakefile.config.mine
@@ -12,11 +13,11 @@ all:
 test: run_test
 	./$^ -v
 
-run_test: $(LINKLIBS)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS)
+run_test: $(LINKOBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LINKLIBS) $(LDFLAGS)
 
 clean:
-	$(RM) run_test $(LINKLIBS)
+	$(RM) run_test $(LINKOBJS)
 
 depend:
 	@true

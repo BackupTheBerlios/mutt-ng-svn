@@ -39,7 +39,7 @@ typedef struct {
   int fill;
   /** rows */
   list_t** rows;
-  /** whether key was only copied */
+  /** whether key was copied */
   unsigned int dup_key:1;
 } hash_t;
 
@@ -62,7 +62,7 @@ void hash_destroy (void** t, void (*destroy) (HASH_ITEMTYPE*)) {
     if ((*tab)->rows && !list_empty((*tab)->rows[r])) {
       for (c = 0; c < (*tab)->rows[r]->length; c++) {
         hash_item_t* t = (hash_item_t*) (*tab)->rows[r]->data[c];
-        if (!(*tab)->dup_key)
+        if ((*tab)->dup_key)
           mem_free (&t->key);
         if (destroy)
           destroy (&t->data);
@@ -120,6 +120,8 @@ int hash_add_hash (void* t, const void* key,
     item = mem_malloc (sizeof (hash_item_t));
     if (tab->dup_key)
       item->key = strdup (key);
+    else
+      item->key = (char*) key;
     item->keylen = str_len (key);
     item->data = data;
     list_push_back (&tab->rows[row], (LIST_ITEMTYPE) item);
@@ -142,8 +144,8 @@ int hash_add_hash (void* t, const void* key,
 static HASH_ITEMTYPE _hash_find_hash (void* t, const void* key, int remove,
                                       unsigned int code) {
   int row = 0, col = 0;
-  hash_item_t* ret = NULL;
   hash_t* tab = (hash_t*) t;
+  HASH_ITEMTYPE ret;
 
   if (!tab || !key)
     return (0);
@@ -151,12 +153,15 @@ static HASH_ITEMTYPE _hash_find_hash (void* t, const void* key, int remove,
   if ((col = _hash_exists (tab, row, key)) < 0)
     return (0);
   if (remove) {
-    ret = (hash_item_t*) list_pop_idx (&tab->rows[row], col);
-    mem_free (&ret->key);
+    hash_item_t* tmp = (hash_item_t*) list_pop_idx (&tab->rows[row], col);
+    ret = tmp->data;
+    if (tab->dup_key)
+      mem_free (&tmp->key);
+    mem_free (&tmp);
     tab->fill--;
   } else
-    ret = (hash_item_t*) tab->rows[row]->data[col];
-  return (ret->data);
+    ret = ((hash_item_t*) tab->rows[row]->data[col])->data;
+  return (ret);
 }
 
 int hash_exists_hash (void* t, const void* key, unsigned int code) {

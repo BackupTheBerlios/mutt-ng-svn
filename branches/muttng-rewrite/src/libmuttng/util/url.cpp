@@ -163,6 +163,7 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error) {
   char *path;
   char *err;
   int chars = 0;
+  size_t pathlen = 0;
 
   url->username = NULL;
   url->password = NULL;
@@ -216,8 +217,14 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error) {
     err = url->host;
     goto decode_error;
   }
-  if (path && *path)
-    url->path = str_dup (path);
+
+  /* always fully qualify path with leading '/' */
+  pathlen = str_len (path);
+  url->path = (char*) mem_malloc (pathlen+2);
+  url->path[0] = '/';
+  url->path[pathlen+1] = '\0';
+  if (pathlen)
+    memcpy (url->path+1, path, pathlen);
   if (!url_decode (url->path, &chars)) {
     err = url->path;
     goto decode_error;
@@ -276,13 +283,6 @@ url_t* url_from_string (const char* url, buffer_t* error) {
       if (error)
         buffer_add_str (error, _("no host given for protocol"), -1);
       goto error;
-    } else {
-      size_t len = str_len (ret->path);
-      /* if file:// is valid, prepend / to path */
-      mem_realloc (&ret->path, len+2);
-      memmove (&ret->path[1], &ret->path[0], len);
-      ret->path[0] = '/';
-      ret->path[len+1] = '\0';
     }
   }
 
@@ -319,7 +319,6 @@ void url_to_string (url_t* url, buffer_t* dst, bool pwd) {
   }
   buffer_add_str (dst, url->host, -1);
   /* XXX default port */
-  buffer_add_ch (dst, '/');
   buffer_add_str (dst, url->path, -1);
 }
 

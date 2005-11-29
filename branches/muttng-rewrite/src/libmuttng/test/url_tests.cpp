@@ -49,19 +49,21 @@ static struct {
   url_t url;
 } ValidURLTable[] = {
 
-  { "imap://location/",                          { NULL,   NULL,     "location", 0,   false, NULL,   P_IMAP } },
-  { "imap://location/path",                      { NULL,   NULL,     "location", 0,   false, "path", P_IMAP } },
-  { "imap://user@location/path",                 { "user", NULL,     "location", 0,   false, "path", P_IMAP } },
-  { "imap://user:secret@location/path",          { "user", "secret", "location", 0,   false, "path", P_IMAP } },
-  { "imap://user:secret@location:0815/path",     { "user", "secret", "location", 815, false, "path", P_IMAP } },
+  { "imap://location",                           { NULL,   NULL,     "location", 0,   false, "/",   P_IMAP } },
+  { "imap://location/",                          { NULL,   NULL,     "location", 0,   false, "/",   P_IMAP } },
+  { "imap://location/path",                      { NULL,   NULL,     "location", 0,   false, "/path", P_IMAP } },
+  { "imap://user@location/path",                 { "user", NULL,     "location", 0,   false, "/path", P_IMAP } },
+  { "imap://user:secret@location/path",          { "user", "secret", "location", 0,   false, "/path", P_IMAP } },
+  { "imap://user:secret@location:0815/path",     { "user", "secret", "location", 815, false, "/path", P_IMAP } },
   { "imap://user@host:secret@location:0815/path",
-    { "user@host", "secret", "location", 815, false, "path", P_IMAP } },
+    { "user@host", "secret", "location", 815, false, "/path", P_IMAP } },
 
-  { "imaps://location/",                         { NULL,   NULL,     "location", 0,   true,  NULL,   P_IMAP } },
-  { "imaps://location/path",                     { NULL,   NULL,     "location", 0,   true,  "path", P_IMAP } },
-  { "imaps://user@location/path",                { "user", NULL,     "location", 0,   true,  "path", P_IMAP } },
-  { "imaps://user:secret@location/path",         { "user", "secret", "location", 0,   true,  "path", P_IMAP } },
-  { "imaps://user:secret@location:0815/path",    { "user", "secret", "location", 815, true,  "path", P_IMAP } },
+  { "imaps://location",                          { NULL,   NULL,     "location", 0,   true,  "/",   P_IMAP } },
+  { "imaps://location/",                         { NULL,   NULL,     "location", 0,   true,  "/",   P_IMAP } },
+  { "imaps://location/path",                     { NULL,   NULL,     "location", 0,   true,  "/path", P_IMAP } },
+  { "imaps://user@location/path",                { "user", NULL,     "location", 0,   true,  "/path", P_IMAP } },
+  { "imaps://user:secret@location/path",         { "user", "secret", "location", 0,   true,  "/path", P_IMAP } },
+  { "imaps://user:secret@location:0815/path",    { "user", "secret", "location", 815, true,  "/path", P_IMAP } },
 
   { "file:///tmp",                               { NULL,   NULL,     NULL,       0,   false, "/tmp", P_FILE } },
   { "file:///",                                  { NULL,   NULL,     NULL,       0,   false, "/",    P_FILE } },
