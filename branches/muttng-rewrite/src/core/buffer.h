@@ -32,9 +32,9 @@ typedef struct {
  * @test buffer_tests::test_buffer_init().
  */
 #define buffer_init(B) do { \
-  B->str = NULL; \
-  B->len = 0; \
-  B->size = 0; \
+  (B)->str = NULL; \
+  (B)->len = 0; \
+  (B)->size = 0; \
 } while (0)
 
 /**
