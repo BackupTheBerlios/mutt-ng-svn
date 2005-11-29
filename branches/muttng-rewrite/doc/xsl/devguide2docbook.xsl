@@ -6,15 +6,15 @@
   <xsl:import href="./manual2docbook_tags.xsl"/>
 
   <xsl:template match="section">
-    <sect1 id="{@id}">
+    <chapter id="{@id}">
       <xsl:apply-templates/>
-    </sect1>
+    </chapter>
   </xsl:template>
 
   <xsl:template match="subsection">
-    <sect2 id="{@id}">
+    <sect1 id="{@id}">
       <xsl:apply-templates/>
-    </sect2>
+    </sect1>
   </xsl:template>
 
 </xsl:stylesheet>

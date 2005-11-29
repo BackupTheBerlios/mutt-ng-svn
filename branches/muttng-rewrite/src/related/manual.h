@@ -394,14 +394,13 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @section sect_devguide Developer's Guide
     @subsection sect_devguide-tour Developer Tour
     
-      This section is brief introduction describing how things are
+      This section is brief a introduction describing how things are
       organized.
     
 
-    @subsubsection sect_devguide-source-organisation Source organisation
+    @subsubsection sect_devguide-source-organisation Source code
     
-        The source code is organized into the following three major
-        parts: 
+        The source code is organized into the following three layers:
       
 
     <ul>
@@ -448,7 +447,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       </ul>
     
         A very important design goal to keep by any means is the
-        relationship between these three parts:
+        relationship between these three layers:
       
 
     <ul>
@@ -477,14 +476,9 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       
 
     
-    @subsubsection sect_devguide-doc-organisation Documentation organisation
+    @subsubsection sect_devguide-doc-organisation Documentation
     
-        The documentation building process works slightly different
-        than before.
-      
-
-    
-        Now, all documentation in all places is written in a custom XML
+        All documentation in all places is written in a custom XML
         dialect to be translated via XSL into all other formats we need.
         These include DocBook as well as @c doxygen(1)-based
         documentation. Language-independent parts are put in a separate
@@ -501,7 +495,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           below), it'll be auto-generated and validated from the source code to
           avoid out-of-sync problems as far as possible.</li>
     <li>New is the goal to have all parts split over several files rather
-          then only one big file and have all files be valid XML to be checked
+          than only one big file. All files have to be valid XML and are checked
           for validity and completenes (where appropriate.)</li>
     <li>The basic manual structure for both, the user-only manual and this
           developer manual, is placed in <code> doc/common/</code> which contains
@@ -512,24 +506,34 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
       </ul>
     
-        The following parts of the documentation are auto-generated:
+    @subsubsection sect_devguide-build-organisation Build system
+    
+        The build system is completely GNU make-based so that use of the autotools
+        (such as @c autoconf(1)) is avoided. To avoid clashes and misleading
+        error messages with other flavors of @c make(1), all Makefiles are named
+        <code> GNUmakefile</code> so that other make tools don't even find a Makefile.
       
 
-    <ul>
-    <li><code> doc/en/var_descr.xml</code> and <code> doc/en/var_def.xml</code>:
-          These contain variable descriptions and definitions created from
-          <code> src/muttng/config/set_command.cpp</code> by
-          <code> src/muttng/config/config.pl</code>. For other languages, an automated
-          mechanism to update and check translations will be provided.</li>
-    <li><code> doc/en/func_descr.xml</code> and <code> doc/en/func_def.xml</code>:
-          These contain variable descriptions and definitions created by
-          <code> src/muttng/event/event.pl</code>. For other languages, an automated
-          mechanism to update and check translations will be provided.</li>
-    <li><code> src/related/manual.h</code>: This is a dummy header file for
-          @c doxygen(1) which contains the full manual with proper tags so that
-          the manual can be added as a ``related page.''</li>
     
-      </ul>
+        In the top-level source directory there're Makefile written for inclusion:
+        they contain common logic, targets and rules as well as functions.
+      
+
+    
+        These include Makefiles have to be included in all other Makefiles as necessary.
+      
+
+    
+        All Makefiles are under version control except a custom one where users can
+        set their own options (and any other make construct.) to avoid subversion conflicts
+        if we change something.
+      
+
+    
+        There's a common set of targets every Makefile in any directory must implement
+        so that we have targets working for the whole tree.
+      
+
     
     
     @subsection sect_devguide-style Coding style
@@ -582,6 +586,246 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         just any number.
       
 
+    
+    
+    @subsection sect_devguide-build Build system
+    @subsubsection sect_devguide-build-config Configuration: GNUmakefile.config and GNUmakefile.config.mine
+    
+        The user configuration Makefile is <code> GNUmakefile.config.mine</code>
+        in the top-level source directory. It may contain any make logic.
+      
+
+    
+        Any Makefile including it must include <code> GNUmakefile.config</code>
+        directly afterwards like so:
+      
+
+    <pre>
+include [path]/GNUmakefile.config.mine
+include [path]/GNUmakefile.config</pre><code> GNUmakefile.config</code> interprets and completes internal options
+        set in the custom file:
+      
+
+    <ul>
+    <li>for the compilers, it sets up the following variables depending
+          on <code> CCSTYLE</code>:
+          <ul>
+    <li><code> CC</code>: C compiler</li>
+    <li><code> CXX</code>: C++ compiler</li>
+    <li><code> CFLAGS</code>: C compiler flags</li>
+    <li><code> CXXFLAGS</code>: C++ compiler flags</li>
+    <li><code> DEPFLAGS</code>: C/C++ compiler flags to obtain include dependencies
+              for make's dependency tracking</li>
+    <li><code> AR</code>: path to @c ar(1)</li>
+    <li><code> RANLIB</code>: path to @c ranlib(1)</li>
+    
+      </ul>
+    </li>
+    <li>it checks whether the dependency file <code> ./.depend</code> exists and
+          includes it</li>
+    <li>for <code> DEBUG=1</code>, it sets up <code> CFLAGS</code>, <code> CXXFLAGS</code>
+          and <code> LDFLAGS</code> correctly</li>
+    <li>it defines the operating system and sets compiler flags
+          accordingly (e.g. <code> -DFREEBSD</code> for FreeBSD, <code> -DSUNOS</code>
+          for solaris, etc.) The operating system value is set as
+          <code> $(MYOS)</code></li>
+    <li>it sets up compiler and linker flags to contain the required
+          paths for Unit++ derived from the configured <code> $(UNITPPDIR)</code></li>
+    <li>it searches for the following tools in <code> $(PATH)</code>:
+          <ul>
+    <li>@c doxygen(1): <code> $(DOXYGEN)</code></li>
+    <li>@c tidy(1): <code> $(TIDY)</code></li>
+    <li>@c xgettext(1): <code> $(XGETTEXT)</code></li>
+    <li>@c msgmerge(1): <code> $(MSGMERGE)</code></li>
+    <li>@c msgfmt(1): <code> $(MSGFMT)</code></li>
+    
+      </ul>
+    </li>
+    <li>according to the XSL processor chosen via <code> $(XSLPROC)</code>,
+          it defines the following two functions: <code> doxslt_s</code> and
+          <code> doxslt_m</code>. The first does transformation to a single
+          output file while the latter does transformation to multiple output files
+          (splitting these up is required for Xalan Java whose <code> -out</code>
+          option cannot be set to a directory.) These functions take the following
+          mandatory arguments (ordered):
+          <ul>
+    <li>XML source file</li>
+    <li>XSL stylesheet file</li>
+    <li>XML output file</li>
+    <li>output language passed to processors as the value for the
+              <code> l10n.gentext.default.language</code> parameter. This is bad
+              modularization as this parameter only has an effect on DocBook
+              but passing to other transformations shouldn't do harm.</li>
+    
+      </ul>
+    </li>
+    
+      </ul>
+    
+        In any Makefile, targets can be setup depending on whether a tool is present
+        or not via, for example:
+      
+
+    <pre>
+srcdoc:
+ifneq ($(DOXYGEN),)
+        $(DOXYGEN)
+ifneq ($(TIDY),)
+        $(TIDY) [options] [files]
+endif
+else
+        @ true</pre>
+        This only runs @c doxygen(1) it it's found in <code> $PATH</code>. If, in addition,
+        @c tidy(1) is found too, it'll also be called. If doxygen isn't present,
+        the <code> srcdoc</code> rule does nothing.
+      
+
+    
+    @subsubsection sect_devguide-build-whereis Path search: GNUmakefile.whereis
+    
+        The include Makefile <code> GNUmakefile.whereis</code> defines a
+        function called <code> whereis</code>. This searches through the
+        environment variable <code> $PATH</code> and returns the full path
+        found or the given default fallback.
+      
+
+    
+        The arguments for <code> whereis</code> are in order:
+      
+
+    <ul>
+    <li>name of binary to find</li>
+    <li>fallback</li>
+    
+      </ul>
+    
+        For example, the full path to @c vi(1) can be obtained via:
+      
+
+    <pre>
+GREAT_EDITOR := $(call whereis,vi,)</pre>
+        If the binary is found, <code> GREAT_EDITOR</code> will contain its path and
+        will be empty otherwise. A check for it could be:
+      
+
+    <pre>
+somerule:
+ifneq ($(GREAT_EDITOR),)
+        $(GREAT_EDITOR) [options]
+endif</pre>
+        An example of a non-empty default is:
+      
+
+    <pre>
+GREAT_EDITOR := $(call whereis,vim,vi)</pre>
+        ...which will search for the @c vim(1) binary: if it's found,
+        <code> GREAT_EDITOR</code> contains its path but just <code> vi</code> otherwise.
+      
+
+    
+    @subsubsection sect_devguide-build-subdirs Directory traversal: GNUmakefile.subdirs
+    
+        The file <code> GNUmakefile.subdirs</code> defines targets to
+        be called recursively. To make use of it, define a variable
+        named <code> SUBDIRS</code> at the beginning of a Makefile. Then,
+        the following targets can be used on these directories:
+      
+
+    <ul>
+    <li><code> all</code>: <code> subdir</code></li>
+    <li><code> clean</code>: <code> subdirclean</code></li>
+    <li><code> doc</code>: <code> subdirdoc</code></li>
+    <li><code> depend</code>: <code> subdirdepend</code></li>
+    <li><code> test</code>: <code> subdirtest</code></li>
+    
+      </ul>
+    
+        For example, to have all these targets for the subdirectories
+        <code> foo</code> and <code> bar</code>, use:
+      
+
+    <pre>
+SUBDIRS=foo bar
+
+all: subdirs
+        [commands for local "all" target]
+clean: subdirclean
+        [commands for local "clean" target]
+doc: subdirdoc
+        [commands for local "doc" target]
+depend: subdirdepend
+        [commands for local "depend" target]
+test: subdirtest
+        [commands for local "test" target]</pre>
+          ...whereby the local commands are optional.
+        
+
+    
+    @subsubsection sect_devguide-build-compile Compilation: GNUmakefile.compile_c and GNUmakefile.compile_cpp
+    
+        The files <code> GNUmakefile.compile_c</code> and <code> GNUmakefile.compile_cpp</code>
+        contain everything necessary to compile sources either using a C or C++ compiler
+        respectively.
+      
+
+    
+        Use is as easy as:
+      
+
+    <pre>
+FILES := foo bar
+LIB := libfoobar.a
+
+all: $(LIB)
+
+include $(CURDIR)/../../GNUmakefile.whereis
+include $(CURDIR)/../../GNUmakefile.config.mine
+include $(CURDIR)/../../GNUmakefile.config
+include $(CURDIR)/../../GNUmakefile.compile_c</pre>
+        ...plus the mandatory makefile inclusion. This will compile the files
+        <code> foo.c</code> and <code> bar.c</code> into the archive <code> libfoobar.a</code> using
+        the C compiler.
+      
+
+    
+        For C++ sources, the files must be named <code> foo.cpp</code> and <code> bar.cpp</code>
+        and instead of <code> GNUmakefile.compile_c</code> the file
+        <code> GNUmakefile.compile_cpp</code> must be included.
+      
+
+    
+        Either of these also define the following targets:
+      
+
+    <ul>
+    <li><code> clean</code>: remove any temporary, object and archive files</li>
+    <li><code> depend</code>: run the C/C++ compiler and put the dependency
+          tracking info for @c make(1) into <code> ./.depend</code></li>
+    
+      </ul>
+    
+    @subsubsection sect_devguide-build-adding Adding subdirectories
+    
+        When adding directories somewhere, please make sure the Makefile
+        includes at least the following:
+      
+
+    <pre>
+include $(CURDIR)/../../GNUmakefile.whereis
+include $(CURDIR)/../../GNUmakefile.config.mine
+include $(CURDIR)/../../GNUmakefile.config</pre>
+        Also, it must define the following targets so that they work
+        over the complete tree:
+      
+
+    <ul>
+    <li><code> all</code>: perform building all</li>
+    <li><code> clean</code>: perform cleanup so that only files for a release remain</li>
+    <li><code> test</code>: perform all automated tests</li>
+    <li><code> depend</code>: perform all preparation required for
+          <code> all</code> target</li>
+    
+      </ul>
     
     
     @subsection sect_devguide-docs Documentation

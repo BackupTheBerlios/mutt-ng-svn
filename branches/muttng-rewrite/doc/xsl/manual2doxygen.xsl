@@ -131,6 +131,10 @@
     <xsl:text>&lt;code&gt; </xsl:text><xsl:apply-templates/><xsl:text>&lt;/code&gt;</xsl:text>
   </xsl:template>
 
+  <xsl:template match="env">
+    <xsl:text>&lt;code&gt; $</xsl:text><xsl:apply-templates/><xsl:text>&lt;/code&gt;</xsl:text>
+  </xsl:template>
+
   <xsl:template match="tt">
     <xsl:text>&lt;code&gt; </xsl:text><xsl:apply-templates/><xsl:text>&lt;/code&gt;</xsl:text>
   </xsl:template>

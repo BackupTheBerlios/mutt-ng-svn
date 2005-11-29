@@ -16,7 +16,7 @@ subdirclean:
 	$(call dosubdirs,clean)
 
 subdirdoc:
-	$(call dosubdirs,clean)
+	$(call dosubdirs,doc)
 
 subdirdepend:
 	$(call dosubdirs,depend)
