@@ -24,8 +24,6 @@ ifneq ($(TIDY),)
 	  $(TIDY) -q -i -m -utf8 $$i >/dev/null 2>&1 || true ; \
 	done
 endif
-else
-$(warning "doxygen(1) not found")
 endif
 	find ./../doxygen -name '*.html' | ./../contrib/html_head_number.pl
 
