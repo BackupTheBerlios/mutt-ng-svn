@@ -6,7 +6,7 @@
 #include "mailbox.h"
 
 /**
- * Mailbox with underlaying remote network connection.
+ * Mailbox with an underlaying local storage.
  */
 class LocalMailbox : public Mailbox {
   public:

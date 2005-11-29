@@ -18,3 +18,5 @@ svn-commit:
 	  svn diff ) 2>&1 | less && svn commit
 
 include GNUmakefile.subdirs
+
+.PHONY: doc
