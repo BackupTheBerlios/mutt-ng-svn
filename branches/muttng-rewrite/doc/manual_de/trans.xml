@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<translations>
+  <trans id="encodings">Transportkodierung</trans>
+  <trans id="environ">Umgebungsvariable</trans>
+  <trans id="hdr">Kopfzeile</trans>
+</translations>

@@ -16,8 +16,8 @@ include $(CURDIR)/../GNUmakefile.config
 
 manual:
 	@ for l in $(LANGUAGES) ; do \
-	  $(call doxslt_m,manual_$$l/manual-docbook.xml,xsl/docbook2chunkhtml.xsl,manual_$$l/,$$l) ; \
 	  $(call doxslt_s,manual_$$l/manual-user.xml,xsl/manual2docbook.xsl,manual_$$l/manual-docbook.xml,$$l) ; \
+	  $(call doxslt_m,manual_$$l/manual-docbook.xml,xsl/docbook2chunkhtml.xsl,manual_$$l/,$$l) ; \
 	  $(call doxslt_s,manual_$$l/manual-docbook.xml,xsl/docbook2html.xsl,manual_$$l/manual.html,$$l) ; \
         done
 ifneq ($(TIDY),)

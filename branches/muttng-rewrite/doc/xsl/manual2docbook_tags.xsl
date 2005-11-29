@@ -107,6 +107,8 @@
 
   <xsl:template match="sig"/>
 
+  <xsl:template match="translations"/>
+
   <xsl:template match="descr">
     <xsl:apply-templates/>
   </xsl:template>
@@ -176,7 +178,7 @@
   <xsl:template match="enc">
     <code><xsl:value-of select="text()"/></code>
     <indexterm>
-      <primary>Encodings</primary>
+      <primary><xsl:value-of select="//translations/trans[@id='encodings']"/></primary>
       <secondary sortas="{text()}">
         <code><xsl:value-of select="text()"/></code>
       </secondary>
@@ -186,19 +188,19 @@
   <xsl:template match="env">
     <code>$<xsl:value-of select="text()"/></code>
     <indexterm>
-      <primary>Environment variable</primary>
+      <primary><xsl:value-of select="//translations/trans[@id='environ']"/></primary>
       <secondary sortas="{text()}">
-        <code><xsl:value-of select="text()"/></code>
+        <code>$<xsl:value-of select="text()"/></code>
       </secondary>
     </indexterm>
   </xsl:template>
 
   <xsl:template match="hdr">
-    <code><xsl:value-of select="text()"/></code>
+    <code><xsl:value-of select="text()"/>:</code>
     <indexterm>
-      <primary>Header</primary>
+      <primary><xsl:value-of select="//translations/trans[@id='hdr']"/></primary>
       <secondary sortas="{text()}">
-        <code><xsl:value-of select="text()"/></code>
+        <code><xsl:value-of select="text()"/>:</code>
       </secondary>
     </indexterm>
   </xsl:template>

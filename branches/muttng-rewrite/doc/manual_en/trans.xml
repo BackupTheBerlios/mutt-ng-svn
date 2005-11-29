@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<translations>
+  <trans id="encodings">Encodings</trans>
+  <trans id="environ">Environment variable</trans>
+  <trans id="hdr">Header</trans>
+</translations>

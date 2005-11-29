@@ -37,8 +37,9 @@
     </xsl:text>
   </xsl:template>
 
-
   <xsl:template match="head"/>
+
+  <xsl:template match="translations"/>
 
   <xsl:template match="content">
     <xsl:apply-templates/>
