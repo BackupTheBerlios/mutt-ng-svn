@@ -237,6 +237,286 @@
   </section>
   <!--}}}-->
 
+  <section id="devguide-build"> <!--{{{-->
+    <title>Übersetzungssystem</title>
+
+    <subsection id="devguide-build-config"> <!--{{{-->
+      <title>Konfiguration: GNUmakefile.config und GNUmakefile.config.mine</title>
+
+      <p>
+        Die Konfigurationsdatei für Nutzer ist <tt>GNUmakefile.config.mine</tt>
+        im obersten Quellenverzeichnis. Sie darf jede Art von make-Konstrukt enthalten.
+      </p>
+
+      <p>
+        Jedes Makefile, das diese inkludiert, muss <tt>GNUmakefile.config</tt>
+        direkt danach ebenfalls so inkludieren:
+      </p>
+
+      <pre>
+include [path]/GNUmakefile.config.mine
+include [path]/GNUmakefile.config</pre>
+
+      <p>
+        <tt>GNUmakefile.config</tt> interpretiert und vervollständigt interne
+        Optionen, die im angepassten <tt>GNUmakefile.config.mine</tt> benutzt wurden:
+      </p>
+
+      <ul>
+        <li>für Übersetzer werden die folgenden Variablen in Abhängigkeit von
+          <tt>CCSTYLE</tt> gesetzt:
+          <ul>
+            <li><tt>CC</tt>: C Übersetzer</li>
+            <li><tt>CXX</tt>: C++ Übersetzer</li>
+            <li><tt>CFLAGS</tt>: C Übersetzer-Optionen</li>
+            <li><tt>CXXFLAGS</tt>: C++ Übersetzer-Optionen</li>
+            <li><tt>DEPFLAGS</tt>: C/C++ Übersetzer-Optionen für die Erstellung
+              von Abhängigkeiten für make</li>
+            <li><tt>AR</tt>: Pfad für <man>ar</man></li>
+            <li><tt>RANLIB</tt>: Pfad für <man>ranlib</man></li>
+          </ul>
+        </li>
+        <li>es überprüft, ob die Datei <tt>./.depend</tt> vorhanden ist und
+          bezieht sie ein</li>
+        <li>für <tt>DEBUG=1</tt> werden <tt>CFLAGS</tt>, <tt>CXXFLAGS</tt>
+          und <tt>LDFLAGS</tt> richtig gesetzt</li>
+        <li>es wird das Betriebssystem ermittelt und als Übersetzer-Option
+          entsprechend gesetzt (e.g. <tt>-DFREEBSD</tt> für FreeBSD, <tt>-DSUNOS</tt>
+          für Solaris, etc). Das Betriebssystem wird in der Variable
+          <tt>$(MYOS)</tt></li>
+        <li>Übersetzer-Optionen werden um die Pfade für Unit++ von <tt>$(UNITPPDIR)</tt>
+          abgeleitet</li>
+        <li>es nach den folgenden Programmen in <env>PATH</env> gesucht:
+          <ul>
+            <li><man>doxygen</man>: <tt>$(DOXYGEN)</tt></li>
+            <li><man>tidy</man>: <tt>$(TIDY)</tt></li>
+            <li><man>xgettext</man>: <tt>$(XGETTEXT)</tt></li>
+            <li><man>msgmerge</man>: <tt>$(MSGMERGE)</tt></li>
+            <li><man>msgfmt</man>: <tt>$(MSGFMT)</tt></li>
+          </ul>
+        </li>
+        <li>je nach ausgewähltem XSL Prozessor via <tt>$(XSLPROC)</tt>,
+          werden die folgenden zwei Funktionen definiert: <tt>doxslt_s</tt> und
+          <tt>doxslt_m</tt>. Erstere übernimmt die Übersetzung in eine einzige
+          Ausgabedatei während letztere für mehrere Ausgabedateien zuständig ist.
+          (die Aufspaltung ist für Xalan Java notwendig, dessen <tt>-out</tt>
+          Option nicht auf ein Verzeichnis gesetzt werden kann). Diese Funktionen
+          erwarten die folgenden Argumente in dieser Reihenfolge:
+          <ul>
+            <li>XML Eingabedatei</li>
+            <li>XSL Transformationsdatei</li>
+            <li>XML Ausgabedatei</li>
+            <li>Ausgabesprache, die an den Prozessor als Wert für den
+              <tt>l10n.gentext.default.language</tt> Parameter übergeben wird.
+              Dies ist schlechte Aufgabenteilung aber dieser Parameter hat nur
+              für die DocBook-Ausgabe eine Bedeutung und sollte anderen Orts
+              keinen Schaden anrichten.</li>
+          </ul>
+        </li>
+      </ul>
+
+      <p>
+        In allen Makefiles können Regeln auf darauf reagieren ob ein Programm
+        vorhanden ist oder nicht. Beispiel:
+      </p>
+
+      <pre>
+srcdoc:
+ifneq ($(DOXYGEN),)
+        $(DOXYGEN)
+ifneq ($(TIDY),)
+        $(TIDY) [options] [files]
+endif
+        @ true</pre>
+
+      <p>
+        Damit wird <man>doxygen</man> nur ausgeführt, wenn es im Pfad <env>PATH</env>
+        vorhanden ist. Wenn zusätzlich <man>tidy</man> gefunden wurde, wird es ebenfalls
+        ausgeführt. Wenn doxygen nicht gefunden wird, tut die <tt>srcdoc</tt> Regel nichts.
+      </p>
+
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-build-whereis"> <!--{{{-->
+      <title>Pfadsuche: GNUmakefile.whereis</title>
+
+      <p>
+        Das Makefile <tt>GNUmakefile.whereis</tt> definiert die Funktion
+        <tt>whereis</tt>. Diese sucht die Liste der Verzeichnisse in der
+        Umgebungsvariable <env>PATH</env> und liefert entweder den vollen
+        gefunden Pfad oder den beim Aufruf angegebenen Standardwert
+        zurück.
+      </p>
+
+      <p>
+        Die Argumente für <tt>whereis</tt> sind in Reihenfolge:
+      </p>
+
+      <ul>
+        <li>Name des zu suchenden Programms</li>
+        <li>Standardwert</li>
+      </ul>
+
+      <p>
+        Zum Beispiel kann der volle Pfad für <man>vi</man> so ermittelt werden:
+      </p>
+
+      <pre>
+GREAT_EDITOR := $(call whereis,vi,)</pre>
+
+      <p>
+        Wenn das Programm gefunden wurde, ist der Name in 
+        <tt>GREAT_EDITOR</tt> gespeichert und ist leer, wenn es
+        nicht gefunden wurde. Eine Überprüfung könnte sein:
+      </p>
+
+      <pre>
+somerule:
+ifneq ($(GREAT_EDITOR),)
+        $(GREAT_EDITOR) [options]
+endif</pre>
+
+      <p>
+        Ein Beispiel für einen nicht-leeren Standardwert ist:
+      </p>
+
+      <pre>
+GREAT_EDITOR := $(call whereis,vim,vi)</pre>
+
+      <p>
+        ...was nach <man>vim</man> sucht: wenn es gefunden wird,
+        enthält <tt>GREAT_EDITOR</tt> den vollen Pfad und andernfalls
+        nur <tt>vi</tt>.
+      </p>
+
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-build-subdirs"> <!--{{{-->
+      <title>Unterverzeichnisse: GNUmakefile.subdirs</title>
+
+      <p>
+        Die Datei namens <tt>GNUmakefile.subdirs</tt> definiert Ziele
+        für rekursive Aufrufe. Um es zu nutzen, muss eine Variable namens
+        <tt>SUBDIRS</tt> am Anfang im Makefile definiert sein. Damit können dann
+        folgende Ziele auf die angegebenen Unterverzeichnisse angewendet werden:
+      </p>
+
+      <ul>
+        <li><tt>all</tt>: <tt>subdir</tt></li>
+        <li><tt>clean</tt>: <tt>subdirclean</tt></li>
+        <li><tt>doc</tt>: <tt>subdirdoc</tt></li>
+        <li><tt>depend</tt>: <tt>subdirdepend</tt></li>
+        <li><tt>test</tt>: <tt>subdirtest</tt></li>
+      </ul>
+
+      <p>
+        Sollen alle diese Ziele beispielsweise auf die Unterverzeichnisse
+        <tt>foo</tt> und <tt>bar</tt> angewendet werden, muss folgendes geschrieben werden:
+      </p>
+
+      <pre>
+SUBDIRS=foo bar
+
+all: subdirs
+        [Befehle für lokales Ziel "all"]
+clean: subdirclean
+        [Befehle für lokales Ziel "clean"]
+doc: subdirdoc
+        [Befehle für lokales Ziel "doc"]
+depend: subdirdepend
+        [Befehle für lokales Ziel "depend"]
+test: subdirtest
+        [Befehle für lokales Ziel "test"]</pre>
+
+      <p>
+      ...wobei die lokalen Befehle optional sind.
+      </p>
+      
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-build-compile"> <!--{{{-->
+      <title>Übersetzung: GNUmakefile.compile_c und GNUmakefile.compile_cpp</title>
+
+      <p>
+        Die Dateien <tt>GNUmakefile.compile_c</tt> und
+        <tt>GNUmakefile.compile_cpp</tt> beinhalten alles für das
+        Übersetzen von Quellen mit einem C oder C++ Übersetzer.
+      </p>
+
+      <p>
+        Die Benutzung ist sehr einfach:
+      </p>
+
+      <pre>
+FILES := foo bar
+LIB := libfoobar.a
+
+all: $(LIB)
+
+include $(CURDIR)/../../GNUmakefile.whereis
+include $(CURDIR)/../../GNUmakefile.config.mine
+include $(CURDIR)/../../GNUmakefile.config
+include $(CURDIR)/../../GNUmakefile.compile_c</pre>
+
+      <p>
+        Dies übersetzt die Dateien <tt>foo.c</tt> und <tt>bar.c</tt> in das Archiv
+        <tt>libfoobar.a</tt> mit einem C Übersetzer.
+      </p>
+
+      <p>
+        Für C++ Quellen müssten die Dateien <tt>foo.cpp</tt> und <tt>bar.cpp</tt>
+        und statt <tt>GNUmakefile.compile_c</tt> muss <tt>GNUmakefile.compile_cpp</tt>
+        inkludiert werden.
+      </p>
+
+      <p>
+        Beide definieren zusätzlich die folgenden Ziele:
+      </p>
+
+      <ul>
+        <li><tt>clean</tt>: Löschen temporärer, Objekt- und Archivdateien</li>
+        <li><tt>depend</tt>: der C/C++ Übersetzer wird benutzt, um
+          Abhängigkeitsinformationen für <man>make</man> in <tt>./.depend</tt>
+          zu speichern</li>
+      </ul>
+      
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-build-adding"> <!--{{{-->
+      <title>Unterverzeichnisse hinzufügen</title>
+
+      <p>
+        Beim Hinzufügen eines Verzeichnisses müssen die folgenden Makefiles
+        mindestens inkludiert werden:
+      </p>
+      
+      <pre>
+include $(CURDIR)/../../GNUmakefile.whereis
+include $(CURDIR)/../../GNUmakefile.config.mine
+include $(CURDIR)/../../GNUmakefile.config</pre>
+
+      <p>
+        Außerdem muss jedes neue Makefile folgende Ziele unterstützen:
+      </p>
+
+      <ul>
+        <li><tt>all</tt>: alles übersetzen/bauen</li>
+        <li><tt>clean</tt>: aufräumen, damit nur Dateien für Releases übrig bleiben</li>
+        <li><tt>test</tt>: Ausführen automatisierter Tests</li>
+        <li><tt>depend</tt>: alle Voraussetzungen für das Ausführen von
+          <tt>all</tt> schaffen</li>
+      </ul>
+      
+    </subsection>
+    <!--}}}-->
+
+  </section>
+  <!--}}}-->
+  
   <section id="devguide-docs"> <!--{{{-->
     <title>Dokumentation</title>
 
@@ -313,6 +593,7 @@
             <li><tt>hdr</tt>: when refering to a commonly used header</li>
             <li><tt>enc</tt>: when refering to transport encodings (such
               as <enc>quoted-printable</enc> or <enc>us-ascii</enc></li>
+            <li><tt>env</tt>: when refering to environment variables</li>
           </ul>
         </li>
 

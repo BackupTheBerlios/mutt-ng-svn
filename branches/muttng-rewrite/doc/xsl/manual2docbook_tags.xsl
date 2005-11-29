@@ -196,11 +196,11 @@
   </xsl:template>
 
   <xsl:template match="hdr">
-    <code><xsl:value-of select="text()"/>:</code>
+    <code><xsl:value-of select="text()"/></code>
     <indexterm>
       <primary><xsl:value-of select="//translations/trans[@id='hdr']"/></primary>
       <secondary sortas="{text()}">
-        <code><xsl:value-of select="text()"/>:</code>
+        <code><xsl:value-of select="text()"/></code>
       </secondary>
     </indexterm>
   </xsl:template>

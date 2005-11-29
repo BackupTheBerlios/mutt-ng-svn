@@ -631,7 +631,7 @@ include [path]/GNUmakefile.config</pre><code> GNUmakefile.config</code> interpre
           <code> $(MYOS)</code></li>
     <li>it sets up compiler and linker flags to contain the required
           paths for Unit++ derived from the configured <code> $(UNITPPDIR)</code></li>
-    <li>it searches for the following tools in <code> $(PATH)</code>:
+    <li>it searches for the following tools in <code> $PATH</code>:
           <ul>
     <li>@c doxygen(1): <code> $(DOXYGEN)</code></li>
     <li>@c tidy(1): <code> $(TIDY)</code></li>
@@ -673,7 +673,6 @@ ifneq ($(DOXYGEN),)
 ifneq ($(TIDY),)
         $(TIDY) [options] [files]
 endif
-else
         @ true</pre>
         This only runs @c doxygen(1) it it's found in <code> $PATH</code>. If, in addition,
         @c tidy(1) is found too, it'll also be called. If doxygen isn't present,
@@ -782,7 +781,7 @@ include $(CURDIR)/../../GNUmakefile.whereis
 include $(CURDIR)/../../GNUmakefile.config.mine
 include $(CURDIR)/../../GNUmakefile.config
 include $(CURDIR)/../../GNUmakefile.compile_c</pre>
-        ...plus the mandatory makefile inclusion. This will compile the files
+        This will compile the files
         <code> foo.c</code> and <code> bar.c</code> into the archive <code> libfoobar.a</code> using
         the C compiler.
       
@@ -896,6 +895,7 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
     <li><code> hdr</code>: when refering to a commonly used header</li>
     <li><code> enc</code>: when refering to transport encodings (such
               as <code> quoted-printable</code> or <code> us-ascii</code></li>
+    <li><code> env</code>: when refering to environment variables</li>
     
       </ul>
     </li>

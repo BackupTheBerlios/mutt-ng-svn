@@ -290,7 +290,7 @@ include [path]/GNUmakefile.config</pre>
           <tt>$(MYOS)</tt></li>
         <li>it sets up compiler and linker flags to contain the required
           paths for Unit++ derived from the configured <tt>$(UNITPPDIR)</tt></li>
-        <li>it searches for the following tools in <tt>$(PATH)</tt>:
+        <li>it searches for the following tools in <env>PATH</env>:
           <ul>
             <li><man>doxygen</man>: <tt>$(DOXYGEN)</tt></li>
             <li><man>tidy</man>: <tt>$(TIDY)</tt></li>
@@ -330,7 +330,6 @@ ifneq ($(DOXYGEN),)
 ifneq ($(TIDY),)
         $(TIDY) [options] [files]
 endif
-else
         @ true</pre>
 
       <p>
@@ -463,7 +462,7 @@ include $(CURDIR)/../../GNUmakefile.config
 include $(CURDIR)/../../GNUmakefile.compile_c</pre>
 
       <p>
-        ...plus the mandatory makefile inclusion. This will compile the files
+        This will compile the files
         <tt>foo.c</tt> and <tt>bar.c</tt> into the archive <tt>libfoobar.a</tt> using
         the C compiler.
       </p>
@@ -595,6 +594,7 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
             <li><tt>hdr</tt>: when refering to a commonly used header</li>
             <li><tt>enc</tt>: when refering to transport encodings (such
               as <enc>quoted-printable</enc> or <enc>us-ascii</enc></li>
+            <li><tt>env</tt>: when refering to environment variables</li>
           </ul>
         </li>
 
