@@ -16,7 +16,7 @@ NNTPMailbox::NNTPMailbox (void) {
 NNTPMailbox::~NNTPMailbox (void) {
 }
 
-const char* NNTPMailbox::key (Message* msg) {
+const char* NNTPMailbox::cacheKey (Message* msg) {
   (void) msg;
   return (NULL);
 }

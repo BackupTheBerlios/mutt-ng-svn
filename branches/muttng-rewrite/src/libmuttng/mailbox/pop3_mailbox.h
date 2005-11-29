@@ -12,7 +12,7 @@ class POP3Mailbox : public RemoteMailbox {
 	public:
 		POP3Mailbox ();
 		~POP3Mailbox ();
-		const char* key (Message* msg);
+		const char* cacheKey (Message* msg);
 
 		/**
 		 * Opens the POP3 mailbox.

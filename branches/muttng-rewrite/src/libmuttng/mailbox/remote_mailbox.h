@@ -12,5 +12,5 @@ class RemoteMailbox : public Mailbox {
   public:
     RemoteMailbox ();
     ~RemoteMailbox ();
-    virtual const char* key (Message* msg) = 0;
+    virtual const char* cacheKey (Message* msg) = 0;
 };

@@ -16,7 +16,7 @@ ImapMailbox::ImapMailbox (void) {
 ImapMailbox::~ImapMailbox (void) {
 }
 
-const char* ImapMailbox::key (Message* msg) {
+const char* ImapMailbox::cacheKey (Message* msg) {
   (void) msg;
   return (NULL);
 }

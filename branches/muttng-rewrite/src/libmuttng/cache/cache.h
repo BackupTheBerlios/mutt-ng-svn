@@ -8,6 +8,7 @@
 
 #include "../libmuttng.h"
 #include "../message/message.h"
+#include "../util/url.h"
 
 /** Caching base class */
 class Cache : public LibMuttng {
@@ -16,17 +17,31 @@ class Cache : public LibMuttng {
     Cache (void);
     /** destructor */
     virtual ~Cache(void) = 0;
-    /** dummy */
-    virtual void open (void) = 0;
-    /** dummy */
-    virtual void close (void) = 0;
+    /**
+     * Load single message from cache.
+     * This is to be implemented by the various caching modules.
+     * @param url URL of mailbox.
+     * @param key The key for the message to load.
+     * @return If message could be restored, it's returned
+     *         and @c NULL otherwise.
+     */
+    virtual Message* cacheLoadSingle (url_t* url, const char* key) = 0;
+    /**
+     * Store single message from cache.
+     * This is to be implemented by the various caching modules.
+     * @param url URL of mailbox.
+     * @param key The key for the message to load.
+     * @param message The message to store.
+     * @return Whether storing succeeded.
+     */
+    virtual bool cacheDumpSingle (url_t* url, const char* key, Message* message) = 0;
     /**
      * Compute key for message.
      * This must be implmented by Mailbox classes.
      * @param msg Message.
      * @return Key.
      */
-    virtual const char* key (Message* msg) = 0;
+    virtual const char* cacheKey (Message* msg) = 0;
 };
 
 #endif /* !LIBMUTTG_CACHE_CACHE_H */

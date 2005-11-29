@@ -45,9 +45,9 @@ class Mailbox : public Cache {
      */
     const char* getUrl ();
     /**
-     * Implementation of Cache::key().
+     * Implementation of Cache::cacheKey().
      */
-    virtual const char* key (Message* msg) = 0;
+    virtual const char* cacheKey (Message* msg) = 0;
 
     /**
      * Opens the mailbox.

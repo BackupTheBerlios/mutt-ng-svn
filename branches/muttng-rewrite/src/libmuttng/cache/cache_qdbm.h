@@ -14,10 +14,9 @@ class QDBMCache : public Cache {
     /** constructor */
     QDBMCache (void);
     /** destructor */
-    virtual ~QDBMCache(void) = 0;
-    void open (void);
-    void close (void);
-    virtual const char* key (Message* msg) = 0;
+    ~QDBMCache(void);
+    Message* cacheLoadSingle (url_t* url, const char* key);
+    bool cacheDumpSingle (url_t* url, const char* key, Message* message);
 };
 
 #endif /* !LIBMUTTG_CACHE_CACHE_QDBM_H */
