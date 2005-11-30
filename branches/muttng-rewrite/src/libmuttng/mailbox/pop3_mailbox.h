@@ -10,7 +10,7 @@
  */
 class POP3Mailbox : public RemoteMailbox {
 	public:
-		POP3Mailbox ();
+		POP3Mailbox (url_t* url_);
 		~POP3Mailbox ();
 		const char* cacheKey (Message* msg);
 

@@ -7,6 +7,9 @@
  * @file libmuttng/mailbox/mailbox.h
  * @brief Interface: Mailbox base class
  */
+#ifndef LIBMUTTNG_MAILBOX_MAILBOX_H
+#define LIBMUTTNG_MAILBOX_MAILBOX_H
+
 #include "../cache/cache.h"
 
 enum acl_bit_t {
@@ -36,14 +39,14 @@ enum mailbox_query_status {
 class Mailbox : public Cache {
   public:
     /** construct mailbox form URL already */
-    Mailbox (const char* url = NULL);
+    Mailbox (url_t* url_);
     /** cleanup */
     ~Mailbox ();
     /**
      * Get URL for mailbox.
-     * @return URL or @c NULL if none set (yet.)
+     * @param dst Destination buffer.
      */
-    const char* getUrl ();
+    void getUrl (buffer_t* dst);
     /**
      * Implementation of Cache::cacheKey().
      */
@@ -116,6 +119,15 @@ class Mailbox : public Cache {
      */
     virtual bool checkAccess() = 0;
 
+    /**
+     * Abstract interface to different modules: create Mailbox
+     * object depending on URL.
+     * @param url URL string.
+     * @param error Error buffer where error message will be put (if any).
+     * @return Mailbox object or @c NULL in case of error.
+     */
+    static Mailbox* fromURL (const char* url, buffer_t* error);
+
   protected:
     /** whether mailbox supports caching */
     unsigned int haveCaching:1;
@@ -126,7 +138,8 @@ class Mailbox : public Cache {
     /** whether mailbox supports filters */
     unsigned int haveFilters:1;
     /** URL if any. */
-    const char* url;
+    url_t* url;
 };
 
+#endif /* !LIBMUTTNG_MAILBOX_MAILBOX_H */
 /** @} */

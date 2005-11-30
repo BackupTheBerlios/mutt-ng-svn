@@ -10,7 +10,7 @@
  */
 class RemoteMailbox : public Mailbox {
   public:
-    RemoteMailbox ();
+    RemoteMailbox (url_t* url_);
     ~RemoteMailbox ();
     virtual const char* cacheKey (Message* msg) = 0;
 };

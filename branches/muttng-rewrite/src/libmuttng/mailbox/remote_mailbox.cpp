@@ -7,7 +7,7 @@
 
 #include "remote_mailbox.h"
 
-RemoteMailbox::RemoteMailbox (void) {
+RemoteMailbox::RemoteMailbox (url_t* url_) : Mailbox (url_) {
   this->haveFilters = 0;
 }
 

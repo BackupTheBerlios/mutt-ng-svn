@@ -7,7 +7,7 @@
 
 #include "imap_mailbox.h"
 
-ImapMailbox::ImapMailbox (void) {
+ImapMailbox::ImapMailbox (url_t* url_) : RemoteMailbox (url_) {
   this->haveCaching = 1;
   this->haveAuthentication = 1;
   this->haveEncryption = 1;

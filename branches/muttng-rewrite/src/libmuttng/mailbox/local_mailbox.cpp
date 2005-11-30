@@ -7,7 +7,7 @@
 
 #include "local_mailbox.h"
 
-LocalMailbox::LocalMailbox (void) {
+LocalMailbox::LocalMailbox (url_t* url_) : Mailbox (url_) {
   this->haveFilters = 1;
 }
 

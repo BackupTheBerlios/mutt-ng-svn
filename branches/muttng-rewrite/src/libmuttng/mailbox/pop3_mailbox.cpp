@@ -8,7 +8,7 @@
 #include "util/url.h"
 #include "pop3_mailbox.h"
 
-POP3Mailbox::POP3Mailbox (void) {
+POP3Mailbox::POP3Mailbox (url_t* url_) : RemoteMailbox (url_) {
   this->haveCaching = 1;
   this->haveAuthentication = 1;
   this->haveEncryption = 1;
@@ -29,16 +29,6 @@ mailbox_query_status POP3Mailbox::openMailbox() {
 		/* TODO: emit some error? */
 		return MQ_ERR;
 	}
-
-	buffer_t err;
-	url_t * connect_url = url_from_string(url,&err);
-
-	if (!connect_url) {
-		/* TODO: emit error message */
-		return MQ_ERR;
-	}
-
-	delete connect_url;
 
 	return MQ_NOT_CONNECTED;
 }

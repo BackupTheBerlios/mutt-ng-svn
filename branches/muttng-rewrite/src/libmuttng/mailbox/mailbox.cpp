@@ -8,18 +8,37 @@
 #include "core/str.h"
 
 #include "mailbox.h"
+#include "pop3_mailbox.h"
 
-Mailbox::Mailbox (const char* url) {
+Mailbox::Mailbox (url_t* url_) {
   this->haveCaching = 0;
   this->haveAuthentication = 0;
   this->haveEncryption = 0;
-  this->url = url;
-  DEBUGPRINT(D_MOD,("create mailbox '%s'", NONULL(url)));
+  this->url = url_;
 }
 
 Mailbox::~Mailbox (void) {
+  url_free (this->url);
+  delete (this->url);
 }
 
-const char* Mailbox::getUrl () {
-  return (this->url);
+void Mailbox::getUrl (buffer_t* dst) {
+  if (dst)
+    url_to_string (this->url, dst, false);
+}
+
+Mailbox* Mailbox::fromURL (const char* url_, buffer_t* error) {
+  Mailbox* ret = NULL;
+  url_t* u = NULL;
+
+  if (!(u = url_from_string (url_, error)))
+    return (NULL);
+  switch (u->proto) {
+  case P_POP3:
+    /* ret = new POP3Mailbox(u); */
+    break;
+  default:
+    break;
+  }
+  return (ret);
 }
