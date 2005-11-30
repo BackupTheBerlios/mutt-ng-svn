@@ -14,6 +14,7 @@ using namespace unitpp;
 
 #include "signal_tests.h"
 #include "url_tests.h"
+#include "conn_tests.h"
 
 namespace {
 
@@ -25,6 +26,7 @@ namespace {
       libmuttng_tests() : suite("libmuttng_tests") {
         suite::main().add("libmuttng_test_suite",new signal_tests());
         suite::main().add("libmuttng_test_suite",new url_tests());
+        suite::main().add("libmuttng_test_suite",new conn_tests());
       }
   };
 

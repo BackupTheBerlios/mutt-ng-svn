@@ -14,6 +14,10 @@
 
 #include "core/buffer.h"
 
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+
 /**
  * plain TCP connection.
  * Feel free to extend it to "plug-ins" so that SSL/TLS can be transparently switched on.
@@ -36,7 +40,8 @@ class Connection {
 		bool disconnect();
 
 		/**
-		 * Reads a number of characters from the connection.
+		 * Reads a number of characters from the connection. If an error
+     * occurs, the buffer is unaltered.
 		 * @param buf buffer into which the data should be read.
 		 * @param len number of characters to read.
 		 * @return number of characters read. -1 if an error occured.
@@ -60,22 +65,36 @@ class Connection {
 		 */
 		int readLine(buffer_t * buf);
 
-		/**
-		 * Read accessor for tcp_port.
-		 * @return the currently set TCP port.
-		 */
-		unsigned short port();
+    /**
+     * Reads a single character from the connection.
+     * @return the character, or -1 if an error occurs.
+     */
+    int readChar();
 
-		/**
-		 * Determines whether there is data ready to be read.
-		 * @return true if there is data ready to be read, otherwise false.
-		 */
-		bool canRead();
+    /**
+     * Writes a buffer to the connection.
+     * @return the number of characters written, or -1 if an
+     *          error occurs.
+     */
+    int doWrite(buffer_t * buf);
 
-	private:
-		unsigned short tcp_port;
-		buffer_t hostname;
-		int fd; /* this will be pulled out when a pluggable transport mechanism system will be implemented */
+    /**
+     * Read accessor for tcp_port.
+     * @return the currently set TCP port.
+     */
+    unsigned short port();
+
+    /**
+     * Determines whether there is data ready to be read.
+     * @return true if there is data ready to be read, otherwise false.
+     */
+    bool canRead();
+
+  private:
+    unsigned short tcp_port;
+    buffer_t hostname;
+    int fd; /* this will be pulled out when a pluggable transport mechanism system will be implemented */
+    struct sockaddr_in sin;
 };
 
 #endif

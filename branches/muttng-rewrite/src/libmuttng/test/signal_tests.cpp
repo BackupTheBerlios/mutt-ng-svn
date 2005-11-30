@@ -109,3 +109,15 @@ signal_tests::~signal_tests() {
   delete test1;
   delete test2;
 }
+
+bool signal_tests::sig1_loop(int * a) {
+      if ((*a) > 10)
+        return (false);
+      return (sig1.emit(&(++(*a))));
+}
+
+bool signal_tests::sig2_loop (int* a, int b) {
+  if ((*a) > 10)
+    return (false);
+  return (sig2.emit(&(++(*a)), b));
+}
