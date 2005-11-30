@@ -66,6 +66,13 @@
     </xsl:text>
   </xsl:template>
 
+  <xsl:template match="subsubsection">
+    <xsl:text>&lt;b&gt;</xsl:text><xsl:value-of select="@title"/><xsl:text>&lt;/b&gt;&lt;br&gt;&lt;br&gt;</xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>
+    </xsl:text>
+  </xsl:template>
+
   <xsl:template match="title">
     <xsl:value-of select="."/><xsl:text>
     </xsl:text>

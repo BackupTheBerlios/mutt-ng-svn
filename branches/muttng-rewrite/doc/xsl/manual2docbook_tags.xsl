@@ -72,18 +72,6 @@
     </listitem>
   </xsl:template>
 
-  <xsl:template match="section">
-    <sect1 id="{@id}">
-      <xsl:apply-templates/>
-    </sect1>
-  </xsl:template>
-
-  <xsl:template match="subsection">
-    <sect2 id="{@id}">
-      <xsl:apply-templates/>
-    </sect2>
-  </xsl:template>
-
   <xsl:template match="variable">
     <sect2 id="option-{translate(@name,'_','-')}">
       <title><code>$<xsl:value-of select="@name"/></code></title>

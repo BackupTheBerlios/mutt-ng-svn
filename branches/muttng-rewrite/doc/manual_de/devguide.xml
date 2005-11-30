@@ -547,7 +547,8 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
 
       <p>
         Within the mentioned <tt>chapter</tt> tags, the following tags are to
-        be used for grouping text: <tt>section</tt> and <tt>subsection</tt>.
+        be used for grouping text: <tt>section</tt>, <tt>subsection</tt>
+        and <tt>subsubsection</tt>.
         All sectioning tags <em>must</em> have an <tt>id</tt> attribute with
         the name of the section. For nesting them, please specify prefixes to
         avoid clashes. For example, within a chapter with <tt>id="intro"</tt>
@@ -778,79 +779,143 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
         and extended/modified it to fit our needs.
       </p>
 
-      <p>
-        <em>Declaring</em> a signal is as easy as:
-      </p>
+      <subsubsection id="devguide-libmuttng-signal-declare" title="Declaring"> <!--{{{-->
 
-      <pre>
+        <p>
+          Declaring a signal is as easy as:
+        </p>
+
+        <pre>
 SignalX&lt;type of arg1,type of arg2,...,type of argX&gt; signalname;</pre>
 
-      <p>
-        whereby <tt>X</tt> is the number of arguments. An example may be:
-      </p>
+        <p>
+          whereby <tt>X</tt> is the number of arguments. An example may be:
+        </p>
 
-      <pre>
+        <pre>
 Signal1&lt;Mailbox*&gt; mailboxHasNewMail;</pre>
 
-      <p>
-        saying that all handlers will get one argument being a pointer to a
-        Mailbox class instance.
-      </p>
+        <p>
+          saying that all handlers will get one argument being a pointer to a
+          Mailbox class instance.
+        </p>
 
-      <p>
-        <em>Connecting</em> to a signal is easy, too. Each handler must fullfill
-        the following two requirements:
-      </p>
+      </subsubsection>
+      <!--}}}-->
 
-      <ul>
-        <li>it must return <tt>bool</tt> specifying whether it succeeded
-          or not</li>
-        <li>it must take exactly the number and type of arguments the
-          signal was declared with</li>
-      </ul>
+      <subsubsection id="devguide-libmuttng-signal-connect" title="Connecting"> <!--{{{-->
 
-      <p>
-        For the above example, given a class <tt>foo</tt> with a method
-        <tt>bool foo::bar(Mailbox* mailbox)</tt>, connecting to the
-        signal is as easy as:
-      </p>
+        <p>
+          <em>Connecting</em> to a signal is easy, too. Each handler must fullfill
+          the following two requirements:
+        </p>
 
-      <pre>
+        <ul>
+          <li>it must return <tt>bool</tt> specifying whether it succeeded
+            or not</li>
+          <li>it must take exactly the number and type of arguments the
+            signal was declared with</li>
+        </ul>
+
+        <p>
+          For the above example, given a class <tt>foo</tt> with a method
+          <tt>bool foo::bar(Mailbox* mailbox)</tt>, connecting to the
+          signal is as easy as:
+        </p>
+
+        <pre>
 connectSignal (someObject.mailboxHasNewMail, this, &amp;foo::bar);</pre>
 
-      <p>
-        <em>Emitting</em> a signal can be done by every method having access to
-        the signal's declaration and works like this:
-      </p>
+      </subsubsection>
+      <!--}}}-->
 
-      <pre>
+      <subsubsection id="devguide-libmuttng-signal-connect" title="Emitting"> <!--{{{-->
+
+        <p>
+          <em>Emitting</em> a signal can be done by every method having access to
+          the signal's declaration and works like this:
+        </p>
+
+        <pre>
 this.mailboxHasNewMail.emit (this);</pre>
 
-      <p>
-        ...assuming the signal is defined in a Mailbox class.
-      </p>
+        <p>
+          ...assuming the signal is defined in a Mailbox class.
+        </p>
 
-      <p>
-        For a given signal, all handlers are executed in some order while
-        each of them returns success. As soon as one handlers reports failure,
-        the emit process will abort.
-      </p>
+        <p>
+          For a given signal, all handlers are executed in some order while
+          each of them returns success. As soon as one handlers reports failure,
+          the emit process will abort.
+        </p>
 
-      <p>
-        <em>Disconnecting</em> from a signal is highly recommended to take
-        place in the object's destructor as a crash upon the next emit after
-        destruction is likely. Though any object may connect as many handlers as it
-        likes to a signal, it's currently only supported to unbind all
-        handlers of an object <em>for a specific signal</em> at once like so:
-      </p>
+      </subsubsection>
+      <!--}}}-->
 
-      <pre>
+      <subsubsection id="devguide-libmuttng-signal-connect" title="Disonnecting"> <!--{{{-->
+
+        <p>
+          <em>Disconnecting</em> from a signal is highly recommended to take
+          place in the object's destructor as a crash upon the next emit after
+          destruction is likely. Though any object may connect as many handlers as it
+          likes to a signal, it's currently only supported to unbind all
+          handlers of an object <em>for a specific signal</em> at once like so:
+        </p>
+
+        <pre>
 disconnectSignals (someObject.mailboxHasNewMail, this);</pre>
 
+        <p>
+          This must be done for every signal the object connected a(ny) handler(s)
+          to.
+        </p>
+
+      </subsubsection>
+      <!--}}}-->
+
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-libmuttng-mailbox"> <!--{{{-->
+      <title>Mailbox handling</title>
+
       <p>
-        This must be done for every signal the object connected a(ny) handler(s)
-        to.
+        Libmuttng contains transparent support for the following
+        types of mailboxes: IMAP, POP3, NNTP, Maildir, MH, MBOX
+        and MMDF. Also, caching and filtering (for local mailboxes
+        only) is transparently hidden behind the general Mailbox
+        class interface.
       </p>
+
+      <p>
+        Though any client using libmuttng can access the different
+        mailbox types derived from Mailbox directly, it's recommended
+        to use the generic interface only.
+      </p>
+
+      <p>
+        As part of hiding implementations behind the common interface,
+        all mailboxes can be accessed via an URL only.
+      </p>
+
+      <subsubsection id="devguide-libmuttng-mailbox-create" title="Creating a mailbox"> <!--{{{-->
+      
+        <p>
+          Creating a new instance of a mailbox based on the URL (other ways
+          are not planned), use the Mailbox::fromUrl() function like this:
+        </p>
+
+        <pre>
+buffer_t error;
+Mailbox* folder = NULL;
+buffer_init(&amp;error);
+if (!(folder = Mailbox::fromUrl ([url string], &amp;error)))
+  /* error: likely URL is wrong */
+else
+  /* success */</pre>
+
+      </subsubsection>
+      <!--}}}-->
 
     </subsection>
     <!--}}}-->

@@ -17,4 +17,11 @@
     </sect2>
   </xsl:template>
 
+  <xsl:template match="subsubsection">
+    <sect3 id="{@id}">
+      <title><xsl:value-of select="@title"/></title>
+      <xsl:apply-templates/>
+    </sect3>
+  </xsl:template>
+
 </xsl:stylesheet>

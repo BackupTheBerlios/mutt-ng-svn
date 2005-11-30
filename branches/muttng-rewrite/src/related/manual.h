@@ -850,7 +850,8 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
       </ul>
     
         Within the mentioned <code> chapter</code> tags, the following tags are to
-        be used for grouping text: <code> section</code> and <code> subsection</code>.
+        be used for grouping text: <code> section</code>, <code> subsection</code>
+        and <code> subsubsection</code>.
         All sectioning tags <em>must</em> have an <code> id</code> attribute with
         the name of the section. For nesting them, please specify prefixes to
         avoid clashes. For example, within a chapter with <code> id="intro"</code>
@@ -1050,66 +1051,108 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
         and extended/modified it to fit our needs.
       
 
-    <em>Declaring</em> a signal is as easy as:
-      
+    <b>Declaring</b><br><br>
+          Declaring a signal is as easy as:
+        
 
     <pre>
 SignalX<type of arg1,type of arg2,...,type of argX> signalname;</pre>
-        whereby <code> X</code> is the number of arguments. An example may be:
-      
+          whereby <code> X</code> is the number of arguments. An example may be:
+        
 
     <pre>
 Signal1<Mailbox*> mailboxHasNewMail;</pre>
-        saying that all handlers will get one argument being a pointer to a
-        Mailbox class instance.
-      
+          saying that all handlers will get one argument being a pointer to a
+          Mailbox class instance.
+        
 
-    <em>Connecting</em> to a signal is easy, too. Each handler must fullfill
-        the following two requirements:
-      
+    
+    <b>Connecting</b><br><br>
+          Connecting to a signal is easy, too. Each handler must fullfill
+          the following two requirements:
+        
 
     <ul>
     <li>it must return <code> bool</code> specifying whether it succeeded
-          or not</li>
+            or not</li>
     <li>it must take exactly the number and type of arguments the
-          signal was declared with</li>
+            signal was declared with</li>
     
       </ul>
     
-        For the above example, given a class <code> foo</code> with a method
-        <code> bool foo::bar(Mailbox* mailbox)</code>, connecting to the
-        signal is as easy as:
-      
+          For the above example, given a class <code> foo</code> with a method
+          <code> bool foo::bar(Mailbox* mailbox)</code>, connecting to the
+          signal is as easy as:
+        
 
     <pre>
-connectSignal (someObject.mailboxHasNewMail, this, &foo::bar);</pre><em>Emitting</em> a signal can be done by every method having access to
-        the signal's declaration and works like this:
-      
+connectSignal (someObject.mailboxHasNewMail, this, &foo::bar);</pre>
+    <b>Emitting</b><br><br>
+          Emitting a signal can be done by every method having access to
+          the signal's declaration and works like this:
+        
 
     <pre>
 this.mailboxHasNewMail.emit (this);</pre>
-        ...assuming the signal is defined in a Mailbox class.
-      
+          ...assuming the signal is defined in a Mailbox class.
+        
 
     
-        For a given signal, all handlers are executed in some order while
-        each of them returns success. As soon as one handlers reports failure,
-        the emit process will abort.
-      
+          For a given signal, all handlers are executed in some order while
+          each of them returns success. As soon as one handlers reports failure,
+          the emit process will abort.
+        
 
-    <em>Disconnecting</em> from a signal is highly recommended to take
-        place in the object's destructor as a crash upon the next emit after
-        destruction is likely. Though any object may connect as many handlers as it
-        likes to a signal, it's currently only supported to unbind all
-        handlers of an object <em>for a specific signal</em> at once like so:
-      
+    
+    <b>Disonnecting</b><br><br>
+          Disconnecting from a signal is highly recommended to take
+          place in the object's destructor as a crash upon the next emit after
+          destruction is likely. Though any object may connect as many handlers as it
+          likes to a signal, it's currently only supported to unbind all
+          handlers of an object <em>for a specific signal</em> at once like so:
+        
 
     <pre>
 disconnectSignals (someObject.mailboxHasNewMail, this);</pre>
-        This must be done for every signal the object connected a(ny) handler(s)
-        to.
+          This must be done for every signal the object connected a(ny) handler(s)
+          to.
+        
+
+    
+    
+    @subsubsection sect_devguide-libmuttng-mailbox Mailbox handling
+    
+        Libmuttng contains transparent support for the following
+        types of mailboxes: IMAP, POP3, NNTP, Maildir, MH, MBOX
+        and MMDF. Also, caching and filtering (for local mailboxes
+        only) is transparently hidden behind the general Mailbox
+        class interface.
       
 
+    
+        Though any client using libmuttng can access the different
+        mailbox types derived from Mailbox directly, it's recommended
+        to use the generic interface only.
+      
+
+    
+        As part of hiding implementations behind the common interface,
+        all mailboxes can be accessed via an URL only.
+      
+
+    <b>Creating a mailbox</b><br><br>
+          Creating a new instance of a mailbox based on the URL (other ways
+          are not planned), use the Mailbox::fromUrl() function like this:
+        
+
+    <pre>
+buffer_t error;
+Mailbox* folder = NULL;
+buffer_init(&error);
+if (!(folder = Mailbox::fromUrl ([url string], &error)))
+  /* error: likely URL is wrong */
+else
+  /* success */</pre>
     
     @subsubsection sect_devguide-libmuttng-auto Auto-generated code
     <em>Signal implementation.</em> As unfortunately we cannot overload
