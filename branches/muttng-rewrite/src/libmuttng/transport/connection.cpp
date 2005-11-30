@@ -83,9 +83,24 @@ int Connection::doRead(buffer_t * buf, unsigned int len) {
 }
 
 int Connection::readUntilSeparator(buffer_t * buf, char sep) {
-	(void)buf;
-	(void)sep;
-	return -1;
+  buffer_init(buf);
+  char c;
+
+  do {
+    int rc = read(fd,&c,sizeof(c));
+    switch (rc) {
+      case -1: 
+        return -1;
+        break;
+      case  0: 
+        return buf->len;
+        break;
+      default:
+        buffer_add_ch(buf,c);
+        break;
+    }
+  } while (sep != c);
+  return buf->len;
 }
 
 int Connection::readLine(buffer_t * buf) {

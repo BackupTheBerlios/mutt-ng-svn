@@ -21,6 +21,7 @@ class conn_tests : public suite {
   private:
     void test_connectdisconnect();
     void test_readwrite();
+    void test_canread();
 };
 
 #endif /* LIBMUTTNG_TEST_CONN_TESTS_H */
