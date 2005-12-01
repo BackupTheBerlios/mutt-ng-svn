@@ -166,7 +166,7 @@ Connection * Connection::fromURL(url_t * url) {
 
   buffer_t hostbuf;
   buffer_init(&hostbuf);
-  buffer_add_str(&hostbuf,url->host);
+  buffer_add_str(&hostbuf,url->host,-1);
 
   Connection * conn = new Connection(&hostbuf,url->port);
 
