@@ -1,5 +1,7 @@
 #include "connection.h"
 
+#include "core/mem.h"
+
 #include "util/url.h"
 
 #include <stdio.h>
@@ -11,6 +13,8 @@
 #include <netdb.h>
 #include <sys/socket.h>
 #include <sys/poll.h>
+#include <string.h>
+#include <strings.h>
 
 Connection::Connection(buffer_t * host, unsigned short port) : tcp_port(port), is_connected(false) {
   buffer_init(&hostname);
@@ -71,14 +75,16 @@ bool Connection::disconnect() {
 }
 
 int Connection::doRead(buffer_t * buf, unsigned int len) {
-  char cbuf[len+1];
+  char* cbuf;
   int read_len;
 
+  cbuf = (char*) mem_malloc (len+1);
   read_len = read(fd,cbuf,len);
 
   switch (read_len) {
     case -1:
       is_connected = false;
+      mem_free (&cbuf);
       return -1;
     case  0:
       is_connected = false;
@@ -88,6 +94,7 @@ int Connection::doRead(buffer_t * buf, unsigned int len) {
       break;
   }
 
+  mem_free (&cbuf);
   return read_len;
 }
 

@@ -24,8 +24,8 @@ class io_tests : public suite {
      * @param tempfile @c tempfile Parameter for @c io_tempfile().
      * @return @c 1 on success, @c 0 on failure.
      */
-    int io_tests::test_io_tempfile2 (const char* dir, const char* name,
-                                     buffer_t* tempfile);
+    int test_io_tempfile2 (const char* dir, const char* name,
+                           buffer_t* tempfile);
     /** run single test for @c io_open(). */
     void test_io_open (void);
     /** run several tests for @c io_tempfile(). */
