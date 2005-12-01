@@ -13,6 +13,7 @@
 #define LIBMUTTNG_TRANSPORT_CONNECTION__H
 
 #include "core/buffer.h"
+#include "util/url.h"
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -45,6 +46,7 @@ class Connection {
 		 * @param buf buffer into which the data should be read.
 		 * @param len number of characters to read.
 		 * @return number of characters read. -1 if an error occured.
+     *         0 if the connection has been closed.
 		 */
 		int doRead(buffer_t * buf, unsigned int len);
 
@@ -90,11 +92,25 @@ class Connection {
      */
     bool canRead();
 
+    /**
+     * Determines whether this connection is currently connected.
+     * @return true if connection is connected, otherwise false.
+     */
+    bool isConnected();
+
+    /**
+     * Creates a new connection based on the given URL.
+     * @param url_ the URL object.
+     * @return new Connection, or NULL if an error occured.
+     */
+    static Connection * fromURL(url_t * url_);
+
   private:
     unsigned short tcp_port;
     buffer_t hostname;
     int fd; /* this will be pulled out when a pluggable transport mechanism system will be implemented */
     struct sockaddr_in sin;
+    bool is_connected;
 };
 
 #endif

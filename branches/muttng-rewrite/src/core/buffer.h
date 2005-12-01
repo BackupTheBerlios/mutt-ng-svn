@@ -46,7 +46,7 @@ typedef struct {
  *        get length of string first via @c str_len().
  * @test buffer_tests::test_buffer_add_str().
  */
-void buffer_add_str (buffer_t* buffer, const char* s, int len);
+void buffer_add_str (buffer_t* buffer, const char* s, int len = -1);
 
 /**
  * Append single character to buffer.
@@ -96,7 +96,7 @@ void buffer_add_num2 (buffer_t* buffer, int num, int pad, int base);
  * @return Yes/No.
  * @test buffer_tests::test_buffer_equal1().
  */
-int buffer_equal1 (buffer_t* buffer, const char* s, int slen);
+int buffer_equal1 (buffer_t* buffer, const char* s, int slen = -1);
 
 /**
  * Compare buffer to buffer

@@ -1,5 +1,7 @@
 #include "connection.h"
 
+#include "util/url.h"
+
 #include <stdio.h>
 #include <errno.h>
 
@@ -10,7 +12,7 @@
 #include <sys/socket.h>
 #include <sys/poll.h>
 
-Connection::Connection(buffer_t * host, unsigned short port) : tcp_port(port) {
+Connection::Connection(buffer_t * host, unsigned short port) : tcp_port(port), is_connected(false) {
   buffer_init(&hostname);
   buffer_add_buffer(&hostname,host);
 }
@@ -53,6 +55,7 @@ bool Connection::connect() {
     return false;
   }
 
+  is_connected = true;
   return true;
 }
 
@@ -63,6 +66,7 @@ bool Connection::disconnect() {
   if (close(fd)<0) {
     return false;
   }
+  is_connected = false;
   return true;
 }
 
@@ -72,12 +76,17 @@ int Connection::doRead(buffer_t * buf, unsigned int len) {
 
   read_len = read(fd,cbuf,len);
 
-  if (read_len==-1) {
-    return -1;
+  switch (read_len) {
+    case -1:
+      is_connected = false;
+      return -1;
+    case  0:
+      is_connected = false;
+    default:
+      buffer_shrink(buf,0);
+      buffer_add_str(buf,cbuf,read_len);
+      break;
   }
-
-  buffer_shrink(buf,0);
-  buffer_add_str(buf,cbuf,read_len);
 
   return read_len;
 }
@@ -90,9 +99,11 @@ int Connection::readUntilSeparator(buffer_t * buf, char sep) {
     int rc = read(fd,&c,sizeof(c));
     switch (rc) {
       case -1: 
+        is_connected = false;
         return -1;
         break;
       case  0: 
+        is_connected = false;
         return buf->len;
         break;
       default:
@@ -109,7 +120,8 @@ int Connection::readLine(buffer_t * buf) {
 
 int Connection::readChar() {
   char c;
-  if (read(fd,&c,sizeof(c))<0) {
+  if (read(fd,&c,sizeof(c))<=0) {
+    is_connected = false;
     return -1;
   }
   return c;
@@ -118,7 +130,12 @@ int Connection::readChar() {
 int Connection::doWrite(buffer_t * buf) {
   if (!buf) return -1;
 
-  return write(fd,buf->str,buf->len);
+  int rc = write(fd,buf->str,buf->len);
+  if (rc<0) {
+    is_connected = false;
+  }
+
+  return rc;
 }
 
 unsigned short Connection::port() {
@@ -133,4 +150,27 @@ bool Connection::canRead() {
     }
   }
   return false;
+}
+
+bool Connection::isConnected() {
+  return is_connected;
+}
+
+Connection * Connection::fromURL(url_t * url) {
+  if (!url) return NULL; /* if not URL provided, we can't create a new connection. */
+  if (!url->host || !url->port) return NULL; /* url with no host or port, can't create new connection either. */
+  
+  if (url->secure) { /* XXX not yet supported */
+    return NULL;
+  }
+
+  buffer_t hostbuf;
+  buffer_init(&hostbuf);
+  buffer_add_str(&hostbuf,url->host);
+
+  Connection * conn = new Connection(&hostbuf,url->port);
+
+  buffer_free(&hostbuf);
+
+  return conn;
 }

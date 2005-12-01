@@ -119,6 +119,25 @@ class Mailbox : public Cache {
      */
     virtual bool checkAccess() = 0;
 
+
+    /**
+     * Fetch message headers of message into Message object.
+     * @param msg Message object into which the message headers shall be fetched.
+     * @param msgnum message number.
+     * @return MQ_OK if fetch was successful, MQ_NOT_CONNECTED if mailbox was not connected,
+     *         MQ_ERR otherwise.
+     */
+    virtual mailbox_query_status fetchMessageHeaders(Message * msg, unsigned int msgnum) = 0;
+
+    /**
+     * Fetch complete message into Message object.
+     * @param msg Message object into which the message headers shall be fetched.
+     * @param msgnum message number.
+     * @return MQ_OK if fetch was successful, MQ_NOT_CONNECTED if mailbox was not connected,
+     *         MQ_ERR otherwise.
+     */
+    virtual mailbox_query_status fetchMessage(Message * msg, unsigned int msgnum) = 0;
+
     /**
      * Abstract interface to different modules: create Mailbox
      * object depending on URL.

@@ -9,6 +9,7 @@
 
 #include "mailbox.h"
 #include "pop3_mailbox.h"
+#include "transport/connection.h"
 
 Mailbox::Mailbox (url_t* url_) {
   this->haveCaching = 0;
@@ -29,13 +30,17 @@ void Mailbox::getUrl (buffer_t* dst) {
 
 Mailbox* Mailbox::fromURL (const char* url_, buffer_t* error) {
   Mailbox* ret = NULL;
+  Connection * conn = NULL;
   url_t* u = NULL;
 
   if (!(u = url_from_string (url_, error)))
     return (NULL);
   switch (u->proto) {
   case P_POP3:
-    /* ret = new POP3Mailbox(u); */
+    conn = Connection::fromURL(u);
+    if (conn) {
+      ret = new POP3Mailbox(u,conn);
+    }
     break;
   default:
     break;
