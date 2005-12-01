@@ -374,7 +374,7 @@ void menu_check_recenter (MUTTMENU * menu)
       set_option (OPTNEEDREDRAW);
     }
   } else {
-    if (option (OPTMENUSCROLL) || (menu->pagelen <= 0) || (c <= MenuContext)) {
+    if (option (OPTMENUSCROLL) || (menu->pagelen <= 0) || (c < MenuContext)) {
       if (menu->current < menu->top + c)
         menu->top = menu->current - c;
       else if (menu->current >= menu->top + menu->pagelen - c)
