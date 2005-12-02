@@ -1,11 +1,12 @@
-LANGUAGES=de en
+ALL_LANGUAGES=de en
+BUILD_LANGUAGES=$(ALL_LANGUAGES)
 
 all: prepare
 
 depend: doxygen
 
 prepare: common/manual-full.xml common/manual-user.xml
-	@ for l in $(LANGUAGES) ; do \
+	@ for l in $(ALL_LANGUAGES) ; do \
 	  cp $^ css/muttng.css manual_$$l/ ; \
 	  cp css/muttng.css homepage_$$l ; \
 	done
@@ -15,13 +16,13 @@ include $(CURDIR)/../GNUmakefile.whereis
 include $(CURDIR)/../GNUmakefile.config
 
 manual:
-	@ for l in $(LANGUAGES) ; do \
+	@ for l in $(BUILD_LANGUAGES) ; do \
 	  $(call doxslt_s,manual_$$l/manual-user.xml,xsl/manual2docbook.xsl,manual_$$l/manual-docbook.xml,$$l) ; \
 	  $(call doxslt_m,manual_$$l/manual-docbook.xml,xsl/docbook2chunkhtml.xsl,manual_$$l/,$$l) ; \
 	  $(call doxslt_s,manual_$$l/manual-docbook.xml,xsl/docbook2html.xsl,manual_$$l/manual.html,$$l) ; \
         done
 ifneq ($(TIDY),)
-	@ for l in $(LANGUAGES) ; do \
+	@ for l in $(BUILD_LANGUAGES) ; do \
 	  $(TIDY) -q -i -m -utf8 manual_$$l/*.html >/dev/null 2>&1 || true ; \
 	done
 endif
@@ -31,12 +32,12 @@ doxygen:
 	@ $(call doxslt_s,homepage_en/homepage.xml,xsl/manual2doxygen.xsl,./../src/related/mainpage.h,en)
 
 homepage:
-	@ for l in $(LANGUAGES) ; do \
+	@ for l in $(BUILD_LANGUAGES) ; do \
 	  $(call doxslt_s,homepage_$$l/homepage.xml,xsl/manual2docbook.xsl,homepage_$$l/homepage-docbook.xml,$$l) ; \
 	  $(call doxslt_s,homepage_$$l/homepage-docbook.xml,xsl/docbook2html.xsl,homepage_$$l/index.html,$$l) ; \
 	done
 ifneq ($(TIDY),)
-	@ for l in $(LANGUAGES) ; do \
+	@ for l in $(BUILD_LANGUAGES) ; do \
 	  $(TIDY) -q -i -m -utf8 homepage_$$l/*.html >/dev/null 2>&1 || true ; \
 	done
 endif

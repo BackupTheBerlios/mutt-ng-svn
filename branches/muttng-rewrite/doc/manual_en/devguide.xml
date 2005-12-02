@@ -521,145 +521,248 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
   <section id="devguide-docs"> <!--{{{-->
     <title>Documentation</title>
 
+    <subsection id="devguide-docs-overview"> <!--{{{-->
+      <title>Organisation</title>
+
+      <p>
+        The documentation includes the user manual, the developer's guide and the
+        (new) mutt-ng homepage. All is written in a custom XML dialect (describes later
+        in this chapter) and transformed into the following formats:
+      </p>
+
+      <ul>
+        <li>DocBook: this meta format is used to transform everything into
+          fancy HTML</li>
+        <li>Doxygen: this format makes doxygen pick up the documentation to
+          integrate it into the source's docs</li>
+      </ul>
+
+      <p>
+        As far as possible, documentation is automatically generated (better: stripped)
+        from the source code to avoid out-of-sync problems. Details of auto-generation
+        are described later in this chapter.
+      </p>
+
+      <p>
+        The documentation is multi-lingual. Details are described later in this
+        chapter.
+      </p>
+
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-docs-layout"> <!--{{{-->
+      <title>Directory layout</title>
+
+      <p>
+        The <tt>doc/</tt> directory contains the following subdirectories:
+      </p>
+
+      <ul>
+        <li><tt>common/</tt>: it contains all language-independent fractions of any
+          part of the docs</li>
+        <li><tt>css/</tt>: it contains HTML CSS stylesheets for use with doxygen- and
+          DocBook-generated HTML output</li>
+        <li><tt>xsl/</tt>: it contains the XSL stylesheets used for transformations</li>
+        <li><tt>manual_[lang]/</tt>: it contains all input and output files for
+          the manual in a specific language</li>
+        <li><tt>homepage_[lang]/</tt>: it contains all input and output files for
+          the homepage in a specific language</li>
+      </ul>
+
+      <p>
+        To have all files correctly setup when getting a working copy or making a
+        release, some files are identical and copied from a ``master'' source to
+        several directories. This is important to mention as a change made to a copy
+        will get lost, changes should be made to the master only. The master documents
+        and its copies are:
+      </p>
+
+      <ul>
+        <li><tt>css/muttng.css</tt>: the main CSS stylesheet it's copied to all
+          <tt>manual_*</tt> and all <tt>homepage_*</tt> directories</li>
+        <li><tt>common/manual-full.xml</tt> and <tt>common/manual-user.xml</tt>:
+          the actual manual files are maintained like this to have a common structure
+          for all translations. These are copied to all <tt>manual_*</tt> directories.
+        </li>
+      </ul>
+
+    </subsection>
+    <!--}}}-->
+
     <subsection id="devguide-docs-dialect"> <!--{{{-->
       <title>XML Dialect</title>
 
-      <p> This section describes the custom XML dialect used for writing all of
+      <p>
+        This section describes the custom XML dialect used for writing all of
         the documentation (including descriptions for variables and everything
-        else.)</p>
-
-      <p>
-        The manual is wrapped in a <tt>manual</tt> tag. It contains the following two
-        tags:
+        else.)
       </p>
 
-      <ul>
+      <subsubsection id="devguide-docs-dialect-structure" title="Document structure"> <!--{{{-->
+      
+        <p>
+          The manual is wrapped in a <tt>manual</tt> tag. It contains the following two
+          tags:
+        </p>
 
-        <li><tt>head</tt>: This describes a header for the document. Its title
-          is enclosed in a <tt>title</tt> tag, the list of all authors in an
-          <tt>authors</tt> tag. Within the latter, the <tt>author</tt> tag
-          lists any number of authors with the following tags:
-          <tt>surname</tt>, <tt>firstname</tt> and <tt>email</tt>.</li>
+        <ul>
 
-        <li><tt>content</tt>: This describes the content for the document, that
-          is, one or more <tt>chapter</tt> tags.</li>
+          <li><tt>head</tt>: This describes a header for the document. Its title
+            is enclosed in a <tt>title</tt> tag, the list of all authors in an
+            <tt>authors</tt> tag. Within the latter, the <tt>author</tt> tag
+            lists any number of authors with the following tags:
+            <tt>surname</tt>, <tt>firstname</tt> and <tt>email</tt>.</li>
 
-      </ul>
+          <li><tt>content</tt>: This describes the content for the document, that
+            is, one or more <tt>chapter</tt> tags.</li>
 
-      <p>
-        Within the mentioned <tt>chapter</tt> tags, the following tags are to
-        be used for grouping text: <tt>section</tt>, <tt>subsection</tt>
-        and <tt>subsubsection</tt>.
-        All sectioning tags <em>must</em> have an <tt>id</tt> attribute with
-        the name of the section. For nesting them, please specify prefixes to
-        avoid clashes. For example, within a chapter with <tt>id="intro"</tt>
-        and there for a section mentioning the mailing lists, use
-        <tt>id="intro-mailing"</tt>. As all output formats we use have a flat
-        ``labeling'' or ``anchor'' namespace, we create our namespaces like
-        this.
-      </p>
+        </ul>
 
-      <p>        
-        All texts are to be grouped within <tt>p</tt> tags (``p'' as in
-        paragraph.)
-      </p>
+      </subsubsection>
+      <!--}}}-->
 
-      <p>
-        For ordinary text, please use the following to fill the manual with
-        semantics rather than flat text or any layout:
-      </p>
+      <subsubsection id="devguide-docs-dialect-sectioning" title="Chapters and sections"> <!--{{{-->
 
-      <ul>
+        <p>
+          Within the mentioned <tt>chapter</tt> tags, the following tags are to
+          be used for grouping text: <tt>section</tt>, <tt>subsection</tt>
+          and <tt>subsubsection</tt>.
+          All sectioning tags <em>must</em> have an <tt>id</tt> attribute with
+          the name of the section. For nesting them, please specify prefixes to
+          avoid clashes. For example, within a chapter with <tt>id="intro"</tt>
+          and there for a section mentioning the mailing lists, use
+          <tt>id="intro-mailing"</tt>. As all output formats we use have a flat
+          ``labeling'' or ``anchor'' namespace, we create our namespaces like
+          this.
+        </p>
 
-        <li><em>(cross-)referencing</em>. For making any type of references, the followin
-          tags are to be used:
-          <ul>
-            <li><tt>email</tt>: an email address</li>
-            <li><tt>web</tt>: a web address</li>
-            <li><tt>varref</tt>: referencing a configuration variable</li>
-            <li><tt>cmdref</tt>: referencing a configuration command</li>
-            <li><tt>funcref</tt>: referencing a function</li>
-            <li><tt>man</tt>: referencing a manual page. Optionally,
-              it may contain a <tt>sect</tt> attribute to specify the
-              section. If none given, 1 will be used by default.</li>
-          </ul>
-        </li>
+      </subsubsection>
+      <!--}}}-->
 
-        <li><em>special semantics</em>. There will be much more, but currently
-          the following tags are to be used for specifying a special semantic
-          for a word (mainly these are needed for auto-indexing so that
-          one can actually find something in the documentation):
-          <ul>
-            <li><tt>val</tt>: when refering to (possible/default/...) values
-              for variables.</li>
-            <li><tt>hdr</tt>: when refering to a commonly used header</li>
-            <li><tt>enc</tt>: when refering to transport encodings (such
-              as <enc>quoted-printable</enc> or <enc>us-ascii</enc></li>
-            <li><tt>env</tt>: when refering to environment variables</li>
-          </ul>
-        </li>
+      <subsubsection id="devguide-docs-dialect-text" title="Text"> <!--{{{-->
 
-        <li><em>listings</em>. To specify lists or listings, the following tags
-          are available:
-          <ul>
-            <li><tt>ul</tt>: a non-numbered itemized list</li>
-            <li><tt>li</tt>: an item of any of these lists</li>
-          </ul>
-        </li>
+        <p>        
+          All texts are to be grouped within <tt>p</tt> tags (``p'' as in
+          paragraph.)
+        </p>
 
-        <li><em>misc.</em>: The following are not the optimal solution as they
-          imply layout semantics already but here we go:
-          <ul>
-            <li><tt>tt</tt>: typewriter font</li>
-            <li><tt>em</tt>: emphasise</li>
-            <li><tt>b</tt>: bold font</li>
-          </ul>
-        </li>
+        <p>
+          For ordinary text, please use the following to fill the manual with
+          semantics rather than flat text or any layout:
+        </p>
 
-      </ul>
+        <ul>
 
-      <p>
-        Internally, variables are documented like this (this does <em>not</em> count for
-        the description of a variable but the variable as a whole within the
-        manual) (<em>note: this is auto-generated</em>):
-      </p>
+          <li><em>special semantics</em>. There will be much more, but currently
+            the following tags are to be used for specifying a special semantic
+            for a word (mainly these are needed for auto-indexing so that
+            one can actually find something in the documentation):
+            <ul>
+              <li><tt>val</tt>: when refering to (possible/default/...) values
+                for variables.</li>
+              <li><tt>hdr</tt>: when refering to a commonly used header</li>
+              <li><tt>enc</tt>: when refering to transport encodings (such
+                as <enc>quoted-printable</enc> or <enc>us-ascii</enc></li>
+              <li><tt>env</tt>: when refering to environment variables</li>
+            </ul>
+          </li>
 
-      <ul>
-        <li>all variables are wrapped within a <tt>descriptions</tt> tag</li>
-        <li>within this, there's any number of <tt>variable</tt> tags containing
-          the following attributes: <tt>name</tt> specifies the name of the
-          variable, <tt>type</tt> specifies its type</li>
-        <li>within a <tt>variable</tt> tag, the following tags will be used:
-          <ul>
-            <li><tt>init</tt>: initial or default value</li>
-            <li><tt>sig</tt>: whether a change of it will cause a signal be emitted</li>
-            <li><tt>descr</tt>: its description</li>
-          </ul>
-        </li>
-      </ul>
+          <li><em>listings</em>. To specify lists or listings, the following tags
+            are available:
+            <ul>
+              <li><tt>ul</tt>: a non-numbered itemized list</li>
+              <li><tt>li</tt>: an item of any of these lists</li>
+            </ul>
+          </li>
 
-      <p>
-        Internally, functions are documented like this
-        (<em>note: this is auto-generated</em>):
-      </p>
+          <li><em>misc.</em>: The following are not the optimal solution as they
+            imply layout semantics already but here we go:
+            <ul>
+              <li><tt>tt</tt>: typewriter font</li>
+              <li><tt>em</tt>: emphasise</li>
+              <li><tt>b</tt>: bold font</li>
+            </ul>
+          </li>
 
-      <ul>
-        <li>all functions are wrapped within a <tt>descriptions</tt> tag</li>
-        <li>within this, there's any number of <tt>context</tt> tags containing
-          the following attributes: <tt>name</tt> specifies the name of the
-          context. As functions are grouped by context (that is: by menu) where
-          they may have different bindings, each function may appear several
-          times within different <tt>context</tt> tags.</li>
-        <li>within the <tt>context</tt> tag, all functions it contains are
-          given via <tt>function</tt> tags. Each <tt>function</tt> tag must contain the
-          following attributes: <tt>name</tt> specifies the name a user
-          may bind to it, <tt>default</tt> specifies the default key binding
-          and <tt>group</tt> specifies to which semantic group the function belongs
-          within the context.</li>
-        <li>the text within the <tt>function</tt> tag is just the functions's
-          (English) summary to appear in the help menus</li>
-      </ul>
-          
+        </ul>
+
+      </subsubsection>
+      <!--}}}-->
+
+      <subsubsection id="devguide-docs-dialect-referencing" title="Referencing"> <!--{{{-->
+
+        <p>
+          For specifying references, a distinction is made to what target
+          a reference is made:
+        </p>
+
+        <ul>
+          <li><tt>email</tt>: an email address</li>
+          <li><tt>web</tt>: a web address</li>
+          <li><tt>varref</tt>: referencing a configuration variable</li>
+          <li><tt>cmdref</tt>: referencing a configuration command</li>
+          <li><tt>funcref</tt>: referencing a function</li>
+          <li><tt>man</tt>: referencing a manual page. Optionally,
+            it may contain a <tt>sect</tt> attribute to specify the
+            section. If none given, 1 will be used by default.</li>
+        </ul>
+
+      </subsubsection>
+      <!--}}}-->
+
+      <subsubsection id="devguide-docs-dialect-variables" title="Documenting variables"> <!--{{{-->
+
+        <p>
+          Internally, variables are documented like this (this does <em>not</em> count for
+          the description of a variable but the variable as a whole within the
+          manual) (<em>note: this is auto-generated</em>):
+        </p>
+
+        <ul>
+          <li>all variables are wrapped within a <tt>descriptions</tt> tag</li>
+          <li>within this, there's any number of <tt>variable</tt> tags containing
+            the following attributes: <tt>name</tt> specifies the name of the
+            variable, <tt>type</tt> specifies its type</li>
+          <li>within a <tt>variable</tt> tag, the following tags will be used:
+            <ul>
+              <li><tt>init</tt>: initial or default value</li>
+              <li><tt>sig</tt>: whether a change of it will cause a signal be emitted</li>
+              <li><tt>descr</tt>: its description</li>
+            </ul>
+          </li>
+        </ul>
+
+      </subsubsection>
+      <!--}}}-->
+
+      <subsubsection id="devguide-docs-dialect-functions" title="Documenting functions"> <!--{{{-->
+
+        <p>
+          Internally, functions are documented like this
+          (<em>note: this is auto-generated</em>):
+        </p>
+
+        <ul>
+          <li>all functions are wrapped within a <tt>descriptions</tt> tag</li>
+          <li>within this, there's any number of <tt>context</tt> tags containing
+            the following attributes: <tt>name</tt> specifies the name of the
+            context. As functions are grouped by context (that is: by menu) where
+            they may have different bindings, each function may appear several
+            times within different <tt>context</tt> tags.</li>
+          <li>within the <tt>context</tt> tag, all functions it contains are
+            given via <tt>function</tt> tags. Each <tt>function</tt> tag must contain the
+            following attributes: <tt>name</tt> specifies the name a user
+            may bind to it, <tt>default</tt> specifies the default key binding
+            and <tt>group</tt> specifies to which semantic group the function belongs
+            within the context as defined in <tt>src/muttng/event/GROUPS</tt>.</li>
+          <li>the text within the <tt>function</tt> tag is just the functions's
+            summary to appear in the help menus</li>
+        </ul>
+
+      </subsubsection>
+      <!--}}}-->
+            
     </subsection>
     <!--}}}-->
 
@@ -671,39 +774,154 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
         to our custom XML dialect automatically.
       </p>
 
-      <p>
-        For variables, <tt>src/muttng/config/config.pl</tt> is used. The
-        documentation process for variables is the same as it was before:
-      </p>
+      <subsubsection id="devguide-docs-auto-variables" title="Variables"> <!--{{{-->
+      
+        <p>
+          For variables, <tt>src/muttng/config/config.pl</tt> is used. The
+          documentation process for variables is the same as it was before:
+        </p>
 
-      <ul>
-        <li>all documentation is expected between the words <tt>START</tt>
-          and <tt>END</tt> (commented) in set_command.cpp</li>
-        <li>the variable definition for the source is one line</li>
-        <li><em>below</em> is a comment block whereby each line to be
-          treated as part of the description for a variable starts with
-          <em>two</em> asterisks. The tags are the same as for
-          all other documentation.
-        </li>
-      </ul>
+        <ul>
+          <li>all documentation is expected between the words <tt>START</tt>
+            and <tt>END</tt> (commented) in set_command.cpp</li>
+          <li>the variable definition for the source is one line</li>
+          <li><em>below</em> is a comment block whereby each line to be
+            treated as part of the description for a variable starts with
+            <em>two</em> asterisks. The tags are the same as for
+            all other documentation.
+          </li>
+        </ul>
 
-      <p>
-        For functions, <tt>src/muttng/event/event.pl</tt> is used. It parses the
-        following file in the subdirectory for documentation: <tt>EVENTS</tt>. This
-        has space or tab separated fields with the following meanings for documentation:
-      </p>
+        <p>
+          The auto-generated files are:
+        </p>
 
-      <ul>
-        <li>1st field: the context IDs defined in <tt>CONTEXTS</tt></li>
-        <li>3rd field: the function's name</li>
-        <li>4th field: the group IDs defined in <tt>GROUPS</tt></li>
-        <li>5th field: the default keybinding</li>
-        <li>rest of the line: short description</li>
-      </ul>
+        <ul>
+          <li><tt>doc/manual_en/var_def.xml</tt>: contains a simple listing
+            of all variables found. As English is expected to be always in sync
+            with the source code, this file will be used to validate and/or
+            check other translations for completeness</li>
+          <li><tt>doc/manual_en/var_descr.xml</tt>: contains the full English
+            documentation</li>
+        </ul>
+
+      </subsubsection>
+      <!--}}}-->
+
+      <subsubsection id="devguide-docs-auto-functions" title="Functions"> <!--{{{-->
+
+        <p>
+          For functions, <tt>src/muttng/event/event.pl</tt> is used. It parses the
+          following file in the <tt>event</tt> subdirectory for documentation:
+          <tt>EVENTS</tt>. This has space or tab separated fields with the
+          following meanings for documentation:
+        </p>
+
+        <ul>
+          <li>1st field: the context IDs defined in <tt>CONTEXTS</tt></li>
+          <li>3rd field: the function's name</li>
+          <li>4th field: the group IDs defined in <tt>GROUPS</tt></li>
+          <li>5th field: the default keybinding</li>
+          <li>rest of the line: short description</li>
+        </ul>
+
+        <p>
+          The auto-generated files are:
+        </p>
+
+        <ul>
+          <li><tt>doc/manual_en/func_def.xml</tt>: contains a simple listing
+            of all functions found. As English is expected to be always in sync
+            with the source code, this file will be used to validate and/or
+            check other translations for completeness</li>
+          <li><tt>doc/manual_en/func_descr.xml</tt>: contains the full English
+            documentation</li>
+        </ul>
+
+      </subsubsection>
+      <!--}}}-->
 
     </subsection>
     <!--}}}-->
-  
+
+    <subsection id="devguide-docs-trans"> <!--{{{-->
+      <title>Translations</title>
+
+      <p>
+        Though the English documents are considered the ``master'' documents,
+        they're only a treated as a translation, too. This section describes how to
+        add and maintain a translation.
+      </p>
+
+      <subsubsection id="devguide-docs-trans-files" title="Mandatory files"> <!--{{{-->
+
+        <p>
+          As mentioned when explaining the directory layout, the manual
+          files are copied from a master document in the <tt>common/</tt> to a
+          language directory. The manual files define the necessary structure which is
+          technically implemented using XInclude. Thus, a language directory must
+          contain a set of files:
+        </p>
+
+        <ul>
+          <li><tt>head.xml</tt>: it must contain a <tt>head</tt> tag as the document
+            root and list all details for the manual: title and authors.</li>
+          <li><tt>trans.xml</tt>: it must contain a set of translated special words described
+            later in this document.</li>
+          <li><tt>intro.xml</tt>: it must contain the introductionary chapter</li>
+          <li><tt>build.xml</tt>: it must contain the chapter explaining the build
+            process</li>
+          <li><tt>config.xml</tt>: it must contain the configuration documentation</li>
+          <li><tt>reference.xml</tt>: it must contain the reference chapter. This document
+            must include the following two files: <tt>var_descr.xml</tt> for variable
+            descriptions and <tt>func_descr.xml</tt> for functions. For the English
+            documentation, both are automatically generated.</li>
+          <li><tt>devguide.xml</tt>: it must contain the developer's guide</li>
+          <li><tt>ack.xml</tt>: it must contain acknowledgements. This file must include
+            the following files in the <tt>doc/common/</tt> directory:
+            <ul>
+              <li><tt>dev_muttng.xml</tt>: list of mutt-ng developers</li>
+              <li><tt>ack_muttng.xml</tt>: list of people who contributed to mutt-ng</li>
+              <li><tt>ack_mutt.xml</tt>: list of people who contributed to mutt</li>
+            </ul>
+          </li>
+        </ul>
+
+      </subsubsection>
+      <!--}}}-->
+
+      <subsubsection id="devguide-docs-trans-add" title="Adding a new translation"> <!--{{{-->
+
+        <p>
+          When adding a new translation, the easiest way is to make a copy of the
+          English translation: just copy all XML files except <tt>manual-docbook</tt>
+          to the corresponding language directory and add them to version control.
+        </p>
+
+        <p>
+          Afterwards, the following files should be translated first as they contain
+          only a few words to translate:
+        </p>
+
+        <ul>
+          <li><tt>head.xml</tt></li>
+          <li><tt>reference.xml</tt></li>
+          <li><tt>ack.xml</tt> and</li>
+          <li><tt>trans.xml</tt></li>
+        </ul>
+
+        <p>
+          For these, what to translate how should be pretty self-explanatory so that
+          not much documentation is put here. In <tt>trans.xml</tt> the comments and
+          English translations should be sufficient.
+        </p>
+
+      </subsubsection>
+      <!--}}}-->
+
+    </subsection>
+    <!--}}}-->
+    
   </section>
   <!--}}}-->
 

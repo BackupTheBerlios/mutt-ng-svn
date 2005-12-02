@@ -17,6 +17,11 @@
   <trans id="option-boolean">Boolean</trans>
   <trans id="option-url">URL</trans>
   <trans id="option-quad-option">Quad-Option</trans>
+  <!-- screen names -->
+  <trans id="screen-generic">Generic</trans>
+  <trans id="screen-help">Help</trans>
+  <trans id="screen-index">Index</trans>
+  <trans id="screen-pager">Pager</trans>
   <!-- group names -->
   <trans id="group-G_INTERNAL">Internal</trans>
   <trans id="group-G_GENERIC">Generic</trans>

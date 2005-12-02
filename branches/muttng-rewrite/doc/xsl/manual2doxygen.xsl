@@ -67,7 +67,7 @@
   </xsl:template>
 
   <xsl:template match="subsubsection">
-    <xsl:text>&lt;b&gt;</xsl:text><xsl:value-of select="@title"/><xsl:text>&lt;/b&gt;&lt;br&gt;&lt;br&gt;</xsl:text>
+    <xsl:text>@paragraph sect_</xsl:text><xsl:value-of select="@id"/><xsl:text> </xsl:text><xsl:value-of select="@title"/>
     <xsl:apply-templates/>
     <xsl:text>
     </xsl:text>

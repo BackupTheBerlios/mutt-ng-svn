@@ -828,89 +828,140 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
     
     
     @subsection sect_devguide-docs Documentation
-    @subsubsection sect_devguide-docs-dialect XML Dialect
-     This section describes the custom XML dialect used for writing all of
-        the documentation (including descriptions for variables and everything
-        else.)
+    @subsubsection sect_devguide-docs-overview Organisation
+    
+        The documentation includes the user manual, the developer's guide and the
+        (new) mutt-ng homepage. All is written in a custom XML dialect (describes later
+        in this chapter) and transformed into the following formats:
+      
+
+    <ul>
+    <li>DocBook: this meta format is used to transform everything into
+          fancy HTML</li>
+    <li>Doxygen: this format makes doxygen pick up the documentation to
+          integrate it into the source's docs</li>
+    
+      </ul>
+    
+        As far as possible, documentation is automatically generated (better: stripped)
+        from the source code to avoid out-of-sync problems. Details of auto-generation
+        are described later in this chapter.
+      
 
     
-        The manual is wrapped in a <code> manual</code> tag. It contains the following two
-        tags:
+        The documentation is multi-lingual. Details are described later in this
+        chapter.
       
+
+    
+    @subsubsection sect_devguide-docs-layout Directory layout
+    
+        The <code> doc/</code> directory contains the following subdirectories:
+      
+
+    <ul>
+    <li><code> common/</code>: it contains all language-independent fractions of any
+          part of the docs</li>
+    <li><code> css/</code>: it contains HTML CSS stylesheets for use with doxygen- and
+          DocBook-generated HTML output</li>
+    <li><code> xsl/</code>: it contains the XSL stylesheets used for transformations</li>
+    <li><code> manual_[lang]/</code>: it contains all input and output files for
+          the manual in a specific language</li>
+    <li><code> homepage_[lang]/</code>: it contains all input and output files for
+          the homepage in a specific language</li>
+    
+      </ul>
+    
+        To have all files correctly setup when getting a working copy or making a
+        release, some files are identical and copied from a ``master'' source to
+        several directories. This is important to mention as a change made to a copy
+        will get lost, changes should be made to the master only. The master documents
+        and its copies are:
+      
+
+    <ul>
+    <li><code> css/muttng.css</code>: the main CSS stylesheet it's copied to all
+          <code> manual_*</code> and all <code> homepage_*</code> directories</li>
+    <li><code> common/manual-full.xml</code> and <code> common/manual-user.xml</code>:
+          the actual manual files are maintained like this to have a common structure
+          for all translations. These are copied to all <code> manual_*</code> directories.
+        </li>
+    
+      </ul>
+    
+    @subsubsection sect_devguide-docs-dialect XML Dialect
+    
+        This section describes the custom XML dialect used for writing all of
+        the documentation (including descriptions for variables and everything
+        else.)
+      
+
+    @paragraph sect_devguide-docs-dialect-structure Document structure
+          The manual is wrapped in a <code> manual</code> tag. It contains the following two
+          tags:
+        
 
     <ul>
     <li><code> head</code>: This describes a header for the document. Its title
-          is enclosed in a <code> title</code> tag, the list of all authors in an
-          <code> authors</code> tag. Within the latter, the <code> author</code> tag
-          lists any number of authors with the following tags:
-          <code> surname</code>, <code> firstname</code> and <code> email</code>.</li>
+            is enclosed in a <code> title</code> tag, the list of all authors in an
+            <code> authors</code> tag. Within the latter, the <code> author</code> tag
+            lists any number of authors with the following tags:
+            <code> surname</code>, <code> firstname</code> and <code> email</code>.</li>
     <li><code> content</code>: This describes the content for the document, that
-          is, one or more <code> chapter</code> tags.</li>
+            is, one or more <code> chapter</code> tags.</li>
     
       </ul>
     
-        Within the mentioned <code> chapter</code> tags, the following tags are to
-        be used for grouping text: <code> section</code>, <code> subsection</code>
-        and <code> subsubsection</code>.
-        All sectioning tags <em>must</em> have an <code> id</code> attribute with
-        the name of the section. For nesting them, please specify prefixes to
-        avoid clashes. For example, within a chapter with <code> id="intro"</code>
-        and there for a section mentioning the mailing lists, use
-        <code> id="intro-mailing"</code>. As all output formats we use have a flat
-        ``labeling'' or ``anchor'' namespace, we create our namespaces like
-        this.
-      
-
-            
-        All texts are to be grouped within <code> p</code> tags (``p'' as in
-        paragraph.)
-      
+    @paragraph sect_devguide-docs-dialect-sectioning Chapters and sections
+          Within the mentioned <code> chapter</code> tags, the following tags are to
+          be used for grouping text: <code> section</code>, <code> subsection</code>
+          and <code> subsubsection</code>.
+          All sectioning tags <em>must</em> have an <code> id</code> attribute with
+          the name of the section. For nesting them, please specify prefixes to
+          avoid clashes. For example, within a chapter with <code> id="intro"</code>
+          and there for a section mentioning the mailing lists, use
+          <code> id="intro-mailing"</code>. As all output formats we use have a flat
+          ``labeling'' or ``anchor'' namespace, we create our namespaces like
+          this.
+        
 
     
-        For ordinary text, please use the following to fill the manual with
-        semantics rather than flat text or any layout:
-      
+    @paragraph sect_devguide-docs-dialect-text Text        
+          All texts are to be grouped within <code> p</code> tags (``p'' as in
+          paragraph.)
+        
+
+    
+          For ordinary text, please use the following to fill the manual with
+          semantics rather than flat text or any layout:
+        
 
     <ul>
-    <li><em>(cross-)referencing</em>. For making any type of references, the followin
-          tags are to be used:
-          <ul>
-    <li><code> email</code>: an email address</li>
-    <li><code> web</code>: a web address</li>
-    <li><code> varref</code>: referencing a configuration variable</li>
-    <li><code> cmdref</code>: referencing a configuration command</li>
-    <li><code> funcref</code>: referencing a function</li>
-    <li><code> man</code>: referencing a manual page. Optionally,
-              it may contain a <code> sect</code> attribute to specify the
-              section. If none given, 1 will be used by default.</li>
-    
-      </ul>
-    </li>
     <li><em>special semantics</em>. There will be much more, but currently
-          the following tags are to be used for specifying a special semantic
-          for a word (mainly these are needed for auto-indexing so that
-          one can actually find something in the documentation):
-          <ul>
+            the following tags are to be used for specifying a special semantic
+            for a word (mainly these are needed for auto-indexing so that
+            one can actually find something in the documentation):
+            <ul>
     <li><code> val</code>: when refering to (possible/default/...) values
-              for variables.</li>
+                for variables.</li>
     <li><code> hdr</code>: when refering to a commonly used header</li>
     <li><code> enc</code>: when refering to transport encodings (such
-              as <code> quoted-printable</code> or <code> us-ascii</code></li>
+                as <code> quoted-printable</code> or <code> us-ascii</code></li>
     <li><code> env</code>: when refering to environment variables</li>
     
       </ul>
     </li>
     <li><em>listings</em>. To specify lists or listings, the following tags
-          are available:
-          <ul>
+            are available:
+            <ul>
     <li><code> ul</code>: a non-numbered itemized list</li>
     <li><code> li</code>: an item of any of these lists</li>
     
       </ul>
     </li>
     <li><em>misc.</em>: The following are not the optimal solution as they
-          imply layout semantics already but here we go:
-          <ul>
+            imply layout semantics already but here we go:
+            <ul>
     <li><code> tt</code>: typewriter font</li>
     <li><code> em</code>: emphasise</li>
     <li><code> b</code>: bold font</li>
@@ -920,18 +971,36 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
     
       </ul>
     
-        Internally, variables are documented like this (this does <em>not</em> count for
-        the description of a variable but the variable as a whole within the
-        manual) (<em>note: this is auto-generated</em>):
-      
+    @paragraph sect_devguide-docs-dialect-referencing Referencing
+          For specifying references, a distinction is made to what target
+          a reference is made:
+        
+
+    <ul>
+    <li><code> email</code>: an email address</li>
+    <li><code> web</code>: a web address</li>
+    <li><code> varref</code>: referencing a configuration variable</li>
+    <li><code> cmdref</code>: referencing a configuration command</li>
+    <li><code> funcref</code>: referencing a function</li>
+    <li><code> man</code>: referencing a manual page. Optionally,
+            it may contain a <code> sect</code> attribute to specify the
+            section. If none given, 1 will be used by default.</li>
+    
+      </ul>
+    
+    @paragraph sect_devguide-docs-dialect-variables Documenting variables
+          Internally, variables are documented like this (this does <em>not</em> count for
+          the description of a variable but the variable as a whole within the
+          manual) (<em>note: this is auto-generated</em>):
+        
 
     <ul>
     <li>all variables are wrapped within a <code> descriptions</code> tag</li>
     <li>within this, there's any number of <code> variable</code> tags containing
-          the following attributes: <code> name</code> specifies the name of the
-          variable, <code> type</code> specifies its type</li>
+            the following attributes: <code> name</code> specifies the name of the
+            variable, <code> type</code> specifies its type</li>
     <li>within a <code> variable</code> tag, the following tags will be used:
-          <ul>
+            <ul>
     <li><code> init</code>: initial or default value</li>
     <li><code> sig</code>: whether a change of it will cause a signal be emitted</li>
     <li><code> descr</code>: its description</li>
@@ -941,27 +1010,29 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
     
       </ul>
     
-        Internally, functions are documented like this
-        (<em>note: this is auto-generated</em>):
-      
+    @paragraph sect_devguide-docs-dialect-functions Documenting functions
+          Internally, functions are documented like this
+          (<em>note: this is auto-generated</em>):
+        
 
     <ul>
     <li>all functions are wrapped within a <code> descriptions</code> tag</li>
     <li>within this, there's any number of <code> context</code> tags containing
-          the following attributes: <code> name</code> specifies the name of the
-          context. As functions are grouped by context (that is: by menu) where
-          they may have different bindings, each function may appear several
-          times within different <code> context</code> tags.</li>
+            the following attributes: <code> name</code> specifies the name of the
+            context. As functions are grouped by context (that is: by menu) where
+            they may have different bindings, each function may appear several
+            times within different <code> context</code> tags.</li>
     <li>within the <code> context</code> tag, all functions it contains are
-          given via <code> function</code> tags. Each <code> function</code> tag must contain the
-          following attributes: <code> name</code> specifies the name a user
-          may bind to it, <code> default</code> specifies the default key binding
-          and <code> group</code> specifies to which semantic group the function belongs
-          within the context.</li>
+            given via <code> function</code> tags. Each <code> function</code> tag must contain the
+            following attributes: <code> name</code> specifies the name a user
+            may bind to it, <code> default</code> specifies the default key binding
+            and <code> group</code> specifies to which semantic group the function belongs
+            within the context as defined in <code> src/muttng/event/GROUPS</code>.</li>
     <li>the text within the <code> function</code> tag is just the functions's
-          (English) summary to appear in the help menus</li>
+            summary to appear in the help menus</li>
     
       </ul>
+    
     
     @subsubsection sect_devguide-docs-auto Auto-generation
     
@@ -969,27 +1040,42 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
         to our custom XML dialect automatically.
       
 
-    
-        For variables, <code> src/muttng/config/config.pl</code> is used. The
-        documentation process for variables is the same as it was before:
-      
+    @paragraph sect_devguide-docs-auto-variables Variables
+          For variables, <code> src/muttng/config/config.pl</code> is used. The
+          documentation process for variables is the same as it was before:
+        
 
     <ul>
     <li>all documentation is expected between the words <code> START</code>
-          and <code> END</code> (commented) in set_command.cpp</li>
+            and <code> END</code> (commented) in set_command.cpp</li>
     <li>the variable definition for the source is one line</li>
     <li><em>below</em> is a comment block whereby each line to be
-          treated as part of the description for a variable starts with
-          <em>two</em> asterisks. The tags are the same as for
-          all other documentation.
-        </li>
+            treated as part of the description for a variable starts with
+            <em>two</em> asterisks. The tags are the same as for
+            all other documentation.
+          </li>
     
       </ul>
     
-        For functions, <code> src/muttng/event/event.pl</code> is used. It parses the
-        following file in the subdirectory for documentation: <code> EVENTS</code>. This
-        has space or tab separated fields with the following meanings for documentation:
-      
+          The auto-generated files are:
+        
+
+    <ul>
+    <li><code> doc/manual_en/var_def.xml</code>: contains a simple listing
+            of all variables found. As English is expected to be always in sync
+            with the source code, this file will be used to validate and/or
+            check other translations for completeness</li>
+    <li><code> doc/manual_en/var_descr.xml</code>: contains the full English
+            documentation</li>
+    
+      </ul>
+    
+    @paragraph sect_devguide-docs-auto-functions Functions
+          For functions, <code> src/muttng/event/event.pl</code> is used. It parses the
+          following file in the <code> event</code> subdirectory for documentation:
+          <code> EVENTS</code>. This has space or tab separated fields with the
+          following meanings for documentation:
+        
 
     <ul>
     <li>1st field: the context IDs defined in <code> CONTEXTS</code></li>
@@ -999,6 +1085,87 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
     <li>rest of the line: short description</li>
     
       </ul>
+    
+          The auto-generated files are:
+        
+
+    <ul>
+    <li><code> doc/manual_en/func_def.xml</code>: contains a simple listing
+            of all functions found. As English is expected to be always in sync
+            with the source code, this file will be used to validate and/or
+            check other translations for completeness</li>
+    <li><code> doc/manual_en/func_descr.xml</code>: contains the full English
+            documentation</li>
+    
+      </ul>
+    
+    
+    @subsubsection sect_devguide-docs-trans Translations
+    
+        Though the English documents are considered the ``master'' documents,
+        they're only a treated as a translation, too. This section describes how to
+        add and maintain a translation.
+      
+
+    @paragraph sect_devguide-docs-trans-files Mandatory files
+          As mentioned when explaining the directory layout, the manual
+          files are copied from a master document in the <code> common/</code> to a
+          language directory. The manual files define the necessary structure which is
+          technically implemented using XInclude. Thus, a language directory must
+          contain a set of files:
+        
+
+    <ul>
+    <li><code> head.xml</code>: it must contain a <code> head</code> tag as the document
+            root and list all details for the manual: title and authors.</li>
+    <li><code> trans.xml</code>: it must contain a set of translated special words described
+            later in this document.</li>
+    <li><code> intro.xml</code>: it must contain the introductionary chapter</li>
+    <li><code> build.xml</code>: it must contain the chapter explaining the build
+            process</li>
+    <li><code> config.xml</code>: it must contain the configuration documentation</li>
+    <li><code> reference.xml</code>: it must contain the reference chapter. This document
+            must include the following two files: <code> var_descr.xml</code> for variable
+            descriptions and <code> func_descr.xml</code> for functions. For the English
+            documentation, both are automatically generated.</li>
+    <li><code> devguide.xml</code>: it must contain the developer's guide</li>
+    <li><code> ack.xml</code>: it must contain acknowledgements. This file must include
+            the following files in the <code> doc/common/</code> directory:
+            <ul>
+    <li><code> dev_muttng.xml</code>: list of mutt-ng developers</li>
+    <li><code> ack_muttng.xml</code>: list of people who contributed to mutt-ng</li>
+    <li><code> ack_mutt.xml</code>: list of people who contributed to mutt</li>
+    
+      </ul>
+    </li>
+    
+      </ul>
+    
+    @paragraph sect_devguide-docs-trans-add Adding a new translation
+          When adding a new translation, the easiest way is to make a copy of the
+          English translation: just copy all XML files except <code> manual-docbook</code>
+          to the corresponding language directory and add them to version control.
+        
+
+    
+          Afterwards, the following files should be translated first as they contain
+          only a few words to translate:
+        
+
+    <ul>
+    <li><code> head.xml</code></li>
+    <li><code> reference.xml</code></li>
+    <li><code> ack.xml</code> and</li>
+    <li><code> trans.xml</code></li>
+    
+      </ul>
+    
+          For these, what to translate how should be pretty self-explanatory so that
+          not much documentation is put here. In <code> trans.xml</code> the comments and
+          English translations should be sufficient.
+        
+
+    
     
     
     @subsection sect_devguide-core Core
@@ -1051,7 +1218,7 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
         and extended/modified it to fit our needs.
       
 
-    <b>Declaring</b><br><br>
+    @paragraph sect_devguide-libmuttng-signal-declare Declaring
           Declaring a signal is as easy as:
         
 
@@ -1067,7 +1234,7 @@ Signal1<Mailbox*> mailboxHasNewMail;</pre>
         
 
     
-    <b>Connecting</b><br><br>
+    @paragraph sect_devguide-libmuttng-signal-connect Connecting
           Connecting to a signal is easy, too. Each handler must fullfill
           the following two requirements:
         
@@ -1087,7 +1254,7 @@ Signal1<Mailbox*> mailboxHasNewMail;</pre>
 
     <pre>
 connectSignal (someObject.mailboxHasNewMail, this, &foo::bar);</pre>
-    <b>Emitting</b><br><br>
+    @paragraph sect_devguide-libmuttng-signal-connect Emitting
           Emitting a signal can be done by every method having access to
           the signal's declaration and works like this:
         
@@ -1104,7 +1271,7 @@ this.mailboxHasNewMail.emit (this);</pre>
         
 
     
-    <b>Disonnecting</b><br><br>
+    @paragraph sect_devguide-libmuttng-signal-connect Disonnecting
           Disconnecting from a signal is highly recommended to take
           place in the object's destructor as a crash upon the next emit after
           destruction is likely. Though any object may connect as many handlers as it
@@ -1140,7 +1307,7 @@ disconnectSignals (someObject.mailboxHasNewMail, this);</pre>
         all mailboxes can be accessed via an URL only.
       
 
-    <b>Creating a mailbox</b><br><br>
+    @paragraph sect_devguide-libmuttng-mailbox-create Creating a mailbox
           Creating a new instance of a mailbox based on the URL (other ways
           are not planned), use the Mailbox::fromUrl() function like this:
         
