@@ -80,3 +80,4 @@ class LibMuttng {
 };
 
 #endif /* !LIBMUTTNG_LIBMUTTNG_H */
+/** @} */

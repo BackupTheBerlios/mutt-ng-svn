@@ -133,7 +133,7 @@ class Tool : public Muttng {
      * adjust debug levels when @ref option_debug_level changes.
      * @param context Context signal was emitted in.
      * @param name Name of option changed
-     * @þaram value New value.
+     * @param value New value.
      * @return @c true
      */
     bool catchNumOptChange (Event::context context,

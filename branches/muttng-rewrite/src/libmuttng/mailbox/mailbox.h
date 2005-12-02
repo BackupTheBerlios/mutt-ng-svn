@@ -12,25 +12,47 @@
 
 #include "../cache/cache.h"
 
+/**
+ * ACLs for mailbox access.
+ * For IMAP, a list is obtained from the server. For other protocols, these may
+ * be hard-coded.
+ */
 enum acl_bit_t {
-	ACL_LOOKUP = 0,
-	ACL_READ,
-	ACL_SEEN,
-	ACL_WRITE,
-	ACL_INSERT,
-	ACL_POST,
-	ACL_CREATE,
-	ACL_DELETE,
-	ACL_ADMIN,
-
-	RIGHTSMAX
+  /** lookup subscribed folders/new messages */
+  ACL_LOOKUP = 0,
+  /** read/search messages */
+  ACL_READ,
+  /** mark as read */
+  ACL_SEEN,
+  /** change any flags except "deleted" and "read" */
+  ACL_WRITE,
+  /** editing/appending messages */
+  ACL_INSERT,
+  /** save message */
+  ACL_POST,
+  /** create/rename/remove folders */
+  ACL_CREATE,
+  /** mark as (un)deleted and commit deletion */
+  ACL_DELETE,
+  /** change ACLs */
+  ACL_ADMIN,
+  /** for static array sizes */
+  RIGHTSMAX
 };
 
+/**
+ * State to be returned by operations on mailboxes.
+ */
 enum mailbox_query_status {
-	MQ_ERR = -2,		/** error */
-	MQ_NOT_CONNECTED = -1,	/** problem with connection */
-	MQ_OK = 0,		/** means that operation went OK */
-	MQ_NEW_MAIL = 1		/** means that the checkNewMail() operation detected new mail in the mailbox. */
+  /** error */
+  MQ_ERR = -2,
+  /** problem with connection */
+  MQ_NOT_CONNECTED = -1,
+  /** means that operation went OK */
+  MQ_OK = 0,
+  /** means that the Mailbox::checkNewMail() operation
+   * detected new mail in the mailbox. */
+  MQ_NEW_MAIL = 1
 };
 
 /**
@@ -54,10 +76,10 @@ class Mailbox : public Cache {
 
     /**
      * Opens the mailbox.
-     * @return MQ_OK if open was successful, 
-     * 		MQ_NOT_CONNECTED if the connection failed or the
-     * 		mailbox was otherwise unavailable, and
-     * 		MQ_ERR if login failed.
+     * @return
+     * - mailbox_query_status::MQ_OK if open was successful, 
+     * - mailbox_query_status::MQ_NOT_CONNECTED if the connection failed or the mailbox was otherwise unavailable, and
+     * - mailbox_query_status::MQ_ERR if login failed.
      */
     virtual mailbox_query_status openMailbox() = 0;
 
@@ -69,49 +91,57 @@ class Mailbox : public Cache {
 
     /**
      * Checks ACL bit.
+     * @param bit Bit to check.
      * @return true if operation is granted through ACL, otherwise false.
      */
     virtual bool checkACL(acl_bit_t bit) = 0;
 
     /**
      * Closes the mailbox.
-     * @return MQ_OK if close was successful, MQ_NOT_CONNECTED if the
-     * 		mailbox was disconnected before logging out, and
-     * 		MQ_ERR if the logout was not successful.
+     * @return
+     * - mailbox_query_status::MQ_OK if close was successful,
+     * - mailbox_query_status::MQ_NOT_CONNECTED if the mailbox was disconnected before logging out, and
+     * - mailbox_query_status::MQ_ERR if the logout was not successful.
      */
     virtual mailbox_query_status closeMailbox() = 0;
 
     /**
      * Synchronizes the mailbox.
-     * @return MQ_OK if sync was successful, MQ_NOT_CONNECTED if the
-     * 		connection was lost during sync, and
-     * 		MQ_ERR if sync was not successful due to some other
-     * 		error.
+     * @return
+     * - mailbox_query_status::MQ_OK if sync was successful,
+     * - mailbox_query_status::MQ_NOT_CONNECTED if the connection was lost during sync, and
+     * - mailbox_query_status::MQ_ERR if sync was not successful due to some other error.
      */
     virtual mailbox_query_status syncMailbox() = 0;
 
     /**
      * Check mailbox for new mail.
-     * @return MQ_OK if no new mails are in the mailbox, MQ_NEW_MAIL if
-     *		new mail arrived in the mailbox, MQ_NOT_CONNECTED if
-     *		the connection was lost during check, and MQ_ERR
-     *		if some other error happened during check.
+     * @return
+     * - mailbox_query_status::MQ_OK if no new mails are in the mailbox,
+     * - mailbox_query_status::MQ_NEW_MAIL if new mail arrived in the mailbox,
+     * - mailbox_query_status::MQ_NOT_CONNECTED if the connection was lost during check, and
+     * - mailbox_query_status::MQ_ERR if some other error happened during check.
      */
     virtual mailbox_query_status checkMailbox() = 0;
 
     /**
      * Commit message to mailbox.
-     * @return MQ_OK if commit was successful, MQ_NOT_CONNECTED if
-     * 		the connection was lost during check, and MQ_ERR
-     * 		if some other error happened during check.
+     * @param msg Message to commit.
+     * @return
+     * - mailbox_query_status::MQ_OK if commit was successful,
+     * - mailbox_query_status::MQ_NOT_CONNECTED if the connection was lost during check, and
+     * - mailbox_query_status::MQ_ERR if some other error happened during check.
      */
-    virtual mailbox_query_status commitMessage(Message *) = 0;
+    virtual mailbox_query_status commitMessage(Message * msg) = 0;
 
     /**
      * Open a new (local temporary, as far as I understand XXX) message.
-     * @return MQ_OK if open was successful, MQ_ERR otherwise.
+     * @param msg Message.
+     * @return
+     * - mailbox_query_status::MQ_OK if open was successful,
+     * - mailbox_query_status::MQ_ERR otherwise.
      */
-    virtual mailbox_query_status openNewMessage(Message *) = 0;
+    virtual mailbox_query_status openNewMessage(Message * msg) = 0;
 
     /**
      * Check whether access to mailbox is possible.
@@ -119,13 +149,14 @@ class Mailbox : public Cache {
      */
     virtual bool checkAccess() = 0;
 
-
     /**
      * Fetch message headers of message into Message object.
      * @param msg Message object into which the message headers shall be fetched.
      * @param msgnum message number.
-     * @return MQ_OK if fetch was successful, MQ_NOT_CONNECTED if mailbox was not connected,
-     *         MQ_ERR otherwise.
+     * @return
+     * - mailbox_query_status::MQ_OK if fetch was successful,
+     * - mailbox_query_status::MQ_NOT_CONNECTED if mailbox was not connected,
+     * - mailbox_query_status::MQ_ERR otherwise.
      */
     virtual mailbox_query_status fetchMessageHeaders(Message * msg, unsigned int msgnum) = 0;
 
@@ -133,8 +164,10 @@ class Mailbox : public Cache {
      * Fetch complete message into Message object.
      * @param msg Message object into which the message headers shall be fetched.
      * @param msgnum message number.
-     * @return MQ_OK if fetch was successful, MQ_NOT_CONNECTED if mailbox was not connected,
-     *         MQ_ERR otherwise.
+     * @return
+     * - mailbox_query_status::MQ_OK if fetch was successful,
+     * - mailbox_query_status::MQ_NOT_CONNECTED if mailbox was not connected,
+     * - mailbox_query_status::MQ_ERR otherwise.
      */
     virtual mailbox_query_status fetchMessage(Message * msg, unsigned int msgnum) = 0;
 

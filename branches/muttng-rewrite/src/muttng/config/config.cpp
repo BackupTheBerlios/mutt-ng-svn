@@ -98,3 +98,5 @@ bool Config::getSingleOption (int* idx, buffer_t* name, buffer_t* type,
     buffer_shrink (value, 0);
   return (this->handlers[C_SET]->getSingleOption (idx, name, type, init, value));
 }
+
+/** @} */

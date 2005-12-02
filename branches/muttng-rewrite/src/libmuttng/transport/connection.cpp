@@ -1,3 +1,11 @@
+/** @ingroup libmuttng_transport */
+/**
+ * @file libmuttng/transport/connection.cpp
+ * @author Andreas Krennmair <ak@synflood.at>
+ * @brief Implementation: plain TCP connection
+ * @todo implementation is completely missing.
+ */
+
 #include "connection.h"
 
 #include "core/mem.h"
@@ -16,7 +24,9 @@
 #include <string.h>
 #include <strings.h>
 
-Connection::Connection(buffer_t * host, unsigned short port) : tcp_port(port), is_connected(false) {
+Connection::Connection(buffer_t * host, unsigned short port, bool secure_) :
+  tcp_port(port),  is_connected(false), secure(secure_) {
+
   buffer_init(&hostname);
   buffer_add_buffer(&hostname,host);
 }
@@ -31,6 +41,8 @@ bool Connection::connect() {
    * Shall we use exceptions to do that?
    */
   memset(&sin,0,sizeof(sin));
+
+  sigPreconnect.emit (&hostname, tcp_port, secure);
 
   struct hostent * hp = gethostbyname(hostname.str);
 
@@ -56,6 +68,20 @@ bool Connection::connect() {
    */
   if(::connect(fd, (const struct sockaddr *) &sin, sizeof(sin)) < 0) {
     printf("connect failed: %s\n",strerror(errno));
+    return false;
+  }
+
+  /* XXX do SSL/TLS right init/connect() right here */
+#if 0
+  if sslsetup
+    ...
+  else
+    return false;
+#endif
+
+  /* XXX don't pass fd here but some representation of certificate */
+  if (secure && !sigCheckCertificate.emit (fd)) {
+    disconnect();
     return false;
   }
 
@@ -167,17 +193,24 @@ Connection * Connection::fromURL(url_t * url) {
   if (!url) return NULL; /* if not URL provided, we can't create a new connection. */
   if (!url->host || !url->port) return NULL; /* url with no host or port, can't create new connection either. */
   
-  if (url->secure) { /* XXX not yet supported */
-    return NULL;
-  }
-
   buffer_t hostbuf;
   buffer_init(&hostbuf);
   buffer_add_str(&hostbuf,url->host,-1);
 
-  Connection * conn = new Connection(&hostbuf,url->port);
+  Connection * conn = new Connection(&hostbuf,url->port,url->secure);
 
   buffer_free(&hostbuf);
 
   return conn;
+}
+
+bool Connection::isSecure() {
+  return secure;
+}
+
+bool Connection::setSecure (bool secure_) {
+  if (is_connected)
+    return false;
+  secure = secure_;
+  return true;
 }

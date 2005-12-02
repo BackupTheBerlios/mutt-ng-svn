@@ -1,6 +1,6 @@
 /** @ingroup libmuttng */
 /**
- * @file libmuttng/features.h
+ * @file libmuttng/muttng_features.h
  * @brief Interface: Compile-time features
  */
 #ifndef LIBMUTTNG_FEATURES_H
