@@ -10,7 +10,10 @@
 #ifndef LIBMUTTNG_MAILBOX_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_MAILBOX_H
 
-#include "../cache/cache.h"
+#include "libmuttng.h"
+#include "message/message.h"
+#include "util/url.h"
+#include "cache/cache.h"
 
 /**
  * ACLs for mailbox access.
@@ -58,21 +61,17 @@ enum mailbox_query_status {
 /**
  * Base class for mailbox abstraction.
  */
-class Mailbox : public Cache {
+class Mailbox : public LibMuttng {
   public:
     /** construct mailbox form URL already */
     Mailbox (url_t* url_);
     /** cleanup */
-    ~Mailbox ();
+    virtual ~Mailbox ();
     /**
      * Get URL for mailbox.
      * @param dst Destination buffer.
      */
     void getUrl (buffer_t* dst);
-    /**
-     * Implementation of Cache::cacheKey().
-     */
-    virtual const char* cacheKey (Message* msg) = 0;
 
     /**
      * Opens the mailbox.

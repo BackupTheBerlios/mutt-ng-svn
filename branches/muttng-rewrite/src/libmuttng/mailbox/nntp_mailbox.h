@@ -12,5 +12,4 @@ class NNTPMailbox : public RemoteMailbox {
   public:
     NNTPMailbox (url_t* url_);
     ~NNTPMailbox ();
-    const char* cacheKey (Message* msg);
 };

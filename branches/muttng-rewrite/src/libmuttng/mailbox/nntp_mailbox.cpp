@@ -16,7 +16,3 @@ NNTPMailbox::NNTPMailbox (url_t* url_) : RemoteMailbox (url_) {
 NNTPMailbox::~NNTPMailbox (void) {
 }
 
-const char* NNTPMailbox::cacheKey (Message* msg) {
-  (void) msg;
-  return (NULL);
-}

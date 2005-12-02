@@ -12,5 +12,4 @@ class LocalMailbox : public Mailbox {
   public:
     LocalMailbox (url_t* url_);
     ~LocalMailbox ();
-    virtual const char* cacheKey (Message* msg) = 0;
 };

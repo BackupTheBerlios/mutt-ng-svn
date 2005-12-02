@@ -15,4 +15,7 @@
 /** whether libmuttng is compiled with SMTP suppport */
 #define LIBMUTTNG_SMTP  1
 
+/** whether caching is done via qdbm */
+#define LIBMUTTNG_CACHE_QDBM    1
+
 #endif /* !LIBMUTTNG_FEATURES_H */

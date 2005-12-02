@@ -15,8 +15,3 @@ ImapMailbox::ImapMailbox (url_t* url_) : RemoteMailbox (url_) {
 
 ImapMailbox::~ImapMailbox (void) {
 }
-
-const char* ImapMailbox::cacheKey (Message* msg) {
-  (void) msg;
-  return (NULL);
-}

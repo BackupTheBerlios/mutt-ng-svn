@@ -6,9 +6,10 @@
 #ifndef LIBMUTTNG_CACHE_CACHE_H
 #define LIBMUTTNG_CACHE_CACHE_H
 
-#include "../libmuttng.h"
-#include "../message/message.h"
-#include "../util/url.h"
+#include "libmuttng.h"
+#include "muttng_signal.h"
+#include "message/message.h"
+#include "util/url.h"
 
 /** Caching base class */
 class Cache : public LibMuttng {
@@ -36,12 +37,18 @@ class Cache : public LibMuttng {
      */
     virtual bool cacheDumpSingle (url_t* url, const char* key, Message* message) = 0;
     /**
-     * Compute key for message.
-     * This must be implmented by Mailbox classes.
-     * @param msg Message.
-     * @return Key.
+     * Get caching module
+     * @param pointer to module.
      */
-    virtual const char* cacheKey (Message* msg) = 0;
+    static Cache* create();
+    /**
+     * Signal emitted when we need a key.
+     * This is caught by a Mailbox class with caching.
+     * The parameters passed are:
+     * -# the message to compute key for
+     * -# destination where to store key
+     */
+    Signal2<Message*,buffer_t*> cacheGetKey;
 };
 
 #endif /* !LIBMUTTG_CACHE_CACHE_H */

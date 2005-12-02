@@ -17,10 +17,11 @@ class RemoteMailbox : public Mailbox {
   public:
     RemoteMailbox (url_t* url_, Connection * c = NULL);
     ~RemoteMailbox ();
-    virtual const char* cacheKey (Message* msg) = 0;
-
   protected:
+    /** connection */
     Connection * conn;
+    /** caching object */
+    Cache* cache;
 };
 
 #endif

@@ -12,27 +12,13 @@ POP3Mailbox::POP3Mailbox (url_t* url_, Connection * c) : RemoteMailbox (url_,c) 
   this->haveCaching = 1;
   this->haveAuthentication = 1;
   this->haveEncryption = 1;
+  this->cache = Cache::create ();
+  connectSignal (this->cache->cacheGetKey, this, &POP3Mailbox::cacheGetKey);
 }
 
 POP3Mailbox::~POP3Mailbox (void) {
-}
-
-const char* POP3Mailbox::cacheKey (Message* msg) {
-  (void) msg;
-  return (NULL);
-}
-
-Message* POP3Mailbox::cacheLoadSingle (url_t* url, const char* key) {
-  (void)url;
-  (void)key;
-  return NULL;
-}
-
-bool POP3Mailbox::cacheDumpSingle (url_t* url, const char* key, Message* message) {
-  (void)url;
-  (void)key;
-  (void)message;
-  return false;
+  disconnectSignals (this->cache->cacheGetKey, this);
+  delete this->cache;
 }
 
 mailbox_query_status POP3Mailbox::openMailbox() {
@@ -102,4 +88,10 @@ mailbox_query_status POP3Mailbox::fetchMessage(Message * msg, unsigned int msgnu
   (void)msgnum;
 
   return MQ_NOT_CONNECTED;
+}
+
+bool POP3Mailbox::cacheGetKey (Message* msg, buffer_t* dst) {
+  (void) msg;
+  (void) dst;
+  return (false);
 }

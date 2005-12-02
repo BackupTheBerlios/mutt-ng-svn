@@ -12,5 +12,4 @@ class ImapMailbox : public RemoteMailbox {
   public:
     ImapMailbox (url_t* url_);
     ~ImapMailbox ();
-    const char* cacheKey (Message* msg);
 };
