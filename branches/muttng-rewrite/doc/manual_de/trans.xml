@@ -1,6 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <translations>
+  <!-- for indexing -->
   <trans id="encodings">Transportkodierung</trans>
   <trans id="environ">Umgebungsvariable</trans>
   <trans id="hdr">Kopfzeile</trans>
+  <!-- variable descriptions -->
+  <trans id="defbind">Standardbelegung</trans>
+  <trans id="type">Typ</trans>
+  <trans id="initval">Standardwert</trans>
+  <!-- function descriptions -->
+  <trans id="group">Gruppe</trans>
+  <trans id="screen">Menü</trans>
+  <!-- variable types -->
+  <trans id="option-number">Zahl</trans>
+  <trans id="option-string">Zeichenkette</trans>
+  <trans id="option-boolean">Boolean</trans>
+  <trans id="option-url">URL</trans>
+  <trans id="option-quad-option">Quad-Option</trans>
+  <!-- screen names -->
+  <trans id="screen-generic">Generic</trans>
+  <trans id="screen-help">Hilfe</trans>
+  <trans id="screen-index">Übersicht</trans>
+  <trans id="screen-pager">Nachrichtenanzeige</trans>
+  <!-- group names -->
+  <trans id="group-G_INTERNAL">Intern</trans>
+  <trans id="group-G_GENERIC">Allgemein</trans>
+  <trans id="group-G_REPLY">Antworten/Weiterleiten</trans>
+  <trans id="group-G_MOVE">Navigieren</trans>
+  <trans id="group-G_EDIT">Bearbeiten</trans>
+  <trans id="group-G_THREAD">Diskussionsfaden</trans>
 </translations>

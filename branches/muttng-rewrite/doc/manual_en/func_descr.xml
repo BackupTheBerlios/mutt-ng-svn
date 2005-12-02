@@ -1,38 +1,38 @@
 <descriptions>
   <context name="generic">
-    <function name="page-up" default="pgup" group="Movement">
+    <function name="page-up" default="pgup" group="G_MOVE">
       Page up</function>
-    <function name="show-version" default="V" group="Generic">
+    <function name="show-version" default="V" group="G_GENERIC">
       Show version information</function>
   </context>
   <context name="help">
   </context>
   <context name="index">
-    <function name="break-thread" default="#" group="Threading">
+    <function name="break-thread" default="#" group="G_THREAD">
       Break thread at current message</function>
-    <function name="edit-message" default="e" group="Editing">
+    <function name="edit-message" default="e" group="G_EDIT">
       Edit current message</function>
-    <function name="group-reply" default="g" group="Reply/Forward">
+    <function name="group-reply" default="g" group="G_REPLY">
       Group-reply to current message</function>
-    <function name="help" default="h" group="Generic">
+    <function name="help" default="h" group="G_GENERIC">
       Show help screen</function>
-    <function name="link-thread" default="&amp;" group="Threading">
+    <function name="link-thread" default="&amp;" group="G_THREAD">
       Link tagged to current message in thread</function>
-    <function name="list-reply" default="L" group="Reply/Forward">
+    <function name="list-reply" default="L" group="G_REPLY">
       List-reply to current message</function>
-    <function name="reply" default="r" group="Reply/Forward">
+    <function name="reply" default="r" group="G_REPLY">
       Reply to current message</function>
   </context>
   <context name="pager">
-    <function name="edit-message" default="e" group="Editing">
+    <function name="edit-message" default="e" group="G_EDIT">
       Edit current message</function>
-    <function name="group-reply" default="g" group="Reply/Forward">
+    <function name="group-reply" default="g" group="G_REPLY">
       Group-reply to current message</function>
-    <function name="help" default="h" group="Generic">
+    <function name="help" default="h" group="G_GENERIC">
       Show help screen</function>
-    <function name="list-reply" default="L" group="Reply/Forward">
+    <function name="list-reply" default="L" group="G_REPLY">
       List-reply to current message</function>
-    <function name="reply" default="r" group="Reply/Forward">
+    <function name="reply" default="r" group="G_REPLY">
       Reply to current message</function>
   </context>
 </descriptions>

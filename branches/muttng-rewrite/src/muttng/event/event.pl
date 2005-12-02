@@ -232,7 +232,7 @@ foreach my $ctx (sort keys (%context_str)) {
   foreach my $func (sort keys (%{$event_doc{$ctx}})) {
     print OUT "    <function name=\"$func\" ".
                          "default=\"$event_doc{$ctx}{$func}{'key'}\" ".
-                         "group=\"$group_str{$event_doc{$ctx}{$func}{'cat'}}\"".
+                         "group=\"$event_doc{$ctx}{$func}{'cat'}\"".
           ">\n      $event_doc{$ctx}{$func}{'descr'}</function>\n";
   }
   print OUT "  </context>\n";

@@ -57,8 +57,9 @@
   </xsl:template>
 
   <xsl:template match="context">
+    <xsl:variable name="transid" select="concat('screen-',@name)"/>
     <sect2 id="funcref-screen-{@name}">
-      <title>Screen: <xsl:value-of select="@name"/></title>
+      <title><xsl:value-of select="//translations/trans[@id='screen']"/>: <xsl:value-of select="//translations/trans[@id=$transid]"/></title>
       <itemizedlist>
         <xsl:apply-templates select="function"/>
       </itemizedlist>
@@ -66,17 +67,19 @@
   </xsl:template>
 
   <xsl:template match="function">
+    <xsl:variable name="transid" select="concat('group-',@group)"/>
     <listitem>
       <anchor id="func-{@name}"/>
-      <code>&lt;<xsl:value-of select="@name"/>&gt;</code> (default binding: '<code><xsl:value-of select="@default"/></code>', group: <xsl:value-of select="@group"/>): <xsl:value-of select="text()"/>
+      <code>&lt;<xsl:value-of select="@name"/>&gt;</code> (<xsl:value-of select="//translations/trans[@id='defbind']"/>: '<code><xsl:value-of select="@default"/></code>', <xsl:value-of select="//translations/trans[@id='group']"/>: <xsl:value-of select="//translations/trans[@id=$transid]"/>): <xsl:value-of select="text()"/>
     </listitem>
   </xsl:template>
 
   <xsl:template match="variable">
+    <xsl:variable name="transid" select="concat('option-',@type)"/>
     <sect2 id="option-{translate(@name,'_','-')}">
       <title><code>$<xsl:value-of select="@name"/></code></title>
       <para>
-        Type: <code><xsl:value-of select="@type"/></code>
+        <xsl:value-of select="//translations/trans[@id='type']"/>: <xsl:value-of select="//translations/trans[@id=$transid]"/>
       </para>
       <para>
         <xsl:apply-templates select="init" mode="vardescr"/>
@@ -88,7 +91,7 @@
   </xsl:template>
 
   <xsl:template match="init" mode="vardescr">
-    Initial value: '<code><xsl:value-of select="."/></code>'
+    <xsl:value-of select="//translations/trans[@id='initval']"/>: '<code><xsl:value-of select="."/></code>'
   </xsl:template>
 
   <xsl:template match="init"/>

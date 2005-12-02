@@ -89,7 +89,8 @@
   </xsl:template>
 
   <xsl:template match="function">
-    <xsl:text>- &lt;b&gt;&lt;code&gt;&amp;lt;</xsl:text><xsl:value-of select="@name"/><xsl:text>&amp;gt;&lt;/code&gt;&lt;/b&gt; (default binding: '@c </xsl:text><xsl:value-of select="@default"/><xsl:text>', group: </xsl:text><xsl:value-of select="@group"/><xsl:text>): </xsl:text><xsl:value-of select="."/><xsl:text>
+    <xsl:variable name="transid" select="concat('group-',@group)"/>
+    <xsl:text>- &lt;b&gt;&lt;code&gt;&amp;lt;</xsl:text><xsl:value-of select="@name"/><xsl:text>&amp;gt;&lt;/code&gt;&lt;/b&gt; (default binding: '@c </xsl:text><xsl:value-of select="@default"/><xsl:text>', group: </xsl:text><xsl:value-of select="//translations/trans[@id=$transid]"/><xsl:text>): </xsl:text><xsl:value-of select="."/><xsl:text>
     </xsl:text>
   </xsl:template>
 

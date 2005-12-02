@@ -1,6 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <translations>
-  <trans id="encodings">Encodings</trans>
+  <!-- for indexing -->
+  <trans id="encodings">Encoding</trans>
   <trans id="environ">Environment variable</trans>
   <trans id="hdr">Header</trans>
+  <!-- variable descriptions -->
+  <trans id="defbind">Default binding</trans>
+  <trans id="type">Type</trans>
+  <trans id="initval">Initial value</trans>
+  <!-- function descriptions -->
+  <trans id="group">Group</trans>
+  <trans id="screen">Screen</trans>
+  <!-- variable types -->
+  <trans id="option-number">Number</trans>
+  <trans id="option-string">String</trans>
+  <trans id="option-boolean">Boolean</trans>
+  <trans id="option-url">URL</trans>
+  <trans id="option-quad-option">Quad-Option</trans>
+  <!-- group names -->
+  <trans id="group-G_INTERNAL">Internal</trans>
+  <trans id="group-G_GENERIC">Generic</trans>
+  <trans id="group-G_REPLY">Reply/Forward</trans>
+  <trans id="group-G_MOVE">Movement</trans>
+  <trans id="group-G_EDIT">Editing</trans>
+  <trans id="group-G_THREAD">Threading</trans>
 </translations>

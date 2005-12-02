@@ -1,4 +1,4 @@
-LANGUAGES=en de
+LANGUAGES=de en
 
 all: prepare
 
