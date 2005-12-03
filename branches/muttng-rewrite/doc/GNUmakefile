@@ -1,5 +1,6 @@
 ALL_LANGUAGES=de en
 BUILD_LANGUAGES=$(ALL_LANGUAGES)
+TEXDIRS=$(TEXINPUTS):./../tex:./../examples:
 
 all: prepare
 
@@ -20,10 +21,18 @@ manual:
 	  $(call doxslt_s,manual_$$l/manual-user.xml,xsl/manual2docbook.xsl,manual_$$l/manual-docbook.xml,$$l) ; \
 	  $(call doxslt_m,manual_$$l/manual-docbook.xml,xsl/docbook2chunkhtml.xsl,manual_$$l/,$$l) ; \
 	  $(call doxslt_s,manual_$$l/manual-docbook.xml,xsl/docbook2html.xsl,manual_$$l/manual.html,$$l) ; \
+	  $(call doxslt_s,manual_$$l/manual-user.xml,xsl/manual2tex.xsl,manual_$$l/manual.tex,$$l) ; \
         done
 ifneq ($(TIDY),)
 	@ for l in $(BUILD_LANGUAGES) ; do \
 	  $(TIDY) -q -i -m -utf8 manual_$$l/*.html >/dev/null 2>&1 || true ; \
+	done
+endif
+ifneq ($(PDFLATEX),)
+	@ for l in $(BUILD_LANGUAGES) ; do \
+	  cd manual_$$l ; \
+	  TEXINPUTS="$(TEXDIRS)" $(PDFLATEX) -interaction=nonstopmode -file-line-error-style manual.tex ; \
+	  cd .. ; \
 	done
 endif
 
@@ -44,6 +53,10 @@ endif
 
 clean:
 	$(MAKE) -C examples clean
+	@ for l in $(ALL_LANGUAGES) ; do \
+	  rm -rf manual_$$l/*.html manual_$$l/*.aux manual_$$l/*.idx manual_$$l/*.lof manual_$$l/*.log manual_$$l/*.lol manual_$$l/*.out manual_$$l/*.pdf manual_$$l/*.tex manual_$$l/*.toc manual_$$l/manual-docbook.xml ; \
+	  rm -rf homepage_$$l/*.html ; \
+	done
 
 test:
 	$(MAKE) -C examples test

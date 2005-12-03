@@ -638,6 +638,9 @@ include [path]/GNUmakefile.config</pre><code> GNUmakefile.config</code> interpre
     <li>@c xgettext(1): <code> $(XGETTEXT)</code></li>
     <li>@c msgmerge(1): <code> $(MSGMERGE)</code></li>
     <li>@c msgfmt(1): <code> $(MSGFMT)</code></li>
+    <li>@c pdflatex(1): <code> $(PDFLATEX)</code></li>
+    <li>@c latex(1): <code> $(LATEX)</code></li>
+    <li>@c makeindex(1): <code> $(MAKEINDEX)</code></li>
     
       </ul>
     </li>
@@ -840,6 +843,7 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
           fancy HTML</li>
     <li>Doxygen: this format makes doxygen pick up the documentation to
           integrate it into the source's docs</li>
+    <li>LaTex: this format is used to generate PDF and PostScript output</li>
     
       </ul>
     
@@ -871,6 +875,7 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
           the homepage in a specific language</li>
     <li><code> examples/</code>: it contains all examples contained in the manual
           (such as programming or configuration examples.)</li>
+    <li><code> tex/</code>: all files related to LaTeX-processing</li>
     
       </ul>
     
