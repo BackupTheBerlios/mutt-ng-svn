@@ -869,6 +869,8 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
           the manual in a specific language</li>
     <li><code> homepage_[lang]/</code>: it contains all input and output files for
           the homepage in a specific language</li>
+    <li><code> examples/</code>: it contains all examples contained in the manual
+          (such as programming or configuration examples.)</li>
     
       </ul>
     
@@ -888,6 +890,12 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
         </li>
     
       </ul>
+    
+        To ensure that at least the programming examples are up-to-date and compile,
+        they're not only fragments but complete examples that can be compiled, linked
+        and, if needed, even executed.
+      
+
     
     @subsubsection sect_devguide-docs-dialect XML Dialect
     
@@ -973,7 +981,8 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
     
     @paragraph sect_devguide-docs-dialect-referencing Referencing
           For specifying references, a distinction is made to what target
-          a reference is made:
+          a reference is made. The following don't accept attributes for the
+          target but the target given as text to the tag:
         
 
     <ul>
@@ -987,6 +996,12 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
             section. If none given, 1 will be used by default.</li>
     
       </ul>
+    
+          For document-internal references, the <code> docref</code> tag is to be used
+          which expects the target as <code> href</code> attribute and the text to
+          create a link with given as text for the <code> docref</code> tag.
+        
+
     
     @paragraph sect_devguide-docs-dialect-variables Documenting variables
           Internally, variables are documented like this (this does <em>not</em> count for
@@ -1030,6 +1045,25 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
             within the context as defined in <code> src/muttng/event/GROUPS</code>.</li>
     <li>the text within the <code> function</code> tag is just the functions's
             summary to appear in the help menus</li>
+    
+      </ul>
+    
+    @paragraph sect_devguide-docs-dialect-listings Embedding listrings
+          Eventually there will be several types of listings each treated individually
+          for the output. The <code> listing</code> tag contains no text but the following
+          attributes:
+        
+
+    <ul>
+    <li><code> lang</code> specifies the language. Currently, only <code> cpp</code> for C++
+            is valid though other types such as <code> c</code> or <code> muttngrc</code> will
+            be added as progress is made.</li>
+    <li><code> id</code> specifies a document-internal ID to link to listings. As for
+            any other ID attributes, we fake a namespace or hierarchy by prefixes. At least all
+            sample listings must have <code> sample-</code> as prefix for this attribute.</li>
+    <li><code> title</code> is the title to specify (if at all which depends on the output
+            format.)</li>
+    <li><code> href</code> specifies the filename in the <code> doc/examples/</code> directory.</li>
     
       </ul>
     
@@ -1224,13 +1258,7 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
 
     <pre>
 SignalX<type of arg1,type of arg2,...,type of argX> signalname;</pre>
-          whereby <code> X</code> is the number of arguments. An example may be:
-        
-
-    <pre>
-Signal1<Mailbox*> mailboxHasNewMail;</pre>
-          saying that all handlers will get one argument being a pointer to a
-          Mailbox class instance.
+          whereby <code> X</code> is the number of arguments.
         
 
     
@@ -1247,31 +1275,41 @@ Signal1<Mailbox*> mailboxHasNewMail;</pre>
     
       </ul>
     
-          For the above example, given a class <code> foo</code> with a method
-          <code> bool foo::bar(Mailbox* mailbox)</code>, connecting to the
-          signal is as easy as:
+          Due to overloading, connecting to a signal is always the same:
         
 
     <pre>
-connectSignal (someObject.mailboxHasNewMail, this, &foo::bar);</pre>
-    @paragraph sect_devguide-libmuttng-signal-connect Emitting
+connectSignal (signal, object, Object::handler)</pre>
+          ..whereby:
+        
+
+    <ul>
+    <li><code> signal</code> is the signale declared elsewhere</li>
+    <li><code> object</code> is an instance of an object containg a handler</li>
+    <li><code> Object::handler</code> is the actual handler method. Here, <code> Object</code>
+            is the <em>classname</em> of <code> object</code></li>
+    
+      </ul>
+    
+          In most cases, the object will be <code> this</code> though any method may connect
+          everything it wants to every signal it wishes to.
+        
+
+    
+    @paragraph sect_devguide-libmuttng-signal-emit Emitting
           Emitting a signal can be done by every method having access to
           the signal's declaration and works like this:
         
 
     <pre>
-this.mailboxHasNewMail.emit (this);</pre>
-          ...assuming the signal is defined in a Mailbox class.
-        
-
-    
+signal.emit (arguments);</pre>
           For a given signal, all handlers are executed in some order while
           each of them returns success. As soon as one handlers reports failure,
           the emit process will abort.
         
 
     
-    @paragraph sect_devguide-libmuttng-signal-connect Disonnecting
+    @paragraph sect_devguide-libmuttng-signal-disconnect Disonnecting
           Disconnecting from a signal is highly recommended to take
           place in the object's destructor as a crash upon the next emit after
           destruction is likely. Though any object may connect as many handlers as it
@@ -1280,11 +1318,21 @@ this.mailboxHasNewMail.emit (this);</pre>
         
 
     <pre>
-disconnectSignals (someObject.mailboxHasNewMail, this);</pre>
+disconnectSignals (signal, object);</pre>
           This must be done for every signal the object connected a(ny) handler(s)
-          to.
+          to. In most cases, object is simply <code> this</code>.
         
 
+    
+    @paragraph sect_devguide-libmuttng-signal-example Example
+          The @ref sample-libmuttng-signal "Signal example"  shows how
+          to handle signals: it contains a class <code> Sig</code> which contains nothing but
+          the signal declaration and a class <code> Handler</code> which simply catches a signal
+          and prints the argument passed through all handlers.
+        
+
+    @anchor sample-libmuttng-signal
+    @verbinclude libmuttng_signal.cpp
     
     
     @subsubsection sect_devguide-libmuttng-mailbox Mailbox handling
@@ -1309,17 +1357,13 @@ disconnectSignals (someObject.mailboxHasNewMail, this);</pre>
 
     @paragraph sect_devguide-libmuttng-mailbox-create Creating a mailbox
           Creating a new instance of a mailbox based on the URL (other ways
-          are not planned), use the Mailbox::fromUrl() function like this:
+          are not planned), use the Mailbox::fromUrl() function as shown
+          @ref sample-libmuttng-mailbox-create "in the example" .
         
 
-    <pre>
-buffer_t error;
-Mailbox* folder = NULL;
-buffer_init(&error);
-if (!(folder = Mailbox::fromUrl ([url string], &error)))
-  /* error: likely URL is wrong */
-else
-  /* success */</pre>
+    @anchor sample-libmuttng-mailbox-create
+    @verbinclude libmuttng_mailbox_create.cpp
+    
     
     @subsubsection sect_devguide-libmuttng-auto Auto-generated code
     <em>Signal implementation.</em> As unfortunately we cannot overload

@@ -1,0 +1,19 @@
+FILES=libmuttng_mailbox_create libmuttng_signal
+LIB=
+APPS=app_libmuttng_signal
+
+include $(CURDIR)/../../GNUmakefile.whereis
+include $(CURDIR)/../../GNUmakefile.config.mine
+include $(CURDIR)/../../GNUmakefile.config
+
+CXXFLAGS+=-I../../src -I../../src/libmuttng
+
+include $(CURDIR)/../../GNUmakefile.compile_cpp
+
+test: $(OBJS) $(APPS)
+
+app_%: %.o
+	$(CXX) -o $@ $^ $(LDFLAGS)
+
+extraclean:
+	rm -rf $(OBJS) $(APPS)

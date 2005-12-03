@@ -567,6 +567,8 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
           the manual in a specific language</li>
         <li><tt>homepage_[lang]/</tt>: it contains all input and output files for
           the homepage in a specific language</li>
+        <li><tt>examples/</tt>: it contains all examples contained in the manual
+          (such as programming or configuration examples.)</li>
       </ul>
 
       <p>
@@ -585,6 +587,12 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
           for all translations. These are copied to all <tt>manual_*</tt> directories.
         </li>
       </ul>
+
+      <p>
+        To ensure that at least the programming examples are up-to-date and compile,
+        they're not only fragments but complete examples that can be compiled, linked
+        and, if needed, even executed.
+      </p>
 
     </subsection>
     <!--}}}-->
@@ -693,7 +701,8 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
 
         <p>
           For specifying references, a distinction is made to what target
-          a reference is made:
+          a reference is made. The following don't accept attributes for the
+          target but the target given as text to the tag:
         </p>
 
         <ul>
@@ -706,6 +715,12 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
             it may contain a <tt>sect</tt> attribute to specify the
             section. If none given, 1 will be used by default.</li>
         </ul>
+
+        <p>
+          For document-internal references, the <tt>docref</tt> tag is to be used
+          which expects the target as <tt>href</tt> attribute and the text to
+          create a link with given as text for the <tt>docref</tt> tag.
+        </p>
 
       </subsubsection>
       <!--}}}-->
@@ -761,7 +776,30 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
 
       </subsubsection>
       <!--}}}-->
-            
+
+      <subsubsection id="devguide-docs-dialect-listings" title="Embedding listrings"> <!--{{{-->
+
+        <p>
+          Eventually there will be several types of listings each treated individually
+          for the output. The <tt>listing</tt> tag contains no text but the following
+          attributes:
+        </p>
+
+        <ul>
+          <li><tt>lang</tt> specifies the language. Currently, only <tt>cpp</tt> for C++
+            is valid though other types such as <tt>c</tt> or <tt>muttngrc</tt> will
+            be added as progress is made.</li>
+          <li><tt>id</tt> specifies a document-internal ID to link to listings. As for
+            any other ID attributes, we fake a namespace or hierarchy by prefixes. At least all
+            sample listings must have <tt>sample-</tt> as prefix for this attribute.</li>
+          <li><tt>title</tt> is the title to specify (if at all which depends on the output
+            format.)</li>
+          <li><tt>href</tt> specifies the filename in the <tt>doc/examples/</tt> directory.</li>
+        </ul>
+
+      </subsubsection>
+      <!--}}}-->
+
     </subsection>
     <!--}}}-->
 
@@ -948,7 +986,7 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
     <title>Libmuttng</title>
 
     <subsection id="devguide-libmuttng-features"> <!--{{{-->
-      <title>Funktionen</title>
+      <title>Features</title>
 
       <p>
         Libmuttng is in the <tt>src/libmuttng/</tt> subdirectory
@@ -981,7 +1019,7 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
     <!--}}}-->
 
     <subsection id="devguide-libmuttng-signal"> <!--{{{-->
-      <title>Signalverarbeitung</title>
+      <title>Signal handling</title>
 
       <p>
         Libmuttng contains a very simple, easy to use and typesafe signal
@@ -1007,15 +1045,7 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
 SignalX&lt;type of arg1,type of arg2,...,type of argX&gt; signalname;</pre>
 
         <p>
-          whereby <tt>X</tt> is the number of arguments. An example may be:
-        </p>
-
-        <pre>
-Signal1&lt;Mailbox*&gt; mailboxHasNewMail;</pre>
-
-        <p>
-          saying that all handlers will get one argument being a pointer to a
-          Mailbox class instance.
+          whereby <tt>X</tt> is the number of arguments.
         </p>
 
       </subsubsection>
@@ -1024,7 +1054,7 @@ Signal1&lt;Mailbox*&gt; mailboxHasNewMail;</pre>
       <subsubsection id="devguide-libmuttng-signal-connect" title="Connecting"> <!--{{{-->
 
         <p>
-          <em>Connecting</em> to a signal is easy, too. Each handler must fullfill
+          Connecting to a signal is easy, too. Each handler must fullfill
           the following two requirements:
         </p>
 
@@ -1036,30 +1066,40 @@ Signal1&lt;Mailbox*&gt; mailboxHasNewMail;</pre>
         </ul>
 
         <p>
-          For the above example, given a class <tt>foo</tt> with a method
-          <tt>bool foo::bar(Mailbox* mailbox)</tt>, connecting to the
-          signal is as easy as:
+          Due to overloading, connecting to a signal is always the same:
         </p>
 
         <pre>
-connectSignal (someObject.mailboxHasNewMail, this, &amp;foo::bar);</pre>
+connectSignal (signal, object, Object::handler)</pre>
+
+        <p>
+          ..whereby:
+        </p>
+
+        <ul>
+          <li><tt>signal</tt> is the signale declared elsewhere</li>
+          <li><tt>object</tt> is an instance of an object containg a handler</li>
+          <li><tt>Object::handler</tt> is the actual handler method. Here, <tt>Object</tt>
+            is the <em>classname</em> of <tt>object</tt></li>
+        </ul>
+
+        <p>
+          In most cases, the object will be <tt>this</tt> though any method may connect
+          everything it wants to every signal it wishes to.
+        </p>
 
       </subsubsection>
       <!--}}}-->
 
-      <subsubsection id="devguide-libmuttng-signal-connect" title="Emitting"> <!--{{{-->
+      <subsubsection id="devguide-libmuttng-signal-emit" title="Emitting"> <!--{{{-->
 
         <p>
-          <em>Emitting</em> a signal can be done by every method having access to
+          Emitting a signal can be done by every method having access to
           the signal's declaration and works like this:
         </p>
 
         <pre>
-this.mailboxHasNewMail.emit (this);</pre>
-
-        <p>
-          ...assuming the signal is defined in a Mailbox class.
-        </p>
+signal.emit (arguments);</pre>
 
         <p>
           For a given signal, all handlers are executed in some order while
@@ -1070,10 +1110,10 @@ this.mailboxHasNewMail.emit (this);</pre>
       </subsubsection>
       <!--}}}-->
 
-      <subsubsection id="devguide-libmuttng-signal-connect" title="Disonnecting"> <!--{{{-->
+      <subsubsection id="devguide-libmuttng-signal-disconnect" title="Disonnecting"> <!--{{{-->
 
         <p>
-          <em>Disconnecting</em> from a signal is highly recommended to take
+          Disconnecting from a signal is highly recommended to take
           place in the object's destructor as a crash upon the next emit after
           destruction is likely. Though any object may connect as many handlers as it
           likes to a signal, it's currently only supported to unbind all
@@ -1081,16 +1121,32 @@ this.mailboxHasNewMail.emit (this);</pre>
         </p>
 
         <pre>
-disconnectSignals (someObject.mailboxHasNewMail, this);</pre>
+disconnectSignals (signal, object);</pre>
 
         <p>
           This must be done for every signal the object connected a(ny) handler(s)
-          to.
+          to. In most cases, object is simply <tt>this</tt>.
         </p>
 
       </subsubsection>
       <!--}}}-->
 
+      <subsubsection id="devguide-libmuttng-signal-example" title="Example"> <!--{{{-->
+
+        <p>
+          The <docref href="sample-libmuttng-signal">Signal example</docref> shows how
+          to handle signals: it contains a class <tt>Sig</tt> which contains nothing but
+          the signal declaration and a class <tt>Handler</tt> which simply catches a signal
+          and prints the argument passed through all handlers.
+        </p>
+        
+        <listing lang="cpp" id="sample-libmuttng-signal"
+          title="Signal example"
+          href="libmuttng_signal.cpp"/>
+
+      </subsubsection>
+      <!--}}}-->
+ 
     </subsection>
     <!--}}}-->
 
@@ -1120,17 +1176,13 @@ disconnectSignals (someObject.mailboxHasNewMail, this);</pre>
       
         <p>
           Creating a new instance of a mailbox based on the URL (other ways
-          are not planned), use the Mailbox::fromUrl() function like this:
+          are not planned), use the Mailbox::fromUrl() function as shown
+          <docref href="sample-libmuttng-mailbox-create">in the example</docref>.
         </p>
 
-        <pre>
-buffer_t error;
-Mailbox* folder = NULL;
-buffer_init(&amp;error);
-if (!(folder = Mailbox::fromUrl ([url string], &amp;error)))
-  /* error: likely URL is wrong */
-else
-  /* success */</pre>
+        <listing lang="cpp" id="sample-libmuttng-mailbox-create"
+          title="Create Mailbox from URL"
+          href="libmuttng_mailbox_create.cpp"/>
 
       </subsubsection>
       <!--}}}-->
@@ -1141,7 +1193,7 @@ else
     <!-- these should be the last -->
 
     <subsection id="devguide-libmuttng-auto"> <!--{{{-->
-      <title>Automatisch erzeugter Source</title>
+      <title>Auto-generated code</title>
 
       <p>
         <em>Signal implementation.</em> As unfortunately we cannot overload
@@ -1158,7 +1210,7 @@ else
     <!--}}}-->
 
       <subsection id="devguide-libmuttng-extending"> <!--{{{-->
-      <title>Bibliothek erweitern</title>
+      <title>Extending the library</title>
 
       <p>
         When making extensions to the library and adding classes,

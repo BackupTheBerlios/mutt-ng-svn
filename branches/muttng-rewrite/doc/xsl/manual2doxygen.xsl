@@ -82,6 +82,17 @@
     <xsl:apply-templates/>
   </xsl:template>
 
+  <xsl:template match="listing">
+    <xsl:text>@anchor </xsl:text><xsl:value-of select="@id"/><xsl:text>
+    </xsl:text>
+    <xsl:text>@verbinclude </xsl:text><xsl:value-of select="@href"/><xsl:text>
+    </xsl:text>
+  </xsl:template>
+
+  <xsl:template match="docref">
+    <xsl:text>@ref </xsl:text><xsl:value-of select="@href"/><xsl:text> "</xsl:text><xsl:value-of select="."/><xsl:text>" </xsl:text>
+  </xsl:template>
+
   <xsl:template match="context">
     <xsl:text>@subsubsection screen_</xsl:text><xsl:value-of select="@name"/><xsl:text> Screen: </xsl:text><xsl:value-of select="@name"/><xsl:text>
     </xsl:text>

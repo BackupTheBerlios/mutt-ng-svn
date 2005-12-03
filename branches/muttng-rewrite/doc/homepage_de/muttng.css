@@ -9,11 +9,11 @@
 
   h1,h2,h3,h4,h5,p.title,div.toc,span.appendix,
   span.chapter,span.sect1,span.sect2,span.sect3,
-  div.list-of-tables {
+  div.list-of-tables,div.list-of-examples {
     font-family: sans-serif;
   }
 
-  h1,h1.title,div.author,p.pubdate,div.abstract {
+  h1,h1.title,div.author,p.pubdate,div.abstract,p.title {
     text-align: center;
   }
 

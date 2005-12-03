@@ -43,7 +43,7 @@ ifneq ($(TIDY),)
 endif
 
 clean:
-	@ true
+	$(MAKE) -C examples clean
 
 test:
-	@ true
+	$(MAKE) -C examples test

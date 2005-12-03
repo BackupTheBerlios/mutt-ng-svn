@@ -5,6 +5,7 @@ all: subdirs
 clean: subdirclean
 
 doc:
+	$(MAKE) -C ./doc doxygen manual homepage
 	$(MAKE) -C ./src srcdoc
 
 test: subdirtest

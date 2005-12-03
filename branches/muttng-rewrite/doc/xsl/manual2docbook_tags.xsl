@@ -135,6 +135,10 @@
       <code>$<xsl:value-of select="."/></code></link>
   </xsl:template>
 
+  <xsl:template match="docref">
+    <link linkend="{@href}"><xsl:value-of select="."/></link>
+  </xsl:template>
+
   <xsl:template match="web">
     <ulink url="{text()}"><xsl:value-of select="."/></ulink>
   </xsl:template>
@@ -156,6 +160,14 @@
   <xsl:template match="pre">
     <screen>
 <xsl:apply-templates/></screen>
+  </xsl:template>
+
+  <xsl:template match="listing[@lang='cpp']">
+    <example>
+      <anchor id="{@id}"/>
+      <title><xsl:value-of select="@title"/></title>
+      <programlisting><xi:include  href="{concat('./../examples/',@href)}" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
+    </example>
   </xsl:template>
 
   <xsl:template match="em">
