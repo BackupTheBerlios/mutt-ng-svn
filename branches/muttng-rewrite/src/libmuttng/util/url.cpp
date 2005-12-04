@@ -26,27 +26,30 @@ static struct {
   const char* str;
   /** whether proto uses SSL */
   bool secure;
+  /** default port */
+  unsigned int defport;
 } Protos[] = {
-  { P_FILE,     "file",         0 },
+  { P_FILE,     "file",         0,      0 },
 #if LIBMUTTNG_IMAP
-  { P_IMAP,     "imap",         0 },
-  { P_IMAP,     "imaps",        1 },
+  { P_IMAP,     "imap",         0,      143 },
+  { P_IMAP,     "imaps",        1,      993 },
 #endif
 #if LIBMUTTNG_NNTP
-  { P_NNTP,     "nntp",         0 },
-  { P_NNTP,     "news",         0 },
-  { P_NNTP,     "nntps",        1 },
-  { P_NNTP,     "snews",        1 },
+  { P_NNTP,     "nntp",         0,      119 },
+  { P_NNTP,     "news",         0,      119 },
+  { P_NNTP,     "nntps",        1,      563 },
+  { P_NNTP,     "snews",        1,      563 },
 #endif
 #if LIBMUTTNG_POP3
-  { P_POP3,     "pop",          0 },
-  { P_POP3,     "pops",         1 },
+  { P_POP3,     "pop",          0,      110 },
+  { P_POP3,     "pops",         1,      995 },
 #endif
 #if LIBMUTTNG_SMTP
-  { P_SMTP,     "smtp",         0 },
-  { P_SMTP,     "ismtps",       1 },
+  { P_SMTP,     "smtp",         0,      25 },
+  { P_SMTP,     "smtps",        1,      465 },
+  { P_SMTP,     "ssmtp",        1,      465 },
 #endif
-  { P_LAST,     NULL,           0 }
+  { P_LAST,     NULL,           0,      0 }
 };
 
 /**
@@ -113,12 +116,15 @@ static bool url_decode (char* url, int* chars) {
  * For an URL string, check and return protocol.
  * @param s URL String.
  * @param secure Pointer to storage to indicate whether SSL is used or not.
+ * @param defport Pointer to storage for default port
  * @param error Error buffer for error message.
  * @return
  *      - protocol upon success
  *      - @c P_LAST otherwise
  */
-static urlproto_t url_get_proto (const char* s, bool* secure, buffer_t* error) {
+static urlproto_t url_get_proto (const char* s, bool* secure,
+                                 unsigned short* defport,
+                                 buffer_t* error) {
   char sbuf[32];        /* 32 should suffice for any ^[a-z]: string */
   char *t = NULL;
   int i = 0;
@@ -136,6 +142,7 @@ static urlproto_t url_get_proto (const char* s, bool* secure, buffer_t* error) {
 
   for (i = 0; Protos[i].str; i++)
     if (str_eq (Protos[i].str, sbuf)) {
+      *defport = Protos[i].defport;
       *secure = Protos[i].secure;
       return (Protos[i].proto);
     }
@@ -259,11 +266,12 @@ url_t* url_from_string (const char* url, buffer_t* error) {
   url_t* ret = NULL;
   urlproto_t proto = P_LAST;
   bool secure = false;
+  unsigned short defport = 0;
 
-  if ((proto = url_get_proto (url, &secure, error)) == P_LAST)
+  if ((proto = url_get_proto (url, &secure, &defport, error)) == P_LAST)
     return (NULL);
 
-  ret = new url_t (proto, secure);
+  ret = new url_t (proto, secure, defport);
   buf = str_dup (url);
   tmp = strchr (buf, ':') + 1;
 
@@ -318,7 +326,10 @@ void url_to_string (url_t* url, buffer_t* dst, bool pwd) {
     buffer_add_ch (dst, '@');
   }
   buffer_add_str (dst, url->host, -1);
-  /* XXX default port */
+  if (url->port != url->defport) {
+    buffer_add_ch (dst, ':');
+    buffer_add_num (dst, url->port, -1);
+  }
   buffer_add_str (dst, url->path, -1);
 }
 

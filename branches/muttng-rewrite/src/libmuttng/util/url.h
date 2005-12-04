@@ -44,7 +44,9 @@ typedef struct url_t {
   /** optional: host */
   char* host;
   /** optional: port */
-  int port;
+  unsigned short port;
+  /** default port; don't touch */
+  unsigned short defport;
   /** optional: whether we're using SSL */
   bool secure;
   /** mandatory: path */
@@ -56,12 +58,14 @@ typedef struct url_t {
    * Init new url_t structure.
    * @param proto_ protocol.
    * @param secure_ secure.
+   * @param defport_ default port.
    */
-  url_t(urlproto_t proto_, bool secure_) {
+  url_t(urlproto_t proto_, bool secure_, unsigned short defport_) {
     username = NULL;
     password = NULL;
     host = NULL;
     port = 0;
+    defport = defport_;
     secure = secure_;
     proto = proto_; 
   }
