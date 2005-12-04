@@ -175,7 +175,7 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error) {
   url->username = NULL;
   url->password = NULL;
   url->host = NULL;
-  url->port = 0;
+  url->port = url->defport;
   url->path = NULL;
 
   if (str_ncmp (src, "//", 2))

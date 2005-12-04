@@ -640,5 +640,3 @@ std::vector<Event::event>* Event::getEvents (Event::context context) {
 binding_t* Event::getHelp (Event::context context, Event::event event) {
   return (&bindings[context][event]);
 }
-
-/** @} */
