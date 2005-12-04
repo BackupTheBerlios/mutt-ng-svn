@@ -3,8 +3,8 @@
  * @file libmuttng/mailbox/pop3_mailbox.h
  * @brief Interface: POP3 Mailbox
  */
-#ifndef LIBMUTTNG_MAILBOX_POP3_MAILBOX__H
-#define LIBMUTTNG_MAILBOX_POP3_MAILBOX__H
+#ifndef LIBMUTTNG_MAILBOX_POP3_MAILBOX_H
+#define LIBMUTTNG_MAILBOX_POP3_MAILBOX_H
 
 #include "remote_mailbox.h"
 #include "transport/connection.h"

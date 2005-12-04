@@ -17,3 +17,10 @@ clean:
 
 depend:
 	mkdep $(CFLAGS) $(SRCS) || ( ( $(CC) $(DEPFLAG) $(CFLAGS) $(SRCS) ) > ./.depend || true )
+
+# if there is a file called `.depend' in current dir, include it
+ifneq ($(wildcard $(CURDIR)/.depend),)
+include $(CURDIR)/.depend
+else
+#$(warning "Run 'make depend' first...")
+endif

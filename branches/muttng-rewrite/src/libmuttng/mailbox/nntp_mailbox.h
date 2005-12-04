@@ -3,6 +3,9 @@
  * @file libmuttng/mailbox/nntp_mailbox.h
  * @brief Interface: NNTP Mailbox
  */
+#ifndef LIBMUTTNG_MAILBOX_NNTP_MAILBOX_H
+#define LIBMUTTNG_MAILBOX_NNTP_MAILBOX_H
+
 #include "remote_mailbox.h"
 
 /**
@@ -13,3 +16,5 @@ class NNTPMailbox : public RemoteMailbox {
     NNTPMailbox (url_t* url_);
     ~NNTPMailbox ();
 };
+
+#endif

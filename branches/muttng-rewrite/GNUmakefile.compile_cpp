@@ -20,3 +20,10 @@ depend:
 
 $(BINARY): $(BINARY).o $(LIB) $(foreach lib,$(wildcard $(CURDIR)/$(lib)),$(LINKLIBS))
 	$(CXX) -o $@ $(LDFLAGS) $^
+
+# if there is a file called `.depend' in current dir, include it
+ifneq ($(wildcard $(CURDIR)/.depend),)
+include $(CURDIR)/.depend
+else
+#$(warning "Run 'make depend' first...")
+endif

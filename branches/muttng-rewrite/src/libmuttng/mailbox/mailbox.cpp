@@ -7,9 +7,11 @@
 
 #include "core/str.h"
 
-#include "mailbox.h"
-#include "pop3_mailbox.h"
 #include "transport/connection.h"
+
+#include "mailbox.h"
+#include "remote_mailbox.h"
+#include "local_mailbox.h"
 
 Mailbox::Mailbox (url_t* url_) {
   this->haveCaching = 0;
@@ -30,17 +32,19 @@ void Mailbox::getUrl (buffer_t* dst) {
 
 Mailbox* Mailbox::fromURL (const char* url_, buffer_t* error) {
   Mailbox* ret = NULL;
-  Connection * conn = NULL;
   url_t* u = NULL;
 
   if (!(u = url_from_string (url_, error)))
     return (NULL);
+
   switch (u->proto) {
+  case P_IMAP:
   case P_POP3:
-    conn = Connection::fromURL(u);
-    if (conn) {
-      ret = new POP3Mailbox(u,conn);
-    }
+  case P_NNTP:
+    ret = RemoteMailbox::fromURL(u);
+    break;
+  case P_FILE:
+    ret = LocalMailbox::fromURL(u);
     break;
   default:
     break;
