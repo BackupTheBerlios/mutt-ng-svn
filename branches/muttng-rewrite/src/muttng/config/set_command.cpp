@@ -9,7 +9,8 @@
 #include "core/buffer.h"
 #include "core/str.h"
 #include "core/intl.h"
-#include "core/hash.h"
+
+#include "util/hash.h"
 
 /** all storage for variables is static here */
 #define SET_COMMAND_CPP 1
@@ -164,12 +165,15 @@ static option_t Options[] = {
   { 0,                          NULL,   NULL,   0,      0 }
 };
 
+/** how many options we know */
+#define OPTION_COUNT    (sizeof (Options) / sizeof (option_t))
+
 /** for faster access: hash table of options we know */
-static void* OptHash = NULL;
+static Hash<option_t*>* OptHash = NULL;
 
 SetCommand::SetCommand (void) : AbstractCommand () {}
 SetCommand::~SetCommand (void) {
-  hash_del (&OptHash, NULL);
+  delete OptHash;
 }
 
 bool SetCommand::handle (buffer_t* line, buffer_t* error, unsigned long data) {
@@ -201,7 +205,7 @@ bool SetCommand::init (UI* ui) {
   this->types[T_QUAD] = _("quad-option");
   this->types[T_URL] = _("url");
 
-  OptHash = hash_new ((sizeof (Options) / sizeof (option_t))*2, 0);
+  OptHash = new Hash<option_t*> (OPTION_COUNT*2);
 
   buffer_init ((&error2));
 
@@ -209,7 +213,7 @@ bool SetCommand::init (UI* ui) {
 
     bool isDebug = str_eq2 (Options[i].name, "debug_level", 11);
 
-    hash_add (OptHash, Options[i].name, (HASH_ITEMTYPE) &Options[i]);
+    OptHash->add (Options[i].name, &Options[i]);
 
     if (isDebug && DebugLevel != 0)
       continue;
@@ -267,7 +271,7 @@ bool SetCommand::getSingleOption (int* idx, buffer_t* name, buffer_t* type,
                                   buffer_t* init, buffer_t* value) {
   option_t* opt = NULL;
 
-  if (*idx >= (int) (sizeof (Options) / sizeof (option_t) - 1))
+  if (*idx >= (int) OPTION_COUNT-1)
     return (false);
   opt = &Options[*idx];
 

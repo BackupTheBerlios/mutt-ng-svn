@@ -8,7 +8,7 @@ include $(CURDIR)/../../../GNUmakefile.whereis
 include $(CURDIR)/../../../GNUmakefile.config.mine
 include $(CURDIR)/../../../GNUmakefile.config
 
-CXXFLAGS+=-I.. -I../..
+CXXFLAGS+=-I.. -I../.. -I../../libmuttng
 
 vars.h: set_command.cpp config.pl
 	./config.pl < set_command.cpp

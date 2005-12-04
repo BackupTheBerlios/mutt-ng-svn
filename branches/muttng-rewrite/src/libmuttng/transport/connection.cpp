@@ -97,6 +97,7 @@ bool Connection::disconnect() {
     return false;
   }
   is_connected = false;
+  sigPostconnect.emit (&hostname, tcp_port);
   return true;
 }
 

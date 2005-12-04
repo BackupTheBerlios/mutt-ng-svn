@@ -143,6 +143,14 @@ class Connection {
     Signal3<buffer_t*,unsigned int,bool> sigPreconnect;
 
     /**
+     * Signal emitted after closing the connection.
+     * The values passed are:
+     * -# hostname
+     * -# port
+     */
+    Signal2<buffer_t*,unsigned int> sigPostconnect;
+
+    /**
      * Signal emitted prior to accepting a certificate, if any.
      * This can be used by clients to decide whether to accept
      * or discard a certificate.
