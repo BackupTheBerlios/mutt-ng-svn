@@ -162,12 +162,17 @@
 <xsl:apply-templates/></screen>
   </xsl:template>
 
-  <xsl:template match="listing[@lang='cpp']">
+  <!--  <xsl:template match="listing[@lang='cpp']"> -->
+  <xsl:template match="listing">
     <example>
       <anchor id="{@id}"/>
       <title><xsl:value-of select="@title"/></title>
       <programlisting><xi:include  href="{concat('./../examples/',@href)}" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
     </example>
+  </xsl:template>
+
+  <xsl:template match="inlinelisting">
+    <literal><xsl:apply-templates/></literal>
   </xsl:template>
 
   <xsl:template match="em">

@@ -1,0 +1,7 @@
+srcdoc:
+ifneq ($(DOXYGEN),)
+        $(DOXYGEN)
+ifneq ($(TIDY),)
+        $(TIDY) [options] [files]
+endif
+        @ true

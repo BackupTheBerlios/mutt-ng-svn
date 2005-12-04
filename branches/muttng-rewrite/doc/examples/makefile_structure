@@ -1,0 +1,16 @@
+SUBDIRS=foo bar
+
+all: subdirs
+	# commands for local "all" target
+
+clean: subdirclean
+	# commands for local "clean" target
+
+doc: subdirdoc
+	# commands for local "doc" target
+
+depend: subdirdepend
+	# commands for local "depend" target
+
+test: subdirtest
+	# commands for local "test" target

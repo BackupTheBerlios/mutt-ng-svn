@@ -1,0 +1,9 @@
+FILES := foo bar
+LIB := libfoobar.a
+
+all: $(LIB)
+
+include $(CURDIR)/../../GNUmakefile.whereis
+include $(CURDIR)/../../GNUmakefile.config.mine
+include $(CURDIR)/../../GNUmakefile.config
+include $(CURDIR)/../../GNUmakefile.compile_c

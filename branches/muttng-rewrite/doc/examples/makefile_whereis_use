@@ -1,0 +1,4 @@
+somerule:
+ifneq ($(GREAT_EDITOR),)
+        $(GREAT_EDITOR) [options]
+endif

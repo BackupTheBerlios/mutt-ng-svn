@@ -55,6 +55,8 @@
         unterstützt, wobei mit <tt>xalan</tt> und dem XInclude-Standard noch
         Probleme beseitigt werden müssen.</li>
       <li>DocBook Stylesheets für Version 4.3.</li>
+      <li>Ein LaTeX-System inklusive <man>pdflatex</man>, <man>latex</man> und
+        <man>makeindex</man></li>.
     </ul>
 
     <p>

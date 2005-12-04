@@ -1,0 +1,1 @@
+GREAT_EDITOR := $(call whereis,vim,vi)

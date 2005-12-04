@@ -120,10 +120,23 @@
     <xsl:text>\lstinputlisting[style=muttng</xsl:text>
     <xsl:choose>
       <xsl:when test="@lang='cpp'"><xsl:text>,language=C++</xsl:text></xsl:when>
+      <xsl:when test="@lang='make'"><xsl:text>,language={[GNU]make}</xsl:text></xsl:when>
+      <xsl:when test="@lang='muttngrc'"><xsl:text>,language=muttngrc</xsl:text></xsl:when>
     </xsl:choose>
     <xsl:text>,caption=</xsl:text><xsl:value-of select="@title"/>
     <xsl:text>,label=</xsl:text><xsl:value-of select="@id"/>
     <xsl:text>]{</xsl:text><xsl:value-of select="@href"/><xsl:text>}
+    </xsl:text>
+  </xsl:template>
+
+  <xsl:template match="inlinelisting">
+    <xsl:text>\lstinline[style=muttng,basicstyle=\ttfamily</xsl:text>
+    <xsl:choose>
+      <xsl:when test="@lang='cpp'"><xsl:text>,language=C++</xsl:text></xsl:when>
+      <xsl:when test="@lang='make'"><xsl:text>,language={[GNU]make}</xsl:text></xsl:when>
+      <xsl:when test="@lang='muttngrc'"><xsl:text>,language=muttngrc</xsl:text></xsl:when>
+    </xsl:choose>
+    <xsl:text>]{</xsl:text><xsl:value-of select="."/><xsl:text>}
     </xsl:text>
   </xsl:template>
 
@@ -145,7 +158,7 @@
 
   <xsl:template match="function">
     <xsl:variable name="transid" select="concat('group-',@group)"/>
-      <xsl:text>\item \textbf{\texttt{</xsl:text>
+      <xsl:text>\item \textbf{\uglyesc{</xsl:text>
       <xsl:value-of select="@name"/><xsl:text>}} (</xsl:text><xsl:value-of select="//translations/trans[@id='defbind']"/><xsl:text>: '\uglyesc{</xsl:text><xsl:value-of select="@default"/><xsl:text>}', </xsl:text><xsl:value-of select="//translations/trans[@id='group']"/><xsl:text>: </xsl:text><xsl:value-of select="//translations/trans[@id=$transid]"/><xsl:text>): </xsl:text><xsl:value-of select="."/><xsl:text>
     </xsl:text>
   </xsl:template>
@@ -155,7 +168,7 @@
     </xsl:text>
     <xsl:text>\subsubsection{\texttt{\uglyesc{$</xsl:text><xsl:value-of select="@name"/><xsl:text>}}}
     </xsl:text>
-    <xsl:text></xsl:text><xsl:value-of select="//translations/trans[@id='type']"/><xsl:text>: \texttt{</xsl:text><xsl:value-of select="@type"/><xsl:text>}\\
+    <xsl:text></xsl:text><xsl:value-of select="//translations/trans[@id='type']"/><xsl:text>: \uglyesc{</xsl:text><xsl:value-of select="@type"/><xsl:text>}\\
 
     </xsl:text>
     <xsl:apply-templates select="init" mode="vardescr"/>
@@ -163,8 +176,8 @@
   </xsl:template>
 
   <xsl:template match="init" mode="vardescr">
-    <xsl:text></xsl:text><xsl:value-of select="//translations/trans[@id='initval']"/><xsl:text>: '\texttt{</xsl:text><xsl:value-of select="."/><xsl:text>'}\\
-    
+    <xsl:text></xsl:text><xsl:value-of select="//translations/trans[@id='initval']"/><xsl:text>: '</xsl:text><xsl:if test="text()!=''"><xsl:text>\uglyesc{</xsl:text><xsl:value-of select="."/><xsl:text>}</xsl:text></xsl:if>'\\
+    <xsl:text>
     </xsl:text>
   </xsl:template>
 
@@ -185,23 +198,23 @@
   </xsl:template>
 
   <xsl:template match="val">
-    <xsl:text>\texttt{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
+    <xsl:text>\uglyesc{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="hdr">
-    <xsl:text>\texttt{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
+    <xsl:text>\uglyesc{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="enc">
-    <xsl:text>\texttt{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
+    <xsl:text>\uglyesc{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="env">
-    <xsl:text>\texttt{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
+    <xsl:text>\uglyesc{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="tt">
-    <xsl:text>\texttt{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
+    <xsl:text>\uglyesc{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="b">
@@ -257,7 +270,7 @@
     </xsl:text>
   </xsl:template>
 
-  <!--{{{ _slooooooow_ TeX escaping stolen from W3C -->
+  <!--{{{ _slooooooow_ TeX escaping stolen from W3C
 
   <xsl:template match="text()">
     <xsl:call-template name="esc">
@@ -320,11 +333,9 @@
         <xsl:value-of select='substring-before($s, $c)'/>
 
         <xsl:choose>
-          <!-- XXX puke -->
           <xsl:when test='$c = "\"'>
             <xsl:text>\textbackslash </xsl:text>
           </xsl:when>
-          <!-- XXX puke -->
           <xsl:when test='$c = "~"'>
             <xsl:text>\char126 </xsl:text>
           </xsl:when>
@@ -344,6 +355,6 @@
     </xsl:choose>
   </xsl:template>
 
-  <!--}}}-->
+  }}} -->
 
 </xsl:stylesheet>

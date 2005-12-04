@@ -52,6 +52,8 @@
       <li>XSL processor. Currently only <tt>xsltproc</tt> and <tt>xalan</tt> are supported
         whereby <tt>xalan</tt> has problems with XInclude still to be resolved.</li>
       <li>DocBook stylesheets for version 4.3.</li>
+      <li>A LaTeX system including <man>pdflatex</man>, <man>latex</man> and
+        <man>makeindex</man></li>.
     </ul>
 
     <p>

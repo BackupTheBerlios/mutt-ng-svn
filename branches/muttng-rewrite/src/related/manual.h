@@ -52,6 +52,9 @@
     <li>XSL processor. Currently only <code> xsltproc</code> and <code> xalan</code> are supported
         whereby <code> xalan</code> has problems with XInclude still to be resolved.</li>
     <li>DocBook stylesheets for version 4.3.</li>
+    <li>A LaTeX system including @c pdflatex(1), @c latex(1) and
+        @c makeindex(1)</li>
+    .
     
       </ul>
     
@@ -194,15 +197,15 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
 
     <ul>
-    <li>The set <b> ?</b>foo syntax isn't allowed any longer. For
+    <li>The <code>set ?foo</code> syntax isn't allowed any longer. For
         this purpose, the <code> query</code> command is to be used instead:
-        query foo</li>
-    <li>The set <b> no</b>foo syntax isn't allowed any
-        longer. For this purpose, use unset foo instead.</li>
-    <li>The set <b> inv</b>foo syntax isn't allowed any
-        longer. For this purpose, use toggle foo instead.</li>
-    <li>The set <b> &</b>foo syntax isn't allowed any
-        longer. For this purpose, use reset foo instead.</li>
+        <code>query foo</code></li>
+    <li>The <code>set nofoo</code> syntax isn't allowed any
+        longer. For this purpose, use <code>unset foo</code> instead.</li>
+    <li>The <code>set invfoo</code> syntax isn't allowed any
+        longer. For this purpose, use <code>toggle foo</code> instead.</li>
+    <li>The <code>set &foo</code> syntax isn't allowed any
+        longer. For this purpose, use <code>reset foo</code> instead.</li>
     
       </ul>
     
@@ -545,7 +548,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 
     
         In general: document all files! Specify a doxygen header with at
-        least the @@file and @@brief tags. For
+        least the <code> @@file</code> and <code> @@brief</code> tags. For
         headers, the brief tag looks like:
       
 
@@ -575,8 +578,8 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 ...
 #endif</pre>
         whereby the identifier is constructed from the filename under
-        the src/ directory,
-        libmuttng/foo/bar.h in this case.
+        the <code> src/</code> directory,
+        <code> libmuttng/foo/bar.h</code> in this case.
       
 
     
@@ -597,12 +600,13 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 
     
         Any Makefile including it must include <code> GNUmakefile.config</code>
-        directly afterwards like so:
+        directly afterwards like in @ref sample-libmuttng-build-config "include
+          example" .
       
 
-    <pre>
-include [path]/GNUmakefile.config.mine
-include [path]/GNUmakefile.config</pre><code> GNUmakefile.config</code> interprets and completes internal options
+    @anchor sample-libmuttng-build-config
+    @verbinclude makefile_config
+    <code> GNUmakefile.config</code> interprets and completes internal options
         set in the custom file:
       
 
@@ -666,17 +670,13 @@ include [path]/GNUmakefile.config</pre><code> GNUmakefile.config</code> interpre
       </ul>
     
         In any Makefile, targets can be setup depending on whether a tool is present
-        or not via, for example:
+        or not via, see @ref sample-libmuttng-build-conditional "conditional
+          example" .
       
 
-    <pre>
-srcdoc:
-ifneq ($(DOXYGEN),)
-        $(DOXYGEN)
-ifneq ($(TIDY),)
-        $(TIDY) [options] [files]
-endif
-        @ true</pre>
+    @anchor sample-libmuttng-build-conditional
+    @verbinclude makefile_conditional
+    
         This only runs @c doxygen(1) it it's found in <code> $PATH</code>. If, in addition,
         @c tidy(1) is found too, it'll also be called. If doxygen isn't present,
         the <code> srcdoc</code> rule does nothing.
@@ -701,29 +701,29 @@ endif
     
       </ul>
     
-        For example, the full path to @c vi(1) can be obtained via:
+        For example, the full path to @c vi(1) can be obtained via
+        the call shown in the @ref sample-libmuttng-build-whereis-call1 "first whereis call example" .
       
 
-    <pre>
-GREAT_EDITOR := $(call whereis,vi,)</pre>
+    @anchor sample-libmuttng-build-whereis-call1
+    @verbinclude makefile_whereis_call1
+    
         If the binary is found, <code> GREAT_EDITOR</code> will contain its path and
-        will be empty otherwise. A check for it could be:
+        will be empty otherwise. A check for it could be implemented as shown in the
+        @ref sample-libmuttng-build-whereis-use "whereis usage example" .
       
 
-    <pre>
-somerule:
-ifneq ($(GREAT_EDITOR),)
-        $(GREAT_EDITOR) [options]
-endif</pre>
-        An example of a non-empty default is:
-      
-
-    <pre>
-GREAT_EDITOR := $(call whereis,vim,vi)</pre>
-        ...which will search for the @c vim(1) binary: if it's found,
+    @anchor sample-libmuttng-build-whereis-use
+    @verbinclude makefile_whereis_use
+    
+        An example of a non-empty default is show in the
+        @ref sample-libmuttng-build-whereis-call2 "second whereis call example" 
+        which will search for the @c vim(1) binary: if it's found,
         <code> GREAT_EDITOR</code> contains its path but just <code> vi</code> otherwise.
       
 
+    @anchor sample-libmuttng-build-whereis-call2
+    @verbinclude makefile_whereis_call2
     
     @subsubsection sect_devguide-build-subdirs Directory traversal: GNUmakefile.subdirs
     
@@ -743,27 +743,15 @@ GREAT_EDITOR := $(call whereis,vim,vi)</pre>
       </ul>
     
         For example, to have all these targets for the subdirectories
-        <code> foo</code> and <code> bar</code>, use:
+        <code> foo</code> and <code> bar</code>, use the basic structure as shown
+        in the @ref sample-libmuttng-build-structure "general makefile structure" 
+        listing.
       
 
-    <pre>
-SUBDIRS=foo bar
-
-all: subdirs
-        [commands for local "all" target]
-clean: subdirclean
-        [commands for local "clean" target]
-doc: subdirdoc
-        [commands for local "doc" target]
-depend: subdirdepend
-        [commands for local "depend" target]
-test: subdirtest
-        [commands for local "test" target]</pre>
-          ...whereby the local commands are optional.
-        
-
+    @anchor sample-libmuttng-build-structure
+    @verbinclude makefile_structure
     
-    @subsubsection sect_devguide-build-compile Compilation: GNUmakefile.compile_c and GNUmakefile.compile_cpp
+    @subsubsection sect_devguide-build-compile Compilation: GNUmakefile.compile
     
         The files <code> GNUmakefile.compile_c</code> and <code> GNUmakefile.compile_cpp</code>
         contain everything necessary to compile sources either using a C or C++ compiler
@@ -771,19 +759,12 @@ test: subdirtest
       
 
     
-        Use is as easy as:
+        Use is as easy as show in the @ref sample-libmuttng-build-compile "compilation makefile example" .
       
 
-    <pre>
-FILES := foo bar
-LIB := libfoobar.a
-
-all: $(LIB)
-
-include $(CURDIR)/../../GNUmakefile.whereis
-include $(CURDIR)/../../GNUmakefile.config.mine
-include $(CURDIR)/../../GNUmakefile.config
-include $(CURDIR)/../../GNUmakefile.compile_c</pre>
+    @anchor sample-libmuttng-build-compile
+    @verbinclude makefile_compile
+    
         This will compile the files
         <code> foo.c</code> and <code> bar.c</code> into the archive <code> libfoobar.a</code> using
         the C compiler.
@@ -809,13 +790,11 @@ include $(CURDIR)/../../GNUmakefile.compile_c</pre>
     @subsubsection sect_devguide-build-adding Adding subdirectories
     
         When adding directories somewhere, please make sure the Makefile
-        includes at least the following:
+        includes at least the files previously shown in the 
+        @ref sample-libmuttng-build-config "include example" .
       
 
-    <pre>
-include $(CURDIR)/../../GNUmakefile.whereis
-include $(CURDIR)/../../GNUmakefile.config.mine
-include $(CURDIR)/../../GNUmakefile.config</pre>
+    
         Also, it must define the following targets so that they work
         over the complete tree:
       
@@ -1055,14 +1034,40 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
     
     @paragraph sect_devguide-docs-dialect-listings Embedding listrings
           Eventually there will be several types of listings each treated individually
-          for the output. The <code> listing</code> tag contains no text but the following
-          attributes:
+          for the output.
+        
+
+    
+          The following two tags can be used for specifying listings:
         
 
     <ul>
-    <li><code> lang</code> specifies the language. Currently, only <code> cpp</code> for C++
-            is valid though other types such as <code> c</code> or <code> muttngrc</code> will
-            be added as progress is made.</li>
+    <li><code> listing</code>: make listing from an external file</li>
+    <li><code> inlinelisting</code>: make listing inline from given text</li>
+    
+      </ul>
+    
+          Both require these attributes:
+        
+
+    <ul>
+    <li><code> lang</code> specifies the language. For most of the output this is irrelevant
+            but for LaTeX output and the <code> listings.sty</code> package we have syntax-highlighting
+            automatically. The following languages are supported:
+            <ul>
+    <li><code> cpp</code> for C++</li>
+    <li><code> make</code> for GNU make</li>
+    <li><code> muttngrc</code> for muttng's configuration syntax</li>
+    
+      </ul>
+    </li>
+    
+      </ul>
+    
+          The <code> listing</code> tag also requires these attributes in addition:
+        
+
+    <ul>
     <li><code> id</code> specifies a document-internal ID to link to listings. As for
             any other ID attributes, we fake a namespace or hierarchy by prefixes. At least all
             sample listings must have <code> sample-</code> as prefix for this attribute.</li>
@@ -1086,7 +1091,7 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
 
     <ul>
     <li>all documentation is expected between the words <code> START</code>
-            and <code> END</code> (commented) in set_command.cpp</li>
+            and <code> END</code> (commented) in <code> set_command.cpp</code></li>
     <li>the variable definition for the source is one line</li>
     <li><em>below</em> is a comment block whereby each line to be
             treated as part of the description for a variable starts with
@@ -1205,6 +1210,24 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
         
 
     
+    
+    @subsubsection sect_devguide-docs-notes Notes
+    
+        For LaTeX output escaping of several characters is required.
+        With XSL this could be done using a recursively called function which
+        has two major drawbacks: it's terribly slow as the manual is getting
+        closer to being complete and it doesn't work based on semantics (for
+        example, within a <code> verbatim</code> environment, we do not want to
+        escape special characters but elsewhere we want.) To solve this,
+        the file <code> doc/tex/muttng.sty</code> contains a macro named
+        <code> uglyesc</code> which ``escapes''--or better: fakes escaping--using
+        the <code> listinline</code> macro of the <code> listings.sty</code> package.
+        As the <code> uglyesc</code> command switches to typewriter, most of the
+        typewriter-layout is done with it rather than with LaTeX's own
+        <code> texttt</code>. As a consequence, whenever using a word which may
+        require escaping, use the <code> tt/</code> tag.
+      
+
     
     
     @subsection sect_devguide-core Core
@@ -1376,7 +1399,7 @@ disconnectSignals (signal, object);</pre>
         implementation for every argument count we need. Thus, this is done by
         a script: <code> src/libmuttng/signal.pl</code> prints the commented
         implementation to <code> stdout</code> so that the makefile puts it into
-        <code> muttng_signal.h</code>. When making changes, modify muttng_signal.h to verify it
+        <code> muttng_signal.h</code>. When making changes, modify <code> muttng_signal.h</code> to verify it
         works (plus maybe add a unit test) and adjust signal.pl to print the
         changed code.
       

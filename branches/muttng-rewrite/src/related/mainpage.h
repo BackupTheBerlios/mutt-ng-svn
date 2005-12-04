@@ -33,8 +33,22 @@
         
 
     <ul>
-    <li><a href="http://mutt-ng.berlios.de/rewrite/en/manual/">http://mutt-ng.berlios.de/rewrite/en/manual/</a>: English</li>
-    <li><a href="http://mutt-ng.berlios.de/rewrite/de/manual/">http://mutt-ng.berlios.de/rewrite/de/manual/</a>: German</li>
+    <li>English:
+            <ul>
+    <li><a href="http://mutt-ng.berlios.de/rewrite/en/manual/">http://mutt-ng.berlios.de/rewrite/en/manual/</a>: HTML, multiple files</li>
+    <li><a href="http://mutt-ng.berlios.de/rewrite/en/manual/manual.html">http://mutt-ng.berlios.de/rewrite/en/manual/manual.html</a>: HTML, one file</li>
+    <li><a href="http://mutt-ng.berlios.de/rewrite/en/manual/manual.pdf">http://mutt-ng.berlios.de/rewrite/en/manual/manual.pdf</a>: PDF</li>
+    
+      </ul>
+    </li>
+    <li>German:
+            <ul>
+    <li><a href="http://mutt-ng.berlios.de/rewrite/de/manual/">http://mutt-ng.berlios.de/rewrite/de/manual/</a>: HTML, multiple files</li>
+    <li><a href="http://mutt-ng.berlios.de/rewrite/de/manual/manual.html">http://mutt-ng.berlios.de/rewrite/de/manual/manual.html</a>: HTML, one file</li>
+    <li><a href="http://mutt-ng.berlios.de/rewrite/de/manual/manual.pdf">http://mutt-ng.berlios.de/rewrite/de/manual/manual.pdf</a>: PDF</li>
+    
+      </ul>
+    </li>
     
       </ul>
     

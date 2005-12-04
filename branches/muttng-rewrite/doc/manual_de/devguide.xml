@@ -250,12 +250,12 @@
 
       <p>
         Jedes Makefile, das diese inkludiert, muss <tt>GNUmakefile.config</tt>
-        direkt danach ebenfalls so inkludieren:
+        direkt danach ebenfalls so inkludieren wie im
+        <docref href="sample-libmuttng-build-config">Beispiel</docref>.
       </p>
 
-      <pre>
-include [path]/GNUmakefile.config.mine
-include [path]/GNUmakefile.config</pre>
+      <listing lang="make" id="sample-libmuttng-build-config" title="Konfiguration inkludieren"
+        href="makefile_config"/>
 
       <p>
         <tt>GNUmakefile.config</tt> interpretiert und vervollständigt interne
@@ -320,17 +320,12 @@ include [path]/GNUmakefile.config</pre>
 
       <p>
         In allen Makefiles können Regeln auf darauf reagieren ob ein Programm
-        vorhanden ist oder nicht. Beispiel:
+        vorhanden ist oder nicht, siehe das
+        <docref href="sample-libmuttng-build-conditional">Beispiel für bedingte Anweisungen</docref>.
       </p>
 
-      <pre>
-srcdoc:
-ifneq ($(DOXYGEN),)
-        $(DOXYGEN)
-ifneq ($(TIDY),)
-        $(TIDY) [options] [files]
-endif
-        @ true</pre>
+      <listing lang="make" id="sample-libmuttng-build-conditional" title="Bedingte Anweisungen"
+        href="makefile_conditional"/>
 
       <p>
         Damit wird <man>doxygen</man> nur ausgeführt, wenn es im Pfad <env>PATH</env>
@@ -362,36 +357,35 @@ endif
       </ul>
 
       <p>
-        Zum Beispiel kann der volle Pfad für <man>vi</man> so ermittelt werden:
+        Zum Beispiel kann der volle Pfad für <man>vi</man> wie im
+        <docref href="sample-libmuttng-build-whereis-call1">ersten
+          whereis-Beispielaufruf</docref> ermittelt werden.
       </p>
 
-      <pre>
-GREAT_EDITOR := $(call whereis,vi,)</pre>
+      <listing lang="make" id="sample-libmuttng-build-whereis-call1"
+        title="whereis-Aufruf 1" href="makefile_whereis_call1"/>
 
       <p>
         Wenn das Programm gefunden wurde, ist der Name in 
         <tt>GREAT_EDITOR</tt> gespeichert und ist leer, wenn es
-        nicht gefunden wurde. Eine Überprüfung könnte sein:
+        nicht gefunden wurde. Eine mögliche Überprüfung zeigt das
+        <docref href="sample-libmuttng-build-whereis-use"
+          >whereis Nutzungsbeispiel</docref>.
       </p>
 
-      <pre>
-somerule:
-ifneq ($(GREAT_EDITOR),)
-        $(GREAT_EDITOR) [options]
-endif</pre>
+      <listing lang="make" id="sample-libmuttng-build-whereis-use"
+        title="whereis benutzen" href="makefile_whereis_use"/>
 
       <p>
-        Ein Beispiel für einen nicht-leeren Standardwert ist:
+        Ein Beispiel für einen nicht-leeren Standardwert zeigt der
+        <docref href="sample-libmuttng-build-whereis-call2"
+          >zweite Beispielaufruf</docref>, der nach <man>vim</man> sucht:
+        wenn es gefunden wird, enthält <tt>GREAT_EDITOR</tt> den vollen Pfad
+        und andernfalls nur <tt>vi</tt>.
       </p>
 
-      <pre>
-GREAT_EDITOR := $(call whereis,vim,vi)</pre>
-
-      <p>
-        ...was nach <man>vim</man> sucht: wenn es gefunden wird,
-        enthält <tt>GREAT_EDITOR</tt> den vollen Pfad und andernfalls
-        nur <tt>vi</tt>.
-      </p>
+      <listing lang="make" id="sample-libmuttng-build-whereis-call2"
+        title="whereis-Aufruf 2" href="makefile_whereis_call2"/>
 
     </subsection>
     <!--}}}-->
@@ -416,32 +410,19 @@ GREAT_EDITOR := $(call whereis,vim,vi)</pre>
 
       <p>
         Sollen alle diese Ziele beispielsweise auf die Unterverzeichnisse
-        <tt>foo</tt> und <tt>bar</tt> angewendet werden, muss folgendes geschrieben werden:
+        <tt>foo</tt> und <tt>bar</tt> angewendet werden, muss das Makefile der
+        <docref href="sample-libmuttng-build-structure">Makefile Struktur</docref>
+        entsprechen.
       </p>
 
-      <pre>
-SUBDIRS=foo bar
+      <listing lang="make" id="sample-libmuttng-build-structure"
+        title="Makefile Struktur" href="makefile_structure"/>
 
-all: subdirs
-        [Befehle für lokales Ziel "all"]
-clean: subdirclean
-        [Befehle für lokales Ziel "clean"]
-doc: subdirdoc
-        [Befehle für lokales Ziel "doc"]
-depend: subdirdepend
-        [Befehle für lokales Ziel "depend"]
-test: subdirtest
-        [Befehle für lokales Ziel "test"]</pre>
-
-      <p>
-      ...wobei die lokalen Befehle optional sind.
-      </p>
-      
     </subsection>
     <!--}}}-->
 
     <subsection id="devguide-build-compile"> <!--{{{-->
-      <title>Übersetzung: GNUmakefile.compile_c und GNUmakefile.compile_cpp</title>
+      <title>Übersetzung</title>
 
       <p>
         Die Dateien <tt>GNUmakefile.compile_c</tt> und
@@ -450,19 +431,13 @@ test: subdirtest
       </p>
 
       <p>
-        Die Benutzung ist sehr einfach:
+        Die Benutzung ist sehr einfach und wird in
+        <docref href="sample-libmuttng-build-compile">Übersetzungsbeispiel</docref>
+        gezeigt.
       </p>
-
-      <pre>
-FILES := foo bar
-LIB := libfoobar.a
-
-all: $(LIB)
-
-include $(CURDIR)/../../GNUmakefile.whereis
-include $(CURDIR)/../../GNUmakefile.config.mine
-include $(CURDIR)/../../GNUmakefile.config
-include $(CURDIR)/../../GNUmakefile.compile_c</pre>
+    
+      <listing lang="make" id="sample-libmuttng-build-compile"
+        title="Dateien übersetzen" href="makefile_compile"/>
 
       <p>
         Dies übersetzt die Dateien <tt>foo.c</tt> und <tt>bar.c</tt> in das Archiv
@@ -493,14 +468,10 @@ include $(CURDIR)/../../GNUmakefile.compile_c</pre>
       <title>Unterverzeichnisse hinzufügen</title>
 
       <p>
-        Beim Hinzufügen eines Verzeichnisses müssen die folgenden Makefiles
-        mindestens inkludiert werden:
+        Beim Hinzufügen eines Verzeichnisses sollte das neue Makefile mindestens
+        die <docref href="sample-libmuttng-build-config">Konfigurationsdateien</docref>
+        inkludieren.
       </p>
-      
-      <pre>
-include $(CURDIR)/../../GNUmakefile.whereis
-include $(CURDIR)/../../GNUmakefile.config.mine
-include $(CURDIR)/../../GNUmakefile.config</pre>
 
       <p>
         Außerdem muss jedes neue Makefile folgende Ziele unterstützen:
@@ -786,14 +757,39 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
 
         <p>
           Eventually there will be several types of listings each treated individually
-          for the output. The <tt>listing</tt> tag contains no text but the following
-          attributes:
+          for the output.
+        </p>
+
+        <p>
+          The following two tags can be used for specifying listings:
         </p>
 
         <ul>
-          <li><tt>lang</tt> specifies the language. Currently, only <tt>cpp</tt> for C++
-            is valid though other types such as <tt>c</tt> or <tt>muttngrc</tt> will
-            be added as progress is made.</li>
+          <li><tt>listing</tt>: make listing from an external file</li>
+          <li><tt>inlinelisting</tt>: make listing inline from given text</li>
+        </ul>
+
+        <p>
+          Both require these attributes:
+        </p>
+
+        <ul>
+          <li><tt>lang</tt> specifies the language. For most of the output this is irrelevant
+            but for LaTeX output and the <tt>listings.sty</tt> package we have syntax-highlighting
+            automatically. The following languages are supported:
+            <ul>
+              <li><tt>cpp</tt> for C++</li>
+              <li><tt>make</tt> for GNU make</li>
+              <li><tt>muttngrc</tt> for muttng's configuration syntax</li>
+            </ul>
+          </li>
+        </ul>
+
+        <p>
+          The <tt>listing</tt> tag also requires these attributes in addition:
+        </p>
+
+        <ul>
           <li><tt>id</tt> specifies a document-internal ID to link to listings. As for
             any other ID attributes, we fake a namespace or hierarchy by prefixes. At least all
             sample listings must have <tt>sample-</tt> as prefix for this attribute.</li>
@@ -825,7 +821,7 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
 
         <ul>
           <li>all documentation is expected between the words <tt>START</tt>
-            and <tt>END</tt> (commented) in set_command.cpp</li>
+            and <tt>END</tt> (commented) in <tt>set_command.cpp</tt></li>
           <li>the variable definition for the source is one line</li>
           <li><em>below</em> is a comment block whereby each line to be
             treated as part of the description for a variable starts with
@@ -891,8 +887,8 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
 
       <p>
         Though the English documents are considered the ``master'' documents,
-        they're only a treated as a translation, too. This section describes how to
-        add and maintain a translation.
+        they're only a treated as a translation, too. This section describes
+        how to add and maintain a translation.
       </p>
 
       <subsubsection id="devguide-docs-trans-files" title="Mandatory files"> <!--{{{-->
@@ -963,7 +959,29 @@ include $(CURDIR)/../../GNUmakefile.config</pre>
 
     </subsection>
     <!--}}}-->
-    
+
+    <subsection id="devguide-docs-notes"> <!--{{{-->
+      <title>Notes</title>
+
+      <p>
+        For LaTeX output escaping of several characters is required.
+        With XSL this could be done using a recursively called function which
+        has two major drawbacks: it's terribly slow as the manual is getting
+        closer to being complete and it doesn't work based on semantics (for
+        example, within a <tt>verbatim</tt> environment, we do not want to
+        escape special characters but elsewhere we want.) To solve this,
+        the file <tt>doc/tex/muttng.sty</tt> contains a macro named
+        <tt>uglyesc</tt> which ``escapes''--or better: fakes escaping--using
+        the <tt>listinline</tt> macro of the <tt>listings.sty</tt> package.
+        As the <tt>uglyesc</tt> command switches to typewriter, most of the
+        typewriter-layout is done with it rather than with LaTeX's own
+        <tt>texttt</tt>. As a consequence, whenever using a word which may
+        require escaping, use the <tt>tt/</tt> tag.
+      </p>
+
+    </subsection>
+    <!--}}}-->
+ 
   </section>
   <!--}}}-->
 
@@ -1206,7 +1224,7 @@ disconnectSignals (signal, object);</pre>
         implementation for every argument count we need. Thus, this is done by
         a script: <tt>src/libmuttng/signal.pl</tt> prints the commented
         implementation to <tt>stdout</tt> so that the makefile puts it into
-        <tt>muttng_signal.h</tt>. When making changes, modify muttng_signal.h to verify it
+        <tt>muttng_signal.h</tt>. When making changes, modify <tt>muttng_signal.h</tt> to verify it
         works (plus maybe add a unit test) and adjust signal.pl to print the
         changed code.
       </p>

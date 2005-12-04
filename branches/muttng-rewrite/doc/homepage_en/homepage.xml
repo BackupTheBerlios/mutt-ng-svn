@@ -44,8 +44,20 @@
         </p>
 
         <ul>
-          <li><web>http://mutt-ng.berlios.de/rewrite/en/manual/</web>: English</li>
-          <li><web>http://mutt-ng.berlios.de/rewrite/de/manual/</web>: German</li>
+          <li>English:
+            <ul>
+              <li><web>http://mutt-ng.berlios.de/rewrite/en/manual/</web>: HTML, multiple files</li>
+              <li><web>http://mutt-ng.berlios.de/rewrite/en/manual/manual.html</web>: HTML, one file</li>
+              <li><web>http://mutt-ng.berlios.de/rewrite/en/manual/manual.pdf</web>: PDF</li>
+            </ul>
+          </li>
+          <li>German:
+            <ul>
+              <li><web>http://mutt-ng.berlios.de/rewrite/de/manual/</web>: HTML, multiple files</li>
+              <li><web>http://mutt-ng.berlios.de/rewrite/de/manual/manual.html</web>: HTML, one file</li>
+              <li><web>http://mutt-ng.berlios.de/rewrite/de/manual/manual.pdf</web>: PDF</li>
+            </ul>
+          </li>
         </ul>
 
       </section>

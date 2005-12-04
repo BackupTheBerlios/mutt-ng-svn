@@ -32,6 +32,7 @@ ifneq ($(PDFLATEX),)
 	@ for l in $(BUILD_LANGUAGES) ; do \
 	  cd manual_$$l ; \
 	  TEXINPUTS="$(TEXDIRS)" $(PDFLATEX) -interaction=nonstopmode -file-line-error-style manual.tex ; \
+	  TEXINPUTS="$(TEXDIRS)" $(PDFLATEX) -interaction=nonstopmode -file-line-error-style manual.tex ; \
 	  cd .. ; \
 	done
 endif

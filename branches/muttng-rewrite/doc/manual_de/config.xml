@@ -91,15 +91,15 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     </p>
 
     <ul>
-      <li>The <code>set <b>?</b>foo</code> syntax isn't allowed any longer. For
+      <li>The <inlinelisting lang="muttngrc">set <b>?</b>foo</inlinelisting> syntax isn't allowed any longer. For
         this purpose, the <tt>query</tt> command is to be used instead:
-        <code>query foo</code></li>
-      <li>The <code>set <b>no</b>foo</code> syntax isn't allowed any
-        longer. For this purpose, use <code>unset foo</code> instead.</li>
-      <li>The <code>set <b>inv</b>foo</code> syntax isn't allowed any
-        longer. For this purpose, use <code>toggle foo</code> instead.</li>
-      <li>The <code>set <b>&amp;</b>foo</code> syntax isn't allowed any
-        longer. For this purpose, use <code>reset foo</code> instead.</li>
+        <inlinelisting lang="muttngrc">query foo</inlinelisting></li>
+      <li>The <inlinelisting lang="muttngrc">set <b>no</b>foo</inlinelisting> syntax isn't allowed any
+        longer. For this purpose, use <inlinelisting lang="muttngrc">unset foo</inlinelisting> instead.</li>
+      <li>The <inlinelisting lang="muttngrc">set <b>inv</b>foo</inlinelisting> syntax isn't allowed any
+        longer. For this purpose, use <inlinelisting lang="muttngrc">toggle foo</inlinelisting> instead.</li>
+      <li>The <inlinelisting lang="muttngrc">set <b>&amp;</b>foo</inlinelisting> syntax isn't allowed any
+        longer. For this purpose, use <inlinelisting lang="muttngrc">reset foo</inlinelisting> instead.</li>
     </ul>
 
   </section> <!--}}}-->

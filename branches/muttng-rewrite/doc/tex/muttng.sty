@@ -90,7 +90,15 @@
 % color for comments
 \definecolor{mygray}{gray}{0.4}
 
-\lstloadlanguages{C++,Make}
+\lstdefinelanguage[]{muttngrc}{%
+morekeywords={set,unset,query,toggle,reset},
+morecomment=[l]\#,%
+morestring=[d]",%
+morestring=[d]',%
+moreemph={yes,no,ask-yes,ask-no}%
+}[keywords,comments,strings,emph]
+
+\lstloadlanguages{C++,Make,muttngrc}
 
 \lstdefinestyle{muttng}{
 basicstyle=\scriptsize\ttfamily,%

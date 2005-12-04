@@ -89,6 +89,10 @@
     </xsl:text>
   </xsl:template>
 
+  <xsl:template match="inlinelisting">
+    <xsl:text>&lt;code&gt;</xsl:text><xsl:value-of select="."/><xsl:text>&lt;/code&gt;</xsl:text>
+  </xsl:template>
+
   <xsl:template match="docref">
     <xsl:text>@ref </xsl:text><xsl:value-of select="@href"/><xsl:text> "</xsl:text><xsl:value-of select="."/><xsl:text>" </xsl:text>
   </xsl:template>
