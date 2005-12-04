@@ -70,14 +70,14 @@
     <xsl:variable name="transid" select="concat('group-',@group)"/>
     <listitem>
       <anchor id="func-{@name}"/>
-      <code>&lt;<xsl:value-of select="@name"/>&gt;</code> (<xsl:value-of select="//translations/trans[@id='defbind']"/>: '<code><xsl:value-of select="@default"/></code>', <xsl:value-of select="//translations/trans[@id='group']"/>: <xsl:value-of select="//translations/trans[@id=$transid]"/>): <xsl:value-of select="text()"/>
+      <literal>&lt;<xsl:value-of select="@name"/>&gt;</literal> (<xsl:value-of select="//translations/trans[@id='defbind']"/>: '<literal><xsl:value-of select="@default"/></literal>', <xsl:value-of select="//translations/trans[@id='group']"/>: <xsl:value-of select="//translations/trans[@id=$transid]"/>): <xsl:value-of select="text()"/>
     </listitem>
   </xsl:template>
 
   <xsl:template match="variable">
     <xsl:variable name="transid" select="concat('option-',@type)"/>
     <sect2 id="option-{translate(@name,'_','-')}">
-      <title><code>$<xsl:value-of select="@name"/></code></title>
+      <title><literal>$<xsl:value-of select="@name"/></literal></title>
       <para>
         <xsl:value-of select="//translations/trans[@id='type']"/>: <xsl:value-of select="//translations/trans[@id=$transid]"/>
       </para>
@@ -91,7 +91,7 @@
   </xsl:template>
 
   <xsl:template match="init" mode="vardescr">
-    <xsl:value-of select="//translations/trans[@id='initval']"/>: '<code><xsl:value-of select="."/></code>'
+    <xsl:value-of select="//translations/trans[@id='initval']"/>: '<literal><xsl:value-of select="."/></literal>'
   </xsl:template>
 
   <xsl:template match="init"/>
@@ -111,11 +111,11 @@
   </xsl:template>
 
   <xsl:template match="val">
-    <code><xsl:apply-templates/></code>
+    <literal><xsl:apply-templates/></literal>
   </xsl:template>
 
   <xsl:template match="tt">
-    <code><xsl:apply-templates/></code>
+    <literal><xsl:apply-templates/></literal>
   </xsl:template>
 
   <xsl:template match="ul">
@@ -132,7 +132,7 @@
 
   <xsl:template match="varref">
     <link linkend="option-{translate(text(),'_','-')}">
-      <code>$<xsl:value-of select="."/></code></link>
+      <literal>$<xsl:value-of select="."/></literal></link>
   </xsl:template>
 
   <xsl:template match="docref">
@@ -145,16 +145,16 @@
 
   <xsl:template match="cmdref">
     <link linkend="cmd-{translate(text(),'_','-')}">
-      <code><xsl:value-of select="."/></code></link>
+      <literal><xsl:value-of select="."/></literal></link>
   </xsl:template>
 
   <xsl:template match="funcref">
     <link linkend="func-{translate(text(),'_','-')}">
-      <code>&lt;<xsl:value-of select="."/>&gt;</code></link>
+      <literal>&lt;<xsl:value-of select="."/>&gt;</literal></link>
   </xsl:template>
 
   <xsl:template match="man">
-    <code><xsl:value-of select="."/>(<xsl:choose><xsl:when test="@sect"><xsl:value-of select="@sect"/></xsl:when><xsl:otherwise>1</xsl:otherwise></xsl:choose>)</code>
+    <literal><xsl:value-of select="."/>(<xsl:choose><xsl:when test="@sect"><xsl:value-of select="@sect"/></xsl:when><xsl:otherwise>1</xsl:otherwise></xsl:choose>)</literal>
   </xsl:template>
 
   <xsl:template match="pre">
@@ -184,31 +184,31 @@
   </xsl:template>
 
   <xsl:template match="enc">
-    <code><xsl:value-of select="text()"/></code>
+    <literal><xsl:value-of select="text()"/></literal>
     <indexterm>
       <primary><xsl:value-of select="//translations/trans[@id='encodings']"/></primary>
       <secondary sortas="{text()}">
-        <code><xsl:value-of select="text()"/></code>
+        <literal><xsl:value-of select="text()"/></literal>
       </secondary>
     </indexterm>
   </xsl:template>
 
   <xsl:template match="env">
-    <code>$<xsl:value-of select="text()"/></code>
+    <literal>$<xsl:value-of select="text()"/></literal>
     <indexterm>
       <primary><xsl:value-of select="//translations/trans[@id='environ']"/></primary>
       <secondary sortas="{text()}">
-        <code>$<xsl:value-of select="text()"/></code>
+        <literal>$<xsl:value-of select="text()"/></literal>
       </secondary>
     </indexterm>
   </xsl:template>
 
   <xsl:template match="hdr">
-    <code><xsl:value-of select="text()"/></code>
+    <literal><xsl:value-of select="text()"/></literal>
     <indexterm>
       <primary><xsl:value-of select="//translations/trans[@id='hdr']"/></primary>
       <secondary sortas="{text()}">
-        <code><xsl:value-of select="text()"/></code>
+        <literal><xsl:value-of select="text()"/></literal>
       </secondary>
     </indexterm>
   </xsl:template>

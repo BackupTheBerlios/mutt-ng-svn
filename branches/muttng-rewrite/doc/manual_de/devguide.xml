@@ -179,7 +179,7 @@
 
       <p>
         In general: document all files! Specify a doxygen header with at
-        least the <code>@@file</code> and <code>@@brief</code> tags. For
+        least the <tt>@@file</tt> and <tt>@@brief</tt> tags. For
         headers, the brief tag looks like:
       </p>
 
@@ -218,8 +218,8 @@
 
       <p>
         whereby the identifier is constructed from the filename under
-        the <code>src/</code> directory,
-        <code>libmuttng/foo/bar.h</code> in this case.
+        the <tt>src/</tt> directory,
+        <tt>libmuttng/foo/bar.h</tt> in this case.
       </p>
 
     </subsection> <!--}}}-->
