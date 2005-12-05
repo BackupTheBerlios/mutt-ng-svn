@@ -82,7 +82,12 @@ void header_tests::test_serialization() {
 
   h1 = new Header("From","test1@test1.com");
   h2 = new Header("To","test2@test2.com");
-  (&a) << *h1 << *h2;
+
+  h1->serialize(&a);
+  buffer_add_str(&a,"\r\n",-1);
+  h2->serialize(&a);
+  buffer_add_str(&a,"\r\n",-1);
+
   assert_eq("serialization of two headers",true,buffer_equal1(&a,"From: test1@test1.com\r\nTo: test2@test2.com\r\n",-1));
 
   delete h1;
@@ -91,8 +96,8 @@ void header_tests::test_serialization() {
   h1 = new Header("","");
 
   buffer_shrink(&a,0);
-  (&a) << *h1;
-  assert_eq("serialization of an empty header",true,buffer_equal1(&a,": \r\n",-1));
+  h1->serialize(&a);
+  assert_eq("serialization of an empty header",true,buffer_equal1(&a,": ",-1));
 
   delete h1;
 }

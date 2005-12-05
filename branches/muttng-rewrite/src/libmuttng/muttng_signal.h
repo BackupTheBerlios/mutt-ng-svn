@@ -2,6 +2,8 @@
  * @ingroup libmuttng
  * @addtogroup libmuttng_sig Signal handling
  * @{
+ * For implementation details and an example, please see
+ * @ref sect_devguide-libmuttng-signal.
  */
 /**
  * @file libmuttng/muttng_signal.h

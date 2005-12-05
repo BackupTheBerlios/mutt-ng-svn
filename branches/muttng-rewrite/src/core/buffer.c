@@ -78,3 +78,15 @@ void buffer_shrink (buffer_t* buffer, size_t len) {
     buffer->str[len] = '\0';
   }
 }
+
+unsigned int buffer_chomp(buffer_t * buffer) {
+  unsigned int chomp_count = 0;
+  if (buffer) {
+    while (buffer->len > 0 && (buffer->str[buffer->len-1]=='\r' || buffer->str[buffer->len-1]=='\n')) {
+      buffer->str[buffer->len-1]='\0';
+      buffer->len--;
+      chomp_count++;
+    }
+  }
+  return chomp_count;
+}

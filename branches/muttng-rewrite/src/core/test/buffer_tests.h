@@ -15,14 +15,15 @@ using namespace unitpp;
  * buffer_t unit testing class
  */
 class buffer_tests : public suite {
-		void test_buffer_init();
-		void test_buffer_equal1();
-		void test_buffer_add_str();
-		void test_buffer_add_buffer();
-		void test_buffer_add_ch();
-		void test_buffer_add_num2();
-	public:
-		buffer_tests();
+    void test_buffer_init();
+    void test_buffer_equal1();
+    void test_buffer_add_str();
+    void test_buffer_add_buffer();
+    void test_buffer_add_ch();
+    void test_buffer_add_num2();
+    void test_buffer_chomp();
+  public:
+    buffer_tests();
 };
 
 #endif

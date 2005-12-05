@@ -125,6 +125,13 @@ void buffer_free (buffer_t* buffer);
  */
 void buffer_shrink (buffer_t* buffer, size_t len);
 
+/**
+ * Remove trailing CR/LF characters from buffer.
+ * @param buffer buffer which shall be chomped.
+ * @return number of characters chomped.
+ */
+unsigned int buffer_chomp(buffer_t * buffer);
+
 #ifdef __cplusplus
 }
 #endif

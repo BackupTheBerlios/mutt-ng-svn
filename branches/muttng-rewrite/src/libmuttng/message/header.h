@@ -81,11 +81,10 @@ class Header : public LibMuttng {
     /**
      * Serialization function.
      * @param buf buffer_t into which serialization shall happen.
-     * @param h Header that shall be serialized.
-     * @return buffer_t pointer into which serialization has happened.
      * @test header_tests::test_serialization()
      */
-    friend buffer_t * operator<<(buffer_t * buf,Header & h);
+    void serialize(buffer_t * buf);
+
   private:
     buffer_t name;
     buffer_t body;

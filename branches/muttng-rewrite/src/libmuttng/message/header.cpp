@@ -61,14 +61,12 @@ void Header::setBody(buffer_t * body) {
   }
 }
 
-buffer_t * operator<<(buffer_t * buf, Header & h) {
+void Header::serialize(buffer_t * buf) {
   if (buf) {
-    buffer_add_buffer(buf,h.getName());
+    buffer_add_buffer(buf,getName());
     buffer_add_str(buf,": ",2);
-    buffer_add_buffer(buf,h.getBody());
-    buffer_add_str(buf,"\r\n",2);
+    buffer_add_buffer(buf,getBody());
   }
-  return buf;
 }
 
 Header::~Header(void) {
