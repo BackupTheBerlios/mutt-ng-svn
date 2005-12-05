@@ -22,19 +22,82 @@ POP3Mailbox::~POP3Mailbox (void) {
 }
 
 mailbox_query_status POP3Mailbox::openMailbox() {
-  /* TODO */
+  buffer_t rbuf, sbuf; /* receive & send buffers */
+  buffer_init(&rbuf);
+  buffer_init(&sbuf);
 
-  if (!url) {
+  if (!url || !conn) {
     /* TODO: emit some error? */
+    return MQ_NOT_CONNECTED;
+  }
+
+  if (!url->username || !url->password) {
+    /* TODO: emit query for username and/or password */
+    return MQ_NOT_CONNECTED;
+  }
+
+  if (conn->connect()==false) {
+    return MQ_NOT_CONNECTED;
+  }
+
+  if (conn->readLine(&rbuf)<=0) {
+    return MQ_NOT_CONNECTED;
+  }
+
+  if (!buffer_equal1(&rbuf,"+OK",3)) {
+    conn->disconnect();
     return MQ_ERR;
   }
 
-  return MQ_NOT_CONNECTED;
+  buffer_add_str(&sbuf,"USER ",5);
+  buffer_add_str(&sbuf,url->username,-1);
+  buffer_add_str(&sbuf,"\r\n",2);
+
+  if (conn->doWrite(&sbuf)<0) {
+    conn->disconnect();
+    return MQ_NOT_CONNECTED;
+  }
+
+  buffer_shrink(&rbuf,0);
+
+  if (conn->readLine(&rbuf)<=0) {
+    return MQ_NOT_CONNECTED;
+  }
+
+  if (!buffer_equal1(&rbuf,"+OK",3)) {
+    conn->disconnect();
+    return MQ_ERR;
+  }
+
+  buffer_shrink(&sbuf,0);
+  buffer_add_str(&sbuf,"PASS ",5);
+  buffer_add_str(&sbuf,url->password,-1);
+  buffer_add_str(&sbuf,"\r\n",2);
+
+  if (conn->doWrite(&sbuf)<0) {
+    conn->disconnect();
+    return MQ_NOT_CONNECTED;
+  }
+
+  buffer_shrink(&rbuf,0);
+
+  if (conn->readLine(&rbuf)<=0) {
+    return MQ_NOT_CONNECTED;
+  }
+
+  if (!buffer_equal1(&rbuf,"+OK",3)) {
+    conn->disconnect();
+    return MQ_ERR;
+  }
+
+  /* from this point on, we're successfully logged in and in transactional state */
+
+  return MQ_OK;
 }
 
 bool POP3Mailbox::checkEmpty() {
   /* TODO */
-  return MQ_NOT_CONNECTED;
+  return true;
 }
 
 bool POP3Mailbox::checkACL(acl_bit_t bit) {
@@ -51,6 +114,8 @@ bool POP3Mailbox::checkACL(acl_bit_t bit) {
 }
 
 mailbox_query_status POP3Mailbox::closeMailbox() {
+  /* TODO: synchronize content of mailbox */
+  conn->disconnect();
   return MQ_NOT_CONNECTED;
 }
 

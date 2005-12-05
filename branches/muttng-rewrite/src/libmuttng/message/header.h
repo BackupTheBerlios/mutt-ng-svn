@@ -18,16 +18,18 @@
 class Header : public LibMuttng {
   public:
     /**
-    * Constructor.
+    * Constructor. If one of the parameters is NULL, then the according member is initialized with an empty string.
     * @param name header name as C string.
     * @param body header body as C string.
+    * @test header_tests::test_constructors()
     */
     Header(char * name = "", char * body = "");
 
     /**
-    * Constructor.
+    * Constructor. If one of the parameters is NULL, then the according members is initialized with an empty string.
     * @param name header name as @c buffer_t pointer.
     * @param body header body as @c buffer_t pointer.
+    * @test header_tests::test_constructors()
     */
     Header(buffer_t * name, buffer_t * body);
 
@@ -39,14 +41,16 @@ class Header : public LibMuttng {
     /**
      * Compares the header name with a string in a case-insensitive way.
      * @param name header name to compare with.
-     * @return true if name equals the header name, otherwise false.
+     * @return true if name equals the header name, otherwise false. name == NULL always returns false.
+     * @test header_tests::test_equalsname()
      */
     bool equalsName(char * name);
 
     /**
      * Compares the header name with a buffer_t in a case-insensitive way.
      * @param name header name to compare with.
-     * @return true if name equals the header name, otherwise false.
+     * @return true if name equals the header name, otherwise false. name == NULL always returns false.
+     * @test header_tests::test_equalsname()
      */
     bool equalsName(buffer_t * name);
 
@@ -64,18 +68,28 @@ class Header : public LibMuttng {
 
     /**
      * Setter function for header name.
-     * @param name new header name.
+     * @param name new header name. If it is NULL, the header name is not modified.
      */
     void setName(buffer_t * name);
 
     /**
      * Setter function for header body.
-     * @param body new header body.
+     * @param body new header body. If it is NULL, the header name is not modified.
      */
     void setBody(buffer_t * body);
+
+    /**
+     * Serialization function.
+     * @param buf buffer_t into which serialization shall happen.
+     * @param h Header that shall be serialized.
+     * @return buffer_t pointer into which serialization has happened.
+     * @test header_tests::test_serialization()
+     */
+    friend buffer_t * operator<<(buffer_t * buf,Header & h);
   private:
     buffer_t name;
     buffer_t body;
 };
+
 
 #endif /* !LIBMUTTNG_MESSGAGE_HEADER_H */
