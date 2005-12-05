@@ -90,6 +90,9 @@ void buffer_add_num2 (buffer_t* buffer, int num, int pad, int base);
 
 /**
  * Compare buffer to string.
+ * If length of string passed in is negative, it's computed <b>and</b>
+ * buffer must match string exactly (length+content). If postive or zero
+ * length given, check only first @c slen characters.
  * @param buffer Pointer to buffer.
  * @param s String.
  * @param slen Length of string. If negative, it will be computed first.

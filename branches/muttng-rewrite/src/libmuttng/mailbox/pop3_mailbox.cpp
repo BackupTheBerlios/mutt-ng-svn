@@ -49,6 +49,7 @@ mailbox_query_status POP3Mailbox::openMailbox() {
   }
 
   if (!buffer_equal1(&rbuf,"+OK",3)) {
+    DEBUGPRINT(1,("%.3s %d", rbuf.str,buffer_equal1(&rbuf,"+OK",3)));
     conn->disconnect();
     return MQ_AUTH;
   }

@@ -15,6 +15,7 @@
 #include "core/buffer.h"
 #include "libmuttng/util/url.h"
 
+#include "libmuttng/libmuttng.h"
 #include "libmuttng/muttng_features.h"
 #include "libmuttng/muttng_signal.h"
 
@@ -31,7 +32,7 @@
  * done in this class to not have to deal with details anywhere outside
  * Connection class.
  */
-class Connection {
+class Connection : public LibMuttng {
   public:
     /**
      * Constructor for connection.

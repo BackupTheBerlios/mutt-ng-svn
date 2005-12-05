@@ -50,7 +50,7 @@ int buffer_equal1 (buffer_t* buffer, const char* s, int len) {
   size_t l = (len >= 0 ? (size_t) len : str_len (s));
   if (!buffer || !s)
     return (!buffer && !s);
-  return (buffer->len == l && strncmp (buffer->str, s, l) == 0);
+  return ((len >= 0 || buffer->len == l) && strncmp (buffer->str, s, l) == 0);
 }
 
 int buffer_equal2 (buffer_t* buffer1, buffer_t* buffer2) {
