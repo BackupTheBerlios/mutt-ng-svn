@@ -12,6 +12,7 @@
       \documentclass[a4paper]{scrbook}
       \usepackage{muttng}
       \parindent0mm
+      \setcounter{secnumdepth}{5}
     </xsl:text>
     <xsl:choose>
       <xsl:when test="$l10n.gentext.default.language='de'"><xsl:text>\usepackage[ngerman]{babel}</xsl:text></xsl:when>
@@ -30,6 +31,8 @@
     <xsl:apply-templates select="authors" mode="head"/>
     <xsl:text>
       \begin{document}
+      \addtocontents{toc}{\protect\setcounter{tocdepth}{5}}
+
       \maketitle
       \newpage
       \tableofcontents
@@ -117,7 +120,7 @@
   </xsl:template>
 
   <xsl:template match="listing">
-    <xsl:text>\lstinputlisting[style=muttng</xsl:text>
+    <xsl:text>\lstinputlisting[firstline=2,style=muttng</xsl:text>
     <xsl:choose>
       <xsl:when test="@lang='cpp'"><xsl:text>,language=C++</xsl:text></xsl:when>
       <xsl:when test="@lang='make'"><xsl:text>,language={[GNU]make}</xsl:text></xsl:when>
@@ -141,12 +144,12 @@
   </xsl:template>
 
   <xsl:template match="docref">
-    <xsl:value-of select="."/><xsl:text> \vref{</xsl:text><xsl:value-of select="@href"/><xsl:text>}</xsl:text>
+    <xsl:apply-templates/> <xsl:text> ($\to$ </xsl:text><xsl:value-of select="@type"/><xsl:text> \vref{</xsl:text><xsl:value-of select="@href"/><xsl:text>})</xsl:text>
   </xsl:template>
 
   <xsl:template match="context">
     <xsl:text>\label{</xsl:text><xsl:value-of select="@name"/><xsl:text>}</xsl:text>
-    <xsl:text>\subsubsection{Screen: </xsl:text><xsl:value-of select="@name"/><xsl:text>}
+    <xsl:text>\subsection{Screen: </xsl:text><xsl:value-of select="@name"/><xsl:text>}
       \begin{itemize}
       \item dummy
     </xsl:text>
@@ -166,7 +169,7 @@
   <xsl:template match="variable">
     <xsl:text>\label{option_</xsl:text><xsl:value-of select="@name"/><xsl:text>}
     </xsl:text>
-    <xsl:text>\subsubsection{\texttt{\uglyesc{$</xsl:text><xsl:value-of select="@name"/><xsl:text>}}}
+    <xsl:text>\subsection{\texttt{\uglyesc{$</xsl:text><xsl:value-of select="@name"/><xsl:text>}}}
     </xsl:text>
     <xsl:text></xsl:text><xsl:value-of select="//translations/trans[@id='type']"/><xsl:text>: \uglyesc{</xsl:text><xsl:value-of select="@type"/><xsl:text>}\\
 
@@ -267,6 +270,60 @@
     </xsl:text>
     <xsl:apply-templates/>
     <xsl:text>\end{verbatim}
+    </xsl:text>
+  </xsl:template>
+
+  <xsl:template match="cap"/>
+
+  <xsl:template match="cap" mode="tab">
+    <xsl:text>\caption{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
+  </xsl:template>
+  
+  <xsl:template match="tab">
+    <xsl:text>
+      \begin{longtable}{</xsl:text>
+    <xsl:value-of select="@texstr"/>
+    <xsl:text>}
+    </xsl:text>
+    <xsl:apply-templates select="cap" mode="tab"/><xsl:text>\label{</xsl:text>
+    <xsl:value-of select="@id"/>
+    <xsl:text>} \\
+    </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>
+      \end{longtable}
+    </xsl:text>
+  </xsl:template>
+
+  <xsl:template match="th">
+    <xsl:apply-templates select="tr" mode="head"/>
+  </xsl:template>
+
+  <xsl:template match="tb">
+    <xsl:apply-templates select="tr" mode="body"/>
+  </xsl:template>
+
+  <xsl:template match="td" mode="tab">
+    <xsl:apply-templates/>
+    <xsl:if test="position()!=last()">
+      <xsl:text> &amp; </xsl:text>
+    </xsl:if>
+  </xsl:template>
+     
+  <xsl:template match="tr" mode="head">
+    <xsl:apply-templates select="td" mode="tab"/>
+    <xsl:text> \\ \hline\hline
+      \endfirsthead
+      \endhead
+    </xsl:text>
+  </xsl:template>
+     
+  <xsl:template match="tr" mode="body">
+    <xsl:apply-templates select="td" mode="tab"/>
+    <xsl:if test="position()!=last()">
+      <xsl:text> \\ \hline</xsl:text>
+    </xsl:if>
+    <xsl:text>
     </xsl:text>
   </xsl:template>
 

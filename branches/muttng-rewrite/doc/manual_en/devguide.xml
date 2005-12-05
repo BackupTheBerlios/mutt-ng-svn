@@ -254,7 +254,7 @@
 
       <p>
         Any Makefile including it must include <tt>GNUmakefile.config</tt>
-        directly afterwards like in <docref href="sample-libmuttng-build-config">include
+        directly afterwards like in <docref type="listing" href="sample-libmuttng-build-config">include
           example</docref>.
       </p>
 
@@ -268,19 +268,9 @@
       </p>
 
       <ul>
-        <li>for the compilers, it sets up the following variables depending
-          on <tt>CCSTYLE</tt>:
-          <ul>
-            <li><tt>CC</tt>: C compiler</li>
-            <li><tt>CXX</tt>: C++ compiler</li>
-            <li><tt>CFLAGS</tt>: C compiler flags</li>
-            <li><tt>CXXFLAGS</tt>: C++ compiler flags</li>
-            <li><tt>DEPFLAGS</tt>: C/C++ compiler flags to obtain include dependencies
-              for make's dependency tracking</li>
-            <li><tt>AR</tt>: path to <man>ar</man></li>
-            <li><tt>RANLIB</tt>: path to <man>ranlib</man></li>
-          </ul>
-        </li>
+        <li>for the compilers, it sets up
+          <docref type="table" href="table-make-env1">variables for compilers and flags</docref>
+          depending on <tt>CCSTYLE</tt></li>
         <li>it checks whether the dependency file <tt>./.depend</tt> exists and
           includes it</li>
         <li>for <tt>DEBUG=1</tt>, it sets up <tt>CFLAGS</tt>, <tt>CXXFLAGS</tt>
@@ -291,18 +281,8 @@
           <tt>$(MYOS)</tt></li>
         <li>it sets up compiler and linker flags to contain the required
           paths for Unit++ derived from the configured <tt>$(UNITPPDIR)</tt></li>
-        <li>it searches for the following tools in <env>PATH</env>:
-          <ul>
-            <li><man>doxygen</man>: <tt>$(DOXYGEN)</tt></li>
-            <li><man>tidy</man>: <tt>$(TIDY)</tt></li>
-            <li><man>xgettext</man>: <tt>$(XGETTEXT)</tt></li>
-            <li><man>msgmerge</man>: <tt>$(MSGMERGE)</tt></li>
-            <li><man>msgfmt</man>: <tt>$(MSGFMT)</tt></li>
-            <li><man>pdflatex</man>: <tt>$(PDFLATEX)</tt></li>
-            <li><man>latex</man>: <tt>$(LATEX)</tt></li>
-            <li><man>makeindex</man>: <tt>$(MAKEINDEX)</tt></li>
-          </ul>
-        </li>
+        <li>it searches <env>PATH</env> for the paths of
+          <docref type="table" href="table-make-tools">tools required</docref>.</li>
         <li>according to the XSL processor chosen via <tt>$(XSLPROC)</tt>,
           it defines the following two functions: <tt>doxslt_s</tt> and
           <tt>doxslt_m</tt>. The first does transformation to a single
@@ -323,8 +303,45 @@
       </ul>
 
       <p>
+        <tab cols="2" texstr="l|l" id="table-make-env1">
+          <cap>Make environment</cap>
+          <th>
+            <tr><td>Make variable</td><td>Meaning</td></tr>
+          </th>
+          <tb>
+            <tr><td><tt>CC</tt></td><td>C compiler</td></tr>
+            <tr><td><tt>CXX</tt></td><td>C++ compiler</td></tr>
+            <tr><td><tt>CFLAGS</tt></td><td>C compiler flags</td></tr>
+            <tr><td><tt>CXXFLAGS</tt></td><td>C++ compiler flags</td></tr>
+            <tr><td><tt>DEPFLAGS</tt></td><td>C/C++ compiler flags for dependencies</td></tr>
+            <tr><td><tt>AR</tt></td><td>path to <man>ar</man></td></tr>
+            <tr><td><tt>RANLIB</tt></td><td>path to <man>ranlib</man></td></tr>
+          </tb>
+        </tab>
+      </p>
+
+      <p>
+        <tab cols="2" texstr="l|l" id="table-make-tools">
+          <cap>Make tools</cap>
+          <th>
+            <tr><td>Tool</td><td>Make variable</td></tr>
+          </th>
+          <tb>
+            <tr><td><man>doxygen</man></td><td><tt>DOXYGEN</tt></td></tr>
+            <tr><td><man>tidy</man></td><td><tt>TIDY</tt></td></tr>
+            <tr><td><man>xgettext</man></td><td><tt>XGETTEXT</tt></td></tr>
+            <tr><td><man>msgmerge</man></td><td><tt>MSGMERGE</tt></td></tr>
+            <tr><td><man>msgfmt</man></td><td><tt>MSGFMT</tt></td></tr>
+            <tr><td><man>pdflatex</man></td><td><tt>PDFLATEX</tt></td></tr>
+            <tr><td><man>latex</man></td><td><tt>LATEX</tt></td></tr>
+            <tr><td><man>makeindex</man></td><td><tt>MAKEINDEX</tt></td></tr>
+          </tb>
+        </tab>
+      </p>
+
+      <p>
         In any Makefile, targets can be setup depending on whether a tool is present
-        or not via, see <docref href="sample-libmuttng-build-conditional">conditional
+        or not via, see <docref type="listing" href="sample-libmuttng-build-conditional">conditional
           example</docref>.
       </p>
 
@@ -362,7 +379,7 @@
 
       <p>
         For example, the full path to <man>vi</man> can be obtained via
-        the call shown in the <docref href="sample-libmuttng-build-whereis-call1"
+        the call shown in the <docref type="listing" href="sample-libmuttng-build-whereis-call1"
           >first whereis call example</docref>.
       </p>
 
@@ -374,7 +391,7 @@
       <p>
         If the binary is found, <tt>GREAT_EDITOR</tt> will contain its path and
         will be empty otherwise. A check for it could be implemented as shown in the
-        <docref href="sample-libmuttng-build-whereis-use">whereis usage example</docref>.
+        <docref type="listing" href="sample-libmuttng-build-whereis-use">whereis usage example</docref>.
       </p>
 
       <listing lang="make" id="sample-libmuttng-build-whereis-use"
@@ -383,7 +400,7 @@
 
       <p>
         An example of a non-empty default is show in the
-        <docref href="sample-libmuttng-build-whereis-call2">second whereis call example</docref>
+        <docref type="listing" href="sample-libmuttng-build-whereis-call2">second whereis call example</docref>
         which will search for the <man>vim</man> binary: if it's found,
         <tt>GREAT_EDITOR</tt> contains its path but just <tt>vi</tt> otherwise.
       </p>
@@ -416,7 +433,7 @@
       <p>
         For example, to have all these targets for the subdirectories
         <tt>foo</tt> and <tt>bar</tt>, use the basic structure as shown
-        in the <docref href="sample-libmuttng-build-structure">general makefile structure</docref>
+        in the <docref type="listing" href="sample-libmuttng-build-structure">general makefile structure</docref>
         listing.
       </p>
 
@@ -437,7 +454,7 @@
       </p>
 
       <p>
-        Use is as easy as show in the <docref
+        Use is as easy as show in the <docref type="listing"
           href="sample-libmuttng-build-compile">compilation makefile example</docref>.
       </p>
 
@@ -476,7 +493,7 @@
       <p>
         When adding directories somewhere, please make sure the Makefile
         includes at least the files previously shown in the 
-        <docref href="sample-libmuttng-build-config">include example</docref>.
+        <docref type="listing" href="sample-libmuttng-build-config">include example</docref>.
       </p>
 
       <p>
@@ -684,25 +701,59 @@
 
         <p>
           For specifying references, a distinction is made to what target
-          a reference is made. The following don't accept attributes for the
-          target but the target given as text to the tag:
+          a reference is made:
         </p>
 
         <ul>
-          <li><tt>email</tt>: an email address</li>
-          <li><tt>web</tt>: a web address</li>
-          <li><tt>varref</tt>: referencing a configuration variable</li>
-          <li><tt>cmdref</tt>: referencing a configuration command</li>
-          <li><tt>funcref</tt>: referencing a function</li>
-          <li><tt>man</tt>: referencing a manual page. Optionally,
-            it may contain a <tt>sect</tt> attribute to specify the
-            section. If none given, 1 will be used by default.</li>
+          <li><docref type="table" href="tab-ref-tags">some tags</docref> don't
+            accept attributes but the target specified as text</li>
+          <li>for document-internal references, the 
+            <docref type="table" href="tab-docref-attrs"><tt>docref</tt> tag is to
+              be used</docref></li>
+          <li>for references to manual pages, the <docref
+              type="table" href="tab-man-attrs"><tt>man</tt> tag</docref> with an optional
+            section attribute is to be used</li>
         </ul>
 
         <p>
-          For document-internal references, the <tt>docref</tt> tag is to be used
-          which expects the target as <tt>href</tt> attribute and the text to
-          create a link with given as text for the <tt>docref</tt> tag.
+          <tab cols="2" texstr="l|c|l" id="tab-ref-tags"> <!--{{{-->
+            <cap>reference tags</cap>
+            <th>
+              <tr><td>Tag</td><td>Meaning</td></tr>
+            </th>
+            <tb>
+              <tr><td><tt>email</tt></td><td>an email address</td></tr>
+              <tr><td><tt>web</tt></td><td>a web address</td></tr>
+              <tr><td><tt>varref</tt></td><td>referencing a configuration variable</td></tr>
+              <tr><td><tt>cmdref</tt></td><td>referencing a configuration command</td></tr>
+              <tr><td><tt>funcref</tt></td><td>referencing a function</td></tr>
+            </tb>
+          </tab> <!--}}}-->
+        </p>
+
+        <p>
+          <tab cols="3" texstr="l|c|l" id="tab-man-attrs"> <!--{{{-->
+            <cap><tt>man</tt> tag attributes</cap>
+            <th>
+              <tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr>
+            </th>
+            <tb>
+              <tr><td><tt>sect</tt></td><td><tt>no</tt></td><td>Manual page section, default: 1</td></tr>
+            </tb>
+          </tab> <!--}}}-->
+        </p>
+
+        <p>
+          <tab cols="3" texstr="l|c|l" id="tab-docref-attrs"> <!--{{{-->
+            <cap><tt>docref</tt> tag attributes</cap>
+            <th>
+              <tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr>
+            </th>
+            <tb>
+              <tr><td><tt>type</tt></td><td><tt>yes</tt></td><td>Type of link's end (e.g. ``table''.)</td></tr>
+              <tr><td><tt>href</tt></td><td><tt>yes</tt></td><td>Target (document-internal ID)</td></tr>
+            </tb>
+          </tab> <!--}}}-->
         </p>
 
       </subsubsection>
@@ -804,6 +855,39 @@
             format.)</li>
           <li><tt>href</tt> specifies the filename in the <tt>doc/examples/</tt> directory.</li>
         </ul>
+
+      </subsubsection>
+      <!--}}}-->
+
+      <subsubsection id="devguide-docs-dialect-tables" title="Tables"> <!--{{{-->
+
+        <p>
+          Tables have to be specified within a
+          <docref type="table" href="tab-tab-attrs"><tt>tab</tt> tag with
+            proper attributes</docref>. Within a table, there must be a header
+          within a <tt>th</tt> tag and a body within a <tt>tb</tt> tag. Within each
+          of them, there's any number of rows wrapped in <tt>tr</tt>. As a row consists
+          of multiple columns, within <tt>tr</tt> there's any number of <tt>td</tt> tags
+          for columns.
+        </p>
+
+        <p>
+          The caption is specified via a <tt>cap</tt> tag within the table.
+        </p>
+
+        <p>
+          <tab cols="3" texstr="l|c|l" id="tab-tab-attrs"> <!--{{{-->
+            <cap><tt>tab</tt> tag attributes</cap>
+            <th>
+              <tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr>
+            </th>
+            <tb>
+              <tr><td><tt>cols</tt></td><td><tt>yes</tt></td><td>Number of columns</td></tr>
+              <tr><td><tt>texstr</tt></td><td><tt>yes</tt></td><td>Layout string for LaTeX's <tt>longtable</tt></td></tr>
+              <tr><td><tt>id</tt></td><td><tt>yes</tt></td><td>Document-internal ID</td></tr>
+            </tb>
+          </tab> <!--}}}-->
+        </p>
 
       </subsubsection>
       <!--}}}-->
@@ -1164,7 +1248,7 @@ disconnectSignals (signal, object);</pre>
       <subsubsection id="devguide-libmuttng-signal-example" title="Example"> <!--{{{-->
 
         <p>
-          The <docref href="sample-libmuttng-signal">Signal example</docref> shows how
+          The <docref type="listing" href="sample-libmuttng-signal">Signal example</docref> shows how
           to handle signals: it contains a class <tt>Sig</tt> which contains nothing but
           the signal declaration and a class <tt>Handler</tt> which simply catches a signal
           and prints the argument passed through all handlers.
@@ -1207,7 +1291,7 @@ disconnectSignals (signal, object);</pre>
         <p>
           Creating a new instance of a mailbox based on the URL (other ways
           are not planned), use the Mailbox::fromUrl() function as shown
-          <docref href="sample-libmuttng-mailbox-create">in the example</docref>.
+          <docref type="listing" href="sample-libmuttng-mailbox-create">in the example</docref>.
         </p>
 
         <listing lang="cpp" id="sample-libmuttng-mailbox-create"

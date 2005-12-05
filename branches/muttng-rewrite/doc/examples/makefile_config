@@ -1,3 +1,4 @@
+
 include [path]/GNUmakefile.whereis
 include [path]/GNUmakefile.config.mine
 include [path]/GNUmakefile.config

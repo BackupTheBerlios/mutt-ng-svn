@@ -237,4 +237,50 @@
     </sect1>
   </xsl:template>
 
+  <!-- tables {{{ -->
+  
+  <xsl:template match="tab">
+    <anchor id="{@id}"/>
+    <table rowsep="1" frame="none">
+      <xsl:apply-templates select="cap" mode="tab"/>
+      <tgroup cols="{@cols}" align="left" colsep="1" rowsep="1">
+        <xsl:apply-templates/>
+      </tgroup>
+    </table>
+  </xsl:template>
+
+  <xsl:template match="th">
+    <thead>
+      <xsl:apply-templates/>
+    </thead>
+  </xsl:template>
+
+  <xsl:template match="cap"/>
+
+  <xsl:template match="cap" mode="tab">
+    <title>
+      <xsl:apply-templates/>
+    </title>
+  </xsl:template>
+
+  <xsl:template match="tb">
+    <tbody>
+      <xsl:apply-templates/>
+    </tbody>
+  </xsl:template>
+
+  <xsl:template match="tr">
+    <row>
+      <xsl:apply-templates/>
+    </row>
+  </xsl:template>
+
+  <xsl:template match="td">
+    <entry>
+      <xsl:apply-templates/>
+    </entry>
+  </xsl:template>
+
+  <!-- }}} -->
+
 </xsl:stylesheet>

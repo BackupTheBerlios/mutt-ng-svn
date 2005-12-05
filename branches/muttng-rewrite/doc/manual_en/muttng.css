@@ -17,6 +17,10 @@
     text-align: center;
   }
 
+  p.title {
+    font-weight: bold;
+  }
+
   div.qindex,pre,pre.screen,div.nav {
     margin-left: 1cm;
     margin-right: 1cm;
@@ -79,4 +83,10 @@
     border-style: solid;
     border-color: black;
   }
+
+  table {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
 }

@@ -1,4 +1,142 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter id="introduction">
-  <title>Einführung</title>
+  <title>Introduction</title>
+
+  <section id="introduction-overview"> <!--{{{-->
+    <title>Overview</title>
+    
+    <p>
+      <b>Mutt-ng</b> is a small but very
+      powerful text-based MIME mail client.  Mutt-ng is highly
+      configurable, and is well suited to the mail power user with
+      advanced features like key bindings, keyboard macros, mail
+      threading, regular expression searches and a powerful pattern
+      matching language for selecting groups of messages.
+    </p>
+    
+    <p>
+      This documentation additionally contains documentation to
+      <b>Mutt-NG</b>, a fork from Mutt
+      with the goal to fix all the little annoyances of Mutt, to
+      integrate all the Mutt patches that are floating around in the
+      web, and to add other new features. Features specific to Mutt-ng
+      will be discussed in an extra section. Don't be confused when
+      most of the documentation talk about Mutt and not Mutt-ng,
+      Mutt-ng contains all Mutt features, plus many more.
+    </p>
+    
+  </section>
+  <!--}}}-->
+
+  <section id="introduction-homepage"> <!--{{{-->
+    <title>Mutt-ng Home Page</title>
+    
+    <p>
+      The official hompepage of mutt-ng is: <web>http://www.muttng.org/</web>
+    </p>
+    
+    <p>
+      While the rewrite is maintained in a branch, the
+      homepage for it is: <web>http://www.muttng.org/rewrite/</web>.
+    </p>
+    
+  </section>
+  <!--}}}-->
+  
+  <section id="introduction-mailinglists"> <!--{{{-->
+    <title>Mailing Lists</title>
+    
+    <p>
+      The following mailing lists are available:
+    </p>
+
+    <ul>
+      <li>
+        <email>mutt-ng-users@lists.berlios.de</email>: This is
+        where the mutt-ng user support happens.</li>
+      <li>
+        <email>mutt-ng-devel@lists.berlios.de</email>: The
+        development mailing list for mutt-ng</li>
+    </ul>
+    
+  </section>
+  <!--}}}-->
+  
+  <section id="introduction-distrib-sites"> <!--{{{-->
+    <title>Software Distribution Sites</title>
+    
+    <p>
+      So far, there are no official releases of Mutt-ng, but you can
+      download daily snapshots from <web>http://mutt-ng.berlios.de/snapshots/</web>
+      for the ``old'' version.
+    </p>
+    
+    <p>
+      The code of the rewrite branch is currently only available via
+      subversion:
+    </p>
+
+    <pre>
+$ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewrite</pre>
+    
+  </section>
+  <!--}}}-->
+  
+  <section id="introduction-irc"> <!--{{{-->
+    <title>IRC</title>
+    
+    <p>
+      Visit channel <tt>#muttng</tt> on <tt>irc.freenode.net</tt>
+      (see <web>http://www.freenode.net/</web>) to chat with other people
+      interested in Mutt-ng.  
+    </p>
+    
+  </section>
+  <!--}}}-->
+  
+  <section id="introduction-weblog"> <!--{{{-->
+    <title>Weblog</title>
+    
+    <p>
+      If you want to read fresh news about the latest development in
+      Mutt-ng, and get informed about stuff like interesting,
+      Mutt-ng-related articles and packages for your favorite
+      distribution, you can read and/or subscribe to our development
+      weblog at <web>http://mutt-ng.supersized.org/</web>.
+    </p>
+    
+  </section>
+  <!--}}}-->
+  
+  <section id="introduction-copyright"> <!--{{{-->
+    <title>Copyright</title>
+    
+    <p>
+      Mutt is Copyright (C) 1996-2000 Michael R. Elkins
+      <email>me@cs.hmc.edu</email> and others.
+    </p>
+    
+    <p>
+      This program is free software; you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation; either version 2 of the License, or
+      (at your option) any later version.
+    </p>
+    
+    <p>
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+    </p>
+    
+    <p>
+      You should have received a copy of the GNU General Public License
+      along with this program; if not, write to the Free Software
+      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+    </p>
+    
+  </section>
+  <!--}}}-->
+
 </chapter>

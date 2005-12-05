@@ -90,7 +90,7 @@
   </xsl:template>
 
   <xsl:template match="inlinelisting">
-    <xsl:text>&lt;code&gt;</xsl:text><xsl:value-of select="."/><xsl:text>&lt;/code&gt;</xsl:text>
+    <xsl:text>&lt;tt&gt;</xsl:text><xsl:value-of select="."/><xsl:text>&lt;/tt&gt;</xsl:text>
   </xsl:template>
 
   <xsl:template match="docref">
@@ -105,7 +105,7 @@
 
   <xsl:template match="function">
     <xsl:variable name="transid" select="concat('group-',@group)"/>
-    <xsl:text>- &lt;b&gt;&lt;code&gt;&amp;lt;</xsl:text><xsl:value-of select="@name"/><xsl:text>&amp;gt;&lt;/code&gt;&lt;/b&gt; (default binding: '@c </xsl:text><xsl:value-of select="@default"/><xsl:text>', group: </xsl:text><xsl:value-of select="//translations/trans[@id=$transid]"/><xsl:text>): </xsl:text><xsl:value-of select="."/><xsl:text>
+    <xsl:text>- &lt;b&gt;&lt;tt&gt;&amp;lt;</xsl:text><xsl:value-of select="@name"/><xsl:text>&amp;gt;&lt;/tt&gt;&lt;/b&gt; (default binding: '@c </xsl:text><xsl:value-of select="@default"/><xsl:text>', group: </xsl:text><xsl:value-of select="//translations/trans[@id=$transid]"/><xsl:text>): </xsl:text><xsl:value-of select="."/><xsl:text>
     </xsl:text>
   </xsl:template>
 
@@ -144,27 +144,27 @@
   </xsl:template>
 
   <xsl:template match="val">
-    <xsl:text>&lt;code&gt; </xsl:text><xsl:apply-templates/><xsl:text>&lt;/code&gt;</xsl:text>
+    <xsl:text>&lt;tt&gt;</xsl:text><xsl:apply-templates/><xsl:text>&lt;/tt&gt;</xsl:text>
   </xsl:template>
 
   <xsl:template match="hdr">
-    <xsl:text>&lt;code&gt; </xsl:text><xsl:apply-templates/><xsl:text>&lt;/code&gt;</xsl:text>
+    <xsl:text>&lt;tt&gt;</xsl:text><xsl:apply-templates/><xsl:text>&lt;/tt&gt;</xsl:text>
   </xsl:template>
 
   <xsl:template match="enc">
-    <xsl:text>&lt;code&gt; </xsl:text><xsl:apply-templates/><xsl:text>&lt;/code&gt;</xsl:text>
+    <xsl:text>&lt;tt&gt;</xsl:text><xsl:apply-templates/><xsl:text>&lt;/tt&gt;</xsl:text>
   </xsl:template>
 
   <xsl:template match="env">
-    <xsl:text>&lt;code&gt; $</xsl:text><xsl:apply-templates/><xsl:text>&lt;/code&gt;</xsl:text>
+    <xsl:text>&lt;tt&gt;$</xsl:text><xsl:apply-templates/><xsl:text>&lt;/tt&gt;</xsl:text>
   </xsl:template>
 
   <xsl:template match="tt">
-    <xsl:text>&lt;code&gt; </xsl:text><xsl:apply-templates/><xsl:text>&lt;/code&gt;</xsl:text>
+    <xsl:text>&lt;tt&gt;</xsl:text><xsl:apply-templates/><xsl:text>&lt;/tt&gt;</xsl:text>
   </xsl:template>
 
   <xsl:template match="b">
-    <xsl:text>&lt;b&gt; </xsl:text><xsl:apply-templates/><xsl:text>&lt;/b&gt;</xsl:text>
+    <xsl:text>&lt;b&gt;</xsl:text><xsl:apply-templates/><xsl:text>&lt;/b&gt;</xsl:text>
   </xsl:template>
 
   <xsl:template match="ul">
@@ -202,7 +202,7 @@
   </xsl:template>
 
   <xsl:template match="man">
-    <xsl:text>@c </xsl:text><xsl:value-of select="."/><xsl:text>(</xsl:text><xsl:choose><xsl:when test="@sect"><xsl:value-of select="@sect"/></xsl:when><xsl:otherwise><xsl:text>1</xsl:text></xsl:otherwise></xsl:choose><xsl:text>)</xsl:text>
+    <xsl:text>&lt;tt&gt;</xsl:text><xsl:value-of select="."/><xsl:text>(</xsl:text><xsl:choose><xsl:when test="@sect"><xsl:value-of select="@sect"/></xsl:when><xsl:otherwise><xsl:text>1</xsl:text></xsl:otherwise></xsl:choose><xsl:text>)&lt;/tt&gt;</xsl:text>
   </xsl:template>
 
   <xsl:template match="pre">
@@ -213,5 +213,56 @@
   <xsl:template match="em">
     <xsl:text>&lt;em&gt;</xsl:text><xsl:apply-templates/><xsl:text>&lt;/em&gt;</xsl:text>
   </xsl:template>
+
+  <!-- tables {{{ -->
+
+  <xsl:template match="cap"/>
+
+  <xsl:template match="cap" mode="tab">
+    <xsl:apply-templates/>
+  </xsl:template>
+  
+  <xsl:template match="tab">
+    <xsl:text>@anchor </xsl:text><xsl:value-of select="@id"/><xsl:text>
+    </xsl:text>
+    <xsl:text>@htmlonly
+    &lt;p class="title"&gt;</xsl:text>
+    <xsl:apply-templates select="cap" mode="tab"/>
+    <xsl:text>&lt;/p&gt;</xsl:text>
+    <xsl:text>
+      &lt;table rowsep="1" summary="</xsl:text><xsl:apply-templates select="cap" mode="tab"/><xsl:text>"&gt;
+    </xsl:text>    
+    <xsl:apply-templates/>
+    <xsl:text>
+      &lt;/table&gt;
+      @endhtmlonly
+    </xsl:text>
+  </xsl:template>
+
+  <xsl:template match="th">
+    <xsl:text>&lt;thead&gt;</xsl:text>
+      <xsl:apply-templates/>
+    <xsl:text>&lt;/thead&gt;</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="tb">
+    <xsl:text>&lt;tbody&gt;</xsl:text>
+      <xsl:apply-templates/>
+    <xsl:text>&lt;/tbody&gt;</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="tr">
+    <xsl:text>&lt;tr&gt;</xsl:text>
+      <xsl:apply-templates/>
+    <xsl:text>&lt;/tr&gt;</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="td">
+    <xsl:text>&lt;td&gt;</xsl:text>
+      <xsl:apply-templates/>
+    <xsl:text>&lt;/td&gt;</xsl:text>
+  </xsl:template>
+
+  <!-- }}} -->
 
 </xsl:stylesheet>

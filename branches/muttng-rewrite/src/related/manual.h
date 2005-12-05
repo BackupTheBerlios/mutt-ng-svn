@@ -6,6 +6,109 @@
 @page page_manual Mutt-ng Manual
 
     @section sect_introduction Introduction
+    @subsection sect_introduction-overview Overview
+    <b>Mutt-ng</b> is a small but very
+      powerful text-based MIME mail client.  Mutt-ng is highly
+      configurable, and is well suited to the mail power user with
+      advanced features like key bindings, keyboard macros, mail
+      threading, regular expression searches and a powerful pattern
+      matching language for selecting groups of messages.
+    
+
+    
+      This documentation additionally contains documentation to
+      <b>Mutt-NG</b>, a fork from Mutt
+      with the goal to fix all the little annoyances of Mutt, to
+      integrate all the Mutt patches that are floating around in the
+      web, and to add other new features. Features specific to Mutt-ng
+      will be discussed in an extra section. Don't be confused when
+      most of the documentation talk about Mutt and not Mutt-ng,
+      Mutt-ng contains all Mutt features, plus many more.
+    
+
+    
+    @subsection sect_introduction-homepage Mutt-ng Home Page
+    
+      The official hompepage of mutt-ng is: <a href="http://www.muttng.org/">http://www.muttng.org/</a>
+
+    
+      While the rewrite is maintained in a branch, the
+      homepage for it is: <a href="http://www.muttng.org/rewrite/">http://www.muttng.org/rewrite/</a>.
+    
+
+    
+    @subsection sect_introduction-mailinglists Mailing Lists
+    
+      The following mailing lists are available:
+    
+
+    <ul>
+    <li><a href="mailto:mutt-ng-users@lists.berlios.de">&lt;mutt-ng-users@lists.berlios.de&gt;</a>: This is
+        where the mutt-ng user support happens.</li>
+    <li><a href="mailto:mutt-ng-devel@lists.berlios.de">&lt;mutt-ng-devel@lists.berlios.de&gt;</a>: The
+        development mailing list for mutt-ng</li>
+    
+      </ul>
+    
+    @subsection sect_introduction-distrib-sites Software Distribution Sites
+    
+      So far, there are no official releases of Mutt-ng, but you can
+      download daily snapshots from <a href="http://mutt-ng.berlios.de/snapshots/">http://mutt-ng.berlios.de/snapshots/</a>
+      for the ``old'' version.
+    
+
+    
+      The code of the rewrite branch is currently only available via
+      subversion:
+    
+
+    <pre>
+$ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewrite</pre>
+    @subsection sect_introduction-irc IRC
+    
+      Visit channel <tt>#muttng</tt> on <tt>irc.freenode.net</tt>
+      (see <a href="http://www.freenode.net/">http://www.freenode.net/</a>) to chat with other people
+      interested in Mutt-ng.  
+    
+
+    
+    @subsection sect_introduction-weblog Weblog
+    
+      If you want to read fresh news about the latest development in
+      Mutt-ng, and get informed about stuff like interesting,
+      Mutt-ng-related articles and packages for your favorite
+      distribution, you can read and/or subscribe to our development
+      weblog at <a href="http://mutt-ng.supersized.org/">http://mutt-ng.supersized.org/</a>.
+    
+
+    
+    @subsection sect_introduction-copyright Copyright
+    
+      Mutt is Copyright (C) 1996-2000 Michael R. Elkins
+      <a href="mailto:me@cs.hmc.edu">&lt;me@cs.hmc.edu&gt;</a> and others.
+    
+
+    
+      This program is free software; you can redistribute it and/or modify
+      it under the terms of the GNU General Public License as published by
+      the Free Software Foundation; either version 2 of the License, or
+      (at your option) any later version.
+    
+
+    
+      This program is distributed in the hope that it will be useful,
+      but WITHOUT ANY WARRANTY; without even the implied warranty of
+      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+      GNU General Public License for more details.
+    
+
+    
+      You should have received a copy of the GNU General Public License
+      along with this program; if not, write to the Free Software
+      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+    
+
+    
     
     @section sect_building Building and installation
     @subsection sect_build-systems Supported systems
@@ -49,25 +152,25 @@
     
 
     <ul>
-    <li>XSL processor. Currently only <code> xsltproc</code> and <code> xalan</code> are supported
-        whereby <code> xalan</code> has problems with XInclude still to be resolved.</li>
+    <li>XSL processor. Currently only <tt>xsltproc</tt> and <tt>xalan</tt> are supported
+        whereby <tt>xalan</tt> has problems with XInclude still to be resolved.</li>
     <li>DocBook stylesheets for version 4.3.</li>
-    <li>A LaTeX system including @c pdflatex(1), @c latex(1) and
-        @c makeindex(1)</li>
+    <li>A LaTeX system including <tt>pdflatex(1)</tt>, <tt>latex(1)</tt> and
+        <tt>makeindex(1)</tt></li>
     .
     
       </ul>
     
       In addition, for building the source code's documentation,
-      @c doxygen(1) (see <a href="http://www.doxygen.org/">http://www.doxygen.org/</a>) is required.
+      <tt>doxygen(1)</tt> (see <a href="http://www.doxygen.org/">http://www.doxygen.org/</a>) is required.
     
 
     
     @subsection sect_build-config Build Configuration
     
       In order to make the build process work at all, you need to create
-      a file called <code> GNUmakefile.config.mine</code> in the top-level
-      directory, i.e. in <code> mutt-ng/branches/muttng-rewrite</code>.
+      a file called <tt>GNUmakefile.config.mine</tt> in the top-level
+      directory, i.e. in <tt>mutt-ng/branches/muttng-rewrite</tt>.
     
 
     
@@ -75,34 +178,34 @@
     
 
     <ul>
-    <li><code> CCSTYLE=(gcc|suncc)</code>. Wether to assume use of GNU or Sun's
-        Workshop Pro C/C++ compilers. Default: <code> gcc</code>.</li>
-    <li><code> XSLPROC=(xsltproc|xalanj)</code>. Whether to use @c xsltproc(1)
-        or Xalan Java for as XSL processor. Default: <code> xsltproc</code>.</li>
-    <li><code> DEBUG=(0|1).</code> Whether to pass <code> -g</code> to the
+    <li><tt>CCSTYLE=(gcc|suncc)</tt>. Wether to assume use of GNU or Sun's
+        Workshop Pro C/C++ compilers. Default: <tt>gcc</tt>.</li>
+    <li><tt>XSLPROC=(xsltproc|xalanj)</tt>. Whether to use <tt>xsltproc(1)</tt>
+        or Xalan Java for as XSL processor. Default: <tt>xsltproc</tt>.</li>
+    <li><tt>DEBUG=(0|1).</tt> Whether to pass <tt>-g</tt> to the
         compilers/linkers. This is useful for running a debuger. This is not
         the same as the feature to make mutt-ng print debug messages (which
-        currently cannot be turned off). Default: <code> 0</code>.</li>
-    <li><code> UNITPPDIR=/path</code>. Where Unit++ (see
+        currently cannot be turned off). Default: <tt>0</tt>.</li>
+    <li><tt>UNITPPDIR=/path</tt>. Where Unit++ (see
         <a href="http://unitpp.sf.net/">http://unitpp.sf.net/</a>) for
-        running the unit tests is installed. Default: <code> /usr</code>.</li>
+        running the unit tests is installed. Default: <tt>/usr</tt>.</li>
     
       </ul>
     
     @subsection sect_build-app Building applications
     
-      From the <code> src</code> subdirectory, the following are important targets:
+      From the <tt>src</tt> subdirectory, the following are important targets:
     
 
     <ul>
-    <li><code> depend.</code> Please always run "make depend" first.</li>
-    <li><code> all.</code> Build everything.</li>
-    <li><code> test.</code> Build an run all unit tests.</li>
-    <li><code> srcdoc.</code> Run @c doxygen(1) to generate the docs from source.
-        The output will be placed in the <code> doxygen</code> directory. <b> NOTE:</b> you
+    <li><tt>depend.</tt> Please always run "make depend" first.</li>
+    <li><tt>all.</tt> Build everything.</li>
+    <li><tt>test.</tt> Build an run all unit tests.</li>
+    <li><tt>srcdoc.</tt> Run <tt>doxygen(1)</tt> to generate the docs from source.
+        The output will be placed in the <tt>doxygen</tt> directory. <b>NOTE:</b> you
         need the graphviz package, too. If not, look through the file
-        <code> src/Doxyfile</code> and there for a line called
-        <code> HAVE_DOT</code>. Change the <code> YES</code> into <code> NO.</code></li>
+        <tt>src/Doxyfile</tt> and there for a line called
+        <tt>HAVE_DOT</tt>. Change the <tt>YES</tt> into <tt>NO.</tt></li>
     
       </ul>
     
@@ -123,37 +226,37 @@ $ cd ./src && make depend && make</pre>
     @subsection sect_config-commands Configuration commands
     
       The following commands are available for dealing with options:
-      <code> set,</code><code> unset,</code><code> reset,</code><code> toggle</code> and <code> query</code>.
+      <tt>set,</tt><tt>unset,</tt><tt>reset,</tt><tt>toggle</tt> and <tt>query</tt>.
     
 
     
-      The <code> set</code> command sets an option to a value. If no particular
-      value is given for <code> quad-option</code> and <code> bool</code> types, <code> yes</code> is
+      The <tt>set</tt> command sets an option to a value. If no particular
+      value is given for <tt>quad-option</tt> and <tt>bool</tt> types, <tt>yes</tt> is
       assumed.
     
 
     
-      The <code> unset</code> command unsets a value to a neutral value. The
+      The <tt>unset</tt> command unsets a value to a neutral value. The
       neutral values depend on the option's type:
     
 
     <ul>
-    <li><code> boolean</code> and <code> quad-option</code>: <code> no</code></li>
-    <li><code> number</code>; <code> 0</code></li>
-    <li><code> string</code> and <code> url</code>: the empty string/url ""</li>
+    <li><tt>boolean</tt> and <tt>quad-option</tt>: <tt>no</tt></li>
+    <li><tt>number</tt>; <tt>0</tt></li>
+    <li><tt>string</tt> and <tt>url</tt>: the empty string/url ""</li>
     
       </ul>
     
-      The <code> reset</code> command changes a value to its default.
+      The <tt>reset</tt> command changes a value to its default.
     
 
        
-      The <code> toggle</code> command inverts a <code> bool</code> or <code> quad-option</code> value
+      The <tt>toggle</tt> command inverts a <tt>bool</tt> or <tt>quad-option</tt> value
       and is not allowed for other option types.
     
 
     
-      The <code> query</code> command displays the current value for any option.
+      The <tt>query</tt> command displays the current value for any option.
     
 
     
@@ -161,33 +264,33 @@ $ cd ./src && make depend && make</pre>
     The following types of configuration options are supported:
 
     <ul>
-    <li><b> <code> boolean</code></b>: A boolean option. Possible values are:
-        <code> yes</code>, <code> no</code>.</li>
-    <li><b> <code> number</code></b>: A numeric option. Most of the options are
+    <li><b><tt>boolean</tt></b>: A boolean option. Possible values are:
+        <tt>yes</tt>, <tt>no</tt>.</li>
+    <li><b><tt>number</tt></b>: A numeric option. Most of the options are
         positive-only numbers but some allow negative values. The
         documentation for the options list these and, in addition,
         mutt-ng will perform strict checks and report error for
         invalid ranges.</li>
-    <li><b> <code> string</code></b>: A string. As for numbers, most options allow any
+    <li><b><tt>string</tt></b>: A string. As for numbers, most options allow any
         value but some allow only for a few magic words given in the
         option documentation. Mutt-ng will perform strict checks and
         print errors for invalid values, i.e. non-magic words.</li>
-    <li><b> <code> quad-option</code></b>: A "question" with the feature to already
+    <li><b><tt>quad-option</tt></b>: A "question" with the feature to already
         answer it and thus skip any prompts with a given value.
-        Possible values are: <code> yes,</code><code> no,</code><code> ask-yes</code> and <code> ask-no.</code>
-        When an option is used and it's either <code> ask-yes</code> and <code> ask-no,</code>
+        Possible values are: <tt>yes,</tt><tt>no,</tt><tt>ask-yes</tt> and <tt>ask-no.</tt>
+        When an option is used and it's either <tt>ask-yes</tt> and <tt>ask-no,</tt>
         a prompt will query for a result highlighting the given
-        choice, <code> yes</code> or <code> no</code> respectively. With settings of <code> yes</code>
-        or <code> no,</code> the question is assumed to be answered already.</li>
-    <li><b> <code> url</code></b>: A URL for specifying folders. Basically, the
+        choice, <tt>yes</tt> or <tt>no</tt> respectively. With settings of <tt>yes</tt>
+        or <tt>no,</tt> the question is assumed to be answered already.</li>
+    <li><b><tt>url</tt></b>: A URL for specifying folders. Basically, the
         following syntax is allowed:
         <pre>
 proto[s]://[username[:password]@]host[:port]/path</pre>
-        where valid protocols are: <code> imap,</code><code> nntp,</code><code> pop,</code><code> smtp</code>
-        and <code> file.</code> The <code> file</code> protocol is treated specially as it
-        doesn't allow the secure pointer <code> [s]</code> and only contains a
+        where valid protocols are: <tt>imap,</tt><tt>nntp,</tt><tt>pop,</tt><tt>smtp</tt>
+        and <tt>file.</tt> The <tt>file</tt> protocol is treated specially as it
+        doesn't allow the secure pointer <tt>[s]</tt> and only contains a
         path. For compatibility reasons, if an URL doesn't contain a
-        protocoll, <code> file</code> is assumed.</li>
+        protocoll, <tt>file</tt> is assumed.</li>
     
       </ul>
     
@@ -197,15 +300,15 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
 
     <ul>
-    <li>The <code>set ?foo</code> syntax isn't allowed any longer. For
-        this purpose, the <code> query</code> command is to be used instead:
-        <code>query foo</code></li>
-    <li>The <code>set nofoo</code> syntax isn't allowed any
-        longer. For this purpose, use <code>unset foo</code> instead.</li>
-    <li>The <code>set invfoo</code> syntax isn't allowed any
-        longer. For this purpose, use <code>toggle foo</code> instead.</li>
-    <li>The <code>set &foo</code> syntax isn't allowed any
-        longer. For this purpose, use <code>reset foo</code> instead.</li>
+    <li>The <tt>set ?foo</tt> syntax isn't allowed any longer. For
+        this purpose, the <tt>query</tt> command is to be used instead:
+        <tt>query foo</tt></li>
+    <li>The <tt>set nofoo</tt> syntax isn't allowed any
+        longer. For this purpose, use <tt>unset foo</tt> instead.</li>
+    <li>The <tt>set invfoo</tt> syntax isn't allowed any
+        longer. For this purpose, use <tt>toggle foo</tt> instead.</li>
+    <li>The <tt>set &foo</tt> syntax isn't allowed any
+        longer. For this purpose, use <tt>reset foo</tt> instead.</li>
     
       </ul>
     
@@ -213,36 +316,36 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @section sect_reference Reference
     @subsection sect_funcref Functions
     @subsubsection screen_generic Screen: generic
-    - <b><code>&lt;page-up&gt;</code></b> (default binding: '@c pgup', group: Movement): 
+    - <b><tt>&lt;page-up&gt;</tt></b> (default binding: '@c pgup', group: Movement): 
       Page up
-    - <b><code>&lt;show-version&gt;</code></b> (default binding: '@c V', group: Generic): 
+    - <b><tt>&lt;show-version&gt;</tt></b> (default binding: '@c V', group: Generic): 
       Show version information
     @subsubsection screen_help Screen: help
     @subsubsection screen_index Screen: index
-    - <b><code>&lt;break-thread&gt;</code></b> (default binding: '@c #', group: Threading): 
+    - <b><tt>&lt;break-thread&gt;</tt></b> (default binding: '@c #', group: Threading): 
       Break thread at current message
-    - <b><code>&lt;edit-message&gt;</code></b> (default binding: '@c e', group: Editing): 
+    - <b><tt>&lt;edit-message&gt;</tt></b> (default binding: '@c e', group: Editing): 
       Edit current message
-    - <b><code>&lt;group-reply&gt;</code></b> (default binding: '@c g', group: Reply/Forward): 
+    - <b><tt>&lt;group-reply&gt;</tt></b> (default binding: '@c g', group: Reply/Forward): 
       Group-reply to current message
-    - <b><code>&lt;help&gt;</code></b> (default binding: '@c h', group: Generic): 
+    - <b><tt>&lt;help&gt;</tt></b> (default binding: '@c h', group: Generic): 
       Show help screen
-    - <b><code>&lt;link-thread&gt;</code></b> (default binding: '@c &', group: Threading): 
+    - <b><tt>&lt;link-thread&gt;</tt></b> (default binding: '@c &', group: Threading): 
       Link tagged to current message in thread
-    - <b><code>&lt;list-reply&gt;</code></b> (default binding: '@c L', group: Reply/Forward): 
+    - <b><tt>&lt;list-reply&gt;</tt></b> (default binding: '@c L', group: Reply/Forward): 
       List-reply to current message
-    - <b><code>&lt;reply&gt;</code></b> (default binding: '@c r', group: Reply/Forward): 
+    - <b><tt>&lt;reply&gt;</tt></b> (default binding: '@c r', group: Reply/Forward): 
       Reply to current message
     @subsubsection screen_pager Screen: pager
-    - <b><code>&lt;edit-message&gt;</code></b> (default binding: '@c e', group: Editing): 
+    - <b><tt>&lt;edit-message&gt;</tt></b> (default binding: '@c e', group: Editing): 
       Edit current message
-    - <b><code>&lt;group-reply&gt;</code></b> (default binding: '@c g', group: Reply/Forward): 
+    - <b><tt>&lt;group-reply&gt;</tt></b> (default binding: '@c g', group: Reply/Forward): 
       Group-reply to current message
-    - <b><code>&lt;help&gt;</code></b> (default binding: '@c h', group: Generic): 
+    - <b><tt>&lt;help&gt;</tt></b> (default binding: '@c h', group: Generic): 
       Show help screen
-    - <b><code>&lt;list-reply&gt;</code></b> (default binding: '@c L', group: Reply/Forward): 
+    - <b><tt>&lt;list-reply&gt;</tt></b> (default binding: '@c L', group: Reply/Forward): 
       List-reply to current message
-    - <b><code>&lt;reply&gt;</code></b> (default binding: '@c r', group: Reply/Forward): 
+    - <b><tt>&lt;reply&gt;</tt></b> (default binding: '@c r', group: Reply/Forward): 
       Reply to current message
     
     @subsection sect_varref Variables
@@ -251,17 +354,17 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       Initial value: '@c yes'<br>
       Change signaled: no
     
-      If set to <code> yes</code>, composition will automatically abort after
+      If set to <tt>yes</tt>, composition will automatically abort after
       editing the message body if no changes are made to the file (this
       check only happens after the <em>first</em> edit of the file).
-      When set to <code> no</code>, composition will never be aborted.
+      When set to <tt>no</tt>, composition will never be aborted.
     @subsubsection option_allow_8bit $allow_8bit
       Type: @c boolean<br>
       Initial value: '@c yes'<br>
       Change signaled: no
     
       Controls whether 8-bit data is converted to 7-bit using either
-      <code> quoted-printable</code> or <code> base64</code> encoding when
+      <tt>quoted-printable</tt> or <tt>base64</tt> encoding when
       sending mail.
       
 
@@ -278,7 +381,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 
     
       By default, all the header fields and message body without any charset
-      indication are assumed to be in <code> us-ascii</code>.
+      indication are assumed to be in <tt>us-ascii</tt>.
       
 
     
@@ -289,7 +392,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 
     
       However, only the first content is valid for the message body.
-      This variable is valid only if @ref option_strict_mime is <code> unset</code>.
+      This variable is valid only if @ref option_strict_mime is <tt>unset</tt>.
       
 
     @subsubsection option_debug_level $debug_level
@@ -310,13 +413,13 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 
     
       Debug files will have a name of the following format:
-      <code> .[scope].[pid].[id].log</code>, whereby:
+      <tt>.[scope].[pid].[id].log</tt>, whereby:
       <ul>
-    <li><code> [scope]</code> is an identifier for where the output came.
-          One file will be created for <code> libmuttng</code> and one for the
-          tool using it such as @c muttng(1) or @c muttgn-conf(1)</li>
-    <li><code> [pid]</code> is the current process ID</li>
-    <li><code> [id]</code> is the debug sequence number. For the first debug
+    <li><tt>[scope]</tt> is an identifier for where the output came.
+          One file will be created for <tt>libmuttng</tt> and one for the
+          tool using it such as <tt>muttng(1)</tt> or <tt>muttgn-conf(1)</tt></li>
+    <li><tt>[pid]</tt> is the current process ID</li>
+    <li><tt>[id]</tt> is the debug sequence number. For the first debug
           file of the current session it'll be 1 and increased for
           subsequent enabling/disabling of debug output via this variable</li>
     
@@ -332,14 +435,14 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       
 
     
-      A <code> +</code> or <code> =</code> at the beginning of a pathname will be expanded
+      A <tt>+</tt> or <tt>=</tt> at the beginning of a pathname will be expanded
       to the value of this variable.
       
 
     
       Note that if you change this variable from
       the default value you need to make sure that the assignment occurs
-      <em>before</em> you use <code> +</code> or <code> =</code> for any other variables
+      <em>before</em> you use <tt>+</tt> or <tt>=</tt> for any other variables
       since expansion takes place during the @ref command_set command.
       
 
@@ -374,7 +477,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       This specifies the file into which your outgoing messages should be
       appended. (This is meant as the primary method for saving a copy of
       your messages, but another way to do this is using the @ref command_my_hdr
-      command to create a <code> Bcc:</code> header field with your email address in it.)
+      command to create a <tt>Bcc:</tt> header field with your email address in it.)
       
 
     
@@ -388,7 +491,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       Change signaled: no
     
       This variable specifies the <em>octal</em> permissions for
-      @c umask(2). See @c chmod(1) for possible
+      <tt>umask(2)</tt>. See <tt>chmod(1)</tt> for possible
       value.
       
 
@@ -407,7 +510,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       
 
     <ul>
-    <li><em>core</em> in <code> src/core/</code>. This is the base
+    <li><em>core</em> in <tt>src/core/</tt>. This is the base
           library written in C containing very basic functionality. This
           includes a generic hash table, a generic list, a safe
           growing-buffer implementation, lightweight type conversions,
@@ -416,12 +519,12 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           related topics) or the user interface(s) (and related topics.)
           This is eventually to be separated into an souvereign project,
           maybe. The API already is designed a little towards
-          <code> libowfat</code> so that a future migratation will be not so
+          <tt>libowfat</tt> so that a future migratation will be not so
           painful. The migration isn't done as the first step in the
           rewrite process since we're focusing on the core (logic)
           design and not on efficient sanity wrappers for system
           functions.</li>
-    <li><em>libmuttng</em> in <code> src/libmuttng/</code>. This is the core
+    <li><em>libmuttng</em> in <tt>src/libmuttng/</tt>. This is the core
           part of the whole project as it contains most of the mail logic. It
           will provide one simple interface to mail storage independent from
           ``details'' like whether the actual storage is IMAP, POP3, NNTP or
@@ -436,7 +539,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           utility classes and functions not at all related to mail but useful
           for the library and application implementation like a centralized
           debug output interface and generic signal handling.</li>
-    <li><em>muttng</em> in <code> src/muttng/</code>. Built on top of the
+    <li><em>muttng</em> in <tt>src/muttng/</tt>. Built on top of the
           <em>core</em> and <em>libmuttng</em> layers, this group represents
           user interfaces and everything related. This includes support for
           reading configuration files, presenting data provided by the two
@@ -483,7 +586,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
         All documentation in all places is written in a custom XML
         dialect to be translated via XSL into all other formats we need.
-        These include DocBook as well as @c doxygen(1)-based
+        These include DocBook as well as <tt>doxygen(1)</tt>-based
         documentation. Language-independent parts are put in a separate
         directory and automated mechanisms for validity and completeness
         checks will be provided to ensure correct translated documentation.
@@ -501,7 +604,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           than only one big file. All files have to be valid XML and are checked
           for validity and completenes (where appropriate.)</li>
     <li>The basic manual structure for both, the user-only manual and this
-          developer manual, is placed in <code> doc/common/</code> which contains
+          developer manual, is placed in <tt>doc/common/</tt> which contains
           other language-independent parts. For every language supported, upon
           change these will be copied to the language directories to have them
           under version control, too, on the one hand and to ease (the release)
@@ -512,9 +615,9 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @subsubsection sect_devguide-build-organisation Build system
     
         The build system is completely GNU make-based so that use of the autotools
-        (such as @c autoconf(1)) is avoided. To avoid clashes and misleading
-        error messages with other flavors of @c make(1), all Makefiles are named
-        <code> GNUmakefile</code> so that other make tools don't even find a Makefile.
+        (such as <tt>autoconf(1)</tt>) is avoided. To avoid clashes and misleading
+        error messages with other flavors of <tt>make(1)</tt>, all Makefiles are named
+        <tt>GNUmakefile</tt> so that other make tools don't even find a Makefile.
       
 
     
@@ -548,7 +651,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 
     
         In general: document all files! Specify a doxygen header with at
-        least the <code> @@file</code> and <code> @@brief</code> tags. For
+        least the <tt>@@file</tt> and <tt>@@brief</tt> tags. For
         headers, the brief tag looks like:
       
 
@@ -578,8 +681,8 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 ...
 #endif</pre>
         whereby the identifier is constructed from the filename under
-        the <code> src/</code> directory,
-        <code> libmuttng/foo/bar.h</code> in this case.
+        the <tt>src/</tt> directory,
+        <tt>libmuttng/foo/bar.h</tt> in this case.
       
 
     
@@ -594,65 +697,43 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @subsection sect_devguide-build Build system
     @subsubsection sect_devguide-build-config Configuration: GNUmakefile.config and GNUmakefile.config.mine
     
-        The user configuration Makefile is <code> GNUmakefile.config.mine</code>
+        The user configuration Makefile is <tt>GNUmakefile.config.mine</tt>
         in the top-level source directory. It may contain any make logic.
       
 
     
-        Any Makefile including it must include <code> GNUmakefile.config</code>
+        Any Makefile including it must include <tt>GNUmakefile.config</tt>
         directly afterwards like in @ref sample-libmuttng-build-config "include
           example" .
       
 
     @anchor sample-libmuttng-build-config
     @verbinclude makefile_config
-    <code> GNUmakefile.config</code> interprets and completes internal options
+    <tt>GNUmakefile.config</tt> interprets and completes internal options
         set in the custom file:
       
 
     <ul>
-    <li>for the compilers, it sets up the following variables depending
-          on <code> CCSTYLE</code>:
-          <ul>
-    <li><code> CC</code>: C compiler</li>
-    <li><code> CXX</code>: C++ compiler</li>
-    <li><code> CFLAGS</code>: C compiler flags</li>
-    <li><code> CXXFLAGS</code>: C++ compiler flags</li>
-    <li><code> DEPFLAGS</code>: C/C++ compiler flags to obtain include dependencies
-              for make's dependency tracking</li>
-    <li><code> AR</code>: path to @c ar(1)</li>
-    <li><code> RANLIB</code>: path to @c ranlib(1)</li>
-    
-      </ul>
-    </li>
-    <li>it checks whether the dependency file <code> ./.depend</code> exists and
+    <li>for the compilers, it sets up
+          @ref table-make-env1 "variables for compilers and flags" 
+          depending on <tt>CCSTYLE</tt></li>
+    <li>it checks whether the dependency file <tt>./.depend</tt> exists and
           includes it</li>
-    <li>for <code> DEBUG=1</code>, it sets up <code> CFLAGS</code>, <code> CXXFLAGS</code>
-          and <code> LDFLAGS</code> correctly</li>
+    <li>for <tt>DEBUG=1</tt>, it sets up <tt>CFLAGS</tt>, <tt>CXXFLAGS</tt>
+          and <tt>LDFLAGS</tt> correctly</li>
     <li>it defines the operating system and sets compiler flags
-          accordingly (e.g. <code> -DFREEBSD</code> for FreeBSD, <code> -DSUNOS</code>
+          accordingly (e.g. <tt>-DFREEBSD</tt> for FreeBSD, <tt>-DSUNOS</tt>
           for solaris, etc.) The operating system value is set as
-          <code> $(MYOS)</code></li>
+          <tt>$(MYOS)</tt></li>
     <li>it sets up compiler and linker flags to contain the required
-          paths for Unit++ derived from the configured <code> $(UNITPPDIR)</code></li>
-    <li>it searches for the following tools in <code> $PATH</code>:
-          <ul>
-    <li>@c doxygen(1): <code> $(DOXYGEN)</code></li>
-    <li>@c tidy(1): <code> $(TIDY)</code></li>
-    <li>@c xgettext(1): <code> $(XGETTEXT)</code></li>
-    <li>@c msgmerge(1): <code> $(MSGMERGE)</code></li>
-    <li>@c msgfmt(1): <code> $(MSGFMT)</code></li>
-    <li>@c pdflatex(1): <code> $(PDFLATEX)</code></li>
-    <li>@c latex(1): <code> $(LATEX)</code></li>
-    <li>@c makeindex(1): <code> $(MAKEINDEX)</code></li>
-    
-      </ul>
-    </li>
-    <li>according to the XSL processor chosen via <code> $(XSLPROC)</code>,
-          it defines the following two functions: <code> doxslt_s</code> and
-          <code> doxslt_m</code>. The first does transformation to a single
+          paths for Unit++ derived from the configured <tt>$(UNITPPDIR)</tt></li>
+    <li>it searches <tt>$PATH</tt> for the paths of
+          @ref table-make-tools "tools required" .</li>
+    <li>according to the XSL processor chosen via <tt>$(XSLPROC)</tt>,
+          it defines the following two functions: <tt>doxslt_s</tt> and
+          <tt>doxslt_m</tt>. The first does transformation to a single
           output file while the latter does transformation to multiple output files
-          (splitting these up is required for Xalan Java whose <code> -out</code>
+          (splitting these up is required for Xalan Java whose <tt>-out</tt>
           option cannot be set to a directory.) These functions take the following
           mandatory arguments (ordered):
           <ul>
@@ -660,7 +741,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li>XSL stylesheet file</li>
     <li>XML output file</li>
     <li>output language passed to processors as the value for the
-              <code> l10n.gentext.default.language</code> parameter. This is bad
+              <tt>l10n.gentext.default.language</tt> parameter. This is bad
               modularization as this parameter only has an effect on DocBook
               but passing to other transformations shouldn't do harm.</li>
     
@@ -668,6 +749,24 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     </li>
     
       </ul>
+    @anchor table-make-env1
+    @htmlonly
+    <p class="title">Make environment</p>
+      <table rowsep="1" summary="Make environment">
+    <thead><tr><td>Make variable</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>CC</tt></td><td>C compiler</td></tr><tr><td><tt>CXX</tt></td><td>C++ compiler</td></tr><tr><td><tt>CFLAGS</tt></td><td>C compiler flags</td></tr><tr><td><tt>CXXFLAGS</tt></td><td>C++ compiler flags</td></tr><tr><td><tt>DEPFLAGS</tt></td><td>C/C++ compiler flags for dependencies</td></tr><tr><td><tt>AR</tt></td><td>path to <tt>ar(1)</tt></td></tr><tr><td><tt>RANLIB</tt></td><td>path to <tt>ranlib(1)</tt></td></tr></tbody>
+      </table>
+      @endhtmlonly
+    
+
+    @anchor table-make-tools
+    @htmlonly
+    <p class="title">Make tools</p>
+      <table rowsep="1" summary="Make tools">
+    <thead><tr><td>Tool</td><td>Make variable</td></tr></thead><tbody><tr><td><tt>doxygen(1)</tt></td><td><tt>DOXYGEN</tt></td></tr><tr><td><tt>tidy(1)</tt></td><td><tt>TIDY</tt></td></tr><tr><td><tt>xgettext(1)</tt></td><td><tt>XGETTEXT</tt></td></tr><tr><td><tt>msgmerge(1)</tt></td><td><tt>MSGMERGE</tt></td></tr><tr><td><tt>msgfmt(1)</tt></td><td><tt>MSGFMT</tt></td></tr><tr><td><tt>pdflatex(1)</tt></td><td><tt>PDFLATEX</tt></td></tr><tr><td><tt>latex(1)</tt></td><td><tt>LATEX</tt></td></tr><tr><td><tt>makeindex(1)</tt></td><td><tt>MAKEINDEX</tt></td></tr></tbody>
+      </table>
+      @endhtmlonly
+    
+
     
         In any Makefile, targets can be setup depending on whether a tool is present
         or not via, see @ref sample-libmuttng-build-conditional "conditional
@@ -677,22 +776,22 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @anchor sample-libmuttng-build-conditional
     @verbinclude makefile_conditional
     
-        This only runs @c doxygen(1) it it's found in <code> $PATH</code>. If, in addition,
-        @c tidy(1) is found too, it'll also be called. If doxygen isn't present,
-        the <code> srcdoc</code> rule does nothing.
+        This only runs <tt>doxygen(1)</tt> it it's found in <tt>$PATH</tt>. If, in addition,
+        <tt>tidy(1)</tt> is found too, it'll also be called. If doxygen isn't present,
+        the <tt>srcdoc</tt> rule does nothing.
       
 
     
     @subsubsection sect_devguide-build-whereis Path search: GNUmakefile.whereis
     
-        The include Makefile <code> GNUmakefile.whereis</code> defines a
-        function called <code> whereis</code>. This searches through the
-        environment variable <code> $PATH</code> and returns the full path
+        The include Makefile <tt>GNUmakefile.whereis</tt> defines a
+        function called <tt>whereis</tt>. This searches through the
+        environment variable <tt>$PATH</tt> and returns the full path
         found or the given default fallback.
       
 
     
-        The arguments for <code> whereis</code> are in order:
+        The arguments for <tt>whereis</tt> are in order:
       
 
     <ul>
@@ -701,14 +800,14 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
       </ul>
     
-        For example, the full path to @c vi(1) can be obtained via
+        For example, the full path to <tt>vi(1)</tt> can be obtained via
         the call shown in the @ref sample-libmuttng-build-whereis-call1 "first whereis call example" .
       
 
     @anchor sample-libmuttng-build-whereis-call1
     @verbinclude makefile_whereis_call1
     
-        If the binary is found, <code> GREAT_EDITOR</code> will contain its path and
+        If the binary is found, <tt>GREAT_EDITOR</tt> will contain its path and
         will be empty otherwise. A check for it could be implemented as shown in the
         @ref sample-libmuttng-build-whereis-use "whereis usage example" .
       
@@ -718,8 +817,8 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
         An example of a non-empty default is show in the
         @ref sample-libmuttng-build-whereis-call2 "second whereis call example" 
-        which will search for the @c vim(1) binary: if it's found,
-        <code> GREAT_EDITOR</code> contains its path but just <code> vi</code> otherwise.
+        which will search for the <tt>vim(1)</tt> binary: if it's found,
+        <tt>GREAT_EDITOR</tt> contains its path but just <tt>vi</tt> otherwise.
       
 
     @anchor sample-libmuttng-build-whereis-call2
@@ -727,23 +826,23 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
     @subsubsection sect_devguide-build-subdirs Directory traversal: GNUmakefile.subdirs
     
-        The file <code> GNUmakefile.subdirs</code> defines targets to
+        The file <tt>GNUmakefile.subdirs</tt> defines targets to
         be called recursively. To make use of it, define a variable
-        named <code> SUBDIRS</code> at the beginning of a Makefile. Then,
+        named <tt>SUBDIRS</tt> at the beginning of a Makefile. Then,
         the following targets can be used on these directories:
       
 
     <ul>
-    <li><code> all</code>: <code> subdir</code></li>
-    <li><code> clean</code>: <code> subdirclean</code></li>
-    <li><code> doc</code>: <code> subdirdoc</code></li>
-    <li><code> depend</code>: <code> subdirdepend</code></li>
-    <li><code> test</code>: <code> subdirtest</code></li>
+    <li><tt>all</tt>: <tt>subdir</tt></li>
+    <li><tt>clean</tt>: <tt>subdirclean</tt></li>
+    <li><tt>doc</tt>: <tt>subdirdoc</tt></li>
+    <li><tt>depend</tt>: <tt>subdirdepend</tt></li>
+    <li><tt>test</tt>: <tt>subdirtest</tt></li>
     
       </ul>
     
         For example, to have all these targets for the subdirectories
-        <code> foo</code> and <code> bar</code>, use the basic structure as shown
+        <tt>foo</tt> and <tt>bar</tt>, use the basic structure as shown
         in the @ref sample-libmuttng-build-structure "general makefile structure" 
         listing.
       
@@ -753,7 +852,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
     @subsubsection sect_devguide-build-compile Compilation: GNUmakefile.compile
     
-        The files <code> GNUmakefile.compile_c</code> and <code> GNUmakefile.compile_cpp</code>
+        The files <tt>GNUmakefile.compile_c</tt> and <tt>GNUmakefile.compile_cpp</tt>
         contain everything necessary to compile sources either using a C or C++ compiler
         respectively.
       
@@ -766,14 +865,14 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @verbinclude makefile_compile
     
         This will compile the files
-        <code> foo.c</code> and <code> bar.c</code> into the archive <code> libfoobar.a</code> using
+        <tt>foo.c</tt> and <tt>bar.c</tt> into the archive <tt>libfoobar.a</tt> using
         the C compiler.
       
 
     
-        For C++ sources, the files must be named <code> foo.cpp</code> and <code> bar.cpp</code>
-        and instead of <code> GNUmakefile.compile_c</code> the file
-        <code> GNUmakefile.compile_cpp</code> must be included.
+        For C++ sources, the files must be named <tt>foo.cpp</tt> and <tt>bar.cpp</tt>
+        and instead of <tt>GNUmakefile.compile_c</tt> the file
+        <tt>GNUmakefile.compile_cpp</tt> must be included.
       
 
     
@@ -781,9 +880,9 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       
 
     <ul>
-    <li><code> clean</code>: remove any temporary, object and archive files</li>
-    <li><code> depend</code>: run the C/C++ compiler and put the dependency
-          tracking info for @c make(1) into <code> ./.depend</code></li>
+    <li><tt>clean</tt>: remove any temporary, object and archive files</li>
+    <li><tt>depend</tt>: run the C/C++ compiler and put the dependency
+          tracking info for <tt>make(1)</tt> into <tt>./.depend</tt></li>
     
       </ul>
     
@@ -800,11 +899,11 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       
 
     <ul>
-    <li><code> all</code>: perform building all</li>
-    <li><code> clean</code>: perform cleanup so that only files for a release remain</li>
-    <li><code> test</code>: perform all automated tests</li>
-    <li><code> depend</code>: perform all preparation required for
-          <code> all</code> target</li>
+    <li><tt>all</tt>: perform building all</li>
+    <li><tt>clean</tt>: perform cleanup so that only files for a release remain</li>
+    <li><tt>test</tt>: perform all automated tests</li>
+    <li><tt>depend</tt>: perform all preparation required for
+          <tt>all</tt> target</li>
     
       </ul>
     
@@ -839,22 +938,22 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
     @subsubsection sect_devguide-docs-layout Directory layout
     
-        The <code> doc/</code> directory contains the following subdirectories:
+        The <tt>doc/</tt> directory contains the following subdirectories:
       
 
     <ul>
-    <li><code> common/</code>: it contains all language-independent fractions of any
+    <li><tt>common/</tt>: it contains all language-independent fractions of any
           part of the docs</li>
-    <li><code> css/</code>: it contains HTML CSS stylesheets for use with doxygen- and
+    <li><tt>css/</tt>: it contains HTML CSS stylesheets for use with doxygen- and
           DocBook-generated HTML output</li>
-    <li><code> xsl/</code>: it contains the XSL stylesheets used for transformations</li>
-    <li><code> manual_[lang]/</code>: it contains all input and output files for
+    <li><tt>xsl/</tt>: it contains the XSL stylesheets used for transformations</li>
+    <li><tt>manual_[lang]/</tt>: it contains all input and output files for
           the manual in a specific language</li>
-    <li><code> homepage_[lang]/</code>: it contains all input and output files for
+    <li><tt>homepage_[lang]/</tt>: it contains all input and output files for
           the homepage in a specific language</li>
-    <li><code> examples/</code>: it contains all examples contained in the manual
+    <li><tt>examples/</tt>: it contains all examples contained in the manual
           (such as programming or configuration examples.)</li>
-    <li><code> tex/</code>: all files related to LaTeX-processing</li>
+    <li><tt>tex/</tt>: all files related to LaTeX-processing</li>
     
       </ul>
     
@@ -866,11 +965,11 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       
 
     <ul>
-    <li><code> css/muttng.css</code>: the main CSS stylesheet it's copied to all
-          <code> manual_*</code> and all <code> homepage_*</code> directories</li>
-    <li><code> common/manual-full.xml</code> and <code> common/manual-user.xml</code>:
+    <li><tt>css/muttng.css</tt>: the main CSS stylesheet it's copied to all
+          <tt>manual_*</tt> and all <tt>homepage_*</tt> directories</li>
+    <li><tt>common/manual-full.xml</tt> and <tt>common/manual-user.xml</tt>:
           the actual manual files are maintained like this to have a common structure
-          for all translations. These are copied to all <code> manual_*</code> directories.
+          for all translations. These are copied to all <tt>manual_*</tt> directories.
         </li>
     
       </ul>
@@ -889,37 +988,37 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       
 
     @paragraph sect_devguide-docs-dialect-structure Document structure
-          The manual is wrapped in a <code> manual</code> tag. It contains the following two
+          The manual is wrapped in a <tt>manual</tt> tag. It contains the following two
           tags:
         
 
     <ul>
-    <li><code> head</code>: This describes a header for the document. Its title
-            is enclosed in a <code> title</code> tag, the list of all authors in an
-            <code> authors</code> tag. Within the latter, the <code> author</code> tag
+    <li><tt>head</tt>: This describes a header for the document. Its title
+            is enclosed in a <tt>title</tt> tag, the list of all authors in an
+            <tt>authors</tt> tag. Within the latter, the <tt>author</tt> tag
             lists any number of authors with the following tags:
-            <code> surname</code>, <code> firstname</code> and <code> email</code>.</li>
-    <li><code> content</code>: This describes the content for the document, that
-            is, one or more <code> chapter</code> tags.</li>
+            <tt>surname</tt>, <tt>firstname</tt> and <tt>email</tt>.</li>
+    <li><tt>content</tt>: This describes the content for the document, that
+            is, one or more <tt>chapter</tt> tags.</li>
     
       </ul>
     
     @paragraph sect_devguide-docs-dialect-sectioning Chapters and sections
-          Within the mentioned <code> chapter</code> tags, the following tags are to
-          be used for grouping text: <code> section</code>, <code> subsection</code>
-          and <code> subsubsection</code>.
-          All sectioning tags <em>must</em> have an <code> id</code> attribute with
+          Within the mentioned <tt>chapter</tt> tags, the following tags are to
+          be used for grouping text: <tt>section</tt>, <tt>subsection</tt>
+          and <tt>subsubsection</tt>.
+          All sectioning tags <em>must</em> have an <tt>id</tt> attribute with
           the name of the section. For nesting them, please specify prefixes to
-          avoid clashes. For example, within a chapter with <code> id="intro"</code>
+          avoid clashes. For example, within a chapter with <tt>id="intro"</tt>
           and there for a section mentioning the mailing lists, use
-          <code> id="intro-mailing"</code>. As all output formats we use have a flat
+          <tt>id="intro-mailing"</tt>. As all output formats we use have a flat
           ``labeling'' or ``anchor'' namespace, we create our namespaces like
           this.
         
 
     
     @paragraph sect_devguide-docs-dialect-text Text        
-          All texts are to be grouped within <code> p</code> tags (``p'' as in
+          All texts are to be grouped within <tt>p</tt> tags (``p'' as in
           paragraph.)
         
 
@@ -934,29 +1033,29 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
             for a word (mainly these are needed for auto-indexing so that
             one can actually find something in the documentation):
             <ul>
-    <li><code> val</code>: when refering to (possible/default/...) values
+    <li><tt>val</tt>: when refering to (possible/default/...) values
                 for variables.</li>
-    <li><code> hdr</code>: when refering to a commonly used header</li>
-    <li><code> enc</code>: when refering to transport encodings (such
-                as <code> quoted-printable</code> or <code> us-ascii</code></li>
-    <li><code> env</code>: when refering to environment variables</li>
+    <li><tt>hdr</tt>: when refering to a commonly used header</li>
+    <li><tt>enc</tt>: when refering to transport encodings (such
+                as <tt>quoted-printable</tt> or <tt>us-ascii</tt></li>
+    <li><tt>env</tt>: when refering to environment variables</li>
     
       </ul>
     </li>
     <li><em>listings</em>. To specify lists or listings, the following tags
             are available:
             <ul>
-    <li><code> ul</code>: a non-numbered itemized list</li>
-    <li><code> li</code>: an item of any of these lists</li>
+    <li><tt>ul</tt>: a non-numbered itemized list</li>
+    <li><tt>li</tt>: an item of any of these lists</li>
     
       </ul>
     </li>
     <li><em>misc.</em>: The following are not the optimal solution as they
             imply layout semantics already but here we go:
             <ul>
-    <li><code> tt</code>: typewriter font</li>
-    <li><code> em</code>: emphasise</li>
-    <li><code> b</code>: bold font</li>
+    <li><tt>tt</tt>: typewriter font</li>
+    <li><tt>em</tt>: emphasise</li>
+    <li><tt>b</tt>: bold font</li>
     
       </ul>
     </li>
@@ -965,26 +1064,45 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
     @paragraph sect_devguide-docs-dialect-referencing Referencing
           For specifying references, a distinction is made to what target
-          a reference is made. The following don't accept attributes for the
-          target but the target given as text to the tag:
+          a reference is made:
         
 
     <ul>
-    <li><code> email</code>: an email address</li>
-    <li><code> web</code>: a web address</li>
-    <li><code> varref</code>: referencing a configuration variable</li>
-    <li><code> cmdref</code>: referencing a configuration command</li>
-    <li><code> funcref</code>: referencing a function</li>
-    <li><code> man</code>: referencing a manual page. Optionally,
-            it may contain a <code> sect</code> attribute to specify the
-            section. If none given, 1 will be used by default.</li>
+    <li>@ref tab-ref-tags "some tags"  don't
+            accept attributes but the target specified as text</li>
+    <li>for document-internal references, the 
+            @ref tab-docref-attrs "docref tag is to
+              be used" </li>
+    <li>for references to manual pages, the @ref tab-man-attrs "man tag"  with an optional
+            section attribute is to be used</li>
     
       </ul>
+    @anchor tab-ref-tags
+    @htmlonly
+    <p class="title">reference tags</p>
+      <table rowsep="1" summary="reference tags">
+    <thead><tr><td>Tag</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>email</tt></td><td>an email address</td></tr><tr><td><tt>web</tt></td><td>a web address</td></tr><tr><td><tt>varref</tt></td><td>referencing a configuration variable</td></tr><tr><td><tt>cmdref</tt></td><td>referencing a configuration command</td></tr><tr><td><tt>funcref</tt></td><td>referencing a function</td></tr></tbody>
+      </table>
+      @endhtmlonly
     
-          For document-internal references, the <code> docref</code> tag is to be used
-          which expects the target as <code> href</code> attribute and the text to
-          create a link with given as text for the <code> docref</code> tag.
-        
+
+    @anchor tab-man-attrs
+    @htmlonly
+    <p class="title"><tt>man</tt> tag attributes</p>
+      <table rowsep="1" summary="<tt>man</tt> tag attributes">
+    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>sect</tt></td><td><tt>no</tt></td><td>Manual page section, default: 1</td></tr></tbody>
+      </table>
+      @endhtmlonly
+    
+
+    @anchor tab-docref-attrs
+    @htmlonly
+    <p class="title"><tt>docref</tt> tag attributes</p>
+      <table rowsep="1" summary="<tt>docref</tt> tag attributes">
+    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>type</tt></td><td><tt>yes</tt></td><td>Type of link's end (e.g. ``table''.)</td></tr><tr><td><tt>href</tt></td><td><tt>yes</tt></td><td>Target (document-internal ID)</td></tr></tbody>
+      </table>
+      @endhtmlonly
+    
 
     
     @paragraph sect_devguide-docs-dialect-variables Documenting variables
@@ -994,15 +1112,15 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         
 
     <ul>
-    <li>all variables are wrapped within a <code> descriptions</code> tag</li>
-    <li>within this, there's any number of <code> variable</code> tags containing
-            the following attributes: <code> name</code> specifies the name of the
-            variable, <code> type</code> specifies its type</li>
-    <li>within a <code> variable</code> tag, the following tags will be used:
+    <li>all variables are wrapped within a <tt>descriptions</tt> tag</li>
+    <li>within this, there's any number of <tt>variable</tt> tags containing
+            the following attributes: <tt>name</tt> specifies the name of the
+            variable, <tt>type</tt> specifies its type</li>
+    <li>within a <tt>variable</tt> tag, the following tags will be used:
             <ul>
-    <li><code> init</code>: initial or default value</li>
-    <li><code> sig</code>: whether a change of it will cause a signal be emitted</li>
-    <li><code> descr</code>: its description</li>
+    <li><tt>init</tt>: initial or default value</li>
+    <li><tt>sig</tt>: whether a change of it will cause a signal be emitted</li>
+    <li><tt>descr</tt>: its description</li>
     
       </ul>
     </li>
@@ -1015,19 +1133,19 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         
 
     <ul>
-    <li>all functions are wrapped within a <code> descriptions</code> tag</li>
-    <li>within this, there's any number of <code> context</code> tags containing
-            the following attributes: <code> name</code> specifies the name of the
+    <li>all functions are wrapped within a <tt>descriptions</tt> tag</li>
+    <li>within this, there's any number of <tt>context</tt> tags containing
+            the following attributes: <tt>name</tt> specifies the name of the
             context. As functions are grouped by context (that is: by menu) where
             they may have different bindings, each function may appear several
-            times within different <code> context</code> tags.</li>
-    <li>within the <code> context</code> tag, all functions it contains are
-            given via <code> function</code> tags. Each <code> function</code> tag must contain the
-            following attributes: <code> name</code> specifies the name a user
-            may bind to it, <code> default</code> specifies the default key binding
-            and <code> group</code> specifies to which semantic group the function belongs
-            within the context as defined in <code> src/muttng/event/GROUPS</code>.</li>
-    <li>the text within the <code> function</code> tag is just the functions's
+            times within different <tt>context</tt> tags.</li>
+    <li>within the <tt>context</tt> tag, all functions it contains are
+            given via <tt>function</tt> tags. Each <tt>function</tt> tag must contain the
+            following attributes: <tt>name</tt> specifies the name a user
+            may bind to it, <tt>default</tt> specifies the default key binding
+            and <tt>group</tt> specifies to which semantic group the function belongs
+            within the context as defined in <tt>src/muttng/event/GROUPS</tt>.</li>
+    <li>the text within the <tt>function</tt> tag is just the functions's
             summary to appear in the help menus</li>
     
       </ul>
@@ -1042,8 +1160,8 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         
 
     <ul>
-    <li><code> listing</code>: make listing from an external file</li>
-    <li><code> inlinelisting</code>: make listing inline from given text</li>
+    <li><tt>listing</tt>: make listing from an external file</li>
+    <li><tt>inlinelisting</tt>: make listing inline from given text</li>
     
       </ul>
     
@@ -1051,31 +1169,55 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         
 
     <ul>
-    <li><code> lang</code> specifies the language. For most of the output this is irrelevant
-            but for LaTeX output and the <code> listings.sty</code> package we have syntax-highlighting
+    <li><tt>lang</tt> specifies the language. For most of the output this is irrelevant
+            but for LaTeX output and the <tt>listings.sty</tt> package we have syntax-highlighting
             automatically. The following languages are supported:
             <ul>
-    <li><code> cpp</code> for C++</li>
-    <li><code> make</code> for GNU make</li>
-    <li><code> muttngrc</code> for muttng's configuration syntax</li>
+    <li><tt>cpp</tt> for C++</li>
+    <li><tt>make</tt> for GNU make</li>
+    <li><tt>muttngrc</tt> for muttng's configuration syntax</li>
     
       </ul>
     </li>
     
       </ul>
     
-          The <code> listing</code> tag also requires these attributes in addition:
+          The <tt>listing</tt> tag also requires these attributes in addition:
         
 
     <ul>
-    <li><code> id</code> specifies a document-internal ID to link to listings. As for
+    <li><tt>id</tt> specifies a document-internal ID to link to listings. As for
             any other ID attributes, we fake a namespace or hierarchy by prefixes. At least all
-            sample listings must have <code> sample-</code> as prefix for this attribute.</li>
-    <li><code> title</code> is the title to specify (if at all which depends on the output
+            sample listings must have <tt>sample-</tt> as prefix for this attribute.</li>
+    <li><tt>title</tt> is the title to specify (if at all which depends on the output
             format.)</li>
-    <li><code> href</code> specifies the filename in the <code> doc/examples/</code> directory.</li>
+    <li><tt>href</tt> specifies the filename in the <tt>doc/examples/</tt> directory.</li>
     
       </ul>
+    
+    @paragraph sect_devguide-docs-dialect-tables Tables
+          Tables have to be specified within a
+          @ref tab-tab-attrs "tab tag with
+            proper attributes" . Within a table, there must be a header
+          within a <tt>th</tt> tag and a body within a <tt>tb</tt> tag. Within each
+          of them, there's any number of rows wrapped in <tt>tr</tt>. As a row consists
+          of multiple columns, within <tt>tr</tt> there's any number of <tt>td</tt> tags
+          for columns.
+        
+
+    
+          The caption is specified via a <tt>cap</tt> tag within the table.
+        
+
+    @anchor tab-tab-attrs
+    @htmlonly
+    <p class="title"><tt>tab</tt> tag attributes</p>
+      <table rowsep="1" summary="<tt>tab</tt> tag attributes">
+    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>cols</tt></td><td><tt>yes</tt></td><td>Number of columns</td></tr><tr><td><tt>texstr</tt></td><td><tt>yes</tt></td><td>Layout string for LaTeX's <tt>longtable</tt></td></tr><tr><td><tt>id</tt></td><td><tt>yes</tt></td><td>Document-internal ID</td></tr></tbody>
+      </table>
+      @endhtmlonly
+    
+
     
     
     @subsubsection sect_devguide-docs-auto Auto-generation
@@ -1085,13 +1227,13 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       
 
     @paragraph sect_devguide-docs-auto-variables Variables
-          For variables, <code> src/muttng/config/config.pl</code> is used. The
+          For variables, <tt>src/muttng/config/config.pl</tt> is used. The
           documentation process for variables is the same as it was before:
         
 
     <ul>
-    <li>all documentation is expected between the words <code> START</code>
-            and <code> END</code> (commented) in <code> set_command.cpp</code></li>
+    <li>all documentation is expected between the words <tt>START</tt>
+            and <tt>END</tt> (commented) in <tt>set_command.cpp</tt></li>
     <li>the variable definition for the source is one line</li>
     <li><em>below</em> is a comment block whereby each line to be
             treated as part of the description for a variable starts with
@@ -1105,26 +1247,26 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         
 
     <ul>
-    <li><code> doc/manual_en/var_def.xml</code>: contains a simple listing
+    <li><tt>doc/manual_en/var_def.xml</tt>: contains a simple listing
             of all variables found. As English is expected to be always in sync
             with the source code, this file will be used to validate and/or
             check other translations for completeness</li>
-    <li><code> doc/manual_en/var_descr.xml</code>: contains the full English
+    <li><tt>doc/manual_en/var_descr.xml</tt>: contains the full English
             documentation</li>
     
       </ul>
     
     @paragraph sect_devguide-docs-auto-functions Functions
-          For functions, <code> src/muttng/event/event.pl</code> is used. It parses the
-          following file in the <code> event</code> subdirectory for documentation:
-          <code> EVENTS</code>. This has space or tab separated fields with the
+          For functions, <tt>src/muttng/event/event.pl</tt> is used. It parses the
+          following file in the <tt>event</tt> subdirectory for documentation:
+          <tt>EVENTS</tt>. This has space or tab separated fields with the
           following meanings for documentation:
         
 
     <ul>
-    <li>1st field: the context IDs defined in <code> CONTEXTS</code></li>
+    <li>1st field: the context IDs defined in <tt>CONTEXTS</tt></li>
     <li>3rd field: the function's name</li>
-    <li>4th field: the group IDs defined in <code> GROUPS</code></li>
+    <li>4th field: the group IDs defined in <tt>GROUPS</tt></li>
     <li>5th field: the default keybinding</li>
     <li>rest of the line: short description</li>
     
@@ -1134,11 +1276,11 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         
 
     <ul>
-    <li><code> doc/manual_en/func_def.xml</code>: contains a simple listing
+    <li><tt>doc/manual_en/func_def.xml</tt>: contains a simple listing
             of all functions found. As English is expected to be always in sync
             with the source code, this file will be used to validate and/or
             check other translations for completeness</li>
-    <li><code> doc/manual_en/func_descr.xml</code>: contains the full English
+    <li><tt>doc/manual_en/func_descr.xml</tt>: contains the full English
             documentation</li>
     
       </ul>
@@ -1153,32 +1295,32 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 
     @paragraph sect_devguide-docs-trans-files Mandatory files
           As mentioned when explaining the directory layout, the manual
-          files are copied from a master document in the <code> common/</code> to a
+          files are copied from a master document in the <tt>common/</tt> to a
           language directory. The manual files define the necessary structure which is
           technically implemented using XInclude. Thus, a language directory must
           contain a set of files:
         
 
     <ul>
-    <li><code> head.xml</code>: it must contain a <code> head</code> tag as the document
+    <li><tt>head.xml</tt>: it must contain a <tt>head</tt> tag as the document
             root and list all details for the manual: title and authors.</li>
-    <li><code> trans.xml</code>: it must contain a set of translated special words described
+    <li><tt>trans.xml</tt>: it must contain a set of translated special words described
             later in this document.</li>
-    <li><code> intro.xml</code>: it must contain the introductionary chapter</li>
-    <li><code> build.xml</code>: it must contain the chapter explaining the build
+    <li><tt>intro.xml</tt>: it must contain the introductionary chapter</li>
+    <li><tt>build.xml</tt>: it must contain the chapter explaining the build
             process</li>
-    <li><code> config.xml</code>: it must contain the configuration documentation</li>
-    <li><code> reference.xml</code>: it must contain the reference chapter. This document
-            must include the following two files: <code> var_descr.xml</code> for variable
-            descriptions and <code> func_descr.xml</code> for functions. For the English
+    <li><tt>config.xml</tt>: it must contain the configuration documentation</li>
+    <li><tt>reference.xml</tt>: it must contain the reference chapter. This document
+            must include the following two files: <tt>var_descr.xml</tt> for variable
+            descriptions and <tt>func_descr.xml</tt> for functions. For the English
             documentation, both are automatically generated.</li>
-    <li><code> devguide.xml</code>: it must contain the developer's guide</li>
-    <li><code> ack.xml</code>: it must contain acknowledgements. This file must include
-            the following files in the <code> doc/common/</code> directory:
+    <li><tt>devguide.xml</tt>: it must contain the developer's guide</li>
+    <li><tt>ack.xml</tt>: it must contain acknowledgements. This file must include
+            the following files in the <tt>doc/common/</tt> directory:
             <ul>
-    <li><code> dev_muttng.xml</code>: list of mutt-ng developers</li>
-    <li><code> ack_muttng.xml</code>: list of people who contributed to mutt-ng</li>
-    <li><code> ack_mutt.xml</code>: list of people who contributed to mutt</li>
+    <li><tt>dev_muttng.xml</tt>: list of mutt-ng developers</li>
+    <li><tt>ack_muttng.xml</tt>: list of people who contributed to mutt-ng</li>
+    <li><tt>ack_mutt.xml</tt>: list of people who contributed to mutt</li>
     
       </ul>
     </li>
@@ -1187,7 +1329,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
     @paragraph sect_devguide-docs-trans-add Adding a new translation
           When adding a new translation, the easiest way is to make a copy of the
-          English translation: just copy all XML files except <code> manual-docbook</code>
+          English translation: just copy all XML files except <tt>manual-docbook</tt>
           to the corresponding language directory and add them to version control.
         
 
@@ -1197,15 +1339,15 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         
 
     <ul>
-    <li><code> head.xml</code></li>
-    <li><code> reference.xml</code></li>
-    <li><code> ack.xml</code> and</li>
-    <li><code> trans.xml</code></li>
+    <li><tt>head.xml</tt></li>
+    <li><tt>reference.xml</tt></li>
+    <li><tt>ack.xml</tt> and</li>
+    <li><tt>trans.xml</tt></li>
     
       </ul>
     
           For these, what to translate how should be pretty self-explanatory so that
-          not much documentation is put here. In <code> trans.xml</code> the comments and
+          not much documentation is put here. In <tt>trans.xml</tt> the comments and
           English translations should be sufficient.
         
 
@@ -1217,15 +1359,15 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         With XSL this could be done using a recursively called function which
         has two major drawbacks: it's terribly slow as the manual is getting
         closer to being complete and it doesn't work based on semantics (for
-        example, within a <code> verbatim</code> environment, we do not want to
+        example, within a <tt>verbatim</tt> environment, we do not want to
         escape special characters but elsewhere we want.) To solve this,
-        the file <code> doc/tex/muttng.sty</code> contains a macro named
-        <code> uglyesc</code> which ``escapes''--or better: fakes escaping--using
-        the <code> listinline</code> macro of the <code> listings.sty</code> package.
-        As the <code> uglyesc</code> command switches to typewriter, most of the
+        the file <tt>doc/tex/muttng.sty</tt> contains a macro named
+        <tt>uglyesc</tt> which ``escapes''--or better: fakes escaping--using
+        the <tt>listinline</tt> macro of the <tt>listings.sty</tt> package.
+        As the <tt>uglyesc</tt> command switches to typewriter, most of the
         typewriter-layout is done with it rather than with LaTeX's own
-        <code> texttt</code>. As a consequence, whenever using a word which may
-        require escaping, use the <code> tt/</code> tag.
+        <tt>texttt</tt>. As a consequence, whenever using a word which may
+        require escaping, use the <tt>tt/</tt> tag.
       
 
     
@@ -1243,7 +1385,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @subsection sect_devguide-libmuttng Libmuttng
     @subsubsection sect_devguide-libmuttng-features Features
     
-        Libmuttng is in the <code> src/libmuttng/</code> subdirectory
+        Libmuttng is in the <tt>src/libmuttng/</tt> subdirectory
         and provides the following features:
       
 
@@ -1259,8 +1401,8 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           caching layer which means that clients don't take note of caching
           existing.</li>
     <li><em>MIME and crypto</em> support via either local utilities such as
-          @c pgp(1)/@c gpg(1) or via gpgme for crypto and support for
-          the mailcap mechanism, using @c file(1) and the like. Decoding
+          <tt>pgp(1)</tt>/<tt>gpg(1)</tt> or via gpgme for crypto and support for
+          the mailcap mechanism, using <tt>file(1)</tt> and the like. Decoding
           will be transparent for client, too.</li>
     
       </ul>
@@ -1286,7 +1428,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 
     <pre>
 SignalX<type of arg1,type of arg2,...,type of argX> signalname;</pre>
-          whereby <code> X</code> is the number of arguments.
+          whereby <tt>X</tt> is the number of arguments.
         
 
     
@@ -1296,7 +1438,7 @@ SignalX<type of arg1,type of arg2,...,type of argX> signalname;</pre>
         
 
     <ul>
-    <li>it must return <code> bool</code> specifying whether it succeeded
+    <li>it must return <tt>bool</tt> specifying whether it succeeded
             or not</li>
     <li>it must take exactly the number and type of arguments the
             signal was declared with</li>
@@ -1312,14 +1454,14 @@ connectSignal (signal, object, Object::handler)</pre>
         
 
     <ul>
-    <li><code> signal</code> is the signale declared elsewhere</li>
-    <li><code> object</code> is an instance of an object containg a handler</li>
-    <li><code> Object::handler</code> is the actual handler method. Here, <code> Object</code>
-            is the <em>classname</em> of <code> object</code></li>
+    <li><tt>signal</tt> is the signale declared elsewhere</li>
+    <li><tt>object</tt> is an instance of an object containg a handler</li>
+    <li><tt>Object::handler</tt> is the actual handler method. Here, <tt>Object</tt>
+            is the <em>classname</em> of <tt>object</tt></li>
     
       </ul>
     
-          In most cases, the object will be <code> this</code> though any method may connect
+          In most cases, the object will be <tt>this</tt> though any method may connect
           everything it wants to every signal it wishes to.
         
 
@@ -1348,14 +1490,14 @@ signal.emit (arguments);</pre>
     <pre>
 disconnectSignals (signal, object);</pre>
           This must be done for every signal the object connected a(ny) handler(s)
-          to. In most cases, object is simply <code> this</code>.
+          to. In most cases, object is simply <tt>this</tt>.
         
 
     
     @paragraph sect_devguide-libmuttng-signal-example Example
           The @ref sample-libmuttng-signal "Signal example"  shows how
-          to handle signals: it contains a class <code> Sig</code> which contains nothing but
-          the signal declaration and a class <code> Handler</code> which simply catches a signal
+          to handle signals: it contains a class <tt>Sig</tt> which contains nothing but
+          the signal declaration and a class <tt>Handler</tt> which simply catches a signal
           and prints the argument passed through all handlers.
         
 
@@ -1397,9 +1539,9 @@ disconnectSignals (signal, object);</pre>
     <em>Signal implementation.</em> As unfortunately we cannot overload
         templates by the number of arguments, we need to specify the same
         implementation for every argument count we need. Thus, this is done by
-        a script: <code> src/libmuttng/signal.pl</code> prints the commented
-        implementation to <code> stdout</code> so that the makefile puts it into
-        <code> muttng_signal.h</code>. When making changes, modify <code> muttng_signal.h</code> to verify it
+        a script: <tt>src/libmuttng/signal.pl</tt> prints the commented
+        implementation to <tt>stdout</tt> so that the makefile puts it into
+        <tt>muttng_signal.h</tt>. When making changes, modify <tt>muttng_signal.h</tt> to verify it
         works (plus maybe add a unit test) and adjust signal.pl to print the
         changed code.
       

@@ -1,3 +1,4 @@
+
 FILES := foo bar
 LIB := libfoobar.a
 
