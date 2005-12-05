@@ -14,11 +14,11 @@ RemoteMailbox::RemoteMailbox (url_t* url_, Connection * c) : Mailbox (url_), con
 
 RemoteMailbox::~RemoteMailbox (void) {}
 
-Mailbox* RemoteMailbox::fromURL (url_t* url_) {
+Mailbox* RemoteMailbox::fromURL (url_t* url_, buffer_t* error) {
   Connection* conn = NULL;
   Mailbox* ret = NULL;
 
-  if (!(conn = Connection::fromURL(url_)))
+  if (!(conn = Connection::fromURL(url_,error)))
     return NULL;
   switch (url_->proto) {
   case P_POP3:

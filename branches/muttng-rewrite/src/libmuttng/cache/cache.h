@@ -6,10 +6,10 @@
 #ifndef LIBMUTTNG_CACHE_CACHE_H
 #define LIBMUTTNG_CACHE_CACHE_H
 
-#include "libmuttng.h"
-#include "muttng_signal.h"
-#include "message/message.h"
-#include "util/url.h"
+#include "libmuttng/libmuttng.h"
+#include "libmuttng/muttng_signal.h"
+#include "libmuttng/message/message.h"
+#include "libmuttng/util/url.h"
 
 /** Caching base class */
 class Cache : public LibMuttng {

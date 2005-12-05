@@ -5,13 +5,14 @@
  * @brief Implementation: muttng(1)
  */
 #include <unistd.h>
-
 #include <iostream>
 
 #include "core/intl.h"
+#include "core/str.h"
+
+#include "libmuttng/mailbox/mailbox.h"
 
 #include "ui/ui_curses.h"
-
 #include "muttng_tool.h"
 
 using namespace std;
@@ -82,14 +83,63 @@ int MuttngTool::main (void) {
         break;
     }
   }
+  this->argc -= optind;
+  this->argv += optind;
 
   if (!this->start ())
     return (1);
   /* do something */
+  if (argc > 0)
+    doIndexMenu(argv[0]);
   this->end ();
   return (0);
 }
 
 const char* MuttngTool::getName (void) {
   return ("muttng");
+}
+
+void MuttngTool::doIndexMenu(const char* url) {
+  buffer_t error;
+  Mailbox* folder;
+  mailbox_query_status state;
+
+  buffer_init(&error);
+  if (!(folder = Mailbox::fromURL(url,&error))) {
+    std::cerr << _("Error opening folder '") << (NONULL(url)) << _("': ") << (NONULL(error.str)) << std::endl;
+    return;
+  }
+
+  connectSignal(folder->sigGetUsername,this,&MuttngTool::getUsername);
+  connectSignal(folder->sigGetPassword,this,&MuttngTool::getPassword);
+
+  /* XXX do loop */
+  if ((state = folder->openMailbox()) == MQ_OK)
+    folder->closeMailbox();
+  else
+    std::cerr << Mailbox::strerror(state) << std::endl;
+
+  disconnectSignals(folder->sigGetUsername,this);
+  disconnectSignals(folder->sigGetPassword,this);
+  delete folder;
+}
+
+bool MuttngTool::getUsername (url_t* url) {
+  char buf[64];
+  if (!url)
+    return false;
+  std::cout << _("Enter username for ") << url->host << ": " << std::endl;
+  std::cin.getline(buf,64);
+  str_replace (&url->username, buf);
+  return str_len(url->username)>0;
+}
+
+bool MuttngTool::getPassword (url_t* url) {
+  char buf[64];
+  if (!url)
+    return false;
+  std::cout << _("Enter password for ") << url->username << "@" << url->host << ": " << std::endl;
+  std::cin.getline(buf,64);
+  str_replace (&url->password, buf);
+  return str_len(url->password)>0;
 }

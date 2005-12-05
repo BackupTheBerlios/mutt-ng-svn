@@ -7,7 +7,7 @@
 #ifndef LIBMUTTNG_MESSGAGE_BODY_H
 #define LIBMUTTNG_MESSGAGE_BODY_H
 
-#include "../libmuttng.h"
+#include "libmuttng/libmuttng.h"
 
 /** Single MIME body part */
 class Body : public LibMuttng {

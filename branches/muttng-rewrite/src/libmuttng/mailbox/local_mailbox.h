@@ -6,7 +6,7 @@
 #ifndef LIBMUTTNG_MAILBOX_LOCAL_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_LOCAL_MAILBOX_H
 
-#include "mailbox.h"
+#include "libmuttng/mailbox/mailbox.h"
 
 /**
  * Mailbox with an underlaying local storage.

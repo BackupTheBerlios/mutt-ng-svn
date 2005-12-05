@@ -6,9 +6,9 @@
 #ifndef LIBMUTTNG_MAILBOX_FILE_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_FILE_MAILBOX_H
 
-#include "local_mailbox.h"
+#include "libmuttng/mailbox/local_mailbox.h"
 
-#include "message/message.h"
+#include "libmuttng/message/message.h"
 
 /**
  * Single file-based Mailbox with an underlaying local storage.

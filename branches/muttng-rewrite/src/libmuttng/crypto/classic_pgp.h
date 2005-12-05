@@ -7,7 +7,7 @@
 #ifndef LIBMUTTNG_CRYPTO_CLASSIC_PGP_H
 #define LIBMUTTNG_CRYPTO_CLASSIC_PGP_H
 
-#include "../libmuttng.h"
+#include "libmuttng/libmuttng.h"
 
 /**
  * Base class for crypto abstraction.

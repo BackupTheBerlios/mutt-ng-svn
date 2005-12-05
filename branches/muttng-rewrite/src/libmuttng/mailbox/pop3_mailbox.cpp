@@ -31,9 +31,13 @@ mailbox_query_status POP3Mailbox::openMailbox() {
     return MQ_NOT_CONNECTED;
   }
 
+  if (!url->username && !sigGetUsername.emit (url))
+    return MQ_AUTH;
+  if (!url->password && !sigGetPassword.emit (url))
+    return MQ_AUTH;
+
   if (!url->username || !url->password) {
-    /* TODO: emit query for username and/or password */
-    return MQ_NOT_CONNECTED;
+    return MQ_AUTH;
   }
 
   if (conn->connect()==false) {
@@ -46,7 +50,7 @@ mailbox_query_status POP3Mailbox::openMailbox() {
 
   if (!buffer_equal1(&rbuf,"+OK",3)) {
     conn->disconnect();
-    return MQ_ERR;
+    return MQ_AUTH;
   }
 
   buffer_add_str(&sbuf,"USER ",5);
@@ -66,7 +70,7 @@ mailbox_query_status POP3Mailbox::openMailbox() {
 
   if (!buffer_equal1(&rbuf,"+OK",3)) {
     conn->disconnect();
-    return MQ_ERR;
+    return MQ_AUTH;
   }
 
   buffer_shrink(&sbuf,0);
@@ -87,7 +91,7 @@ mailbox_query_status POP3Mailbox::openMailbox() {
 
   if (!buffer_equal1(&rbuf,"+OK",3)) {
     conn->disconnect();
-    return MQ_ERR;
+    return MQ_AUTH;
   }
 
   /* from this point on, we're successfully logged in and in transactional state */

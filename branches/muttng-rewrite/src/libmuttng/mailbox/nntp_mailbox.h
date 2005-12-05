@@ -6,7 +6,7 @@
 #ifndef LIBMUTTNG_MAILBOX_NNTP_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_NNTP_MAILBOX_H
 
-#include "remote_mailbox.h"
+#include "libmuttng/mailbox/remote_mailbox.h"
 
 /**
  * NNTP mailbox.

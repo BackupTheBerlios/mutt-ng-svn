@@ -6,7 +6,7 @@
 #ifndef LIBMUTTNG_MAILBOX_IMAP_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_IMAP_MAILBOX_H
 
-#include "remote_mailbox.h"
+#include "libmuttng/mailbox/remote_mailbox.h"
 
 /**
  * IMAP mailbox.

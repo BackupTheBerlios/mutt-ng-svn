@@ -14,6 +14,8 @@
 
 #include "core/buffer.h"
 
+#include "libmuttng/util/url.h"
+
 #include "tool.h"
 
 /**
@@ -31,6 +33,21 @@ class MuttngTool : public Tool {
     int main (void);
     const char* getName (void);
     void getUsage (buffer_t* dst);
+
+  private:
+    void doIndexMenu(const char* folder);
+    /**
+     * Connected to Mailbox::sigGetUsername().
+     * @param url URL to complete.
+     * @return Yes/No.
+     */
+    bool getUsername (url_t* url);
+    /**
+     * Connected to Mailbox::sigGetPassword().
+     * @param url URL to complete.
+     * @return Yes/No.
+     */
+    bool getPassword (url_t* url);
 };
 
 #endif /* !MUTTNG_MUTTNG_TOOL_H */

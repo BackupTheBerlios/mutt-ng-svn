@@ -8,7 +8,7 @@
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Message cryptography
  */
-#include "../libmuttng.h"
+#include "libmuttng/libmuttng.h"
 
 /**
  * Base class for crypto abstraction.

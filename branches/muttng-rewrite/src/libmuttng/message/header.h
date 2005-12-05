@@ -8,7 +8,7 @@
 #ifndef LIBMUTTNG_MESSGAGE_HEADER_H
 #define LIBMUTTNG_MESSGAGE_HEADER_H
 
-#include "../libmuttng.h"
+#include "libmuttng/libmuttng.h"
 #include "core/buffer.h"
 
 /**

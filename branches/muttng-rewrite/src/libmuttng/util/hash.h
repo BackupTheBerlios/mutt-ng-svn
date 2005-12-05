@@ -10,7 +10,7 @@
 #include "core/hash.h"
 #include "core/mem.h"
 
-#include "libmuttng.h"
+#include "libmuttng/libmuttng.h"
 
 /** empty structure for passing through Hash::map */
 struct nil {};

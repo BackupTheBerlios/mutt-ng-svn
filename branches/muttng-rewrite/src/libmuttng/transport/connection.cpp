@@ -9,6 +9,7 @@
 #include "connection.h"
 
 #include "core/mem.h"
+#include "core/intl.h"
 
 #include "util/url.h"
 
@@ -190,10 +191,20 @@ bool Connection::isConnected() {
   return is_connected;
 }
 
-Connection * Connection::fromURL(url_t * url) {
-  if (!url) return NULL; /* if not URL provided, we can't create a new connection. */
-  if (!url->host || !url->port) return NULL; /* url with no host or port, can't create new connection either. */
-  
+Connection * Connection::fromURL(url_t * url, buffer_t* error) {
+  if (!url) {
+    /* if not URL provided, we can't create a new connection. */
+    buffer_init(error);
+    buffer_add_str(error,_("failed to create connection: no URL given"),-1);
+    return NULL;
+  }
+  if (!url->host || !url->port) {
+    /* url with no host or port, can't create new connection either. */
+    buffer_init(error);
+    buffer_add_str(error,_("failed to create connection: no host and/or port given"),-1);
+    return NULL;
+  }
+
   buffer_t hostbuf;
   buffer_init(&hostbuf);
   buffer_add_str(&hostbuf,url->host,-1);

@@ -132,7 +132,7 @@ static urlproto_t url_get_proto (const char* s, bool* secure,
   if (!s || !(t = (char*) strchr (s, ':')) ||
       (t - s) + 1 >= (int) sizeof (sbuf)) {
     if (error)
-      buffer_add_str (error, _("internal error"), -1);
+      buffer_add_str (error, _("no or too long protocoll identifier in URL"), -1);
     return P_LAST;
   }
 
@@ -215,8 +215,6 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error) {
       goto field_error;
     url->port = atoi (p);
   }
-  else
-    url->port = 0;
 
   if (t && *t)
     url->host = str_dup (t);

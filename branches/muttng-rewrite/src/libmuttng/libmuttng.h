@@ -43,7 +43,7 @@
 #ifndef LIBMUTTNG_LIBMUTTNG_H
 #define LIBMUTTNG_LIBMUTTNG_H
 
-#include "debug.h"
+#include "libmuttng/debug.h"
 
 /** module init/cleanup debug level */
 #define D_MOD           1

@@ -6,9 +6,10 @@
 #ifndef LIBMUTTNG_MAILBOX_REMOTE_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_REMOTE_MAILBOX_H
 
-#include "mailbox.h"
+#include "core/buffer.h"
 
-#include "transport/connection.h"
+#include "libmuttng/mailbox/mailbox.h"
+#include "libmuttng/transport/connection.h"
 
 /**
  * Mailbox with underlaying remote network connection.
@@ -17,7 +18,7 @@ class RemoteMailbox : public Mailbox {
   public:
     RemoteMailbox (url_t* url_, Connection * c = NULL);
     ~RemoteMailbox ();
-    static Mailbox* fromURL (url_t* url_);
+    static Mailbox* fromURL (url_t* url_,buffer_t* error);
   protected:
     /** connection */
     Connection * conn;

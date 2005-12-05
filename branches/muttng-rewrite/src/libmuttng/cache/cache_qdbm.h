@@ -6,7 +6,7 @@
 #ifndef LIBMUTTNG_CACHE_CACHE_QDBM_H
 #define LIBMUTTNG_CACHE_CACHE_QDBM_H
 
-#include "cache.h"
+#include "libmuttng/cache/cache.h"
 
 /** Caching base class */
 class QDBMCache : public Cache {

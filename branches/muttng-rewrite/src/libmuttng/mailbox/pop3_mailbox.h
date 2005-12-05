@@ -6,8 +6,8 @@
 #ifndef LIBMUTTNG_MAILBOX_POP3_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_POP3_MAILBOX_H
 
-#include "remote_mailbox.h"
-#include "transport/connection.h"
+#include "libmuttng/mailbox/remote_mailbox.h"
+#include "libmuttng/transport/connection.h"
 
 /**
  * POP3 mailbox.

@@ -10,10 +10,10 @@
 #ifndef LIBMUTTNG_MAILBOX_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_MAILBOX_H
 
-#include "libmuttng.h"
-#include "message/message.h"
-#include "util/url.h"
-#include "cache/cache.h"
+#include "libmuttng/libmuttng.h"
+#include "libmuttng/message/message.h"
+#include "libmuttng/util/url.h"
+#include "libmuttng/cache/cache.h"
 
 /**
  * ACLs for mailbox access.
@@ -48,7 +48,9 @@ enum acl_bit_t {
  */
 enum mailbox_query_status {
   /** error */
-  MQ_ERR = -2,
+  MQ_ERR = -3,
+  /** not authenticated */
+  MQ_AUTH = -2,
   /** problem with connection */
   MQ_NOT_CONNECTED = -1,
   /** means that operation went OK */
@@ -178,6 +180,27 @@ class Mailbox : public LibMuttng {
      * @return Mailbox object or @c NULL in case of error.
      */
     static Mailbox* fromURL (const char* url, buffer_t* error);
+
+    /**
+     * Retrieve error message for state.
+     * @param State state.
+     * @return Error message.
+     */
+    static const char* strerror (mailbox_query_status state);
+
+    /**
+     * Signal emitted when username for connection is required.
+     * Parameters in order are:
+     * -# url
+     */
+    Signal1<url_t*> sigGetUsername;
+
+    /**
+     * Signal emitted when password for connection is required.
+     * Parameters in order are:
+     * -# url
+     */
+    Signal1<url_t*> sigGetPassword;
 
   protected:
     /** whether mailbox supports caching */

@@ -6,9 +6,9 @@
 #ifndef LIBMUTTNG_MAILBOX_DIR_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_DIR_MAILBOX_H
 
-#include "local_mailbox.h"
-#include "cache/cache.h"
-#include "message/message.h"
+#include "libmuttng/mailbox/local_mailbox.h"
+#include "libmuttng/cache/cache.h"
+#include "libmuttng/message/message.h"
 
 /**
  * Directory--based Mailbox with an underlaying local storage.

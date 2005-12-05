@@ -7,7 +7,7 @@
 #ifndef LIBMUTTNG_MESSGAGE_MESSAGE_H
 #define LIBMUTTNG_MESSGAGE_MESSAGE_H
 
-#include "../libmuttng.h"
+#include "libmuttng/libmuttng.h"
 
 /** MIME message class */
 class Message : public LibMuttng {

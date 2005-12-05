@@ -7,9 +7,9 @@
 #ifndef LIBMUTTNG_CRYPTO_CLASSIC_CRYPTO_H
 #define LIBMUTTNG_CRYPTO_CLASSIC_CRYPTO_H
 
-#include "crypto.h"
-#include "classic_pgp.h"
-#include "classic_smime.h"
+#include "libmuttng/crypto/crypto.h"
+#include "libmuttng/crypto/classic_pgp.h"
+#include "libmuttng/crypto/classic_smime.h"
 
 /**
  * Base class for crypto abstraction.

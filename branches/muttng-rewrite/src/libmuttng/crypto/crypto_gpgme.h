@@ -7,7 +7,7 @@
 #ifndef LIBMUTTNG_CRYPTO_CRYPTO_GPGME_H
 #define LIBMUTTNG_CRYPTO_CRYPTO_GPGME_H
 
-#include "crypto.h"
+#include "libmuttng/crypto/crypto.h"
 
 /**
  * Base class for crypto abstraction.

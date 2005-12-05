@@ -13,10 +13,10 @@
 #define LIBMUTTNG_TRANSPORT_CONNECTION__H
 
 #include "core/buffer.h"
-#include "util/url.h"
+#include "libmuttng/util/url.h"
 
-#include "./../muttng_features.h"
-#include "./../muttng_signal.h"
+#include "libmuttng/muttng_features.h"
+#include "libmuttng/muttng_signal.h"
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -131,7 +131,7 @@ class Connection {
      * @param url_ the URL object.
      * @return new Connection, or NULL if an error occured.
      */
-    static Connection * fromURL(url_t * url_);
+    static Connection * fromURL(url_t * url_, buffer_t* error);
 
     /**
      * Signal emitted prior to opening the connection.
