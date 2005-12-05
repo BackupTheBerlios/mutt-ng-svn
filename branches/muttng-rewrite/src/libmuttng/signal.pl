@@ -10,6 +10,8 @@ my $head =
 " * \@ingroup libmuttng\n" .
 " * \@addtogroup libmuttng_sig Signal handling\n" .
 " * \@{\n" .
+" * For implementation details and an example, please see\n" .
+" * \@ref sect_devguide-libmuttng-signal.\n" .
 " */\n" .
 "/**\n" .
 " * \@file libmuttng/muttng_signal.h\n" .

@@ -1264,6 +1264,51 @@ disconnectSignals (signal, object);</pre>
     </subsection>
     <!--}}}-->
 
+    <subsection id="devguide-libmuttng-url"> <!--{{{-->
+      <title>URL handling</title>
+
+      <p>
+        The syntax for supported URLs is:
+      </p>
+
+      <pre>
+proto[s]://[username[:password]@]host[:port][/path]</pre>
+
+      <p>
+        whereby <tt>proto</tt> is any of the following protocolls:
+        <tt>imap[s]</tt>, <tt>pop[s]</tt>, <tt>nntp[s]</tt>, <tt>smtp[s]</tt>
+        or <tt>file</tt>.
+      </p>
+
+      <p>
+        The string <tt>[s]</tt> denotes a secure connection to be used for those protocolls
+        supporting it.
+      </p>
+
+      <p>
+        LibMuttng supports parsing a string into such an URL and <em>always</em>
+        fully qualifies the path, i.e. it will always have a leading slash (if no path
+        is contained in the string, the path is just the slash.)
+      </p>
+
+      <p>
+        Please see <docref type="listing" href="sample-libmuttng-url">the example provided</docref>
+        for use and error handling.
+      </p>
+
+      <listing lang="cpp" id="sample-libmuttng-url"
+          title="Create URL structure from string"
+          href="libmuttng_url.cpp"/>
+
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-libmuttng-connection"> <!--{{{-->
+      <title>Connection handling</title>
+
+    </subsection>
+    <!--}}}-->
+
     <subsection id="devguide-libmuttng-mailbox"> <!--{{{-->
       <title>Mailbox handling</title>
 

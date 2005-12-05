@@ -230,7 +230,7 @@
     <xsl:apply-templates select="cap" mode="tab"/>
     <xsl:text>&lt;/p&gt;</xsl:text>
     <xsl:text>
-      &lt;table rowsep="1" summary="</xsl:text><xsl:apply-templates select="cap" mode="tab"/><xsl:text>"&gt;
+      &lt;table class="ordinary" rowsep="1" summary="</xsl:text><xsl:apply-templates select="cap" mode="tab"/><xsl:text>"&gt;
     </xsl:text>    
     <xsl:apply-templates/>
     <xsl:text>

@@ -1,4 +1,4 @@
-/** @ingroup libmuttng_util */
+/** @ingroup libmuttng_url */
 /**
  * @file libmuttng/util/url.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>

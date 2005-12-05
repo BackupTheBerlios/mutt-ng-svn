@@ -1,6 +1,8 @@
 /** @ingroup libmuttng_util
  * @addtogroup libmuttng_transport Connection
  * @{
+ * For implementation details and an example, please see
+ * @ref sect_devguide-libmuttng-connection.
  */
 /**
  * @file libmuttng/transport/connection.h

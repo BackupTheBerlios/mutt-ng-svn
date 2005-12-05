@@ -84,7 +84,7 @@
     border-color: black;
   }
 
-  table {
+  table.ordinary {
     margin-left: auto;
     margin-right: auto;
   }

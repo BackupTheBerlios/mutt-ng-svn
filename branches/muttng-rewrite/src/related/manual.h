@@ -752,7 +752,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @anchor table-make-env1
     @htmlonly
     <p class="title">Make environment</p>
-      <table rowsep="1" summary="Make environment">
+      <table class="ordinary" rowsep="1" summary="Make environment">
     <thead><tr><td>Make variable</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>CC</tt></td><td>C compiler</td></tr><tr><td><tt>CXX</tt></td><td>C++ compiler</td></tr><tr><td><tt>CFLAGS</tt></td><td>C compiler flags</td></tr><tr><td><tt>CXXFLAGS</tt></td><td>C++ compiler flags</td></tr><tr><td><tt>DEPFLAGS</tt></td><td>C/C++ compiler flags for dependencies</td></tr><tr><td><tt>AR</tt></td><td>path to <tt>ar(1)</tt></td></tr><tr><td><tt>RANLIB</tt></td><td>path to <tt>ranlib(1)</tt></td></tr></tbody>
       </table>
       @endhtmlonly
@@ -761,7 +761,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @anchor table-make-tools
     @htmlonly
     <p class="title">Make tools</p>
-      <table rowsep="1" summary="Make tools">
+      <table class="ordinary" rowsep="1" summary="Make tools">
     <thead><tr><td>Tool</td><td>Make variable</td></tr></thead><tbody><tr><td><tt>doxygen(1)</tt></td><td><tt>DOXYGEN</tt></td></tr><tr><td><tt>tidy(1)</tt></td><td><tt>TIDY</tt></td></tr><tr><td><tt>xgettext(1)</tt></td><td><tt>XGETTEXT</tt></td></tr><tr><td><tt>msgmerge(1)</tt></td><td><tt>MSGMERGE</tt></td></tr><tr><td><tt>msgfmt(1)</tt></td><td><tt>MSGFMT</tt></td></tr><tr><td><tt>pdflatex(1)</tt></td><td><tt>PDFLATEX</tt></td></tr><tr><td><tt>latex(1)</tt></td><td><tt>LATEX</tt></td></tr><tr><td><tt>makeindex(1)</tt></td><td><tt>MAKEINDEX</tt></td></tr></tbody>
       </table>
       @endhtmlonly
@@ -1080,7 +1080,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @anchor tab-ref-tags
     @htmlonly
     <p class="title">reference tags</p>
-      <table rowsep="1" summary="reference tags">
+      <table class="ordinary" rowsep="1" summary="reference tags">
     <thead><tr><td>Tag</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>email</tt></td><td>an email address</td></tr><tr><td><tt>web</tt></td><td>a web address</td></tr><tr><td><tt>varref</tt></td><td>referencing a configuration variable</td></tr><tr><td><tt>cmdref</tt></td><td>referencing a configuration command</td></tr><tr><td><tt>funcref</tt></td><td>referencing a function</td></tr></tbody>
       </table>
       @endhtmlonly
@@ -1089,7 +1089,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @anchor tab-man-attrs
     @htmlonly
     <p class="title"><tt>man</tt> tag attributes</p>
-      <table rowsep="1" summary="<tt>man</tt> tag attributes">
+      <table class="ordinary" rowsep="1" summary="<tt>man</tt> tag attributes">
     <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>sect</tt></td><td><tt>no</tt></td><td>Manual page section, default: 1</td></tr></tbody>
       </table>
       @endhtmlonly
@@ -1098,7 +1098,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @anchor tab-docref-attrs
     @htmlonly
     <p class="title"><tt>docref</tt> tag attributes</p>
-      <table rowsep="1" summary="<tt>docref</tt> tag attributes">
+      <table class="ordinary" rowsep="1" summary="<tt>docref</tt> tag attributes">
     <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>type</tt></td><td><tt>yes</tt></td><td>Type of link's end (e.g. ``table''.)</td></tr><tr><td><tt>href</tt></td><td><tt>yes</tt></td><td>Target (document-internal ID)</td></tr></tbody>
       </table>
       @endhtmlonly
@@ -1212,7 +1212,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @anchor tab-tab-attrs
     @htmlonly
     <p class="title"><tt>tab</tt> tag attributes</p>
-      <table rowsep="1" summary="<tt>tab</tt> tag attributes">
+      <table class="ordinary" rowsep="1" summary="<tt>tab</tt> tag attributes">
     <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>cols</tt></td><td><tt>yes</tt></td><td>Number of columns</td></tr><tr><td><tt>texstr</tt></td><td><tt>yes</tt></td><td>Layout string for LaTeX's <tt>longtable</tt></td></tr><tr><td><tt>id</tt></td><td><tt>yes</tt></td><td>Document-internal ID</td></tr></tbody>
       </table>
       @endhtmlonly
@@ -1504,6 +1504,39 @@ disconnectSignals (signal, object);</pre>
     @anchor sample-libmuttng-signal
     @verbinclude libmuttng_signal.cpp
     
+    
+    @subsubsection sect_devguide-libmuttng-url URL handling
+    
+        The syntax for supported URLs is:
+      
+
+    <pre>
+proto[s]://[username[:password]@]host[:port][/path]</pre>
+        whereby <tt>proto</tt> is any of the following protocolls:
+        <tt>imap[s]</tt>, <tt>pop[s]</tt>, <tt>nntp[s]</tt>, <tt>smtp[s]</tt>
+        or <tt>file</tt>.
+      
+
+    
+        The string <tt>[s]</tt> denotes a secure connection to be used for those protocolls
+        supporting it.
+      
+
+    
+        LibMuttng supports parsing a string into such an URL and <em>always</em>
+        fully qualifies the path, i.e. it will always have a leading slash (if no path
+        is contained in the string, the path is just the slash.)
+      
+
+    
+        Please see @ref sample-libmuttng-url "the example provided" 
+        for use and error handling.
+      
+
+    @anchor sample-libmuttng-url
+    @verbinclude libmuttng_url.cpp
+    
+    @subsubsection sect_devguide-libmuttng-connection Connection handling
     
     @subsubsection sect_devguide-libmuttng-mailbox Mailbox handling
     

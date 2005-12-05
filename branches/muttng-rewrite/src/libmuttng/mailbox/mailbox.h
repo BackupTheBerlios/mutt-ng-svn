@@ -2,6 +2,8 @@
  * @ingroup libmuttng
  * @addtogroup libmuttng_mailbox Mailbox
  * @{
+ * For implementation details and an example, please see
+ * @ref sect_devguide-libmuttng-mailbox.
  */
 /**
  * @file libmuttng/mailbox/mailbox.h

@@ -1,4 +1,10 @@
-/** @ingroup libmuttng_util */
+/**
+ * @ingroup libmuttng_util
+ * @addtogroup libmuttng_url URL handling
+ * @{
+ * For implementation details and an example, please see
+ * @ref sect_devguide-libmuttng-url.
+ */
 /**
  * @file libmuttng/util/url.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -108,3 +114,5 @@ void url_free (url_t* url);
 bool url_eq (url_t* url1, url_t* url2);
 
 #endif /* !LIBMUTTNG_MESSGAGE_BODY_H */
+
+/** @} */
