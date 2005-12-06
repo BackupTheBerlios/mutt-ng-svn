@@ -58,7 +58,7 @@ doxygen:
 homepage:
 	@ for l in $(BUILD_LANGUAGES) ; do \
 	  $(call doxslt_s,homepage_$$l/homepage.xml,xsl/manual2docbook.xsl,homepage_$$l/homepage-docbook.xml,$$l) ; \
-	  $(call doxslt_s,homepage_$$l/homepage-docbook.xml,xsl/docbook2html.xsl,homepage_$$l/index.html,$$l) ; \
+	  $(call doxslt_s,homepage_$$l/homepage-docbook.xml,xsl/homepage2xhtml.xsl,homepage_$$l/index.html,$$l) ; \
 	done
 ifneq ($(TIDY),)
 	@ for l in $(BUILD_LANGUAGES) ; do \

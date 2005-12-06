@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <translations>
+  <!-- for homepage -->
+  <trans id="avail">Diese Seite ist in folgenden Sprachen verfügbar</trans>
   <!-- for indexing -->
   <trans id="encodings">Transportkodierung</trans>
   <trans id="environ">Umgebungsvariable</trans>

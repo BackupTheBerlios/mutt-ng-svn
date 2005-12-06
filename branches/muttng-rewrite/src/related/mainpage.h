@@ -29,26 +29,13 @@
     
           As the manual will be re-worked completely, too, it is
           still far from being complete. The current manual is
-          available in the following languages:
+          available in the following formats:
         
 
     <ol>
-    <li>English:
-            <ol>
     <li><a href="http://mutt-ng.berlios.de/rewrite/en/manual/">http://mutt-ng.berlios.de/rewrite/en/manual/</a>: HTML, multiple files</li>
     <li><a href="http://mutt-ng.berlios.de/rewrite/en/manual/manual.html">http://mutt-ng.berlios.de/rewrite/en/manual/manual.html</a>: HTML, one file</li>
     <li><a href="http://mutt-ng.berlios.de/rewrite/en/manual/manual.pdf">http://mutt-ng.berlios.de/rewrite/en/manual/manual.pdf</a>: PDF</li>
-    
-      </ol>
-    </li>
-    <li>German:
-            <ol>
-    <li><a href="http://mutt-ng.berlios.de/rewrite/de/manual/">http://mutt-ng.berlios.de/rewrite/de/manual/</a>: HTML, multiple files</li>
-    <li><a href="http://mutt-ng.berlios.de/rewrite/de/manual/manual.html">http://mutt-ng.berlios.de/rewrite/de/manual/manual.html</a>: HTML, one file</li>
-    <li><a href="http://mutt-ng.berlios.de/rewrite/de/manual/manual.pdf">http://mutt-ng.berlios.de/rewrite/de/manual/manual.pdf</a>: PDF</li>
-    
-      </ol>
-    </li>
     
       </ol>
     
