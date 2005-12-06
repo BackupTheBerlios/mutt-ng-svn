@@ -17,7 +17,7 @@
 
   </section>
   <!--}}}-->
-  
+
   <section id="build-requirements"> <!--{{{-->
     <title>Voraussetzungen</title>
 
@@ -36,6 +36,8 @@
         Unit++ (siehe <web>http://unitpp.sf.net/</web>) benötigt.</li>
       <li>Für das optionale Erstellen von lokalisierten Versionen der
         Anwendungen wird GNU gettext benötigt.</li>
+      <li>Für optional verschlüsstelte Verbindungen wird entweder
+        OpenSSL oder GNUTLS benötigt.</li>
     </ul>
 
     <p>
@@ -95,6 +97,10 @@
       <li><tt>UNITPPDIR=/path</tt>. Pfad in dem Unit++ (siehe
         <web>http://unitpp.sf.net/</web>) für die Testsuite installiert
         ist. Vorgabe: <tt>/usr</tt>.</li>
+      <li><tt>OPENSSLDIR=/path</tt>. Pfad in dem OpenSSL
+        installiert ist. Dies wird für verschlüsselte Verbindungen benötigt.
+        Wenn kein Wert gegeben ist, wird OpenSSL nicht verwendet.
+        Vorgabe: keine.</li>
     </ul>
 
   </section>

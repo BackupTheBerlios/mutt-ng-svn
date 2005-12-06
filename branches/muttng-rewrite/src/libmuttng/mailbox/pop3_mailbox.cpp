@@ -40,7 +40,7 @@ mailbox_query_status POP3Mailbox::openMailbox() {
     return MQ_AUTH;
   }
 
-  if (conn->connect()==false) {
+  if (conn->socketConnect()==false) {
     return MQ_NOT_CONNECTED;
   }
 
@@ -49,7 +49,7 @@ mailbox_query_status POP3Mailbox::openMailbox() {
   }
 
   if (!buffer_equal1(&rbuf,"+OK",3)) {
-    conn->disconnect();
+    conn->socketDisconnect();
     return MQ_AUTH;
   }
 
@@ -58,7 +58,7 @@ mailbox_query_status POP3Mailbox::openMailbox() {
   buffer_add_str(&sbuf,"\r\n",2);
 
   if (conn->doWrite(&sbuf)<0) {
-    conn->disconnect();
+    conn->socketDisconnect();
     return MQ_NOT_CONNECTED;
   }
 
@@ -69,7 +69,7 @@ mailbox_query_status POP3Mailbox::openMailbox() {
   }
 
   if (!buffer_equal1(&rbuf,"+OK",3)) {
-    conn->disconnect();
+    conn->socketDisconnect();
     return MQ_AUTH;
   }
 
@@ -79,7 +79,7 @@ mailbox_query_status POP3Mailbox::openMailbox() {
   buffer_add_str(&sbuf,"\r\n",2);
 
   if (conn->doWrite(&sbuf)<0) {
-    conn->disconnect();
+    conn->socketDisconnect();
     return MQ_NOT_CONNECTED;
   }
 
@@ -90,7 +90,7 @@ mailbox_query_status POP3Mailbox::openMailbox() {
   }
 
   if (!buffer_equal1(&rbuf,"+OK",3)) {
-    conn->disconnect();
+    conn->socketDisconnect();
     return MQ_AUTH;
   }
 
@@ -119,7 +119,7 @@ bool POP3Mailbox::checkACL(acl_bit_t bit) {
 
 mailbox_query_status POP3Mailbox::closeMailbox() {
   /* TODO: synchronize content of mailbox */
-  conn->disconnect();
+  conn->socketDisconnect();
   return MQ_NOT_CONNECTED;
 }
 

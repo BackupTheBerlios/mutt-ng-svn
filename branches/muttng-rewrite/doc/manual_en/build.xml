@@ -34,6 +34,8 @@
         <web>http://unitpp.sf.net/</web>) must be installed.</li>
       <li>Optionally, for building localized versions of the applications,
         GNU gettext is required to be installed.</li>
+      <li>Optionally, for encrypted connections, either OpenSSL or GNUTLS is
+        required.</li>
     </ul>
 
     <p>
@@ -89,6 +91,9 @@
       <li><tt>UNITPPDIR=/path</tt>. Where Unit++ (see
         <web>http://unitpp.sf.net/</web>) for
         running the unit tests is installed. Default: <tt>/usr</tt>.</li>
+      <li><tt>OPENSSLDIR=/path</tt>. Where OpenSSL
+        is installed. This is required for encrypted connections.
+        If none is given, OpenSSL won't be used. Default: none.</li>
     </ul>
 
   </section>

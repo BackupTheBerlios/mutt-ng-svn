@@ -1,8 +1,7 @@
-/** @ingroup libmuttng_util
+/**
+ * @ingroup libmuttng_util
  * @addtogroup libmuttng_transport Connection
  * @{
- * For implementation details and an example, please see
- * @ref sect_devguide-libmuttng-connection.
  */
 /**
  * @file libmuttng/transport/connection.h
@@ -26,13 +25,7 @@
 #include <netinet/in.h>
 
 /**
- * plain TCP connection.
- * Feel free to extend it to "plug-ins" so that SSL/TLS can be
- * transparently switched on.
- * pdmef: my choice is to have two flavors of read/write functions
- * whereby use is transparently hidden behind this interface and all is
- * done in this class to not have to deal with details anywhere outside
- * Connection class.
+ * Abstract TCP connection.
  */
 class Connection : public LibMuttng {
   public:
@@ -44,19 +37,19 @@ class Connection : public LibMuttng {
      */
     Connection(buffer_t * host = NULL, unsigned short port = 0,
                bool secure_ = false);
-    ~Connection();
+    virtual ~Connection();
 
     /**
      * Start connection.
      * @return true if connection succeeded, false if connection failed.
      */
-    bool connect();
+    bool socketConnect();
 
     /**
      * Close connection.
      * @return true if close succeeded, false if connection failed.
      */
-    bool disconnect();
+    bool socketDisconnect();
 
     /**
      * Determines whether connection is secure or not.
@@ -64,22 +57,10 @@ class Connection : public LibMuttng {
      */
     bool isSecure();
 
-    /**
-     * Set or unset whether secure connection is to be used.
-     * @b Note: this works only while connection is closed/not opened yet.
-     * @return Whether operation succeeded.
-     */
-    bool setSecure(bool secure_);
-
-    /**
-     * Reads a number of characters from the connection. If an error
-     * occurs, the buffer is unaltered.
-     * @param buf buffer into which the data should be read.
-     * @param len number of characters to read.
-     * @return number of characters read. -1 if an error occured.
-     *         0 if the connection has been closed.
-     */
-    int doRead(buffer_t * buf, unsigned int len);
+    virtual int doRead(buffer_t * buf, unsigned int len) = 0;
+    virtual int doWrite(buffer_t * buf) = 0;
+    virtual bool doOpen() = 0;
+    virtual bool doClose() = 0;
 
     /**
      * Reads characters from the connection until a separator is hit.
@@ -97,19 +78,6 @@ class Connection : public LibMuttng {
      * @return number of characters read. -1 if an error occured.
      */
     int readLine(buffer_t * buf);
-
-    /**
-     * Reads a single character from the connection.
-     * @return the character, or -1 if an error occurs.
-     */
-    int readChar();
-
-    /**
-     * Writes a buffer to the connection.
-     * @return the number of characters written, or -1 if an
-     *          error occurs.
-     */
-    int doWrite(buffer_t * buf);
 
     /**
      * Read accessor for tcp_port.
@@ -153,15 +121,7 @@ class Connection : public LibMuttng {
      */
     Signal2<buffer_t*,unsigned int> sigPostconnect;
 
-    /**
-     * Signal emitted prior to accepting a certificate, if any.
-     * This can be used by clients to decide whether to accept
-     * or discard a certificate.
-     * @todo pass certificate rather dummy int argument
-     */
-    Signal1<int> sigCheckCertificate;
-
-  private:
+  protected:
     unsigned short tcp_port;
     buffer_t hostname;
     int fd; /* this will be pulled out when a pluggable transport
@@ -169,6 +129,14 @@ class Connection : public LibMuttng {
     struct sockaddr_in sin;
     bool is_connected;
     bool secure;
+    /**
+     * Signal emitted prior to accepting a certificate, if any.
+     * This can be used by clients to decide whether to accept
+     * or discard a certificate.
+     * @todo pass certificate rather dummy int argument
+     */
+    Signal1<int> sigCheckCertificate;
+    int ssf;
 };
 
 #endif

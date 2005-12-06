@@ -5,8 +5,16 @@
  * @brief Implementation: plain TCP connection
  * @todo implementation is completely missing.
  */
+#include "libmuttng/muttng_features.h"
 
 #include "connection.h"
+#include "plain_connection.h"
+#ifdef LIBMUTTNG_SSL_OPENSSL
+#include "ssl_connection.h"
+#endif
+#ifdef LIBMUTTNG_SSL_GNUTLS
+#include "tls_connection.h"
+#endif
 
 #include "core/mem.h"
 #include "core/intl.h"
@@ -36,7 +44,7 @@ Connection::~Connection() {
   buffer_free(&hostname);
 }
 
-bool Connection::connect() {
+bool Connection::socketConnect() {
   /*
    * TODO: we need to differentiate between different errors.
    * Shall we use exceptions to do that?
@@ -72,17 +80,8 @@ bool Connection::connect() {
     return false;
   }
 
-  /* XXX do SSL/TLS right init/connect() right here */
-#if 0
-  if sslsetup
-    ...
-  else
-    return false;
-#endif
-
-  /* XXX don't pass fd here but some representation of certificate */
-  if (secure && !sigCheckCertificate.emit (fd)) {
-    disconnect();
+  if (!doOpen()) {
+    DEBUGPRINT(D_MOD,("doOpen() for %s:%d failed",hostname.str,tcp_port));
     return false;
   }
 
@@ -90,50 +89,29 @@ bool Connection::connect() {
   return true;
 }
 
-bool Connection::disconnect() {
+bool Connection::socketDisconnect() {
   if (shutdown(fd,SHUT_RDWR)<0) {
     return false;
   }
   if (close(fd)<0) {
     return false;
   }
+  if (!doClose())
+    return false;
   is_connected = false;
   sigPostconnect.emit (&hostname, tcp_port);
   return true;
 }
 
-int Connection::doRead(buffer_t * buf, unsigned int len) {
-  char* cbuf;
-  int read_len;
-
-  cbuf = (char*) mem_malloc (len+1);
-  read_len = read(fd,cbuf,len);
-
-  DEBUGPRINT(D_SOCKET,("%s:%d << '%s'",hostname.str,tcp_port,cbuf));
-
-  switch (read_len) {
-    case -1:
-      is_connected = false;
-      mem_free (&cbuf);
-      return -1;
-    case  0:
-      is_connected = false;
-    default:
-      buffer_shrink(buf,0);
-      buffer_add_str(buf,cbuf,read_len);
-      break;
-  }
-
-  mem_free (&cbuf);
-  return read_len;
-}
-
 int Connection::readUntilSeparator(buffer_t * buf, char sep) {
+  buffer_t rbuf;
+
   buffer_init(buf);
-  char c;
+  buffer_init(&rbuf);
 
   do {
-    int rc = read(fd,&c,sizeof(c));
+    buffer_shrink(&rbuf,0);
+    int rc = doRead(&rbuf,sizeof(char));
     switch (rc) {
       case -1: 
         is_connected = false;
@@ -144,39 +122,16 @@ int Connection::readUntilSeparator(buffer_t * buf, char sep) {
         return buf->len;
         break;
       default:
-        buffer_add_ch(buf,c);
+        buffer_add_ch(buf,rbuf.str[0]);
         break;
     }
-  } while (sep != c);
+  } while (sep != rbuf.str[0]);
   DEBUGPRINT(D_SOCKET,("%s:%d << '%s'",hostname.str,tcp_port,buf->str));
   return buf->len;
 }
 
 int Connection::readLine(buffer_t * buf) {
   return readUntilSeparator(buf,'\n');
-}
-
-int Connection::readChar() {
-  char c;
-  if (read(fd,&c,sizeof(c))<=0) {
-    is_connected = false;
-    return -1;
-  }
-  return c;
-}
-
-int Connection::doWrite(buffer_t * buf) {
-  if (!buf) return -1;
-
-  int rc = write(fd,buf->str,buf->len);
-
-  DEBUGPRINT(D_SOCKET,("%s:%d >> '%s'",hostname.str,tcp_port,buf->str));
-
-  if (rc<0) {
-    is_connected = false;
-  }
-
-  return rc;
 }
 
 unsigned short Connection::port() {
@@ -215,7 +170,19 @@ Connection * Connection::fromURL(url_t * url, buffer_t* error) {
   buffer_init(&hostbuf);
   buffer_add_str(&hostbuf,url->host,-1);
 
-  Connection * conn = new Connection(&hostbuf,url->port,url->secure);
+  Connection * conn = NULL;
+#if defined(LIBMUTTNG_SSL_OPENSSL) || defined(LIBMUTTNG_SSL_GNUTLS)
+  if (url->secure)
+#ifdef LIBMUTTNG_SSL_OPENSSL
+    conn = new SSLConnection(&hostbuf,url->port,url->secure);
+#elif LIBMUTTNG_SSL_GNUTLS
+    conn = new GNUTLSConnection(&hostbuf,url->port,url->secure);
+#else
+    return NULL;
+#endif
+  else
+#endif
+    conn = new PlainConnection(&hostbuf,url->port,url->secure);
 
   buffer_free(&hostbuf);
 
@@ -224,11 +191,4 @@ Connection * Connection::fromURL(url_t * url, buffer_t* error) {
 
 bool Connection::isSecure() {
   return secure;
-}
-
-bool Connection::setSecure (bool secure_) {
-  if (is_connected)
-    return false;
-  secure = secure_;
-  return true;
 }

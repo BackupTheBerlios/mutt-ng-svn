@@ -18,4 +18,7 @@
 /** whether caching is done via qdbm */
 #define LIBMUTTNG_CACHE_QDBM    1
 
+/** whether to SSL via OpenSSL */
+#define LIBMUTTNG_SSL_OPENSSL   1
+
 #endif /* !LIBMUTTNG_FEATURES_H */

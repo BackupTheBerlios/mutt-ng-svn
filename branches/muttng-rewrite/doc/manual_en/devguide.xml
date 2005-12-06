@@ -271,6 +271,12 @@
         <li>for the compilers, it sets up
           <docref type="table" href="table-make-env1">variables for compilers and flags</docref>
           depending on <tt>CCSTYLE</tt></li>
+        <li>for optional libraries, it sets up
+          <tt>CFLAGS_[lib]</tt>, <tt>CXXFLAGS_[lib]</tt> and
+          <tt>LDFLAGS_[lib]</tt> with compiler and linker flags for
+          use with library <tt>[lib]</tt>. A
+          <docref type="table" href="table-make-env2">full listing</docref> of
+          libararies is available.</li>
         <li>it checks whether the dependency file <tt>./.depend</tt> exists and
           includes it</li>
         <li>for <tt>DEBUG=1</tt>, it sets up <tt>CFLAGS</tt>, <tt>CXXFLAGS</tt>
@@ -304,9 +310,9 @@
 
       <p>
         <tab cols="2" texstr="l|l" id="table-make-env1">
-          <cap>Make environment</cap>
+          <cap>Common make compile variables</cap>
           <th>
-            <tr><td>Make variable</td><td>Meaning</td></tr>
+            <tr><td>Variable</td><td>Meaning</td></tr>
           </th>
           <tb>
             <tr><td><tt>CC</tt></td><td>C compiler</td></tr>
@@ -321,8 +327,27 @@
       </p>
 
       <p>
+        <tab cols="3" texstr="l|l|l" id="table-make-env2">
+          <cap>Library-specific make compile variables</cap>
+          <th>
+            <tr><td>Libarary</td><td>suffix</td><td>Variables</td></tr>
+          </th>
+          <tb>
+            <tr>
+              <td>OpenSSL</td><td><tt>SSL</tt></td>
+              <td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td>
+            </tr>
+            <tr>
+              <td>GNUTLS</td><td><tt>SSL</tt></td>
+              <td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td>
+            </tr>
+          </tb>
+        </tab>
+      </p>
+
+      <p>
         <tab cols="2" texstr="l|l" id="table-make-tools">
-          <cap>Make tools</cap>
+          <cap>Tools</cap>
           <th>
             <tr><td>Tool</td><td>Make variable</td></tr>
           </th>
@@ -514,7 +539,7 @@
 
   </section>
   <!--}}}-->
-  
+
   <section id="devguide-docs"> <!--{{{-->
     <title>Documentation</title>
 

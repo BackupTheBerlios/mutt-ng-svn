@@ -137,6 +137,8 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
         <a href="http://unitpp.sf.net/">http://unitpp.sf.net/</a>) must be installed.</li>
     <li>Optionally, for building localized versions of the applications,
         GNU gettext is required to be installed.</li>
+    <li>Optionally, for encrypted connections, either OpenSSL or GNUTLS is
+        required.</li>
     
       </ul>
     
@@ -189,6 +191,9 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     <li><tt>UNITPPDIR=/path</tt>. Where Unit++ (see
         <a href="http://unitpp.sf.net/">http://unitpp.sf.net/</a>) for
         running the unit tests is installed. Default: <tt>/usr</tt>.</li>
+    <li><tt>OPENSSLDIR=/path</tt>. Where OpenSSL
+        is installed. This is required for encrypted connections.
+        If none is given, OpenSSL won't be used. Default: none.</li>
     
       </ul>
     
@@ -717,6 +722,12 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li>for the compilers, it sets up
           @ref table-make-env1 "variables for compilers and flags" 
           depending on <tt>CCSTYLE</tt></li>
+    <li>for optional libraries, it sets up
+          <tt>CFLAGS_[lib]</tt>, <tt>CXXFLAGS_[lib]</tt> and
+          <tt>LDFLAGS_[lib]</tt> with compiler and linker flags for
+          use with library <tt>[lib]</tt>. A
+          @ref table-make-env2 "full listing"  of
+          libararies is available.</li>
     <li>it checks whether the dependency file <tt>./.depend</tt> exists and
           includes it</li>
     <li>for <tt>DEBUG=1</tt>, it sets up <tt>CFLAGS</tt>, <tt>CXXFLAGS</tt>
@@ -751,17 +762,26 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       </ul>
     @anchor table-make-env1
     @htmlonly
-    <p class="title">Make environment</p>
-      <table class="ordinary" rowsep="1" summary="Make environment">
-    <thead><tr><td>Make variable</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>CC</tt></td><td>C compiler</td></tr><tr><td><tt>CXX</tt></td><td>C++ compiler</td></tr><tr><td><tt>CFLAGS</tt></td><td>C compiler flags</td></tr><tr><td><tt>CXXFLAGS</tt></td><td>C++ compiler flags</td></tr><tr><td><tt>DEPFLAGS</tt></td><td>C/C++ compiler flags for dependencies</td></tr><tr><td><tt>AR</tt></td><td>path to <tt>ar(1)</tt></td></tr><tr><td><tt>RANLIB</tt></td><td>path to <tt>ranlib(1)</tt></td></tr></tbody>
+    <p class="title">Common make compile variables</p>
+      <table class="ordinary" rowsep="1" summary="Common make compile variables">
+    <thead><tr><td>Variable</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>CC</tt></td><td>C compiler</td></tr><tr><td><tt>CXX</tt></td><td>C++ compiler</td></tr><tr><td><tt>CFLAGS</tt></td><td>C compiler flags</td></tr><tr><td><tt>CXXFLAGS</tt></td><td>C++ compiler flags</td></tr><tr><td><tt>DEPFLAGS</tt></td><td>C/C++ compiler flags for dependencies</td></tr><tr><td><tt>AR</tt></td><td>path to <tt>ar(1)</tt></td></tr><tr><td><tt>RANLIB</tt></td><td>path to <tt>ranlib(1)</tt></td></tr></tbody>
+      </table>
+      @endhtmlonly
+    
+
+    @anchor table-make-env2
+    @htmlonly
+    <p class="title">Library-specific make compile variables</p>
+      <table class="ordinary" rowsep="1" summary="Library-specific make compile variables">
+    <thead><tr><td>Libarary</td><td>suffix</td><td>Variables</td></tr></thead><tbody><tr><td>OpenSSL</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr><tr><td>GNUTLS</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr></tbody>
       </table>
       @endhtmlonly
     
 
     @anchor table-make-tools
     @htmlonly
-    <p class="title">Make tools</p>
-      <table class="ordinary" rowsep="1" summary="Make tools">
+    <p class="title">Tools</p>
+      <table class="ordinary" rowsep="1" summary="Tools">
     <thead><tr><td>Tool</td><td>Make variable</td></tr></thead><tbody><tr><td><tt>doxygen(1)</tt></td><td><tt>DOXYGEN</tt></td></tr><tr><td><tt>tidy(1)</tt></td><td><tt>TIDY</tt></td></tr><tr><td><tt>xgettext(1)</tt></td><td><tt>XGETTEXT</tt></td></tr><tr><td><tt>msgmerge(1)</tt></td><td><tt>MSGMERGE</tt></td></tr><tr><td><tt>msgfmt(1)</tt></td><td><tt>MSGFMT</tt></td></tr><tr><td><tt>pdflatex(1)</tt></td><td><tt>PDFLATEX</tt></td></tr><tr><td><tt>latex(1)</tt></td><td><tt>LATEX</tt></td></tr><tr><td><tt>makeindex(1)</tt></td><td><tt>MAKEINDEX</tt></td></tr></tbody>
       </table>
       @endhtmlonly
