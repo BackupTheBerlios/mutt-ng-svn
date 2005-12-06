@@ -6,6 +6,7 @@
  */
 #include "header.h"
 #include <cstring>
+#include <iostream>
 
 Header::Header (char * name, char * body) {
   buffer_init(&this->name);
@@ -66,6 +67,39 @@ void Header::serialize(buffer_t * buf) {
     buffer_add_buffer(buf,getName());
     buffer_add_str(buf,": ",2);
     buffer_add_buffer(buf,getBody());
+  }
+}
+
+void Header::parseLine(buffer_t * buf) {
+  buffer_t name, body;
+  if (buf) {
+    buffer_chomp(buf);
+
+    char * sep = strchr(buf->str,':');
+
+    if (!sep) {
+      /* when no separator could be found, simply use the complete buffer as header name, and set an empty header body */
+      setName(buf);
+
+      buffer_init(&body);
+      setBody(&body);
+      buffer_free(&body);
+    } else {
+      /* set header name */
+      buffer_init(&name);
+      buffer_add_str(&name,buf->str,sep - buf->str);
+      setName(&name);
+      buffer_free(&name);
+
+      ++sep;
+      while (*sep != '\0' && *sep == ' ') ++sep;
+
+      /* set header body */
+      buffer_init(&body);
+      buffer_add_str(&body,sep,-1);
+      setBody(&body);
+      buffer_free(&body);
+    }
   }
 }
 

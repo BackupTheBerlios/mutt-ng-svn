@@ -85,6 +85,13 @@ class Header : public LibMuttng {
      */
     void serialize(buffer_t * buf);
 
+    /**
+     * Parsing function.
+     * @param buf buffer_t from which the header will be parsed.
+     * @test header_tests::test_parse()
+     */
+    void parseLine(buffer_t * buf);
+
   private:
     buffer_t name;
     buffer_t body;

@@ -22,6 +22,7 @@ class header_tests : public suite {
     void test_constructors();
     void test_equalsname();
     void test_serialization();
+    void test_parse();
 };
 
 #endif
