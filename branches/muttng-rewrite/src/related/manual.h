@@ -777,7 +777,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       
 
     @anchor sample-sysconf
-    @verbinclude makefile-sysconf
+    @verbinclude makefile_sysconf
     
         Of course, the preprocessor's define name doesn't have to be named after
         the function though it makes the code readable this way.

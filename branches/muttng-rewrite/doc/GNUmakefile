@@ -2,13 +2,15 @@ ALL_LANGUAGES=de en
 BUILD_LANGUAGES=$(ALL_LANGUAGES)
 TEXDIRS=$(TEXINPUTS):./../tex:./../examples:
 
+mk_ind=touch $(1).idx && $(MAKEINDEX) -s muttng.ist -o $(1).ind $(1).idx
+
 all: prepare
 
 depend: doxygen
 
 prepare: common/manual-full.xml common/manual-user.xml
 	@ for l in $(ALL_LANGUAGES) ; do \
-	  cp $^ css/muttng.css manual_$$l/ ; \
+	  cp $^ tex/muttng.ist css/muttng.css manual_$$l/ ; \
 	  cp css/muttng.css homepage_$$l ; \
 	done
 
@@ -35,6 +37,18 @@ ifneq ($(PDFLATEX),)
 	  TEXINPUTS="$(TEXDIRS)" $(PDFLATEX) -interaction=nonstopmode -file-line-error-style manual.tex ; \
 	  cd .. ; \
 	done
+ifneq ($(MAKEINDEX),)
+	@ for l in $(BUILD_LANGUAGES) ; do \
+	  cd manual_$$l ; \
+	  TEXINPUTS="$(TEXDIRS)" $(call mk_ind,manual) ; \
+	  cd .. ; \
+	done
+endif
+	@ for l in $(BUILD_LANGUAGES) ; do \
+	  cd manual_$$l ; \
+	  TEXINPUTS="$(TEXDIRS)" $(PDFLATEX) -interaction=nonstopmode -file-line-error-style manual.tex ; \
+	  cd .. ; \
+	done
 endif
 
 doxygen:
@@ -55,7 +69,7 @@ endif
 clean:
 	$(MAKE) -C examples clean
 	@ for l in $(ALL_LANGUAGES) ; do \
-	  rm -rf manual_$$l/*.html manual_$$l/*.aux manual_$$l/*.idx manual_$$l/*.lof manual_$$l/*.log manual_$$l/*.lol manual_$$l/*.out manual_$$l/*.pdf manual_$$l/*.tex manual_$$l/*.toc manual_$$l/manual-docbook.xml ; \
+	  rm -rf manual_$$l/*.html manual_$$l/*.aux manual_$$l/*.idx manual_$$l/*.lof manual_$$l/*.log manual_$$l/*.lol manual_$$l/*.out manual_$$l/*.pdf manual_$$l/*.tex manual_$$l/*.toc manual_$$l/*.ilg manual_$$l/*.ind manual_$$l/*.lot manual_$$l/*.ilg manual_$$l/manual-docbook.xml ; \
 	  rm -rf homepage_$$l/*.html ; \
 	done
 

@@ -291,7 +291,7 @@
       </p>
 
       <listing lang="make" id="sample-sysconf"
-        title="System auto-configuration example" href="makefile-sysconf"/>
+        title="System auto-configuration example" href="makefile_sysconf"/>
 
       <p>
         Of course, the preprocessor's define name doesn't have to be named after

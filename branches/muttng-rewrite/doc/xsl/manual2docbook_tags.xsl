@@ -139,6 +139,9 @@
   <xsl:template match="varref">
     <link linkend="option-{translate(text(),'_','-')}">
       <literal>$<xsl:value-of select="."/></literal></link>
+    <indexterm>
+      <primary sortas="{text()}"><literal>$<xsl:value-of select="."/></literal></primary>
+    </indexterm>
   </xsl:template>
 
   <xsl:template match="docref">
@@ -152,15 +155,26 @@
   <xsl:template match="cmdref">
     <link linkend="cmd-{translate(text(),'_','-')}">
       <literal><xsl:value-of select="."/></literal></link>
+    <indexterm>
+      <primary><literal><xsl:value-of select="."/></literal></primary>
+    </indexterm>
   </xsl:template>
 
   <xsl:template match="funcref">
     <link linkend="func-{translate(text(),'_','-')}">
       <literal>&lt;<xsl:value-of select="."/>&gt;</literal></link>
+    <indexterm>
+      <primary sortas="{translate(text(),'_','-')}">
+        <literal>&lt;<xsl:value-of select="."/>&gt;</literal>
+      </primary>
+    </indexterm>
   </xsl:template>
 
   <xsl:template match="man">
     <literal><xsl:value-of select="."/>(<xsl:choose><xsl:when test="@sect"><xsl:value-of select="@sect"/></xsl:when><xsl:otherwise>1</xsl:otherwise></xsl:choose>)</literal>
+    <indexterm>
+      <primary sortas="{text()}"><literal><xsl:value-of select="."/>(<xsl:choose><xsl:when test="@sect"><xsl:value-of select="@sect"/></xsl:when><xsl:otherwise>1</xsl:otherwise></xsl:choose>)</literal></primary>
+    </indexterm>
   </xsl:template>
 
   <xsl:template match="pre">

@@ -5,4 +5,5 @@ ifneq ($(DOXYGEN),)
 ifneq ($(TIDY),)
         $(TIDY) [options] [files]
 endif
+endif
         @ true

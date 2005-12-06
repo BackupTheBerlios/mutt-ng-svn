@@ -13,6 +13,7 @@
       \usepackage{muttng}
       \parindent0mm
       \setcounter{secnumdepth}{5}
+      \makeindex
     </xsl:text>
     <xsl:choose>
       <xsl:when test="$l10n.gentext.default.language='de'"><xsl:text>\usepackage[ngerman]{babel}</xsl:text></xsl:when>
@@ -22,6 +23,7 @@
     </xsl:text>
     <xsl:apply-templates/>
     <xsl:text>
+      \printindex
       \end{document}
     </xsl:text>
   </xsl:template>
