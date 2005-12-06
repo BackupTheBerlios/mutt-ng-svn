@@ -176,6 +176,15 @@
     </xsl:text>
   </xsl:template>
 
+  <xsl:template match="ul">
+    <xsl:text>&lt;ol&gt;
+    </xsl:text>
+      <xsl:apply-templates/>
+    <xsl:text>
+      &lt;/ol&gt;
+    </xsl:text>
+  </xsl:template>
+
   <xsl:template match="li">
     <xsl:text>&lt;li&gt;</xsl:text><xsl:apply-templates/><xsl:text>&lt;/li&gt;
     </xsl:text>

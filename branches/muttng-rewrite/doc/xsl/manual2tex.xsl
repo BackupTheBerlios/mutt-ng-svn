@@ -236,6 +236,14 @@
     </xsl:text>
   </xsl:template>
 
+  <xsl:template match="ol">
+    <xsl:text>\begin{enumerate}
+    </xsl:text>
+    <xsl:apply-templates/>
+    <xsl:text>\end{enumerate}
+    </xsl:text>
+  </xsl:template>
+
   <xsl:template match="li">
     <xsl:text>\item </xsl:text><xsl:apply-templates/><xsl:text>
     </xsl:text>

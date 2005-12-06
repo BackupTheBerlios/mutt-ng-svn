@@ -30,7 +30,7 @@
       For the rewrite, the main design objectives are:
     
 
-    <ul>
+    <ol>
     <li><em>Logic separation of funtionality.</em> It turned out that there
         were too few abstraction layers in general but special treatment in just too
         many places. Also it seemed that the main design wasn't questioned at all
@@ -62,7 +62,7 @@
         when a redesign is required in the future (as this will certainly be the case, we
         already prepare for it.)</li>
     
-      </ul>
+      </ol>
     
     @subsection sect_introduction-homepage Mutt-ng Home Page
     
@@ -79,13 +79,13 @@
       The following mailing lists are available:
     
 
-    <ul>
+    <ol>
     <li><a href="mailto:mutt-ng-users@lists.berlios.de">&lt;mutt-ng-users@lists.berlios.de&gt;</a>: This is
         where the mutt-ng user support happens.</li>
     <li><a href="mailto:mutt-ng-devel@lists.berlios.de">&lt;mutt-ng-devel@lists.berlios.de&gt;</a>: The
         development mailing list for mutt-ng</li>
     
-      </ul>
+      </ol>
     
     @subsection sect_introduction-distrib-sites Software Distribution Sites
     
@@ -153,12 +153,12 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
       Mutt-ng is known to work on the following systems:
     
 
-    <ul>
+    <ol>
     <li>Linux: gcc</li>
     <li>FreeBSD: 5.x with gcc 3.4/4.0</li>
     <li>Solaris: 5.9 with gcc 3.4/Sun Workshop Pro 9.0</li>
     
-      </ul>
+      </ol>
     
     @subsection sect_build-requirements Build Requirements
           
@@ -166,7 +166,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
       and working:
     
 
-    <ul>
+    <ol>
     <li>GNU make. Others won't work as the makefiles use GNU make-only constructs.</li>
     <li>A C and C++ compiler. Currently supported are the GNU Compiler Collection and
         Sun Microsystems' workshop pro compiler suite.</li>
@@ -177,7 +177,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     <li>Optionally, for encrypted connections, either OpenSSL or GNUTLS is
         required.</li>
     
-      </ul>
+      </ol>
     
       Everything should build if these requirements are met. However, as Perl scripts are
       used to generate some parts of the source code automatically which are already
@@ -190,7 +190,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
       installed and setup properly:
     
 
-    <ul>
+    <ol>
     <li>XSL processor. Currently only <tt>xsltproc</tt> and <tt>xalan</tt> are supported
         whereby <tt>xalan</tt> has problems with XInclude still to be resolved.</li>
     <li>DocBook stylesheets for version 4.3.</li>
@@ -198,7 +198,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
         <tt>makeindex(1)</tt></li>
     .
     
-      </ul>
+      </ol>
     
       In addition, for building the source code's documentation,
       <tt>doxygen(1)</tt> (see <a href="http://www.doxygen.org/">http://www.doxygen.org/</a>) is required.
@@ -216,7 +216,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
       There you can set various options. Most important are the following:
     
 
-    <ul>
+    <ol>
     <li><tt>CCSTYLE=(gcc|suncc)</tt>. Wether to assume use of GNU or Sun's
         Workshop Pro C/C++ compilers. Default: <tt>gcc</tt>.</li>
     <li><tt>XSLPROC=(xsltproc|xalanj)</tt>. Whether to use <tt>xsltproc(1)</tt>
@@ -232,14 +232,14 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
         is installed. This is required for encrypted connections.
         If none is given, OpenSSL won't be used. Default: none.</li>
     
-      </ul>
+      </ol>
     
     @subsection sect_build-app Building applications
     
       From the <tt>src</tt> subdirectory, the following are important targets:
     
 
-    <ul>
+    <ol>
     <li><tt>depend.</tt> Please always run "make depend" first.</li>
     <li><tt>all.</tt> Build everything.</li>
     <li><tt>test.</tt> Build an run all unit tests.</li>
@@ -249,7 +249,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
         <tt>src/Doxyfile</tt> and there for a line called
         <tt>HAVE_DOT</tt>. Change the <tt>YES</tt> into <tt>NO.</tt></li>
     
-      </ul>
+      </ol>
     
       Building the main applications should be as easy as the following:
     
@@ -282,12 +282,12 @@ $ cd ./src && make depend && make</pre>
       neutral values depend on the option's type:
     
 
-    <ul>
+    <ol>
     <li><tt>boolean</tt> and <tt>quad-option</tt>: <tt>no</tt></li>
     <li><tt>number</tt>; <tt>0</tt></li>
     <li><tt>string</tt> and <tt>url</tt>: the empty string/url ""</li>
     
-      </ul>
+      </ol>
     
       The <tt>reset</tt> command changes a value to its default.
     
@@ -305,7 +305,7 @@ $ cd ./src && make depend && make</pre>
     @subsection sect_config-types Configuration options
     The following types of configuration options are supported:
 
-    <ul>
+    <ol>
     <li><b><tt>boolean</tt></b>: A boolean option. Possible values are:
         <tt>yes</tt>, <tt>no</tt>.</li>
     <li><b><tt>number</tt></b>: A numeric option. Most of the options are
@@ -334,14 +334,14 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         path. For compatibility reasons, if an URL doesn't contain a
         protocoll, <tt>file</tt> is assumed.</li>
     
-      </ul>
+      </ol>
     
     @subsection sect_config-incompat Incompatible changes
     
       Compared to mutt and mutt-ng, there're some incompatible changes:
     
 
-    <ul>
+    <ol>
     <li>The <tt>set ?foo</tt> syntax isn't allowed any longer. For
         this purpose, the <tt>query</tt> command is to be used instead:
         <tt>query foo</tt></li>
@@ -352,7 +352,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li>The <tt>set &foo</tt> syntax isn't allowed any
         longer. For this purpose, use <tt>reset foo</tt> instead.</li>
     
-      </ul>
+      </ol>
     
     
     @section sect_reference Reference
@@ -456,7 +456,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
       Debug files will have a name of the following format:
       <tt>.[scope].[pid].[id].log</tt>, whereby:
-      <ul>
+      <ol>
     <li><tt>[scope]</tt> is an identifier for where the output came.
           One file will be created for <tt>libmuttng</tt> and one for the
           tool using it such as <tt>muttng(1)</tt> or <tt>muttgn-conf(1)</tt></li>
@@ -465,7 +465,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           file of the current session it'll be 1 and increased for
           subsequent enabling/disabling of debug output via this variable</li>
     
-      </ul>
+      </ol>
     
 
     @subsubsection option_folder $folder
@@ -551,7 +551,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         The source code is organized into the following three layers:
       
 
-    <ul>
+    <ol>
     <li><em>core</em> in <tt>src/core/</tt>. This is the base
           library written in C containing very basic functionality. This
           includes a generic hash table, a generic list, a safe
@@ -592,13 +592,13 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           so that user interfaces only have to implement presenting data and
           nothing more.</li>
     
-      </ul>
+      </ol>
     
         A very important design goal to keep by any means is the
         relationship between these three layers:
       
 
-    <ul>
+    <ol>
     <li><em>core</em> must not depend on or make any kind of
           assumptions about either <em>libmuttng</em> or
           <em>muttng</em>. It may only rely on the standard C
@@ -611,7 +611,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           all parts, must not make assumptions about internal
           implementation details or choices.</li>
     
-      </ul>
+      </ol>
     
         The reason for this separation is to have good information
         hiding and a modular structure not only within these parts but
@@ -638,7 +638,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         The basic organization is this:
       
 
-    <ul>
+    <ol>
     <li>The ``master'' documentation is English. Where appropriate (see
           below), it'll be auto-generated and validated from the source code to
           avoid out-of-sync problems as far as possible.</li>
@@ -652,7 +652,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           under version control, too, on the one hand and to ease (the release)
           build process for users.</li>
     
-      </ul>
+      </ol>
     
     @subsubsection sect_devguide-build-organisation Build system
     
@@ -673,7 +673,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 
     
         All Makefiles are under version control except a custom one where users can
-        set their own options (and any other make construct.) to avoid subversion conflicts
+        set their own options (and any other make construct) to avoid subversion conflicts
         if we change something.
       
 
@@ -737,7 +737,65 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
     
     @subsection sect_devguide-build Build system
-    @subsubsection sect_devguide-build-config Configuration: GNUmakefile.config and GNUmakefile.config.mine
+    @subsubsection sect_devguide-build-systemconfig System Configuration
+    
+        As said in the introductory part of this manual, the use of
+        tools such as <tt>autoconf(1)</tt> or <tt>automake(1)</tt> is
+        avoided by use of a custom system which includes the detection
+        of system properties, too.
+      
+
+    
+        The system includes a makefile named <tt>GNUmakefile.sysconf</tt>
+        as well as a number of test source files located in the
+        <tt>src/sysconf/</tt> directory.
+      
+
+    <tt>GNUmakefile.sysconf</tt> defines two functions for compiling
+        such a test program to see if a feature works and adds the result to
+        a header file for regular sources to include.
+      
+
+    
+        The functions defined are: <tt>testing_c</tt> and <tt>testing_cpp</tt>
+        which only differ in the compiler they use. The first uses the C while the
+        latter uses the C++ compiler. The arguments to be passed to these function
+        are in order:
+      
+
+    <li>source file in <tt>src/sysconf</tt> to compile</li>
+    <li>function name to report progress on screen</li>
+    <li>a preprocessor <tt>#define</tt> for the header</li>
+    <li>the name of the header file to create</li>
+    @ref sample-sysconf "An example"  used for
+        the <tt>core/</tt> library is provided: it tests for whether programs
+        using <tt>mmap(2)</tt>, <tt>alloca(3)</tt> and
+        <tt>strsep(3)</tt> functions properly compile and link. For each of
+        these, the following <tt>#defines</tt> are either set to 1 or 0 depending
+        on whether the compilation and linkage succeeded or not:
+        <tt>HAVE_MMAP</tt>, <tt>HAVE_ALLOCA</tt> and <tt>HAVE_STRSEP</tt> respectively.
+      
+
+    @anchor sample-sysconf
+    @verbinclude makefile-sysconf
+    
+        Of course, the preprocessor's define name doesn't have to be named after
+        the function though it makes the code readable this way.
+      
+
+    
+        As there's no <tt>./configure</tt> replacement yet, the auto-configuration
+        has to be invoked and tested manually:
+      
+
+    <pre>
+$ make -f GNUmakefile.sysconf sysconf</pre>
+        ...which produces the header file: <tt>src/core/core_features.h</tt> with
+        the results.
+      
+
+    
+    @subsubsection sect_devguide-build-userconfig User Configuration
     
         The user configuration Makefile is <tt>GNUmakefile.config.mine</tt>
         in the top-level source directory. It may contain any make logic.
@@ -755,7 +813,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         set in the custom file:
       
 
-    <ul>
+    <ol>
     <li>for the compilers, it sets up
           @ref table-make-env1 "variables for compilers and flags" 
           depending on <tt>CCSTYLE</tt></li>
@@ -784,7 +842,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           (splitting these up is required for Xalan Java whose <tt>-out</tt>
           option cannot be set to a directory.) These functions take the following
           mandatory arguments (ordered):
-          <ul>
+          <ol>
     <li>XML source file</li>
     <li>XSL stylesheet file</li>
     <li>XML output file</li>
@@ -793,10 +851,10 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
               modularization as this parameter only has an effect on DocBook
               but passing to other transformations shouldn't do harm.</li>
     
-      </ul>
+      </ol>
     </li>
     
-      </ul>
+      </ol>
     @anchor table-make-env1
     @htmlonly
     <p class="title">Common make compile variables</p>
@@ -851,11 +909,11 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         The arguments for <tt>whereis</tt> are in order:
       
 
-    <ul>
+    <ol>
     <li>name of binary to find</li>
     <li>fallback</li>
     
-      </ul>
+      </ol>
     
         For example, the full path to <tt>vi(1)</tt> can be obtained via
         the call shown in the @ref sample-libmuttng-build-whereis-call1 "first whereis call example" .
@@ -889,14 +947,14 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         the following targets can be used on these directories:
       
 
-    <ul>
+    <ol>
     <li><tt>all</tt>: <tt>subdir</tt></li>
     <li><tt>clean</tt>: <tt>subdirclean</tt></li>
     <li><tt>doc</tt>: <tt>subdirdoc</tt></li>
     <li><tt>depend</tt>: <tt>subdirdepend</tt></li>
     <li><tt>test</tt>: <tt>subdirtest</tt></li>
     
-      </ul>
+      </ol>
     
         For example, to have all these targets for the subdirectories
         <tt>foo</tt> and <tt>bar</tt>, use the basic structure as shown
@@ -936,12 +994,12 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         Either of these also define the following targets:
       
 
-    <ul>
+    <ol>
     <li><tt>clean</tt>: remove any temporary, object and archive files</li>
     <li><tt>depend</tt>: run the C/C++ compiler and put the dependency
           tracking info for <tt>make(1)</tt> into <tt>./.depend</tt></li>
     
-      </ul>
+      </ol>
     
     @subsubsection sect_devguide-build-adding Adding subdirectories
     
@@ -955,14 +1013,14 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         over the complete tree:
       
 
-    <ul>
+    <ol>
     <li><tt>all</tt>: perform building all</li>
     <li><tt>clean</tt>: perform cleanup so that only files for a release remain</li>
     <li><tt>test</tt>: perform all automated tests</li>
     <li><tt>depend</tt>: perform all preparation required for
           <tt>all</tt> target</li>
     
-      </ul>
+      </ol>
     
     
     @subsection sect_devguide-docs Documentation
@@ -973,14 +1031,14 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         in this chapter) and transformed into the following formats:
       
 
-    <ul>
+    <ol>
     <li>DocBook: this meta format is used to transform everything into
           fancy HTML</li>
     <li>Doxygen: this format makes doxygen pick up the documentation to
           integrate it into the source's docs</li>
     <li>LaTex: this format is used to generate PDF and PostScript output</li>
     
-      </ul>
+      </ol>
     
         As far as possible, documentation is automatically generated (better: stripped)
         from the source code to avoid out-of-sync problems. Details of auto-generation
@@ -998,7 +1056,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         The <tt>doc/</tt> directory contains the following subdirectories:
       
 
-    <ul>
+    <ol>
     <li><tt>common/</tt>: it contains all language-independent fractions of any
           part of the docs</li>
     <li><tt>css/</tt>: it contains HTML CSS stylesheets for use with doxygen- and
@@ -1012,7 +1070,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           (such as programming or configuration examples.)</li>
     <li><tt>tex/</tt>: all files related to LaTeX-processing</li>
     
-      </ul>
+      </ol>
     
         To have all files correctly setup when getting a working copy or making a
         release, some files are identical and copied from a ``master'' source to
@@ -1021,7 +1079,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         and its copies are:
       
 
-    <ul>
+    <ol>
     <li><tt>css/muttng.css</tt>: the main CSS stylesheet it's copied to all
           <tt>manual_*</tt> and all <tt>homepage_*</tt> directories</li>
     <li><tt>common/manual-full.xml</tt> and <tt>common/manual-user.xml</tt>:
@@ -1029,7 +1087,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           for all translations. These are copied to all <tt>manual_*</tt> directories.
         </li>
     
-      </ul>
+      </ol>
     
         To ensure that at least the programming examples are up-to-date and compile,
         they're not only fragments but complete examples that can be compiled, linked
@@ -1049,7 +1107,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           tags:
         
 
-    <ul>
+    <ol>
     <li><tt>head</tt>: This describes a header for the document. Its title
             is enclosed in a <tt>title</tt> tag, the list of all authors in an
             <tt>authors</tt> tag. Within the latter, the <tt>author</tt> tag
@@ -1058,7 +1116,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li><tt>content</tt>: This describes the content for the document, that
             is, one or more <tt>chapter</tt> tags.</li>
     
-      </ul>
+      </ol>
     
     @paragraph sect_devguide-docs-dialect-sectioning Chapters and sections
           Within the mentioned <tt>chapter</tt> tags, the following tags are to
@@ -1084,12 +1142,12 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           semantics rather than flat text or any layout:
         
 
-    <ul>
+    <ol>
     <li><em>special semantics</em>. There will be much more, but currently
             the following tags are to be used for specifying a special semantic
             for a word (mainly these are needed for auto-indexing so that
             one can actually find something in the documentation):
-            <ul>
+            <ol>
     <li><tt>val</tt>: when refering to (possible/default/...) values
                 for variables.</li>
     <li><tt>hdr</tt>: when refering to a commonly used header</li>
@@ -1097,34 +1155,35 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
                 as <tt>quoted-printable</tt> or <tt>us-ascii</tt></li>
     <li><tt>env</tt>: when refering to environment variables</li>
     
-      </ul>
+      </ol>
     </li>
     <li><em>listings</em>. To specify lists or listings, the following tags
             are available:
-            <ul>
+            <ol>
     <li><tt>ul</tt>: a non-numbered itemized list</li>
+    <li><tt>ol</tt>: numbered itemized list</li>
     <li><tt>li</tt>: an item of any of these lists</li>
     
-      </ul>
+      </ol>
     </li>
     <li><em>misc.</em>: The following are not the optimal solution as they
             imply layout semantics already but here we go:
-            <ul>
+            <ol>
     <li><tt>tt</tt>: typewriter font</li>
     <li><tt>em</tt>: emphasise</li>
     <li><tt>b</tt>: bold font</li>
     
-      </ul>
+      </ol>
     </li>
     
-      </ul>
+      </ol>
     
     @paragraph sect_devguide-docs-dialect-referencing Referencing
           For specifying references, a distinction is made to what target
           a reference is made:
         
 
-    <ul>
+    <ol>
     <li>@ref tab-ref-tags "some tags"  don't
             accept attributes but the target specified as text</li>
     <li>for document-internal references, the 
@@ -1133,7 +1192,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li>for references to manual pages, the @ref tab-man-attrs "man tag"  with an optional
             section attribute is to be used</li>
     
-      </ul>
+      </ol>
     @anchor tab-ref-tags
     @htmlonly
     <p class="title">reference tags</p>
@@ -1168,28 +1227,28 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           manual) (<em>note: this is auto-generated</em>):
         
 
-    <ul>
+    <ol>
     <li>all variables are wrapped within a <tt>descriptions</tt> tag</li>
     <li>within this, there's any number of <tt>variable</tt> tags containing
             the following attributes: <tt>name</tt> specifies the name of the
             variable, <tt>type</tt> specifies its type</li>
     <li>within a <tt>variable</tt> tag, the following tags will be used:
-            <ul>
+            <ol>
     <li><tt>init</tt>: initial or default value</li>
     <li><tt>sig</tt>: whether a change of it will cause a signal be emitted</li>
     <li><tt>descr</tt>: its description</li>
     
-      </ul>
+      </ol>
     </li>
     
-      </ul>
+      </ol>
     
     @paragraph sect_devguide-docs-dialect-functions Documenting functions
           Internally, functions are documented like this
           (<em>note: this is auto-generated</em>):
         
 
-    <ul>
+    <ol>
     <li>all functions are wrapped within a <tt>descriptions</tt> tag</li>
     <li>within this, there's any number of <tt>context</tt> tags containing
             the following attributes: <tt>name</tt> specifies the name of the
@@ -1205,7 +1264,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li>the text within the <tt>function</tt> tag is just the functions's
             summary to appear in the help menus</li>
     
-      </ul>
+      </ol>
     
     @paragraph sect_devguide-docs-dialect-listings Embedding listrings
           Eventually there will be several types of listings each treated individually
@@ -1216,33 +1275,33 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           The following two tags can be used for specifying listings:
         
 
-    <ul>
+    <ol>
     <li><tt>listing</tt>: make listing from an external file</li>
     <li><tt>inlinelisting</tt>: make listing inline from given text</li>
     
-      </ul>
+      </ol>
     
           Both require these attributes:
         
 
-    <ul>
+    <ol>
     <li><tt>lang</tt> specifies the language. For most of the output this is irrelevant
             but for LaTeX output and the <tt>listings.sty</tt> package we have syntax-highlighting
             automatically. The following languages are supported:
-            <ul>
+            <ol>
     <li><tt>cpp</tt> for C++</li>
     <li><tt>make</tt> for GNU make</li>
     <li><tt>muttngrc</tt> for muttng's configuration syntax</li>
     
-      </ul>
+      </ol>
     </li>
     
-      </ul>
+      </ol>
     
           The <tt>listing</tt> tag also requires these attributes in addition:
         
 
-    <ul>
+    <ol>
     <li><tt>id</tt> specifies a document-internal ID to link to listings. As for
             any other ID attributes, we fake a namespace or hierarchy by prefixes. At least all
             sample listings must have <tt>sample-</tt> as prefix for this attribute.</li>
@@ -1250,7 +1309,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
             format.)</li>
     <li><tt>href</tt> specifies the filename in the <tt>doc/examples/</tt> directory.</li>
     
-      </ul>
+      </ol>
     
     @paragraph sect_devguide-docs-dialect-tables Tables
           Tables have to be specified within a
@@ -1288,7 +1347,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           documentation process for variables is the same as it was before:
         
 
-    <ul>
+    <ol>
     <li>all documentation is expected between the words <tt>START</tt>
             and <tt>END</tt> (commented) in <tt>set_command.cpp</tt></li>
     <li>the variable definition for the source is one line</li>
@@ -1298,12 +1357,12 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
             all other documentation.
           </li>
     
-      </ul>
+      </ol>
     
           The auto-generated files are:
         
 
-    <ul>
+    <ol>
     <li><tt>doc/manual_en/var_def.xml</tt>: contains a simple listing
             of all variables found. As English is expected to be always in sync
             with the source code, this file will be used to validate and/or
@@ -1311,7 +1370,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li><tt>doc/manual_en/var_descr.xml</tt>: contains the full English
             documentation</li>
     
-      </ul>
+      </ol>
     
     @paragraph sect_devguide-docs-auto-functions Functions
           For functions, <tt>src/muttng/event/event.pl</tt> is used. It parses the
@@ -1320,19 +1379,19 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           following meanings for documentation:
         
 
-    <ul>
+    <ol>
     <li>1st field: the context IDs defined in <tt>CONTEXTS</tt></li>
     <li>3rd field: the function's name</li>
     <li>4th field: the group IDs defined in <tt>GROUPS</tt></li>
     <li>5th field: the default keybinding</li>
     <li>rest of the line: short description</li>
     
-      </ul>
+      </ol>
     
           The auto-generated files are:
         
 
-    <ul>
+    <ol>
     <li><tt>doc/manual_en/func_def.xml</tt>: contains a simple listing
             of all functions found. As English is expected to be always in sync
             with the source code, this file will be used to validate and/or
@@ -1340,7 +1399,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li><tt>doc/manual_en/func_descr.xml</tt>: contains the full English
             documentation</li>
     
-      </ul>
+      </ol>
     
     
     @subsubsection sect_devguide-docs-trans Translations
@@ -1358,7 +1417,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           contain a set of files:
         
 
-    <ul>
+    <ol>
     <li><tt>head.xml</tt>: it must contain a <tt>head</tt> tag as the document
             root and list all details for the manual: title and authors.</li>
     <li><tt>trans.xml</tt>: it must contain a set of translated special words described
@@ -1374,15 +1433,15 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li><tt>devguide.xml</tt>: it must contain the developer's guide</li>
     <li><tt>ack.xml</tt>: it must contain acknowledgements. This file must include
             the following files in the <tt>doc/common/</tt> directory:
-            <ul>
+            <ol>
     <li><tt>dev_muttng.xml</tt>: list of mutt-ng developers</li>
     <li><tt>ack_muttng.xml</tt>: list of people who contributed to mutt-ng</li>
     <li><tt>ack_mutt.xml</tt>: list of people who contributed to mutt</li>
     
-      </ul>
+      </ol>
     </li>
     
-      </ul>
+      </ol>
     
     @paragraph sect_devguide-docs-trans-add Adding a new translation
           When adding a new translation, the easiest way is to make a copy of the
@@ -1395,13 +1454,13 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           only a few words to translate:
         
 
-    <ul>
+    <ol>
     <li><tt>head.xml</tt></li>
     <li><tt>reference.xml</tt></li>
     <li><tt>ack.xml</tt> and</li>
     <li><tt>trans.xml</tt></li>
     
-      </ul>
+      </ol>
     
           For these, what to translate how should be pretty self-explanatory so that
           not much documentation is put here. In <tt>trans.xml</tt> the comments and
@@ -1446,7 +1505,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         and provides the following features:
       
 
-    <ul>
+    <ol>
     <li><em>basic services</em> of interest for the whole library and
           application: signal handling and debug support.</li>
     <li><em>mailbox support</em> includes: IMAP, POP3, NNTP, Maildir, MH,
@@ -1462,7 +1521,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           the mailcap mechanism, using <tt>file(1)</tt> and the like. Decoding
           will be transparent for client, too.</li>
     
-      </ul>
+      </ol>
     
     @subsubsection sect_devguide-libmuttng-signal Signal handling
     
@@ -1494,13 +1553,13 @@ SignalX<type of arg1,type of arg2,...,type of argX> signalname;</pre>
           the following two requirements:
         
 
-    <ul>
+    <ol>
     <li>it must return <tt>bool</tt> specifying whether it succeeded
             or not</li>
     <li>it must take exactly the number and type of arguments the
             signal was declared with</li>
     
-      </ul>
+      </ol>
     
           Due to overloading, connecting to a signal is always the same:
         
@@ -1510,13 +1569,13 @@ connectSignal (signal, object, Object::handler)</pre>
           ..whereby:
         
 
-    <ul>
+    <ol>
     <li><tt>signal</tt> is the signale declared elsewhere</li>
     <li><tt>object</tt> is an instance of an object containg a handler</li>
     <li><tt>Object::handler</tt> is the actual handler method. Here, <tt>Object</tt>
             is the <em>classname</em> of <tt>object</tt></li>
     
-      </ul>
+      </ol>
     
           In most cases, the object will be <tt>this</tt> though any method may connect
           everything it wants to every signal it wishes to.
@@ -1676,18 +1735,18 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
     @section sect_acknowledgements Acknowledgements
     
     Mutt-ng is developed by the following people:
-    <ul>
+    <ol>
     <li>Andreas Krennmair <a href="mailto:ak@synflood.at">&lt;ak@synflood.at&gt;</a></li>
     <li>Nico Golde <a href="mailto:nico@ngolde.de">&lt;nico@ngolde.de&gt;</a></li>
     <li>Rocco Rutte <a href="mailto:pdmef@cs.tu-berlin.de">&lt;pdmef@cs.tu-berlin.de&gt;</a></li>
     
-      </ul>
+      </ol>
     
 
     
     The following people have been very helpful to the
     development of mutt-ng:
-    <ul>
+    <ol>
     <li>Christian Gall <a href="mailto:cg@cgall.de">&lt;cg@cgall.de&gt;</a></li>
     <li>Iain Lea <a href="mailto:iain@bricbrac.de">&lt;iain@bricbrac.de&gt;</a></li>
     <li>Andreas Kneib <a href="mailto:akneib@gmx.net">&lt;akneib@gmx.net&gt;</a></li>
@@ -1695,13 +1754,13 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
     <li>Carsten Schoelzki <a href="mailto:cjs@weisshuhn.de">&lt;cjs@weisshuhn.de&gt;</a></li>
     <li>Elimar Riesebieter <a href="mailto:riesebie@lxtec.de">&lt;riesebie@lxtec.de&gt;</a></li>
     
-      </ul>
+      </ol>
     
 
     
     The following people have been very helpful to the
     development of mutt:
-    <ul>
+    <ol>
     <li>Kari Hurtta <a href="mailto:kari.hurtta@fmi.fi">&lt;kari.hurtta@fmi.fi&gt;</a></li>
     <li>Vikas Agnihotri <a href="mailto:vikasa@writeme.com">&lt;vikasa@writeme.com&gt;</a></li>
     <li>Francois Berjon <a href="mailto: Francois.Berjon@aar.alcatel-alsthom.fr">&lt; Francois.Berjon@aar.alcatel-alsthom.fr&gt;</a></li>
@@ -1745,7 +1804,7 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
     <li>Vsevolod Volkov <a href="mailto:vvv@lucky.net">&lt;vvv@lucky.net&gt;</a></li>
     <li>Ken Weinert <a href="mailto:kenw@ihs.com">&lt;kenw@ihs.com&gt;</a></li>
     
-      </ul>
+      </ol>
     
 
     

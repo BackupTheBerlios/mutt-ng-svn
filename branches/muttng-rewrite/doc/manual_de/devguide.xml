@@ -155,7 +155,7 @@
 
       <p>
         All Makefiles are under version control except a custom one where users can
-        set their own options (and any other make construct.) to avoid subversion conflicts
+        set their own options (and any other make construct) to avoid subversion conflicts
         if we change something.
       </p>
 
@@ -244,8 +244,78 @@
   <section id="devguide-build"> <!--{{{-->
     <title>Build system</title>
 
-    <subsection id="devguide-build-config"> <!--{{{-->
-      <title>Configuration: GNUmakefile.config and GNUmakefile.config.mine</title>
+    <subsection id="devguide-build-systemconfig"> <!--{{{-->
+      <title>System Configuration</title>
+
+      <p>
+        As said in the introductory part of this manual, the use of
+        tools such as <man>autoconf</man> or <man>automake</man> is
+        avoided by use of a custom system which includes the detection
+        of system properties, too.
+      </p>
+
+      <p>
+        The system includes a makefile named <tt>GNUmakefile.sysconf</tt>
+        as well as a number of test source files located in the
+        <tt>src/sysconf/</tt> directory.
+      </p>
+
+      <p>
+        <tt>GNUmakefile.sysconf</tt> defines two functions for compiling
+        such a test program to see if a feature works and adds the result to
+        a header file for regular sources to include.
+      </p>
+
+      <p>
+        The functions defined are: <tt>testing_c</tt> and <tt>testing_cpp</tt>
+        which only differ in the compiler they use. The first uses the C while the
+        latter uses the C++ compiler. The arguments to be passed to these function
+        are in order:
+      </p>
+
+      <ol>
+        <li>source file in <tt>src/sysconf</tt> to compile</li>
+        <li>function name to report progress on screen</li>
+        <li>a preprocessor <tt>#define</tt> for the header</li>
+        <li>the name of the header file to create</li>
+      </ol>
+
+      <p>
+        <docref type="listing" href="sample-sysconf">An example</docref> used for
+        the <tt>core/</tt> library is provided: it tests for whether programs
+        using <man sect="2">mmap</man>, <man sect="3">alloca</man> and
+        <man sect="3">strsep</man> functions properly compile and link. For each of
+        these, the following <tt>#defines</tt> are either set to 1 or 0 depending
+        on whether the compilation and linkage succeeded or not:
+        <tt>HAVE_MMAP</tt>, <tt>HAVE_ALLOCA</tt> and <tt>HAVE_STRSEP</tt> respectively.
+      </p>
+
+      <listing lang="make" id="sample-sysconf"
+        title="System auto-configuration example" href="makefile-sysconf"/>
+
+      <p>
+        Of course, the preprocessor's define name doesn't have to be named after
+        the function though it makes the code readable this way.
+      </p>
+
+      <p>
+        As there's no <tt>./configure</tt> replacement yet, the auto-configuration
+        has to be invoked and tested manually:
+      </p>
+
+      <pre>
+$ make -f GNUmakefile.sysconf sysconf</pre>
+
+      <p>
+        ...which produces the header file: <tt>src/core/core_features.h</tt> with
+        the results.
+      </p>
+
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-build-userconfig"> <!--{{{-->
+      <title>User Configuration</title>
 
       <p>
         The user configuration Makefile is <tt>GNUmakefile.config.mine</tt>
@@ -704,6 +774,7 @@
             are available:
             <ul>
               <li><tt>ul</tt>: a non-numbered itemized list</li>
+              <li><tt>ol</tt>: numbered itemized list</li>
               <li><tt>li</tt>: an item of any of these lists</li>
             </ul>
           </li>

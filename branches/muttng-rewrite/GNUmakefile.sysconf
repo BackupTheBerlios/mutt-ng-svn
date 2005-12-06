@@ -4,10 +4,16 @@ include ./GNUmakefile.whereis
 include ./GNUmakefile.config.mine
 include ./GNUmakefile.config
 
-# this tries to compile a test programm to detect a feature
-# usage $(call testing,[source file],[function name],[preprocessor define],[config file])
-testing=echo -n "Testing for working $(2)()..." && \
+# these tries to compile a test programm to detect a feature via $(CC)/$(CXX)
+# usage $(call testing_c,[source file],[function name],[preprocessor define],[config file])
+testing_c=echo -n "Testing for working $(2)()..." && \
 	(($(CC) $(CFLAGS) -o $(CURDIR)/a.out ./src/sysconf/$(1) >/dev/null 2>&1 && \
+	  echo "\#define $(3) 1" || \
+	  echo "\#define $(3) 0") >> $(4)) && \
+	(grep "$(3) 1" $(4) >/dev/null 2>&1 && (echo " yes") || \
+	  (echo " no")) ; rm -rf $(CURDIR)/a.out
+testing_cpp=echo -n "Testing for working $(2)()..." && \
+	(($(CXX) $(CXXFLAGS) -o $(CURDIR)/a.out ./src/sysconf/$(1) >/dev/null 2>&1 && \
 	  echo "\#define $(3) 1" || \
 	  echo "\#define $(3) 0") >> $(4)) && \
 	(grep "$(3) 1" $(4) >/dev/null 2>&1 && (echo " yes") || \
@@ -24,9 +30,9 @@ sysconf_core:
 	rm -rf ./src/core/core_features.h a.out
 	echo "#ifndef CORE_FEATURES_H" >> ./src/core/core_features.h
 	echo "#define CORE_FEATURES_H" >> ./src/core/core_features.h
-	$(call testing,test_alloca.c,alloca,HAVE_ALLOCA,./src/core/core_features.h)
-	$(call testing,test_mmap.c,mmap,HAVE_MMAP,./src/core/core_features.h)
-	$(call testing,test_strsep.c,strsep,HAVE_STRSEP,./src/core/core_features.h)
+	$(call testing_c,test_alloca.c,alloca,HAVE_ALLOCA,./src/core/core_features.h)
+	$(call testing_c,test_mmap.c,mmap,HAVE_MMAP,./src/core/core_features.h)
+	$(call testing_c,test_strsep.c,strsep,HAVE_STRSEP,./src/core/core_features.h)
 ifneq ($(DEBUG),)
 	echo "#define HAVE_DEBUG 1" >> ./src/core/core_features.h
 else
