@@ -32,12 +32,12 @@
           available in the following formats:
         
 
-    <ol>
+    <ul>
     <li><a href="http://mutt-ng.berlios.de/rewrite/en/manual/">http://mutt-ng.berlios.de/rewrite/en/manual/</a>: HTML, multiple files</li>
     <li><a href="http://mutt-ng.berlios.de/rewrite/en/manual/manual.html">http://mutt-ng.berlios.de/rewrite/en/manual/manual.html</a>: HTML, one file</li>
     <li><a href="http://mutt-ng.berlios.de/rewrite/en/manual/manual.pdf">http://mutt-ng.berlios.de/rewrite/en/manual/manual.pdf</a>: PDF</li>
     
-      </ol>
+      </ul>
     
     @subsection sect_docs-devel For developers
     
@@ -73,7 +73,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
         to actively join the development:
       
 
-    <ol>
+    <ul>
     <li>Since the build process isn't the "common" way of using the Autotools
           but a custom make-based system, we need early feedback on how stable it
           works or if it works at all. Users can test whether the source can be compiled
@@ -90,7 +90,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
           <a href="mailto:mutt-ng-devel@lists.berlios.de">&lt;mutt-ng-devel@lists.berlios.de&gt;</a> or via our private mail 
           addresses. </li>
     
-      </ol>
+      </ul>
     
     @section sect_feeds Newsfeeds
     
@@ -98,7 +98,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
         can be used to stay up-to-date with the progress of the rewrite:
       
 
-    <ol>
+    <ul>
     <li>this page, of course ;-)</li>
     <li>the development blog found at:
           <a href="http://mutt-ng.supersized.org/">http://mutt-ng.supersized.org/</a></li>
@@ -106,7 +106,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
           <a href="http://user.cs.tu-berlin.de/~pdmef/muttng.cgi?c=muttng-rewrite">http://user.cs.tu-berlin.de/~pdmef/muttng.cgi?c=muttng-rewrite</a>
           (which also lists several newsfeeds such as RSS, Atom and MBOX)</li>
     
-      </ol>
+      </ul>
     
     
 */

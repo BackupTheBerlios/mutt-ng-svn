@@ -30,7 +30,7 @@
       For the rewrite, the main design objectives are:
     
 
-    <ol>
+    <ul>
     <li><em>Logic separation of funtionality.</em> It turned out that there
         were too few abstraction layers in general but special treatment in just too
         many places. Also it seemed that the main design wasn't questioned at all
@@ -62,7 +62,7 @@
         when a redesign is required in the future (as this will certainly be the case, we
         already prepare for it.)</li>
     
-      </ol>
+      </ul>
     
     @subsection sect_introduction-homepage Mutt-ng Home Page
     
@@ -79,13 +79,13 @@
       The following mailing lists are available:
     
 
-    <ol>
+    <ul>
     <li><a href="mailto:mutt-ng-users@lists.berlios.de">&lt;mutt-ng-users@lists.berlios.de&gt;</a>: This is
         where the mutt-ng user support happens.</li>
     <li><a href="mailto:mutt-ng-devel@lists.berlios.de">&lt;mutt-ng-devel@lists.berlios.de&gt;</a>: The
         development mailing list for mutt-ng</li>
     
-      </ol>
+      </ul>
     
     @subsection sect_introduction-distrib-sites Software Distribution Sites
     
@@ -153,12 +153,12 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
       Mutt-ng is known to work on the following systems:
     
 
-    <ol>
+    <ul>
     <li>Linux: gcc</li>
     <li>FreeBSD: 5.x with gcc 3.4/4.0</li>
     <li>Solaris: 5.9 with gcc 3.4/Sun Workshop Pro 9.0</li>
     
-      </ol>
+      </ul>
     
     @subsection sect_build-requirements Build Requirements
           
@@ -166,7 +166,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
       and working:
     
 
-    <ol>
+    <ul>
     <li>GNU make. Others won't work as the makefiles use GNU make-only constructs.</li>
     <li>A C and C++ compiler. Currently supported are the GNU Compiler Collection and
         Sun Microsystems' workshop pro compiler suite.</li>
@@ -177,7 +177,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     <li>Optionally, for encrypted connections, either OpenSSL or GNUTLS is
         required.</li>
     
-      </ol>
+      </ul>
     
       Everything should build if these requirements are met. However, as Perl scripts are
       used to generate some parts of the source code automatically which are already
@@ -190,7 +190,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
       installed and setup properly:
     
 
-    <ol>
+    <ul>
     <li>XSL processor. Currently only <tt>xsltproc</tt> and <tt>xalan</tt> are supported
         whereby <tt>xalan</tt> has problems with XInclude still to be resolved.</li>
     <li>DocBook stylesheets for version 4.3.</li>
@@ -198,7 +198,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
         <tt>makeindex(1)</tt></li>
     .
     
-      </ol>
+      </ul>
     
       In addition, for building the source code's documentation,
       <tt>doxygen(1)</tt> (see <a href="http://www.doxygen.org/">http://www.doxygen.org/</a>) is required.
@@ -216,7 +216,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
       There you can set various options. Most important are the following:
     
 
-    <ol>
+    <ul>
     <li><tt>CCSTYLE=(gcc|suncc)</tt>. Wether to assume use of GNU or Sun's
         Workshop Pro C/C++ compilers. Default: <tt>gcc</tt>.</li>
     <li><tt>XSLPROC=(xsltproc|xalanj)</tt>. Whether to use <tt>xsltproc(1)</tt>
@@ -232,14 +232,14 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
         is installed. This is required for encrypted connections.
         If none is given, OpenSSL won't be used. Default: none.</li>
     
-      </ol>
+      </ul>
     
     @subsection sect_build-app Building applications
     
       From the <tt>src</tt> subdirectory, the following are important targets:
     
 
-    <ol>
+    <ul>
     <li><tt>depend.</tt> Please always run "make depend" first.</li>
     <li><tt>all.</tt> Build everything.</li>
     <li><tt>test.</tt> Build an run all unit tests.</li>
@@ -249,7 +249,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
         <tt>src/Doxyfile</tt> and there for a line called
         <tt>HAVE_DOT</tt>. Change the <tt>YES</tt> into <tt>NO.</tt></li>
     
-      </ol>
+      </ul>
     
       Building the main applications should be as easy as the following:
     
@@ -282,12 +282,12 @@ $ cd ./src && make depend && make</pre>
       neutral values depend on the option's type:
     
 
-    <ol>
+    <ul>
     <li><tt>boolean</tt> and <tt>quad-option</tt>: <tt>no</tt></li>
     <li><tt>number</tt>; <tt>0</tt></li>
     <li><tt>string</tt> and <tt>url</tt>: the empty string/url ""</li>
     
-      </ol>
+      </ul>
     
       The <tt>reset</tt> command changes a value to its default.
     
@@ -305,7 +305,7 @@ $ cd ./src && make depend && make</pre>
     @subsection sect_config-types Configuration options
     The following types of configuration options are supported:
 
-    <ol>
+    <ul>
     <li><b><tt>boolean</tt></b>: A boolean option. Possible values are:
         <tt>yes</tt>, <tt>no</tt>.</li>
     <li><b><tt>number</tt></b>: A numeric option. Most of the options are
@@ -334,14 +334,14 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         path. For compatibility reasons, if an URL doesn't contain a
         protocoll, <tt>file</tt> is assumed.</li>
     
-      </ol>
+      </ul>
     
     @subsection sect_config-incompat Incompatible changes
     
       Compared to mutt and mutt-ng, there're some incompatible changes:
     
 
-    <ol>
+    <ul>
     <li>The <tt>set ?foo</tt> syntax isn't allowed any longer. For
         this purpose, the <tt>query</tt> command is to be used instead:
         <tt>query foo</tt></li>
@@ -352,7 +352,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li>The <tt>set &foo</tt> syntax isn't allowed any
         longer. For this purpose, use <tt>reset foo</tt> instead.</li>
     
-      </ol>
+      </ul>
     
     
     @section sect_reference Reference
@@ -456,7 +456,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     
       Debug files will have a name of the following format:
       <tt>.[scope].[pid].[id].log</tt>, whereby:
-      <ol>
+      <ul>
     <li><tt>[scope]</tt> is an identifier for where the output came.
           One file will be created for <tt>libmuttng</tt> and one for the
           tool using it such as <tt>muttng(1)</tt> or <tt>muttgn-conf(1)</tt></li>
@@ -465,7 +465,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           file of the current session it'll be 1 and increased for
           subsequent enabling/disabling of debug output via this variable</li>
     
-      </ol>
+      </ul>
     
 
     @subsubsection option_folder $folder
@@ -551,7 +551,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         The source code is organized into the following three layers:
       
 
-    <ol>
+    <ul>
     <li><em>core</em> in <tt>src/core/</tt>. This is the base
           library written in C containing very basic functionality. This
           includes a generic hash table, a generic list, a safe
@@ -592,13 +592,13 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           so that user interfaces only have to implement presenting data and
           nothing more.</li>
     
-      </ol>
+      </ul>
     
         A very important design goal to keep by any means is the
         relationship between these three layers:
       
 
-    <ol>
+    <ul>
     <li><em>core</em> must not depend on or make any kind of
           assumptions about either <em>libmuttng</em> or
           <em>muttng</em>. It may only rely on the standard C
@@ -611,7 +611,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           all parts, must not make assumptions about internal
           implementation details or choices.</li>
     
-      </ol>
+      </ul>
     
         The reason for this separation is to have good information
         hiding and a modular structure not only within these parts but
@@ -638,7 +638,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         The basic organization is this:
       
 
-    <ol>
+    <ul>
     <li>The ``master'' documentation is English. Where appropriate (see
           below), it'll be auto-generated and validated from the source code to
           avoid out-of-sync problems as far as possible.</li>
@@ -652,7 +652,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
           under version control, too, on the one hand and to ease (the release)
           build process for users.</li>
     
-      </ol>
+      </ul>
     
     @subsubsection sect_devguide-build-organisation Build system
     
@@ -763,10 +763,13 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         are in order:
       
 
+    <ol>
     <li>source file in <tt>src/sysconf</tt> to compile</li>
     <li>function name to report progress on screen</li>
     <li>a preprocessor <tt>#define</tt> for the header</li>
     <li>the name of the header file to create</li>
+    
+      </ol>
     @ref sample-sysconf "An example"  used for
         the <tt>core/</tt> library is provided: it tests for whether programs
         using <tt>mmap(2)</tt>, <tt>alloca(3)</tt> and
@@ -813,7 +816,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
         set in the custom file:
       
 
-    <ol>
+    <ul>
     <li>for the compilers, it sets up
           @ref table-make-env1 "variables for compilers and flags" 
           depending on <tt>CCSTYLE</tt></li>
@@ -842,7 +845,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           (splitting these up is required for Xalan Java whose <tt>-out</tt>
           option cannot be set to a directory.) These functions take the following
           mandatory arguments (ordered):
-          <ol>
+          <ul>
     <li>XML source file</li>
     <li>XSL stylesheet file</li>
     <li>XML output file</li>
@@ -851,10 +854,10 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
               modularization as this parameter only has an effect on DocBook
               but passing to other transformations shouldn't do harm.</li>
     
-      </ol>
+      </ul>
     </li>
     
-      </ol>
+      </ul>
     @anchor table-make-env1
     @htmlonly
     <p class="title">Common make compile variables</p>
@@ -909,11 +912,11 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
         The arguments for <tt>whereis</tt> are in order:
       
 
-    <ol>
+    <ul>
     <li>name of binary to find</li>
     <li>fallback</li>
     
-      </ol>
+      </ul>
     
         For example, the full path to <tt>vi(1)</tt> can be obtained via
         the call shown in the @ref sample-libmuttng-build-whereis-call1 "first whereis call example" .
@@ -947,14 +950,14 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
         the following targets can be used on these directories:
       
 
-    <ol>
+    <ul>
     <li><tt>all</tt>: <tt>subdir</tt></li>
     <li><tt>clean</tt>: <tt>subdirclean</tt></li>
     <li><tt>doc</tt>: <tt>subdirdoc</tt></li>
     <li><tt>depend</tt>: <tt>subdirdepend</tt></li>
     <li><tt>test</tt>: <tt>subdirtest</tt></li>
     
-      </ol>
+      </ul>
     
         For example, to have all these targets for the subdirectories
         <tt>foo</tt> and <tt>bar</tt>, use the basic structure as shown
@@ -994,12 +997,12 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
         Either of these also define the following targets:
       
 
-    <ol>
+    <ul>
     <li><tt>clean</tt>: remove any temporary, object and archive files</li>
     <li><tt>depend</tt>: run the C/C++ compiler and put the dependency
           tracking info for <tt>make(1)</tt> into <tt>./.depend</tt></li>
     
-      </ol>
+      </ul>
     
     @subsubsection sect_devguide-build-adding Adding subdirectories
     
@@ -1013,14 +1016,14 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
         over the complete tree:
       
 
-    <ol>
+    <ul>
     <li><tt>all</tt>: perform building all</li>
     <li><tt>clean</tt>: perform cleanup so that only files for a release remain</li>
     <li><tt>test</tt>: perform all automated tests</li>
     <li><tt>depend</tt>: perform all preparation required for
           <tt>all</tt> target</li>
     
-      </ol>
+      </ul>
     
     
     @subsection sect_devguide-docs Documentation
@@ -1031,14 +1034,14 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
         in this chapter) and transformed into the following formats:
       
 
-    <ol>
+    <ul>
     <li>DocBook: this meta format is used to transform everything into
           fancy HTML</li>
     <li>Doxygen: this format makes doxygen pick up the documentation to
           integrate it into the source's docs</li>
     <li>LaTex: this format is used to generate PDF and PostScript output</li>
     
-      </ol>
+      </ul>
     
         As far as possible, documentation is automatically generated (better: stripped)
         from the source code to avoid out-of-sync problems. Details of auto-generation
@@ -1056,7 +1059,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
         The <tt>doc/</tt> directory contains the following subdirectories:
       
 
-    <ol>
+    <ul>
     <li><tt>common/</tt>: it contains all language-independent fractions of any
           part of the docs</li>
     <li><tt>css/</tt>: it contains HTML CSS stylesheets for use with doxygen- and
@@ -1070,7 +1073,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           (such as programming or configuration examples.)</li>
     <li><tt>tex/</tt>: all files related to LaTeX-processing</li>
     
-      </ol>
+      </ul>
     
         To have all files correctly setup when getting a working copy or making a
         release, some files are identical and copied from a ``master'' source to
@@ -1079,7 +1082,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
         and its copies are:
       
 
-    <ol>
+    <ul>
     <li><tt>css/muttng.css</tt>: the main CSS stylesheet it's copied to all
           <tt>manual_*</tt> and all <tt>homepage_*</tt> directories</li>
     <li><tt>common/manual-full.xml</tt> and <tt>common/manual-user.xml</tt>:
@@ -1087,7 +1090,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           for all translations. These are copied to all <tt>manual_*</tt> directories.
         </li>
     
-      </ol>
+      </ul>
     
         To ensure that at least the programming examples are up-to-date and compile,
         they're not only fragments but complete examples that can be compiled, linked
@@ -1107,7 +1110,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           tags:
         
 
-    <ol>
+    <ul>
     <li><tt>head</tt>: This describes a header for the document. Its title
             is enclosed in a <tt>title</tt> tag, the list of all authors in an
             <tt>authors</tt> tag. Within the latter, the <tt>author</tt> tag
@@ -1116,7 +1119,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
     <li><tt>content</tt>: This describes the content for the document, that
             is, one or more <tt>chapter</tt> tags.</li>
     
-      </ol>
+      </ul>
     
     @paragraph sect_devguide-docs-dialect-sectioning Chapters and sections
           Within the mentioned <tt>chapter</tt> tags, the following tags are to
@@ -1142,12 +1145,12 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           semantics rather than flat text or any layout:
         
 
-    <ol>
+    <ul>
     <li><em>special semantics</em>. There will be much more, but currently
             the following tags are to be used for specifying a special semantic
             for a word (mainly these are needed for auto-indexing so that
             one can actually find something in the documentation):
-            <ol>
+            <ul>
     <li><tt>val</tt>: when refering to (possible/default/...) values
                 for variables.</li>
     <li><tt>hdr</tt>: when refering to a commonly used header</li>
@@ -1155,35 +1158,35 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
                 as <tt>quoted-printable</tt> or <tt>us-ascii</tt></li>
     <li><tt>env</tt>: when refering to environment variables</li>
     
-      </ol>
+      </ul>
     </li>
     <li><em>listings</em>. To specify lists or listings, the following tags
             are available:
-            <ol>
+            <ul>
     <li><tt>ul</tt>: a non-numbered itemized list</li>
     <li><tt>ol</tt>: numbered itemized list</li>
     <li><tt>li</tt>: an item of any of these lists</li>
     
-      </ol>
+      </ul>
     </li>
     <li><em>misc.</em>: The following are not the optimal solution as they
             imply layout semantics already but here we go:
-            <ol>
+            <ul>
     <li><tt>tt</tt>: typewriter font</li>
     <li><tt>em</tt>: emphasise</li>
     <li><tt>b</tt>: bold font</li>
     
-      </ol>
+      </ul>
     </li>
     
-      </ol>
+      </ul>
     
     @paragraph sect_devguide-docs-dialect-referencing Referencing
           For specifying references, a distinction is made to what target
           a reference is made:
         
 
-    <ol>
+    <ul>
     <li>@ref tab-ref-tags "some tags"  don't
             accept attributes but the target specified as text</li>
     <li>for document-internal references, the 
@@ -1192,7 +1195,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
     <li>for references to manual pages, the @ref tab-man-attrs "man tag"  with an optional
             section attribute is to be used</li>
     
-      </ol>
+      </ul>
     @anchor tab-ref-tags
     @htmlonly
     <p class="title">reference tags</p>
@@ -1227,28 +1230,28 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           manual) (<em>note: this is auto-generated</em>):
         
 
-    <ol>
+    <ul>
     <li>all variables are wrapped within a <tt>descriptions</tt> tag</li>
     <li>within this, there's any number of <tt>variable</tt> tags containing
             the following attributes: <tt>name</tt> specifies the name of the
             variable, <tt>type</tt> specifies its type</li>
     <li>within a <tt>variable</tt> tag, the following tags will be used:
-            <ol>
+            <ul>
     <li><tt>init</tt>: initial or default value</li>
     <li><tt>sig</tt>: whether a change of it will cause a signal be emitted</li>
     <li><tt>descr</tt>: its description</li>
     
-      </ol>
+      </ul>
     </li>
     
-      </ol>
+      </ul>
     
     @paragraph sect_devguide-docs-dialect-functions Documenting functions
           Internally, functions are documented like this
           (<em>note: this is auto-generated</em>):
         
 
-    <ol>
+    <ul>
     <li>all functions are wrapped within a <tt>descriptions</tt> tag</li>
     <li>within this, there's any number of <tt>context</tt> tags containing
             the following attributes: <tt>name</tt> specifies the name of the
@@ -1264,7 +1267,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
     <li>the text within the <tt>function</tt> tag is just the functions's
             summary to appear in the help menus</li>
     
-      </ol>
+      </ul>
     
     @paragraph sect_devguide-docs-dialect-listings Embedding listrings
           Eventually there will be several types of listings each treated individually
@@ -1275,33 +1278,33 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           The following two tags can be used for specifying listings:
         
 
-    <ol>
+    <ul>
     <li><tt>listing</tt>: make listing from an external file</li>
     <li><tt>inlinelisting</tt>: make listing inline from given text</li>
     
-      </ol>
+      </ul>
     
           Both require these attributes:
         
 
-    <ol>
+    <ul>
     <li><tt>lang</tt> specifies the language. For most of the output this is irrelevant
             but for LaTeX output and the <tt>listings.sty</tt> package we have syntax-highlighting
             automatically. The following languages are supported:
-            <ol>
+            <ul>
     <li><tt>cpp</tt> for C++</li>
     <li><tt>make</tt> for GNU make</li>
     <li><tt>muttngrc</tt> for muttng's configuration syntax</li>
     
-      </ol>
+      </ul>
     </li>
     
-      </ol>
+      </ul>
     
           The <tt>listing</tt> tag also requires these attributes in addition:
         
 
-    <ol>
+    <ul>
     <li><tt>id</tt> specifies a document-internal ID to link to listings. As for
             any other ID attributes, we fake a namespace or hierarchy by prefixes. At least all
             sample listings must have <tt>sample-</tt> as prefix for this attribute.</li>
@@ -1309,7 +1312,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
             format.)</li>
     <li><tt>href</tt> specifies the filename in the <tt>doc/examples/</tt> directory.</li>
     
-      </ol>
+      </ul>
     
     @paragraph sect_devguide-docs-dialect-tables Tables
           Tables have to be specified within a
@@ -1347,7 +1350,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           documentation process for variables is the same as it was before:
         
 
-    <ol>
+    <ul>
     <li>all documentation is expected between the words <tt>START</tt>
             and <tt>END</tt> (commented) in <tt>set_command.cpp</tt></li>
     <li>the variable definition for the source is one line</li>
@@ -1357,12 +1360,12 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
             all other documentation.
           </li>
     
-      </ol>
+      </ul>
     
           The auto-generated files are:
         
 
-    <ol>
+    <ul>
     <li><tt>doc/manual_en/var_def.xml</tt>: contains a simple listing
             of all variables found. As English is expected to be always in sync
             with the source code, this file will be used to validate and/or
@@ -1370,7 +1373,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
     <li><tt>doc/manual_en/var_descr.xml</tt>: contains the full English
             documentation</li>
     
-      </ol>
+      </ul>
     
     @paragraph sect_devguide-docs-auto-functions Functions
           For functions, <tt>src/muttng/event/event.pl</tt> is used. It parses the
@@ -1379,19 +1382,19 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           following meanings for documentation:
         
 
-    <ol>
+    <ul>
     <li>1st field: the context IDs defined in <tt>CONTEXTS</tt></li>
     <li>3rd field: the function's name</li>
     <li>4th field: the group IDs defined in <tt>GROUPS</tt></li>
     <li>5th field: the default keybinding</li>
     <li>rest of the line: short description</li>
     
-      </ol>
+      </ul>
     
           The auto-generated files are:
         
 
-    <ol>
+    <ul>
     <li><tt>doc/manual_en/func_def.xml</tt>: contains a simple listing
             of all functions found. As English is expected to be always in sync
             with the source code, this file will be used to validate and/or
@@ -1399,7 +1402,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
     <li><tt>doc/manual_en/func_descr.xml</tt>: contains the full English
             documentation</li>
     
-      </ol>
+      </ul>
     
     
     @subsubsection sect_devguide-docs-trans Translations
@@ -1417,7 +1420,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           contain a set of files:
         
 
-    <ol>
+    <ul>
     <li><tt>head.xml</tt>: it must contain a <tt>head</tt> tag as the document
             root and list all details for the manual: title and authors.</li>
     <li><tt>trans.xml</tt>: it must contain a set of translated special words described
@@ -1433,15 +1436,15 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
     <li><tt>devguide.xml</tt>: it must contain the developer's guide</li>
     <li><tt>ack.xml</tt>: it must contain acknowledgements. This file must include
             the following files in the <tt>doc/common/</tt> directory:
-            <ol>
+            <ul>
     <li><tt>dev_muttng.xml</tt>: list of mutt-ng developers</li>
     <li><tt>ack_muttng.xml</tt>: list of people who contributed to mutt-ng</li>
     <li><tt>ack_mutt.xml</tt>: list of people who contributed to mutt</li>
     
-      </ol>
+      </ul>
     </li>
     
-      </ol>
+      </ul>
     
     @paragraph sect_devguide-docs-trans-add Adding a new translation
           When adding a new translation, the easiest way is to make a copy of the
@@ -1454,13 +1457,13 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           only a few words to translate:
         
 
-    <ol>
+    <ul>
     <li><tt>head.xml</tt></li>
     <li><tt>reference.xml</tt></li>
     <li><tt>ack.xml</tt> and</li>
     <li><tt>trans.xml</tt></li>
     
-      </ol>
+      </ul>
     
           For these, what to translate how should be pretty self-explanatory so that
           not much documentation is put here. In <tt>trans.xml</tt> the comments and
@@ -1505,7 +1508,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
         and provides the following features:
       
 
-    <ol>
+    <ul>
     <li><em>basic services</em> of interest for the whole library and
           application: signal handling and debug support.</li>
     <li><em>mailbox support</em> includes: IMAP, POP3, NNTP, Maildir, MH,
@@ -1521,7 +1524,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           the mailcap mechanism, using <tt>file(1)</tt> and the like. Decoding
           will be transparent for client, too.</li>
     
-      </ol>
+      </ul>
     
     @subsubsection sect_devguide-libmuttng-signal Signal handling
     
@@ -1553,13 +1556,13 @@ SignalX<type of arg1,type of arg2,...,type of argX> signalname;</pre>
           the following two requirements:
         
 
-    <ol>
+    <ul>
     <li>it must return <tt>bool</tt> specifying whether it succeeded
             or not</li>
     <li>it must take exactly the number and type of arguments the
             signal was declared with</li>
     
-      </ol>
+      </ul>
     
           Due to overloading, connecting to a signal is always the same:
         
@@ -1569,13 +1572,13 @@ connectSignal (signal, object, Object::handler)</pre>
           ..whereby:
         
 
-    <ol>
+    <ul>
     <li><tt>signal</tt> is the signale declared elsewhere</li>
     <li><tt>object</tt> is an instance of an object containg a handler</li>
     <li><tt>Object::handler</tt> is the actual handler method. Here, <tt>Object</tt>
             is the <em>classname</em> of <tt>object</tt></li>
     
-      </ol>
+      </ul>
     
           In most cases, the object will be <tt>this</tt> though any method may connect
           everything it wants to every signal it wishes to.
@@ -1735,18 +1738,18 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
     @section sect_acknowledgements Acknowledgements
     
     Mutt-ng is developed by the following people:
-    <ol>
+    <ul>
     <li>Andreas Krennmair <a href="mailto:ak@synflood.at">&lt;ak@synflood.at&gt;</a></li>
     <li>Nico Golde <a href="mailto:nico@ngolde.de">&lt;nico@ngolde.de&gt;</a></li>
     <li>Rocco Rutte <a href="mailto:pdmef@cs.tu-berlin.de">&lt;pdmef@cs.tu-berlin.de&gt;</a></li>
     
-      </ol>
+      </ul>
     
 
     
     The following people have been very helpful to the
     development of mutt-ng:
-    <ol>
+    <ul>
     <li>Christian Gall <a href="mailto:cg@cgall.de">&lt;cg@cgall.de&gt;</a></li>
     <li>Iain Lea <a href="mailto:iain@bricbrac.de">&lt;iain@bricbrac.de&gt;</a></li>
     <li>Andreas Kneib <a href="mailto:akneib@gmx.net">&lt;akneib@gmx.net&gt;</a></li>
@@ -1754,13 +1757,13 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
     <li>Carsten Schoelzki <a href="mailto:cjs@weisshuhn.de">&lt;cjs@weisshuhn.de&gt;</a></li>
     <li>Elimar Riesebieter <a href="mailto:riesebie@lxtec.de">&lt;riesebie@lxtec.de&gt;</a></li>
     
-      </ol>
+      </ul>
     
 
     
     The following people have been very helpful to the
     development of mutt:
-    <ol>
+    <ul>
     <li>Kari Hurtta <a href="mailto:kari.hurtta@fmi.fi">&lt;kari.hurtta@fmi.fi&gt;</a></li>
     <li>Vikas Agnihotri <a href="mailto:vikasa@writeme.com">&lt;vikasa@writeme.com&gt;</a></li>
     <li>Francois Berjon <a href="mailto: Francois.Berjon@aar.alcatel-alsthom.fr">&lt; Francois.Berjon@aar.alcatel-alsthom.fr&gt;</a></li>
@@ -1804,7 +1807,7 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
     <li>Vsevolod Volkov <a href="mailto:vvv@lucky.net">&lt;vvv@lucky.net&gt;</a></li>
     <li>Ken Weinert <a href="mailto:kenw@ihs.com">&lt;kenw@ihs.com&gt;</a></li>
     
-      </ol>
+      </ul>
     
 
     

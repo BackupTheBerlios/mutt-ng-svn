@@ -176,7 +176,7 @@
     </xsl:text>
   </xsl:template>
 
-  <xsl:template match="ul">
+  <xsl:template match="ol">
     <xsl:text>&lt;ol&gt;
     </xsl:text>
       <xsl:apply-templates/>
