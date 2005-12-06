@@ -12,20 +12,57 @@
       configurable, and is well suited to the mail power user with
       advanced features like key bindings, keyboard macros, mail
       threading, regular expression searches and a powerful pattern
-      matching language for selecting groups of messages.
+      matching language for selecting groups of messages to perform
+      various of types of actions with.
     
 
     
-      This documentation additionally contains documentation to
-      <b>Mutt-NG</b>, a fork from Mutt
-      with the goal to fix all the little annoyances of Mutt, to
-      integrate all the Mutt patches that are floating around in the
-      web, and to add other new features. Features specific to Mutt-ng
-      will be discussed in an extra section. Don't be confused when
-      most of the documentation talk about Mutt and not Mutt-ng,
-      Mutt-ng contains all Mutt features, plus many more.
+      The project started off with the mutt code base and got extended with
+      more usefull features written on our own as well as patches
+      which were already available for mutt. However, by the time we more and
+      more ran into the problem that we found the code (mostly) too complex,
+      not well enough documented and hardly maintainable any longer when it came to
+      tracking down underlying problems of bug reports we received. As the
+      consequence, we started to redesign and rewrite everything from scratch.
     
 
+    
+      For the rewrite, the main design objectives are:
+    
+
+    <ul>
+    <li><em>Logic separation of funtionality.</em> It turned out that there
+        were too few abstraction layers in general but special treatment in just too
+        many places. Also it seemed that the main design wasn't questioned at all
+        but just got extended by more conditional parts in-place instead of
+        migrating to better abstraction models. For the rewrite, we thus use the following
+        layer model described later in detail: a <em>core</em> part
+        containing very low level but not mail-related functionality, a
+        <em>libmuttng</em> library with all mail-related logic and a
+        <em>muttng</em> part with user interfaces just using the two lower layers
+        as needed. Within each, we separate features and functionality as much
+        as possible to move to a more modular system.</li>
+    <li><em>Documentation.</em> For developers there virtually wasn't any documentation
+        about the design decissions made, the general interaction between different
+        parts nor which parts there were. The user-manual was good by means of
+        quantity but not quality. For the rewrite, we provide much better documentation
+        for users and for developers in as many languages as we find translators for.
+        The manual will be completely rewritten, that is, better structured, better
+        examples and more accessible for users new to mutt-ng. For developers there's
+        better documentation, too. Functions are not only documented, within the different
+        layers they're also grouped by their purpose including reasoning for
+        the grouping structure. The developer's guide contains plenty documentation
+        and ready-to-use examples which are included from compileable source code
+        (no copy'n'paste is required, examples are verified automatically to compile
+        and work.)</li>
+    <li><em>Quality ensurance.</em> As the <em>libmuttng</em> as well as the
+        <em>muttng</em> layer is written in C++, there're so-called unit tests which
+        are run automatically to see if a certain part works. This greatly improves
+        maintainability of the code base not only during the rewrite process but also
+        when a redesign is required in the future (as this will certainly be the case, we
+        already prepare for it.)</li>
+    
+      </ul>
     
     @subsection sect_introduction-homepage Mutt-ng Home Page
     

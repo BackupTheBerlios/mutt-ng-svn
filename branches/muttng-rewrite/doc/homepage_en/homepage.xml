@@ -97,18 +97,38 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     </chapter>
     <!--}}}-->
 
-    <chapter id="feedback"> <!--{{{-->
-      <title>Feedback</title>
+    <chapter id="contributing"> <!--{{{-->
+      <title>Contributing</title>
 
       <p>
         As the rewrite is in an early stage, please do <em>not</em>
-        open bug reports or feature request at our BerliOS.
+        open bug reports or feature request at our BerliOS which only concern
+        the rewrite. Instead, please contact us via the developer's mailing list:
+        <email>mutt-ng-devel@lists.berlios.de</email> only.
       </p>
 
       <p>
-        Instead, please contact us via the developer's mailing list:
-        <email>mutt-ng-devel@lists.berlios.de</email> only.
+        There not yet many open tasks which volunteers can accept to solve in order
+        to actively join the development:
       </p>
+
+      <ul>
+        <li>Since the build process isn't the "common" way of using the Autotools
+          but a custom make-based system, we need early feedback on how stable it
+          works or if it works at all. Users can test whether the source can be compiled
+          on different configurations: different operating systems, different
+          compilers (especially the C++ parts.)</li>
+        <li>Since one of the main goals is to have much better documentation being
+          available in multiple languages, we ask for help with the documentation.
+          This includes proof reading (spelling and content) as well as its structure
+          (content as well as the build process and its automatation.) For translators
+          there maybe will be mailinglist set up.</li>
+        <li>Though the application is rewritten by keeping most of the current
+          features, we of course ask for suggestions of critics of any kind. We can
+          be contacted either via the developer's mailing list at
+          <email>mutt-ng-devel@lists.berlios.de</email> or via our private mail 
+          addresses. </li>
+      </ul>
 
     </chapter>
     <!--}}}-->

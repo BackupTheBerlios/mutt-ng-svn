@@ -97,20 +97,43 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     </chapter>
     <!--}}}-->
 
-    <chapter id="feedback"> <!--{{{-->
-      <title>Rückmeldung</title>
+    <chapter id="contributing"> <!--{{{-->
+      <title>Beiträge liefern</title>
 
       <p>
         Weil die Neuentwicklung noch in einem frühen Stadium ist,
         bitten wir darum <em>keine</em> Fehlermeldungen oder Wünsche über
-        die BerliOS-Seite zu öffnen.
-      </p>
-
-      <p>
+        die BerliOS-Seite zu öffnen, wenn es nur die Neuentwicklung betrifft.
         Statt dessen bitten wir um E-Mail Kontakt über die Mailingliste für
         Entwickler:
         <email>mutt-ng-devel@lists.berlios.de</email>.
       </p>
+
+      <p>
+        Es gibt noch nicht sehr viele Aufgaben, die Freiwillige übernehmen können,
+        um sich aktiv an der Neuentwicklung zu beteiligen:
+      </p>
+
+      <ul>
+        <li>Weil der Übersetzungsprozess nicht der "gängige" Weg unter Nutzung
+          der Autotools ist sondern ein eigenes make-basiertes System, brauchen
+          wir früh Rückmeldung darüber, wie stabil bzw. ob das System funktioniert.
+          Nutzer können testen, ob sich die Quellen unter verschiedenen Konfigurationen
+          übersetzen lassen: verschiedene Systeme, verschiedene Compiler (vor allem
+          für den C++-Teil).</li>
+        <li>Weil eines der Hauptziele eine stark verbesserte Dokumentation ist, die
+          mehrsprachig verfügbar und aktuell sein soll, bitten wir um Mithilfe bei der
+          Dokumentation. Dies beinhaltet sowohl die Fehlerkorrektur (Orthografie und Inhalt)
+          als auch die Struktur (sowohl Inhalt als auch Erstellungsprozess und dessen
+          Automatismen). Für die Übersetzungen bzw. Übersetzer wird es eventuell
+          auch eine spezielle Mailingliste geben.</li>
+        <li>Die Anwendung wird zwar unter weitest gehender Beibehaltung der bisherigen
+          Funktionalität neu entwickelt, wir sind aber selstverständlich für Anregungen und
+          Kritik jeder Art offen. Wir können entweder über die Entwicklerliste
+          per E-Mail an <email>mutt-ng-devel@lists.berlios.de</email> bzw. über private
+          E-Mail-Adressen kontaktiert werden.
+        </li>
+      </ul>
 
     </chapter>
     <!--}}}-->
