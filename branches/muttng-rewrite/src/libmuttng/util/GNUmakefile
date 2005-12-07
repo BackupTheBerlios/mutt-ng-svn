@@ -1,4 +1,4 @@
-FILES=url
+FILES=url recode rfc2047
 LIB=
 
 include $(CURDIR)/../../../GNUmakefile.whereis
