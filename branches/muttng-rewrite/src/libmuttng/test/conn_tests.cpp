@@ -11,7 +11,7 @@
 #include "conn_tests.h"
 
 #include "core/buffer.h"
-#include "transport/connection.h"
+#include "transport/plain_connection.h"
 
 using namespace unitpp;
 
@@ -19,17 +19,17 @@ void conn_tests::test_connectdisconnect() {
   buffer_t buf;
   buffer_init(&buf);
   buffer_add_str(&buf,"www.google.com",-1);
-  Connection * conn = new Connection(&buf,80);
+  Connection * conn = new PlainConnection(&buf,80);
 
   bool return_value;
 
-  return_value = conn->connect();
+  return_value = conn->socketConnect();
 
-  assert_eq("connect() to www.google.com:80",return_value,true);
+  assert_eq("socketConnect() to www.google.com:80",return_value,true);
 
-  return_value = conn->disconnect();
+  return_value = conn->socketDisconnect();
 
-  assert_eq("disconnect() from www.google.com:80",return_value,true);
+  assert_eq("socketDisconnect() from www.google.com:80",return_value,true);
 
   buffer_free(&buf);
   delete conn;
@@ -39,11 +39,11 @@ void conn_tests::test_canread() {
   buffer_t buf;
   buffer_init(&buf);
   buffer_add_str(&buf,"www.google.com",-1);
-  Connection * conn = new Connection(&buf,80);
+  Connection * conn = new PlainConnection(&buf,80);
 
   bool return_value;
 
-  return_value = conn->connect();
+  return_value = conn->socketConnect();
 
   assert_eq("connect() to www.google.com:80",return_value,true);
 
@@ -57,7 +57,7 @@ void conn_tests::test_canread() {
 
   assert_eq("canRead",conn->canRead(),true);
 
-  conn->disconnect();
+  conn->socketDisconnect();
 
   buffer_free(&buf);
   delete conn;
@@ -68,13 +68,13 @@ void conn_tests::test_readwrite() {
   buffer_t buf;
   buffer_init(&buf);
   buffer_add_str(&buf,"www.google.com",-1);
-  Connection * conn = new Connection(&buf,80);
+  Connection * conn = new PlainConnection(&buf,80);
 
   bool return_value;
 
-  return_value = conn->connect();
+  return_value = conn->socketConnect();
 
-  assert_eq("connect() to www.google.com:80",return_value,true);
+  assert_eq("socketConnect() to www.google.com:80",return_value,true);
 
   buffer_t rbuf;
   buffer_init(&rbuf);
@@ -86,9 +86,9 @@ void conn_tests::test_readwrite() {
   conn->readLine(&rbuf);
   assert_eq("readLine",buffer_equal1(&rbuf,"HTTP/1.0 302 Found\r\n",-1)!=0,true);
 
-  return_value = conn->disconnect();
+  return_value = conn->socketDisconnect();
 
-  assert_eq("disconnect() from www.google.com:80",return_value,true);
+  assert_eq("socketDisconnect() from www.google.com:80",return_value,true);
 
   buffer_free(&buf);
   delete conn;

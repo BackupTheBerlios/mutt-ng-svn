@@ -14,7 +14,7 @@ test: run_test
 	./$^ -v
 
 run_test: $(LINKOBJS)
-	$(CXX) $(CXXFLAGS) -o $@ $^ $(LINKLIBS) $(LDFLAGS)
+	$(CXX) $(CXXFLAGS) -o $@ $^ $(LINKLIBS) $(LDFLAGS) $(LDFLAGS_LIBICONV) $(LDFLAGS_SSL)
 
 clean:
 	$(RM) run_test $(LINKOBJS)

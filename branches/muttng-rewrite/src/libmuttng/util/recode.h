@@ -17,30 +17,19 @@ typedef enum {
   ENC_BASE64
 } encodings;
 
-/**
- * Encode a string to QP.
- * @param buf String.
- */
 void recode_encode_qp (buffer_t* buf);
 
 /**
- * Decode a string from QP.
- * @param buf String.
+ * Decode a QP string.
+ * This will fail on incomplete and the magic @c %00 sequence.
+ * @param str String to decode.
+ * @param c Magic QP delimiter character. This is @c % for URLs
+ *          and mostly @c = in all other cases.
+ * @param chars If given a pointer to @c int, this stores how many
+ *              characters of input have been processed to point
+ *              out at which place an error occured.
  * @return Success.
  */
-int recode_decode_qp (buffer_t* buf);
-
-/**
- * Encode a string to base64.
- * @param buf String.
- */
-void recode_encode_base64 (buffer_t* buf);
-
-/**
- * Decode a string from base64.
- * @param buf String.
- * @return Success.
- */
-int recode_decode_base64 (buffer_t* buf);
+bool recode_decode_qp (char* str, unsigned char c, int* chars);
 
 #endif

@@ -114,7 +114,7 @@ void url_tests::test_parse() {
     buffer_add_str (&msg, "' is valid: ", 12);
     url = url_from_string (ValidURLTable[i].urlstr, &error);
     buffer_add_buffer (&msg, &error);
-    assert_true (msg.str, url && url_eq (url, &ValidURLTable[i].url));
+    assert_eq (msg.str, 1, url && url_eq (url, &ValidURLTable[i].url));
   }
 
   for (i = 0; InvalidURLTable[i]; i++) {
@@ -155,6 +155,12 @@ void url_tests::test_decode() {
 }
 
 url_tests::url_tests() : suite("url_tests") {
+  int i = 0;
+  /* for all ports of 0, get defaults so url_eq() works */
+  for (i = 0; ValidURLTable[i].urlstr; i++)
+    if (!ValidURLTable[i].url.port)
+      ValidURLTable[i].url.port = url_defport(ValidURLTable[i].url.proto,
+                                              ValidURLTable[i].url.secure);
   add("url",testcase(this,"test_url_invalid_proto",
                      &url_tests::test_invalid_proto));
   add("url",testcase(this,"test_url_parse",

@@ -113,6 +113,8 @@ void url_free (url_t* url);
  */
 bool url_eq (url_t* url1, url_t* url2);
 
+unsigned short url_defport (urlproto_t proto, bool secure);
+
 #endif /* !LIBMUTTNG_MESSGAGE_BODY_H */
 
 /** @} */

@@ -6,7 +6,6 @@
  * @brief Implementation: URL handling
  */
 #include <ctype.h>
-#include <iostream>
 #include <cstring>
 
 #include "core/buffer.h"
@@ -14,7 +13,11 @@
 #include "core/mem.h"
 #include "core/intl.h"
 
+#include "recode.h"
 #include "url.h"
+
+/** readability define for QP decoding */
+#define url_decode(STR,CHARS)   recode_decode_qp(STR,'%',CHARS)
 
 /**
  * Table for mapping protos to strings we accept.
@@ -51,66 +54,6 @@ static struct {
 #endif
   { P_LAST,     NULL,           0,      0 }
 };
-
-/**
- * Interpret character as hex and return decimal value.
- * @param c Character.
- * @return
- *   - decimal value upon success
- *   - @c -1 upon error
- */
-static int hexval (unsigned char c) {
-  unsigned char d = 0;
-  if (c >= '0' && c <= '9')
-    return (c - '0');
-  d = tolower (c);
-  if (d >= 'a' && d <= 'f')
-    return (10 + (d - 'a'));
-  return (-1);
-}
-
-/**
- * Decode an URL.
- * This will fail on incomplete and the magic @c %00 sequence.
- * @param url URL to decode.
- * @param chars If given a pointer to @c int, this stores how many
- *              characters of input have been processed to point
- *              out at which place an error occured.
- * @return Success.
- */
-static bool url_decode (char* url, int* chars) {
-  char* d;
-
-  if (!url)
-    return (true);
-
-  if (chars)
-    *chars = 0;
-
-  for (d = url; *url; url++) {
-    if (*url == '%') {
-      /**
-       * Be sure to block %00 aka \\0, there were some bugtraq
-       * posts so be strict ;-)
-       */
-      if (url[1] && url[2] && strncmp (&url[1], "00", 2) != 0 &&
-          hexval ((unsigned char) url[1]) >= 0 &&
-          hexval ((unsigned char) url[2]) >= 0) {
-        *d++ = (hexval ((unsigned char) url[1]) << 4) |
-               (hexval ((unsigned char) url[2]));
-        url += 2;
-      } else
-        return (false);
-    } else if (*url == '+')
-      *d++ = ' ';
-    else
-      *d++ = *url;
-    if (chars)
-      (*chars)++;
-  }
-  *d = '\0';
-  return (true);
-}
 
 /**
  * For an URL string, check and return protocol.
@@ -341,4 +284,12 @@ bool url_eq (url_t* url1, url_t* url2) {
           url1->port == url2->port &&
           url1->secure == url2->secure &&
           url1->proto == url2->proto);
+}
+
+unsigned short url_defport (urlproto_t proto, bool secure) {
+  int i = 0;
+  for (i = 0; Protos[i].str; i++)
+    if (Protos[i].proto == proto && Protos[i].secure == secure)
+      return Protos[i].defport;
+  return 0;
 }
