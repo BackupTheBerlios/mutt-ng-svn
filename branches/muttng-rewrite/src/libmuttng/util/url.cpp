@@ -12,12 +12,12 @@
 #include "core/str.h"
 #include "core/mem.h"
 #include "core/intl.h"
+#include "core/qp.h"
 
-#include "recode.h"
 #include "url.h"
 
 /** readability define for QP decoding */
-#define url_decode(STR,CHARS)   recode_decode_qp(STR,'%',CHARS)
+#define url_decode(STR,CHARS)   qp_decode(STR,'%',CHARS)
 
 /**
  * Table for mapping protos to strings we accept.

@@ -1,13 +1,6 @@
-/** @ingroup libmuttng_util */
-/**
- * @file libmuttng/util/recode.cpp
- * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Implementation: Encoding/Decoding routines
- */
 #include <ctype.h>
-#include <cstring>
-
-#include "libmuttng/util/recode.h"
+#include <string.h>
+#include "qp.h"
 
 /**
  * Interpret character as hex and return decimal value.
@@ -17,21 +10,22 @@
  *   - @c -1 upon error
  */
 static int hexval (unsigned char c) {
+  unsigned char d;
   if (c >= '0' && c <= '9')
     return (c - '0');
-  unsigned char d = tolower (c);
+  d = tolower (c);
   if (d >= 'a' && d <= 'f')
     return (10 + (d - 'a'));
   return (-1);
 }
 
-void recode_encode_qp (buffer_t* buf) { (void) buf; }
+void qp_encode (buffer_t* src, buffer_t* dst) {(void)src;(void)dst;}
 
-bool recode_decode_qp (char* str, unsigned char c, int* chars) {
+int qp_decode (char* str, unsigned char c, int* chars) {
   char* d;
 
   if (!str)
-    return (true);
+    return (1);
 
   if (chars)
     *chars = 0;
@@ -49,7 +43,7 @@ bool recode_decode_qp (char* str, unsigned char c, int* chars) {
                (hexval ((unsigned char) str[2]));
         str += 2;
       } else
-        return (false);
+        return (0);
     }
 #if 0
     else if (*str == '+')
@@ -61,5 +55,5 @@ bool recode_decode_qp (char* str, unsigned char c, int* chars) {
       (*chars)++;
   }
   *d = '\0';
-  return (true);
+  return (1);
 }

@@ -8,22 +8,8 @@
 #define LIBMUTTNG_UTIL_RFC2047_H
 
 #include "core/buffer.h"
-#include "libmuttng/util/recode.h"
 
-/**
- * RfC2047-encode a string.
- * @param buf String to encode.
- * @param method Encoding method.
- * @return Success.
- */
-int rfc2047_encode (buffer_t* buf, encodings method);
-
-/**
- * Decode a string from QP.
- * @param buf String to decode.
- * @param method Which method to use.
- * @return Success.
- */
-int rfc2047_decode (buffer_t* buf, encodings method);
+bool rfc2047_encode (buffer_t* src, buffer_t* dst);
+bool rfc2047_decode (buffer_t* src, buffer_t* dst);
 
 #endif

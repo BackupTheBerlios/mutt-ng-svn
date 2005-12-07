@@ -6,12 +6,12 @@
  */
 #include "libmuttng/util/rfc2047.h"
 
-int rfc2047_encode (buffer_t* buf, encodings method) {
-  (void) buf; (void) method;
+bool rfc2047_encode (buffer_t* src, buffer_t* dst) {
+  (void) src; (void) dst;
   return 0;
 }
 
-int rfc2047_decode (buffer_t* buf, encodings method) {
-  (void) buf; (void) method;
+bool rfc2047_decode (buffer_t* src, buffer_t* dst) {
+  (void) src; (void) dst;
   return 0;
 }
