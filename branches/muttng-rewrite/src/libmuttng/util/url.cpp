@@ -8,6 +8,8 @@
 #include <ctype.h>
 #include <cstring>
 
+#include <string.h>
+
 #include "core/buffer.h"
 #include "core/str.h"
 #include "core/mem.h"
