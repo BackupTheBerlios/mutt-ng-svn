@@ -18,6 +18,7 @@ using namespace unitpp;
 #include "io_tests.h"
 #include "conv_tests.h"
 #include "base64_tests.h"
+#include "qp_tests.h"
 
 namespace {
 
@@ -33,6 +34,7 @@ namespace {
         suite::main().add("core_test_suite",new io_tests());
         suite::main().add("core_test_suite",new conv_tests());
         suite::main().add("core_test_suite",new base64_tests());
+        suite::main().add("core_test_suite",new qp_tests());
       }
   };
 

@@ -2,6 +2,8 @@
 #include <string.h>
 #include "qp.h"
 
+static const char Hex[] = { "0123456789ABCDEF" };
+
 /**
  * Interpret character as hex and return decimal value.
  * @param c Character.
@@ -19,41 +21,50 @@ static int hexval (unsigned char c) {
   return (-1);
 }
 
-void qp_encode (buffer_t* src, buffer_t* dst) {(void)src;(void)dst;}
+void qp_encode (buffer_t* dst, buffer_t* src, unsigned char c) {
+  int i = 0;
+  if (!src || !dst)
+    return;
+  buffer_shrink(dst,0);
+  for (i = 0; i < (int)src->len; i++) {
+    if (!isalnum((unsigned char)src->str[i])) {
+      buffer_add_ch(dst,c);
+      buffer_add_ch(dst,Hex[((unsigned char)src->str[i]) / 16]);
+      buffer_add_ch(dst,Hex[((unsigned char)src->str[i]) % 16]);
+    } else
+      buffer_add_ch(dst,(unsigned char)src->str[i]);
+  }
+}
 
-int qp_decode (char* str, unsigned char c, int* chars) {
-  char* d;
+int qp_decode (buffer_t* dst, buffer_t* src, unsigned char c, int* chars) {
+  int i = 0;
 
-  if (!str)
-    return (1);
+  if (!src || !dst)
+    return 0;
 
   if (chars)
     *chars = 0;
+  buffer_shrink(dst,0);
 
-  for (d = str; *str; str++) {
-    if (*str == c) {
+  for (i = 0; i < (int)src->len; i++) {
+    if ((unsigned char)src->str[i] == c) {
       /**
        * Be sure to block %00 aka \\0, there were some bugtraq
        * posts so be strict ;-)
        */
-      if (str[1] && str[2] && strncmp (&str[1], "00", 2) != 0 &&
-          hexval ((unsigned char) str[1]) >= 0 &&
-          hexval ((unsigned char) str[2]) >= 0) {
-        *d++ = (hexval ((unsigned char) str[1]) << 4) |
-               (hexval ((unsigned char) str[2]));
-        str += 2;
+      if (i < ((int) src->len-2) && strncmp (&src->str[i+1], "00", 2) != 0 &&
+          hexval ((unsigned char) src->str[i+1]) >= 0 &&
+          hexval ((unsigned char) src->str[i+2]) >= 0) {
+        buffer_add_ch(dst,(hexval ((unsigned char) src->str[i+1]) << 4) |
+                          (hexval ((unsigned char) src->str[i+2])));
+        i+=2;
       } else
         return (0);
     }
-#if 0
-    else if (*str == '+')
-      *d++ = ' ';
-#endif
     else
-      *d++ = *str;
+      buffer_add_ch(dst,(unsigned char)src->str[i]);
     if (chars)
       (*chars)++;
   }
-  *d = '\0';
   return (1);
 }

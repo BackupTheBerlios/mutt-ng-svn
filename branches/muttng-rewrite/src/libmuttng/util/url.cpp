@@ -16,8 +16,21 @@
 
 #include "url.h"
 
-/** readability define for QP decoding */
-#define url_decode(STR,CHARS)   qp_decode(STR,'%',CHARS)
+static bool url_decode (char** str, int* chars) {
+  buffer_t tmp1, tmp2;
+  int rc = 1;
+
+  buffer_init(&tmp1);
+  buffer_init(&tmp2);
+
+  buffer_add_str(&tmp1,*str,-1);
+  if ((rc=qp_decode(&tmp2,&tmp1,'%',chars))) {
+    mem_free(str);
+    *str = tmp2.str;
+  }
+  buffer_free(&tmp1);
+  return rc;
+}
 
 /**
  * Table for mapping protos to strings we accept.
@@ -136,7 +149,7 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error) {
       if (str_len (p+1) == 0)
         goto field_error;
       url->password = str_dup (p + 1);
-      if (!url_decode (url->password, &chars)) {
+      if (!url_decode (&url->password, &chars)) {
         err = url->password;
         goto decode_error;
       }
@@ -144,7 +157,7 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error) {
     if (str_len (src) == 0)
       goto field_error;
     url->username = str_dup (src);
-    if (!url_decode (url->username, &chars)) {
+    if (!url_decode (&url->username, &chars)) {
       err = url->username;
       goto decode_error;
     }
@@ -161,7 +174,7 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error) {
 
   if (t && *t)
     url->host = str_dup (t);
-  if (!url_decode (url->host, &chars)) {
+  if (!url_decode (&url->host, &chars)) {
     err = url->host;
     goto decode_error;
   }
@@ -173,7 +186,7 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error) {
   url->path[pathlen+1] = '\0';
   if (pathlen)
     memcpy (url->path+1, path, pathlen);
-  if (!url_decode (url->path, &chars)) {
+  if (!url_decode (&url->path, &chars)) {
     err = url->path;
     goto decode_error;
   }
