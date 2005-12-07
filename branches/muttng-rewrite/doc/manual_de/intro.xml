@@ -1,116 +1,123 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter id="introduction">
-  <title>Introduction</title>
+  <title>Einführung</title>
 
   <section id="introduction-overview"> <!--{{{-->
-    <title>Overview</title>
+    <title>Überblick</title>
     
     <p>
-      <b>Mutt-ng</b> is a small but very
-      powerful text-based MIME mail client.  Mutt-ng is highly
-      configurable, and is well suited to the mail power user with
-      advanced features like key bindings, keyboard macros, mail
-      threading, regular expression searches and a powerful pattern
-      matching language for selecting groups of messages to perform
-      various of types of actions with.
+      <b>Mutt-ng</b> is eine kleine aber mächtige Text- und MIME-basierte
+      E-Mail-Anwendung. Mutt-ng ist sehr anpassbar und richted sich an
+      E-Mail "Poweruser" mit Funktionen wie anpassbarer Tastaturbelegung,
+      Tastaturmakros, (Re-)Konstruktion von Diskussionsfäden für Nachrichten,
+      Suchen basierend auf regulären Ausdrücken und einer Sprache zur
+      Mustererkennung, um Gruppen von Nachrichten auszuwählen und zahlreiche
+      verschiedene Typen von Aktionen auf sie anzuwenden.
     </p>
 
     <p>
-      The project started off with the mutt code base and got extended with
-      more usefull features written on our own as well as patches
-      which were already available for mutt. However, by the time we more and
-      more ran into the problem that we found the code (mostly) too complex,
-      not well enough documented and hardly maintainable any longer when it came to
-      tracking down underlying problems of bug reports we received. As the
-      consequence, we started to redesign and rewrite everything from scratch.
+      Das Projekt begann mit dem Quellcode von mutt und wurde mit von uns
+      selbst bzw. für mutt verfügbaren Erweiterungen um neue Funktionen
+      erweitert. Mit der Zeit stießen wir jedoch mehr und mehr auf das Problem,
+      dass die Quellen zu (fast ausschließlich) komplex waren, nicht gut genug
+      dokumentiert und nur noch kaum wartbar waren, wenn es darum ging, die
+      tatsächlichen Ursachen hinter Fehlerberichten zu finden, die wir erhalten
+      haben. Als Konsequenz haben wir uns entschieden, alles von Grund auf neu zu
+      entwerfern und zu implementieren.
     </p>
 
     <p>
-      For the rewrite, the main design objectives are:
+      Die Hauptziele der Neuentwicklung sind:
     </p>
 
     <ul>
-      <li><em>Logic separation of funtionality.</em> It turned out that there
-        were too few abstraction layers in general but special treatment in just too
-        many places. Also it seemed that the main design wasn't questioned at all
-        but just got extended by more conditional parts in-place instead of
-        migrating to better abstraction models. For the rewrite, we thus use the following
-        layer model described later in detail: a <em>core</em> part
-        containing very low level but not mail-related functionality, a
-        <em>libmuttng</em> library with all mail-related logic and a
-        <em>muttng</em> part with user interfaces just using the two lower layers
-        as needed. Within each, we separate features and functionality as much
-        as possible to move to a more modular system.</li>
-      <li><em>Documentation.</em> For developers there virtually wasn't any documentation
-        about the design decissions made, the general interaction between different
-        parts nor which parts there were. The user-manual was good by means of
-        quantity but not quality. For the rewrite, we provide much better documentation
-        for users and for developers in as many languages as we find translators for.
-        The manual will be completely rewritten, that is, better structured, better
-        examples and more accessible for users new to mutt-ng. For developers there's
-        better documentation, too. Functions are not only documented, within the different
-        layers they're also grouped by their purpose including reasoning for
-        the grouping structure. The developer's guide contains plenty documentation
-        and ready-to-use examples which are included from compileable source code
-        (no copy'n'paste is required, examples are verified automatically to compile
-        and work.)</li>
-      <li><em>Quality ensurance.</em> As the <em>libmuttng</em> as well as the
-        <em>muttng</em> layer is written in C++, there're so-called unit tests which
-        are run automatically to see if a certain part works. This greatly improves
-        maintainability of the code base not only during the rewrite process but also
-        when a redesign is required in the future (as this will certainly be the case, we
-        already prepare for it.)</li>
+      <li><em>Logische Trennung von Funktionalität.</em> Es stellte sich heraus,
+        dass es zu wenige Abstraktionsschichten gab und statt dessen Spezialbehandlungen
+        an zu vielen Stellen gemacht wurde. Auch sah es so aus, als sei der Entwurf
+        nie wirklich hinterfragt sondern nur durch weitere Teile mit
+        Spezialbehandlungen an den verschiedensten Stellen erweitert worden anstatt
+        bessere Abstraktionsmodelle einzuführen und zu benutzen. Für die Neuentwicklung
+        nutzen wir deshalb folgendes Schichtenmodell, das später im Detail erklärt
+        wird: der <em>Core</em>-Teil beinhaltet Basis- aber nicht E-Mail-bezogene
+        Funktionalität, eine <em>Libmuttng</em>-Bibliothek mit E-Mail-bezogener
+        Funktionalität sowie ein <em>Muttng</em>-Teil mit den Benutzerschnittstellen,
+        der nur die zwei unteren Schichten so benutzt, wie es gebraucht wird. Innerhalb
+        dieser Schichten unterteilen wir nach Funktion und Funktionalität so weit wie
+        möglich, um ein modulares System umzusetzen.</li>
+      <li><em>Dokumentation.</em> Für Entwickler gab es praktisch keine Dokumentation
+        über weder Entwurfsentscheidungen, die Zusammenarbeit wichtiger Teile noch
+        welche Teile es überhaupt gab. Das Benutzerhandbuch war gut im Sinne von
+        Umfang aber nicht Qualität. Für die Neuentwicklung stellen wir Dokumentation
+        für Nutzer und Entwickler in den Sprachen zur Verfügung, für die wir auch
+        Übersetzer finden. Das Handbuch wird komplett neu geschrieben, d.h. es wird
+        besser strukturiert sein, bessere Beispiele enthalten und wird für
+        Neueinsteiger besser zugänglich sein. Auch für Entwickler gibt es wesentlich
+        verbesserte Dokumentation. Nicht nur werden alle Funktionen dokumentiert sein,
+        sondern innerhalb der verschiedenen Schichten wird nach Funktionalität weiter
+        gruppiert, was auch die Begründung für Gruppierung mit ein schließt. Das
+        Entwicklerhandbuch enhält eine Vielzahl an Dokumentation und fertige Beispiele,
+        die aus übersetzbaren Quellen eingebunden wird (d.h. Beispiele müssen nicht aus
+        dem Handbuch in eine Quelldatei kopiert werden, alle Beispiele werden automatisch
+        auf Übersetzungsfähigkeit geprüft).</li>
+      <li><em>Qualitätsmanagement.</em> Weil sowohl die <em>Libmuttng</em>- als auch die
+        <em>Muttng</em>-Schicht in C++ geschrieben sind, gibt es Einzeltests, die automatisch
+        durchgeführt werden um zu testen, ob ein Teil wie gewünscht funktioniert. Dies
+        erhöht die Wartbarkeit der Quellen erheblich nicht nur während der Phase der
+        Neuentwicklung sondern auch in Zukunft, wenn eine erneute Überarbeitung
+        notwendig werden wird (und weil dies sicher der Fall sein wird, bereiten wir
+        uns jetzt darauf vor).</li>
     </ul>
     
   </section>
   <!--}}}-->
 
   <section id="introduction-homepage"> <!--{{{-->
-    <title>Mutt-ng Home Page</title>
+    <title>Mutt-ng Internetseiten</title>
     
     <p>
-      The official hompepage of mutt-ng is: <web>http://www.muttng.org/</web>
+      Die offizielle Internetseite ist: <web>http://www.muttng.org/</web>
     </p>
     
     <p>
-      While the rewrite is maintained in a branch, the
-      homepage for it is: <web>http://www.muttng.org/rewrite/</web>.
+      Während die Neuentwicklung in einem Seitenzweig voran getrieben wird,
+      gibt es dazu folgende Internetseite:
+      <web>http://www.muttng.org/rewrite/</web>.
     </p>
     
   </section>
   <!--}}}-->
   
   <section id="introduction-mailinglists"> <!--{{{-->
-    <title>Mailing Lists</title>
+    <title>Mailinglisten</title>
     
     <p>
-      The following mailing lists are available:
+      Die folgenden Mailinglisten sind verfügbar:
     </p>
 
     <ul>
       <li>
-        <email>mutt-ng-users@lists.berlios.de</email>: This is
-        where the mutt-ng user support happens.</li>
+        <email>mutt-ng-users@lists.berlios.de</email>:
+        für Nutzer und Fragen, Anregungen und Smalltalk</li>
       <li>
-        <email>mutt-ng-devel@lists.berlios.de</email>: The
-        development mailing list for mutt-ng</li>
+        <email>mutt-ng-devel@lists.berlios.de</email>:
+        die Entwicklerliste</li>
     </ul>
     
   </section>
   <!--}}}-->
   
-  <section id="introduction-distrib-sites"> <!--{{{-->
-    <title>Software Distribution Sites</title>
+  <section id="introduction-download"> <!--{{{-->
+    <title>Download</title>
     
     <p>
-      So far, there are no official releases of Mutt-ng, but you can
-      download daily snapshots from <web>http://mutt-ng.berlios.de/snapshots/</web>
-      for the ``old'' version.
+      Derzeit gibt es keine offiziellen Releases von Mutt-ng sondern
+      nur täglich erstelle Snapshots der "alten" Version unter
+      <web>http://mutt-ng.berlios.de/snapshots/</web>.
     </p>
     
     <p>
-      The code of the rewrite branch is currently only available via
-      subversion:
+      Die Quellen der Neuentwicklung sind derzeit nur über
+      subversion verfügbar:
     </p>
 
     <pre>
@@ -123,9 +130,9 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     <title>IRC</title>
     
     <p>
-      Visit channel <tt>#muttng</tt> on <tt>irc.freenode.net</tt>
-      (see <web>http://www.freenode.net/</web>) to chat with other people
-      interested in Mutt-ng.  
+      Um mit anderen an Mutt-ng interesierten Leuten zu chatten,
+      gibt es den Kanal <tt>#muttng</tt> auf <tt>irc.freenode.net</tt>
+      (siehe <web>http://www.freenode.net/</web>).  
     </p>
     
   </section>
@@ -135,11 +142,11 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     <title>Weblog</title>
     
     <p>
-      If you want to read fresh news about the latest development in
-      Mutt-ng, and get informed about stuff like interesting,
-      Mutt-ng-related articles and packages for your favorite
-      distribution, you can read and/or subscribe to our development
-      weblog at <web>http://mutt-ng.supersized.org/</web>.
+      Aktuelle Informationen zu den neuesten Entwicklungen in
+      Mutt-ng, Hinweise über Artikel zu Mutt-ng und Packate für
+      das eigene Betriebssystem, kann man das Entwickler-Weblog
+      unter <web>http://mutt-ng.supersized.org/</web> lesen
+      und/oder abonieren.
     </p>
     
   </section>

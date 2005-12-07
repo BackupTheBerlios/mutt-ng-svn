@@ -87,7 +87,7 @@
     
       </ul>
     
-    @subsection sect_introduction-distrib-sites Software Distribution Sites
+    @subsection sect_introduction-download Download
     
       So far, there are no official releases of Mutt-ng, but you can
       download daily snapshots from <a href="http://mutt-ng.berlios.de/snapshots/">http://mutt-ng.berlios.de/snapshots/</a>

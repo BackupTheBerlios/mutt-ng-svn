@@ -99,8 +99,8 @@
   </section>
   <!--}}}-->
   
-  <section id="introduction-distrib-sites"> <!--{{{-->
-    <title>Software Distribution Sites</title>
+  <section id="introduction-download"> <!--{{{-->
+    <title>Download</title>
     
     <p>
       So far, there are no official releases of Mutt-ng, but you can
