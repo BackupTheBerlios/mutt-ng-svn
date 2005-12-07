@@ -11,17 +11,19 @@ extern "C" {
  * Decodes base64-encoded buffer.
  * @param dest buffer into which the decoded string shall be written.
  * @param src buffer which shall be decoded.
- * @return length of decoded string.
+ * @param chars If given a pointer to @c size_t, this stores how many
+ *              characters of input have been processed to point
+ *              out at which place an error occured.
+ * @return Success.
  */
-unsigned long buffer_decode_base64(buffer_t * dest, const buffer_t * src);
+int buffer_decode_base64(buffer_t * dest, const buffer_t * src, size_t* chars);
 
 /**
  * Encodes a buffer to base64.
  * @param dest buffer into which the encoded string shall be written.
  * @param src buffer which shall be encoded.
- * @return length of encoded string.
  */
-unsigned long buffer_encode_base64(buffer_t * dest, const buffer_t * src);
+void buffer_encode_base64(buffer_t * dest, const buffer_t * src);
 
 #ifdef __cplusplus
 }

@@ -21,7 +21,7 @@ static int hexval (unsigned char c) {
   return (-1);
 }
 
-void qp_encode (buffer_t* dst, buffer_t* src, unsigned char c) {
+void qp_encode (buffer_t* dst, const buffer_t* src, unsigned char c) {
   int i = 0;
   if (!src || !dst)
     return;
@@ -36,14 +36,12 @@ void qp_encode (buffer_t* dst, buffer_t* src, unsigned char c) {
   }
 }
 
-int qp_decode (buffer_t* dst, buffer_t* src, unsigned char c, int* chars) {
+int qp_decode (buffer_t* dst, const buffer_t* src, unsigned char c, size_t* chars) {
   int i = 0;
 
   if (!src || !dst)
     return 0;
 
-  if (chars)
-    *chars = 0;
   buffer_shrink(dst,0);
 
   for (i = 0; i < (int)src->len; i++) {
@@ -58,13 +56,16 @@ int qp_decode (buffer_t* dst, buffer_t* src, unsigned char c, int* chars) {
         buffer_add_ch(dst,(hexval ((unsigned char) src->str[i+1]) << 4) |
                           (hexval ((unsigned char) src->str[i+2])));
         i+=2;
-      } else
+      } else {
+        if (chars)
+          *chars = (size_t) i;
         return (0);
+      }
     }
     else
       buffer_add_ch(dst,(unsigned char)src->str[i]);
-    if (chars)
-      (*chars)++;
   }
+  if (chars)
+    *chars = 0;
   return (1);
 }

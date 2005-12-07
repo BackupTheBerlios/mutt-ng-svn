@@ -21,12 +21,19 @@ static inline int dec(unsigned char x) {
   }
 }
 
-unsigned long buffer_decode_base64(buffer_t * dest,const buffer_t * src) {
-  unsigned short tmp=0,bits=0;
+int buffer_decode_base64(buffer_t * dest,const buffer_t * src, size_t* chars) {
+  unsigned short tmp=0,bits=0,rc=1;
   register const unsigned char* s=(const unsigned char*) src->str;
+  if (chars)
+    *chars = 0;
   for (;;) {
     int a=dec(*s);
     if (a<0) {
+      if (*s != '=') {
+        rc = 0;
+        if (chars)
+          *chars = (const char*)s-src->str;
+      }
       while (*s=='=') ++s;
       break;
     }
@@ -36,15 +43,15 @@ unsigned long buffer_decode_base64(buffer_t * dest,const buffer_t * src) {
       buffer_add_ch(dest,(tmp>>(bits-=8)));
     }
   }
-  return (const char*)s-src->str;
+  return rc;
 }
 
-unsigned long buffer_encode_base64(buffer_t * dest,const buffer_t * src) {
+void buffer_encode_base64(buffer_t * dest,const buffer_t * src) {
   register const unsigned char* s=(const unsigned char*) src->str;
   unsigned short bits=0,temp=0;
   unsigned long written=0,i;
   unsigned int len = src->len;
-  if (!dest) return ((len+2)/3)*4;
+  if (!dest) return;
   for (i=0; i<len; ++i) {
     temp<<=8; temp+=s[i]; bits+=8;
     while (bits>6) {
@@ -58,5 +65,4 @@ unsigned long buffer_encode_base64(buffer_t * dest,const buffer_t * src) {
     ++written;
   }
   while (written&3) { buffer_add_ch(dest,'='); ++written; }
-  return written;
 }

@@ -18,7 +18,7 @@
 
 #include "url.h"
 
-static bool url_decode (char** str, int* chars) {
+static bool url_decode (char** str, size_t* chars) {
   buffer_t tmp1, tmp2;
   int rc = 1;
 
@@ -127,7 +127,7 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error) {
   char *p;
   char *path;
   char *err;
-  int chars = 0;
+  size_t chars = 0;
   size_t pathlen = 0;
 
   url->username = NULL;

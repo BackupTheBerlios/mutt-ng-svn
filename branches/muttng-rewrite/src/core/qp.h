@@ -13,12 +13,12 @@ extern "C" {
  * @param str String to decode.
  * @param c Magic QP character. This is @c % for URLs
  *          and mostly @c = in all other cases.
- * @param chars If given a pointer to @c int, this stores how many
+ * @param chars If given a pointer to @c size_t, this stores how many
  *              characters of input have been processed to point
  *              out at which place an error occured.
  * @return Success.
  */
-int qp_decode (buffer_t* dst, buffer_t* src, unsigned char c, int* chars);
+int qp_decode (buffer_t* dst, const buffer_t* src, unsigned char c, size_t* chars);
 
 /**
  * Encode string to QP.
@@ -27,7 +27,7 @@ int qp_decode (buffer_t* dst, buffer_t* src, unsigned char c, int* chars);
  * @param c Magic QP character. This is @c % for URLs
  *          and mostly @c = in all other cases.
  */
-void qp_encode (buffer_t* dst, buffer_t* src, unsigned char c);
+void qp_encode (buffer_t* dst, const buffer_t* src, unsigned char c);
 
 #ifdef __cplusplus
 }
