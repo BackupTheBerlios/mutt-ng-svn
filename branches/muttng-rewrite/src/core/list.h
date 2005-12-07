@@ -1,4 +1,8 @@
-/** @ingroup core */
+/**
+ * @ingroup core
+ * @addtogroup core_data Data structures
+ * @{
+ */
 /**
  * @file core/list.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
@@ -126,3 +130,5 @@ int list_lookup (list_t* list, int (*cmp) (const LIST_ITEMTYPE, const LIST_ITEMT
 #endif
 
 #endif /* !MUTTNG_CORE_LIST_H */
+
+/** @} */

@@ -1,6 +1,4 @@
-/**
- * @ingroup core
- */
+/** @ingroup core_string */
 /**
  * @file core/conv.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>

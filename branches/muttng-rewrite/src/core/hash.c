@@ -1,4 +1,4 @@
-/** @ingroup core */
+/** @ingroup core_data */
 /**
  * @file core/hash.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>

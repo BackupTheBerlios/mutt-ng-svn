@@ -1,6 +1,4 @@
-/**
- * @ingroup core
- */
+/** @ingroup core_mem */
 /**
  * @file core/mem.c
  * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>

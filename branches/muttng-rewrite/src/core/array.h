@@ -1,6 +1,4 @@
-/**
- * @ingroup core
- */
+/** @ingroup core_data */
 /**
  * @file core/array.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>

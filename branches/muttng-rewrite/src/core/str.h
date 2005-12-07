@@ -1,5 +1,7 @@
 /**
  * @ingroup core
+ * @addtogroup core_string String handling
+ * @{
  */
 /**
  * @file core/str.h
@@ -74,3 +76,5 @@ void str_skip_trailws (char*);
 #endif
 
 #endif /* !MUTTNG_CORE_STR_H */
+
+/** @} */

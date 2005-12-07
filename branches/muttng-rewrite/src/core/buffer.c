@@ -1,6 +1,4 @@
-/**
- * @ingroup core
- */
+/** @ingroup core_string */
 /**
  * @file core/buffer.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>

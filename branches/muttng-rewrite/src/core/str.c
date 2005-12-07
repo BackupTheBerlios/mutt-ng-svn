@@ -1,6 +1,4 @@
-/**
- * @ingroup core
- */
+/** @ingroup core_string */
 /**
  * @file core/str.c
  * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>

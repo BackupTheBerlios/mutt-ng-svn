@@ -1,5 +1,7 @@
 /**
  * @ingroup core
+ * @addtogroup core_mem Memory handling
+ * @{
  */
 /**
  * @file core/mem.h
@@ -31,3 +33,5 @@ void _mem_free (void*);
 #endif
 
 #endif /* !MUTTNG_CORE_MEM_H */
+
+/** @} */

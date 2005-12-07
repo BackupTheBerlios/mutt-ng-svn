@@ -1,4 +1,8 @@
-/** @ingroup core */
+/**
+ * @ingroup core
+ * @addtogroup core_io I/O routines
+ * @{
+ */
 /**
  * @file core/io.h
  * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
@@ -70,3 +74,5 @@ int io_tempfile (const char* dir, const char* name, buffer_t* tempfile);
 #endif
 
 #endif
+
+/** @} */

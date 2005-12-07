@@ -1,6 +1,4 @@
-/**
- * @ingroup core
- */
+/** @ingroup core_legacy */
 /**
  * @file core/exit.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>

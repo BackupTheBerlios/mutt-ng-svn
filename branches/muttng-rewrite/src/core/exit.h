@@ -1,5 +1,8 @@
 /**
  * @ingroup core
+ * @addtogroup core_legacy Legacy
+ * @{
+ * <b>NOTE: THIS IS TO BE REMOVED EVENTUALLY</b>.
  */
 /**
  * @file core/exit.h
@@ -20,3 +23,5 @@ void exit_fatal (const char*, const char*, int, const char*, int);
 #endif
 
 #endif /* !MUTTNG_CORE_EXIT_H */
+
+/** @} */
