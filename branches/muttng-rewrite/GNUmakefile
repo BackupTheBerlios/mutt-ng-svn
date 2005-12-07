@@ -1,6 +1,6 @@
 SUBDIRS=doc src
 
-all: subdirs
+all: sysconf subdirs
 
 clean: subdirclean
 
@@ -21,3 +21,6 @@ svn-commit:
 include GNUmakefile.subdirs
 
 .PHONY: doc
+
+sysconf:
+	$(MAKE) -f GNUmakefile.sysconf sysconf

@@ -38,6 +38,9 @@
         Anwendungen wird GNU gettext benötigt.</li>
       <li>Für optional verschlüsstelte Verbindungen wird entweder
         OpenSSL oder GNUTLS benötigt.</li>
+      <li>Zwar technisch optional aber dringend empfohlen wird die Installation
+        von libiconv, die für das Konvertieren von Zeichensätzen/-kodierungen
+        benötigt wird.</li>
     </ul>
 
     <p>
@@ -101,6 +104,10 @@
         installiert ist. Dies wird für verschlüsselte Verbindungen benötigt.
         Wenn kein Wert gegeben ist, wird OpenSSL nicht verwendet.
         Vorgabe: keine.</li>
+      <li><tt>LIBICONVDIR=/path</tt>. Pfad in dem libiconv installiert ist,
+        die für Konvertierungen zwischen Zeichensätzen/-kodierungen
+        benötigt wird. Wird kein Wert angegeben, wird libiconv nicht
+        verwendet. Vorgabe: keine.</li>
     </ul>
 
   </section>
@@ -110,29 +117,30 @@
     <title>Anwendungen übersetzen</title>
 
     <p>
-      From the <tt>src</tt> subdirectory, the following are important targets:
+      Das Übersetzunen der Anwendungen sollte recht einfach sein:
     </p>
 
-    <ul>
-      <li><tt>depend.</tt> Please always run "make depend" first.</li>
-      <li><tt>all.</tt> Build everything.</li>
-      <li><tt>test.</tt> Build an run all unit tests.</li>
-      <li><tt>srcdoc.</tt> Run <man>doxygen</man> to generate the docs from source.
-        The output will be placed in the <tt>doxygen</tt> directory. <b>NOTE:</b> you
-        need the graphviz package, too. If not, look through the file
-        <tt>src/Doxyfile</tt> and there for a line called
-        <tt>HAVE_DOT</tt>. Change the <tt>YES</tt> into <tt>NO.</tt></li>
-    </ul>
+    <ol>
+      <li>Nach der Lektüre <docref href="build-config">wie man das Übersetzen
+          konfiguriert</docref>, muss zunächst <tt>GNUmakefile.config.mine</tt>
+        entsprechend bearbeitet werden.</li>
+      <li>Im obersten Verzeichnis führt man
+        <pre>
+$ make sysconf</pre>
+        danach als ersten Befehl aus. Es werden verrückte Fehlermeldungen
+        kommen falls nicht.</li>
+      <li>Wenn nicht mit einem Fehler abgebrochen wurde (was nicht passieren
+        sollte), führt man
+        <pre>
+$ make depend</pre>
+        ebenfalls im obersten Verzeichnis aus.</li>
+      <li>Wenn immernoch alles ohne Fehler lief, führt man nur noch 
+        <tt>make</tt> aus, um alles zu übersetzen.</li>
+    </ol>
 
     <p>
-      Building the main applications should be as easy as the following:
-    </p>
-
-    <pre>
-$ cd ./src &amp;&amp; make depend &amp;&amp; make</pre>
-
-    <p>
-      If any build process fails, please notify the developers via
+      Sollte irgendeiner dieser Schritte fehl schlagen,
+      bitten wir um Nachricht an die Entwickler über die E-Mail-Adresse
       <email>mutt-ng-devel@lists.berlios.de</email>.
     </p>
  

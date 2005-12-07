@@ -176,6 +176,9 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
         GNU gettext is required to be installed.</li>
     <li>Optionally, for encrypted connections, either OpenSSL or GNUTLS is
         required.</li>
+    <li>Though technically optional it's higly recommended to have
+        libiconv installed which is used for conversions between
+        different characte sets/encodings.</li>
     
       </ul>
     
@@ -231,32 +234,34 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     <li><tt>OPENSSLDIR=/path</tt>. Where OpenSSL
         is installed. This is required for encrypted connections.
         If none is given, OpenSSL won't be used. Default: none.</li>
+    <li><tt>LIBICONVDIR=/path</tt>. Where libiconv is installed.
+        This is required for conversions between character sets/encodings.
+        If none is given, libiconv won't be used. Default: none.</li>
     
       </ul>
     
     @subsection sect_build-app Building applications
     
-      From the <tt>src</tt> subdirectory, the following are important targets:
+      Building the main applications should be as easy as the following steps:
     
 
-    <ul>
-    <li><tt>depend.</tt> Please always run "make depend" first.</li>
-    <li><tt>all.</tt> Build everything.</li>
-    <li><tt>test.</tt> Build an run all unit tests.</li>
-    <li><tt>srcdoc.</tt> Run <tt>doxygen(1)</tt> to generate the docs from source.
-        The output will be placed in the <tt>doxygen</tt> directory. <b>NOTE:</b> you
-        need the graphviz package, too. If not, look through the file
-        <tt>src/Doxyfile</tt> and there for a line called
-        <tt>HAVE_DOT</tt>. Change the <tt>YES</tt> into <tt>NO.</tt></li>
+    <ol>
+    <li>After reading how to @ref build-config "configure the build
+          system" , edit <tt>GNUmakefile.config.mine</tt> accordingly.</li>
+    <li>In the top-level directory, run:
+        <pre>
+$ make sysconf</pre>
+        as the very first command. You'll get weird error messages if not.</li>
+    <li>If it didn't stop with an error (what shouldn't happen), run
+        <pre>
+$ make depend</pre>
+        in the top-level directory.</li>
+    <li>If everything still succeeded, just run <tt>make</tt> to build
+        everything.</li>
     
-      </ul>
+      </ol>
     
-      Building the main applications should be as easy as the following:
-    
-
-    <pre>
-$ cd ./src && make depend && make</pre>
-      If any build process fails, please notify the developers via
+      If any of these steps fails, please notify the developers via
       <a href="mailto:mutt-ng-devel@lists.berlios.de">&lt;mutt-ng-devel@lists.berlios.de&gt;</a>.
     
 
@@ -871,7 +876,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
     @htmlonly
     <p class="title">Library-specific make compile variables</p>
       <table class="ordinary" rowsep="1" summary="Library-specific make compile variables">
-    <thead><tr><td>Libarary</td><td>suffix</td><td>Variables</td></tr></thead><tbody><tr><td>OpenSSL</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr><tr><td>GNUTLS</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr></tbody>
+    <thead><tr><td>Libarary</td><td>suffix</td><td>Variables</td></tr></thead><tbody><tr><td>OpenSSL</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr><tr><td>GNUTLS</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr><tr><td>LibIconv</td><td><tt>LIBICONV</tt></td><td><tt>CFLAGSLIBICONV</tt>, <tt>CXXFLAGSLIBICONV</tt>, <tt>LDFLAGSLIBICONV</tt></td></tr></tbody>
       </table>
       @endhtmlonly
     

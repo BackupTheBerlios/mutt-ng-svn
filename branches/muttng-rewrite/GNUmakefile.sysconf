@@ -19,6 +19,9 @@ testing_cpp=echo -n "Testing for working $(2)()..." && \
 	(grep "$(3) 1" $(4) >/dev/null 2>&1 && (echo " yes") || \
 	  (echo " no")) ; rm -rf $(CURDIR)/a.out
 
+# extremely ugly: get modifier for inbuf arg of iconv()
+ICONVCONST:=$(shell test -f $(LIBICONVDIR)/include/iconv.h && ( grep ' iconv .iconv_t' $(LIBICONVDIR)/include/iconv.h | cut -d , -f 2 | sed 's/char.*$$//' ))
+
 all:
 	@ true
 
@@ -37,6 +40,11 @@ ifneq ($(DEBUG),)
 	echo "#define HAVE_DEBUG 1" >> ./src/core/core_features.h
 else
 	echo "#define HAVE_DEBUG 0" >> ./src/core/core_features.h
+endif
+ifeq ($(strip $(ICONVCONST)),)
+	echo "#define ICONV_CONST /**/" >> ./src/core/core_features.h
+else
+	echo "#define ICONV_CONST $(ICONVCONST)" >> ./src/core/core_features.h
 endif
 	echo "#endif /* !CORE_FEATURES_H */" >> ./src/core/core_features.h
 	rm -rf a.out

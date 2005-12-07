@@ -36,6 +36,9 @@
         GNU gettext is required to be installed.</li>
       <li>Optionally, for encrypted connections, either OpenSSL or GNUTLS is
         required.</li>
+      <li>Though technically optional it's higly recommended to have
+        libiconv installed which is used for conversions between
+        different characte sets/encodings.</li>
     </ul>
 
     <p>
@@ -94,6 +97,9 @@
       <li><tt>OPENSSLDIR=/path</tt>. Where OpenSSL
         is installed. This is required for encrypted connections.
         If none is given, OpenSSL won't be used. Default: none.</li>
+      <li><tt>LIBICONVDIR=/path</tt>. Where libiconv is installed.
+        This is required for conversions between character sets/encodings.
+        If none is given, libiconv won't be used. Default: none.</li>
     </ul>
 
   </section>
@@ -104,29 +110,26 @@
     <title>Building applications</title>
 
     <p>
-      From the <tt>src</tt> subdirectory, the following are important targets:
+      Building the main applications should be as easy as the following steps:
     </p>
 
-    <ul>
-      <li><tt>depend.</tt> Please always run "make depend" first.</li>
-      <li><tt>all.</tt> Build everything.</li>
-      <li><tt>test.</tt> Build an run all unit tests.</li>
-      <li><tt>srcdoc.</tt> Run <man>doxygen</man> to generate the docs from source.
-        The output will be placed in the <tt>doxygen</tt> directory. <b>NOTE:</b> you
-        need the graphviz package, too. If not, look through the file
-        <tt>src/Doxyfile</tt> and there for a line called
-        <tt>HAVE_DOT</tt>. Change the <tt>YES</tt> into <tt>NO.</tt></li>
-    </ul>
+    <ol>
+      <li>After reading how to <docref href="build-config">configure the build
+          system</docref>, edit <tt>GNUmakefile.config.mine</tt> accordingly.</li>
+      <li>In the top-level directory, run:
+        <pre>
+$ make sysconf</pre>
+        as the very first command. You'll get weird error messages if not.</li>
+      <li>If it didn't stop with an error (what shouldn't happen), run
+        <pre>
+$ make depend</pre>
+        in the top-level directory.</li>
+      <li>If everything still succeeded, just run <tt>make</tt> to build
+        everything.</li>
+    </ol>
 
     <p>
-      Building the main applications should be as easy as the following:
-    </p>
-
-    <pre>
-$ cd ./src &amp;&amp; make depend &amp;&amp; make</pre>
-
-    <p>
-      If any build process fails, please notify the developers via
+      If any of these steps fails, please notify the developers via
       <email>mutt-ng-devel@lists.berlios.de</email>.
     </p>
  

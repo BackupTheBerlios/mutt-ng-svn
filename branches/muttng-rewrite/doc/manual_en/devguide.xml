@@ -411,6 +411,10 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
               <td>GNUTLS</td><td><tt>SSL</tt></td>
               <td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td>
             </tr>
+            <tr>
+              <td>LibIconv</td><td><tt>LIBICONV</tt></td>
+              <td><tt>CFLAGSLIBICONV</tt>, <tt>CXXFLAGSLIBICONV</tt>, <tt>LDFLAGSLIBICONV</tt></td>
+            </tr>
           </tb>
         </tab>
       </p>

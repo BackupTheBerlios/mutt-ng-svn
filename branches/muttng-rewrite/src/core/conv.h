@@ -13,6 +13,8 @@
 extern "C" {
 #endif
 
+#include "buffer.h"
+
 /**
  * Buffer size for converting int to string via conv_itoa().
  * As we may convert to binary:
@@ -52,6 +54,25 @@ char* conv_itoa2 (char* buf, int num, int pad, int base);
  * @test buffer_tests::test_buffer_add_num2().
  */
 #define conv_itoa(B,N,P)        conv_itoa2(B,N,P,10)
+
+/**
+ * See if two character sets are identical.
+ * These are first canonicalized if required.
+ * @param c1 1st Character set.
+ * @param c2 2nd Character set.
+ */
+int conv_charset_eq (const char* c1, const char* c2);
+
+/**
+ * Convert a buffer using @c iconv().
+ * If no libiconv support was built in, this does nothing at all.
+ * @param src Source string to be converted in-place.
+ * @param in Input character set.
+ * @param out Output character set.
+ * @return Whether conversion succeeded or not.
+ * @test conv_tests::test_iconv().
+ */
+int conv_iconv (buffer_t* src, const char* in, const char* out);
 
 #ifdef __cplusplus
 }

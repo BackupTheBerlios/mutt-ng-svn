@@ -1,10 +1,10 @@
-CXXFLAGS+=-I..
-LDFLAGS+=-L.. -lcore -lunit++
-LINKLIBS=test.o buffer_tests.o hash_tests.o list_tests.o io_tests.o
-
 include $(CURDIR)/../../../GNUmakefile.whereis
 include $(CURDIR)/../../../GNUmakefile.config.mine
 include $(CURDIR)/../../../GNUmakefile.config
+
+CXXFLAGS+=-I..
+LDFLAGS+=-L.. -lcore -lunit++ $(LDFLAGS_LIBICONV)
+LINKLIBS=test.o buffer_tests.o hash_tests.o list_tests.o io_tests.o conv_tests.o
 
 all: 
 	@echo "run '$(MAKE) test' in order to compile the tests"
