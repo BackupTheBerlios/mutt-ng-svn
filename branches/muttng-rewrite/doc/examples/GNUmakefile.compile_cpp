@@ -1,7 +1,7 @@
 
 FILES=libmuttng_mailbox_create libmuttng_signal libmuttng_url
 LIB=
-APPS=app_libmuttng_signal app_libmuttng_url
+APPS=$(patsubst %,app_%,$(FILES))
 
 include $(CURDIR)/../../GNUmakefile.whereis
 include $(CURDIR)/../../GNUmakefile.config.mine

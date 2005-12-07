@@ -8,13 +8,33 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-11-28 09:30+0000\n"
+"POT-Creation-Date: 2005-12-07 10:08+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+
+#: ../libmuttng/mailbox/mailbox.cpp:63
+msgid "general error"
+msgstr ""
+
+#: ../libmuttng/mailbox/mailbox.cpp:64
+msgid "not authenticated"
+msgstr ""
+
+#: ../libmuttng/mailbox/mailbox.cpp:65
+msgid "not connected"
+msgstr ""
+
+#: ../libmuttng/mailbox/mailbox.cpp:66
+msgid "ok"
+msgstr ""
+
+#: ../libmuttng/mailbox/mailbox.cpp:67
+msgid "new mail"
+msgstr ""
 
 #: ../libmuttng/debug.cpp:110
 #, c-format
@@ -26,27 +46,35 @@ msgstr ""
 msgid "debug finished at level %d for %s at %s"
 msgstr ""
 
-#: ../libmuttng/util/url.cpp:128
-msgid "internal error"
+#: ../libmuttng/transport/connection.cpp:159
+msgid "failed to create connection: no URL given"
 msgstr ""
 
-#: ../libmuttng/util/url.cpp:143
+#: ../libmuttng/transport/connection.cpp:165
+msgid "failed to create connection: no host and/or port given"
+msgstr ""
+
+#: ../libmuttng/util/url.cpp:135
+msgid "no or too long protocoll identifier in URL"
+msgstr ""
+
+#: ../libmuttng/util/url.cpp:151
 msgid "unsupported protocol: "
 msgstr ""
 
-#: ../libmuttng/util/url.cpp:229
+#: ../libmuttng/util/url.cpp:242
 msgid "decoding error in: "
 msgstr ""
 
-#: ../libmuttng/util/url.cpp:237
+#: ../libmuttng/util/url.cpp:250
 msgid "empty field in URL"
 msgstr ""
 
-#: ../libmuttng/util/url.cpp:269
+#: ../libmuttng/util/url.cpp:283
 msgid "no remote files supported for \"file\" protocol"
 msgstr ""
 
-#: ../libmuttng/util/url.cpp:276
+#: ../libmuttng/util/url.cpp:290
 msgid "no host given for protocol"
 msgstr ""
 
@@ -102,7 +130,7 @@ msgid " "
 msgstr ""
 
 #. * Usage string for @c muttng(1).
-#: ../muttng/tools/muttng_tool.cpp:20
+#: ../muttng/tools/muttng_tool.cpp:21
 msgid ""
 "Usage: muttng [ -nRyzZ ] [ -e <cmd> ] [ -F <file> ] [ -m <type> ] [ -f "
 "<file> ]\n"
@@ -121,7 +149,7 @@ msgid ""
 msgstr ""
 
 #. * Help string for @c muttng(1).
-#: ../muttng/tools/muttng_tool.cpp:33
+#: ../muttng/tools/muttng_tool.cpp:34
 msgid ""
 "Options:\n"
 "  -A <alias>\texpand the given alias\n"
@@ -147,6 +175,22 @@ msgid ""
 "  -z\t\texit immediately if there are no messages in the mailbox\n"
 "  -Z\t\topen the first folder with new message, exit immediately if none\n"
 "  "
+msgstr ""
+
+#: ../muttng/tools/muttng_tool.cpp:109
+msgid "Error opening folder '"
+msgstr ""
+
+#: ../muttng/tools/muttng_tool.cpp:109
+msgid "': "
+msgstr ""
+
+#: ../muttng/tools/muttng_tool.cpp:131
+msgid "Enter username for "
+msgstr ""
+
+#: ../muttng/tools/muttng_tool.cpp:141
+msgid "Enter password for "
 msgstr ""
 
 #. * How to reach us
@@ -277,39 +321,39 @@ msgstr ""
 msgid "not a number: "
 msgstr ""
 
-#: ../muttng/config/set_command.cpp:198
+#: ../muttng/config/set_command.cpp:202
 msgid "string"
 msgstr ""
 
-#: ../muttng/config/set_command.cpp:199
+#: ../muttng/config/set_command.cpp:203
 msgid "boolean"
 msgstr ""
 
-#: ../muttng/config/set_command.cpp:200
+#: ../muttng/config/set_command.cpp:204
 msgid "number"
 msgstr ""
 
-#: ../muttng/config/set_command.cpp:201
+#: ../muttng/config/set_command.cpp:205
 msgid "quad-option"
 msgstr ""
 
-#: ../muttng/config/set_command.cpp:202
+#: ../muttng/config/set_command.cpp:206
 msgid "url"
 msgstr ""
 
-#: ../muttng/config/set_command.cpp:245
+#: ../muttng/config/set_command.cpp:249
 msgid "Error for option $"
 msgstr ""
 
-#: ../muttng/config/set_command.cpp:248
+#: ../muttng/config/set_command.cpp:252
 msgid ": invalid default value: \""
 msgstr ""
 
-#: ../muttng/config/set_command.cpp:256
+#: ../muttng/config/set_command.cpp:260
 msgid ": invalid command"
 msgstr ""
 
-#: ../muttng/config/set_command.cpp:257
+#: ../muttng/config/set_command.cpp:261
 msgid " (report this)"
 msgstr ""
 

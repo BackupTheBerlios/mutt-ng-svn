@@ -4,6 +4,12 @@
 ./../libmuttng/mailbox/nntp_mailbox.cpp
 ./../libmuttng/mailbox/mailbox.cpp
 ./../libmuttng/mailbox/pop3_mailbox.cpp
+./../libmuttng/mailbox/mmdf_mailbox.cpp
+./../libmuttng/mailbox/mbox_mailbox.cpp
+./../libmuttng/mailbox/mh_mailbox.cpp
+./../libmuttng/mailbox/file_mailbox.cpp
+./../libmuttng/mailbox/dir_mailbox.cpp
+./../libmuttng/mailbox/maildir_mailbox.cpp
 ./../libmuttng/debug.cpp
 ./../libmuttng/libmuttng.cpp
 ./../libmuttng/message/message.cpp
@@ -12,8 +18,14 @@
 ./../libmuttng/test/test.cpp
 ./../libmuttng/test/signal_tests.cpp
 ./../libmuttng/test/url_tests.cpp
+./../libmuttng/test/conn_tests.cpp
+./../libmuttng/test/header_tests.cpp
 ./../libmuttng/cache/cache.cpp
 ./../libmuttng/cache/cache_qdbm.cpp
+./../libmuttng/transport/connection.cpp
+./../libmuttng/transport/plain_connection.cpp
+./../libmuttng/transport/ssl_connection.cpp
+./../libmuttng/transport/tls_connection.cpp
 ./../libmuttng/crypto/crypto.cpp
 ./../libmuttng/crypto/classic_crypto.cpp
 ./../libmuttng/crypto/classic_pgp.cpp
@@ -54,3 +66,6 @@
 ./../muttng/ui/ui_text.cpp
 ./../muttng/ui/ui.cpp
 ./../muttng/muttng.cpp
+./../sysconf/test_strsep.c
+./../sysconf/test_mmap.c
+./../sysconf/test_alloca.c

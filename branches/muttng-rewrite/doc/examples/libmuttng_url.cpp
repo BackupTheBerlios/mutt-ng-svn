@@ -13,10 +13,12 @@ int main (int argc, char** argv) {
     if (!(url = url_from_string(argv[1],&error))) {
       std::cerr << "URL '" << argv[1] << "' is invalid: "
         << error.str << std::endl;
+      buffer_free(&error);
       return 1;
     }
     std::cout << "URL is " << (url->secure?"":"not ")
       << "secure" << std::endl;
+    url_free(url);
   } else {
     std::cout << "Usage: " << argv[0] << " [url]" << std::endl;
   }
