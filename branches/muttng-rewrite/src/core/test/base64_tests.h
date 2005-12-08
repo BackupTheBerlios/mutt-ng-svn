@@ -1,10 +1,9 @@
 /** @ingroup libmuttng_unit */
 /**
- * @file libmuttng/test/base64_tests.h
+ * @file core/test/base64_tests.h
  * @author Andreas Krennmair <ak@synflood.at>
  * @brief Interface: base64 unit tests
  */
-
 #ifndef LIBMUTTNG_TEST_BASE64_TESTS_H
 #define LIBMUTTNG_TEST_BASE64_TESTS_H
 
@@ -16,14 +15,19 @@ using namespace unitpp;
 /**
  * base64 unit test
  */
-
 class base64_tests : public suite {
   public:
     base64_tests();
     ~base64_tests();
   private:
+    /** @test buffer_encode_base64(). */
     void test_encode();
+    /** @test buffer_decode_base64(). */
     void test_decode();
+    /**
+     * @test buffer_decode_base64().
+     * @test buffer_encode_base64().
+     */
     void test_both();
 };
 

@@ -21,10 +21,7 @@
  */
 class ConfTool : public Tool {
   public:
-    /**
-     * Constructor for Tool::Tool().
-     * @sa Tool::Tool().
-     */
+    /** @copydoc Tool::Tool(). */
     ConfTool (int argc = 0, char** argv = NULL);
     /** destructor */
     ~ConfTool ();

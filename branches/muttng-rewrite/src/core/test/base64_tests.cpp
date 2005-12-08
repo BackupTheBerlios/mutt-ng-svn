@@ -1,8 +1,17 @@
+/** @ingroup libmuttng_unit */
+/**
+ * @file core/test/base64_tests.cpp
+ * @author Andreas Krennmair <ak@synflood.at>
+ * @brief Implementation: base64 unit tests
+ */
 #include "base64.h"
 #include "base64_tests.h"
 
+/** table with test strings */
 static struct {
+  /** test string */
   const char * decoded;
+  /** hand-encoded version of test string */
   const char * encoded;
 } ECTable[] = {
   { "asdf", "YXNkZg==" },

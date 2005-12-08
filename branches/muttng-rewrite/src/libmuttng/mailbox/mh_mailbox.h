@@ -13,6 +13,10 @@
  */
 class MHMailbox : public DirMailbox {
   public:
+    /**
+     * Create MH mailbox from URL.
+     * @param url_ URL.
+     */
     MHMailbox (url_t* url_);
     ~MHMailbox ();
 
@@ -27,9 +31,11 @@ class MHMailbox : public DirMailbox {
 
     /**
      * Test whether local URL is a MH mailbox.
+     * @param url_ URL.
+     * @param error Error buffer.
      * @return Yes/No.
      */
-    static bool isMH (url_t* url_);
+    static bool isMH (url_t* url_, buffer_t* error);
 }; 
 
 #endif

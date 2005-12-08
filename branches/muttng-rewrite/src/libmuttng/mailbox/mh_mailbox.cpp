@@ -15,7 +15,8 @@ bool MHMailbox::cacheGetKey (Message* msg, buffer_t* dst) {
   return false;
 }
 
-bool MHMailbox::isMH (url_t* url_) {
+bool MHMailbox::isMH (url_t* url_, buffer_t* error) {
   (void)url_;
+  (void) error;
   return false;
 }

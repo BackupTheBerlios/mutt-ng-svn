@@ -13,8 +13,17 @@
 #include "buffer.h"
 #include "base64.h"
 
+/** alphabet */
 static const char base64[]="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
+/**
+ * convert character to decimal.
+ * @param x Character.
+ * @return
+ *   - if @c x matches <tt>[A-Za-z0-9+/]</tt>: numerical value
+ *   - if @c x is \\0 or =: -2
+ *   - -1 otherwise
+ */
 static inline int dec(unsigned char x) {
   if (x>='A' && x<='Z') return x-'A';
   if (x>='a' && x<='z') return x-'a'+26;

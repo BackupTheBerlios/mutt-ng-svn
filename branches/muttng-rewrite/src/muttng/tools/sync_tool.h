@@ -22,10 +22,7 @@
  */
 class SyncTool : public Tool {
   public:
-    /**
-     * Constructor for Tool::Tool().
-     * @sa Tool::Tool().
-     */
+    /** @copydoc Tool::Tool(). */
     SyncTool (int argc = 0, char** argv = NULL);
     /** destructor */
     ~SyncTool ();

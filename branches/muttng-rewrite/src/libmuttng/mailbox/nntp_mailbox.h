@@ -13,6 +13,10 @@
  */
 class NNTPMailbox : public RemoteMailbox {
   public:
+    /**
+     * Create NNTP mailbox from URL.
+     * @param url_ URL.
+     */
     NNTPMailbox (url_t* url_);
     ~NNTPMailbox ();
 };

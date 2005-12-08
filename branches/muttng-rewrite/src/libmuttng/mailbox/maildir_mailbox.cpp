@@ -15,7 +15,8 @@ bool MaildirMailbox::cacheGetKey (Message* msg, buffer_t* dst) {
   return false;
 }
 
-bool MaildirMailbox::isMaildir (url_t* url_) {
+bool MaildirMailbox::isMaildir (url_t* url_, buffer_t* error) {
   (void)url_;
+  (void) error;
   return false;
 }

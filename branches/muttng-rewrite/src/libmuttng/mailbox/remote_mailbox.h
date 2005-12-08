@@ -16,8 +16,19 @@
  */
 class RemoteMailbox : public Mailbox {
   public:
+    /**
+     * Create Maildir mailbox from URL.
+     * @param url_ URL.
+     * @param c Connection.
+     */
     RemoteMailbox (url_t* url_, Connection * c = NULL);
     ~RemoteMailbox ();
+    /**
+     * Create remote mailbox from URL.
+     * @param url_ URL.
+     * @param error Error buffer.
+     * @return Mailbox or @c NULL in case of error.
+     */
     static Mailbox* fromURL (url_t* url_,buffer_t* error);
   protected:
     /** connection */

@@ -16,7 +16,7 @@ class ClassicSMIME : public LibMuttng {
   public:
     ClassicSMIME (void);
     ~ClassicSMIME (void);
-
+    /** @copydoc Crypto::smimeFoo(). */
     void smimeFoo (void);
 
 };

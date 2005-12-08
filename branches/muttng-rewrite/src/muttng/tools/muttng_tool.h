@@ -23,10 +23,7 @@
  */
 class MuttngTool : public Tool {
   public:
-    /**
-     * Constructor for Tool::Tool().
-     * @sa Tool::Tool().
-     */
+    /** @copydoc Tool::Tool(). */
     MuttngTool (int argc = 0, char** argv = NULL);
     /** destructor */
     ~MuttngTool ();
@@ -35,17 +32,24 @@ class MuttngTool : public Tool {
     void getUsage (buffer_t* dst);
 
   private:
+    /**
+     * Dummy for testing connections without UI: Open folder.
+     * @param folder Test Mailbox::fromURL() with this.
+     * @bug remove this.
+     */
     void doIndexMenu(const char* folder);
     /**
-     * Connected to Mailbox::sigGetUsername().
+     * Dummy for testing connections without UI: Connected to Mailbox::sigGetUsername().
      * @param url URL to complete.
      * @return Yes/No.
+     * @bug remove this.
      */
     bool getUsername (url_t* url);
     /**
-     * Connected to Mailbox::sigGetPassword().
+     * Dummy for testing connections without UI: Connected to Mailbox::sigGetPassword().
      * @param url URL to complete.
      * @return Yes/No.
+     * @bug remove this.
      */
     bool getPassword (url_t* url);
 };

@@ -50,7 +50,7 @@ Mailbox* Mailbox::fromURL (const char* url_, buffer_t* error) {
     ret = RemoteMailbox::fromURL(u,error);
     break;
   case P_FILE:
-    ret = LocalMailbox::fromURL(u);
+    ret = LocalMailbox::fromURL(u,error);
     break;
   default:
     break;

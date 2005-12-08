@@ -123,7 +123,7 @@ class Hash : public LibMuttng {
      * Map a function to all keys.
      * @param D Type of additional data to pass through.
      * @param map Map function.
-     * @param moredate Additional data just passed through.
+     * @param moredata Additional data just passed through.
      */
     template<typename D>
     inline void map (void (*map) (const char* key, T data, D moredata),

@@ -16,7 +16,7 @@ class ClassicPGP : public LibMuttng {
   public:
     ClassicPGP (void);
     ~ClassicPGP (void);
-
+    /** @copydoc Crypto::pgpFoo(). */
     void pgpFoo (void);
 
 };

@@ -13,6 +13,7 @@
 
 #include <unistd.h>
 
+/** array of protocols priorities for negotiation */
 static int priority[] = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
 
 TLSConnection::TLSConnection(buffer_t * host, unsigned short port,

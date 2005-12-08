@@ -13,6 +13,10 @@
  */
 class MmdfMailbox : public FileMailbox {
   public:
+    /**
+     * Create MMDF mailbox from URL.
+     * @param url_ URL.
+     */
     MmdfMailbox (url_t* url_);
     ~MmdfMailbox ();
 
@@ -22,9 +26,11 @@ class MmdfMailbox : public FileMailbox {
 
     /**
      * Test whether local URL is a MMDF mailbox.
+     * @param url_ URL.
+     * @param error Error buffer.
      * @return Yes/No.
      */
-    static bool isMmdf (url_t* url_);
+    static bool isMmdf (url_t* url_, buffer_t* error);
 }; 
 
 #endif

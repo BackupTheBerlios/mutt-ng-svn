@@ -17,6 +17,7 @@
  */
 class TLSConnection : public Connection {
   public:
+    /** @copydoc Connection::Connection(). */
     TLSConnection(buffer_t * host = NULL, unsigned short port = 0,
                bool secure_ = false);
     ~TLSConnection();
@@ -25,11 +26,17 @@ class TLSConnection : public Connection {
     bool doOpen();
     bool doClose();
   private:
+    /**
+     * Initialize GNUTLS.
+     * @return Success.
+     */
     bool init();
+    /** whether we called init() already. */
     bool did_init;
+    /** state of GNUTLS session. */
     gnutls_session state;
+    /** credentials for managing certs. */
     gnutls_certificate_credentials xcred;
 };
 
 #endif
-/** @} */

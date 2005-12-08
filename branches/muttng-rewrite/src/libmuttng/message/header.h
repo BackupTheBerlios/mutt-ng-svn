@@ -93,7 +93,9 @@ class Header : public LibMuttng {
     void parseLine(buffer_t * buf);
 
   private:
+    /** header's field name */
     buffer_t name;
+    /** header's actual content */
     buffer_t body;
 };
 

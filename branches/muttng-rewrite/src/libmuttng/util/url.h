@@ -113,6 +113,12 @@ void url_free (url_t* url);
  */
 bool url_eq (url_t* url1, url_t* url2);
 
+/**
+ * For a given protocoll, obtain default port.
+ * @param proto Protocoll.
+ * @param secure Whether connection is secure or not.
+ * @return port
+ */
 unsigned short url_defport (urlproto_t proto, bool secure);
 
 #endif /* !LIBMUTTNG_MESSGAGE_BODY_H */

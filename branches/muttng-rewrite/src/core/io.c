@@ -14,6 +14,14 @@
 
 #include "io.h"
 
+/**
+ * Compare two <tt>struct stat</tt>s.
+ * @param osb 1st structure.
+ * @param nsb 2nd structure.
+ * @return
+ *   - 0 if equal
+ *   - negative otherwise
+ */
 static int compare_stat (struct stat *osb, struct stat *nsb) {
   if (osb->st_dev != nsb->st_dev || osb->st_ino != nsb->st_ino ||
       osb->st_rdev != nsb->st_rdev) {

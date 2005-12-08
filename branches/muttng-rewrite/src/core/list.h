@@ -37,6 +37,7 @@ list_t* list_new (void);
 /**
  * Creates list of given size
  * Useful to avoid malloc() for hash tables and friends.
+ * @param size Number of elements.
  * @return Pointer to list.
  */
 list_t* list_new2 (int size);

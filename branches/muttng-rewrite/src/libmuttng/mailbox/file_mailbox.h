@@ -15,6 +15,10 @@
  */
 class FileMailbox : public LocalMailbox {
   public:
+    /**
+     * Create new file-based mailbox from URL.
+     * @param url_ url.
+     */
     FileMailbox (url_t* url_);
     ~FileMailbox ();
 
@@ -41,15 +45,15 @@ class FileMailbox : public LocalMailbox {
 
     mailbox_query_status checkMailbox();
 
-    mailbox_query_status commitMessage(Message *);
+    mailbox_query_status commitMessage(Message * msg);
 
-    mailbox_query_status openNewMessage(Message *);
+    mailbox_query_status openNewMessage(Message * msg);
 
     bool checkAccess();
 
-    mailbox_query_status fetchMessageHeaders(Message *, unsigned int);
+    mailbox_query_status fetchMessageHeaders(Message * msg, unsigned int msgnum);
 
-    mailbox_query_status fetchMessage(Message *, unsigned int);
+    mailbox_query_status fetchMessage(Message * msg, unsigned int msgnum);
 
 }; 
 

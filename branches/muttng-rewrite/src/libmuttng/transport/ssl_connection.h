@@ -14,6 +14,7 @@
  */
 class SSLConnection : public Connection {
   public:
+    /** @copydoc Connection::Connection(). */
     SSLConnection(buffer_t * host = NULL, unsigned short port = 0,
                bool secure_ = false);
     ~SSLConnection();
@@ -24,4 +25,3 @@ class SSLConnection : public Connection {
 };
 
 #endif
-/** @} */

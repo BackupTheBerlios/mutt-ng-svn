@@ -16,6 +16,7 @@
  */
 class PlainConnection : public Connection {
   public:
+    /** @copydoc Connection::Connection(). */
     PlainConnection(buffer_t * host = NULL, unsigned short port = 0,
                bool secure_ = false);
     ~PlainConnection();
@@ -26,4 +27,3 @@ class PlainConnection : public Connection {
 };
 
 #endif
-/** @} */

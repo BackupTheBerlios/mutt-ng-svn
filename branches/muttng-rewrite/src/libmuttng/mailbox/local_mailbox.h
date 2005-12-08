@@ -13,10 +13,20 @@
  */
 class LocalMailbox : public Mailbox {
   public:
+    /**
+     * Create new local mailbox from URL.
+     * @param url_ url.
+     */
     LocalMailbox (url_t* url_);
     ~LocalMailbox ();
 
-    static Mailbox* fromURL (url_t* url_);
+    /**
+     * Create local mailbox from URL.
+     * @param url_ URL.
+     * @param error Error buffer.
+     * @return Mailbox or @c NULL in case of error.
+     */
+    static Mailbox* fromURL (url_t* url_,buffer_t* error);
 }; 
 
 #endif

@@ -22,10 +22,7 @@
  */
 class MailxTool : public Tool {
   public:
-    /**
-     * Constructor for Tool::Tool().
-     * @sa Tool::Tool().
-     */
+    /** @copydoc Tool::Tool(). */
     MailxTool (int argc = 0, char** argv = NULL);
     /** destructor */
     ~MailxTool ();

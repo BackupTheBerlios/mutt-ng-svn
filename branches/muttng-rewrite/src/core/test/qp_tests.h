@@ -1,6 +1,6 @@
 /** @ingroup libmuttng_unit */
 /**
- * @file libmuttng/test/qp_tests.h
+ * @file core/test/qp_tests.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: QP unit tests
  */
@@ -19,8 +19,14 @@ class qp_tests : public suite {
     qp_tests();
     ~qp_tests();
   private:
+    /** @test qp_encode(). */
     void test_encode();
+    /** @test qp_decode(). */
     void test_decode();
+    /**
+     * @test qp_encode().
+     * @test qp_decode().
+     */
     void test_both();
 };
 

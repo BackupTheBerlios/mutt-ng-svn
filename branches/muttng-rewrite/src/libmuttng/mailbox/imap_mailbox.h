@@ -13,6 +13,10 @@
  */
 class ImapMailbox : public RemoteMailbox {
   public:
+    /**
+     * Create new IMAP mailbox from URL.
+     * @param url_ url.
+     */
     ImapMailbox (url_t* url_);
     ~ImapMailbox ();
 }; 

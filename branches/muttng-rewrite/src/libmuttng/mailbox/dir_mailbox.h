@@ -15,6 +15,10 @@
  */
 class DirMailbox : public LocalMailbox {
   public:
+    /**
+     * Create new directory-based mailbox from URL.
+     * @param url_ url.
+     */
     DirMailbox (url_t* url_);
     ~DirMailbox ();
 
@@ -39,17 +43,18 @@ class DirMailbox : public LocalMailbox {
 
     mailbox_query_status checkMailbox();
 
-    mailbox_query_status commitMessage(Message *);
+    mailbox_query_status commitMessage(Message * msg);
 
-    mailbox_query_status openNewMessage(Message *);
+    mailbox_query_status openNewMessage(Message * msg);
 
     bool checkAccess();
 
-    mailbox_query_status fetchMessageHeaders(Message *, unsigned int);
+    mailbox_query_status fetchMessageHeaders(Message * msg, unsigned int msgnum);
 
-    mailbox_query_status fetchMessage(Message *, unsigned int);
+    mailbox_query_status fetchMessage(Message * msg, unsigned int msgnum);
 
   protected:
+    /** cache object */
     Cache* cache;
 }; 
 

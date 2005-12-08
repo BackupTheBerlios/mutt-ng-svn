@@ -14,6 +14,11 @@
  */
 class POP3Mailbox : public RemoteMailbox {
   public:
+    /**
+     * Create POP3 mailbox from URL.
+     * @param url_ URL.
+     * @param c Connection.
+     */
     POP3Mailbox (url_t* url_, Connection * c = NULL);
     ~POP3Mailbox ();
 
@@ -32,15 +37,15 @@ class POP3Mailbox : public RemoteMailbox {
 
     mailbox_query_status checkMailbox();
 
-    mailbox_query_status commitMessage(Message *);
+    mailbox_query_status commitMessage(Message * msg);
 
-    mailbox_query_status openNewMessage(Message *);
+    mailbox_query_status openNewMessage(Message * msg);
 
     bool checkAccess();
 
-    mailbox_query_status fetchMessageHeaders(Message *, unsigned int);
+    mailbox_query_status fetchMessageHeaders(Message * msg, unsigned int msgnum);
 
-    mailbox_query_status fetchMessage(Message *, unsigned int);
+    mailbox_query_status fetchMessage(Message * msg, unsigned int msgnum);
 
     /**
      * Compute key for caching a message.

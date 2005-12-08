@@ -1,12 +1,13 @@
 /** @ingroup core_conv */
 /**
- * @file core/qp.h
+ * @file core/qp.c
  * @brief Implementation: Quoted-printable conversions
  */
 #include <ctype.h>
 #include <string.h>
 #include "qp.h"
 
+/** alphabet */
 static const char Hex[] = { "0123456789ABCDEF" };
 
 /**

@@ -18,6 +18,12 @@
 
 #include "url.h"
 
+/**
+ * QP-decode an URL. This just wraps qp_decode().
+ * @param str Pointer to string.
+ * @param chars Pointer for error storage of qp_decode().
+ * @return Success.
+ */
 static bool url_decode (char** str, size_t* chars) {
   buffer_t tmp1, tmp2;
   int rc = 1;

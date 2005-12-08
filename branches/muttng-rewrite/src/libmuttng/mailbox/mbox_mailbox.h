@@ -13,6 +13,10 @@
  */
 class MboxMailbox : public FileMailbox {
   public:
+    /**
+     * Create MBOX mailbox from URL.
+     * @param url_ URL.
+     */
     MboxMailbox (url_t* url_);
     ~MboxMailbox ();
 
@@ -22,9 +26,11 @@ class MboxMailbox : public FileMailbox {
 
     /**
      * Test whether local URL is a MBOX mailbox.
+     * @param url_ URL.
+     * @param error Error buffer.
      * @return Yes/No.
      */
-    static bool isMbox (url_t* url_);
+    static bool isMbox (url_t* url_, buffer_t* error);
 
 }; 
 

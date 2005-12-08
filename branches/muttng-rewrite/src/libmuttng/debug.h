@@ -98,33 +98,27 @@ class Debug {
 };
 
 #ifdef __GNUG__
-/**
- * For GNU g++: debug print macro.
- * Use with classes derived from Muttng or LibMuttng only.
- * @param O Who wants debugging.
- * @param L Message's debug level.
- * @param X @c printf()-style message in brackets,
- *          eg <code>("foo %s", bar)</code>
- */
 #define DEBUGPRINT2(O,L,X) do { \
   if (O->printIntro (__FILE__,__LINE__,__FUNCTION__,L)) \
     O->printLine X; \
 } while (0)
 
 #else
+#define DEBUGPRINT2(O,L,X) do { \
+  if (O->printIntro (__FILE__,__LINE__,NULL,L)) \
+    O->printLine X; \
+} while (0)
+#endif
+
 /**
- * For non-GNU g++: debug print macro.
+ * @def DEBUGPRINT2
+ * Compiler-dependent: debug print macro.
  * Use with classes derived from Muttng or LibMuttng only.
  * @param O Who wants debugging.
  * @param L Message's debug level.
  * @param X @c printf()-style message in brackets,
  *          eg <code>("foo %s", bar)</code>
  */
-#define DEBUGPRINT2(O,L,X) do { \
-  if (O->printIntro (__FILE__,__LINE__,NULL,L)) \
-    O->printLine X; \
-} while (0)
-#endif
 
 /**
  * Print a debug line.

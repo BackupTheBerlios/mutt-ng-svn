@@ -38,7 +38,7 @@ class Cache : public LibMuttng {
     virtual bool cacheDumpSingle (url_t* url, const char* key, Message* message) = 0;
     /**
      * Get caching module
-     * @param pointer to module.
+     * @return pointer to module.
      */
     static Cache* create();
     /**

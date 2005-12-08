@@ -67,7 +67,10 @@ enum mailbox_query_status {
  */
 class Mailbox : public LibMuttng {
   public:
-    /** construct mailbox form URL already */
+    /**
+     * Create new mailbox from URL.
+     * @param url_ url.
+     */
     Mailbox (url_t* url_);
     /** cleanup */
     virtual ~Mailbox ();
@@ -185,7 +188,7 @@ class Mailbox : public LibMuttng {
 
     /**
      * Retrieve error message for state.
-     * @param State state.
+     * @param state State.
      * @return Error message.
      */
     static const char* strerror (mailbox_query_status state);

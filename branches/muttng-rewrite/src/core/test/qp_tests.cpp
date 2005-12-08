@@ -1,3 +1,9 @@
+/** @ingroup libmuttng_unit */
+/**
+ * @file core/test/qp_tests.cpp
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
+ * @brief Implementation: QP unit tests
+ */
 #include <iostream>
 
 #include "qp.h"

@@ -33,7 +33,7 @@ class Connection : public LibMuttng {
      * Constructor for connection.
      * @param host Hostname.
      * @param port TCP destination port.
-     * @param secure Whether to use a secure connection.
+     * @param secure_ Whether to use a secure connection.
      */
     Connection(buffer_t * host = NULL, unsigned short port = 0,
                bool secure_ = false);
@@ -57,9 +57,35 @@ class Connection : public LibMuttng {
      */
     bool isSecure();
 
+    /**
+     * Read bytes from connection.
+     * @param buf Destination buffer.
+     * @param len How many bytes to read.
+     * @return
+     *   - positive: number of bytes read
+     *   - negative: error
+     */
     virtual int doRead(buffer_t * buf, unsigned int len) = 0;
+
+    /**
+     * Write bytes to connection.
+     * @param buf Source buffer.
+     * @return
+     *   - positive: number of bytes written
+     *   - negative: error
+     */
     virtual int doWrite(buffer_t * buf) = 0;
+
+    /**
+     * After opening the raw socket, perform this initialization.
+     * @return Success.
+     */
     virtual bool doOpen() = 0;
+
+    /**
+     * Before closing raw socket, perform this cleanup.
+     * @return Success.
+     */
     virtual bool doClose() = 0;
 
     /**
@@ -100,6 +126,7 @@ class Connection : public LibMuttng {
     /**
      * Creates a new connection based on the given URL.
      * @param url_ the URL object.
+     * @param error Storage for URL parsing error.
      * @return new Connection, or NULL if an error occured.
      */
     static Connection * fromURL(url_t * url_, buffer_t* error);
@@ -122,12 +149,21 @@ class Connection : public LibMuttng {
     Signal2<buffer_t*,unsigned int> sigPostconnect;
 
   protected:
+    /** destination host's TCP port */
     unsigned short tcp_port;
+    /** destination host */
     buffer_t hostname;
-    int fd; /* this will be pulled out when a pluggable transport
-               mechanism system will be implemented */
+    /**
+     * Socket file descriptor.
+     * @bug this will be pulled out when a pluggable transport
+     * mechanism system will be implemented
+     */
+    int fd; 
+    /** socket address */
     struct sockaddr_in sin;
+    /** whether connection is established */
     bool is_connected;
+    /** whether connection is secure */
     bool secure;
     /**
      * Signal emitted prior to accepting a certificate, if any.
@@ -136,6 +172,7 @@ class Connection : public LibMuttng {
      * @todo pass certificate rather dummy int argument
      */
     Signal1<int> sigCheckCertificate;
+    /** Security Strength Factor for secure connections */
     int ssf;
 };
 

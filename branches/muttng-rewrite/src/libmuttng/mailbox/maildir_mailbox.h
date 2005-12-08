@@ -13,6 +13,10 @@
  */
 class MaildirMailbox : public DirMailbox {
   public:
+    /**
+     * Create Maildir mailbox from URL.
+     * @param url_ URL.
+     */
     MaildirMailbox (url_t* url_);
     ~MaildirMailbox ();
 
@@ -27,9 +31,11 @@ class MaildirMailbox : public DirMailbox {
 
     /**
      * Test whether local URL is a Maildir mailbox.
+     * @param url_ URL.
+     * @param error Error buffer.
      * @return Yes/No.
      */
-    static bool isMaildir (url_t* url_);
+    static bool isMaildir (url_t* url_, buffer_t* error);
 }; 
 
 #endif

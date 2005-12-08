@@ -19,7 +19,8 @@ extern "C" {
 /**
  * Decode a QP string.
  * This will fail on incomplete and the magic @c %00 sequence.
- * @param str String to decode.
+ * @param dst Destination buffer.
+ * @param src Source buffer to decode.
  * @param c Magic QP character. This is @c % for URLs
  *          and mostly @c = in all other cases.
  * @param chars If given a pointer to @c size_t, this stores how many
@@ -31,8 +32,8 @@ int qp_decode (buffer_t* dst, const buffer_t* src, unsigned char c, size_t* char
 
 /**
  * Encode string to QP.
- * @param src Source string.
  * @param dst Destination buffer.
+ * @param src Source string to encode.
  * @param c Magic QP character. This is @c % for URLs
  *          and mostly @c = in all other cases.
  */
