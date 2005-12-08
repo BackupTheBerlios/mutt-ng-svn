@@ -1,12 +1,17 @@
-#include "buffer.h"
-#include "base64.h"
-
-/*
+/** @ingroup core_conv */
+/**
+ * @file core/base64.c
+ * @author Felix von Leitner <felix-libowfat@fefe.de>
+ * @brief Implementation: Base64 conversions
+ *
  * This code is based on the functions scan_base64() and fmt_base64() 
- * of libowfat.
+ * of libowfat (see http://www.fefe.de/libowfat/).
+ *
  * libowfat was written by Felix von Leitner <felix-libowfat@fefe.de> 
  * and is licensed under the GNU General Public License.
  */
+#include "buffer.h"
+#include "base64.h"
 
 static const char base64[]="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
@@ -17,6 +22,8 @@ static inline int dec(unsigned char x) {
   switch (x) {
   case '+': return 62;
   case '/': return 63;
+  case '\0':
+  case '=': return -2;
   default: return -1;
   }
 }
@@ -28,13 +35,17 @@ int buffer_decode_base64(buffer_t * dest,const buffer_t * src, size_t* chars) {
     *chars = 0;
   for (;;) {
     int a=dec(*s);
-    if (a<0) {
-      if (*s != '=') {
-        rc = 0;
-        if (chars)
-          *chars = (const char*)s-src->str;
-      }
+    switch(a) {
+    case -1:
+      rc = 0;
+      if (chars)
+        *chars = (const char*)s-src->str;
+      /* fallthrough */
+    case -2:
       while (*s=='=') ++s;
+      return rc;
+      break;
+    default:
       break;
     }
     tmp=(tmp<<6)|a; bits+=6;

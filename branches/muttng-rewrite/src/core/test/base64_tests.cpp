@@ -54,7 +54,7 @@ void base64_tests::test_decode() {
     buffer_add_str(&dec,ECTable[i].decoded,-1);
     buffer_add_str(&enc,ECTable[i].encoded,-1);
 
-    buffer_decode_base64(&tmp,&enc,NULL);
+    assert_true("decode works",buffer_decode_base64(&tmp,&enc,NULL));
 
     buffer_add_str(&msg,"'",-1);
     buffer_add_buffer(&msg,&enc);
@@ -83,7 +83,7 @@ void base64_tests::test_both() {
     /* first encode */
     buffer_encode_base64(&tmp,&dec);
     /* then decode back */
-    buffer_decode_base64(&tmp2,&tmp,NULL);
+    assert_true("decode works",buffer_decode_base64(&tmp2,&tmp,NULL));
 
     buffer_add_str(&msg,"'",-1);
     buffer_add_buffer(&msg,&dec);

@@ -3,15 +3,26 @@
 #include "qp.h"
 #include "qp_tests.h"
 
+/** table with test strings */
 static struct {
+  /** UTF-8 string */
   const char * decoded;
+  /** QP-hand-encoded */
   const char * encoded;
+  /** if hand-encoded is valid. */
+  int valid;
 } ECTable[] = {
-  { "asdf", "asdf" },
-  { "", "" },
-  { " ", "=20" },
-  { "This is quite a long text, just to test very long text, which is always a good idea to do in unit tests.", "This=20is=20quite=20a=20long=20text=2C=20just=20to=20test=20very=20long=20text=2C=20which=20is=20always=20a=20good=20idea=20to=20do=20in=20unit=20tests=2E" },
-  { NULL, NULL } // end of table
+  { "asdf", "asdf", 1 },
+  { "", "", 1 },
+  { " ", "=20", 1 },
+  { "Täst mit ¤ ünd €", "T=C3=A4st=20mit=20=C2=A4=20=C3=BCnd=20=E2=82=AC", 1 },
+  /* '=Alid$' part is invalid */
+  { "This is invalid.", "This=20is=20invalid=2E=Alid", 0 },
+  /* check if encoding magic chars works/must not work */
+  { "1+1=4", "1=2B1=3D4", 1 },
+  { "-1%7", "=2D1=257", 1 },
+  { "this is valid", "this=20is=20valid=00but=20not=20this", 0 },
+  { NULL, NULL, 0 } // end of table
 };
 
 qp_tests::qp_tests() : suite("qp_tests") {
@@ -29,6 +40,8 @@ void qp_tests::test_encode() {
   buffer_init(&dec); buffer_init(&enc); buffer_init(&tmp); buffer_init(&msg);
 
   for (i=0;ECTable[i].decoded;++i) {
+    if(!ECTable[i].valid)
+      continue;
     buffer_shrink(&dec,0); buffer_shrink(&enc,0); buffer_shrink(&tmp,0); buffer_shrink(&msg,0);
     buffer_add_str(&dec,ECTable[i].decoded,-1);
     buffer_add_str(&enc,ECTable[i].encoded,-1);
@@ -39,7 +52,9 @@ void qp_tests::test_encode() {
     buffer_add_buffer(&msg,&dec);
     buffer_add_str(&msg,"' encodes to '",-1);
     buffer_add_buffer(&msg,&enc);
-    buffer_add_str(&msg,"'",-1);
+    buffer_add_str(&msg,"' (got: '",-1);
+    buffer_add_buffer(&msg,&tmp);
+    buffer_add_str(&msg,"')",2);
 
     assert_true(msg.str,buffer_equal2(&tmp,&enc));
   }
@@ -47,6 +62,7 @@ void qp_tests::test_encode() {
 
 void qp_tests::test_decode() {
   int i;
+  size_t l;
   buffer_t dec, enc;
   buffer_t tmp, msg;
   buffer_init(&dec); buffer_init(&enc); buffer_init(&tmp); buffer_init(&msg);
@@ -56,15 +72,22 @@ void qp_tests::test_decode() {
     buffer_add_str(&dec,ECTable[i].decoded,-1);
     buffer_add_str(&enc,ECTable[i].encoded,-1);
 
-    qp_decode(&tmp,&enc,'=',NULL);
+    buffer_add_str(&msg,"decode(",-1);
+    buffer_add_buffer(&msg,&enc);
+    buffer_add_str(&msg,")==",-1);
+    buffer_add_num(&msg,ECTable[i].valid,-1);
+    assert_true(msg.str,qp_decode(&tmp,&enc,'=',&l)==ECTable[i].valid);
+    buffer_shrink(&msg,0);
 
     buffer_add_str(&msg,"'",-1);
     buffer_add_buffer(&msg,&enc);
     buffer_add_str(&msg,"' decodes to '",-1);
     buffer_add_buffer(&msg,&dec);
-    buffer_add_str(&msg,"'",-1);
+    buffer_add_str(&msg,"' (got: '",-1);
+    buffer_add_buffer(&msg,&tmp);
+    buffer_add_str(&msg,"')",2);
 
-    assert_true(msg.str,buffer_equal2(&tmp,&dec));
+    assert_true(msg.str,buffer_equal1(&tmp,dec.str,l));
   }
 }
 
@@ -85,7 +108,7 @@ void qp_tests::test_both() {
     /* first encode */
     qp_encode(&tmp,&dec,'=');
     /* then decode back */
-    qp_decode(&tmp2,&tmp,'=',NULL);
+    assert_true("decode works",qp_decode(&tmp2,&tmp,'=',NULL));
 
     buffer_add_str(&msg,"'",-1);
     buffer_add_buffer(&msg,&dec);

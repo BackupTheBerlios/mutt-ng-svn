@@ -12,31 +12,53 @@
 
 using namespace unitpp;
 
+/** character sets we do test conversions with */
 static const char* ToSets[] = {
-  "utf-8", "iso-8859-15",
+  /** no comment */
+  "utf-8",
+  /** for euro currency sign */
+  "iso-8859-15",
+  /** for international currency sign but no euro */
+  "iso-8859-1",
+  /** @c conv.c: alias for iso-8859-8 */
+  "hebrew",
+  /** @c conv.c: alias for iso-8859-1 */
+  "latin1",
+  /** @c conv.c: alias for iso-8859-6 */
+  "csISOLatinArabic",
   NULL
 };
 
-static const char* TestStrings[] = {
-  "teststring", "ümläut",
-  NULL
+/** UTF-8 test strings */
+static struct {
+  /** test string */
+  const char* str;
+  /** whether we expect a loss, i.e. non-ASCII input */
+  int loss;
+} TestStrings[] = {
+  { "teststring", 0 },
+  { "ümläut", 1 },
+  { "Täst mit ¤ ünd €", 1 },
+  { NULL, 0 }
 };
 
 void conv_tests::test_iconv() {
-  buffer_t orig, conv, conv2;
+  buffer_t orig, conv, conv2, msg;
   int i = 0, a = 0;
 
   buffer_init(&orig);
   buffer_init(&conv);
   buffer_init(&conv2);
+  buffer_init(&msg);
 
   /** For different character sets and test strings, we: */
   for (a = 0; ToSets[a]; a++) {
-    for (i = 0; TestStrings[i]; i++) {
+    for (i = 0; TestStrings[i].str; i++) {
       buffer_shrink(&orig,0);
       buffer_shrink(&conv,0);
       buffer_shrink(&conv2,0);
-      buffer_add_str(&orig,TestStrings[i],-1);
+      buffer_shrink(&msg,0);
+      buffer_add_str(&orig,TestStrings[i].str,-1);
       buffer_add_buffer(&conv,&orig);
       /** - see if conv_iconv() works at all */
       assert_true("iconv() succeeds",conv_iconv(&conv,"utf-8",ToSets[a]));
@@ -44,7 +66,29 @@ void conv_tests::test_iconv() {
       /** - convert result back */
       conv_iconv(&conv2,ToSets[a],"utf-8");
       /** - and see if it's identical to the original */
-      assert_true("iconv() reverse worked",buffer_equal2(&orig,&conv2));
+      buffer_add_str(&msg,"reverse iconv(): str='",-1);
+      buffer_add_str(&msg,TestStrings[i].str,-1);
+      buffer_add_str(&msg,"' loss=",-1);
+      buffer_add_num(&msg,TestStrings[i].loss,-1);
+      buffer_add_str(&msg," toset=",-1);
+      buffer_add_str(&msg,ToSets[a],-1);
+      buffer_add_str(&msg," got='",-1);
+      buffer_add_buffer(&msg,&conv2);
+      buffer_add_ch(&msg,'\'');
+      /*
+       * the logic here is a little complicated:
+       * - if reverse conversion is equal with orig -> okay
+       * - if not:
+       *        - if we know we don't have a loss (since string is plain ASCII)
+       *          _OR_ we do UTF-8<->UTF-8 on a string, original and
+       *          conversion must be equal
+       *        - if we have a loss we assume iconv() has placed '?'
+       *          in the string somewhere to mark failure
+       */
+      assert_true(msg.str,buffer_equal2(&orig,&conv2) ||
+                          (((!TestStrings[i].loss || str_eq("utf-8",ToSets[a])) &&
+                            buffer_equal2(&orig,&conv2)) ||
+                          (TestStrings[i].loss && strchr(conv2.str,'?'))));
     }
   }
   buffer_free(&orig);

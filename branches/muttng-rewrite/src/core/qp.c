@@ -1,3 +1,8 @@
+/** @ingroup core_conv */
+/**
+ * @file core/qp.h
+ * @brief Implementation: Quoted-printable conversions
+ */
 #include <ctype.h>
 #include <string.h>
 #include "qp.h"
@@ -27,7 +32,8 @@ void qp_encode (buffer_t* dst, const buffer_t* src, unsigned char c) {
     return;
   buffer_shrink(dst,0);
   for (i = 0; i < (int)src->len; i++) {
-    if (!isalnum((unsigned char)src->str[i])) {
+    if (!isalnum((unsigned char)src->str[i]) ||
+        (unsigned char)src->str[i] == c) {
       buffer_add_ch(dst,c);
       buffer_add_ch(dst,Hex[((unsigned char)src->str[i]) / 16]);
       buffer_add_ch(dst,Hex[((unsigned char)src->str[i]) % 16]);

@@ -1,5 +1,10 @@
-#ifndef LIBMUTTNG_UTIL_BASE64__H
-#define LIBMUTTNG_UTIL_BASE64__H
+/** @ingroup core_conv */
+/**
+ * @file core/base64.h
+ * @brief Interface: Base64 conversions
+ */
+#ifndef CORE_BASE64__H
+#define CORE_BASE64__H
 
 #include "buffer.h"
 
@@ -29,5 +34,4 @@ void buffer_encode_base64(buffer_t * dest, const buffer_t * src);
 }
 #endif
 
-
-#endif
+#endif /* !CORE_BASE64__H */

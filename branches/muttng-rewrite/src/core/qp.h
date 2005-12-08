@@ -1,3 +1,12 @@
+/**
+ * @ingroup core
+ * @addtogroup core_conv Data conversion
+ * @{
+ */
+/**
+ * @file core/qp.h
+ * @brief Inteface: Quoted-printable conversions
+ */
 #ifndef CORE_QP_H
 #define CORE_QP_H
 
@@ -33,4 +42,6 @@ void qp_encode (buffer_t* dst, const buffer_t* src, unsigned char c);
 }
 #endif
 
-#endif
+#endif /* !CORE_QP_H */
+
+/** @} */
