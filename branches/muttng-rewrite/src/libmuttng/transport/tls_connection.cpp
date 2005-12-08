@@ -159,3 +159,11 @@ bool TLSConnection::doClose() {
   }
   return false;
 }
+
+bool TLSConnection::getVersion(buffer_t* dst) {
+  if (!dst)
+    return true;
+  buffer_add_str(dst,"gnutls ",7);
+  buffer_add_str(dst,LIBGNUTLS_VERSION,-1);
+  return true;
+}

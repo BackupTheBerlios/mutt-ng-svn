@@ -8,17 +8,15 @@ include ./GNUmakefile.config
 # usage $(call testing_c,[source file],[function name],[preprocessor define],[config file])
 testing_c=echo -n "Testing for working $(2)..." && \
 	(($(CC) $(CFLAGS) -o $(CURDIR)/a.out ./src/sysconf/$(1) >/dev/null 2>&1 && \
-	  ./a.out >> $(4) && \
 	  echo "\#define $(3) 1" || \
 	  echo "\#define $(3) 0") >> $(4)) && \
-	(grep "$(3) 1" $(4) >/dev/null 2>&1 && (echo " yes") || \
+	(grep "$(3) 1" $(4) >/dev/null 2>&1 && ./a.out >> $(4) && (echo " yes") || \
 	  (echo " no")) ; rm -rf $(CURDIR)/a.out
 testing_cpp=echo -n "Testing for working $(2)()..." && \
 	(($(CXX) $(CXXFLAGS) -o $(CURDIR)/a.out ./src/sysconf/$(1) >/dev/null 2>&1 && \
-	  ./a.out >> $(4) && \
 	  echo "\#define $(3) 1" || \
 	  echo "\#define $(3) 0") >> $(4)) && \
-	(grep "$(3) 1" $(4) >/dev/null 2>&1 && (echo " yes") || \
+	(grep "$(3) 1" $(4) >/dev/null 2>&1 && ./a.out >> $(4) && (echo " yes") || \
 	  (echo " no")) ; rm -rf $(CURDIR)/a.out
 
 # extremely ugly: get modifier for inbuf arg of iconv()

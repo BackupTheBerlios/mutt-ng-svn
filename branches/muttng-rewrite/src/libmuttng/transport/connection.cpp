@@ -176,7 +176,7 @@ Connection * Connection::fromURL(url_t * url, buffer_t* error) {
 #ifdef LIBMUTTNG_SSL_OPENSSL
     conn = new SSLConnection(&hostbuf,url->port,url->secure);
 #elif LIBMUTTNG_SSL_GNUTLS
-    conn = new GNUTLSConnection(&hostbuf,url->port,url->secure);
+    conn = new TLSConnection(&hostbuf,url->port,url->secure);
 #else
     return NULL;
 #endif
@@ -191,4 +191,16 @@ Connection * Connection::fromURL(url_t * url, buffer_t* error) {
 
 bool Connection::isSecure() {
   return secure;
+}
+
+bool Connection::getSecureVersion(buffer_t* dst) {
+#if defined(LIBMUTTNG_SSL_OPENSSL) || defined(LIBMUTTNG_SSL_GNUTLS)
+#ifdef LIBMUTTNG_SSL_OPENSSL
+  return SSLConnection::getVersion(dst);
+#elif LIBMUTTNG_SSL_GNUTLS
+  return TLSConnection::getVersion(dst);
+#endif
+#endif
+  (void)dst;
+  return false;
 }

@@ -132,6 +132,13 @@ class Connection : public LibMuttng {
     static Connection * fromURL(url_t * url_, buffer_t* error);
 
     /**
+     * Get version string of secure transport lib used.
+     * @param dst Optional destination buffer.
+     * @return Whether secure transport is supported.
+     */
+    static bool getSecureVersion(buffer_t* dst);
+
+    /**
      * Signal emitted prior to opening the connection.
      * The values passed are:
      * -# hostname

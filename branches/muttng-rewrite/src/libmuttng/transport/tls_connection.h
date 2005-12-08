@@ -25,6 +25,8 @@ class TLSConnection : public Connection {
     int doWrite(buffer_t * buf);
     bool doOpen();
     bool doClose();
+    /** @copydoc Connection::getVersion(). */
+    static bool getVersion(buffer_t* dst);
   private:
     /**
      * Initialize GNUTLS.

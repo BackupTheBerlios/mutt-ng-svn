@@ -210,7 +210,27 @@ int conv_iconv (buffer_t* src, const char* in, const char* out) {
   (void) src; (void) in; (void) out;
   return 1;
 }
+int conv_iconv_version (buffer_t* dst) {
+  (void) dst;
+  return 0;
+}
 #else
+
+int conv_iconv_version (buffer_t* dst) {
+  int v =
+#ifdef _LIBICONV_VERSION
+    _LIBICONV_VERSION;
+#else
+    0;
+#endif
+  if (!dst)
+    return 1;
+  buffer_add_str(dst,"libiconv ",9);
+  buffer_add_num(dst,v>>8,-1);
+  buffer_add_ch(dst,'.');
+  buffer_add_num(dst,v&0xff,-1);
+  return 1;
+}
 
 /**
  * Canonicalize a character set to sane MIME name.

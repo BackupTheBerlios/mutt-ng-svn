@@ -129,7 +129,7 @@ class Hash : public LibMuttng {
     inline void map (void (*map) (const char* key, T data, D moredata),
                      D moredata) {
       hash_map(table,
-               (void(*)(const void*,HASH_ITEMTYPE*,unsigned long)) map,
+               (void(*)(const void*,HASH_ITEMTYPE,unsigned long)) map,
                 (unsigned long) moredata);
     }
 };

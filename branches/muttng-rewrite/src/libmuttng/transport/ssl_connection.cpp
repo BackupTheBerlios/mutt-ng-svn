@@ -9,6 +9,8 @@
 
 #include <unistd.h>
 
+#include <openssl/opensslv.h>
+
 SSLConnection::SSLConnection(buffer_t * host, unsigned short port,
                                  bool secure_) : Connection(host,port,secure_) {}
 SSLConnection::~SSLConnection() {}
@@ -55,3 +57,15 @@ int SSLConnection::doWrite(buffer_t * buf) {
 
 bool SSLConnection::doOpen() { return false; }
 bool SSLConnection::doClose() { return false; }
+
+bool SSLConnection::getVersion (buffer_t* dst) {
+  static char a[] = " abcdefghijklmnopqrstuvwxyz";
+  if (!dst)
+    return true;
+  buffer_add_str(dst,"openssl ",8);
+  buffer_add_num(dst,(OPENSSL_VERSION_NUMBER>>28)&0xf,-1);buffer_add_ch(dst,'.');
+  buffer_add_num(dst,(OPENSSL_VERSION_NUMBER>>20)&0xff,-1);buffer_add_ch(dst,'.');
+  buffer_add_num(dst,(OPENSSL_VERSION_NUMBER>>12)&0xff,-1);
+  buffer_add_ch(dst,a[((OPENSSL_VERSION_NUMBER>>4)&0xff)%26]);
+  return true;
+}

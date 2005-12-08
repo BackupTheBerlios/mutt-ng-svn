@@ -72,6 +72,13 @@ int conv_charset_eq (const char* c1, const char* c2);
  */
 int conv_iconv (buffer_t* src, const char* in, const char* out);
 
+/**
+ * Get iconv() version.
+ * @param dst Optional destination buffer.
+ * @return Wether compiled with iconv support or not.
+ */
+int conv_iconv_version (buffer_t* dst);
+
 #ifdef __cplusplus
 }
 #endif

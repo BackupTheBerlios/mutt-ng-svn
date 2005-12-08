@@ -22,6 +22,8 @@ class SSLConnection : public Connection {
     int doWrite(buffer_t * buf);
     bool doOpen();
     bool doClose();
+    /** @copydoc Connection::getVersion(). */
+    static bool getVersion(buffer_t* dst);
 };
 
 #endif

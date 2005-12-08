@@ -10,12 +10,14 @@
 #include <unistd.h>
 
 #include "core/version.h"
+#include "core/conv.h"
 #include "core/intl.h"
 #include "core/buffer.h"
 #include "core/str.h"
 
 #include "libmuttng/version.h"
 #include "libmuttng/debug.h"
+#include "libmuttng/transport/connection.h"
 
 #include "ui/ui_plain.h"
 
@@ -184,7 +186,7 @@ void Tool::doSystem (buffer_t* dst) {
   struct utsname uts;
 
   uname (&uts);
-  buffer_add_str (dst, "System:\n  ", -1);
+  buffer_add_str (dst, _("System:\n  "), -1);
 #ifdef _AIX
   buffer_add_str (dst, uts.sysname, -1);
   buffer_add_ch (dst, ' ');
@@ -200,12 +202,23 @@ void Tool::doSystem (buffer_t* dst) {
   buffer_add_str (dst, uts.release, -1);
 #endif
 
-  buffer_add_str (dst, "\nInternal Libraries:\n  ", -1);
+  buffer_add_str (dst, _("\nInternal Libraries:\n  "), -1);
   buffer_add_str (dst, CORE_VERSION, -1);
   buffer_add_str (dst, "\n  ", 3);
   buffer_add_str (dst, LIBMUTTNG_VERSION, -1);
 
-  buffer_add_str (dst, "\nExternal Libraries:\n  ", -1);
+  buffer_add_str (dst, _("\nExternal Libraries:\n"), -1);
+
+  if (conv_iconv_version(NULL)) {
+    buffer_add_str(dst,"  ",2);
+    conv_iconv_version(dst);
+    buffer_add_ch(dst,'\n');
+  }
+  if (Connection::getSecureVersion(NULL)) {
+    buffer_add_str(dst,"  ",2);
+    Connection::getSecureVersion(dst);
+    buffer_add_ch(dst,'\n');
+  }
 }
 
 void Tool::doLicense (buffer_t* dst) {
