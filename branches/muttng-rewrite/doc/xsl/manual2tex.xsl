@@ -122,7 +122,14 @@
   </xsl:template>
 
   <xsl:template match="listing">
-    <xsl:text>\lstinputlisting[firstline=2,style=muttng</xsl:text>
+    <xsl:choose>
+      <xsl:when test="@href!=''">
+        <xsl:text>\lstinputlisting[firstline=2,style=muttng</xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:text>\begin{lstlisting}[style=muttng</xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
     <xsl:choose>
       <xsl:when test="@lang='cpp'"><xsl:text>,language=C++</xsl:text></xsl:when>
       <xsl:when test="@lang='make'"><xsl:text>,language={[GNU]make}</xsl:text></xsl:when>
@@ -130,8 +137,17 @@
     </xsl:choose>
     <xsl:text>,caption=</xsl:text><xsl:value-of select="@title"/>
     <xsl:text>,label=</xsl:text><xsl:value-of select="@id"/>
-    <xsl:text>]{</xsl:text><xsl:value-of select="@href"/><xsl:text>}
-    </xsl:text>
+    <xsl:text>]</xsl:text>
+    <xsl:choose>
+      <xsl:when test="@href!=''">
+        <xsl:text>{</xsl:text><xsl:value-of select="@href"/><xsl:text>}
+        </xsl:text>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/><xsl:text>\end{lstlisting}
+        </xsl:text>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="inlinelisting">
@@ -146,7 +162,7 @@
   </xsl:template>
 
   <xsl:template match="docref">
-    <xsl:apply-templates/> <xsl:text> ($\to$ </xsl:text><xsl:value-of select="@type"/><xsl:text> \vref{</xsl:text><xsl:value-of select="@href"/><xsl:text>})</xsl:text>
+    <xsl:text>\docref{</xsl:text><xsl:value-of select="@href"/><xsl:text>}{</xsl:text><xsl:apply-templates/><xsl:text>}{</xsl:text><xsl:value-of select="@type"/><xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="context">
@@ -228,6 +244,10 @@
 
   <xsl:template match="em">
     <xsl:text>\textit{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="footnote">
+    <xsl:text>\footnote{</xsl:text><xsl:apply-templates/><xsl:text>}</xsl:text>
   </xsl:template>
 
   <xsl:template match="ul">

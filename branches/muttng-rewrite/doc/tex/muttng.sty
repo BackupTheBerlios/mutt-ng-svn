@@ -72,6 +72,8 @@
 \newcommand{\cmddef}[2]{Usage: \uglyesc{#1} #2\hypertarget{cmd:#1}{}\index{#1@\uglyesc{#1}}}
 \newcommand{\cmdref}[1]{\hyperlink{cmd:#1}{\uglyesc{#1}}\index{#1@\uglyesc{#1}}}
 
+\newcommand{\docref}[3]{\hyperlink{#1}{#2} ($\to$ #3 \vref{#1})}
+
 \newcommand{\funcdef}[2]{\texttt{<#1>} (default: \texttt{#2})\hypertarget{func:#1}{}\index{#1@\uglyesc{<#1>}}}
 \newcommand{\funcref}[1]{\hyperlink{func:#1}{\texttt{<#1>}}\index{#1@\uglyesc{<#1>}}}
 
@@ -105,7 +107,7 @@ basicstyle=\scriptsize\ttfamily,%
 commentstyle=\rmfamily\color{mygray},%
 numbers=left,stepnumber=5,numberstyle=\tiny\ttfamily,%
 numbersep=5pt,frame=tlbr,extendedchars=true,%
-showstringspaces=false,fontadjust,%
+showstringspaces=false,%
 stringstyle=\itshape,emphstyle=\itshape}
 
 \makeindex

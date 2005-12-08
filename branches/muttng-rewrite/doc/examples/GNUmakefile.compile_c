@@ -1,0 +1,20 @@
+
+FILES=core_buffer_format core_buffer_format2
+LIB=
+APPS=$(patsubst %,app_%,$(FILES))
+
+include $(CURDIR)/../../GNUmakefile.whereis
+include $(CURDIR)/../../GNUmakefile.config.mine
+include $(CURDIR)/../../GNUmakefile.config
+
+CFLAGS+=-I../../src
+
+include $(CURDIR)/../../GNUmakefile.compile_c
+
+test: $(OBJS) $(APPS)
+
+app_%: %.o
+	$(CC) -o $@ $^ $(LDFLAGS) $(LDFLAGS_SSL) $(LDFLAGS_LIBICONV) ./../../src/core/libcore.a
+
+extraclean:
+	rm -rf $(OBJS) $(APPS)

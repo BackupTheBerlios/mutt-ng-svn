@@ -108,6 +108,12 @@
         die für Konvertierungen zwischen Zeichensätzen/-kodierungen
         benötigt wird. Wird kein Wert angegeben, wird libiconv nicht
         verwendet. Vorgabe: keine.</li>
+      <li><tt>DOCLANGUAGES=[|list|all]</tt>. In welchen Sprachen die
+        Dokumentation erstellt wird. Ist ein leerer Wert gegeben wird nur
+        Englisch erstellt. Wenn eine Liste angebeben ist, werden alle
+        enthaltenen Sprachen erstellt (Beispiel: "<tt>en de</tt>").
+        Wird das spezielle Wort <tt>all</tt> angebeben, werden alle
+        verfügbaren Sprachen erstellt. Vorgabe: <tt>all</tt>.</li>
     </ul>
 
   </section>
@@ -121,7 +127,7 @@
     </p>
 
     <ol>
-      <li>Nach der Lektüre <docref href="build-config">wie man das Übersetzen
+      <li>Nach der Lektüre <docref type="Abschnitt" href="build-config">wie man das Übersetzen
           konfiguriert</docref>, muss zunächst <tt>GNUmakefile.config.mine</tt>
         entsprechend bearbeitet werden.</li>
       <li>Im obersten Verzeichnis führt man

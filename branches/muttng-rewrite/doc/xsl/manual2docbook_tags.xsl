@@ -187,7 +187,18 @@
     <example>
       <anchor id="{@id}"/>
       <title><xsl:value-of select="@title"/></title>
-      <programlisting><xi:include  href="{concat('./../examples/',@href)}" parse="text" xmlns:xi="http://www.w3.org/2001/XInclude"/></programlisting>
+      <programlisting>
+        <xsl:choose>
+          <xsl:when test="@href!=''">
+            <xi:include href="{concat('./../examples/',@href)}"
+              parse="text"
+              xmlns:xi="http://www.w3.org/2001/XInclude"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:apply-templates/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </programlisting>
     </example>
   </xsl:template>
 
@@ -197,6 +208,10 @@
 
   <xsl:template match="em">
     <emphasis><xsl:apply-templates/></emphasis>
+  </xsl:template>
+
+  <xsl:template match="footnote">
+    <footnote><para><xsl:apply-templates/></para></footnote>
   </xsl:template>
 
   <xsl:template match="b">

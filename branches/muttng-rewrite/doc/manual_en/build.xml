@@ -100,6 +100,12 @@
       <li><tt>LIBICONVDIR=/path</tt>. Where libiconv is installed.
         This is required for conversions between character sets/encodings.
         If none is given, libiconv won't be used. Default: none.</li>
+      <li><tt>DOCLANGUAGES=[|list|all]</tt>. In which languages to
+        build documentation. If it's empty, only English will be built.
+        If a space-separated list is specified, the given languages will be
+        built (example: "<tt>en de</tt>"). If the special word <tt>all</tt>
+        is specified, all available languages will be build. Default:
+        <tt>all</tt>.</li>
     </ul>
 
   </section>
@@ -114,7 +120,7 @@
     </p>
 
     <ol>
-      <li>After reading how to <docref href="build-config">configure the build
+      <li>After reading how to <docref type="section" href="build-config">configure the build
           system</docref>, edit <tt>GNUmakefile.config.mine</tt> accordingly.</li>
       <li>In the top-level directory, run:
         <pre>

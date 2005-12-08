@@ -816,7 +816,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
         </ul>
 
         <p>
-          <tab cols="2" texstr="l|c|l" id="tab-ref-tags"> <!--{{{-->
+          <tab cols="2" texstr="l|l" id="tab-ref-tags"> <!--{{{-->
             <cap>reference tags</cap>
             <th>
               <tr><td>Tag</td><td>Meaning</td></tr>
@@ -914,47 +914,68 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
       <subsubsection id="devguide-docs-dialect-listings" title="Embedding listrings"> <!--{{{-->
 
         <p>
-          Eventually there will be several types of listings each treated individually
-          for the output.
+          There're the following two tags for specifying listings:
+        </p>
+
+        <ol>
+          <li><docref type="table" href="tab-listing-attrs"><tt>listing</tt></docref>:
+            if given a <tt>href</tt> attribute, it requests the source be found
+            in the external file and given as the tag's text otherwise. For
+            most output formats, it puts the code in a dedicated paragraph.</li>
+          <li><docref type="table" href="tab-inlinelisting-attrs"><tt>inlinelisting</tt></docref>:
+            contrary to the <tt>listing</tt> tag it always expects the code
+            as the tag's text and doesn't put the code in a new paragraph but
+            inlines it into the current.</li>
+        </ol>
+
+        <p>
+          In order to enable syntax-highlighting or auto-generation of references,
+          each listing must be declared with a language of which the code is of.
+          See <docref type="table" href="tab-listing-languages">the given table</docref>
+          with all possible values for the <tt>lang</tt> attribute.
         </p>
 
         <p>
-          The following two tags can be used for specifying listings:
+          <tab cols="2" texstr="l|l" id="tab-listing-languages"> <!--{{{-->
+            <cap><tt>inlinelisting</tt>/<tt>listing</tt> languages</cap>
+            <th>
+              <tr><td><tt>lang</tt> attribute value</td><td>Language</td></tr>
+            </th>
+            <tb>
+              <tr><td><tt>c</tt></td><td>C code</td></tr>
+              <tr><td><tt>cpp</tt></td><td>C++ code</td></tr>
+              <tr><td><tt>make</tt></td><td>GNU <man>make</man> code</td></tr>
+              <tr><td><tt>muttngrc</tt></td><td>mutt-ng configuration</td></tr>
+            </tb>
+          </tab> <!--}}}-->
         </p>
-
-        <ul>
-          <li><tt>listing</tt>: make listing from an external file</li>
-          <li><tt>inlinelisting</tt>: make listing inline from given text</li>
-        </ul>
 
         <p>
-          Both require these attributes:
+          <tab cols="3" texstr="l|c|l" id="tab-inlinelisting-attrs"> <!--{{{-->
+            <cap><tt>inlinelisting</tt> tag attributes</cap>
+            <th>
+              <tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr>
+            </th>
+            <tb>
+              <tr><td><tt>lang</tt></td><td><tt>yes</tt></td><td>listing's language</td></tr>
+            </tb>
+          </tab> <!--}}}-->
         </p>
-
-        <ul>
-          <li><tt>lang</tt> specifies the language. For most of the output this is irrelevant
-            but for LaTeX output and the <tt>listings.sty</tt> package we have syntax-highlighting
-            automatically. The following languages are supported:
-            <ul>
-              <li><tt>cpp</tt> for C++</li>
-              <li><tt>make</tt> for GNU make</li>
-              <li><tt>muttngrc</tt> for muttng's configuration syntax</li>
-            </ul>
-          </li>
-        </ul>
 
         <p>
-          The <tt>listing</tt> tag also requires these attributes in addition:
+          <tab cols="3" texstr="l|c|l" id="tab-listing-attrs"> <!--{{{-->
+            <cap><tt>listing</tt> tag attributes</cap>
+            <th>
+              <tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr>
+            </th>
+            <tb>
+              <tr><td><tt>id</tt></td><td><tt>yes</tt></td><td>document-internal ID</td></tr>
+              <tr><td><tt>title</tt></td><td><tt>yes</tt></td><td>caption string</td></tr>
+              <tr><td><tt>lang</tt></td><td><tt>yes</tt></td><td>listing's language</td></tr>
+              <tr><td><tt>href</tt></td><td><tt>no</tt></td><td>external source file (if any)</td></tr>
+            </tb>
+          </tab> <!--}}}-->
         </p>
-
-        <ul>
-          <li><tt>id</tt> specifies a document-internal ID to link to listings. As for
-            any other ID attributes, we fake a namespace or hierarchy by prefixes. At least all
-            sample listings must have <tt>sample-</tt> as prefix for this attribute.</li>
-          <li><tt>title</tt> is the title to specify (if at all which depends on the output
-            format.)</li>
-          <li><tt>href</tt> specifies the filename in the <tt>doc/examples/</tt> directory.</li>
-        </ul>
 
       </subsubsection>
       <!--}}}-->
@@ -1178,7 +1199,177 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
 
   <section id="devguide-core"> <!--{{{-->
     <title>Core</title>
- 
+
+    <subsection id="devguide-core-features"> <!--{{{-->
+      <title>Features</title>
+
+      <p>
+        Core is in the <tt>src/core/</tt> subdirectory
+        and aims to be a library with easily reusable and lightweight
+        C routines for any application. Maybe this is eventually
+        either split into a separate project or we migrate to another
+        library providing similar features. Or we just leave it as it
+        is at the moment.
+      </p>
+
+      <p>
+        The API is designed in a way similar to libowfat
+        (see <web>http://www.fefe.de/libowfat/</web>) by
+        Felix von Leitner so a possible migration to it will be easier
+        if it happens at all.
+      </p>
+
+      <p>
+        The <em>core</em> library contains the following features:
+      </p>
+
+      <ul>
+        <li><em>String handling.</em> As the upper layers of mutt-ng are
+          C++ and we consider C++ strings to be too heavyweighted but
+          C strings on the other hand too low level, it contains a comprise:
+          a string abstraction with enough leightweight routines to
+          get rid of <man sect="3">snprintf</man> for composing strings.</li>
+        <li><em>Data conversion.</em>. It contains features for converting
+          data such as <man sect="3">iconv</man>-based conversions,
+          <enc>quoted-printable</enc> and <enc>base64</enc> support and
+          the like.</li>
+        <li><em>Wrappers.</em> For historic reasons, it contains many
+          functions just wrapping functions which the standard C library
+          should provide or which are provided but require too many
+          individual special treatment (including error checking.)
+          This includes safety wrappers for
+          memory handling (checking the results returned by the system)
+          as well as <tt>NULL</tt>-aware versions of the standard string
+          functions (which isn't the case for all systems.)</li>
+        <li><em>I/O.</em> It contains some utility functions to ease
+          and secure access to (temporary) files.</li>
+        <li><em>Data structures</em>. It contains a relatively leightweight
+          array-based generic list implementation upon which a generic
+          hash table is built.</li>
+      </ul>
+
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-core-string"> <!--{{{-->
+      <title>String handling</title>
+
+      <subsubsection id="devguide-core-string-intro" title="Introduction"> <!--{{{-->
+
+        <p>
+          The string handling is built around a simple structure called
+          <tt>buffer_t</tt> with lots of different functions for working
+          with it: adding strings/buffers/numbers, comparisons, manipulation
+          such as chomping, etc.
+        </p>
+
+        <p>
+          The reason for implementing it is quite simple: the standard way
+          of composing a destination string seems to be using
+          <man sect="3">snprintf</man>. But this approach has several drawbacks
+          our string abstraction avoids:
+        </p>
+
+        <ul>
+          <li>Programmers are responsible on their own for memory management
+            for at least the destination for <man sect="3">snprintf</man> which
+            in the past lead to defining a series of scenarios with upper limits
+            of expected input. Though most of these were allocated on the stack rather
+            than via <man sect="3">malloc</man> and <man sect="3">free</man>,
+            it's bad to make assumptions about the amount of input on
+            the one hand and on the other it's hard to track down bugs caused by
+            such a failure in assumption. Our string abstraction automatically
+            grows the buffer as needed<footnote>using <man sect="3">realloc</man>
+              with a large enough default/increase size so that
+              <tt>_POSIX_PATH_MAX</tt> fits in</footnote>
+            so we need not make any assumptions. Also, the actual code is
+            unit tested and quite short so that several independent security
+            checks should be possible.</li>
+          <li>As profiling shows (see, for example,
+            <web>http://user.cs.tu-berlin.de/~pdmef/graphviz/#printf_vs_write</web>),
+            the <man sect="3">printf</man> family of functions may internally
+            use <man sect="3">malloc</man> which eliminates the positive speed
+            effect of allocating storage on the stack temporarily.</li>
+          <li>More of a philosophical nature is the fact that we consider it to
+            be superflous to "encode" formatting information for
+            <man sect="3">printf</man>. Specifying a format string is a type
+            of encoding the format of the requested result. <man sect="3">printf</man>
+            needs to decode it to compose the result. However, exactly this
+            encoding and decoding is superflous as the format already is always
+            constant during runtime. It only changes when the actual source
+            changes. Even when composing the format string dynamically, right
+            before the call the formatting information is constant.
+          </li>
+        </ul>
+
+        <p>
+          Our approach has the following disadvantages:
+        </p>
+
+        <ul>
+          <li>it requires much more typing and thus leads to much more code</li>
+        </ul>
+
+      </subsubsection>
+      <!--}}}-->
+
+      <subsubsection id="devguide-core-string-format" title="Formatting output"> <!--{{{-->
+
+        <p>
+          Basically, one needs to first declare a buffer as shown
+          in the <docref type="listing" href="sample-buffer-declare">example</docref>. The
+          <tt>buffer_init()</tt> function sets everything to zero so that no
+          accidents happen.
+        </p>
+
+        <listing lang="c" id="sample-buffer-declare"
+          title="Declaring a buffer">
+buffer_t buffer;
+buffer_init(&amp;buffer);</listing>
+
+        <p>
+          See the file <tt>core/buffer.h</tt> for the functions.
+        </p>
+          
+        <p>
+          In <docref type="listing" href="sample-buffer-format">the short example</docref>
+          there's a small sample program given on how to format output: it simply prints out the number
+          of arguments the program is called with and their values. A different version
+          writing the output more often but copying less is
+          <docref type="listing" href="sample-buffer-format2">shown in another example</docref>.
+        </p>
+
+        <p>
+          These examples show...
+        </p>
+
+        <ul>
+          <li>that there's no need to use <man sect="3">printf</man> required to
+            print formatted output.</li>
+          <li>how to format numbers of different bases with and without
+            zero padding using <tt>buffer_add_num()</tt> and
+            <tt>buffer_add_num2()</tt></li>
+          <li>why how and how to use the <tt>buffer_shrink()</tt> function:
+            it helps avoiding copying the same content multiple times in
+            situation where it's sufficient to do it only once</li>
+          <li>that the buffer functions keep track of length and size information
+            so that there's no need to compute these when needed</li>
+        </ul>
+
+        <listing lang="c" id="sample-buffer-format"
+          title="Formatted adding to buffer"
+          href="core_buffer_format.c"/>
+
+        <listing lang="c" id="sample-buffer-format2"
+          title="Formatted adding to buffer (improved)"
+          href="core_buffer_format2.c"/>
+
+      </subsubsection>
+      <!--}}}-->
+
+    </subsection>
+    <!--}}}-->
+
     <!-- this should be the last one!!!1!! -->
 
       <subsection id="devguide-core-extending"> <!--{{{-->

@@ -89,7 +89,7 @@
     border-color: black;
   }
 
-  table.ordinary {
+  table.ordinary,div.table table  {
     margin-left: auto;
     margin-right: auto;
   }

@@ -85,8 +85,57 @@
   <xsl:template match="listing">
     <xsl:text>@anchor </xsl:text><xsl:value-of select="@id"/><xsl:text>
     </xsl:text>
-    <xsl:text>@verbinclude </xsl:text><xsl:value-of select="@href"/><xsl:text>
-    </xsl:text>
+    <xsl:choose>
+      <xsl:when test="@lang='make'">
+        <xsl:choose>
+          <xsl:when test="@href!=''">
+            <xsl:text>@verbinclude </xsl:text><xsl:value-of select="@href"/><xsl:text>
+            </xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>@verbatim
+            </xsl:text>
+            <xsl:apply-templates/>
+            <xsl:text>
+              @endverbatim
+            </xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <xsl:when test="@lang='muttngrc'">
+        <xsl:choose>
+          <xsl:when test="@href!=''">
+            <xsl:text>@verbinclude </xsl:text><xsl:value-of select="@href"/><xsl:text>
+            </xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>@verbatim
+            </xsl:text>
+            <xsl:apply-templates/>
+            <xsl:text>
+              @endverbatim
+            </xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
+      <!--default for all other languages is to use @code..@endcode-->
+      <xsl:otherwise>
+        <xsl:choose>
+          <xsl:when test="@href!=''">
+            <xsl:text>@include </xsl:text><xsl:value-of select="@href"/><xsl:text>
+            </xsl:text>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:text>@code
+            </xsl:text>
+            <xsl:apply-templates/>
+            <xsl:text>
+              @endcode
+            </xsl:text>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template match="inlinelisting">
@@ -221,6 +270,10 @@
 
   <xsl:template match="em">
     <xsl:text>&lt;em&gt;</xsl:text><xsl:apply-templates/><xsl:text>&lt;/em&gt;</xsl:text>
+  </xsl:template>
+
+  <xsl:template match="footnote">
+    <xsl:text> &lt;em&gt;(</xsl:text><xsl:apply-templates/><xsl:text>)&lt;/em&gt;</xsl:text>
   </xsl:template>
 
   <!-- tables {{{ -->

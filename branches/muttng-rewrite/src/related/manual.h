@@ -237,6 +237,12 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     <li><tt>LIBICONVDIR=/path</tt>. Where libiconv is installed.
         This is required for conversions between character sets/encodings.
         If none is given, libiconv won't be used. Default: none.</li>
+    <li><tt>DOCLANGUAGES=[|list|all]</tt>. In which languages to
+        build documentation. If it's empty, only English will be built.
+        If a space-separated list is specified, the given languages will be
+        built (example: "<tt>en de</tt>"). If the special word <tt>all</tt>
+        is specified, all available languages will be build. Default:
+        <tt>all</tt>.</li>
     
       </ul>
     
@@ -786,7 +792,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 
     @anchor sample-sysconf
     @verbinclude makefile_sysconf
-    
+            
         Of course, the preprocessor's define name doesn't have to be named after
         the function though it makes the code readable this way.
       
@@ -817,7 +823,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
 
     @anchor sample-libmuttng-build-config
     @verbinclude makefile_config
-    <tt>GNUmakefile.config</tt> interprets and completes internal options
+            <tt>GNUmakefile.config</tt> interprets and completes internal options
         set in the custom file:
       
 
@@ -898,7 +904,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
 
     @anchor sample-libmuttng-build-conditional
     @verbinclude makefile_conditional
-    
+            
         This only runs <tt>doxygen(1)</tt> it it's found in <tt>$PATH</tt>. If, in addition,
         <tt>tidy(1)</tt> is found too, it'll also be called. If doxygen isn't present,
         the <tt>srcdoc</tt> rule does nothing.
@@ -929,7 +935,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
 
     @anchor sample-libmuttng-build-whereis-call1
     @verbinclude makefile_whereis_call1
-    
+            
         If the binary is found, <tt>GREAT_EDITOR</tt> will contain its path and
         will be empty otherwise. A check for it could be implemented as shown in the
         @ref sample-libmuttng-build-whereis-use "whereis usage example" .
@@ -937,7 +943,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
 
     @anchor sample-libmuttng-build-whereis-use
     @verbinclude makefile_whereis_use
-    
+            
         An example of a non-empty default is show in the
         @ref sample-libmuttng-build-whereis-call2 "second whereis call example" 
         which will search for the <tt>vim(1)</tt> binary: if it's found,
@@ -946,7 +952,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
 
     @anchor sample-libmuttng-build-whereis-call2
     @verbinclude makefile_whereis_call2
-    
+            
     @subsubsection sect_devguide-build-subdirs Directory traversal: GNUmakefile.subdirs
     
         The file <tt>GNUmakefile.subdirs</tt> defines targets to
@@ -972,7 +978,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
 
     @anchor sample-libmuttng-build-structure
     @verbinclude makefile_structure
-    
+            
     @subsubsection sect_devguide-build-compile Compilation: GNUmakefile.compile
     
         The files <tt>GNUmakefile.compile_c</tt> and <tt>GNUmakefile.compile_cpp</tt>
@@ -986,7 +992,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
 
     @anchor sample-libmuttng-build-compile
     @verbinclude makefile_compile
-    
+            
         This will compile the files
         <tt>foo.c</tt> and <tt>bar.c</tt> into the archive <tt>libfoobar.a</tt> using
         the C compiler.
@@ -1275,49 +1281,54 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
       </ul>
     
     @paragraph sect_devguide-docs-dialect-listings Embedding listrings
-          Eventually there will be several types of listings each treated individually
-          for the output.
+          There're the following two tags for specifying listings:
         
 
+    <ol>
+    <li>@ref tab-listing-attrs "listing" :
+            if given a <tt>href</tt> attribute, it requests the source be found
+            in the external file and given as the tag's text otherwise. For
+            most output formats, it puts the code in a dedicated paragraph.</li>
+    <li>@ref tab-inlinelisting-attrs "inlinelisting" :
+            contrary to the <tt>listing</tt> tag it always expects the code
+            as the tag's text and doesn't put the code in a new paragraph but
+            inlines it into the current.</li>
     
-          The following two tags can be used for specifying listings:
+      </ol>
+    
+          In order to enable syntax-highlighting or auto-generation of references,
+          each listing must be declared with a language of which the code is of.
+          See @ref tab-listing-languages "the given table" 
+          with all possible values for the <tt>lang</tt> attribute.
         
 
-    <ul>
-    <li><tt>listing</tt>: make listing from an external file</li>
-    <li><tt>inlinelisting</tt>: make listing inline from given text</li>
+    @anchor tab-listing-languages
+    @htmlonly
+    <p class="title"><tt>inlinelisting</tt>/<tt>listing</tt> languages</p>
+      <table class="ordinary" rowsep="1" summary="<tt>inlinelisting</tt>/<tt>listing</tt> languages">
+    <thead><tr><td><tt>lang</tt> attribute value</td><td>Language</td></tr></thead><tbody><tr><td><tt>c</tt></td><td>C code</td></tr><tr><td><tt>cpp</tt></td><td>C++ code</td></tr><tr><td><tt>make</tt></td><td>GNU <tt>make(1)</tt> code</td></tr><tr><td><tt>muttngrc</tt></td><td>mutt-ng configuration</td></tr></tbody>
+      </table>
+      @endhtmlonly
     
-      </ul>
-    
-          Both require these attributes:
-        
 
-    <ul>
-    <li><tt>lang</tt> specifies the language. For most of the output this is irrelevant
-            but for LaTeX output and the <tt>listings.sty</tt> package we have syntax-highlighting
-            automatically. The following languages are supported:
-            <ul>
-    <li><tt>cpp</tt> for C++</li>
-    <li><tt>make</tt> for GNU make</li>
-    <li><tt>muttngrc</tt> for muttng's configuration syntax</li>
+    @anchor tab-inlinelisting-attrs
+    @htmlonly
+    <p class="title"><tt>inlinelisting</tt> tag attributes</p>
+      <table class="ordinary" rowsep="1" summary="<tt>inlinelisting</tt> tag attributes">
+    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>lang</tt></td><td><tt>yes</tt></td><td>listing's language</td></tr></tbody>
+      </table>
+      @endhtmlonly
     
-      </ul>
-    </li>
-    
-      </ul>
-    
-          The <tt>listing</tt> tag also requires these attributes in addition:
-        
 
-    <ul>
-    <li><tt>id</tt> specifies a document-internal ID to link to listings. As for
-            any other ID attributes, we fake a namespace or hierarchy by prefixes. At least all
-            sample listings must have <tt>sample-</tt> as prefix for this attribute.</li>
-    <li><tt>title</tt> is the title to specify (if at all which depends on the output
-            format.)</li>
-    <li><tt>href</tt> specifies the filename in the <tt>doc/examples/</tt> directory.</li>
+    @anchor tab-listing-attrs
+    @htmlonly
+    <p class="title"><tt>listing</tt> tag attributes</p>
+      <table class="ordinary" rowsep="1" summary="<tt>listing</tt> tag attributes">
+    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>id</tt></td><td><tt>yes</tt></td><td>document-internal ID</td></tr><tr><td><tt>title</tt></td><td><tt>yes</tt></td><td>caption string</td></tr><tr><td><tt>lang</tt></td><td><tt>yes</tt></td><td>listing's language</td></tr><tr><td><tt>href</tt></td><td><tt>no</tt></td><td>external source file (if any)</td></tr></tbody>
+      </table>
+      @endhtmlonly
     
-      </ul>
+
     
     @paragraph sect_devguide-docs-dialect-tables Tables
           Tables have to be specified within a
@@ -1497,6 +1508,157 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
     
     
     @subsection sect_devguide-core Core
+    @subsubsection sect_devguide-core-features Features
+    
+        Core is in the <tt>src/core/</tt> subdirectory
+        and aims to be a library with easily reusable and lightweight
+        C routines for any application. Maybe this is eventually
+        either split into a separate project or we migrate to another
+        library providing similar features. Or we just leave it as it
+        is at the moment.
+      
+
+    
+        The API is designed in a way similar to libowfat
+        (see <a href="http://www.fefe.de/libowfat/">http://www.fefe.de/libowfat/</a>) by
+        Felix von Leitner so a possible migration to it will be easier
+        if it happens at all.
+      
+
+    
+        The <em>core</em> library contains the following features:
+      
+
+    <ul>
+    <li><em>String handling.</em> As the upper layers of mutt-ng are
+          C++ and we consider C++ strings to be too heavyweighted but
+          C strings on the other hand too low level, it contains a comprise:
+          a string abstraction with enough leightweight routines to
+          get rid of <tt>snprintf(3)</tt> for composing strings.</li>
+    <li><em>Data conversion.</em>. It contains features for converting
+          data such as <tt>iconv(3)</tt>-based conversions,
+          <tt>quoted-printable</tt> and <tt>base64</tt> support and
+          the like.</li>
+    <li><em>Wrappers.</em> For historic reasons, it contains many
+          functions just wrapping functions which the standard C library
+          should provide or which are provided but require too many
+          individual special treatment (including error checking.)
+          This includes safety wrappers for
+          memory handling (checking the results returned by the system)
+          as well as <tt>NULL</tt>-aware versions of the standard string
+          functions (which isn't the case for all systems.)</li>
+    <li><em>I/O.</em> It contains some utility functions to ease
+          and secure access to (temporary) files.</li>
+    <li><em>Data structures</em>. It contains a relatively leightweight
+          array-based generic list implementation upon which a generic
+          hash table is built.</li>
+    
+      </ul>
+    
+    @subsubsection sect_devguide-core-string String handling
+    @paragraph sect_devguide-core-string-intro Introduction
+          The string handling is built around a simple structure called
+          <tt>buffer_t</tt> with lots of different functions for working
+          with it: adding strings/buffers/numbers, comparisons, manipulation
+          such as chomping, etc.
+        
+
+    
+          The reason for implementing it is quite simple: the standard way
+          of composing a destination string seems to be using
+          <tt>snprintf(3)</tt>. But this approach has several drawbacks
+          our string abstraction avoids:
+        
+
+    <ul>
+    <li>Programmers are responsible on their own for memory management
+            for at least the destination for <tt>snprintf(3)</tt> which
+            in the past lead to defining a series of scenarios with upper limits
+            of expected input. Though most of these were allocated on the stack rather
+            than via <tt>malloc(3)</tt> and <tt>free(3)</tt>,
+            it's bad to make assumptions about the amount of input on
+            the one hand and on the other it's hard to track down bugs caused by
+            such a failure in assumption. Our string abstraction automatically
+            grows the buffer as needed <em>(using <tt>realloc(3)</tt>
+              with a large enough default/increase size so that
+              <tt>_POSIX_PATH_MAX</tt> fits in)</em>
+            so we need not make any assumptions. Also, the actual code is
+            unit tested and quite short so that several independent security
+            checks should be possible.</li>
+    <li>As profiling shows (see, for example,
+            <a href="http://user.cs.tu-berlin.de/~pdmef/graphviz/#printf_vs_write">http://user.cs.tu-berlin.de/~pdmef/graphviz/#printf_vs_write</a>),
+            the <tt>printf(3)</tt> family of functions may internally
+            use <tt>malloc(3)</tt> which eliminates the positive speed
+            effect of allocating storage on the stack temporarily.</li>
+    <li>More of a philosophical nature is the fact that we consider it to
+            be superflous to "encode" formatting information for
+            <tt>printf(3)</tt>. Specifying a format string is a type
+            of encoding the format of the requested result. <tt>printf(3)</tt>
+            needs to decode it to compose the result. However, exactly this
+            encoding and decoding is superflous as the format already is always
+            constant during runtime. It only changes when the actual source
+            changes. Even when composing the format string dynamically, right
+            before the call the formatting information is constant.
+          </li>
+    
+      </ul>
+    
+          Our approach has the following disadvantages:
+        
+
+    <ul>
+    <li>it requires much more typing and thus leads to much more code</li>
+    
+      </ul>
+    
+    @paragraph sect_devguide-core-string-format Formatting output
+          Basically, one needs to first declare a buffer as shown
+          in the @ref sample-buffer-declare "example" . The
+          <tt>buffer_init()</tt> function sets everything to zero so that no
+          accidents happen.
+        
+
+    @anchor sample-buffer-declare
+    @code
+            
+buffer_t buffer;
+buffer_init(&buffer);
+              @endcode
+            
+          See the file <tt>core/buffer.h</tt> for the functions.
+        
+
+    
+          In @ref sample-buffer-format "the short example" 
+          there's a small sample program given on how to format output: it simply prints out the number
+          of arguments the program is called with and their values. A different version
+          writing the output more often but copying less is
+          @ref sample-buffer-format2 "shown in another example" .
+        
+
+    
+          These examples show...
+        
+
+    <ul>
+    <li>that there's no need to use <tt>printf(3)</tt> required to
+            print formatted output.</li>
+    <li>how to format numbers of different bases with and without
+            zero padding using <tt>buffer_add_num()</tt> and
+            <tt>buffer_add_num2()</tt></li>
+    <li>why how and how to use the <tt>buffer_shrink()</tt> function:
+            it helps avoiding copying the same content multiple times in
+            situation where it's sufficient to do it only once</li>
+    <li>that the buffer functions keep track of length and size information
+            so that there's no need to compute these when needed</li>
+    
+      </ul>
+    @anchor sample-buffer-format
+    @include core_buffer_format.c
+            @anchor sample-buffer-format2
+    @include core_buffer_format2.c
+            
+    
     @subsubsection sect_devguide-core-extending Extending the library
     
         When making any extensions are chaning an implementation,
@@ -1626,8 +1788,8 @@ disconnectSignals (signal, object);</pre>
         
 
     @anchor sample-libmuttng-signal
-    @verbinclude libmuttng_signal.cpp
-    
+    @include libmuttng_signal.cpp
+            
     
     @subsubsection sect_devguide-libmuttng-url URL handling
     
@@ -1658,8 +1820,8 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
       
 
     @anchor sample-libmuttng-url
-    @verbinclude libmuttng_url.cpp
-    
+    @include libmuttng_url.cpp
+            
     @subsubsection sect_devguide-libmuttng-connection Connection handling
     
     @subsubsection sect_devguide-libmuttng-mailbox Mailbox handling
@@ -1689,8 +1851,8 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
         
 
     @anchor sample-libmuttng-mailbox-create
-    @verbinclude libmuttng_mailbox_create.cpp
-    
+    @include libmuttng_mailbox_create.cpp
+            
     
     @subsubsection sect_devguide-libmuttng-auto Auto-generated code
     <em>Signal implementation.</em> As unfortunately we cannot overload
