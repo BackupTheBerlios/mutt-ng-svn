@@ -1,3 +1,9 @@
+/** @ingroup libmuttng_unit */
+/**
+ * @file libmuttng/test/header_tests.cpp
+ * @author Andreas Krennmair <ak@synflood.at>
+ * @brief Interface: Header unit tests
+ */
 #include "message/header.h"
 #include "header_tests.h"
 

@@ -18,58 +18,184 @@ extern "C" {
 
 #include <sys/types.h>
 
+/**
+ * safety define to avoid segfaults due to @c NULL pointers.
+ * @param x String to sanitize.
+ */
 #define NONULL(x) x?x:""
 
-# define HUGE_STRING     5120
-# define LONG_STRING     1024
-# define STRING          256
-# define SHORT_STRING    128
-
-/*
- * Create a format string to be used with scanf.
- * To use it, write, for instance, MUTT_FORMAT(HUGE_STRING).
- * 
- * See K&R 2nd ed, p. 231 for an explanation.
+/**
+ * Make string constant of different fractions.
+ * I.e. turn _MUTT_FORMAT_2(a,b) into '"%" "10" "s".
+ * @param a Size.
+ * @param b @c scanf() modifier.
+ * @return Quoted string.
+ * @bug Legacy: Remove this/Don't use @c scanf().
  */
-# define _MUTT_FORMAT_2(a,b)	"%" a  b
-# define _MUTT_FORMAT_1(a, b)	_MUTT_FORMAT_2(#a, b)
-# define MUTT_FORMAT(a)		_MUTT_FORMAT_1(a, "s")
-# define MUTT_FORMAT2(a,b)	_MUTT_FORMAT_1(a, b)
+#define _MUTT_FORMAT_2(a,b)     "%" a  b
 
-# define ISSPACE(c) isspace((unsigned char)c)
-# define ISBLANK(c) (c == ' ' || c == '\t')
-# define strfcpy(A,B,C) strncpy(A,B,C), *(A+(C)-1)=0
-/* this macro must check for *c == 0 since isspace(0) has
- * unreliable behavior on some systems */
-# define SKIPWS(c) while (*(c) && isspace ((unsigned char) *(c))) c++;
-
-/*
- * safety wrappers/replacements
- * (mostly only difference: safely handle NULL strings)
+/**
+ * Make string constant of different fractions.
+ * I.e. turn _MUTT_FORMAT_1(a,b) into '"%" "10" "s" by quoting first arg.
+ * @param a Size to be quoted.
+ * @param b @c scanf() modifier.
+ * @return Quoted string.
+ * @bug Legacy: Remove this/Don't use @c scanf().
  */
-char *str_dup (const char*);
-char *str_cat (char*, size_t, const char*);
-char *str_ncat (char*, size_t, const char*, size_t);
-int str_cmp (const char*, const char*);
-int str_casecmp (const char*, const char*);
-int str_ncmp (const char*, const char*, size_t);
-int str_ncasecmp (const char*, const char*, size_t);
-int str_coll (const char*, const char*);
-size_t str_len (const char*);
+#define _MUTT_FORMAT_1(a, b)    _MUTT_FORMAT_2(#a, b)
 
-/*
- * tools
+/**
+ * Create format string for use with @c scanf() to get string.
+ * @param a Size of destination string.
+ * @return Quoted string.
+ * @bug Legacy: Remove this/Don't use @c scanf().
  */
-char *str_tolower (char*);
-char *str_substrcpy (char*, const char*, const char*, size_t);
-char *str_substrdup (const char*, const char*);
-void str_replace (char**, const char*);
-void str_adjust (char**);
-int str_eq (const char*, const char*);
+#define MUTT_FORMAT(a)          _MUTT_FORMAT_1(a, "s")
+
+/**
+ * Create format string for use with @c scanf() to get something.
+ * @param a Size of destination storage.
+ * @param b Modifier, eg "s" for string, etc.
+ * @return Quoted string.
+ * @bug Legacy: Remove this/Don't use @c scanf().
+ */
+#define MUTT_FORMAT2(a,b)       _MUTT_FORMAT_1(a, b)
+
+/**
+ * See if character is a space.
+ * param c Character.
+ * @return Yes/No.
+ */
+#define ISSPACE(c) isspace((unsigned char)c)
+
+/**
+ * See if character is a blank.
+ * @param c Character.
+ * @return Yes/No.
+ */
+#define ISBLANK(c) (c == ' ' || c == '\t')
+
+/**
+ * Copy and terminate string.
+ * @param A Destination.
+ * @param B Source.
+ * @param C Size of destination (incl \\0).
+ */
+#define strfcpy(A,B,C) strncpy(A,B,C), *(A+(C)-1)=0
+
+/**
+ * Forward string while character is space.
+ * This macro must check for *c == 0 since isspace(0) has
+ * unreliable behavior on some systems.
+ * @param c String.
+ */
+#define SKIPWS(c) while (*(c) && isspace ((unsigned char) *(c))) c++;
+
+/**
+ * <tt>NULL</tt>-aware @c strdup() wrapper.
+ */
+char *str_dup (const char* s);
+/**
+ * <tt>NULL</tt>-aware @c strcat() wrapper.
+ */
+char *str_cat (char* d, size_t l, const char* s);
+/**
+ * <tt>NULL</tt>-aware @c strncat() wrapper.
+ */
+char *str_ncat (char* d, size_t l, const char* s, size_t sl);
+/**
+ * <tt>NULL</tt>-aware @c strcmp() wrapper.
+ */
+int str_cmp (const char* a, const char* b);
+/**
+ * <tt>NULL</tt>-aware @c strcasecmp() wrapper.
+ */
+int str_casecmp (const char* a, const char* b);
+/**
+ * <tt>NULL</tt>-aware @c strncmp() wrapper.
+ */
+int str_ncmp (const char* a, const char* b, size_t l);
+/**
+ * <tt>NULL</tt>-aware @c strncasecmp() wrapper.
+ */
+int str_ncasecmp (const char* a, const char* b, size_t l);
+/**
+ * <tt>NULL</tt>-aware @c strcoll() wrapper.
+ */
+int str_coll (const char* a, const char* b);
+/**
+ * <tt>NULL</tt>-aware @c strlen() wrapper.
+ */
+size_t str_len (const char* a);
+
+/**
+ * Convert string to lower case.
+ * @param s String.
+ * @return String.
+ */
+char *str_tolower (char* s);
+/**
+ * Make substring copy of string.
+ * @param dest Destination.
+ * @param beg Start from where to copy.
+ * @param end End until which to copy.
+ * @param destlen Copy at most this many bytes.
+ * @return Destination.
+ */
+char *str_substrcpy (char* dest, const char* beg, const char* end, size_t destlen);
+/**
+ * Make substring copy of string.
+ * @param begin Start from where to copy.
+ * @param end End until which to copy.
+ * @return @c malloc()'d substring.
+ */
+char *str_substrdup (const char* begin, const char* end);
+/**
+ * Replace one string by another via @c malloc().
+ * @param p Pointer to destination string. This is @c free()'d first.
+ * @param s String to replace p with.
+ */
+void str_replace (char** p, const char* s);
+/**
+ * @c realloc() string to fits it's length. This may come in handy
+ * once the contents was altered to @c free() up some memory.
+ * @param p Pointer to string.
+ */
+void str_adjust (char** p);
+/**
+ * Test two strings for equality.
+ * Total length as well as contents must be identical for success.
+ * @param s1 1st string.
+ * @param s2 2nd string.
+ * @return Equality or not.
+ */
+int str_eq (const char* s1, const char* s2);
+/**
+ * Test two strings for equality.
+ * Total length as well as contents must be identical for success.
+ * @param s1 1st string.
+ * @param s2 2nd string.
+ * @param s2len Length of 2nd string.
+ * @return Equality or not.
+ */
 int str_eq2 (const char* s1, const char* s2, size_t s2len);
-const char *str_isstr (const char*, const char*);
-char* str_skip_initws (char*);
-void str_skip_trailws (char*);
+/**
+ * See if big string contains little string.
+ * @param haystack Big string.
+ * @param needle Little string.
+ */
+const char *str_isstr (const char* haystack, const char* needle);
+/**
+ * Forward while string starts with space.
+ * @param s String.
+ * @return string.
+ */
+char* str_skip_initws (char* s);
+/**
+ * Remove trailing spaces from string.
+ * @param s String.
+ */
+void str_skip_trailws (char* s);
 
 #ifdef __cplusplus
 }

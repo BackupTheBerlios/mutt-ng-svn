@@ -1,5 +1,5 @@
 /** @ingroup libmuttng_transport */
-/*
+/**
  * @file libmuttng/transport/tls_connection.cpp
  * @author Copyright (C) 2001 Marco d'Itri <md@linux.it>
  * @author Copyright (C) 2001-2004 Andrew McDonald <andrew@mcdonald.org.uk>
