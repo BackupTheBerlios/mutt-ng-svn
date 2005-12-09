@@ -17,7 +17,7 @@
 #include "libmuttng/util/url.h"
 
 #include "libmuttng/libmuttng.h"
-#include "libmuttng/muttng_features.h"
+#include "libmuttng/libmuttng_features.h"
 #include "libmuttng/muttng_signal.h"
 
 #include <sys/types.h>

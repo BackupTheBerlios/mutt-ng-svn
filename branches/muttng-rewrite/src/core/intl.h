@@ -28,7 +28,9 @@
 extern "C" {
 #endif
 
-# ifdef ENABLE_NLS
+#include "core_features.h"
+
+# ifdef CORE_INTL
 #  include <libintl.h>
 # define _(X) (gettext (X))
 #  ifdef gettext_noop

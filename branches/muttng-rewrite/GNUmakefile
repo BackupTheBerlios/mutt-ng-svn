@@ -1,6 +1,6 @@
 SUBDIRS=doc src
 
-all: sysconf subdirs
+all: subdirs
 
 clean: subdirclean
 

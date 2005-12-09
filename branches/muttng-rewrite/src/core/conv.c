@@ -11,7 +11,7 @@
 #include <ctype.h>
 #include <limits.h>
 
-#ifdef WANT_LIBICONV
+#ifdef CORE_LIBICONV
 #include <iconv.h>
 #endif
 
@@ -22,7 +22,7 @@
 /** alphabet of numbers */
 static const char* Alph = "0123456789abcdef";
 
-#ifdef WANT_LIBICONV
+#ifdef CORE_LIBICONV
 /**
  * Map strange charset names to MIME ones.
  * The following list has been created manually from the data under:
@@ -173,7 +173,7 @@ static struct {
   {
   NULL, NULL}
 };
-#endif /* !WANT_LIBICONV */
+#endif /* !CORE_LIBICONV */
 
 char* conv_itoa2 (char* buf, int num, int pad, int base) {
   int i = NUMBUF-2, p = pad, sign = num < 0;
@@ -205,7 +205,7 @@ char* conv_itoa2 (char* buf, int num, int pad, int base) {
   return (buf+i+1);
 }
 
-#ifndef WANT_LIBICONV
+#ifndef CORE_LIBICONV
 int conv_iconv (buffer_t* src, const char* in, const char* out) {
   (void) src; (void) in; (void) out;
   return 1;
@@ -296,11 +296,11 @@ static iconv_t my_iconv_open (const char *tocode, const char *fromcode) {
  * if you're supplying an outrepl, the target charset should be.
  */
 
-static size_t my_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t * inbytesleft,
+static size_t my_iconv (iconv_t cd, CORE_ICONV_CONST char **inbuf, size_t * inbytesleft,
                         char **outbuf, size_t * outbytesleft,
-                        ICONV_CONST char **inrepls, const char *outrepl) {
+                        CORE_ICONV_CONST char **inrepls, const char *outrepl) {
   size_t ret = 0, ret1;
-  ICONV_CONST char *ib = *inbuf;
+  CORE_ICONV_CONST char *ib = *inbuf;
   size_t ibl = *inbytesleft;
   char *ob = *outbuf;
   size_t obl = *outbytesleft;
@@ -312,10 +312,10 @@ static size_t my_iconv (iconv_t cd, ICONV_CONST char **inbuf, size_t * inbytesle
     if (ibl && obl && errno == EILSEQ) {
       if (inrepls) {
         /* Try replacing the input */
-        ICONV_CONST char **t;
+        CORE_ICONV_CONST char **t;
 
         for (t = inrepls; *t; t++) {
-          ICONV_CONST char *ib1 = *t;
+          CORE_ICONV_CONST char *ib1 = *t;
           size_t ibl1 = str_len (*t);
           char *ob1 = ob;
           size_t obl1 = obl;
@@ -383,7 +383,7 @@ int conv_charset_eq (const char* c1, const char* c2) {
 
 int conv_iconv (buffer_t* src, const char* from, const char* to) {
   iconv_t cd;
-  ICONV_CONST char *repls[] = { "\357\277\275", "?", 0 };
+  CORE_ICONV_CONST char *repls[] = { "\357\277\275", "?", 0 };
   char* s = NULL;
 
   if (!src)
@@ -397,10 +397,10 @@ int conv_iconv (buffer_t* src, const char* from, const char* to) {
 
   if (s && to && from && (cd = my_iconv_open (to, from)) != (iconv_t) - 1) {
     int len;
-    ICONV_CONST char *ib;
+    CORE_ICONV_CONST char *ib;
     char *buf, *ob;
     size_t ibl, obl;
-    ICONV_CONST char **inrepls = 0;
+    CORE_ICONV_CONST char **inrepls = 0;
     char *outrepl = 0;
 
     if (conv_charset_eq(to,"utf-8"))
@@ -430,4 +430,4 @@ int conv_iconv (buffer_t* src, const char* from, const char* to) {
   return 0;
 }
 
-#endif /* WANT_LIBICONV */
+#endif /* CORE_LIBICONV */

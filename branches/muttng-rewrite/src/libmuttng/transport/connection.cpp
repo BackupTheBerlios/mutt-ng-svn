@@ -5,7 +5,7 @@
  * @brief Implementation: plain TCP connection
  * @todo implementation is completely missing.
  */
-#include "libmuttng/muttng_features.h"
+#include "libmuttng/libmuttng_features.h"
 
 #include "connection.h"
 #include "plain_connection.h"

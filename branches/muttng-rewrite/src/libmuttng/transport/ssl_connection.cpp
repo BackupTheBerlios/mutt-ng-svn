@@ -66,6 +66,6 @@ bool SSLConnection::getVersion (buffer_t* dst) {
   buffer_add_num(dst,(OPENSSL_VERSION_NUMBER>>28)&0xf,-1);buffer_add_ch(dst,'.');
   buffer_add_num(dst,(OPENSSL_VERSION_NUMBER>>20)&0xff,-1);buffer_add_ch(dst,'.');
   buffer_add_num(dst,(OPENSSL_VERSION_NUMBER>>12)&0xff,-1);
-  buffer_add_ch(dst,a[((OPENSSL_VERSION_NUMBER>>4)&0xff)%26]);
+  buffer_add_ch(dst,a[((OPENSSL_VERSION_NUMBER>>4)&0xff)%27]);
   return true;
 }
