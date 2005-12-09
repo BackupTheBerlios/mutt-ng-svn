@@ -54,22 +54,26 @@ my %features = ( # {{{
   ### libmuttng ###
                              
   "enable-pop"          => { key =>     "LIBMUTTNG_POP3",
+                             conf =>    "WANT_POP3",
                              help =>    "Whether to compile in POP3 support",
                              value =>   "",
                              group =>   [ "libmuttng" ] },
                              
   "enable-imap"         => { key =>     "LIBMUTTNG_IMAP",
+                             conf =>    "WANT_IMAP",
                              help =>    "Whether to compile in IMAP support",
                              value =>   "",
                              group =>   [ "libmuttng" ] },
 
   "enable-nntp"         => { key =>     "LIBMUTTNG_NNTP",
+                             conf =>    "WANT_NNTP",
                              help =>    "Whether to compile in NNTP support",
                              value =>   "",
                              group =>   [ "libmuttng" ] },
 
 
   "enable-smtp"         => { key =>     "LIBMUTTNG_SMTP",
+                             conf =>    "WANT_SMTP",
                              help =>    "Whether to compile in SMTP support",
                              value =>   "",
                              group =>   [ "libmuttng" ] },
@@ -150,7 +154,7 @@ foreach my $k (keys %features) {
     push (@switches, "$k");
   }
 }
-GetOptions (\%options, "help", @switches);
+GetOptions (\%options, "help", @switches) or die;
 foreach my $k (keys %options) {
   if ($k ne "help") {
     $features{$k}{'value'} = $options{$k};
@@ -243,7 +247,7 @@ chomp ($run{"cpp"} = `$options{"make"} -f $basedir/GNUmakefile.sysconf get_cpp 2
 sub compile ($$$$) {
   my ($cmd, $file, $msg, $def) = (@_);
   print "Testing for $msg...";
-  `$cmd $basedir/src/sysconf/$file`;
+  `$cmd $basedir/src/sysconf/$file >/dev/null 2>&1`;
   my $succ = $?>>8;
   print ($succ == 0 ? "yes\n" : "no\n");
   return $succ==0;

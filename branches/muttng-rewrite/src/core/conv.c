@@ -10,6 +10,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
+#include <errno.h>
 
 #ifdef CORE_LIBICONV
 #include <iconv.h>

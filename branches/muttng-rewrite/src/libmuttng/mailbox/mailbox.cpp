@@ -44,11 +44,19 @@ Mailbox* Mailbox::fromURL (const char* url_, buffer_t* error) {
   std::cout<<u->defport<<std::endl;
 
   switch (u->proto) {
+#if defined(LIBMUTTNG_IMAP) || defined(LIBMUTTNG_POP) || defined(LIBMUTTNG_NNTP)
+#ifdef LIBMUTTNG_IMAP
   case P_IMAP:
+#endif
+#ifdef LIBMUTTNG_POP
   case P_POP3:
+#endif
+#ifdef LIBMUTTNG_NNTO
   case P_NNTP:
+#endif
     ret = RemoteMailbox::fromURL(u,error);
     break;
+#endif
   case P_FILE:
     ret = LocalMailbox::fromURL(u,error);
     break;
