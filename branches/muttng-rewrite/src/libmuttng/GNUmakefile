@@ -4,15 +4,15 @@ include $(CURDIR)/../../GNUmakefile.whereis
 include $(CURDIR)/../../GNUmakefile.config.mine
 include $(CURDIR)/../../GNUmakefile.config
 
-all: muttng_signal.h subdirs libmuttng.a
+all: muttng_signal.h
+	@ $(MAKE) subdirs
+	@ $(MAKE) libmuttng.a
 
 clean: subdirclean
 	rm -rf libmuttng.a debug.o libmuttng.o
 
-libmuttng.a: debug.o libmuttng.o
-	$(AR) -cru $@ $^ $(wildcard ./mailbox/*.o) $(wildcard ./crypto/*.o) \
-	  $(wildcard ./message/*.o) $(wildcard ./cache/*.o) $(wildcard ./util/*.o) \
-	  $(wildcard ./transport/*.o)
+libmuttng.a: debug.o libmuttng.o $(wildcard ./mailbox/*.o) $(wildcard ./crypto/*.o) $(wildcard ./message/*.o) $(wildcard ./cache/*.o) $(wildcard ./util/*.o) $(wildcard ./transport/*.o)
+	$(AR) -cru $@ $^ 
 	$(RANLIB) $@
 
 %.o: %.cpp
