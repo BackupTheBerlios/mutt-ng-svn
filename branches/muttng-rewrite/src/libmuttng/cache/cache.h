@@ -6,6 +6,8 @@
 #ifndef LIBMUTTNG_CACHE_CACHE_H
 #define LIBMUTTNG_CACHE_CACHE_H
 
+#include "core/buffer.h"
+
 #include "libmuttng/libmuttng.h"
 #include "libmuttng/muttng_signal.h"
 #include "libmuttng/message/message.h"
@@ -41,6 +43,12 @@ class Cache : public LibMuttng {
      * @return pointer to module.
      */
     static Cache* create();
+    /**
+     * Get version of caching module.
+     * @param Optional destination buffer.
+     * @return Wether caching is enabled.
+     */
+    static bool getVersion(buffer_t* dst);
     /**
      * Signal emitted when we need a key.
      * This is caught by a Mailbox class with caching.

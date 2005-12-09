@@ -17,7 +17,9 @@
 
 #include "libmuttng/version.h"
 #include "libmuttng/debug.h"
+#include "libmuttng/libmuttng_features.h"
 #include "libmuttng/transport/connection.h"
+#include "libmuttng/cache/cache.h"
 
 #include "ui/ui_plain.h"
 
@@ -186,7 +188,7 @@ void Tool::doSystem (buffer_t* dst) {
   struct utsname uts;
 
   uname (&uts);
-  buffer_add_str (dst, _("System:\n  "), -1);
+  buffer_add_str (dst, _("System: "), -1);
 #ifdef _AIX
   buffer_add_str (dst, uts.sysname, -1);
   buffer_add_ch (dst, ' ');
@@ -219,6 +221,36 @@ void Tool::doSystem (buffer_t* dst) {
     Connection::getSecureVersion(dst);
     buffer_add_ch(dst,'\n');
   }
+  if (Cache::getVersion(NULL)) {
+    buffer_add_str(dst,"  ",2);
+    Cache::getVersion(dst);
+    buffer_add_ch(dst,'\n');
+  }
+
+  buffer_add_str(dst,_("Mailbox support: MBOX MMDF Maildir MH "),-1);
+#if defined(LIBMUTTNG_POP3) || defined(LIBMUTTNG_IMAP) || defined(LIBMUTTNG_NNTP)
+#ifdef LIBMUTTNG_POP3
+  buffer_add_str(dst,"POP3 ",5);
+#endif
+#ifdef LIBMUTTNG_IMAP
+  buffer_add_str(dst,"IMAP ",5);
+#endif
+#ifdef LIBMUTTNG_NNTP
+  buffer_add_str(dst,"NNTP ",5);
+#endif
+  buffer_add_ch(dst,'\n');
+#endif
+
+#if defined(LIBMUTTNG_CACHE_QDBM) || defined(LIBMUTTNG_CACHE_GDBM)
+  buffer_add_str(dst,_("Caching support: "),-1);
+#ifdef LIBMUTTNG_CACHE_QDBM
+  buffer_add_str(dst,"qdbm",4);
+#endif
+#ifdef LIBMUTTNG_CACHE_GDBM
+  buffer_add_str(dst,"gdbm",4);
+#endif
+  buffer_add_ch(dst,'\n');
+#endif
 }
 
 void Tool::doLicense (buffer_t* dst) {

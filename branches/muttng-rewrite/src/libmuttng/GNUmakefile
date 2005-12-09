@@ -1,8 +1,11 @@
-SUBDIRS=mailbox crypto message cache test util transport
-
 include $(CURDIR)/../../GNUmakefile.whereis
 include $(CURDIR)/../../GNUmakefile.config.mine
 include $(CURDIR)/../../GNUmakefile.config
+
+SUBDIRS=mailbox crypto message test util transport
+ifeq ($(WANT_CACHE),1)
+SUBDIRS+=cache
+endif
 
 all: muttng_signal.h
 	@ $(MAKE) subdirs

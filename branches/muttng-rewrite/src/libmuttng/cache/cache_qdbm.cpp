@@ -5,6 +5,8 @@
  */
 #include "cache_qdbm.h"
 
+//#include <depot.h>
+
 QDBMCache::QDBMCache (void) {}
 QDBMCache::~QDBMCache (void) {}
 
@@ -19,4 +21,12 @@ bool QDBMCache::cacheDumpSingle (url_t* url, const char* key, Message* message) 
   (void) key;
   (void) message;
   return (false);
+}
+
+bool QDBMCache::getVersion(buffer_t* dst) {
+  if (!dst)
+    return true;
+  buffer_add_str(dst,"qdbm ",5);
+//  buffer_add_str(dst,dpversion,-1);
+  return true;
 }

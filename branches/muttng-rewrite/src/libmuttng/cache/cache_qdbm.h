@@ -17,6 +17,8 @@ class QDBMCache : public Cache {
     ~QDBMCache(void);
     Message* cacheLoadSingle (url_t* url, const char* key);
     bool cacheDumpSingle (url_t* url, const char* key, Message* message);
+    /** @copydoc Cache::getVersion(). */
+    static bool getVersion(buffer_t* dst);
 };
 
 #endif /* !LIBMUTTG_CACHE_CACHE_QDBM_H */
