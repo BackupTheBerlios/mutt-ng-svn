@@ -20,13 +20,13 @@ static struct {
 } ECTable[] = {
   { "asdf", "asdf", 1 },
   { "", "", 1 },
+  { ".", "=2E", 1 },
   { " ", "=20", 1 },
-  { "Täst mit ¤ ünd €", "T=C3=A4st=20mit=20=C2=A4=20=C3=BCnd=20=E2=82=AC", 1 },
+  { "Täst mit <¤> _ü_nd <€>", "T=C3=A4st=20mit=20=3C=C2=A4=3E=20=5F=C3=BC=5Fnd=20=3C=E2=82=AC=3E", 1 },
   /* '=Alid$' part is invalid */
   { "This is invalid.", "This=20is=20invalid=2E=Alid", 0 },
   /* check if encoding magic chars works/must not work */
-  { "1+1=4", "1=2B1=3D4", 1 },
-  { "-1%7", "=2D1=257", 1 },
+  { "1+1=4", "1+1=3D4", 1 },
   { "this is valid", "this=20is=20valid=00but=20not=20this", 0 },
   { NULL, NULL, 0 } // end of table
 };

@@ -17,14 +17,47 @@ static const char Hex[] = { "0123456789ABCDEF" };
  *   - decimal value upon success
  *   - @c -1 upon error
  */
-static int hexval (unsigned char c) {
-  unsigned char d;
+static inline int dec (unsigned char c) {
   if (c >= '0' && c <= '9')
     return (c - '0');
-  d = tolower (c);
-  if (d >= 'a' && d <= 'f')
-    return (10 + (d - 'a'));
+  if (c >= 'a' && c <= 'f')
+    return (10 + (c - 'a'));
+  if (c >= 'A' && c <= 'F')
+    return (10 + (c - 'A'));
   return (-1);
+}
+
+/**
+ * See if character is special enough for MIME to be encoded.
+ * @todo This is not really optimal to have here but this way there's
+ * only one decoder for QP at all instead of duplicate once or passing
+ * around function pointers for special character checking.
+ * @param c Character.
+ * @return Yes/No.
+ */
+static inline int special (unsigned char c) {
+  switch (c) {
+  case '@':
+  case '.':
+  case ',':
+  case ':':
+  case '<':
+  case '>':
+  case '[':
+  case ']':
+  case '\\':
+  case '"':
+  case '(':
+  case ')':
+  case '?':
+  case '/':
+  case '\t':
+  /* for RfC2047, this is allowed for space instead of =20 so encode */
+  case '_':
+    return 1;
+  default:
+    return 0;
+  }
 }
 
 void qp_encode (buffer_t* dst, const buffer_t* src, unsigned char c) {
@@ -33,13 +66,14 @@ void qp_encode (buffer_t* dst, const buffer_t* src, unsigned char c) {
     return;
   buffer_shrink(dst,0);
   for (i = 0; i < (int)src->len; i++) {
-    if (!isalnum((unsigned char)src->str[i]) ||
-        (unsigned char)src->str[i] == c) {
+    unsigned char e = src->str[i];
+    /* catch space here instead of in specials() */
+    if (e <= 0x20 || e > 0x7e || e == c || special(e)) {
       buffer_add_ch(dst,c);
-      buffer_add_ch(dst,Hex[((unsigned char)src->str[i]) / 16]);
-      buffer_add_ch(dst,Hex[((unsigned char)src->str[i]) % 16]);
+      buffer_add_ch(dst,Hex[(e&0xf0)>>4]);
+      buffer_add_ch(dst,Hex[e&0x0f]);
     } else
-      buffer_add_ch(dst,(unsigned char)src->str[i]);
+      buffer_add_ch(dst,e);
   }
 }
 
@@ -57,11 +91,13 @@ int qp_decode (buffer_t* dst, const buffer_t* src, unsigned char c, size_t* char
        * Be sure to block %00 aka \\0, there were some bugtraq
        * posts so be strict ;-)
        */
-      if (i < ((int) src->len-2) && strncmp (&src->str[i+1], "00", 2) != 0 &&
-          hexval ((unsigned char) src->str[i+1]) >= 0 &&
-          hexval ((unsigned char) src->str[i+2]) >= 0) {
-        buffer_add_ch(dst,(hexval ((unsigned char) src->str[i+1]) << 4) |
-                          (hexval ((unsigned char) src->str[i+2])));
+      if (i < ((int) src->len-2) &&
+          ((unsigned char) src->str[i+1] != '0' ||
+           (unsigned char) src->str[i+2] != '0') &&
+          dec ((unsigned char) src->str[i+1]) >= 0 &&
+          dec ((unsigned char) src->str[i+2]) >= 0) {
+        buffer_add_ch(dst,(dec ((unsigned char) src->str[i+1]) << 4) |
+                          (dec ((unsigned char) src->str[i+2])));
         i+=2;
       } else {
         if (chars)

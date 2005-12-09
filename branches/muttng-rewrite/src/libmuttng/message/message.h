@@ -4,8 +4,8 @@
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief MIME message
  */
-#ifndef LIBMUTTNG_MESSGAGE_MESSAGE_H
-#define LIBMUTTNG_MESSGAGE_MESSAGE_H
+#ifndef LIBMUTTNG_MESSAGE_MESSAGE_H
+#define LIBMUTTNG_MESSAGE_MESSAGE_H
 
 #include "libmuttng/libmuttng.h"
 
@@ -16,4 +16,4 @@ class Message : public LibMuttng {
     ~Message (void);
 };
 
-#endif /* !LIBMUTTNG_MESSGAGE_MESSAGE_H */
+#endif /* !LIBMUTTNG_MESSAGE_MESSAGE_H */

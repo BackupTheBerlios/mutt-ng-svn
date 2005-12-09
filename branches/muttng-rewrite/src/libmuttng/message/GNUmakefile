@@ -1,4 +1,4 @@
-FILES=message body header
+FILES=message body header simple_header mailbox_header subject_header
 LIB=
 
 include $(CURDIR)/../../../GNUmakefile.whereis

@@ -4,8 +4,8 @@
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief MIME message body part
  */
-#ifndef LIBMUTTNG_MESSGAGE_BODY_H
-#define LIBMUTTNG_MESSGAGE_BODY_H
+#ifndef LIBMUTTNG_MESSAGE_BODY_H
+#define LIBMUTTNG_MESSAGE_BODY_H
 
 #include "libmuttng/libmuttng.h"
 
@@ -16,4 +16,4 @@ class Body : public LibMuttng {
     ~Body (void);
 };
 
-#endif /* !LIBMUTTNG_MESSGAGE_BODY_H */
+#endif /* !LIBMUTTNG_MESSAGE_BODY_H */

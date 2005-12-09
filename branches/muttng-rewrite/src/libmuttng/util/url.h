@@ -121,6 +121,6 @@ bool url_eq (url_t* url1, url_t* url2);
  */
 unsigned short url_defport (urlproto_t proto, bool secure);
 
-#endif /* !LIBMUTTNG_MESSGAGE_BODY_H */
+#endif /* !LIBMUTTNG_MESSAGE_BODY_H */
 
 /** @} */

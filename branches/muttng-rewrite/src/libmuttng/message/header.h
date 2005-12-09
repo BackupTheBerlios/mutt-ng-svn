@@ -5,15 +5,14 @@
  * @author Andreas Krennmair <ak@synflood.at>
  * @brief MIME message header
  */
-#ifndef LIBMUTTNG_MESSGAGE_HEADER_H
-#define LIBMUTTNG_MESSGAGE_HEADER_H
+#ifndef LIBMUTTNG_MESSAGE_HEADER_H
+#define LIBMUTTNG_MESSAGE_HEADER_H
 
 #include "libmuttng/libmuttng.h"
 #include "core/buffer.h"
 
 /**
- * Message header class. Implements an internet message header
- * according to RFC 2822.
+ * Message header class.
  */
 class Header : public LibMuttng {
   public:
@@ -36,7 +35,19 @@ class Header : public LibMuttng {
     /**
      * Destructor.
      */
-    ~Header (void);
+    virtual ~Header (void);
+
+    /**
+     * Decode value from whatever implementing class wants.
+     * @return Success.
+     */
+    virtual bool decode() = 0;
+
+    /**
+     * Encode value to whatever implementing class wants.
+     * @return Success.
+     */
+    virtual bool encode() = 0;
 
     /**
      * Compares the header name with a string in a case-insensitive way.
@@ -95,9 +106,10 @@ class Header : public LibMuttng {
   private:
     /** header's field name */
     buffer_t name;
+  protected:
     /** header's actual content */
     buffer_t body;
 };
 
 
-#endif /* !LIBMUTTNG_MESSGAGE_HEADER_H */
+#endif /* !LIBMUTTNG_MESSAGE_HEADER_H */

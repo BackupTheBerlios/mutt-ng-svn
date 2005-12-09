@@ -4,7 +4,7 @@
  * @author Andreas Krennmair <ak@synflood.at>
  * @brief Interface: Header unit tests
  */
-#include "message/header.h"
+#include "message/simple_header.h"
 #include "header_tests.h"
 
 header_tests::header_tests() : suite("header_tests") {
@@ -17,17 +17,17 @@ header_tests::header_tests() : suite("header_tests") {
 header_tests::~header_tests() { }
 
 void header_tests::test_constructors() {
-  Header * h = new Header();
+  Header * h = new SimpleHeader();
   assert_eq("empty header name",true,buffer_equal1(h->getName(),"",-1));
   assert_eq("empty header body",true,buffer_equal1(h->getBody(),"",-1));
   delete h;
 
-  h = new Header("foobar","quux");
+  h = new SimpleHeader("foobar","quux");
   assert_eq("header name equals foobar",true,buffer_equal1(h->getName(),"foobar",-1));
   assert_eq("header body equals quux",true,buffer_equal1(h->getBody(),"quux",-1));
   delete h;
 
-  h = new Header("foo",0);
+  h = new SimpleHeader("foo",0);
   assert_eq("header name equals foo",true,buffer_equal1(h->getName(),"foo",-1));
   assert_eq("header body empty",true,buffer_equal1(h->getBody(),"",-1));
   delete h;
@@ -38,7 +38,7 @@ void header_tests::test_constructors() {
   buffer_add_str(&a,"From",-1);
   buffer_add_str(&b,"Some Person <someperson@example.com>",-1);
 
-  h = new Header(&a,&b);
+  h = new SimpleHeader(&a,&b);
   assert_eq("header name equals From",true,buffer_equal1(h->getName(),"From",-1));
   assert_eq("header body equals name + mail address",true,buffer_equal1(h->getBody(),"Some Person <someperson@example.com>",-1));
   delete h;
@@ -48,7 +48,7 @@ void header_tests::test_constructors() {
 }
 
 void header_tests::test_equalsname() {
-  Header * h = new Header("From","foobar");
+  Header * h = new SimpleHeader("From","foobar");
   assert_eq("header name equals 'From'",true,h->equalsName("From"));
   assert_eq("header name equals 'from'",true,h->equalsName("from"));
   assert_eq("header name equals 'FROM'",true,h->equalsName("FROM"));
@@ -87,8 +87,8 @@ void header_tests::test_serialization() {
 
   buffer_init(&a);
 
-  h1 = new Header("From","test1@test1.com");
-  h2 = new Header("To","test2@test2.com");
+  h1 = new SimpleHeader("From","test1@test1.com");
+  h2 = new SimpleHeader("To","test2@test2.com");
 
   h1->serialize(&a);
   buffer_add_str(&a,"\r\n",-1);
@@ -100,7 +100,7 @@ void header_tests::test_serialization() {
   delete h1;
   delete h2;
 
-  h1 = new Header("","");
+  h1 = new SimpleHeader("","");
 
   buffer_shrink(&a,0);
   h1->serialize(&a);
@@ -114,7 +114,7 @@ void header_tests::test_parse() {
   buffer_init(&a);
   buffer_add_str(&a,"From: asdf",-1);
 
-  Header * h = new Header();
+  Header * h = new SimpleHeader();
   h->parseLine(&a);
 
   assert_eq("parse simple header, name",true,buffer_equal1(h->getName(),"From",-1));
