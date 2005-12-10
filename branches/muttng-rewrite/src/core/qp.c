@@ -60,7 +60,7 @@ static inline int special (unsigned char c) {
   }
 }
 
-void qp_encode (buffer_t* dst, const buffer_t* src, unsigned char c) {
+void buffer_encode_qp (buffer_t* dst, const buffer_t* src, unsigned char c) {
   int i = 0;
   if (!src || !dst)
     return;
@@ -77,7 +77,7 @@ void qp_encode (buffer_t* dst, const buffer_t* src, unsigned char c) {
   }
 }
 
-int qp_decode (buffer_t* dst, const buffer_t* src, unsigned char c, size_t* chars) {
+int buffer_decode_qp (buffer_t* dst, const buffer_t* src, unsigned char c, size_t* chars) {
   int i = 0;
 
   if (!src || !dst)

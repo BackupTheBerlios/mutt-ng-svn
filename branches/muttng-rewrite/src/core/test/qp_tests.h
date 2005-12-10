@@ -19,13 +19,13 @@ class qp_tests : public suite {
     qp_tests();
     ~qp_tests();
   private:
-    /** @test qp_encode(). */
+    /** @test buffer_encode_qp(). */
     void test_encode();
-    /** @test qp_decode(). */
+    /** @test buffer_decode_qp(). */
     void test_decode();
     /**
-     * @test qp_encode().
-     * @test qp_decode().
+     * @test buffer_encode_qp().
+     * @test buffer_decode_qp().
      */
     void test_both();
 };

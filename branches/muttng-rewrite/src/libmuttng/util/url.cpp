@@ -19,9 +19,9 @@
 #include "url.h"
 
 /**
- * QP-decode an URL. This just wraps qp_decode().
+ * QP-decode an URL. This just wraps buffer_decode_qp().
  * @param str Pointer to string.
- * @param chars Pointer for error storage of qp_decode().
+ * @param chars Pointer for error storage of buffer_decode_qp().
  * @return Success.
  */
 static bool url_decode (char** str, size_t* chars) {
@@ -32,7 +32,7 @@ static bool url_decode (char** str, size_t* chars) {
   buffer_init(&tmp2);
 
   buffer_add_str(&tmp1,*str,-1);
-  if ((rc=qp_decode(&tmp2,&tmp1,'%',chars))) {
+  if ((rc=buffer_decode_qp(&tmp2,&tmp1,'%',chars))) {
     mem_free(str);
     *str = tmp2.str;
   }

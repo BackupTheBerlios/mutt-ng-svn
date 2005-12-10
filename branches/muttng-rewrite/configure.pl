@@ -136,7 +136,7 @@ my %tests = ( # {{{
                 lang =>  "c",
                 file =>  "test_c99_int.c",
                 msg =>   "C99 integer types",
-                def =>   "CORE_HAVE_C99_INT",
+                def =>   "CORE_HAVE_C99_INTTYPES",
                 run =>   1
               },
 
@@ -196,9 +196,9 @@ if (defined $options{"help"}) {
 ### detect GNU make {{{
 if (not defined $options{"make"}) {
   if (`make -v 2>&1` =~ /^GNU Make/) {
-    chomp ($options{"make"} = `which make 2>&1`);
+    $options{"make"} = "make";
   } elsif (`gmake -v 2>&1` =~ /^GNU Make/) {
-    chomp ($options{"make"} = `which gmake 2>&1`);
+    $options{"make"} = "gmake";
   } else {
     die "Failed to find GNU make: please specify --make=(make|gmake) option.\n";
   }
@@ -325,4 +325,4 @@ foreach my $g (keys %conffiles) {
 ### }}}
 
 print "\nThe source code has been successfully prepared.\n";
-print "Run \"$options{'make'}\" for compilation.\n";
+print "Run \"$options{'make'} depend && $options{'make'}\" for compilation.\n";

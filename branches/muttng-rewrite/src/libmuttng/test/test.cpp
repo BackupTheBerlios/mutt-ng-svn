@@ -16,6 +16,7 @@ using namespace unitpp;
 #include "url_tests.h"
 #include "conn_tests.h"
 #include "header_tests.h"
+#include "rfc2047_tests.h"
 
 namespace {
 
@@ -29,6 +30,7 @@ namespace {
         suite::main().add("libmuttng_test_suite",new url_tests());
         suite::main().add("libmuttng_test_suite",new conn_tests());
         suite::main().add("libmuttng_test_suite",new header_tests());
+        suite::main().add("libmuttng_test_suite",new rfc2047_tests());
       }
   };
 

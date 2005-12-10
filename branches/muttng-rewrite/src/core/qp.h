@@ -28,7 +28,7 @@ extern "C" {
  *              out at which place an error occured.
  * @return Success.
  */
-int qp_decode (buffer_t* dst, const buffer_t* src, unsigned char c, size_t* chars);
+int buffer_decode_qp (buffer_t* dst, const buffer_t* src, unsigned char c, size_t* chars);
 
 /**
  * Encode string to QP.
@@ -37,7 +37,7 @@ int qp_decode (buffer_t* dst, const buffer_t* src, unsigned char c, size_t* char
  * @param c Magic QP character. This is @c % for URLs
  *          and mostly @c = in all other cases.
  */
-void qp_encode (buffer_t* dst, const buffer_t* src, unsigned char c);
+void buffer_encode_qp (buffer_t* dst, const buffer_t* src, unsigned char c);
 
 #ifdef __cplusplus
 }

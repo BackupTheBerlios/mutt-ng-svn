@@ -239,6 +239,9 @@ int conv_iconv_version (buffer_t* dst) {
  * @todo Make this publicly visible? We do want to abstract from things
  * like different character sets and different names for the same, etc,
  * right?
+ * @bug Likely this is broken as it kicks any language spec defined by
+ * RfC2231 which may be wrong in edge cases as this is done here
+ * globally for the whole application.
  */
 static void charset_canonical (buffer_t* charset) {
   size_t i;
@@ -268,6 +271,13 @@ static void charset_canonical (buffer_t* charset) {
   /* for cosmetics' sake, transform to lowercase. */
   for (p = charset->str; *p; p++)
     *p = tolower (*p);
+  /*
+   * RfC2231 defines language spec syntax for charsets:
+   *    [charset]*[langspec]
+   * As we don't support it elsewhere, just kick this part for all
+   */
+  if ((p = strchr(charset->str,'*')))
+    buffer_shrink(charset,p-charset->str);
 }
 
 static iconv_t my_iconv_open (const char *tocode, const char *fromcode) {
