@@ -35,7 +35,8 @@ static bool url_decode (char** str, size_t* chars) {
   if ((rc=buffer_decode_qp(&tmp2,&tmp1,'%',chars))) {
     mem_free(str);
     *str = tmp2.str;
-  }
+  } else
+    buffer_free(&tmp2);
   buffer_free(&tmp1);
   return rc;
 }

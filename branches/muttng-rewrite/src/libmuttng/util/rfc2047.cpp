@@ -12,6 +12,7 @@
 #include "core/str.h"
 
 #include <cstring>
+#include <string.h>
 
 /** temporary: debug on stdout? */
 #define DO_DEBUG        0

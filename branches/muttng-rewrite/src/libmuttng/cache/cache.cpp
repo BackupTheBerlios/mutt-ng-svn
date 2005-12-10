@@ -9,7 +9,7 @@
  */
 #include "cache.h"
 
-#include "libmuttng_features.h"
+#include "../libmuttng_features.h"
 
 #ifdef LIBMUTTNG_CACHE_QDBM
 #include "cache_qdbm.h"
