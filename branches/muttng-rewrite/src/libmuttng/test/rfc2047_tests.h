@@ -24,6 +24,7 @@ class rfc2047_tests : public suite {
     void test_decode();
     /** @test rfc2047_decode(). */
     void test_decode_buf(buffer_t* dst);
+    size_t isclean(buffer_t* src);
 };
 
 #endif /* LIBMUTTNG_TEST_RFC2047_TESTS_H */

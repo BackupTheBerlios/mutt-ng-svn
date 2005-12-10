@@ -15,7 +15,7 @@
  * @param src Source string.
  * @return Success.
  */
-bool rfc2047_encode (buffer_t* dst, buffer_t* src);
+bool rfc2047_encode (buffer_t* dst, buffer_t* src, const char* in);
 
 /**
  * Decode a string according to RfC 2047.

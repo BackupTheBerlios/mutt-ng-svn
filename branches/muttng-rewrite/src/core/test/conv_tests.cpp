@@ -60,8 +60,16 @@ void conv_tests::test_iconv() {
       buffer_shrink(&msg,0);
       buffer_add_str(&orig,TestStrings[i].str,-1);
       buffer_add_buffer(&conv,&orig);
-      /** - see if conv_iconv() works at all */
-      assert_true("iconv() succeeds",conv_iconv(&conv,"utf-8",ToSets[a]));
+      /**
+       * - see if conv_iconv() works at all:
+       *        -# if conv_iconv() succeeds: okay
+       *        -# if conv_iconv() fails: the utf-8 string must be
+       *           marked not fully convertable and we don't convert
+       *           from utf-8 to utf-8 currently (since that musn't
+       *           produce a loss)
+       */
+      assert_true("iconv() succeeds",conv_iconv(&conv,"utf-8",ToSets[a]) ||
+                  (TestStrings[i].loss && !str_eq(ToSets[a],"utf-8")));
       buffer_add_buffer(&conv2,&conv);
       /** - convert result back */
       conv_iconv(&conv2,ToSets[a],"utf-8");

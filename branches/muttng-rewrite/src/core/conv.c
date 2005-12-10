@@ -309,17 +309,22 @@ static iconv_t my_iconv_open (const char *tocode, const char *fromcode) {
 
 static size_t my_iconv (iconv_t cd, CORE_ICONV_CONST char **inbuf, size_t * inbytesleft,
                         char **outbuf, size_t * outbytesleft,
-                        CORE_ICONV_CONST char **inrepls, const char *outrepl) {
+                        CORE_ICONV_CONST char **inrepls, const char *outrepl,
+                        int* err) {
   size_t ret = 0, ret1;
   CORE_ICONV_CONST char *ib = *inbuf;
   size_t ibl = *inbytesleft;
   char *ob = *outbuf;
   size_t obl = *outbytesleft;
 
+  *err = 0;
+
   for (;;) {
     ret1 = iconv (cd, &ib, &ibl, &ob, &obl);
     if (ret1 != (size_t) - 1)
       ret += ret1;
+    else
+      *err = 1;
     if (ibl && obl && errno == EILSEQ) {
       if (inrepls) {
         /* Try replacing the input */
@@ -396,6 +401,7 @@ int conv_iconv (buffer_t* src, const char* from, const char* to) {
   iconv_t cd;
   CORE_ICONV_CONST char *repls[] = { "\357\277\275", "?", 0 };
   char* s = NULL;
+  int err = 0;
 
   if (!src)
     return 0;
@@ -426,7 +432,7 @@ int conv_iconv (buffer_t* src, const char* from, const char* to) {
     obl = MB_LEN_MAX * ibl;
     ob = buf = mem_malloc (obl + 1);
 
-    my_iconv (cd, &ib, &ibl, &ob, &obl, inrepls, outrepl);
+    my_iconv (cd, &ib, &ibl, &ob, &obl, inrepls, outrepl, &err);
     iconv_close (cd);
 
     *ob = '\0';
@@ -435,7 +441,7 @@ int conv_iconv (buffer_t* src, const char* from, const char* to) {
     buffer_add_str(src,buf,-1);
     mem_free(&s);
     mem_free(&buf);
-    return 1;
+    return err==0;
   }
   mem_free(&s);
   return 0;
