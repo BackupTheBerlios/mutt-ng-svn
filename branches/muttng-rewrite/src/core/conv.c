@@ -280,6 +280,13 @@ static void charset_canonical (buffer_t* charset) {
     buffer_shrink(charset,p-charset->str);
 }
 
+/**
+ * Like original @c iconv_open() but canoninitialized character sets
+ * first.
+ * @param tocode To which charset to convert.
+ * @param fromcode From which charset to convert.
+ * @return Conversion description from @c iconv_open().
+ */
 static iconv_t my_iconv_open (const char *tocode, const char *fromcode) {
   buffer_t tocode1, fromcode1;
   iconv_t cd;
@@ -301,12 +308,20 @@ static iconv_t my_iconv_open (const char *tocode, const char *fromcode) {
   return (cd);
 }
 
-/*
+/**
  * Like iconv, but keeps going even when the input is invalid
  * If you're supplying inrepls, the source charset should be stateless;
  * if you're supplying an outrepl, the target charset should be.
+ * @param cd Conversion description.
+ * @param inbuf Input string.
+ * @param inbytesleft How many input bytes to convert.
+ * @param outbuf Destination string.
+ * @param outbytesleft How many output bytes to convert.
+ * @param inrepls Replacements for bad characters in input.
+ * @param outrepl Replacements for bad characters in output.
+ * @param err Pointer to storage for whether an error occured.
+ * @return Return value returned by @c iconv() or 0 in case of error.
  */
-
 static size_t my_iconv (iconv_t cd, CORE_ICONV_CONST char **inbuf, size_t * inbytesleft,
                         char **outbuf, size_t * outbytesleft,
                         CORE_ICONV_CONST char **inrepls, const char *outrepl,

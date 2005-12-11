@@ -170,6 +170,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     <li>GNU make. Others won't work as the makefiles use GNU make-only constructs.</li>
     <li>A C and C++ compiler. Currently supported are the GNU Compiler Collection and
         Sun Microsystems' workshop pro compiler suite.</li>
+    <li>Perl 5.</li>
     <li>Optionally, for building and running the unit tests, Unit++ (see
         <a href="http://unitpp.sf.net/">http://unitpp.sf.net/</a>) must be installed.</li>
     <li>Optionally, for building localized versions of the applications,
@@ -181,13 +182,6 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
         different characte sets/encodings.</li>
     
       </ul>
-    
-      Everything should build if these requirements are met. However, as Perl scripts are
-      used to generate some parts of the source code automatically which are already
-      under version control, Perl isn't mandatory. On the other hand it can't
-      do any harm if it's installed.
-    
-
     
       For building muttng's homepage as well as the manual, the following tools must be
       installed and setup properly:
@@ -210,41 +204,12 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     
     @subsection sect_build-config Build Configuration
     
-      In order to make the build process work at all, you need to create
-      a file called <tt>GNUmakefile.config.mine</tt> in the top-level
-      directory, i.e. in <tt>mutt-ng/branches/muttng-rewrite</tt>.
+      In the top-level directory, there's a file named <tt>configure.pl</tt>
+      which configures the build process. Just run it with the preferred set
+      of options, a full list is available when running it with the 
+      <tt>--help</tt> option.
     
 
-    
-      There you can set various options. Most important are the following:
-    
-
-    <ul>
-    <li><tt>CCSTYLE=(gcc|suncc)</tt>. Wether to assume use of GNU or Sun's
-        Workshop Pro C/C++ compilers. Default: <tt>gcc</tt>.</li>
-    <li><tt>XSLPROC=(xsltproc|xalanj)</tt>. Whether to use <tt>xsltproc(1)</tt>
-        or Xalan Java for as XSL processor. Default: <tt>xsltproc</tt>.</li>
-    <li><tt>DEBUG=(0|1).</tt> Whether to pass <tt>-g</tt> to the
-        compilers/linkers. This is useful for running a debuger. This is not
-        the same as the feature to make mutt-ng print debug messages (which
-        currently cannot be turned off). Default: <tt>0</tt>.</li>
-    <li><tt>UNITPPDIR=/path</tt>. Where Unit++ (see
-        <a href="http://unitpp.sf.net/">http://unitpp.sf.net/</a>) for
-        running the unit tests is installed. Default: <tt>/usr</tt>.</li>
-    <li><tt>OPENSSLDIR=/path</tt>. Where OpenSSL
-        is installed. This is required for encrypted connections.
-        If none is given, OpenSSL won't be used. Default: none.</li>
-    <li><tt>LIBICONVDIR=/path</tt>. Where libiconv is installed.
-        This is required for conversions between character sets/encodings.
-        If none is given, libiconv won't be used. Default: none.</li>
-    <li><tt>DOCLANGUAGES=[|list|all]</tt>. In which languages to
-        build documentation. If it's empty, only English will be built.
-        If a space-separated list is specified, the given languages will be
-        built (example: "<tt>en de</tt>"). If the special word <tt>all</tt>
-        is specified, all available languages will be build. Default:
-        <tt>all</tt>.</li>
-    
-      </ul>
     
     @subsection sect_build-app Building applications
     
@@ -252,12 +217,7 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     
 
     <ol>
-    <li>After reading how to @ref build-config "configure the build
-          system" , edit <tt>GNUmakefile.config.mine</tt> accordingly.</li>
-    <li>In the top-level directory, run:
-        <pre>
-$ make sysconf</pre>
-        as the very first command. You'll get weird error messages if not.</li>
+    <li>run <tt>configure.pl</tt></li>
     <li>If it didn't stop with an error (what shouldn't happen), run
         <pre>
 $ make depend</pre>
@@ -757,68 +717,21 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
       
 
     
-        The system includes a makefile named <tt>GNUmakefile.sysconf</tt>
-        as well as a number of test source files located in the
-        <tt>src/sysconf/</tt> directory.
-      
-
-    <tt>GNUmakefile.sysconf</tt> defines two functions for compiling
-        such a test program to see if a feature works and adds the result to
-        a header file for regular sources to include.
+        The system basically works like this: there's a configuration script
+        written in Perl named <tt>configure.pl</tt> which sets up a configuration
+        Makefile <tt>GNUmakefile.config.mine</tt>, runs some more difficult tests
+        to obtain system-dependent settings and writes out header files with the
+        configuration.
       
 
     
-        The functions defined are: <tt>testing_c</tt> and <tt>testing_cpp</tt>
-        which only differ in the compiler they use. The first uses the C while the
-        latter uses the C++ compiler. The arguments to be passed to these function
-        are in order:
-      
-
-    <ol>
-    <li>source file in <tt>src/sysconf</tt> to compile</li>
-    <li>function name to report progress on screen</li>
-    <li>a preprocessor <tt>#define</tt> for the header</li>
-    <li>the name of the header file to create</li>
-    
-      </ol>
-    @ref sample-sysconf "An example"  used for
-        the <tt>core/</tt> library is provided: it tests for whether programs
-        using <tt>mmap(2)</tt>, <tt>alloca(3)</tt> and
-        <tt>strsep(3)</tt> functions properly compile and link. For each of
-        these, the following <tt>#defines</tt> are either set to 1 or 0 depending
-        on whether the compilation and linkage succeeded or not:
-        <tt>HAVE_MMAP</tt>, <tt>HAVE_ALLOCA</tt> and <tt>HAVE_STRSEP</tt> respectively.
-      
-
-    @anchor sample-sysconf
-    @verbinclude makefile_sysconf
-            
-        Of course, the preprocessor's define name doesn't have to be named after
-        the function though it makes the code readable this way.
+        As the whole project is work-in-progress, there's not much auto-detection
+        implemented in <tt>configure.pl</tt> so everything has to be specified.
       
 
     
-        As there's no <tt>./configure</tt> replacement yet, the auto-configuration
-        has to be invoked and tested manually:
-      
-
-    <pre>
-$ make -f GNUmakefile.sysconf sysconf</pre>
-        ...which produces the header file: <tt>src/core/core_features.h</tt> with
-        the results.
-      
-
-    
-    @subsubsection sect_devguide-build-userconfig User Configuration
-    
-        The user configuration Makefile is <tt>GNUmakefile.config.mine</tt>
-        in the top-level source directory. It may contain any make logic.
-      
-
-    
-        Any Makefile including it must include <tt>GNUmakefile.config</tt>
-        directly afterwards like in @ref sample-libmuttng-build-config "include
-          example" .
+        Every Makefile must include <tt>GNUmakefile.config</tt>
+        directly afterwards like in @ref sample-libmuttng-build-config "include example" .
       
 
     @anchor sample-libmuttng-build-config
@@ -845,8 +758,6 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           accordingly (e.g. <tt>-DFREEBSD</tt> for FreeBSD, <tt>-DSUNOS</tt>
           for solaris, etc.) The operating system value is set as
           <tt>$(MYOS)</tt></li>
-    <li>it sets up compiler and linker flags to contain the required
-          paths for Unit++ derived from the configured <tt>$(UNITPPDIR)</tt></li>
     <li>it searches <tt>$PATH</tt> for the paths of
           @ref table-make-tools "tools required" .</li>
     <li>according to the XSL processor chosen via <tt>$(XSLPROC)</tt>,
@@ -882,7 +793,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
     @htmlonly
     <p class="title">Library-specific make compile variables</p>
       <table class="ordinary" rowsep="1" summary="Library-specific make compile variables">
-    <thead><tr><td>Libarary</td><td>suffix</td><td>Variables</td></tr></thead><tbody><tr><td>OpenSSL</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr><tr><td>GNUTLS</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr><tr><td>LibIconv</td><td><tt>LIBICONV</tt></td><td><tt>CFLAGSLIBICONV</tt>, <tt>CXXFLAGSLIBICONV</tt>, <tt>LDFLAGSLIBICONV</tt></td></tr></tbody>
+    <thead><tr><td>Libarary</td><td>suffix</td><td>Variables</td></tr></thead><tbody><tr><td>OpenSSL</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr><tr><td>GNUTLS</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr><tr><td>LibIconv</td><td><tt>LIBICONV</tt></td><td><tt>CFLAGS_LIBICONV</tt>, <tt>CXXFLAGS_LIBICONV</tt>, <tt>LDFLAGS_LIBICONV</tt></td></tr><tr><td>Unit++</td><td><tt>UNITPP</tt></td><td><tt>CFLAGS_UNITPP</tt>, <tt>CXXFLAGS_UNITPP</tt>, <tt>LDFLAGS_UNITPP</tt></td></tr></tbody>
       </table>
       @endhtmlonly
     
@@ -897,7 +808,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
     
 
     
-        In any Makefile, targets can be setup depending on whether a tool is present
+        In every Makefile, targets can be setup depending on whether a tool is present
         or not via, see @ref sample-libmuttng-build-conditional "conditional
           example" .
       

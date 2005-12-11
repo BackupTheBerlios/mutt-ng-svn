@@ -13,6 +13,7 @@
  * Encode a string according to RfC 2047.
  * @param dst Destination buffer.
  * @param src Source string.
+ * @param in Input character set, ie in which one source is encoded.
  * @return Success.
  */
 bool rfc2047_encode (buffer_t* dst, buffer_t* src, const char* in);

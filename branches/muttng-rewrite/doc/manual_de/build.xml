@@ -29,6 +29,7 @@
     <ul>
       <li>GNU make. Andere make-Varianten funktionieren nicht, weil spezielle
         Konstrukte verwenden werden, die nur GNU make unterstützt.</li>
+      <li>Perl 5.</li>
       <li>Ein C und C++ Übersetzer. Derzeit werden die 
         GNU Compiler Collection als auch Sun Microsystems' Workshop Pro
         Compiler Suite unterstützt.</li>
@@ -42,13 +43,6 @@
         von libiconv, die für das Konvertieren von Zeichensätzen/-kodierungen
         benötigt wird.</li>
     </ul>
-
-    <p>
-      Alle Teile sollten sich übersetzen lassen, wenn diese Bedingungen erfüllt
-      sind. Weil aber einige Teile der Quellen automatisch mit Perlskripten
-      erzeugt werden und diese Teile aber ebenfalls unter Versionskontrolle stehen,
-      sollte Perl nicht zwingend benötigt werden. Es kann aber nicht schaden.
-    </p>
 
     <p>
       Um entweder die Internetseiten für mutt-ng oder das Handbuch zu
@@ -76,45 +70,11 @@
     <title>Konfiguration</title>
 
     <p>
-      Um den Übersetzungsprozess lauffähig zu machen, muss eine Datei namens
-      <tt>GNUmakefile.config.mine</tt> im obersten Quellenverzeichnis erstellt
-      werden, also in <tt>mutt-ng/branches/muttng-rewrite</tt>.
+      Im obersten Verzeichnis ist eine Datei namens <tt>configure.pl</tt>, die
+      die Konfiguration des Übersetzungsprozesses erstellt. Es muss nur mit der
+      gewünschten Liste an Optionen aufgerufen werden, eine vollständige kann
+      mit der Option <tt>--help</tt> abgefragt werden.
     </p>
-
-    <p>
-      Darin lassen sich verschiedene Optionen individuell setzen. Die wichtigsten sind:
-    </p>
-
-    <ul>
-      <li><tt>CCSTYLE=(gcc|suncc)</tt>. Welche Übersetzer angenommen werden
-        sollen: entweder GNU GCC oder Sun's Workshop Pro C/C++ Übersetzer.
-        Vorgabe: <tt>gcc</tt>.</li>
-      <li><tt>XSLPROC=(xsltproc|xalanj)</tt>. Welcher XSL Prozessor verwendet
-        werden soll: entweder <man>xsltproc</man> oder Xalan Java. Vorgabe:
-        <tt>xsltproc</tt>.</li>
-      <li><tt>DEBUG=(0|1).</tt> Ob die Option <tt>-g</tt> and die
-        Übersetzer übergeben werden soll. Dies ist für das Verwenden von
-        Debuggern notwendig. Dies ist nicht das gleiche wie das Erzeugen von
-        Debugausgaben in mutt-ng (, was gegenwärtig nicht abgeschaltet werden
-        kann). Vorgabe: <tt>0</tt>.</li>
-      <li><tt>UNITPPDIR=/path</tt>. Pfad in dem Unit++ (siehe
-        <web>http://unitpp.sf.net/</web>) für die Testsuite installiert
-        ist. Vorgabe: <tt>/usr</tt>.</li>
-      <li><tt>OPENSSLDIR=/path</tt>. Pfad in dem OpenSSL
-        installiert ist. Dies wird für verschlüsselte Verbindungen benötigt.
-        Wenn kein Wert gegeben ist, wird OpenSSL nicht verwendet.
-        Vorgabe: keine.</li>
-      <li><tt>LIBICONVDIR=/path</tt>. Pfad in dem libiconv installiert ist,
-        die für Konvertierungen zwischen Zeichensätzen/-kodierungen
-        benötigt wird. Wird kein Wert angegeben, wird libiconv nicht
-        verwendet. Vorgabe: keine.</li>
-      <li><tt>DOCLANGUAGES=[|list|all]</tt>. In welchen Sprachen die
-        Dokumentation erstellt wird. Ist ein leerer Wert gegeben wird nur
-        Englisch erstellt. Wenn eine Liste angebeben ist, werden alle
-        enthaltenen Sprachen erstellt (Beispiel: "<tt>en de</tt>").
-        Wird das spezielle Wort <tt>all</tt> angebeben, werden alle
-        verfügbaren Sprachen erstellt. Vorgabe: <tt>all</tt>.</li>
-    </ul>
 
   </section>
   <!--}}}-->
@@ -127,14 +87,7 @@
     </p>
 
     <ol>
-      <li>Nach der Lektüre <docref type="Abschnitt" href="build-config">wie man das Übersetzen
-          konfiguriert</docref>, muss zunächst <tt>GNUmakefile.config.mine</tt>
-        entsprechend bearbeitet werden.</li>
-      <li>Im obersten Verzeichnis führt man
-        <pre>
-$ make sysconf</pre>
-        danach als ersten Befehl aus. Es werden verrückte Fehlermeldungen
-        kommen falls nicht.</li>
+      <li><tt>configure.pl</tt> ausführen</li>
       <li>Wenn nicht mit einem Fehler abgebrochen wurde (was nicht passieren
         sollte), führt man
         <pre>

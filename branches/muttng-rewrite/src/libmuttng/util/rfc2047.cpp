@@ -156,7 +156,7 @@ static inline bool encode_as_one (buffer_t* dst, buffer_t* src,
  * definition of ENC_CONT()) so we can easily QP-encode to multiple
  * words which are each shorter than RfC2047's limit.
  * @param dst Destination buffer.
- * @param source Source buffer.
+ * @param src Source buffer.
  * @param in Current input character set. If it's not UTF-8, we convert
  *           to it by force and ignore any error we get since we at
  *           least must send something.
@@ -434,7 +434,7 @@ bail:
  * Though space between encoded words may include linebreaks and header
  * folding, we expect unfolding to be done in a Header class already
  * so we do this:
- *   -# if all @c len chars from @c src match <tt>[ \t]</tt>, we add nothing to @c dst
+ *   -# if all @c len chars from @c src match <tt>[ \\t]</tt>, we add nothing to @c dst
  *   -# otherwise add @c len chars from @c src as-is
  * @param dst Destination buffer.
  * @param src Source string.

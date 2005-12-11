@@ -30,6 +30,7 @@
       <li>GNU make. Others won't work as the makefiles use GNU make-only constructs.</li>
       <li>A C and C++ compiler. Currently supported are the GNU Compiler Collection and
         Sun Microsystems' workshop pro compiler suite.</li>
+      <li>Perl 5.</li>
       <li>Optionally, for building and running the unit tests, Unit++ (see
         <web>http://unitpp.sf.net/</web>) must be installed.</li>
       <li>Optionally, for building localized versions of the applications,
@@ -40,13 +41,6 @@
         libiconv installed which is used for conversions between
         different characte sets/encodings.</li>
     </ul>
-
-    <p>
-      Everything should build if these requirements are met. However, as Perl scripts are
-      used to generate some parts of the source code automatically which are already
-      under version control, Perl isn't mandatory. On the other hand it can't
-      do any harm if it's installed.
-    </p>
 
     <p>
       For building muttng's homepage as well as the manual, the following tools must be
@@ -73,40 +67,11 @@
     <title>Build Configuration</title>
 
     <p>
-      In order to make the build process work at all, you need to create
-      a file called <tt>GNUmakefile.config.mine</tt> in the top-level
-      directory, i.e. in <tt>mutt-ng/branches/muttng-rewrite</tt>.
+      In the top-level directory, there's a file named <tt>configure.pl</tt>
+      which configures the build process. Just run it with the preferred set
+      of options, a full list is available when running it with the 
+      <tt>--help</tt> option.
     </p>
-
-    <p>
-      There you can set various options. Most important are the following:
-    </p>
-
-    <ul>
-      <li><tt>CCSTYLE=(gcc|suncc)</tt>. Wether to assume use of GNU or Sun's
-        Workshop Pro C/C++ compilers. Default: <tt>gcc</tt>.</li>
-      <li><tt>XSLPROC=(xsltproc|xalanj)</tt>. Whether to use <man>xsltproc</man>
-        or Xalan Java for as XSL processor. Default: <tt>xsltproc</tt>.</li>
-      <li><tt>DEBUG=(0|1).</tt> Whether to pass <tt>-g</tt> to the
-        compilers/linkers. This is useful for running a debuger. This is not
-        the same as the feature to make mutt-ng print debug messages (which
-        currently cannot be turned off). Default: <tt>0</tt>.</li>
-      <li><tt>UNITPPDIR=/path</tt>. Where Unit++ (see
-        <web>http://unitpp.sf.net/</web>) for
-        running the unit tests is installed. Default: <tt>/usr</tt>.</li>
-      <li><tt>OPENSSLDIR=/path</tt>. Where OpenSSL
-        is installed. This is required for encrypted connections.
-        If none is given, OpenSSL won't be used. Default: none.</li>
-      <li><tt>LIBICONVDIR=/path</tt>. Where libiconv is installed.
-        This is required for conversions between character sets/encodings.
-        If none is given, libiconv won't be used. Default: none.</li>
-      <li><tt>DOCLANGUAGES=[|list|all]</tt>. In which languages to
-        build documentation. If it's empty, only English will be built.
-        If a space-separated list is specified, the given languages will be
-        built (example: "<tt>en de</tt>"). If the special word <tt>all</tt>
-        is specified, all available languages will be build. Default:
-        <tt>all</tt>.</li>
-    </ul>
 
   </section>
   
@@ -120,12 +85,7 @@
     </p>
 
     <ol>
-      <li>After reading how to <docref type="section" href="build-config">configure the build
-          system</docref>, edit <tt>GNUmakefile.config.mine</tt> accordingly.</li>
-      <li>In the top-level directory, run:
-        <pre>
-$ make sysconf</pre>
-        as the very first command. You'll get weird error messages if not.</li>
+      <li>run <tt>configure.pl</tt></li>
       <li>If it didn't stop with an error (what shouldn't happen), run
         <pre>
 $ make depend</pre>

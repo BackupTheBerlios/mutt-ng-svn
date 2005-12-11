@@ -255,77 +255,22 @@
       </p>
 
       <p>
-        The system includes a makefile named <tt>GNUmakefile.sysconf</tt>
-        as well as a number of test source files located in the
-        <tt>src/sysconf/</tt> directory.
+        The system basically works like this: there's a configuration script
+        written in Perl named <tt>configure.pl</tt> which sets up a configuration
+        Makefile <tt>GNUmakefile.config.mine</tt>, runs some more difficult tests
+        to obtain system-dependent settings and writes out header files with the
+        configuration.
       </p>
 
       <p>
-        <tt>GNUmakefile.sysconf</tt> defines two functions for compiling
-        such a test program to see if a feature works and adds the result to
-        a header file for regular sources to include.
+        As the whole project is work-in-progress, there's not much auto-detection
+        implemented in <tt>configure.pl</tt> so everything has to be specified.
       </p>
 
       <p>
-        The functions defined are: <tt>testing_c</tt> and <tt>testing_cpp</tt>
-        which only differ in the compiler they use. The first uses the C while the
-        latter uses the C++ compiler. The arguments to be passed to these function
-        are in order:
-      </p>
-
-      <ol>
-        <li>source file in <tt>src/sysconf</tt> to compile</li>
-        <li>function name to report progress on screen</li>
-        <li>a preprocessor <tt>#define</tt> for the header</li>
-        <li>the name of the header file to create</li>
-      </ol>
-
-      <p>
-        <docref type="listing" href="sample-sysconf">An example</docref> used for
-        the <tt>core/</tt> library is provided: it tests for whether programs
-        using <man sect="2">mmap</man>, <man sect="3">alloca</man> and
-        <man sect="3">strsep</man> functions properly compile and link. For each of
-        these, the following <tt>#defines</tt> are either set to 1 or 0 depending
-        on whether the compilation and linkage succeeded or not:
-        <tt>HAVE_MMAP</tt>, <tt>HAVE_ALLOCA</tt> and <tt>HAVE_STRSEP</tt> respectively.
-      </p>
-
-      <listing lang="make" id="sample-sysconf"
-        title="System auto-configuration example" href="makefile_sysconf"/>
-
-      <p>
-        Of course, the preprocessor's define name doesn't have to be named after
-        the function though it makes the code readable this way.
-      </p>
-
-      <p>
-        As there's no <tt>./configure</tt> replacement yet, the auto-configuration
-        has to be invoked and tested manually:
-      </p>
-
-      <pre>
-$ make -f GNUmakefile.sysconf sysconf</pre>
-
-      <p>
-        ...which produces the header file: <tt>src/core/core_features.h</tt> with
-        the results.
-      </p>
-
-    </subsection>
-    <!--}}}-->
-
-    <subsection id="devguide-build-userconfig"> <!--{{{-->
-      <title>User Configuration</title>
-
-      <p>
-        The user configuration Makefile is <tt>GNUmakefile.config.mine</tt>
-        in the top-level source directory. It may contain any make logic.
-      </p>
-
-      <p>
-        Any Makefile including it must include <tt>GNUmakefile.config</tt>
-        directly afterwards like in <docref type="listing" href="sample-libmuttng-build-config">include
-          example</docref>.
+        Every Makefile must include <tt>GNUmakefile.config</tt>
+        directly afterwards like in <docref type="listing"
+          href="sample-libmuttng-build-config">include example</docref>.
       </p>
 
       <listing lang="make" id="sample-libmuttng-build-config"
@@ -355,8 +300,6 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
           accordingly (e.g. <tt>-DFREEBSD</tt> for FreeBSD, <tt>-DSUNOS</tt>
           for solaris, etc.) The operating system value is set as
           <tt>$(MYOS)</tt></li>
-        <li>it sets up compiler and linker flags to contain the required
-          paths for Unit++ derived from the configured <tt>$(UNITPPDIR)</tt></li>
         <li>it searches <env>PATH</env> for the paths of
           <docref type="table" href="table-make-tools">tools required</docref>.</li>
         <li>according to the XSL processor chosen via <tt>$(XSLPROC)</tt>,
@@ -413,7 +356,11 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
             </tr>
             <tr>
               <td>LibIconv</td><td><tt>LIBICONV</tt></td>
-              <td><tt>CFLAGSLIBICONV</tt>, <tt>CXXFLAGSLIBICONV</tt>, <tt>LDFLAGSLIBICONV</tt></td>
+              <td><tt>CFLAGS_LIBICONV</tt>, <tt>CXXFLAGS_LIBICONV</tt>, <tt>LDFLAGS_LIBICONV</tt></td>
+            </tr>
+            <tr>
+              <td>Unit++</td><td><tt>UNITPP</tt></td>
+              <td><tt>CFLAGS_UNITPP</tt>, <tt>CXXFLAGS_UNITPP</tt>, <tt>LDFLAGS_UNITPP</tt></td>
             </tr>
           </tb>
         </tab>
@@ -439,7 +386,7 @@ $ make -f GNUmakefile.sysconf sysconf</pre>
       </p>
 
       <p>
-        In any Makefile, targets can be setup depending on whether a tool is present
+        In every Makefile, targets can be setup depending on whether a tool is present
         or not via, see <docref type="listing" href="sample-libmuttng-build-conditional">conditional
           example</docref>.
       </p>
