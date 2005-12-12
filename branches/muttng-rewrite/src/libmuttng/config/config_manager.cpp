@@ -1,7 +1,14 @@
+/** @addtogroup libmuttng_config */
+/**
+ * @file libmuttng/config/config_manager.cpp
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
+ * @brief Implementation: Configuration Manager
+ */
 #include "config_manager.h"
 
 #include "libmuttng/util/hash.h"
 
+/** internal hash tables of options */
 static Hash<Option*>* Options = NULL;
 
 static void free_option(HASH_ITEMTYPE* p) {
@@ -48,6 +55,12 @@ Option* ConfigManager::get(const char* name) {
   return Options->find(name);
 }
 
+/**
+ * Used as callback for Hash::map(): simply add option name to vector.
+ * @param key The name of the option.
+ * @param option Unused: the option object itself.
+ * @param moredate Destination vector.
+ */
 static void add(const char* key, Option* option, std::vector<const char*>* moredata) {
   (void) option;
   moredata->push_back(key);

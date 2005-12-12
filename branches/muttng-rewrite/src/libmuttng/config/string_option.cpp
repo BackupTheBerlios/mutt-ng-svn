@@ -1,3 +1,9 @@
+/** @addtogroup libmuttng_config */
+/**
+ * @file libmuttng/config/string_option.cpp
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
+ * @brief Implementation: String option
+ */
 #include "string_option.h"
 #include "core/intl.h"
 #include "core/str.h"

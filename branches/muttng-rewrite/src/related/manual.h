@@ -1588,7 +1588,8 @@ buffer_init(&buffer);
 
     <ul>
     <li><em>basic services</em> of interest for the whole library and
-          application: signal handling and debug support.</li>
+          application: signal handling and debug support as well a centralized
+          interface for configuration options</li>
     <li><em>mailbox support</em> includes: IMAP, POP3, NNTP, Maildir, MH,
           MBOX and MMDF. The Mailbox abstraction layer works transparently and is
           URL-driven, that is, the client doesn't need to care about and that
@@ -1701,6 +1702,123 @@ disconnectSignals (signal, object);</pre>
     @anchor sample-libmuttng-signal
     @include libmuttng_signal.cpp
             
+    
+    @subsubsection sect_devguide-libmuttng-config Configuration handling
+    
+        Built on top of the signal handling, libmuttng provides a simple
+        interface for configuration options. The main goal is to keep access in
+        "real" O(1), that is, not average O(1) access in hash tables but
+        real O(1) via pointers.
+      
+
+    
+        There's an abstract option interface which defines various get and set
+        methods. Based on these, there's a specialized class for options being of
+        type integer, string, regular expression and the like implementing the get and
+        set methods as well as emitting a signal when an option changes.
+      
+
+    
+        There're two ways to access an option's value:
+      
+
+    <ol>
+    <li>either via the ConfigManager class or</li>
+    <li>via the storage of an option</li>
+    
+      </ol>
+    
+        The first method is intended to be used by portions close to the user interfaces,
+        especially the configuration parser or the <tt>muttng-conf(1)</tt> tool.
+      
+
+    
+        The second method is used for the actual code making use of an option.
+      
+
+    
+        Very early in the startup sequence of an application, all options should be
+        registered once so that the later run of the configuration parser can make the
+        configuration manager access them. The configuration manager itself only
+        has <tt>static</tt> methods.
+      
+
+    
+        An example of use is the POP3 mailbox class: it has options like
+        @ref option_pop_user and @ref option_pop_pass which <em>must not</em>
+        be of interest for any non-POP3-code of libmuttng <em>and</em> muttng. Thus,
+        the storage for these two variables is declared <tt>static</tt> in
+        <tt>pop3_mailbox.cpp</tt> like so:
+      
+
+    @anchor sample-libmuttng-option-storage
+    @code
+            
+static char* DefaultUser = NULL;
+static char* DefaultPassword = NULL;
+              @endcode
+            
+        In a function called by the ConfigManager class named <tt>reg()</tt>, these
+        two have to be registered like so once:
+      
+
+    @anchor sample-libmuttng-option-reg
+    @code
+            
+ConfigManager::reg(new StringOption("pop_user","",&DefaultUser));
+ConfigManager::reg(new StringOption("pop_pass","",&DefaultPassword));
+              @endcode
+            
+        As the configuration manager is also used by the configuration parser
+        to handle options it read from files, it now has access to them.
+      
+
+    @anchor sample-libmuttng-option-temp
+    @code
+            
+Option* tmp = NULL;
+if ((tmp = ConfigManager::get("some_option")))
+  connectSignals(tmp->sigOptionChange,this,&This::handler)
+              @endcode
+            
+        This exampe would query for a variable named <tt>some_option</tt>
+        and set a handler for the signal emitted when the option changes.
+        When the sample object is destroyed it should unbind (as shown
+        for the signal examples). This could, for example, be used when
+        displaying a mailbox index so that the user interface gets informed
+        when a layout-related option changes. After leaving the index,
+        this handler is no longer required. This greatly helps
+        in de-coupling relations between different areas of the code.
+      
+
+    
+        The scope where options are defined should be as small as possible. For
+        example, the current @ref option_debug_level is needed globally so it's
+        declared globally. But a default username to use for access to a POP3 mailbox
+        is only needed for the actual POP3 mailbox class so it's only defined
+        there.
+      
+
+    
+        This approach has the following advantages:
+      
+
+    <ul>
+    <li><em>good de-coupling</em>. There no dozens of <tt>#ifdefs</tt> to manage
+          any longer for just the config. The library's client has a simple interface
+          and we can hide every design we like behind it like how options are stored.</li>
+    <li><em>flexibility</em>. As we need flexible configuration for libmuttng
+          and the muttng layers, this rather simple generic interface is easy to use
+          and flexible. Not only since every option has it's own signal emitted when
+          the value changes so that any part can take action upon arbitrary config
+          changes, but also since every part can flexibly (even conditionally!) define
+          it's own options.</li>
+    <li><em>leight weight</em>. We expect access to option values to happen much
+          more often than changes or queries. So for the latter we have "slow" and
+          average O(1) methods "only" while we have real O(1) access for those parts
+          which need it.</li>
+    
+      </ul>
     
     @subsubsection sect_devguide-libmuttng-url URL handling
     

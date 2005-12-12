@@ -1,3 +1,9 @@
+/** @addtogroup libmuttng_config */
+/**
+ * @file libmuttng/config/int_option.cpp
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
+ * @brief Implementation: Integer option
+ */
 #include "int_option.h"
 #include "core/intl.h"
 
