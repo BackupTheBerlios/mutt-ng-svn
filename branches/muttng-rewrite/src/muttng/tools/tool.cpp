@@ -221,11 +221,14 @@ void Tool::doSystem (buffer_t* dst) {
     Connection::getSecureVersion(dst);
     buffer_add_ch(dst,'\n');
   }
+
+#ifdef WANT_CACHE
   if (Cache::getVersion(NULL)) {
     buffer_add_str(dst,"  ",2);
     Cache::getVersion(dst);
     buffer_add_ch(dst,'\n');
   }
+#endif
 
   buffer_add_str(dst,_("Mailbox support: MBOX MMDF Maildir MH "),-1);
 #if defined(LIBMUTTNG_POP3) || defined(LIBMUTTNG_IMAP) || defined(LIBMUTTNG_NNTP)

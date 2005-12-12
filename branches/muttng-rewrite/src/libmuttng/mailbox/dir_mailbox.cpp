@@ -9,13 +9,17 @@
 
 DirMailbox::DirMailbox (url_t* url_) : LocalMailbox (url_) {
   this->haveFilters = 1;
+#ifdef WANT_CACHE
   this->cache = Cache::create();
   connectSignal (this->cache->cacheGetKey, this, &DirMailbox::cacheGetKey);
+#endif
 }
 
 DirMailbox::~DirMailbox (void) {
+#ifdef WANT_CACHE
   disconnectSignals (this->cache->cacheGetKey, this);
   delete this->cache;
+#endif
 }
 
 mailbox_query_status DirMailbox::openMailbox() {
