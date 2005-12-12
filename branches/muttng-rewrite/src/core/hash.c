@@ -100,7 +100,7 @@ static int _hash_exists (void* t, int row, const void* key) {
   for (i = 0; i < tab->rows[row]->length; i++) {
 #define cur ((hash_item_t*) tab->rows[row]->data[i])
     /* don't use str_eq as it would always compute lengths */
-    if (str_eq2 (key, cur->key, cur->keylen) == 0)
+    if (str_eq2 (key, cur->key, cur->keylen))
       return (i);
 #undef cur
   }

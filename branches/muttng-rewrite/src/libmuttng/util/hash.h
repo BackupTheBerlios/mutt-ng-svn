@@ -53,7 +53,7 @@ class Hash : public LibMuttng {
      * @return Success of insertion.
      */
     inline bool add (const char* key, T data, unsigned int code) {
-      return (hash_add_hash (table, (void*) key, (HASH_ITEMTYPE) data, code) == 1);
+      return hash_add_hash (table, (void*) key, (HASH_ITEMTYPE) data, code);
     }
     /**
      * Add item to table.

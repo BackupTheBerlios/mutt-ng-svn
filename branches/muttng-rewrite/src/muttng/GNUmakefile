@@ -1,4 +1,4 @@
-SUBDIRS=event ui config tools
+SUBDIRS=event ui tools
 
 include $(CURDIR)/../../GNUmakefile.whereis
 include $(CURDIR)/../../GNUmakefile.config.mine

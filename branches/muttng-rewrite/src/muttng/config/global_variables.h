@@ -10,7 +10,11 @@
 #include "core/array.h"
 #include "libmuttng/util/url.h"
 
-#if SET_COMMAND_CPP
+#ifdef WHERE
+#undef WHERE
+#endif
+
+#ifdef MUTTNG_MAIN_CPP
 /** modifier for actual storage of variables */
 #define WHERE
 /** set initial value for static and none for extern */
@@ -41,7 +45,7 @@ WHERE int* QuadOptions INITVAL(NULL);
 /** storage for @ref option_assumed_charset */
 WHERE char* AssumedCharset INITVAL(NULL);
 /** storage for @ref option_debug_level */
-WHERE int DebugLevel INITVAL(0);
+WHERE char* DebugLevel INITVAL(NULL);
 /** storage for @ref option_umask */
 WHERE int Umask INITVAL(0);
 /** storage for @ref option_folder */

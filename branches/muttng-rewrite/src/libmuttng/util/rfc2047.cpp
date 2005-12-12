@@ -5,6 +5,7 @@
  * @brief Implementation: RfC2047 encoding
  */
 #include "libmuttng/util/rfc2047.h"
+#include "libmuttng/libmuttng.h"
 
 #include "core/conv.h"
 #include "core/qp.h"
@@ -209,6 +210,8 @@ static void encode_word (buffer_t* dst, const unsigned char* src,
      * loop over all character sets we may use for sending and try
      * first one where input can be completely cnverted to
      */
+    /* XXX */
+    (void) SendCharset;
     if (conv_iconv(&text_conv,in,OutSets[i]) > 0) {
 #if DO_DEBUG
       std::cout<<"will encode='"<<(NONULL(text_conv.str))<<"' (l="<<len<<")"<<std::endl;

@@ -16,6 +16,9 @@
 #include "mailx_tool.h"
 #include "sync_tool.h"
 
+#define MUTTNG_MAIN_CPP
+#include "../config/global_variables.h"
+
 /**
  * Common @c main() function for all tools.
  * Depending on the name it's invoked with, it creates the proper user

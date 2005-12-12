@@ -68,16 +68,30 @@ class LibMuttng {
     ~LibMuttng (void);
     /**
      * Adjust debug level.
-     * @param level New debug level.
      * @return Success.
      */
     bool setDebugLevel (int level);
+    int LibMuttng::getDebugLevel();
     /** Cleanup after use of library. */
     void cleanup (void);
   protected:
+    bool setDebugLevel (const char* name);
     /** library-wide debug object */
     Debug* debug;
 };
+
+#ifdef WHERE
+#undef WHERE
+#endif
+
+#ifdef LIBMUTTNG_MAIN_CPP
+#define WHERE
+#else
+#define WHERE extern
+#endif
+
+/** storage for $send_charset */
+WHERE char* SendCharset;
 
 #endif /* !LIBMUTTNG_LIBMUTTNG_H */
 /** @} */

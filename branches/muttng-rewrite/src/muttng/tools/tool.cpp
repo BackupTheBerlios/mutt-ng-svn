@@ -20,6 +20,7 @@
 #include "libmuttng/libmuttng_features.h"
 #include "libmuttng/transport/connection.h"
 #include "libmuttng/cache/cache.h"
+#include "libmuttng/config/config_manager.h"
 
 #include "ui/ui_plain.h"
 
@@ -106,20 +107,14 @@ Tool::~Tool () {
 }
 
 int Tool::genericArg (unsigned char c, const char* arg) {
-  int rc = 1, num = 0;
+  int rc = 1;
   switch (c) {
     case 'v': displayVersion (); rc = 0; break;
     case 'V': displayWarranty (); rc = 0; break;
     case 'h': displayUsage (); rc = 0; break;
     case 'n': readGlobal = false; break;
     case 'F': altConfig = arg; break;
-    case 'd':
-      num = atoi (optarg);
-      if (num >= DEBUG_MIN && num <= DEBUG_MAX) {
-        DebugLevel = num;
-        break;
-      }
-      /* fall through for invalid values */
+    case 'd': DebugLevel = optarg; break;
     case '?':
     default:
       return (-1);
@@ -128,32 +123,26 @@ int Tool::genericArg (unsigned char c, const char* arg) {
 }
 
 bool Tool::start (void) {
-  buffer_t error;
+  buffer_t error, dbg;
   UIPlain ui;
 
-  buffer_init ((&error));
+  buffer_init (&error);
+  buffer_init(&dbg);
 
-  /* setup homedir and umask first... */
-  Config::preinit ();
+  buffer_add_str(&dbg,DebugLevel,-1);
+
   /* since we need it for debugging and... */
   muttngInit (Homedir, getName (), Umask);
 
   setupEventHandlers ();
 
-  /* this is derived from Muttng and needs debug, too */
-  config = new Config ();
-
   this->libmuttng = new LibMuttng (Homedir, Umask);
-  setDebugLevel (DebugLevel);
-  this->libmuttng->setDebugLevel (DebugLevel);
+  Option* dbglev = ConfigManager::get("debug_level");
+  if (dbglev)
+    connectSignal(dbglev->sigOptionChange,this,&Tool::catchDebugLevelChange);
+  ConfigManager::set("debug_level",&dbg,NULL);
 
   if (!event->init ())
-    return (false);
-
-  if (!config->init (&ui))
-    return (false);
-
-  if (!config->read (this->readGlobal, this->altConfig, &error))
     return (false);
 
   return (this->ui->start ());
@@ -318,18 +307,12 @@ void Tool::displayUsage (void) {
 }
 
 void Tool::setupEventHandlers (void) {
-  connectSignal (event->sigNumOptChange, this, &Tool::catchNumOptChange);
   connectSignal (event->sigContextChange, this, &Tool::catchContextChange);
 }
 
-bool Tool::catchNumOptChange (Event::context context, const char* name,
-                              int value) {
-  DEBUGPRINT(D_EVENT,("caught num option change: ctx=%s, opt='%s'",
-                      Event::getContextName (context), name));
-  if (str_eq2 (name, "debug_level", 11)) {
-    setDebugLevel (value);
-    libmuttng->setDebugLevel (value);
-  }
+bool Tool::catchDebugLevelChange (const char* name) {
+  (void) name;
+  setDebugLevel(libmuttng->getDebugLevel());
   return (true);
 }
 

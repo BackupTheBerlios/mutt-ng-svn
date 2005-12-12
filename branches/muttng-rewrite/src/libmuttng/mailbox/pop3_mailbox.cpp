@@ -6,7 +6,12 @@
 #include <stdlib.h>
 
 #include "util/url.h"
+#include "config/config_manager.h"
+#include "config/string_option.h"
 #include "pop3_mailbox.h"
+
+static char* DefaultUser = NULL;
+static char* DefaultPassword = NULL;
 
 POP3Mailbox::POP3Mailbox (url_t* url_, Connection * c) : RemoteMailbox (url_,c) {
   this->haveCaching = 1;
@@ -19,6 +24,11 @@ POP3Mailbox::POP3Mailbox (url_t* url_, Connection * c) : RemoteMailbox (url_,c) 
 POP3Mailbox::~POP3Mailbox (void) {
   disconnectSignals (this->cache->cacheGetKey, this);
   delete this->cache;
+}
+
+void POP3Mailbox::reg(void) {
+  ConfigManager::reg(new StringOption("pop_user","",&DefaultUser));
+  ConfigManager::reg(new StringOption("pop_pass","",&DefaultPassword));
 }
 
 mailbox_query_status POP3Mailbox::openMailbox() {

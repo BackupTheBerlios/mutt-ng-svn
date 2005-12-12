@@ -22,6 +22,8 @@ class POP3Mailbox : public RemoteMailbox {
     POP3Mailbox (url_t* url_, Connection * c = NULL);
     ~POP3Mailbox ();
 
+    static void reg();
+
     /**
      * Opens the POP3 mailbox.
      */

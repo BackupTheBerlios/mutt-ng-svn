@@ -16,6 +16,8 @@
 
 #include "conf_tool.h"
 
+#include "libmuttng/config/config_manager.h"
+
 using namespace std;
 
 /** Usage string for @c muttng(1). */
@@ -45,34 +47,39 @@ void ConfTool::getUsage (buffer_t* dst) {
 }
 
 void ConfTool::do_opts (bool annotated, bool changed) {
-  buffer_t name, type, init, value;
-  int idx = 0;
+  (void)annotated;(void)changed;
+  std::vector<const char*>* opts = ConfigManager::getAll();
+  size_t i;
+  buffer_t value;
+  const char* name, *init, *type;
 
-  buffer_init ((&name));
-  buffer_init ((&type));
-  buffer_init ((&init));
-  buffer_init ((&value));
+  if (!opts)
+    return;
 
-  idx = 0;
-  while (config->getSingleOption (&idx, &name, &type, &init, &value)) {
-    int eq = buffer_equal2 (&init, &value);
+  buffer_init (&value);
+
+  for (i = 0; i < opts->size(); i++) {
+    buffer_shrink(&value,0);
+    Option* opt = ConfigManager::get(opts->at(i));
+    name = opt->getName();
+    type = opt->getType();
+    init = opt->getInit();
+    opt->query(&value);
+    int eq = buffer_equal1 (&value,init,-1);
     if (changed && eq)
       continue;
-    cout << name.str << " = \"" << value.str << "\"";
+    cout << name << " = \"" << (NONULL(value.str)) << "\"";
     if (annotated) {
       cout << " #";
       if (!eq)
-        cout << " (default: \"" << init.str << "\")";
-      cout << " (type: " << type.str << ")";
+        cout << " (default: \"" << (NONULL(init)) << "\")";
+      cout << " (type: " << (NONULL(type)) << ")";
     }
     cout << endl;
   }
 
-  buffer_free (&name);
-  buffer_free (&type);
-  buffer_free (&init);
+  delete opts;
   buffer_free (&value);
-
 }
 
 void ConfTool::do_bind (bool annotated, bool changed) {

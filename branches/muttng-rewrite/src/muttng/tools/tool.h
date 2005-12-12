@@ -18,8 +18,6 @@
 #include "libmuttng/libmuttng.h"
 
 #include "muttng.h"
-#include "config/config.h"
-#include "config/option.h"
 #include "ui/ui.h"
 
 /** generic command-line arguments common for all tools. */
@@ -94,8 +92,6 @@ class Tool : public Muttng {
     bool readGlobal;
     /** alternative config to read */
     const char* altConfig;
-    /** global configuration */
-    Config* config;
     /** lib object */
     LibMuttng* libmuttng;
   private:
@@ -127,18 +123,7 @@ class Tool : public Muttng {
     /** setup all event handlers */
     void setupEventHandlers (void);
 
-    /**
-     * Catch any option changes.
-     * Connected to Event::sigOptChange. This is currently only used to
-     * adjust debug levels when @ref option_debug_level changes.
-     * @param context Context signal was emitted in.
-     * @param name Name of option changed
-     * @param value New value.
-     * @return @c true
-     */
-    bool catchNumOptChange (Event::context context,
-                            const char* name,
-                            int value);
+    bool catchDebugLevelChange (const char* name);
 
     /**
      * Catch any context change.

@@ -2,7 +2,7 @@ include $(CURDIR)/../../GNUmakefile.whereis
 include $(CURDIR)/../../GNUmakefile.config.mine
 include $(CURDIR)/../../GNUmakefile.config
 
-SUBDIRS=mailbox crypto message test util transport
+SUBDIRS=mailbox crypto message test util transport config
 ifeq ($(WANT_CACHE),1)
 SUBDIRS+=cache
 endif
@@ -14,7 +14,7 @@ all: muttng_signal.h
 clean: subdirclean
 	rm -rf libmuttng.a debug.o libmuttng.o
 
-libmuttng.a: debug.o libmuttng.o $(wildcard ./mailbox/*.o) $(wildcard ./crypto/*.o) $(wildcard ./message/*.o) $(wildcard ./cache/*.o) $(wildcard ./util/*.o) $(wildcard ./transport/*.o)
+libmuttng.a: debug.o libmuttng.o $(wildcard ./mailbox/*.o) $(wildcard ./crypto/*.o) $(wildcard ./message/*.o) $(wildcard ./cache/*.o) $(wildcard ./util/*.o) $(wildcard ./transport/*.o) $(wildcard ./config/*.o)
 	$(AR) -cru $@ $^ 
 	$(RANLIB) $@
 
