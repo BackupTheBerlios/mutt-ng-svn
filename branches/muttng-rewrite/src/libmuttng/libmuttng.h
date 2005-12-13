@@ -44,6 +44,7 @@
 #define LIBMUTTNG_LIBMUTTNG_H
 
 #include "libmuttng/debug.h"
+#include "libmuttng/config/option.h"
 
 /** module init/cleanup debug level */
 #define D_MOD           1
@@ -68,14 +69,28 @@ class LibMuttng {
     ~LibMuttng (void);
     /**
      * Adjust debug level.
+     * @param level Level in [0,5].
      * @return Success.
      */
     bool setDebugLevel (int level);
-    int LibMuttng::getDebugLevel();
+    /**
+     * Get debug level.
+     * As $debug_level is stored in the library but the apps may want
+     * to use it as well, we catch a change in the apps and need to
+     * set the new level for the app. However, the apps don't have
+     * access to the storage of DebugLevel so they need this method.
+     * @return Level.
+     */
+    int getDebugLevel();
     /** Cleanup after use of library. */
     void cleanup (void);
   protected:
-    bool setDebugLevel (const char* name);
+    /**
+     * Signal handler catching changes of $debug_level.
+     * @param option $debug_level.
+     * @return Success of setting level.
+     */
+    bool setDebugLevel (Option* option);
     /** library-wide debug object */
     Debug* debug;
 };

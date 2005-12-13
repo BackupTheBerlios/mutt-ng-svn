@@ -50,22 +50,27 @@ void ConfTool::do_opts (bool annotated, bool changed) {
   (void)annotated;(void)changed;
   std::vector<const char*>* opts = ConfigManager::getAll();
   size_t i;
-  buffer_t value;
+  buffer_t value, valid;
   const char* name, *init, *type;
 
   if (!opts)
     return;
 
-  buffer_init (&value);
+  buffer_init(&value);
+  buffer_init(&valid);
 
   for (i = 0; i < opts->size(); i++) {
     buffer_shrink(&value,0);
+    buffer_shrink(&valid,0);
     Option* opt = ConfigManager::get(opts->at(i));
     name = opt->getName();
     type = opt->getType();
     init = opt->getInit();
     opt->query(&value);
+    if (!opt->validity(&valid))
+      buffer_shrink(&valid,0);
     int eq = buffer_equal1 (&value,init,-1);
+    Option::prettyValue(&value);
     if (changed && eq)
       continue;
     cout << name << " = \"" << (NONULL(value.str)) << "\"";
@@ -74,6 +79,8 @@ void ConfTool::do_opts (bool annotated, bool changed) {
       if (!eq)
         cout << " (default: \"" << (NONULL(init)) << "\")";
       cout << " (type: " << (NONULL(type)) << ")";
+      if (valid.len)
+        cout << " (validity: " << valid.str << ")";
     }
     cout << endl;
   }

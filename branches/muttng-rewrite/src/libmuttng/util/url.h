@@ -121,6 +121,12 @@ bool url_eq (url_t* url1, url_t* url2);
  */
 unsigned short url_defport (urlproto_t proto, bool secure);
 
+/**
+ * Fill buffer with syntax info for URLs.
+ * @param dst Destination buffer.
+ */
+void url_syntax(buffer_t* dst);
+
 #endif /* !LIBMUTTNG_MESSAGE_BODY_H */
 
 /** @} */

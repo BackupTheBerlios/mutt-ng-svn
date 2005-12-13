@@ -1,5 +1,9 @@
 
-/* Example: format buffer */
+/**
+ * @file examples/core_buffer_format.c
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
+ * @brief Example: Format buffer without s(n)printf
+ */
 
 /* for write(2) */
 #include <sys/types.h>
@@ -8,6 +12,12 @@
 /* for buffer_*() */
 #include "core/buffer.h"
 
+/**
+ * @c main().
+ * @param argc Counter for command-line arguments.
+ * @param argv Command-line arguments.
+ * @return 0 on success, 1 otherwise.
+ */
 int main(int argc,char** argv) {
   buffer_t buf;
   int i=0;

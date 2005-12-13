@@ -25,6 +25,13 @@ my %features = ( # {{{
                              fmt =>     "=s"
                             },
 
+  "ccdocs"              => { conf =>    "CCDOCS",
+                             text =>    "Where GCC C++ includes are located for documentation",
+                             help =>    "GCC C++ include dir",
+                             value =>   "",
+                             fmt =>     "=s"
+                            },
+
   "doc-lang"            => { conf =>    "DOCLANGUAGES",
                              text =>    "In which languages to build documentation",
                              help =>    "Which languages to build docs in",

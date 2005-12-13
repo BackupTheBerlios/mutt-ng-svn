@@ -2,6 +2,12 @@ include ./../GNUmakefile.config.mine
 include ./../GNUmakefile.whereis
 include ./../GNUmakefile.config
 
+ifeq ($(call whereis,dot,),)
+HAVEDOT=NO
+else
+HAVEDOT=YES
+endif
+
 SUBDIRS=core libmuttng muttng
 
 all: subdirs
@@ -12,7 +18,9 @@ clean: subdirclean
 Doxyfile: Doxyfile.in GNUmakefile
 	sed \
 	  -e "s#__UNITPPDIR__#$(UNITPPDIR)#g" \
-	  -e "s#__CURDIR__#$(CURDIR)#g" \
+	  -e "s#__MUTTNGDIR__#$(shell echo $(CURDIR) | sed 's#[^/]*/[^/]*$$##')#g" \
+	  -e "s#__CCDOCS__#$(CCDOCS)#g" \
+	  -e "s#__HAVE_DOT__#$(HAVEDOT)#g" \
 	  < $< > $@
 
 srcdoc: Doxyfile

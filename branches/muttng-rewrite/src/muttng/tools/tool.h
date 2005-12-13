@@ -16,6 +16,7 @@
 #include "core/buffer.h"
 
 #include "libmuttng/libmuttng.h"
+#include "libmuttng/config/option.h"
 
 #include "muttng.h"
 #include "ui/ui.h"
@@ -123,7 +124,12 @@ class Tool : public Muttng {
     /** setup all event handlers */
     void setupEventHandlers (void);
 
-    bool catchDebugLevelChange (const char* name);
+    /**
+     * Signal connected to IntOption::sigOptionChange for $debug_level.
+     * @param option Option for $debug_level.
+     * @return Success of changing level.
+     */
+    bool catchDebugLevelChange (Option* option);
 
     /**
      * Catch any context change.

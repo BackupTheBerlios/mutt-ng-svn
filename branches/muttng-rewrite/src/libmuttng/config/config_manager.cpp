@@ -6,14 +6,16 @@
  */
 #include "config_manager.h"
 
+#include <algorithm>
+
 #include "libmuttng/util/hash.h"
 
 /** internal hash tables of options */
 static Hash<Option*>* Options = NULL;
 
-static void free_option(HASH_ITEMTYPE* p) {
-  Option* option = (Option*) p;
-  delete option;
+static void free_option(Option** option) {
+  delete *option;
+  *option = NULL;
 }
 
 ConfigManager::ConfigManager(){}

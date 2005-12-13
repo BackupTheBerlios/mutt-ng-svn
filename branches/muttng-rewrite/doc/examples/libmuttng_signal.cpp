@@ -1,23 +1,42 @@
 
-/* Example: signal handling */
+/**
+ * @file examples/libmuttng_signal.cpp
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
+ * @brief Example: How to use libmuttng's signals
+ */
 #include <iostream>
 #include "libmuttng/muttng_signal.h"
 
+/**
+ * Dummy class containing only a signal declaration.
+ */
 class Sig {
   public:
-    /* signal takes 1 argument of type 'int' */
+    /** testSignal takes 1 argument of type 'int' */
     Signal1<int> testSignal;
 };
 
+/**
+ * Handler class with a method elsewhere connected to a signal.
+ */
 class Handler {
   public:
-    /* this will be connected to a signal with 1 argument of type 'int' */
+    /** 
+     * Signal handler.
+     * This will be connected to a signal with 1 argument of type 'int'.
+     * @param a The argument passed to Signal1::emit().
+     * @return true
+     */
     bool handle (int a) {
       std::cout << "a = " << a << std::endl;
       return true;
     }
 };
 
+/**
+ * @c main().
+ * @return 1.
+ */
 int main (void) {
   Sig sig;
   Handler* handler = new Handler;

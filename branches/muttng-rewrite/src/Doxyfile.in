@@ -115,7 +115,7 @@ FULL_PATH_NAMES        = YES
 # If left blank the directory from which doxygen is run is used as the 
 # path to strip.
 
-STRIP_FROM_PATH        = __UNITPPDIR__ __CURDIR__
+STRIP_FROM_PATH        = __MUTTNGDIR__
 
 # The STRIP_FROM_INC_PATH tag can be used to strip a user-defined part of 
 # the path mentioned in the documentation of a class, which tells 
@@ -444,7 +444,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories 
 # with spaces.
 
-INPUT                  = . __UNITPPDIR__/include/unit++
+INPUT                  = __MUTTNGDIR__ __UNITPPDIR__/include/unit++ __CCDOCS__
 
 # If the value of the INPUT tag contains directories, you can use the 
 # FILE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp 
@@ -984,7 +984,8 @@ PREDEFINED             = -DDEBUG \
                          -DLIBMUTTNG_IMAP \
                          -DLIBMUTTNG_NNTP \
                          -DLIBMUTTNG_POP3 \
-                         -DLIBMUTTNG_SMTP
+                         -DLIBMUTTNG_SMTP \
+                         -D_GLIBCXX_STD=std
 
 # If the MACRO_EXPANSION and EXPAND_ONLY_PREDEF tags are set to YES then 
 # this tag can be used to specify a list of macro names that should be expanded. 
@@ -1068,7 +1069,7 @@ HIDE_UNDOC_RELATIONS   = YES
 # toolkit from AT&T and Lucent Bell Labs. The other options in this section 
 # have no effect if this option is set to NO (the default)
 
-HAVE_DOT               = YES
+HAVE_DOT               = __HAVE_DOT__
 
 # If the CLASS_GRAPH and HAVE_DOT tags are set to YES then doxygen 
 # will generate a graph for each documented class showing the direct and 

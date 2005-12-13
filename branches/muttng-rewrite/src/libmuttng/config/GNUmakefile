@@ -2,7 +2,8 @@ include $(CURDIR)/../../../GNUmakefile.whereis
 include $(CURDIR)/../../../GNUmakefile.config.mine
 include $(CURDIR)/../../../GNUmakefile.config
 
-FILES=option int_option string_option config_manager
+FILES=option int_option string_option config_manager bool_option \
+      url_option rx_option quad_option
 
 LIB=
 

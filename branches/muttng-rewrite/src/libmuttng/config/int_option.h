@@ -9,6 +9,8 @@
 
 #include "option.h"
 
+#include <limits.h>
+
 /**
  * Integer option class
  */
@@ -19,16 +21,31 @@ class IntOption : public Option {
      * @param name_ Name.
      * @param init_ Initial value.
      * @param store_ Storage for value.
+     * @param min_ Minimum value.
+     * @param max_ Maximum value.
      */
-    IntOption(const char* name_, const char* init_, int* store_);
+    IntOption(const char* name_, const char* init_, int* store_,
+              int min = INT_MIN, int max = INT_MAX);
+    /**
+     * Create new int option.
+     * @param name_ Name.
+     * @param init_ Initial value.
+     * @param store_ Storage for value.
+     * @param negative If @c true, negative values will be allowed.
+     */
+    IntOption(const char* name_, const char* init_, int* store_,
+              bool negative = false);
     bool set(const char* value, buffer_t* error);
     bool unset();
     bool reset();
     bool toggle();
     bool query(buffer_t* dst);
     const char* getType();
+    bool validity(buffer_t* dst);
   private:
     int* store;
+    int min;
+    int max;
 };
 
 #endif

@@ -140,7 +140,10 @@ bool Tool::start (void) {
   Option* dbglev = ConfigManager::get("debug_level");
   if (dbglev)
     connectSignal(dbglev->sigOptionChange,this,&Tool::catchDebugLevelChange);
-  ConfigManager::set("debug_level",&dbg,NULL);
+  if (!ConfigManager::set("debug_level",&dbg,&error)) {
+    std::cerr<<_("Error: ")<<error.str<<std::endl;
+    return false;
+  }
 
   if (!event->init ())
     return (false);
@@ -151,6 +154,7 @@ bool Tool::start (void) {
 bool Tool::end (void) {
   disconnectSignals (event->sigNumOptChange, this);
   disconnectSignals (event->sigContextChange, this);
+  ConfigManager::cleanup();
   return (this->ui->end ());
 }
 
@@ -310,10 +314,9 @@ void Tool::setupEventHandlers (void) {
   connectSignal (event->sigContextChange, this, &Tool::catchContextChange);
 }
 
-bool Tool::catchDebugLevelChange (const char* name) {
-  (void) name;
-  setDebugLevel(libmuttng->getDebugLevel());
-  return (true);
+bool Tool::catchDebugLevelChange (Option* option) {
+  (void) option;
+  return setDebugLevel(libmuttng->getDebugLevel());
 }
 
 bool Tool::catchContextChange (Event::context context, Event::event event) {

@@ -23,7 +23,7 @@ template<typename T>
 class Hash : public LibMuttng {
   private:
     /** for readability */
-    typedef void hashdel_t (HASH_ITEMTYPE*);
+    typedef void hashdel_t (T*);
     /** destroy function */
     hashdel_t* destroy;
     /** table */
@@ -36,15 +36,13 @@ class Hash : public LibMuttng {
      * @param destroy_ Which function to use to free memory upon
      *                 removal of table
      */
-    inline Hash(int size, bool dup_key = false, hashdel_t* destroy_ = NULL) {
+    inline Hash(int size, bool dup_key = false, hashdel_t* destroy_ = NULL) : destroy(destroy_) {
       table = hash_new (size, dup_key);
-      destroy = (void (*) (HASH_ITEMTYPE*)) destroy_;
     }
     /** Destructor */
     inline ~Hash() {
-      hash_destroy(&table, destroy);
+      hash_destroy(&table, (void (*) (HASH_ITEMTYPE*)) destroy);
     }
-
     /**
      * Add item to table.
      * @param key Key

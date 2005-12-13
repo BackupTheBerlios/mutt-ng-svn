@@ -11,9 +11,13 @@
 #ifndef LIBMUTTNG_CONFIG_CONFIG_MANAGER_H
 #define LIBMUTTNG_CONFIG_CONFIG_MANAGER_H
 
-#include "option.h"
-#include "string_option.h"
-#include "int_option.h"
+#include "libmuttng/config/option.h"
+
+#include "libmuttng/config/string_option.h"
+#include "libmuttng/config/int_option.h"
+#include "libmuttng/config/bool_option.h"
+#include "libmuttng/config/url_option.h"
+#include "libmuttng/config/rx_option.h"
 
 #include "core/buffer.h"
 

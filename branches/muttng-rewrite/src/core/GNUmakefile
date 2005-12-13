@@ -2,7 +2,7 @@ include $(CURDIR)/../../GNUmakefile.whereis
 include $(CURDIR)/../../GNUmakefile.config.mine
 include $(CURDIR)/../../GNUmakefile.config
 
-FILES:=buffer mem exit str io conv hash list base64 qp
+FILES:=buffer mem exit str io conv hash list base64 qp rx
 ifeq ($(WANT_LIBICONV),1)
 CFLAGS+=$(CFLAGS_LIBICONV)
 endif

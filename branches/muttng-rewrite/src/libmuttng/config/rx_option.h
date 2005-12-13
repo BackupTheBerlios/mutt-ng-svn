@@ -1,29 +1,27 @@
 /** @addtogroup libmuttng_config */
 /**
- * @file libmuttng/config/string_option.h
+ * @file libmuttng/config/rx_option.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Interface: String option
+ * @brief Boolerface: Regex option
  */
-#ifndef LIBMUTTNG_CONFIG_STRING_OPTION_H
-#define LIBMUTTNG_CONFIG_STRING_OPTION_H
+#ifndef LIBMUTTNG_CONFIG_REGEX_OPTION_H
+#define LIBMUTTNG_CONFIG_REGEX_OPTION_H
 
 #include "option.h"
 #include "core/rx.h"
 
 /**
- * String option class.
+ * Regex option class
  */
-class StringOption : public Option {
+class RXOption : public Option {
   public:
     /**
-     * Create string int option.
+     * Create new boolean option.
      * @param name_ Name.
      * @param init_ Initial value.
      * @param store_ Storage for value.
-     * @param pattern_ Optional pattern to check value.
      */
-    StringOption(const char* name_, const char* init_, char** store_,
-                 const char* pattern_ = NULL);
+    RXOption(const char* name_, const char* init_, rx_t** store_);
     bool set(const char* value, buffer_t* error);
     bool unset();
     bool reset();
@@ -32,8 +30,7 @@ class StringOption : public Option {
     const char* getType();
     bool validity(buffer_t* dst);
   private:
-    rx_t* pattern;
-    char** store;
+    rx_t** store;
 };
 
 #endif

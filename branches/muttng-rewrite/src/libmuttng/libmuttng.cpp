@@ -15,18 +15,20 @@
 #include "mailbox/pop3_mailbox.h"
 #endif
 
+#include "message/subject_header.h"
+
 #include "config/config_manager.h"
 
 /** static debug obj for library classes */
 static Debug* debugObj = NULL;
-
+/** storage for @ref option_debug_level */
 static int DebugLevel = 0;
 
 LibMuttng::LibMuttng (const char* dir, int u) {
   if (!debugObj) {
     debugObj = new Debug (dir, NULL, u);
 
-    Option* d = new IntOption("debug_level","0",&DebugLevel);
+    Option* d = new IntOption("debug_level","0",&DebugLevel,0,5);
     connectSignal(d->sigOptionChange,this,&LibMuttng::setDebugLevel);
     ConfigManager::reg(d);
     ConfigManager::reg(new StringOption("send_charset","us-ascii:iso-8859-1:iso-8859-15:utf-8",&SendCharset));
@@ -34,15 +36,15 @@ LibMuttng::LibMuttng (const char* dir, int u) {
 #ifdef LIBMUTTNG_POP3
     POP3Mailbox::reg();
 #endif
-
+    SubjectHeader::reg();
   }
   LibMuttng::debug = debugObj;
 }
 
 LibMuttng::~LibMuttng (void) {}
 
-bool LibMuttng::setDebugLevel (const char* name) {
-  (void)name;
+bool LibMuttng::setDebugLevel (Option* option) {
+  (void) option;
   return setDebugLevel(DebugLevel);
 }
 

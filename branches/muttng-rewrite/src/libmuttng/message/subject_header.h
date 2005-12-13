@@ -21,6 +21,8 @@ class SubjectHeader : public Header {
     SubjectHeader(buffer_t * name, buffer_t * body);
     bool decode();
     bool encode();
+    /** register module-specific config options */
+    static void reg();
 };
 
 #endif /* !LIBMUTTNG_MESSAGE_HEADER_H */

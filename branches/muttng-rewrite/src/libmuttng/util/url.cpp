@@ -315,3 +315,21 @@ unsigned short url_defport (urlproto_t proto, bool secure) {
       return Protos[i].defport;
   return 0;
 }
+
+void url_syntax(buffer_t* dst) {
+  if (!dst) return;
+  buffer_add_str(dst,"(file|",6);
+#if LIBMUTTNG_POP3
+  buffer_add_str(dst,"|pop[s]",7);
+#endif
+#if LIBMUTTNG_IMAP
+  buffer_add_str(dst,"|imap[s]",8);
+#endif
+#if LIBMUTTNG_NNTP
+  buffer_add_str(dst,"|nntp[s]",8);
+#endif
+#if LIBMUTTNG_SMTP
+  buffer_add_str(dst,"|smtp[s]",8);
+#endif
+  buffer_add_str(dst,")://[user[@password]:]host[/path]",33);
+}

@@ -10,7 +10,21 @@
 #include <iostream>
 
 IntOption::IntOption(const char* name_, const char* init_,
-                     int* store_) : Option(name_,init_), store(store_) {
+                     int* store_, int min_, int max_) : 
+  Option(name_,init_), store(store_), min(min_), max(max_) {
+  set(init_,NULL);
+}
+
+IntOption::IntOption(const char* name_, const char* init_,
+                     int* store_, bool negative) : 
+  Option(name_,init_), store(store_) {
+  if (negative) {
+    min = INT_MIN;
+    max = INT_MAX;
+  } else {
+    min = 0;
+    max = INT_MAX;
+  }
   set(init_,NULL);
 }
 
@@ -30,16 +44,31 @@ bool IntOption::set(const char* value, buffer_t* error) {
     return false;
   }
 
-
-  if (*store != num) {
-    *store = num;
-    sigOptionChange.emit(name);
-  } else
-    *store = num;
-  return true;
+  if (num >= min && num <= max) {
+    if (*store != num) {
+      *store = num;
+      sigOptionChange.emit(this);
+    } else
+      *store = num;
+    return true;
+  }
+  /* value is invalid */
+  if (error) {
+    buffer_add_ch(error,'\'');
+    buffer_add_num(error,num,-1);
+    buffer_add_str(error,_("' is invalid for $"),-1);
+    buffer_add_str(error,name,-1);
+  }
+  return false;
 }
 
-bool IntOption::unset() { *store = 0; return true; }
+bool IntOption::unset() {
+  if (min == max)
+    *store = 0;
+  else
+    *store = min;
+  return true;
+}
 bool IntOption::reset() { set(init,NULL); return true; }
 bool IntOption::toggle() { return false; }
 bool IntOption::query(buffer_t* dst) {
@@ -50,3 +79,18 @@ bool IntOption::query(buffer_t* dst) {
 }
 
 const char* IntOption::getType() { return _("number"); }
+
+bool IntOption::validity(buffer_t* dst) {
+  if (!dst) return true;
+  if (min == INT_MIN && max == INT_MAX) {
+    buffer_add_str(dst,_("positive"),-1);
+  } else if (min != INT_MIN && max != INT_MAX) {  
+    buffer_add_ch(dst,'[');
+    buffer_add_num(dst,min,-1);
+    buffer_add_ch(dst,',');
+    buffer_add_num(dst,max,-1);
+    buffer_add_ch(dst,']');
+  } else
+    return false;
+  return true;
+}

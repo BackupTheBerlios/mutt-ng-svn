@@ -53,11 +53,17 @@ class Option {
      */
     virtual bool query(buffer_t* dst) = 0;
     /**
+     * Get validity information.
+     * If no destination buffer is passed, just check if option
+     * has limitations.
+     */
+    virtual bool validity(buffer_t* dst) = 0;
+    /**
      * Signal emitted when the value changes.
      * The parameters are in order:
-     *   -# name of option
+     *   -# pointer to option
      */
-    Signal1<const char*> sigOptionChange;
+    Signal1<Option*> sigOptionChange;
     /**
      * Return name of option.
      * @return Name.
@@ -73,6 +79,11 @@ class Option {
      * @return Localized type string.
      */
     virtual const char* getType() = 0;
+    /**
+     * Escapes some special characters for printing config values.
+     * @param dst Destination buffer.
+     */
+    static void prettyValue(buffer_t* dst);
   protected:
     /** the name */
     const char* name;
