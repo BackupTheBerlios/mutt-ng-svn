@@ -29,7 +29,7 @@ LibMuttng::LibMuttng (const char* dir, int u) {
     debugObj = new Debug (dir, NULL, u);
 
     Option* d = new IntOption("debug_level","0",&DebugLevel,0,5);
-    connectSignal(d->sigOptionChange,this,&LibMuttng::setDebugLevel);
+    connectSignal<LibMuttng,Option*>(d->sigOptionChange,this,&LibMuttng::setDebugLevel);
     ConfigManager::reg(d);
     ConfigManager::reg(new StringOption("send_charset","us-ascii:iso-8859-1:iso-8859-15:utf-8",&SendCharset));
 
