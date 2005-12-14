@@ -11,6 +11,7 @@ Option::~Option(){}
 const char* Option::getName() { return name; }
 const char* Option::getInit() { return init; }
 
+/** @bug move down to buffer.c */
 void Option::prettyValue(buffer_t* dst) {
   if (!dst || !dst->len) return;
   buffer_t tmp;

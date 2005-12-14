@@ -8,6 +8,7 @@
 #define MUTTNG_CORE_BUFFER_H
 
 #include <stdlib.h>
+#include <ctype.h>
 #include <sys/types.h>
 
 #ifdef __cplusplus
@@ -129,6 +130,34 @@ void buffer_shrink (buffer_t* buffer, size_t len);
  * @return number of characters chomped.
  */
 unsigned int buffer_chomp(buffer_t * buffer);
+
+#define M_TOKEN_EQUAL           1       /* treat '=' as a special */
+#define M_TOKEN_CONDENSE        (1<<1)  /* ^(char) to control chars (macros) */
+#define M_TOKEN_SPACE           (1<<2)  /* don't treat whitespace as a term */
+#define M_TOKEN_QUOTE           (1<<3)  /* don't interpret quotes */
+#define M_TOKEN_PATTERN         (1<<4)  /* !)|~ are terms (for patterns) */
+#define M_TOKEN_COMMENT         (1<<5)  /* don't reap comments */
+#define M_TOKEN_SEMICOLON       (1<<6)  /* don't treat ; as special */
+
+/**
+ * Expand special sequences of source buffer to destination buffer.
+ *
+ * Special sequences include environment/other variables, control
+ * characters, embedded commands via backticks, etc.
+ *
+ * The implementation is senstive to different quoting types. Special
+ * sequences in "-quotes will be expanded while those in ' will just
+ * be copied.
+ *
+ * @param dst Destination buffer.
+ * @param token Source buffer.
+ * @param flags Flags, see M_TOKEN_*.
+ * @param expand Optional callback to call if a variable doesn't seem to
+ *               be an environment variable.
+ * @return Number of characters parsed from token.
+ */
+size_t buffer_extract_token (buffer_t* dst, buffer_t* token, int flags,
+                             int(*expand)(buffer_t*,buffer_t*));
 
 #ifdef __cplusplus
 }

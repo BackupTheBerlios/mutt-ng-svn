@@ -18,6 +18,8 @@
 #include "libmuttng/config/bool_option.h"
 #include "libmuttng/config/url_option.h"
 #include "libmuttng/config/rx_option.h"
+#include "libmuttng/config/quad_option.h"
+#include "libmuttng/config/sys_option.h"
 
 #include "core/buffer.h"
 
@@ -53,6 +55,14 @@ class ConfigManager {
      * @return Option or @c NULL if not found.
      */
     static Option* get(const char* name);
+    /**
+     * Get the value for an option.
+     * This can be used as callback for buffer_extract_token().
+     * @param dst Destination buffer.
+     * @param name Name of variable.
+     * @return 1.
+     */
+    static int get(buffer_t* dst, buffer_t* name);
     /** Initialize. */
     static bool init();
     /** Cleanup after use, ie when application exists */

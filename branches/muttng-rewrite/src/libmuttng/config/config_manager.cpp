@@ -57,6 +57,14 @@ Option* ConfigManager::get(const char* name) {
   return Options->find(name);
 }
 
+int ConfigManager::get(buffer_t* dst, buffer_t* name) {
+  if (!dst || !name || !name->len) return 0;
+  Option* option = Options->find(name->str);
+  if (!option) return 0;
+  option->query(dst);
+  return 1;
+}
+
 /**
  * Used as callback for Hash::map(): simply add option name to vector.
  * @param key The name of the option.

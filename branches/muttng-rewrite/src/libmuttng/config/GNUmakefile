@@ -3,7 +3,7 @@ include $(CURDIR)/../../../GNUmakefile.config.mine
 include $(CURDIR)/../../../GNUmakefile.config
 
 FILES=option int_option string_option config_manager bool_option \
-      url_option rx_option quad_option
+      url_option rx_option quad_option sys_option
 
 LIB=
 
