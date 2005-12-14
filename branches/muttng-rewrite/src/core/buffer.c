@@ -232,16 +232,23 @@ static int extract_var(buffer_t* dst, char** work, int(*expand)(buffer_t*,buffer
   return 1;
 }
 
-size_t buffer_extract_token (buffer_t* dst, buffer_t* token, int flags,
-                             int(*expand)(buffer_t*,buffer_t*)) { 
+size_t buffer_extract_token  (buffer_t* dst, buffer_t* token, int flags,
+                              int(*expand)(buffer_t*,buffer_t*)) {
+  if (!dst || !token || !token->len)
+    return 0;
+  return buffer_extract_token2(dst,(const char*)token->str,flags,expand);
+}
+
+size_t buffer_extract_token2 (buffer_t* dst, const char* token, int flags,
+                              int(*expand)(buffer_t*,buffer_t*)) { 
   char ch;
   char qc=0;    /* quote character */
   char* work;   /* working pointer into token->str */
 
-  if (!dst || !token || !token->len)
+  if (!dst || !token)
     return 0;
 
-  work = token->str;
+  work = (char*)token;
 
   SKIPWS(work);
   while ((ch = *work)) {
@@ -261,16 +268,16 @@ size_t buffer_extract_token (buffer_t* dst, buffer_t* token, int flags,
       qc = ch;
     else if (ch == '\\' && qc != '\'') {
       if (!extract_backslash(dst,&work))
-        return (const char*)work-token->str;
+        return (const char*)work-token;
     }
     else if (ch == '^' && (flags & M_TOKEN_CONDENSE)) {
       if (!extract_control(dst,&work))
-        return (const char*)work-token->str;
+        return (const char*)work-token;
     }
     else if (ch == '$' && (!qc || qc == '"')
              && (*work == '{' || isalpha ((unsigned char) *work))) {
       if (!extract_var(dst,&work,expand))
-        return (const char*)work-token->str;
+        return (const char*)work-token;
     }
 #if 0
     else if (ch == '`' && (!qc || qc == '"')) {
@@ -337,5 +344,5 @@ size_t buffer_extract_token (buffer_t* dst, buffer_t* token, int flags,
       buffer_add_ch(dst,ch);
   }
   SKIPWS(work);
-  return (const char*)work-token->str;
+  return (const char*)work-token;
 }

@@ -159,6 +159,10 @@ unsigned int buffer_chomp(buffer_t * buffer);
 size_t buffer_extract_token (buffer_t* dst, buffer_t* token, int flags,
                              int(*expand)(buffer_t*,buffer_t*));
 
+/** @copydoc buffer_extract_token(). */
+size_t buffer_extract_token2 (buffer_t* dst, const char* token, int flags,
+                             int(*expand)(buffer_t*,buffer_t*));
+
 #ifdef __cplusplus
 }
 #endif

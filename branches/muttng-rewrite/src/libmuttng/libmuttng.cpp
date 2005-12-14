@@ -15,8 +15,10 @@
 #include "mailbox/pop3_mailbox.h"
 #endif
 
-#include "message/subject_header.h"
+#include "core/version.h"
 
+#include "libmuttng/version.h"
+#include "message/subject_header.h"
 #include "config/config_manager.h"
 
 /** static debug obj for library classes */
@@ -33,12 +35,8 @@ LibMuttng::LibMuttng (const char* dir, int u) {
     ConfigManager::reg(d);
     ConfigManager::reg(new StringOption("send_charset","us-ascii:iso-8859-1:iso-8859-15:utf-8",&SendCharset));
 
-    /** @bug remove stupid testing from here */
-    ConfigManager::reg(new SysOption("muttng_test1","$HOME"));
-    ConfigManager::reg(new SysOption("muttng_test2","'$HOME'"));
-    ConfigManager::reg(new SysOption("muttng_test3","$send_charset"));
-    ConfigManager::reg(new SysOption("muttng_test4","\\146\\157\\157"));        /* 'foo' in octal */
-    ConfigManager::reg(new SysOption("muttng_test5","\\x66\\x6f\\x6f"));        /* 'foo' in hex */
+    ConfigManager::reg(new SysOption("muttng_core_version",CORE_VERSION));
+    ConfigManager::reg(new SysOption("muttng_libmuttng_version",LIBMUTTNG_VERSION));
 
 #ifdef LIBMUTTNG_POP3
     POP3Mailbox::reg();

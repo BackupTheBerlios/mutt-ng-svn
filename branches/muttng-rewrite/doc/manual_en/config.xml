@@ -79,6 +79,10 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         doesn't allow the secure pointer <tt>[s]</tt> and only contains a
         path. For compatibility reasons, if an URL doesn't contain a
         protocoll, <tt>file</tt> is assumed.</li>
+      <li><b><tt>regular expression</tt></b>. A regular expression.</li>
+      <li><b><tt>system</tt></b>. A read-only system variable. These can be only
+        queried or used but not set or changed by the user but may change
+        during runtime.</li>
     </ul>
 
   </section> <!--}}}-->

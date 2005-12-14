@@ -27,12 +27,12 @@ bool SysOption::reset() { return false; }
 bool SysOption::toggle() { return false; }
 bool SysOption::query(buffer_t* dst) {
   if (!dst) return false;
-  buffer_t tmp;
-  buffer_init(&tmp);
-  buffer_add_str(&tmp,init,-1);
-  bool rc = buffer_extract_token(dst,&tmp,0,ConfigManager::get);
-  buffer_free(&tmp);
-  return rc;
+  buffer_add_str(dst,init,-1);
+  return true;
 }
 const char* SysOption::getType() { return _("system"); }
-bool SysOption::validity(buffer_t* dst) { (void) dst; return false; }
+bool SysOption::validity(buffer_t* dst) {
+  if (!dst) return true;
+  buffer_add_str(dst,_("read-only"),-1);
+  return true;
+}

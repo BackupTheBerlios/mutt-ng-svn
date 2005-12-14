@@ -304,6 +304,10 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         doesn't allow the secure pointer <tt>[s]</tt> and only contains a
         path. For compatibility reasons, if an URL doesn't contain a
         protocoll, <tt>file</tt> is assumed.</li>
+    <li><b><tt>regular expression</tt></b>. A regular expression.</li>
+    <li><b><tt>system</tt></b>. A read-only system variable. These can be only
+        queried or used but not set or changed by the user but may change
+        during runtime.</li>
     
       </ul>
     
@@ -1569,6 +1573,16 @@ buffer_init(&buffer);
             @anchor sample-buffer-format2
     @include core_buffer_format2.c
             
+    @paragraph sect_devguide-core-string-recode Encoding and decoding
+    @paragraph sect_devguide-core-string-token Tokenizer
+    
+    @subsubsection sect_devguide-core-list Generic list
+    
+    @subsubsection sect_devguide-core-hashing Generic hash table
+    
+    @subsubsection sect_devguide-core-conversion Various conversions
+    
+    @subsubsection sect_devguide-core-intl Internationalization
     
     @subsubsection sect_devguide-core-extending Extending the library
     
@@ -1587,6 +1601,10 @@ buffer_init(&buffer);
       
 
     <ul>
+    <li><em>utilities</em> helping to keep the code modular, clean
+          and readable: some of the RfC parsers/routines for use
+          in different parts, cheap but typesafe wrappers for the
+          generic data structures provided by the core layer and more</li>
     <li><em>basic services</em> of interest for the whole library and
           application: signal handling and debug support as well a centralized
           interface for configuration options</li>
@@ -1705,120 +1723,92 @@ disconnectSignals (signal, object);</pre>
     
     @subsubsection sect_devguide-libmuttng-config Configuration handling
     
-        Built on top of the signal handling, libmuttng provides a simple
-        interface for configuration options. The main goal is to keep access in
-        "real" O(1), that is, not average O(1) access in hash tables but
-        real O(1) via pointers.
-      
-
-    
-        There's an abstract option interface which defines various get and set
-        methods. Based on these, there's a specialized class for options being of
-        type integer, string, regular expression and the like implementing the get and
-        set methods as well as emitting a signal when an option changes.
-      
-
-    
-        There're two ways to access an option's value:
+        Built on top of signal handling, libmuttng provides a simple mechanism
+        for managing configuration variables via so-called ConfigManager class. It's
+        the central interface and can be accessed in two ways with two different
+        semantics:
       
 
     <ol>
-    <li>either via the ConfigManager class or</li>
-    <li>via the storage of an option</li>
+    <li><em>Registration.</em> This way is intended for modules (even outside
+          of libmuttng) wanting to have a configuration variable globally
+          available.</li>
+    <li><em>Queries.</em> This way is intended for parts of the library and
+          clients which either parse or print variables while the use of a
+          variable's value is a rare case which shouldn't happen at all but
+          may do so.</li>
     
       </ol>
-    
-        The first method is intended to be used by portions close to the user interfaces,
-        especially the configuration parser or the <tt>muttng-conf(1)</tt> tool.
-      
+    @paragraph sect_devguide-libmuttng-config-register Registering configuration variables
+          Registration is done via the mentioned ConfigManager class which
+          only knows that there are options but neither that there are
+          different types nor which there are. As a consequence,
+          the caller must provide the option allocated elsewhere.
+        
 
     
-        The second method is used for the actual code making use of an option.
-      
-
-    
-        Very early in the startup sequence of an application, all options should be
-        registered once so that the later run of the configuration parser can make the
-        configuration manager access them. The configuration manager itself only
-        has <tt>static</tt> methods.
-      
-
-    
-        An example of use is the POP3 mailbox class: it has options like
-        @ref option_pop_user and @ref option_pop_pass which <em>must not</em>
-        be of interest for any non-POP3-code of libmuttng <em>and</em> muttng. Thus,
-        the storage for these two variables is declared <tt>static</tt> in
-        <tt>pop3_mailbox.cpp</tt> like so:
-      
-
-    @anchor sample-libmuttng-option-storage
-    @code
-            
-static char* DefaultUser = NULL;
-static char* DefaultPassword = NULL;
-              @endcode
-            
-        In a function called by the ConfigManager class named <tt>reg()</tt>, these
-        two have to be registered like so once:
-      
-
-    @anchor sample-libmuttng-option-reg
-    @code
-            
-ConfigManager::reg(new StringOption("pop_user","",&DefaultUser));
-ConfigManager::reg(new StringOption("pop_pass","",&DefaultPassword));
-              @endcode
-            
-        As the configuration manager is also used by the configuration parser
-        to handle options it read from files, it now has access to them.
-      
-
-    @anchor sample-libmuttng-option-temp
-    @code
-            
-Option* tmp = NULL;
-if ((tmp = ConfigManager::get("some_option")))
-  connectSignals(tmp->sigOptionChange,this,&This::handler)
-              @endcode
-            
-        This exampe would query for a variable named <tt>some_option</tt>
-        and set a handler for the signal emitted when the option changes.
-        When the sample object is destroyed it should unbind (as shown
-        for the signal examples). This could, for example, be used when
-        displaying a mailbox index so that the user interface gets informed
-        when a layout-related option changes. After leaving the index,
-        this handler is no longer required. This greatly helps
-        in de-coupling relations between different areas of the code.
-      
-
-    
-        The scope where options are defined should be as small as possible. For
-        example, the current @ref option_debug_level is needed globally so it's
-        declared globally. But a default username to use for access to a POP3 mailbox
-        is only needed for the actual POP3 mailbox class so it's only defined
-        there.
-      
-
-    
-        This approach has the following advantages:
-      
+          The way to create a new option is basically always the same: just
+          create an object with proper parameters and call
+          <tt>ConfigManager::reg()</tt> with it. The common set for all options
+          include an option's name, an initial value and a pointer to the actual
+          storage of the variable. Besides these, some options
+          provide more advanced features embedded in the object creation:
+        
 
     <ul>
-    <li><em>good de-coupling</em>. There no dozens of <tt>#ifdefs</tt> to manage
-          any longer for just the config. The library's client has a simple interface
-          and we can hide every design we like behind it like how options are stored.</li>
-    <li><em>flexibility</em>. As we need flexible configuration for libmuttng
-          and the muttng layers, this rather simple generic interface is easy to use
-          and flexible. Not only since every option has it's own signal emitted when
-          the value changes so that any part can take action upon arbitrary config
-          changes, but also since every part can flexibly (even conditionally!) define
-          it's own options.</li>
-    <li><em>leight weight</em>. We expect access to option values to happen much
-          more often than changes or queries. So for the latter we have "slow" and
-          average O(1) methods "only" while we have real O(1) access for those parts
-          which need it.</li>
+    <li><tt>Numbers.</tt> A numeric option can be created using the
+            IntOption class which provides two constructors. These allow for specifying
+            that a variable has a range of valid values. The default is to "restrict"
+            a value to the whole integer range.</li>
+    <li><tt>Strings.</tt> Optionally when creating a string option, a regular
+            expression pattern can be supplied against which to check all values.</li>
     
       </ul>
+    
+          Passing a pointer for the actual storage is an imporant part of the
+          design goal behind this way of configuration management. The idea is to keep
+          the scope of a variable as small as possible to achieve modularity, separation
+          and information hiding, that is, only those source parts which need access
+          to the variable should see it on the one hand, but visibility to the outside
+          of the library must be given on the other hand. This is done in a modular 
+          and flexible way. De-coupling the different parts of the library and client(s)
+          is further improved by the fact, that every option has a signal emitted when
+          it changes so that any part can take action when an option of it's choice changes
+          (and as seen with the signal examples, such bindings can even be created temporarily.)
+        
+
+    
+          The big advantage is that access from the "user space" with "only"average O(1)
+          is fast enough due to hashing but still "real" O(1) for the parts utilizing it.
+        
+
+    
+    @paragraph sect_devguide-libmuttng-config-query Querying configuration variables
+          Summarized under the term "query", there's a number of features available
+          for clients of the library. These include not only to query for a current
+          value or change it, but also reset or unset, i.e. set it to a neutral value
+          for a certain option (hiding what this specifically means.)
+        
+
+    
+          For details, please see the following methods:
+        
+
+    <ul>
+    <li><tt>Option::set()</tt>: change a value</li>
+    <li><tt>Option::unset()</tt>: change to a neutral value</li>
+    <li><tt>Option::toggle()</tt>: toggle or invert a value if supported</li>
+    <li><tt>Option::query()</tt>: obtain current value</li>
+    <li><tt>Option::getType()</tt>: get localized type string</li>
+    <li><tt>Option::validity()</tt>: obtain any limitations for a specific variable</li>
+    
+      </ul>
+    
+    @paragraph sect_devguide-libmuttng-config-docs Documenting variables
+          This is fully broken at the moment but will be fixed soon.
+        
+
+    
     
     @subsubsection sect_devguide-libmuttng-url URL handling
     
@@ -1851,8 +1841,6 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
     @anchor sample-libmuttng-url
     @include libmuttng_url.cpp
             
-    @subsubsection sect_devguide-libmuttng-connection Connection handling
-    
     @subsubsection sect_devguide-libmuttng-mailbox Mailbox handling
     
         Libmuttng contains transparent support for the following

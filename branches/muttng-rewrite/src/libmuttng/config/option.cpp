@@ -5,8 +5,18 @@
  * @brief Implementation: Generic Config Option
  */
 #include "option.h"
+#include "config_manager.h"
 
-Option::Option(const char* name_, const char* init_) : name(name_),init(init_) {}
+#include "core/str.h"
+
+Option::Option(const char* name_, const char* init_) : name(name_),init(NULL) {
+  buffer_t tmp;
+  buffer_init(&tmp);
+  if (buffer_extract_token2(&tmp,init_,M_TOKEN_SPACE,ConfigManager::get)>0)
+    init = str_dup(tmp.str);
+  buffer_free(&tmp);
+}
+
 Option::~Option(){}
 const char* Option::getName() { return name; }
 const char* Option::getInit() { return init; }
