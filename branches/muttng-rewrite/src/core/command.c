@@ -1,0 +1,117 @@
+/**
+ * @file core/command.c
+ * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
+ * @brief Implementation: Commands
+ */
+#include <stdlib.h>
+#include <signal.h>
+#include <string.h>
+#include <sys/wait.h>
+#include <unistd.h>
+
+#include "sigs.h"
+#include "command.h"
+#include "core_features.h"
+
+int command_run (const char *cmd, int flags)
+{
+  int rc = -1;
+  struct sigaction act;
+  struct sigaction oldtstp;
+  struct sigaction oldcont;
+  sigset_t set;
+  pid_t thepid;
+
+  if (!cmd || !*cmd)
+    return (0);
+
+  /* must ignore SIGINT and SIGQUIT */
+
+  sigs_block_signals_system ();
+
+  /* also don't want to be stopped right now */
+  if (flags & M_DETACH_PROCESS) {
+    sigemptyset (&set);
+    sigaddset (&set, SIGTSTP);
+    sigprocmask (SIG_BLOCK, &set, NULL);
+  }
+  else {
+    act.sa_handler = SIG_DFL;
+    /* we want to restart the waitpid() below */
+#ifdef SA_RESTART
+    act.sa_flags = SA_RESTART;
+#endif
+    sigemptyset (&act.sa_mask);
+    sigaction (SIGTSTP, &act, &oldtstp);
+    sigaction (SIGCONT, &act, &oldcont);
+  }
+
+  if ((thepid = fork ()) == 0) {
+    act.sa_flags = 0;
+
+    if (flags & M_DETACH_PROCESS) {
+      int fd;
+      (void)fd;
+
+      /* give up controlling terminal */
+      setsid ();
+
+      switch (fork ()) {
+      case 0:
+#if defined(OPEN_MAX)
+        for (fd = 0; fd < OPEN_MAX; fd++)
+          close (fd);
+#elif defined(_POSIX_OPEN_MAX)
+        for (fd = 0; fd < _POSIX_OPEN_MAX; fd++)
+          close (fd);
+#else
+        close (0);
+        close (1);
+        close (2);
+#endif
+        chdir ("/");
+        act.sa_handler = SIG_DFL;
+        sigaction (SIGCHLD, &act, NULL);
+        break;
+
+      case -1:
+        _exit (127);
+
+      default:
+        _exit (0);
+      }
+    }
+
+    /* reset signals for the child; not really needed, but... */
+    sigs_unblock_signals_system (0);
+    act.sa_handler = SIG_DFL;
+    act.sa_flags = 0;
+    sigemptyset (&act.sa_mask);
+    sigaction (SIGTERM, &act, NULL);
+    sigaction (SIGTSTP, &act, NULL);
+    sigaction (SIGCONT, &act, NULL);
+
+    execl (CORE_SHELL, "sh", "-c", cmd, NULL);
+    _exit (127);                /* execl error */
+  }
+  else if (thepid != -1) {
+#ifndef USE_IMAP
+    /* wait for the (first) child process to finish */
+    waitpid (thepid, &rc, 0);
+#else
+    rc = imap_wait_keepalive (thepid);
+#endif
+  }
+
+  sigaction (SIGCONT, &oldcont, NULL);
+  sigaction (SIGTSTP, &oldtstp, NULL);
+
+  /* reset SIGINT, SIGQUIT and SIGCHLD */
+  sigs_unblock_signals_system (1);
+  if (flags & M_DETACH_PROCESS)
+    sigprocmask (SIG_UNBLOCK, &set, NULL);
+
+  rc = (thepid != -1) ? (WIFEXITED (rc) ? WEXITSTATUS (rc) : -1) : -1;
+
+  return (rc);
+}

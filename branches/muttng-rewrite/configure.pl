@@ -58,6 +58,13 @@ my %features = ( # {{{
                              fmt =>     "=s",
                              group =>   [ "core" ] },
 
+  "shell"               => { key =>     "CORE_SHELL",
+                             help =>    "Where the shell for command execution is located",
+                             text =>    "Which shell to use for executing commands",
+                             value =>   "/bin/sh",
+                             fmt =>     "=s",
+                             group =>   [ "core" ] },
+
   ### libmuttng ###
                              
   "enable-pop"          => { key =>     "LIBMUTTNG_POP3",
@@ -121,6 +128,21 @@ my %tests = ( # {{{
                 msg =>   "working alloca()",
                 def =>   "CORE_HAVE_ALLOCA",
                 run =>   0
+              },
+
+              {
+                lang =>  "c",
+                file =>  "test_siglist.c",
+                msg =>   "sys_siglist",
+                def =>   "CORE_HAVE_SYS_SIGLIST",
+                run =>   0
+              },
+
+              {
+                lang =>  "c",
+                file =>  "test_signal.c",
+                msg =>   "return type of signal handlers is void",
+                run =>   1
               },
 
               {
@@ -194,6 +216,14 @@ if (defined $options{"help"}) {
     }
     print "\n";
   }
+  print "" .
+"\n".
+"The following environment variables are recognized:\n".
+"  CC       C compiler\n".
+"  CXX      C++ compiler\n".
+"  CFLAGS   Pre-defined C compiler flags\n".
+"  CXXFLAGS Pre-defined C++ compiler flags\n".
+"  LDFLAGS  Pre-defined linker flags.\n";
   exit 0;
 }
 ### }}}
@@ -233,7 +263,7 @@ foreach my $k (keys %features) {
   }
 }
 ### detect compilers and flags via environment
-my @comp = ("CC", "CFLAGS", "CXX", "CXXFLAGS");
+my @comp = ("CC", "CFLAGS", "CXX", "CXXFLAGS", "LDFLAGS");
 foreach my $k (@comp) {
   if (defined $ENV{$k}) {
     print OUT "$k=$ENV{$k}\n";
@@ -263,7 +293,9 @@ sub compile ($$$$) {
 foreach my $k (keys %tests) {
   foreach my $t (@{$tests{$k}}) {
     my $succ = &compile ($run{$$t{"lang"}}, $$t{"file"}, $$t{"msg"}, $$t{"def"});
-    $conffiles{$k} .= "/** $$t{'msg'} */\n#define $$t{'def'} $succ\n";
+    if (defined $$t{'def'}) {
+      $conffiles{$k} .= "/** $$t{'msg'} */\n#define $$t{'def'} $succ\n";
+    }
     if ($$t{"run"}) {
       $conffiles{$k} .= `./a.out` or die "Failed to run test: $!\n";
     }
@@ -283,6 +315,8 @@ foreach my $k (keys %features) {
       }
       if (defined $options{$k}) {
         $conffiles{$g} .= "#define $features{$k}{'key'} 1\n";
+      } elsif (defined $features{$k}{'value'} and length($features{$k}{'value'}) gt 0) {
+        $conffiles{$g} .= "#define $features{$k}{'key'} \"$features{$k}{'value'}\"\n";
       } else {
         $conffiles{$g} .= "/* #undef $features{$k}{'key'} */\n";
       }
