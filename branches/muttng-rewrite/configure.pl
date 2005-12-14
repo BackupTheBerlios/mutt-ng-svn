@@ -287,7 +287,7 @@ sub compile ($$$$) {
   `$cmd $basedir/src/sysconf/$file >/dev/null 2>&1`;
   my $succ = $?>>8;
   print ($succ == 0 ? "yes\n" : "no\n");
-  return $succ==0;
+  return $succ==0?1:0;
 }
 
 foreach my $k (keys %tests) {
