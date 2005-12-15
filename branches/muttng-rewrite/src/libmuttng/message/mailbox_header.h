@@ -15,7 +15,7 @@
  */
 class MailboxHeader : public Header {
   public:
-    MailboxHeader(char * name = "", char * body = "");
+    MailboxHeader(char * name = NULL, char * body = NULL);
     MailboxHeader(buffer_t * name, buffer_t * body);
     bool decode();
     bool encode();

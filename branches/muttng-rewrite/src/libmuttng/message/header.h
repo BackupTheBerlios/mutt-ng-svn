@@ -22,7 +22,7 @@ class Header : public LibMuttng {
     * @param body header body as C string.
     * @test header_tests::test_constructors()
     */
-    Header(char * name = "", char * body = "");
+    Header(char * name = NULL, char * body = NULL);
 
     /**
     * Constructor. If one of the parameters is NULL, then the according members is initialized with an empty string.

@@ -13,7 +13,7 @@
  */
 class SimpleHeader : public Header {
   public:
-    SimpleHeader(char * name = "", char * body = "");
+    SimpleHeader(char * name = NULL, char * body = NULL);
     SimpleHeader(buffer_t * name, buffer_t * body);
     bool decode();
     bool encode();

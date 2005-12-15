@@ -17,7 +17,7 @@
  */
 class SubjectHeader : public Header {
   public:
-    SubjectHeader(char * name = "", char * body = "");
+    SubjectHeader(char * name = NULL, char * body = NULL);
     SubjectHeader(buffer_t * name, buffer_t * body);
     bool decode();
     bool encode();

@@ -69,6 +69,8 @@ static void get_hostinfo() {
   buffer_init(&domain);
   buffer_init(&Fqdn);
 
+  OSName = str_dup(utsname.sysname);
+
   if ((p = strchr(utsname.nodename,'.'))) {
     Hostname = str_substrdup(utsname.nodename,p++);
     buffer_add_str(&domain,p,-1);
@@ -118,6 +120,7 @@ LibMuttng::LibMuttng () {
     ConfigManager::reg(new SysOption("muttng_libmuttng_version",
                                      LIBMUTTNG_VERSION));
     ConfigManager::reg(new SysOption("muttng_hostname",Hostname));
+    ConfigManager::reg(new SysOption("muttng_system",OSName));
     ConfigManager::reg(new SysOption("muttng_dnsname",Fqdn.str));
 
     /* register all options within library modules */

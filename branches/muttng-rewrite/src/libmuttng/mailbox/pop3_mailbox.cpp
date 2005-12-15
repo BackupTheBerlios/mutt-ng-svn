@@ -5,9 +5,10 @@
  */
 #include <stdlib.h>
 
-#include "util/url.h"
-#include "config/config_manager.h"
-#include "config/string_option.h"
+#include "libmuttng/libmuttng_features.h"
+#include "libmuttng/util/url.h"
+#include "libmuttng/config/config_manager.h"
+#include "libmuttng/config/string_option.h"
 #include "pop3_mailbox.h"
 
 static char* DefaultUser = NULL;
@@ -17,13 +18,17 @@ POP3Mailbox::POP3Mailbox (url_t* url_, Connection * c) : RemoteMailbox (url_,c) 
   this->haveCaching = 1;
   this->haveAuthentication = 1;
   this->haveEncryption = 1;
+#if LIBMUTTNG_HAVE_CACHE
   this->cache = Cache::create ();
   connectSignal (this->cache->cacheGetKey, this, &POP3Mailbox::cacheGetKey);
+#endif
 }
 
 POP3Mailbox::~POP3Mailbox (void) {
+#if LIBMUTTNG_HAVE_CACHE
   disconnectSignals (this->cache->cacheGetKey, this);
   delete this->cache;
+#endif
 }
 
 void POP3Mailbox::reg(void) {

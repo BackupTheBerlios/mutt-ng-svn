@@ -125,6 +125,8 @@ WHERE char* Username INITVAL(NULL);
 WHERE char* Hostname INITVAL(NULL);
 /** fqdn */
 WHERE buffer_t Fqdn;
+/** OS name */
+WHERE char* OSName INITVAL(NULL);
 
 /*
  * Misc.
