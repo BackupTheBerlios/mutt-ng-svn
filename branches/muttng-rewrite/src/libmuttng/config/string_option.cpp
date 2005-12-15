@@ -11,11 +11,11 @@
 
 StringOption::StringOption(const char* name_, const char* init_,
                            char** store_, const char* pattern_) : Option(name_,init_), store(store_) {
-  set(init_,NULL);
   if (pattern_)
     pattern = rx_compile(pattern_,NULL,0);
   else
     pattern = NULL;
+  set(init_,NULL);
 }
 
 bool StringOption::set(const char* value, buffer_t* error) {

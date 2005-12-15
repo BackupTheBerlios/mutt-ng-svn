@@ -61,10 +61,8 @@ class LibMuttng {
   public:
     /**
      * Constructor.
-     * @param dir Directory for debug files
-     * @param u Umask for debug files.
      */
-    LibMuttng (const char* dir = NULL, int u = -1);
+    LibMuttng ();
     /** destructor */
     ~LibMuttng (void);
     /**
@@ -99,14 +97,53 @@ class LibMuttng {
 #undef WHERE
 #endif
 
-#ifdef LIBMUTTNG_MAIN_CPP
-#define WHERE
-#else
-#define WHERE extern
+#ifdef INITVAL
+#undef INITVAL
 #endif
 
+#ifdef LIBMUTTNG_MAIN_CPP
+#define WHERE
+#define INITVAL(X)      =X
+#else
+#define WHERE extern
+#define INITVAL(X)
+#endif
+
+/*
+ * info about environment
+ */
+
+/** user's home directory */
+WHERE char* Homedir INITVAL(NULL);
+/** user's realname */
+WHERE char* Realname INITVAL(NULL);
+/** user's shell */
+WHERE char* Shell INITVAL(NULL);
+/** user's login */
+WHERE char* Username INITVAL(NULL);
+/** hostname */
+WHERE char* Hostname INITVAL(NULL);
+/** fqdn */
+WHERE buffer_t Fqdn;
+
+/*
+ * Misc.
+ */
+
+/**
+ * magic sequence to prevent attacks embedding them in incomin messages
+ * @bug move out to mime decoder/body filters/whoever is going to use it
+ */
+WHERE buffer_t AttachMarker;
+
+/*
+ * Library options
+ */
+
 /** storage for $send_charset */
-WHERE char* SendCharset;
+WHERE char* SendCharset INITVAL(NULL);
+/** storage for $umask */
+WHERE int Umask INITVAL(0);
 
 #endif /* !LIBMUTTNG_LIBMUTTNG_H */
 /** @} */

@@ -117,3 +117,11 @@ int io_tempfile (const char* dir, const char* name, buffer_t* tempfile) {
 
   return (mkstemp (tempfile->str));
 }
+
+int io_fclose(FILE** fp) {
+  int r = 0;
+  if (*fp)
+    r = fclose (*fp);
+  *fp = NULL;
+  return r;
+}

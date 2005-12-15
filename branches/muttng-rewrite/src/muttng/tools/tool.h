@@ -96,6 +96,8 @@ class Tool : public Muttng {
     /** lib object */
     LibMuttng* libmuttng;
   private:
+    /** debug level from command-line */
+    const char* DebugLevel;
     /**
      * Compose a string with name and version info.
      * @param dst Desination buffer for string.

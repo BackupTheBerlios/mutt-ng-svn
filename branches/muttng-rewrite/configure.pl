@@ -62,6 +62,7 @@ my %features = ( # {{{
                              help =>    "Where the shell for command execution is located",
                              text =>    "Which shell to use for executing commands",
                              value =>   "/bin/sh",
+                             defval =>  "1",
                              fmt =>     "=s",
                              group =>   [ "core" ] },
 
@@ -113,6 +114,14 @@ my %features = ( # {{{
                              text =>    "Whether to use SSL via GNUTLS",
                              help =>    "Where GNUTLS is installed",
                              value =>   "",
+                             fmt =>     "=s",
+                             group =>   [ "libmuttng" ] },
+
+  "domain"              => { key =>     "LIBMUTTNG_DOMAIN",
+                             help =>    "Which DNS name to hardcode",
+                             text =>    "Which DNS name to hardcode",
+                             value =>   "",
+                             defval =>  "1",
                              fmt =>     "=s",
                              group =>   [ "libmuttng" ] }
 
@@ -313,10 +322,10 @@ foreach my $k (keys %features) {
       } else {
         $conffiles{$g} .= "/** $features{$k}{'help'} */\n";
       }
-      if (defined $options{$k}) {
-        $conffiles{$g} .= "#define $features{$k}{'key'} 1\n";
-      } elsif (defined $features{$k}{'value'} and length($features{$k}{'value'}) gt 0) {
+      if (defined $features{$k}{'value'} and length($features{$k}{'value'}) gt 0 and $features{$k}{'defval'}) {
         $conffiles{$g} .= "#define $features{$k}{'key'} \"$features{$k}{'value'}\"\n";
+      } elsif (defined $options{$k}) {
+        $conffiles{$g} .= "#define $features{$k}{'key'} 1\n";
       } else {
         $conffiles{$g} .= "/* #undef $features{$k}{'key'} */\n";
       }

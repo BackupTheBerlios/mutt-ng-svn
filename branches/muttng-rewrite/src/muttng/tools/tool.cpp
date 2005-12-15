@@ -135,12 +135,13 @@ bool Tool::start (void) {
   if (!core_init())
     return false;
 
+  this->libmuttng = new LibMuttng;
+
   /* since we need it for debugging and... */
   muttngInit (Homedir, getName (), Umask);
 
   setupEventHandlers ();
 
-  this->libmuttng = new LibMuttng (Homedir, Umask);
   Option* dbglev = ConfigManager::get("debug_level");
   if (dbglev)
     connectSignal(dbglev->sigOptionChange,this,&Tool::catchDebugLevelChange);

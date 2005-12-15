@@ -19,6 +19,7 @@ class NNTPMailbox : public RemoteMailbox {
      */
     NNTPMailbox (url_t* url_);
     ~NNTPMailbox ();
+    static void reg();
 };
 
 #endif

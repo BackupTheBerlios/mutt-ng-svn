@@ -69,6 +69,13 @@ FILE* io_fopen (const char *path, const char *mode, int u);
  */
 int io_tempfile (const char* dir, const char* name, buffer_t* tempfile);
 
+/**
+ * Sanity wrapper for fclose().
+ * @param fp File pointer.
+ * @return result of fclose().
+ */
+int io_fclose(FILE** fp);
+
 #ifdef __cplusplus
 }
 #endif

@@ -39,8 +39,10 @@ bool ConfigManager::reg(Option* option) {
   init();
   if (!option)
     return false;
-  if (Options->exists(option->getName()))
+  if (Options->exists(option->getName())) {
+    delete option;
     return false;
+  }
   Options->add(option->getName(),option);
   return true;
 }
