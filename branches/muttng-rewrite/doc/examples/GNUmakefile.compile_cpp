@@ -1,5 +1,5 @@
 
-FILES=libmuttng_mailbox_create libmuttng_signal libmuttng_url
+FILES=libmuttng_mailbox_create libmuttng_signal libmuttng_url libmuttng_hash
 LIB=
 APPS=$(patsubst %,app_%,$(FILES))
 

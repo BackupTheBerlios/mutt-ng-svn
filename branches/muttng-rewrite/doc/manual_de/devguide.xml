@@ -1332,6 +1332,164 @@ buffer_init(&amp;buffer);</listing>
 
     <subsection id="devguide-core-hashing"> <!--{{{-->
       <title>Generic hash table</title>
+
+      <p>
+        The core layer contains a generic hash table. "Generic" means that
+        all kinds of data can be stored. This is achieved by making the
+        storage type <tt>unsigned long</tt> so that simple types like
+        <tt>int</tt> or <tt>char</tt> can be stored as well as all types
+        of data referenced to by pointers which fit into <tt>unsigned long</tt>.
+      </p>
+
+      <p>
+        This approach has the advantage that one hash table can be used
+        for every type of data but the disadvantage that it makes C code
+        harder to read (due to type casts) and requires some care (again:
+        due to type casts.)
+      </p>
+
+      <subsubsection id="devguide-core-hashing-create"
+        title="Table creation">
+
+        <p>
+          The function <tt>hash_new()</tt> function is to be used for
+          creating a new table. The <tt>size</tt> argument should be
+          twice as large as the expected maximum number of elements stored
+          in the table to ensure low access times due to few collissions.
+        </p>
+
+        <p>
+          It depends on the caller whether keys are stable during lifetime
+          or not. If so, the <tt>dup_key</tt> can be set to <tt>0</tt> to
+          store pointers to the keys only. If not, keys are copied when
+          it's set to <tt>1</tt>. This cannot be changed during runtime.
+        </p>
+
+        <p>
+          If one is not sure, the safe way is to copy keys which requires
+          more memory and memory operations such as <man sect="3">malloc</man>
+          and <man sect="3">free</man>. If keys change during runtime
+          and the hash table didn't copy them, the behavior is completely
+          undefined and strange effects may appear.
+        </p>
+
+      </subsubsection>
+
+      <subsubsection id="devguide-core-hashing-destroy"
+        title="Table destruction">
+
+        <p>
+          For destruction, the <tt>hash_destroy</tt> function is to be
+          used.
+        </p>
+
+        <p>
+          It accepts and optional callback to free up memory consumed by
+          entries it stored.
+        </p>
+
+        <p>
+          This is optional since the table cannot know whether the entries
+          are stored just pointers into original data or pointers to
+          copies of the original data (in fact, it doesn't even know that
+          it stores pointers.) For the latter case, upon destruction of
+          a table, all the extra memory allocated must be released, of course.
+        </p>
+
+      </subsubsection>
+
+      <subsubsection id="devguide-core-hashing-work"
+        title="Insertion, removal and lookup">
+
+        <p>
+          The following scenarios are supported when working with a table:
+        </p>
+
+        <ul>
+          <li>adding items</li>
+          <li>removing items</li>
+          <li>finding data associated with an item</li>
+          <li>testing for existence</li>
+        </ul>
+        
+        <p>
+          The last two points cannot be merged as they only have the same
+          semantics in some cases but not all. For example, when a table is
+          used to map keys to real data, these are equal: if not associated
+          data is found when performing a lookup, the item doesn't exist (thus, the
+          existence test is superflous.) But when a table is used to just
+          manage keys without data (to see whether a property is defined or
+          not, for example), there's no associated data so that the find
+          operation would always fail. In such a case, the existence feature
+          is to be used instead.
+        </p>
+
+        <p>
+          All of these functions are available in two flavors: the real one
+          expects a table, a key and a hash code for the key. The second one
+          is just defined as a macro for the first one.
+        </p>
+
+        <p>
+          The reason is that when the programmer knows he is going to perform
+          a series of operations with the same key, it would waste resources to
+          compute the hash code over and over for every single operation. Thus,
+          the programmer should compute the key's hash code once and use the
+          functions with the <tt>_hash</tt> suffix to avoid computation.
+        </p>
+
+        <p>
+          Though the hash code computation is quite cheap and in the majority
+          of cases it wouldn't mean a noticeable slowdown of operation, it
+          doesn't make sense to compute constant and known data all the time.
+        </p>
+
+      </subsubsection>
+
+      <subsubsection id="devguide-core-hashing-map"
+        title="Mapping functions to a table">
+
+        <p>
+          Besides the mention functions supported, there's one more powerful
+          function called <tt>hash_map()</tt>.
+        </p>
+
+        <p>
+          As the table's internal organization isn't promoted to the outside (i.e.
+          a table is defined as <tt>void*</tt>) to achieve de-coupling and information
+          hiding, the map function can be used to work with a table besided adding,
+          removing or searching for items (though some of these may be done with 
+          the map function, too.)
+        </p>
+
+        <p>
+          The map function takes only a pointer to a callback function as an
+          argument and calls it for every single key-value pair the table
+          contains in a undefined order. This doesn't sound spectacular but
+          enables a client to count the number of pairs stored, compose a list
+          of keys and/or values including custom selection patterns, etc.
+        </p>
+
+      </subsubsection>
+
+      <subsubsection id="devguide-core-hashing-example"
+        title="Example">
+
+        <p>
+          As uses of hashing may appear in lots of different fashions, it's
+          difficult to provide a complete and useful example. The
+          <docref type="listing" href="sample-core-hashing">simple hashing example</docref>
+          creates a hash table with the arguments it was called with. The actual command-line
+          arguments serves as keys while their index number serves as value.
+          Also it shows how to use the <tt>hash_map()</tt> function: in the
+          example it's used for printing the items on <tt>stdout</tt>.
+        </p>
+
+        <listing lang="c" id="sample-core-hashing"
+          title="C hashing example" href="core_hash.c"/>
+      
+      </subsubsection>
+
     </subsection>
     <!--}}}-->
 
@@ -1405,6 +1563,34 @@ buffer_init(&amp;buffer);</listing>
     </subsection>
     <!--}}}-->
 
+    <subsection id="devguide-libmuttng-hashing">
+      <title>Again: hashing</title>
+
+      <p>
+        As one of the major disadvantages of the core layer's generic
+        hash table is the fact that typecasts make the C code harder
+        to read, libmuttng contains a lightweight template-based
+        wrapper to have a typesafe and more readable (in a C++ meaning)
+        variant of a hash table.
+      </p>
+
+      <p>
+        Due to the fact that it's just a wrapper adding no extra
+        features or changing semantics, all what counts for the core
+        layer's hash table counts for the wrapper in libmuttng, too.
+      </p>
+
+      <p>
+        To show how readability is improved,
+        <docref type="listing" href="sample-libmuttng-hashing">a C++ example</docref>
+        is provided.
+      </p>
+
+      <listing lang="c" id="sample-libmuttng-hashing"
+        title="C++ hashing example" href="libmuttng_hash.cpp"/>
+
+    </subsection>
+ 
     <subsection id="devguide-libmuttng-signal"> <!--{{{-->
       <title>Signal handling</title>
 

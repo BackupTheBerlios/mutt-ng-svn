@@ -1,5 +1,5 @@
 
-FILES=core_buffer_format core_buffer_format2
+FILES=core_buffer_format core_buffer_format2 core_hash
 LIB=
 APPS=$(patsubst %,app_%,$(FILES))
 
