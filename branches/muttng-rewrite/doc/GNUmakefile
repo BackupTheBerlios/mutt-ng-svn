@@ -1,5 +1,13 @@
+include $(CURDIR)/../GNUmakefile.config.mine
+include $(CURDIR)/../GNUmakefile.whereis
+include $(CURDIR)/../GNUmakefile.config
+
 ALL_LANGUAGES=de en
+ifeq ($(DOCLANGUAGES),all)
 BUILD_LANGUAGES=$(ALL_LANGUAGES)
+else
+BUILD_LANGUAGES=$(DOCLANGUAGES)
+endif
 TEXDIRS=$(TEXINPUTS):./../tex:./../examples:
 
 mk_ind=touch $(1).idx && $(MAKEINDEX) -s muttng.ist -o $(1).ind $(1).idx
@@ -13,10 +21,6 @@ prepare: common/manual-full.xml common/manual-user.xml
 	  cp $^ tex/muttng.ist css/muttng.css manual_$$l/ ; \
 	  cp css/muttng.css homepage_$$l ; \
 	done
-
-include $(CURDIR)/../GNUmakefile.config.mine
-include $(CURDIR)/../GNUmakefile.whereis
-include $(CURDIR)/../GNUmakefile.config
 
 manual:
 	@ for l in $(BUILD_LANGUAGES) ; do \

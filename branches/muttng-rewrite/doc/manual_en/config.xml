@@ -4,6 +4,167 @@
 
   <section id="config-syntax"> <!--{{{-->
     <title>Syntax of configuration files</title>
+
+    <subsection id="config-syntax-quote">
+      <title>Quoting</title>
+
+      <p>
+        For flexibility, mutt-ng distincts between two types of quoted
+        strings:
+      </p>
+
+      <ol>
+        <li>single-quoted</li>
+        <li>double-quoted</li>
+      </ol>
+
+      <p>
+        The difference between these two is that the latter is expanded
+        or completed during reading the configuration files while the
+        first one is expanded during use (if at all.) This is the standard
+        behavior with many other applications already starting the
+        shell. Consider the following example:
+      </p>
+
+      <listing lang="muttngrc" id="sample-config-quoting"
+        title="Quoting types">
+set folder = "$HOME/Maildir/inbox"
+set folder = '$HOME/Maildir/inbox'</listing>
+
+      <p>
+        Here, the first line would be expanded during reading it
+        to the full path, i.e. the string <env>HOME</env> is replaced
+        with its value since the string is enclosed in double quotes.
+        The first one will not be expanded so that it contains
+        <tt>$HOME/Maildir/inbox</tt> during runtime. A more comprehensive
+        listing of such supported expansions is given in the next section.
+      </p>
+
+      <p>
+        When reading configuration files, exactly one level of
+        backslashes is stripped. For example,
+      </p>
+
+      <listing lang="muttngrc" id="sample-config-backslash"
+        title="Backslash stripping">
+set variable = "\"foo\\\"bar\""</listing>
+
+      <p>
+        will be <inlinelisting lang="muttngrc">"foo\"bar"</inlinelisting> at runtime.
+      </p>
+
+    </subsection>
+
+    <subsection id="config-syntax-expand">
+      <title>Expansion</title>
+
+      <p>
+        The following items are expanded or replace during
+        reading configuration files:
+      </p>
+
+      <ul>
+        <li><tt>$NAME</tt> or <tt>${NAME}</tt>. These are interpreted
+          as variables and can be either environment are configuration
+          variables while environment variables take precedence. This
+          means that if no environment variable <tt>NAME</tt> is found,
+          the configuration variable <tt>NAME</tt> is tried. Such a 
+          name may consist of letters, digits and underscore. If a
+          variable value is to be embedded into a sequence of such
+          characters the latter syntax with curly braces may be used
+          so mutt-ng can clearly identify what the name is.</li>
+        <li>if a backslash is found, several special tokens may
+          appear, see <docref type="table" href="table-config-backslash">
+            the table</docref> for a full listing</li>
+        <li>if a charet symbol is found, several special tokens
+          appear, see <docref type="table" href="table-config-charet">
+            the table</docref> for a full listing</li>
+        <li>if a sequence is enclosed in backticks (<tt>`</tt>),
+          it's replaced by the output of the command enclosed</li>
+      </ul>
+
+      <tab cols="3" texstr="l|l|l" id="table-config-backslash"> <!--{{{-->
+        <cap>Backslash expansion</cap>
+        <th>
+          <tr><td>Sequence</td><td>Replacement</td><td>Meaning</td></tr>
+        </th>
+        <tb>
+
+          <tr>
+            <td><tt>cX</tt> or <tt>CX</tt></td>
+            <td><tt>CTRL+X</tt></td>
+            <td>control character</td>
+          </tr>
+
+          <tr>
+            <td><tt>r</tt></td>
+            <td><tt>r</tt></td>
+            <td>carriage return</td>
+          </tr>
+
+          <tr>
+            <td><tt>n</tt></td>
+            <td><tt>n</tt></td>
+            <td>newline</td>
+          </tr>
+
+          <tr>
+            <td><tt>t</tt></td>
+            <td><tt>t</tt></td>
+            <td>tabulator</td>
+          </tr>
+
+          <tr>
+            <td><tt>e</tt> or <tt>E</tt></td>
+            <td><tt>escape</tt></td>
+            <td>escape character</td>
+          </tr>
+
+          <tr>
+            <td><tt>XYZ</tt></td>
+            <td>character</td>
+            <td>octal character <tt>XYZ</tt></td>
+          </tr>
+
+          <tr>
+            <td><tt>xAB</tt></td>
+            <td>character</td>
+            <td>hex character <tt>0xAB</tt></td>
+          </tr>
+
+        </tb>
+      </tab> <!--}}}-->
+
+      <tab cols="3" texstr="l|l|l" id="table-config-charet"> <!--{{{-->
+        <cap>Charet expansion</cap>
+        <th>
+          <tr><td>Sequence</td><td>Replacement</td><td>Meaning</td></tr>
+        </th>
+        <tb>
+
+          <tr>
+            <td>two charets</td>
+            <td>charet</td>
+            <td>charet character</td>
+          </tr>
+
+          <tr>
+            <td>bracket</td>
+            <td><tt>escape</tt></td>
+            <td>escape character</td>
+          </tr>
+
+          <tr>
+            <td><tt>X</tt></td>
+            <td><tt>CTRL+X</tt></td>
+            <td>control character</td>
+          </tr>
+
+        </tb>
+      </tab> <!--}}}-->
+
+    </subsection>
+
   </section> <!--}}}-->
 
   <section id="config-commands"> <!--{{{-->

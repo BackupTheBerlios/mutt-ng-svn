@@ -316,7 +316,8 @@
   <xsl:template match="tr">
     <xsl:text>&lt;tr&gt;</xsl:text>
       <xsl:apply-templates/>
-    <xsl:text>&lt;/tr&gt;</xsl:text>
+    <xsl:text>&lt;/tr&gt;
+    </xsl:text>
   </xsl:template>
 
   <xsl:template match="td">

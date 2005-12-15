@@ -235,6 +235,108 @@ $ make depend</pre>
     
     @section sect_configuration Configuration
     @subsection sect_config-syntax Syntax of configuration files
+    @subsubsection sect_config-syntax-quote Quoting
+    
+        For flexibility, mutt-ng distincts between two types of quoted
+        strings:
+      
+
+    <ol>
+    <li>single-quoted</li>
+    <li>double-quoted</li>
+    
+      </ol>
+    
+        The difference between these two is that the latter is expanded
+        or completed during reading the configuration files while the
+        first one is expanded during use (if at all.) This is the standard
+        behavior with many other applications already starting the
+        shell. Consider the following example:
+      
+
+    @anchor sample-config-quoting
+    @verbatim
+            
+set folder = "$HOME/Maildir/inbox"
+set folder = '$HOME/Maildir/inbox'
+              @endverbatim
+            
+        Here, the first line would be expanded during reading it
+        to the full path, i.e. the string <tt>$HOME</tt> is replaced
+        with its value since the string is enclosed in double quotes.
+        The first one will not be expanded so that it contains
+        <tt>$HOME/Maildir/inbox</tt> during runtime. A more comprehensive
+        listing of such supported expansions is given in the next section.
+      
+
+    
+        When reading configuration files, exactly one level of
+        backslashes is stripped. For example,
+      
+
+    @anchor sample-config-backslash
+    @verbatim
+            
+set variable = "\"foo\\\"bar\""
+              @endverbatim
+            
+        will be <tt>"foo\"bar"</tt> at runtime.
+      
+
+    
+    @subsubsection sect_config-syntax-expand Expansion
+    
+        The following items are expanded or replace during
+        reading configuration files:
+      
+
+    <ul>
+    <li><tt>$NAME</tt> or <tt>${NAME}</tt>. These are interpreted
+          as variables and can be either environment are configuration
+          variables while environment variables take precedence. This
+          means that if no environment variable <tt>NAME</tt> is found,
+          the configuration variable <tt>NAME</tt> is tried. Such a 
+          name may consist of letters, digits and underscore. If a
+          variable value is to be embedded into a sequence of such
+          characters the latter syntax with curly braces may be used
+          so mutt-ng can clearly identify what the name is.</li>
+    <li>if a backslash is found, several special tokens may
+          appear, see @ref table-config-backslash "
+            the table"  for a full listing</li>
+    <li>if a charet symbol is found, several special tokens
+          appear, see @ref table-config-charet "
+            the table"  for a full listing</li>
+    <li>if a sequence is enclosed in backticks (<tt>`</tt>),
+          it's replaced by the output of the command enclosed</li>
+    
+      </ul>
+    @anchor table-config-backslash
+    @htmlonly
+    <p class="title">Backslash expansion</p>
+      <table class="ordinary" rowsep="1" summary="Backslash expansion">
+    <thead><tr><td>Sequence</td><td>Replacement</td><td>Meaning</td></tr>
+    </thead><tbody><tr><td><tt>cX</tt> or <tt>CX</tt></td><td><tt>CTRL+X</tt></td><td>control character</td></tr>
+    <tr><td><tt>r</tt></td><td><tt>r</tt></td><td>carriage return</td></tr>
+    <tr><td><tt>n</tt></td><td><tt>n</tt></td><td>newline</td></tr>
+    <tr><td><tt>t</tt></td><td><tt>t</tt></td><td>tabulator</td></tr>
+    <tr><td><tt>e</tt> or <tt>E</tt></td><td><tt>escape</tt></td><td>escape character</td></tr>
+    <tr><td><tt>XYZ</tt></td><td>character</td><td>octal character <tt>XYZ</tt></td></tr>
+    <tr><td><tt>xAB</tt></td><td>character</td><td>hex character <tt>0xAB</tt></td></tr>
+    </tbody>
+      </table>
+      @endhtmlonly
+    @anchor table-config-charet
+    @htmlonly
+    <p class="title">Charet expansion</p>
+      <table class="ordinary" rowsep="1" summary="Charet expansion">
+    <thead><tr><td>Sequence</td><td>Replacement</td><td>Meaning</td></tr>
+    </thead><tbody><tr><td>two charets</td><td>charet</td><td>charet character</td></tr>
+    <tr><td>bracket</td><td><tt>escape</tt></td><td>escape character</td></tr>
+    <tr><td><tt>X</tt></td><td><tt>CTRL+X</tt></td><td>control character</td></tr>
+    </tbody>
+      </table>
+      @endhtmlonly
+    
     
     @subsection sect_config-commands Configuration commands
     
@@ -788,7 +890,15 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @htmlonly
     <p class="title">Common make compile variables</p>
       <table class="ordinary" rowsep="1" summary="Common make compile variables">
-    <thead><tr><td>Variable</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>CC</tt></td><td>C compiler</td></tr><tr><td><tt>CXX</tt></td><td>C++ compiler</td></tr><tr><td><tt>CFLAGS</tt></td><td>C compiler flags</td></tr><tr><td><tt>CXXFLAGS</tt></td><td>C++ compiler flags</td></tr><tr><td><tt>DEPFLAGS</tt></td><td>C/C++ compiler flags for dependencies</td></tr><tr><td><tt>AR</tt></td><td>path to <tt>ar(1)</tt></td></tr><tr><td><tt>RANLIB</tt></td><td>path to <tt>ranlib(1)</tt></td></tr></tbody>
+    <thead><tr><td>Variable</td><td>Meaning</td></tr>
+    </thead><tbody><tr><td><tt>CC</tt></td><td>C compiler</td></tr>
+    <tr><td><tt>CXX</tt></td><td>C++ compiler</td></tr>
+    <tr><td><tt>CFLAGS</tt></td><td>C compiler flags</td></tr>
+    <tr><td><tt>CXXFLAGS</tt></td><td>C++ compiler flags</td></tr>
+    <tr><td><tt>DEPFLAGS</tt></td><td>C/C++ compiler flags for dependencies</td></tr>
+    <tr><td><tt>AR</tt></td><td>path to <tt>ar(1)</tt></td></tr>
+    <tr><td><tt>RANLIB</tt></td><td>path to <tt>ranlib(1)</tt></td></tr>
+    </tbody>
       </table>
       @endhtmlonly
     
@@ -797,7 +907,12 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @htmlonly
     <p class="title">Library-specific make compile variables</p>
       <table class="ordinary" rowsep="1" summary="Library-specific make compile variables">
-    <thead><tr><td>Libarary</td><td>suffix</td><td>Variables</td></tr></thead><tbody><tr><td>OpenSSL</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr><tr><td>GNUTLS</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr><tr><td>LibIconv</td><td><tt>LIBICONV</tt></td><td><tt>CFLAGS_LIBICONV</tt>, <tt>CXXFLAGS_LIBICONV</tt>, <tt>LDFLAGS_LIBICONV</tt></td></tr><tr><td>Unit++</td><td><tt>UNITPP</tt></td><td><tt>CFLAGS_UNITPP</tt>, <tt>CXXFLAGS_UNITPP</tt>, <tt>LDFLAGS_UNITPP</tt></td></tr></tbody>
+    <thead><tr><td>Libarary</td><td>suffix</td><td>Variables</td></tr>
+    </thead><tbody><tr><td>OpenSSL</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr>
+    <tr><td>GNUTLS</td><td><tt>SSL</tt></td><td><tt>CFLAGS_SSL</tt>, <tt>CXXFLAGS_SSL</tt>, <tt>LDFLAGS_SSL</tt></td></tr>
+    <tr><td>LibIconv</td><td><tt>LIBICONV</tt></td><td><tt>CFLAGS_LIBICONV</tt>, <tt>CXXFLAGS_LIBICONV</tt>, <tt>LDFLAGS_LIBICONV</tt></td></tr>
+    <tr><td>Unit++</td><td><tt>UNITPP</tt></td><td><tt>CFLAGS_UNITPP</tt>, <tt>CXXFLAGS_UNITPP</tt>, <tt>LDFLAGS_UNITPP</tt></td></tr>
+    </tbody>
       </table>
       @endhtmlonly
     
@@ -806,7 +921,16 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @htmlonly
     <p class="title">Tools</p>
       <table class="ordinary" rowsep="1" summary="Tools">
-    <thead><tr><td>Tool</td><td>Make variable</td></tr></thead><tbody><tr><td><tt>doxygen(1)</tt></td><td><tt>DOXYGEN</tt></td></tr><tr><td><tt>tidy(1)</tt></td><td><tt>TIDY</tt></td></tr><tr><td><tt>xgettext(1)</tt></td><td><tt>XGETTEXT</tt></td></tr><tr><td><tt>msgmerge(1)</tt></td><td><tt>MSGMERGE</tt></td></tr><tr><td><tt>msgfmt(1)</tt></td><td><tt>MSGFMT</tt></td></tr><tr><td><tt>pdflatex(1)</tt></td><td><tt>PDFLATEX</tt></td></tr><tr><td><tt>latex(1)</tt></td><td><tt>LATEX</tt></td></tr><tr><td><tt>makeindex(1)</tt></td><td><tt>MAKEINDEX</tt></td></tr></tbody>
+    <thead><tr><td>Tool</td><td>Make variable</td></tr>
+    </thead><tbody><tr><td><tt>doxygen(1)</tt></td><td><tt>DOXYGEN</tt></td></tr>
+    <tr><td><tt>tidy(1)</tt></td><td><tt>TIDY</tt></td></tr>
+    <tr><td><tt>xgettext(1)</tt></td><td><tt>XGETTEXT</tt></td></tr>
+    <tr><td><tt>msgmerge(1)</tt></td><td><tt>MSGMERGE</tt></td></tr>
+    <tr><td><tt>msgfmt(1)</tt></td><td><tt>MSGFMT</tt></td></tr>
+    <tr><td><tt>pdflatex(1)</tt></td><td><tt>PDFLATEX</tt></td></tr>
+    <tr><td><tt>latex(1)</tt></td><td><tt>LATEX</tt></td></tr>
+    <tr><td><tt>makeindex(1)</tt></td><td><tt>MAKEINDEX</tt></td></tr>
+    </tbody>
       </table>
       @endhtmlonly
     
@@ -1126,7 +1250,13 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @htmlonly
     <p class="title">reference tags</p>
       <table class="ordinary" rowsep="1" summary="reference tags">
-    <thead><tr><td>Tag</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>email</tt></td><td>an email address</td></tr><tr><td><tt>web</tt></td><td>a web address</td></tr><tr><td><tt>varref</tt></td><td>referencing a configuration variable</td></tr><tr><td><tt>cmdref</tt></td><td>referencing a configuration command</td></tr><tr><td><tt>funcref</tt></td><td>referencing a function</td></tr></tbody>
+    <thead><tr><td>Tag</td><td>Meaning</td></tr>
+    </thead><tbody><tr><td><tt>email</tt></td><td>an email address</td></tr>
+    <tr><td><tt>web</tt></td><td>a web address</td></tr>
+    <tr><td><tt>varref</tt></td><td>referencing a configuration variable</td></tr>
+    <tr><td><tt>cmdref</tt></td><td>referencing a configuration command</td></tr>
+    <tr><td><tt>funcref</tt></td><td>referencing a function</td></tr>
+    </tbody>
       </table>
       @endhtmlonly
     
@@ -1135,7 +1265,9 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @htmlonly
     <p class="title"><tt>man</tt> tag attributes</p>
       <table class="ordinary" rowsep="1" summary="<tt>man</tt> tag attributes">
-    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>sect</tt></td><td><tt>no</tt></td><td>Manual page section, default: 1</td></tr></tbody>
+    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr>
+    </thead><tbody><tr><td><tt>sect</tt></td><td><tt>no</tt></td><td>Manual page section, default: 1</td></tr>
+    </tbody>
       </table>
       @endhtmlonly
     
@@ -1144,7 +1276,10 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @htmlonly
     <p class="title"><tt>docref</tt> tag attributes</p>
       <table class="ordinary" rowsep="1" summary="<tt>docref</tt> tag attributes">
-    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>type</tt></td><td><tt>yes</tt></td><td>Type of link's end (e.g. ``table''.)</td></tr><tr><td><tt>href</tt></td><td><tt>yes</tt></td><td>Target (document-internal ID)</td></tr></tbody>
+    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr>
+    </thead><tbody><tr><td><tt>type</tt></td><td><tt>yes</tt></td><td>Type of link's end (e.g. ``table''.)</td></tr>
+    <tr><td><tt>href</tt></td><td><tt>yes</tt></td><td>Target (document-internal ID)</td></tr>
+    </tbody>
       </table>
       @endhtmlonly
     
@@ -1221,7 +1356,12 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @htmlonly
     <p class="title"><tt>inlinelisting</tt>/<tt>listing</tt> languages</p>
       <table class="ordinary" rowsep="1" summary="<tt>inlinelisting</tt>/<tt>listing</tt> languages">
-    <thead><tr><td><tt>lang</tt> attribute value</td><td>Language</td></tr></thead><tbody><tr><td><tt>c</tt></td><td>C code</td></tr><tr><td><tt>cpp</tt></td><td>C++ code</td></tr><tr><td><tt>make</tt></td><td>GNU <tt>make(1)</tt> code</td></tr><tr><td><tt>muttngrc</tt></td><td>mutt-ng configuration</td></tr></tbody>
+    <thead><tr><td><tt>lang</tt> attribute value</td><td>Language</td></tr>
+    </thead><tbody><tr><td><tt>c</tt></td><td>C code</td></tr>
+    <tr><td><tt>cpp</tt></td><td>C++ code</td></tr>
+    <tr><td><tt>make</tt></td><td>GNU <tt>make(1)</tt> code</td></tr>
+    <tr><td><tt>muttngrc</tt></td><td>mutt-ng configuration</td></tr>
+    </tbody>
       </table>
       @endhtmlonly
     
@@ -1230,7 +1370,9 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @htmlonly
     <p class="title"><tt>inlinelisting</tt> tag attributes</p>
       <table class="ordinary" rowsep="1" summary="<tt>inlinelisting</tt> tag attributes">
-    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>lang</tt></td><td><tt>yes</tt></td><td>listing's language</td></tr></tbody>
+    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr>
+    </thead><tbody><tr><td><tt>lang</tt></td><td><tt>yes</tt></td><td>listing's language</td></tr>
+    </tbody>
       </table>
       @endhtmlonly
     
@@ -1239,7 +1381,12 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @htmlonly
     <p class="title"><tt>listing</tt> tag attributes</p>
       <table class="ordinary" rowsep="1" summary="<tt>listing</tt> tag attributes">
-    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>id</tt></td><td><tt>yes</tt></td><td>document-internal ID</td></tr><tr><td><tt>title</tt></td><td><tt>yes</tt></td><td>caption string</td></tr><tr><td><tt>lang</tt></td><td><tt>yes</tt></td><td>listing's language</td></tr><tr><td><tt>href</tt></td><td><tt>no</tt></td><td>external source file (if any)</td></tr></tbody>
+    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr>
+    </thead><tbody><tr><td><tt>id</tt></td><td><tt>yes</tt></td><td>document-internal ID</td></tr>
+    <tr><td><tt>title</tt></td><td><tt>yes</tt></td><td>caption string</td></tr>
+    <tr><td><tt>lang</tt></td><td><tt>yes</tt></td><td>listing's language</td></tr>
+    <tr><td><tt>href</tt></td><td><tt>no</tt></td><td>external source file (if any)</td></tr>
+    </tbody>
       </table>
       @endhtmlonly
     
@@ -1263,7 +1410,11 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     @htmlonly
     <p class="title"><tt>tab</tt> tag attributes</p>
       <table class="ordinary" rowsep="1" summary="<tt>tab</tt> tag attributes">
-    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr></thead><tbody><tr><td><tt>cols</tt></td><td><tt>yes</tt></td><td>Number of columns</td></tr><tr><td><tt>texstr</tt></td><td><tt>yes</tt></td><td>Layout string for LaTeX's <tt>longtable</tt></td></tr><tr><td><tt>id</tt></td><td><tt>yes</tt></td><td>Document-internal ID</td></tr></tbody>
+    <thead><tr><td>Attribute</td><td>Mandatory</td><td>Meaning</td></tr>
+    </thead><tbody><tr><td><tt>cols</tt></td><td><tt>yes</tt></td><td>Number of columns</td></tr>
+    <tr><td><tt>texstr</tt></td><td><tt>yes</tt></td><td>Layout string for LaTeX's <tt>longtable</tt></td></tr>
+    <tr><td><tt>id</tt></td><td><tt>yes</tt></td><td>Document-internal ID</td></tr>
+    </tbody>
       </table>
       @endhtmlonly
     
