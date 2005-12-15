@@ -2230,6 +2230,14 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
     
     
     
+    @section sect_history Mutt-ng History
+    <ul>
+    <li><em>2005/11/10</em> First line of code checked in for rewrite.</li>
+    <li><em>2005/11/07</em> First checking of design ideas for rewrite.</li>
+    <li><em>2005/01/07</em> Initial revision checked in.</li>
+    
+      </ul>
+    
     @section sect_acknowledgements Acknowledgements
     
     Mutt-ng is developed by the following people:

@@ -11,8 +11,12 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
+#include <errno.h>
 
 #include "io.h"
+#include "str.h"
+#include "command.h"
+#include "mem.h"
 
 /**
  * Compare two <tt>struct stat</tt>s.
@@ -47,6 +51,40 @@ int io_open (const char *path, int flags, int u) {
   }
 
   return (fd);
+}
+
+FILE* io_open_read(const char* path, pid_t* thepid) {
+  FILE *f;
+  struct stat s;
+  size_t len = str_len (path);
+
+  if (!len)
+    return NULL;
+
+  if (path[len - 1] == '|') {
+    /* read from a pipe */
+
+    char *s = str_dup (path);
+
+    s[len - 1] = 0;
+#if 0
+    /* XXX */
+    mutt_endwin (NULL);
+#endif
+    *thepid = command_filter(s, NULL, &f, NULL);
+    mem_free (&s);
+  }
+  else {
+    if (stat (path, &s) < 0)
+      return (NULL);
+    if (S_ISDIR (s.st_mode)) {
+      errno = EINVAL;
+      return (NULL);
+    }
+    f = fopen (path, "r");
+    *thepid = -1;
+  }
+  return (f);
 }
 
 FILE *io_fopen (const char *path, const char *mode, int u) {

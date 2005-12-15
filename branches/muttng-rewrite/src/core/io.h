@@ -31,6 +31,16 @@ extern "C" {
 int io_open (const char* path, int flags, int u);
 
 /**
+ * Open file for reading. If filename ends with a "|" symbol,
+ * don't interpret path as filename but command to execute and
+ * read from.
+ * @param path Filename or command.
+ * @param pid Pointer to pid_t which is modified in case a command is found.
+ * @return File pointer opened for reading.
+ */
+FILE* io_open_read(const char* path, pid_t* pid);
+
+/**
  * Like @c fopen(3) but tries to prevent symlink attacks.
  * @param path File to open.
  * @param mode Mode to pass to @c fopen(3).

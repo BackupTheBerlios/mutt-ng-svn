@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter id="history">
+  <title>Mutt-ng History</title>
+
+  <ul>
+
+    <li><em>2005/11/10</em> First line of code checked in for rewrite.</li>
+
+    <li><em>2005/11/07</em> First checking of design ideas for rewrite.</li>
+
+    <li><em>2005/01/07</em> Initial revision checked in.</li>
+
+  </ul>
+
+</chapter>

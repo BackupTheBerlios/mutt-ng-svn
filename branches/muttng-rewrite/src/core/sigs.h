@@ -6,6 +6,10 @@
 #ifndef CORE_SIGS_H
 #define CORE_SIGS_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "core_features.h"
 
 #ifndef CORE_SIGTYPE
@@ -35,5 +39,9 @@ void sigs_block_signals_system (void);
 void sigs_unblock_signals_system (int catch);
 
 void sigs_allow_interrupt (int disposition);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif /* !CORE_SIGS_H */
