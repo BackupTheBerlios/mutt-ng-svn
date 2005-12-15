@@ -9,6 +9,7 @@
 #include <sys/utsname.h>
 #include <unistd.h>
 
+#include "core/core.h"
 #include "core/version.h"
 #include "core/conv.h"
 #include "core/intl.h"
@@ -130,6 +131,9 @@ bool Tool::start (void) {
   buffer_init(&dbg);
 
   buffer_add_str(&dbg,DebugLevel,-1);
+
+  if (!core_init())
+    return false;
 
   /* since we need it for debugging and... */
   muttngInit (Homedir, getName (), Umask);
