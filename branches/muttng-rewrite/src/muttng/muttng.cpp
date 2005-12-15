@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "muttng.h"
+#include "config/config.h"
 
 /** application-wide debug object */
 static Debug* debugObj = NULL;
@@ -25,6 +26,7 @@ void Muttng::muttngInit (const char* dir, const char* prefix, int u) {
   eventObj = new Event (debugObj);
   Muttng::debug = debugObj;
   Muttng::event = eventObj;
+  Config::reg();
 }
 
 void Muttng::muttngCleanup (void) {

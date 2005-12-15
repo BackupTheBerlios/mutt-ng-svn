@@ -20,6 +20,7 @@
 
 #include "muttng.h"
 #include "ui/ui.h"
+#include "config/config.h"
 
 /** generic command-line arguments common for all tools. */
 #define GENERIC_ARGS    "vVhnF:d:"
@@ -98,6 +99,10 @@ class Tool : public Muttng {
   private:
     /** debug level from command-line */
     const char* DebugLevel;
+    /**
+     * Config object. This needs to be an object so it has debugging.
+     */
+    Config* config;
     /**
      * Compose a string with name and version info.
      * @param dst Desination buffer for string.

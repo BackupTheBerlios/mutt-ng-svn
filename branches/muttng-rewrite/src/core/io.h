@@ -86,6 +86,17 @@ int io_tempfile (const char* dir, const char* name, buffer_t* tempfile);
  */
 int io_fclose(FILE** fp);
 
+/**
+ * Read a single line from input into buffer. If the line's end is
+ * escaped, i.e. ends in \\, keep reading until either end of input
+ * or non-escaped endline.
+ * @param dst Destination buffer.
+ * @param fp Where to read from.
+ * @return Number of lines read, i.e. 0 in case of error and positive
+ * otherwise.
+ */
+unsigned int io_readline(buffer_t* dst, FILE* fp);
+
 #ifdef __cplusplus
 }
 #endif

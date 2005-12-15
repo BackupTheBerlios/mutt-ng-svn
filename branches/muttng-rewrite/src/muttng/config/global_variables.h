@@ -30,4 +30,7 @@
 #define INITVAL(X)
 #endif
 
+/** storage for @ref option_config_charset */
+WHERE char* ConfigCharset INITVAL(NULL);
+
 #endif /* !MUTTNG_CONFIG_GLOBAL_VARIABLES_H */

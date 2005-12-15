@@ -147,11 +147,20 @@ bool Tool::start (void) {
     connectSignal(dbglev->sigOptionChange,this,&Tool::catchDebugLevelChange);
   if (!ConfigManager::set("debug_level",&dbg,&error)) {
     std::cerr<<_("Error: ")<<error.str<<std::endl;
+    buffer_free(&error);
     return false;
   }
 
   if (!event->init ())
     return (false);
+
+  buffer_shrink(&error,0);
+  this->config = new Config;
+  if (!this->config->read(&error)) {
+    std::cerr<<_("Error: ")<<error.str<<std::endl;
+    buffer_free(&error);
+    return false;
+  }
 
   return (this->ui->start ());
 }

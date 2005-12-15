@@ -163,3 +163,52 @@ int io_fclose(FILE** fp) {
   *fp = NULL;
   return r;
 }
+
+unsigned int io_readline(buffer_t* dst, FILE* fp) {
+  size_t offset=0,line=0;
+  char* ch;
+
+  if (!dst || !fp)
+    return 0;
+
+  /*
+   * if buffer is fresh one, trigger realloc (or similar) by
+   * force so we have memory to start off with
+   */
+  if (!dst->len)
+    buffer_add_ch(dst,'\0');
+  buffer_shrink(dst,0);
+
+  while(1) {
+    if (fgets(dst->str+offset,dst->size-offset,fp)==NULL) {
+      buffer_shrink(dst,0);
+      return line;
+    }
+    if ((ch = strchr (dst->str + offset, '\n')) != NULL) {
+      /* line was complete; see if end is escaped */
+      line++;
+      *ch = 0;
+      if (ch > dst->str && *(ch - 1) == '\r')
+        *--ch = 0;
+      if (ch == dst->str || *(ch - 1) != '\\')
+        /* end is not escaped */
+        return line;
+      offset = ch - dst->str - 1;
+    } else {
+      int c;
+      c = getc (fp);            /* This is kind of a hack. We want to know if the
+                                   char at the current point in the input stream is EOF.
+                                   feof() will only tell us if we've already hit EOF, not
+                                   if the next character is EOF. So, we need to read in
+                                   the next character and manually check if it is EOF. */
+      if (c == EOF)
+        /* The last line of fp isn't \n terminated */
+        return ++line;
+      ungetc (c, fp);         /* undo our dammage */
+      /* There wasn't room for the line -- increase ``s'' */
+      offset = dst->size - 1;     /* overwrite the terminating 0 */
+      dst->size += 256;
+      mem_realloc (&dst->str, dst->size);
+    }
+  }
+}

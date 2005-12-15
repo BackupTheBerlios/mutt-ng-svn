@@ -1,8 +1,9 @@
-SUBDIRS=event ui tools
-
 include $(CURDIR)/../../GNUmakefile.whereis
 include $(CURDIR)/../../GNUmakefile.config.mine
 include $(CURDIR)/../../GNUmakefile.config
+
+# tools contains binaries to build so it must be last
+SUBDIRS=event ui config tools
 
 all: muttng.o subdirs
 
