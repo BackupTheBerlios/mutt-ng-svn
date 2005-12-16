@@ -16,6 +16,7 @@
 #include "core/io.h"
 #include "core/command.h"
 #include "core/intl.h"
+#include "core/str.h"
 
 bool Config::config_read_file(buffer_t* path, buffer_t* error) {
   FILE* fp = NULL;
@@ -40,8 +41,7 @@ bool Config::config_read_file(buffer_t* path, buffer_t* error) {
   }
 
   io_fclose(&fp);
-  if (filter != -1)
-    command_filter_wait(filter);
+  command_filter_wait(filter);
   buffer_free(&line);
   return true;
 }

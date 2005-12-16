@@ -2,15 +2,17 @@
 /**
  * @file core/test/buffer_tests.cpp
  * @author Andreas Krennmair <ak@synflood.at>
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: buffer_t unit tests
  */
 #include <unit++/unit++.h>
 #include <buffer.h>
 #include "buffer_tests.h"
+#include "../str.h"
 
 using namespace unitpp;
 
-/** test for buffer_init() */
+/** @test  buffer_init() */
 void buffer_tests::test_buffer_init() {
   buffer_t * b = new buffer_t;
   buffer_init(b);
@@ -23,7 +25,7 @@ void buffer_tests::test_buffer_init() {
 }
 
 /**
- * test for buffer_equal1().
+ * @test  buffer_equal1().
  * @todo implement more tests
  */
 void buffer_tests::test_buffer_equal1() {
@@ -34,7 +36,7 @@ void buffer_tests::test_buffer_equal1() {
   delete b;
 }
 
-/** test for buffer_add_str(). */
+/** @test  buffer_add_str(). */
 void buffer_tests::test_buffer_add_str() {
   buffer_t * b = new buffer_t;
   buffer_init(b);
@@ -51,7 +53,7 @@ void buffer_tests::test_buffer_add_str() {
   delete b;
 }
 
-/** test for buffer_add_buffer() */
+/** @test  buffer_add_buffer() */
 void buffer_tests::test_buffer_add_buffer() {
   buffer_t * b1 = new buffer_t;
   buffer_t * b2 = new buffer_t;
@@ -78,7 +80,7 @@ void buffer_tests::test_buffer_add_buffer() {
   delete b3;
 }
 
-/** test for buffer_add_ch() */
+/** @test  buffer_add_ch() */
 void buffer_tests::test_buffer_add_ch() {
   buffer_t * b = new buffer_t;
   buffer_init(b);
@@ -97,7 +99,7 @@ void buffer_tests::test_buffer_add_ch() {
   delete b;
 }
 
-/** test for buffer_add_num2() */
+/** @test  buffer_add_num2() */
 void buffer_tests::test_buffer_add_num2() {
   buffer_t * b = new buffer_t;
   buffer_init(b);
@@ -135,6 +137,7 @@ void buffer_tests::test_buffer_add_num2() {
   delete b;
 }
 
+/** @test  buffer_chomp() */
 void buffer_tests::test_buffer_chomp() {
   buffer_t buf;
   buffer_init(&buf);
@@ -166,6 +169,75 @@ void buffer_tests::test_buffer_chomp() {
 
 }
 
+/**
+ * Helper for test_buffer_tokenize().
+ * @param dst Destination buffer.
+ * @param src Source buffer.
+ * @param in Input string.
+ * @param expect Expected output string.
+ * @param flags Flags for buffer_extract_token().
+ * @param l Length of input buffer_extract_token() is expected to read.
+ */
+static void tokenize(buffer_t* dst, buffer_t* src,
+                     const char* in, const char* expect,
+                     int flags, int l=-1) {
+  if (l<=0) l=str_len(in);
+  buffer_shrink(dst,0);
+  buffer_shrink(src,0);
+  buffer_add_str(src,in,-1);
+  size_t len = buffer_extract_token(dst,src,flags,NULL);
+  assert_eq("all characters parsed from source",l,(int)len);
+  buffer_t msg;
+  buffer_init(&msg);
+  buffer_add_ch(&msg,'\'');
+  buffer_add_str(&msg,in,-1);
+  buffer_add_str(&msg,"' -> '",6);
+  buffer_add_str(&msg,expect,-1);
+  buffer_add_str(&msg,"': '",4);;
+  buffer_add_buffer(&msg,dst);
+  buffer_add_ch(&msg,'\'');
+  assert_true(msg.str,buffer_equal1(dst,expect,-1));
+}
+
+/**
+ * @test buffer_extract_token()
+ * @todo add more tricky tests playing with flags
+ */
+void buffer_tests::test_buffer_tokenize() {
+  buffer_t dst,src;
+  buffer_init(&dst);
+  buffer_init(&src);
+
+  /** We test: */
+
+  /** - wether distinction between valid and invalid octal chars works */
+  tokenize(&dst,&src,"\\888","888",0);
+  tokenize(&dst,&src,"\\66f","66f",0);
+  tokenize(&dst,&src,"\\146\\157\\157","foo",0);
+  /** - wether distinction between valid and invalid hex chars works */
+  tokenize(&dst,&src,"\\x4s","x4s",0);
+  tokenize(&dst,&src,"\\x42","B",0);
+  tokenize(&dst,&src,"\\x66\\x6f\\x6F","foo",0);
+  /** - wether escape sequences are replaced accordingly */
+  tokenize(&dst,&src,"\\Ca","\001",0);
+  tokenize(&dst,&src,"\\cA","\001",0);
+  tokenize(&dst,&src,"\\r\\n\\t\\f\\e\\E","\015\012\011\014\033\033",0);
+  /** - whether ^-expansion is only done with M_TOKEN_CONDENSE and works */
+  tokenize(&dst,&src,"^^^[^A^0","^^^[^A^0",0);
+  tokenize(&dst,&src,"^^^[^A^0","^\033\001^0",M_TOKEN_CONDENSE);
+  /** - whether variable expansion and quoting works */
+  tokenize(&dst,&src,"$HOME",getenv("HOME"),0);
+  tokenize(&dst,&src,"${HOME}",getenv("HOME"),0);
+  tokenize(&dst,&src,"'$HOME'","$HOME",0);
+  tokenize(&dst,&src,"'${HOME}'","${HOME}",0);
+  tokenize(&dst,&src,"a\\$HOME","a$HOME",0);
+  /** - wether M_TOKEN_SPACE and quoting do what they're supposed to */
+  tokenize(&dst,&src,"a b","a",0,2);
+  tokenize(&dst,&src,"a b","a b",M_TOKEN_SPACE);
+  tokenize(&dst,&src,"a\\ b","a b",0);
+  tokenize(&dst,&src,"\"a b\" \"b a\"","a b b a",M_TOKEN_SPACE);
+}
+
 buffer_tests::buffer_tests() : suite("buffer_tests") {
   add("buffer",testcase(this,"test_buffer_init",&buffer_tests::test_buffer_init));
   add("buffer",testcase(this,"test_buffer_equal1",&buffer_tests::test_buffer_equal1));
@@ -174,4 +246,5 @@ buffer_tests::buffer_tests() : suite("buffer_tests") {
   add("buffer",testcase(this,"test_buffer_add_ch",&buffer_tests::test_buffer_add_ch));
   add("buffer",testcase(this,"test_buffer_add_num2",&buffer_tests::test_buffer_add_num2));
   add("buffer",testcase(this,"test_buffer_chomp",&buffer_tests::test_buffer_chomp));
+  add("buffer",testcase(this,"test_buffer_tokenize",&buffer_tests::test_buffer_tokenize));
 }

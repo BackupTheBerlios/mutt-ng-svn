@@ -1,4 +1,4 @@
-FILES=conf_tool mailx_tool muttng_tool sync_tool tool
+FILES=conf_tool mailx_tool muttng_tool sync_tool tool main
 LIB=libtool.a
 BINARY=main
 LINKLIBS=../muttng.o ../event/libevent.a ../ui/libui.a ../config/libconfig.a ../../libmuttng/libmuttng.a ../../core/libcore.a

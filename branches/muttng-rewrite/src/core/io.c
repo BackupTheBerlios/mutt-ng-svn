@@ -182,7 +182,7 @@ unsigned int io_readline(buffer_t* dst, FILE* fp) {
   while(1) {
     if (fgets(dst->str+offset,dst->size-offset,fp)==NULL) {
       buffer_shrink(dst,0);
-      return line;
+      goto out;
     }
     if ((ch = strchr (dst->str + offset, '\n')) != NULL) {
       /* line was complete; see if end is escaped */
@@ -192,7 +192,7 @@ unsigned int io_readline(buffer_t* dst, FILE* fp) {
         *--ch = 0;
       if (ch == dst->str || *(ch - 1) != '\\')
         /* end is not escaped */
-        return line;
+        goto out;
       offset = ch - dst->str - 1;
     } else {
       int c;
@@ -201,9 +201,11 @@ unsigned int io_readline(buffer_t* dst, FILE* fp) {
                                    feof() will only tell us if we've already hit EOF, not
                                    if the next character is EOF. So, we need to read in
                                    the next character and manually check if it is EOF. */
-      if (c == EOF)
+      if (c == EOF) {
         /* The last line of fp isn't \n terminated */
-        return ++line;
+        line++;
+        goto out;
+      }
       ungetc (c, fp);         /* undo our dammage */
       /* There wasn't room for the line -- increase ``s'' */
       offset = dst->size - 1;     /* overwrite the terminating 0 */
@@ -211,4 +213,7 @@ unsigned int io_readline(buffer_t* dst, FILE* fp) {
       mem_realloc (&dst->str, dst->size);
     }
   }
+out:
+  dst->len = str_len(dst->str);
+  return line;
 }

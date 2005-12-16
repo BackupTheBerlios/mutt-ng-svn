@@ -144,8 +144,8 @@ static int extract_backslash(buffer_t* dst, char** work) {
   default:
     /* by default, for \[0-9]{3} we interpret as octal */
     if (isdigit ((unsigned char) ch) &&
-        isdigit ((unsigned char) *(*work)) &&
-        isdigit ((unsigned char) *((*work)+1))) {
+        isdigit ((unsigned char) *(*work)) && *(*work) >= '0' && *(*work) <= '7' &&
+        isdigit ((unsigned char) *((*work)+1)) && *((*work)+1) >= '0' && *((*work)+1) <= '7') {
       buffer_add_ch(dst,(ch<<6)+(*(*work)<<3)+*((*work)+1)-3504);
       (*work)+=2;
     } else if (ch == 'x' &&

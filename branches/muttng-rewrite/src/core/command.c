@@ -230,6 +230,7 @@ pid_t command_filter_fd (const char *cmd, FILE ** in, FILE ** out, FILE ** err,
 
 int command_filter_wait (pid_t pid) {
   int rc;
+  if (pid < 0) return 0;
   waitpid (pid, &rc, 0);
   sigs_unblock_signals_system (1);
   rc = WIFEXITED (rc) ? WEXITSTATUS (rc) : -1;
