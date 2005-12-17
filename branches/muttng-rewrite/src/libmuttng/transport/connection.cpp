@@ -34,7 +34,7 @@
 #include <string.h>
 #include <strings.h>
 
-Connection::Connection(url_t* url_) : is_connected(false) {
+Connection::Connection(url_t* url_) : is_connected(false), ready(false) {
   url = new url_t;
   url->username = str_dup(url_->username);
   url->password = str_dup(url_->password);

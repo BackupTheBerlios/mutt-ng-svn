@@ -13,6 +13,11 @@
 /** internal hash tables of options */
 static Hash<Option*>* Options = NULL;
 
+/**
+ * Free up memory for an Option object. Used as callback with
+ * Hash::map().
+ * @param option Option.
+ */
 static void free_option(Option** option) {
   delete *option;
   *option = NULL;
@@ -71,7 +76,7 @@ int ConfigManager::get(buffer_t* dst, buffer_t* name) {
  * Used as callback for Hash::map(): simply add option name to vector.
  * @param key The name of the option.
  * @param option Unused: the option object itself.
- * @param moredate Destination vector.
+ * @param moredata Destination vector.
  */
 static void add(const char* key, Option* option, std::vector<const char*>* moredata) {
   (void) option;

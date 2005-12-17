@@ -9,6 +9,7 @@
 
 #include "core/rx.h"
 
+/** storage for @ref option_reply_regex */
 static rx_t* ReplyRegex = NULL;
 
 SubjectHeader::SubjectHeader(char* name, char* body) : Header(name,body) {}

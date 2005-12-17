@@ -56,6 +56,7 @@ class Option {
      * Get validity information.
      * If no destination buffer is passed, just check if option
      * has limitations.
+     * @param dst Destination buffer where to append string.
      */
     virtual bool validity(buffer_t* dst) = 0;
     /**

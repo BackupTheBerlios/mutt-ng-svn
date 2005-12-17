@@ -10,6 +10,7 @@
 extern "C" {
 #endif
 
+/** flag for command_run(): give up controlling terminal while running */
 #define M_DETACH_PROCESS        1
 
 #include <stdio.h>
@@ -19,7 +20,7 @@ extern "C" {
  * Run a command via shell.
  * Basically this is does the same as system() but with
  * more sane signal handling.
- * @param command Command to run.
+ * @param cmd Command to run.
  * @param flags See M_*.
  * @return Exit status of the command or -1 in case of error.
  */
@@ -40,6 +41,15 @@ int command_run (const char *cmd, int flags);
 pid_t command_filter_fd(const char *cmd, FILE ** in, FILE ** out, FILE ** err,
                         int fdin, int fdout, int fderr);
 
+/**
+ * Invokes a commmand on a pipe and optionally connects its stdin and stdout
+ * to the specified handles.
+ * @param CMD Command to run.
+ * @param IN Optional handle for input.
+ * @param OUT Optional handle for normal output.
+ * @param ERR Optional handle for error output.
+ * @return pid of filter process.
+ */
 #define command_filter(CMD,IN,OUT,ERR) command_filter_fd(CMD,IN,OUT,ERR,-1,-1,-1)
 
 /**

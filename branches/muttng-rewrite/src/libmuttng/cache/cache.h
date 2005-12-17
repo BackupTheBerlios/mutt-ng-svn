@@ -45,7 +45,7 @@ class Cache : public LibMuttng {
     static Cache* create();
     /**
      * Get version of caching module.
-     * @param Optional destination buffer.
+     * @param dst Optional destination buffer.
      * @return Wether caching is enabled.
      */
     static bool getVersion(buffer_t* dst);

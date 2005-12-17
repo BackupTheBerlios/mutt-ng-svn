@@ -189,7 +189,7 @@ class Mailbox : public LibMuttng {
     /**
      * Retrieve error message for state.
      * @param state State.
-     * @return Error message.
+     * @param error Storage for error message.
      */
     void strerror (mailbox_query_status state, buffer_t* error);
 

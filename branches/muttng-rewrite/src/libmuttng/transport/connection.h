@@ -181,6 +181,8 @@ class Connection : public LibMuttng {
     Signal1<int> sigCheckCertificate;
     /** Security Strength Factor for secure connections */
     int ssf;
+    /** whether all protocoll specific negotiations are done */
+    bool ready;
 };
 
 #endif

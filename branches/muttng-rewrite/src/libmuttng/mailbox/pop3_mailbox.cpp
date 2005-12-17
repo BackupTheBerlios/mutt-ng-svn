@@ -11,7 +11,9 @@
 #include "libmuttng/config/string_option.h"
 #include "pop3_mailbox.h"
 
+/** storage for @ref option_pop_user */
 static char* DefaultUser = NULL;
+/** storage for @ref option_pop_pass */
 static char* DefaultPassword = NULL;
 
 POP3Mailbox::POP3Mailbox (url_t* url_, Connection * c) : RemoteMailbox (url_,c) {

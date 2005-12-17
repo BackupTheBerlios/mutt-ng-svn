@@ -15,7 +15,7 @@ all: subdirs
 clean: subdirclean
 	rm -rf *.core
 
-Doxyfile: Doxyfile.in GNUmakefile
+Doxyfile: Doxyfile.in GNUmakefile ../GNUmakefile.config.mine
 	sed \
 	  -e "s#__UNITPPDIR__#$(UNITPPDIR)#g" \
 	  -e "s#__MUTTNGDIR__#$(shell echo $(CURDIR) | sed 's#[^/]*/[^/]*$$##')#g" \
@@ -27,13 +27,12 @@ srcdoc: Doxyfile
 ifneq ($(DOXYGEN),)
 	$(DOXYGEN)
 ifneq ($(TIDY),)
-	@ for i in $(shell find ./../doxygen -name '*.html') ; do \
-	  echo "cleanup $$i" ; \
-	  $(TIDY) -q -i -m -utf8 $$i >/dev/null 2>&1 || true ; \
-	done
+	@ echo "Running tidy..."
+	@ find ./../doxygen -name '*.html' | xargs -I @ $(TIDY) -q -i -m -utf8 @ >/dev/null 2>&1 || true
 endif
 endif
-	find ./../doxygen -name '*.html' | ./../contrib/html_head_number.pl
+	@ echo "Numbering headlines"
+	@ find ./../doxygen -name '*.html' | xargs ./../contrib/html_head_number.pl
 
 test: all subdirtest
 

@@ -30,6 +30,7 @@ class RXOption : public Option {
     const char* getType();
     bool validity(buffer_t* dst);
   private:
+    /** storage for value */
     rx_t** store;
 };
 

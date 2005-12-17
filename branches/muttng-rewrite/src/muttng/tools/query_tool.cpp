@@ -1,6 +1,6 @@
 /** @ingroup muttng_bin_query */
 /**
- * @file muttng/tools/muttng_query.cpp
+ * @file muttng/tools/query_tool.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: muttng-query(1)
  */

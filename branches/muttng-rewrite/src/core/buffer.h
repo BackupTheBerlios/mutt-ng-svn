@@ -131,13 +131,20 @@ void buffer_shrink (buffer_t* buffer, size_t len);
  */
 unsigned int buffer_chomp(buffer_t * buffer);
 
-#define M_TOKEN_EQUAL           1       /* treat '=' as a special */
-#define M_TOKEN_CONDENSE        (1<<1)  /* ^(char) to control chars (macros) */
-#define M_TOKEN_SPACE           (1<<2)  /* don't treat whitespace as a term */
-#define M_TOKEN_QUOTE           (1<<3)  /* don't interpret quotes */
-#define M_TOKEN_PATTERN         (1<<4)  /* !)|~ are terms (for patterns) */
-#define M_TOKEN_COMMENT         (1<<5)  /* don't reap comments */
-#define M_TOKEN_SEMICOLON       (1<<6)  /* don't treat ; as special */
+/** flag for buffer_extract_token(): treat '=' as a special */
+#define M_TOKEN_EQUAL           1
+/** flag for buffer_extract_token(): ^X to CTRL+X */
+#define M_TOKEN_CONDENSE        (1<<1)
+/** flag for buffer_extract_token(): don't tread whitespace as a term */
+#define M_TOKEN_SPACE           (1<<2)
+/** flag for buffer_extract_token(): don't interpret quotes */
+#define M_TOKEN_QUOTE           (1<<3)
+/** flag for buffer_extract_token(): !)|~ are terms */
+#define M_TOKEN_PATTERN         (1<<4)
+/** flag for buffer_extract_token(): don't reap comments */
+#define M_TOKEN_COMMENT         (1<<5)
+/** flag for buffer_extract_token(): don't treat ; as special */
+#define M_TOKEN_SEMICOLON       (1<<6)
 
 /**
  * Expand special sequences of source buffer to destination buffer.

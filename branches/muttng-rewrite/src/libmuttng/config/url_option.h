@@ -30,6 +30,7 @@ class URLOption : public Option {
     const char* getType();
     bool validity(buffer_t* dst);
   private:
+    /** storage for value */
     url_t** store;
 };
 

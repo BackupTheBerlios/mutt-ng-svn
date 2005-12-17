@@ -25,7 +25,7 @@ class IntOption : public Option {
      * @param max_ Maximum value.
      */
     IntOption(const char* name_, const char* init_, int* store_,
-              int min = INT_MIN, int max = INT_MAX);
+              int min_ = INT_MIN, int max_ = INT_MAX);
     /**
      * Create new int option.
      * @param name_ Name.
@@ -34,7 +34,7 @@ class IntOption : public Option {
      * @param negative If @c true, negative values will be allowed.
      */
     IntOption(const char* name_, const char* init_, int* store_,
-              bool negative = false);
+              bool negative);
     bool set(const char* value, buffer_t* error);
     bool unset();
     bool reset();
@@ -43,8 +43,11 @@ class IntOption : public Option {
     const char* getType();
     bool validity(buffer_t* dst);
   private:
+    /** storage for value */
     int* store;
+    /** for validation checks: minimum value allowed */
     int min;
+    /** for validation checks: maximum value allowed */
     int max;
 };
 

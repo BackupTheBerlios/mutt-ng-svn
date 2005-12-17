@@ -30,8 +30,9 @@ manual:
 	  $(call doxslt_s,manual_$$l/manual-user.xml,xsl/manual2tex.xsl,manual_$$l/manual.tex,$$l) ; \
         done
 ifneq ($(TIDY),)
+	@ echo "Run tidy..."
 	@ for l in $(BUILD_LANGUAGES) ; do \
-	  $(TIDY) -q -i -m -utf8 manual_$$l/*.html >/dev/null 2>&1 || true ; \
+	  find manual_$$l -name '*.html' | xargs -I @ $(TIDY) -q -i -m -utf8 @ >/dev/null 2>&1 || true ; \
 	done
 endif
 ifneq ($(PDFLATEX),)
@@ -65,8 +66,9 @@ homepage:
 	  $(call doxslt_s,homepage_$$l/homepage-docbook.xml,xsl/homepage2xhtml.xsl,homepage_$$l/index.html,$$l) ; \
 	done
 ifneq ($(TIDY),)
+	@ echo "Run tidy..."
 	@ for l in $(BUILD_LANGUAGES) ; do \
-	  $(TIDY) -q -i -m -utf8 homepage_$$l/*.html >/dev/null 2>&1 || true ; \
+	  find homepage_$$l -name '*.html' | xargs -I @ $(TIDY) -q -i -m -utf8 @ >/dev/null 2>&1 || true ; \
 	done
 endif
 

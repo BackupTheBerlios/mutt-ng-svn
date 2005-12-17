@@ -20,9 +20,12 @@ extern "C" {
 
 /** regular expression abstraction */
 typedef struct rx_t {
-  char *pattern;                /* printable version */
-  regex_t *rx;                  /* compiled expression */
-  int no;                       /* do not match */
+  /* printable version */
+  char *pattern;
+  /* compiled expression */
+  regex_t *rx;
+  /* do not match */
+  int no;
 } rx_t;
 
 /** ignore case */
@@ -33,7 +36,7 @@ typedef struct rx_t {
 /**
  * Compile a pattern to a regular expressions.
  * @param pattern Pattern.
- * @param Optional buffer for error message.
+ * @param error Optional buffer for error message.
  * @param flags Flags. See RX_*.
  * @return rx_t pointer or @c NULL in case of error.
  */
@@ -60,7 +63,7 @@ int rx_exec (rx_t* rx, const char* str);
  * @param rx2 2nd regex.
  * @return 1 if equal, 0 otherwise.
  */
-int rx_eq (const rx_t*, const rx_t*);      /* compare two patterns */
+int rx_eq (const rx_t* rx1, const rx_t* rx2);
 
 #ifdef __cplusplus
 }

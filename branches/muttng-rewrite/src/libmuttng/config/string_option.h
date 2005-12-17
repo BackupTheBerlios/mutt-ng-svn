@@ -32,7 +32,9 @@ class StringOption : public Option {
     const char* getType();
     bool validity(buffer_t* dst);
   private:
+    /** optional pattern for validation */
     rx_t* pattern;
+    /** storage for value */
     char** store;
 };
 

@@ -29,6 +29,7 @@ class BoolOption : public Option {
     const char* getType();
     bool validity(buffer_t* dst);
   private:
+    /** storage for boolean. @todo optimize */
     bool* store;
 };
 

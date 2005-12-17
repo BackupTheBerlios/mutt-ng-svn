@@ -1,3 +1,7 @@
+/**
+ * @file core/net.c
+ * @brief Implementation: Network-related routines
+ */
 #include "net.h"
 #include "str.h"
 #include "io.h"
@@ -11,10 +15,10 @@
 int fclose ();
 #endif
 
-/* poor man's version of getdomainname() for systems where it does not return
- * return the DNS domain, but the NIS domain.
+/**
+ * Remove trailing dot.
+ * @param q String.
  */
-
 static void strip_trailing_dot (char *q)
 {
   char *p = q;
