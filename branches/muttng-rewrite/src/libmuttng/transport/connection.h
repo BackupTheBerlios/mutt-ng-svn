@@ -31,12 +31,9 @@ class Connection : public LibMuttng {
   public:
     /**
      * Constructor for connection.
-     * @param host Hostname.
-     * @param port TCP destination port.
-     * @param secure_ Whether to use a secure connection.
+     * @param url_ URL.
      */
-    Connection(buffer_t * host = NULL, unsigned short port = 0,
-               bool secure_ = false);
+    Connection(url_t* url_);
     virtual ~Connection();
 
     /**
@@ -113,12 +110,6 @@ class Connection : public LibMuttng {
     int writeLine(buffer_t* buf);
 
     /**
-     * Read accessor for tcp_port.
-     * @return the currently set TCP port.
-     */
-    unsigned short port();
-
-    /**
      * Determines whether there is data ready to be read.
      * @return true if there is data ready to be read, otherwise false.
      */
@@ -146,13 +137,19 @@ class Connection : public LibMuttng {
     static bool getSecureVersion(buffer_t* dst);
 
     /**
+     * Retrieve URL for connection.
+     * @return URL.
+     */
+    url_t* getURL();
+
+    /**
      * Signal emitted prior to opening the connection.
      * The values passed are:
      * -# hostname
      * -# port
      * -# whether connection will be secure
      */
-    Signal3<buffer_t*,unsigned int,bool> sigPreconnect;
+    Signal3<const char*,unsigned int,bool> sigPreconnect;
 
     /**
      * Signal emitted after closing the connection.
@@ -160,13 +157,11 @@ class Connection : public LibMuttng {
      * -# hostname
      * -# port
      */
-    Signal2<buffer_t*,unsigned int> sigPostconnect;
+    Signal2<const char*,unsigned int> sigPostconnect;
 
   protected:
-    /** destination host's TCP port */
-    unsigned short tcp_port;
-    /** destination host */
-    buffer_t hostname;
+    /** URL */
+    url_t* url;
     /**
      * Socket file descriptor.
      * @bug this will be pulled out when a pluggable transport
@@ -177,8 +172,6 @@ class Connection : public LibMuttng {
     struct sockaddr_in sin;
     /** whether connection is established */
     bool is_connected;
-    /** whether connection is secure */
-    bool secure;
     /**
      * Signal emitted prior to accepting a certificate, if any.
      * This can be used by clients to decide whether to accept

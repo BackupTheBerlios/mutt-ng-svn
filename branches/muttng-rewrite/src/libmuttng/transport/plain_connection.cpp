@@ -11,8 +11,7 @@
 
 #include <unistd.h>
 
-PlainConnection::PlainConnection(buffer_t * host, unsigned short port,
-                                 bool secure_) : Connection(host,port,secure_) {}
+PlainConnection::PlainConnection(url_t* url_) : Connection(url_) {}
 PlainConnection::~PlainConnection() {}
 
 int PlainConnection::doRead(buffer_t * buf, unsigned int len) {

@@ -56,6 +56,13 @@ class NNTPMailbox : public RemoteMailbox {
      */
     bool cacheGetKey (Message* msg, buffer_t* dst);
 
+    /**
+     * For a given URL, see if there's a usable one available already.
+     * @param url_ URL.
+     * @return Connection if found and @c NULL otherwise.
+     */
+    static Connection* findConnection(url_t* url_);
+
   private:
     /** whether server supports XPAT command */
     bool haveXPAT;

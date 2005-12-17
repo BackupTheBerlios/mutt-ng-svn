@@ -18,6 +18,7 @@
 
 #include "core/mem.h"
 #include "core/intl.h"
+#include "core/str.h"
 
 #include "util/url.h"
 
@@ -33,15 +34,21 @@
 #include <string.h>
 #include <strings.h>
 
-Connection::Connection(buffer_t * host, unsigned short port, bool secure_) :
-  tcp_port(port),  is_connected(false), secure(secure_) {
-
-  buffer_init(&hostname);
-  buffer_add_buffer(&hostname,host);
+Connection::Connection(url_t* url_) : is_connected(false) {
+  url = new url_t;
+  url->username = str_dup(url_->username);
+  url->password = str_dup(url_->password);
+  url->host = str_dup(url_->host);
+  url->port = url_->port;
+  url->defport = url_->defport;
+  url->secure = url_->secure;
+  url->path = str_dup(url_->path);
+  url->proto = url_->proto;
 }
 
 Connection::~Connection() {
-  buffer_free(&hostname);
+  url_free(url);
+  delete url;
 }
 
 bool Connection::socketConnect() {
@@ -51,9 +58,10 @@ bool Connection::socketConnect() {
    */
   memset(&sin,0,sizeof(sin));
 
-  sigPreconnect.emit (&hostname, tcp_port, secure);
+  if (!sigPreconnect.emit(url->host,url->port,url->secure))
+    return false;
 
-  struct hostent * hp = gethostbyname(hostname.str);
+  struct hostent * hp = gethostbyname(url->host);
 
   if (NULL == hp) {
     printf("hp == NULL\n");
@@ -63,7 +71,7 @@ bool Connection::socketConnect() {
   sin.sin_family = AF_INET;
 
   bcopy(hp->h_addr, (char *) &sin.sin_addr, hp->h_length);
-  sin.sin_port = htons(tcp_port);
+  sin.sin_port = htons(url->port);
 
   if((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
     printf("socket failed: %s\n",strerror(errno));
@@ -81,7 +89,7 @@ bool Connection::socketConnect() {
   }
 
   if (!doOpen()) {
-    DEBUGPRINT(D_MOD,("doOpen() for %s:%d failed",hostname.str,tcp_port));
+    DEBUGPRINT(D_MOD,("doOpen() for %s:%d failed",url->host,url->port));
     return false;
   }
 
@@ -99,8 +107,7 @@ bool Connection::socketDisconnect() {
   if (!doClose())
     return false;
   is_connected = false;
-  sigPostconnect.emit (&hostname, tcp_port);
-  return true;
+  return sigPostconnect.emit(url->host,url->port);
 }
 
 int Connection::readUntilSeparator(buffer_t * buf, char sep) {
@@ -132,19 +139,15 @@ int Connection::readUntilSeparator(buffer_t * buf, char sep) {
 int Connection::readLine(buffer_t * buf) {
   int rc = readUntilSeparator(buf,'\n');
   buffer_chomp(buf);
-  DEBUGPRINT(D_SOCKET,(" %s:%d << '%s'",hostname.str,tcp_port,buf->str));
+  DEBUGPRINT(D_SOCKET,(" %s:%d << '%s'",url->host,url->port,buf->str));
   return rc;
 }
 
 int Connection::writeLine(buffer_t * buf) {
   if (!buf) return 0;
-  DEBUGPRINT(D_SOCKET,("%s:%d >> '%s'",hostname.str,tcp_port,buf->str));
+  DEBUGPRINT(D_SOCKET,("%s:%d >> '%s'",url->host,url->port,buf->str));
   buffer_add_str(buf,"\r\n",2);
   return doWrite(buf);
-}
-
-unsigned short Connection::port() {
-  return tcp_port;
 }
 
 bool Connection::canRead() {
@@ -175,31 +178,29 @@ Connection * Connection::fromURL(url_t * url, buffer_t* error) {
     return NULL;
   }
 
-  buffer_t hostbuf;
-  buffer_init(&hostbuf);
-  buffer_add_str(&hostbuf,url->host,-1);
-
   Connection * conn = NULL;
 #if defined(LIBMUTTNG_SSL_OPENSSL) || defined(LIBMUTTNG_SSL_GNUTLS)
   if (url->secure)
 #ifdef LIBMUTTNG_SSL_OPENSSL
-    conn = new SSLConnection(&hostbuf,url->port,url->secure);
+    conn = new SSLConnection(url);
 #elif LIBMUTTNG_SSL_GNUTLS
-    conn = new TLSConnection(&hostbuf,url->port,url->secure);
+    conn = new TLSConnection(url);
 #else
     return NULL;
 #endif
   else
 #endif
-    conn = new PlainConnection(&hostbuf,url->port,url->secure);
-
-  buffer_free(&hostbuf);
+    conn = new PlainConnection(url);
 
   return conn;
 }
 
 bool Connection::isSecure() {
-  return secure;
+  return url->secure;
+}
+
+url_t* Connection::getURL() {
+  return url;
 }
 
 bool Connection::getSecureVersion(buffer_t* dst) {

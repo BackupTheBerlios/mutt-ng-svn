@@ -16,9 +16,7 @@
 /** array of protocols priorities for negotiation */
 static int priority[] = { GNUTLS_TLS1, GNUTLS_SSL3, 0 };
 
-TLSConnection::TLSConnection(buffer_t * host, unsigned short port,
-                                 bool secure_) : Connection(host,port,secure_),
-                                                 did_init(false) {}
+TLSConnection::TLSConnection(url_t* url_) : Connection(url_), did_init(false) {}
 TLSConnection::~TLSConnection() {}
 
 bool TLSConnection::init() {
@@ -46,7 +44,6 @@ int TLSConnection::doRead(buffer_t * buf, unsigned int len) {
     return -1;
   }
   buffer_add_str(buf,rbuf,ret);
-  DEBUGPRINT(D_SOCKET,("%s:%d << '%s'",hostname.str,tcp_port,rbuf));
   mem_free(&rbuf);
   return ret;
 }
@@ -55,8 +52,6 @@ int TLSConnection::doWrite(buffer_t * buf) {
   if (!buf) return -1;
 
   int rc = write(fd,buf->str,buf->len);
-
-  DEBUGPRINT(D_SOCKET,("%s:%d >> '%s'",hostname.str,tcp_port,buf->str));
 
   if (rc<0) {
     is_connected = false;

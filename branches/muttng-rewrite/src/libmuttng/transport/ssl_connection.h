@@ -15,8 +15,7 @@
 class SSLConnection : public Connection {
   public:
     /** @copydoc Connection::Connection(). */
-    SSLConnection(buffer_t * host = NULL, unsigned short port = 0,
-               bool secure_ = false);
+    SSLConnection(url_t* url_);
     ~SSLConnection();
     int doRead(buffer_t * buf, unsigned int len);
     int doWrite(buffer_t * buf);

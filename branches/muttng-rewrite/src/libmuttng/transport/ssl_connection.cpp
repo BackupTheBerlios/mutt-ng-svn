@@ -11,8 +11,7 @@
 
 #include <openssl/opensslv.h>
 
-SSLConnection::SSLConnection(buffer_t * host, unsigned short port,
-                                 bool secure_) : Connection(host,port,secure_) {}
+SSLConnection::SSLConnection(url_t* url_) : Connection(url_) {}
 SSLConnection::~SSLConnection() {}
 
 int SSLConnection::doRead(buffer_t * buf, unsigned int len) {

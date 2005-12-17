@@ -4,6 +4,7 @@
  * @brief Implementation: NNTP Mailbox
  */
 #include <stdlib.h>
+#include <vector>
 #include <cstdio>
 
 #include "core/str.h"
@@ -22,6 +23,8 @@ static char* DefaultHost = NULL;
 static const char* HostFiles[] = {
   "/etc/nntpserver", "/etc/news/server", NULL
 };
+/** list of connections */
+static std::vector<Connection*> Connections;
 
 NNTPMailbox::NNTPMailbox (url_t* url_, Connection * c = NULL) : RemoteMailbox (url_,c) {
   this->haveCaching = 1;
@@ -29,6 +32,16 @@ NNTPMailbox::NNTPMailbox (url_t* url_, Connection * c = NULL) : RemoteMailbox (u
   this->haveEncryption = 1;
   buffer_init(&sbuf);
   buffer_init(&rbuf);
+  size_t i = 0;
+  for (i=0; i<Connections.size(); i++)
+    if (c == Connections[i]) {
+      DEBUGPRINT(D_MOD,("found connection for %s:%d at %d",url->host,url->port,i));
+      break;
+    }
+  if (i==Connections.size()) {
+    DEBUGPRINT(D_MOD,("adding connection for %s:%d at end",url->host,url->port));
+    Connections.push_back(c);
+  }
 }
 
 NNTPMailbox::~NNTPMailbox (void) {
@@ -65,6 +78,22 @@ void NNTPMailbox::reg() {
   ConfigManager::reg(new StringOption("nntp_user","",&DefaultUser));
   ConfigManager::reg(new StringOption("nntp_pass","",&DefaultPassword));
   ConfigManager::reg(new StringOption("nntp_host",NONULL(DefaultHost),&DefaultHost));
+}
+
+Connection* NNTPMailbox::findConnection(url_t* url_) {
+  size_t i = 0;
+  url_t* url2;
+  for (i=0; i<Connections.size(); i++) {
+    url2 = Connections[i]->getURL();
+    /*
+     * as user may have different connections to same host with
+     * different usernames, compare ports+logings+hosts+secure items
+     */
+    if (url2->port == url_->port && str_eq(url2->username,url_->username) &&
+        str_eq(url2->host,url_->host) && url2->secure == url_->secure)
+      return Connections[i];
+  }
+  return NULL;
 }
 
 bool NNTPMailbox::getSingleCapa(bool* capa, const char* cmd, size_t cmdlen) {

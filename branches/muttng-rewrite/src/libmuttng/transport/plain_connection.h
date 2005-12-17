@@ -17,8 +17,7 @@
 class PlainConnection : public Connection {
   public:
     /** @copydoc Connection::Connection(). */
-    PlainConnection(buffer_t * host = NULL, unsigned short port = 0,
-               bool secure_ = false);
+    PlainConnection(url_t* url_);
     ~PlainConnection();
     int doRead(buffer_t * buf, unsigned int len);
     int doWrite(buffer_t * buf);

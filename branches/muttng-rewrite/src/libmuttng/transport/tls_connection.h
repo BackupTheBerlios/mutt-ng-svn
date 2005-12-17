@@ -18,8 +18,7 @@
 class TLSConnection : public Connection {
   public:
     /** @copydoc Connection::Connection(). */
-    TLSConnection(buffer_t * host = NULL, unsigned short port = 0,
-               bool secure_ = false);
+    TLSConnection(url_t* url_);
     ~TLSConnection();
     int doRead(buffer_t * buf, unsigned int len);
     int doWrite(buffer_t * buf);

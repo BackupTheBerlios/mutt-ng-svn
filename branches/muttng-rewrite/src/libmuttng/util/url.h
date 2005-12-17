@@ -66,7 +66,7 @@ typedef struct url_t {
    * @param secure_ secure.
    * @param defport_ default port.
    */
-  url_t(urlproto_t proto_, bool secure_, unsigned short defport_) {
+  url_t(urlproto_t proto_ = P_FILE, bool secure_ = false, unsigned short defport_ = 0) {
     username = NULL;
     password = NULL;
     host = NULL;
