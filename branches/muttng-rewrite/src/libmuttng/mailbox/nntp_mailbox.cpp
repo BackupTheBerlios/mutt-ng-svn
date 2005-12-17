@@ -183,7 +183,12 @@ mailbox_query_status NNTPMailbox::openMailbox() {
   buffer_shrink(&errorMsg,0);
 
   if (conn->socketConnect()==false) return MQ_NOT_CONNECTED;
-  if (conn->readLine(&rbuf)<=0 && *rbuf.str!='2') return quit(MQ_NOT_CONNECTED);
+  if (conn->readLine(&rbuf)<=0) return MQ_NOT_CONNECTED;
+  if (*rbuf.str!='2') {
+    buffer_shrink(&errorMsg,0);
+    buffer_add_buffer(&errorMsg,&rbuf);
+    return quit(MQ_NOT_CONNECTED);
+  }
 
   /* MODE READER already is an extension of RfC2980 but... */
   buffer_add_str(&sbuf,"MODE READER",11);
