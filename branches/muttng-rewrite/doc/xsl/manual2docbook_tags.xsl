@@ -3,6 +3,8 @@
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 
+  <xsl:variable name="rfcs"/>
+
   <xsl:output 
     method="xml" 
     doctype-public="-//OASIS//DTD DocBook XML V4.3//EN"
@@ -317,5 +319,12 @@
   </xsl:template>
 
   <!-- }}} -->
+
+  <xsl:template match="rfc">
+    <ulink url="{concat('http://www.faqs.org/rfcs/rfc',text(),'.html')}">RfC <xsl:value-of select="."/></ulink>
+    <indexterm>
+      <primary>RfC <xsl:value-of select="."/></primary>
+    </indexterm>
+  </xsl:template>
 
 </xsl:stylesheet>

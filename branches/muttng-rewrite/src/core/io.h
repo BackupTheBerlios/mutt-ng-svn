@@ -94,6 +94,7 @@ int io_fclose(FILE** fp);
  * @param fp Where to read from.
  * @return Number of lines read, i.e. 0 in case of error and positive
  * otherwise.
+ * @test io_tests::test_io_readline().
  */
 unsigned int io_readline(buffer_t* dst, FILE* fp);
 

@@ -2,7 +2,7 @@ include $(CURDIR)/../GNUmakefile.config.mine
 include $(CURDIR)/../GNUmakefile.whereis
 include $(CURDIR)/../GNUmakefile.config
 
-ALL_LANGUAGES=de en
+ALL_LANGUAGES=en de
 ifeq ($(DOCLANGUAGES),all)
 BUILD_LANGUAGES=$(ALL_LANGUAGES)
 else

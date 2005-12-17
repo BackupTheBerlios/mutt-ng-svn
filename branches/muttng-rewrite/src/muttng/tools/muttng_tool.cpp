@@ -116,8 +116,11 @@ void MuttngTool::doIndexMenu(const char* url) {
   /* XXX do loop */
   if ((state = folder->openMailbox()) == MQ_OK)
     folder->closeMailbox();
-  else
-    std::cerr << Mailbox::strerror(state) << std::endl;
+  else {
+    buffer_shrink(&error,0);
+    folder->strerror(state,&error);
+    std::cerr << (NONULL(error.str)) << std::endl;
+  }
 
   disconnectSignals(folder->sigGetUsername,this);
   disconnectSignals(folder->sigGetPassword,this);

@@ -70,9 +70,8 @@ mailbox_query_status POP3Mailbox::openMailbox() {
 
   buffer_add_str(&sbuf,"USER ",5);
   buffer_add_str(&sbuf,url->username,-1);
-  buffer_add_str(&sbuf,"\r\n",2);
 
-  if (conn->doWrite(&sbuf)<0) {
+  if (conn->writeLine(&sbuf)<0) {
     conn->socketDisconnect();
     return MQ_NOT_CONNECTED;
   }
@@ -91,9 +90,8 @@ mailbox_query_status POP3Mailbox::openMailbox() {
   buffer_shrink(&sbuf,0);
   buffer_add_str(&sbuf,"PASS ",5);
   buffer_add_str(&sbuf,url->password,-1);
-  buffer_add_str(&sbuf,"\r\n",2);
 
-  if (conn->doWrite(&sbuf)<0) {
+  if (conn->writeLine(&sbuf)<0) {
     conn->socketDisconnect();
     return MQ_NOT_CONNECTED;
   }

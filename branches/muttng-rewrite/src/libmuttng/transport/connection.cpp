@@ -126,12 +126,21 @@ int Connection::readUntilSeparator(buffer_t * buf, char sep) {
         break;
     }
   } while (sep != rbuf.str[0]);
-  DEBUGPRINT(D_SOCKET,("%s:%d << '%s'",hostname.str,tcp_port,buf->str));
   return buf->len;
 }
 
 int Connection::readLine(buffer_t * buf) {
-  return readUntilSeparator(buf,'\n');
+  int rc = readUntilSeparator(buf,'\n');
+  buffer_chomp(buf);
+  DEBUGPRINT(D_SOCKET,(" %s:%d << '%s'",hostname.str,tcp_port,buf->str));
+  return rc;
+}
+
+int Connection::writeLine(buffer_t * buf) {
+  if (!buf) return 0;
+  DEBUGPRINT(D_SOCKET,("%s:%d >> '%s'",hostname.str,tcp_port,buf->str));
+  buffer_add_str(buf,"\r\n",2);
+  return doWrite(buf);
 }
 
 unsigned short Connection::port() {

@@ -328,4 +328,8 @@
 
   <!-- }}} -->
 
+  <xsl:template match="rfc">
+    <xsl:text>&lt;a href="http://www.faqs.org/rfcs/rfc</xsl:text><xsl:value-of select="."/><xsl:text>.html"&gt;RfC </xsl:text><xsl:value-of select="."/><xsl:text>&lt;/a&gt;</xsl:text>
+  </xsl:template>
+
 </xsl:stylesheet>

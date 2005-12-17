@@ -4,9 +4,11 @@
  * @brief Implementation: Remote Mailbox base class
  */
 #include <stdlib.h>
+#include <iostream>
 
 #include "remote_mailbox.h"
 #include "pop3_mailbox.h"
+#include "nntp_mailbox.h"
 
 RemoteMailbox::RemoteMailbox (url_t* url_, Connection * c) : Mailbox (url_), conn(c) {
   this->haveFilters = 0;
@@ -21,9 +23,8 @@ Mailbox* RemoteMailbox::fromURL (url_t* url_, buffer_t* error) {
   if (!(conn = Connection::fromURL(url_,error)))
     return NULL;
   switch (url_->proto) {
-  case P_POP3:
-    ret = new POP3Mailbox(url_,conn);
-    break;
+  case P_POP3: ret = new POP3Mailbox(url_,conn); break;
+  case P_NNTP: ret = new NNTPMailbox(url_,conn); break;
   default:
     break;
   }

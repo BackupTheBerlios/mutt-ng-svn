@@ -11,6 +11,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <errno.h>
 
 #include <unit++/unit++.h>
 #include "io_tests.h"
@@ -181,8 +182,58 @@ out:
   buffer_free (&err);
 }
 
+void io_tests::test_io_readline() {
+  buffer_t fname, line;
+  unsigned int count = 0;
+  int fd = -1, c = 0;
+
+  buffer_init(&fname);
+  buffer_init(&line);
+
+  umask(0077);
+
+  if ((fd = io_tempfile(NULL,NULL,&fname)) < 0) {
+    buffer_free(&fname);
+    assert_true("got opened tempfile",0);
+    return;
+  }
+  write(fd,"line1\nline2 \\\nline2 \\\nline2\n\nline4",40);
+  close(fd);
+  FILE* fp = io_fopen(fname.str,"r",-1);
+  assert_true(fname.str,fp!=NULL);
+  while(++c <= 4) {
+    count += io_readline(&line,fp);
+    switch(c) {
+    case 1:
+      assert_true(line.str,buffer_equal1(&line,"line1",-1));
+      assert_eq("at line 1 of input",1U,count);
+      break;
+    case 2:
+      assert_true(line.str,buffer_equal1(&line,"line2 line2 line2",-1));
+      assert_eq("at line 4 of input",4U,count);
+      break;
+    case 3:
+      assert_true(line.str,buffer_equal1(&line,"",-1));
+      assert_eq("at line 5 of input",5U,count);
+      break;
+    case 4:
+      assert_true(line.str,buffer_equal1(&line,"line4",-1));
+      assert_eq("at line 6 of input",6U,count);
+      break;
+    default:
+      break;
+    }
+  }
+  assert_eq("read 6 lines of input",6U,count);
+  io_fclose(&fp);
+  unlink(fname.str);
+  buffer_free(&fname);
+  buffer_free(&line);
+}
+
 io_tests::io_tests() : suite("io_tests") {
   add("io_tempfile()",testcase(this,"test_io_tempfile()",
                                &io_tests::test_io_tempfile));
   add("io_open()",testcase(this,"test_io_open()", &io_tests::test_io_open));
+  add("io_readline()",testcase(this,"test_io_readline()", &io_tests::test_io_readline));
 }

@@ -1225,6 +1225,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <li><tt>tt</tt>: typewriter font</li>
     <li><tt>em</tt>: emphasise</li>
     <li><tt>b</tt>: bold font</li>
+    <li><tt>footnote</tt>: a footnote</li>
     
       </ul>
     </li>
@@ -1256,6 +1257,7 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
     <tr><td><tt>varref</tt></td><td>referencing a configuration variable</td></tr>
     <tr><td><tt>cmdref</tt></td><td>referencing a configuration command</td></tr>
     <tr><td><tt>funcref</tt></td><td>referencing a function</td></tr>
+    <tr><td><tt>rfc</tt></td><td>an RfC number</td></tr>
     </tbody>
       </table>
       @endhtmlonly
@@ -2181,6 +2183,34 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
     @anchor sample-libmuttng-mailbox-create
     @include libmuttng_mailbox_create.cpp
             
+    
+    @subsubsection sect_devguide-libmuttng-nntp NNTP support
+    
+        Libmuttng supports the Network News Transfer Protocol as
+        defined in <a href="http://www.faqs.org/rfcs/rfc977.html">RfC 977</a> as well as some extensions
+        described in <a href="http://www.faqs.org/rfcs/rfc2980.html">RfC 2980</a>. <em>(Each time a connection
+          is established, it's tested which extensions are
+          supported by the server so that libmuttng works fine with
+          a server only supporting <a href="http://www.faqs.org/rfcs/rfc977.html">RfC 977</a>)</em>
+
+    @paragraph sect_devguigde-libmuttng-nntp-server Default server detection
+          Libmuttng supports the following two ways to detect a
+          default server by priority:
+        
+
+    <ol>
+    <li>the <tt>$NNTPSERVER</tt> environment variable</li>
+    <li>the following standard files containing the servername
+            (comment line may start with <tt>#</tt>):
+            <ol>
+    <li><tt>/etc/nntpserver</tt></li>
+    <li><tt>/etc/news/server</tt></li>
+    
+      </ol>
+    </li>
+    
+      </ol>
+    
     
     @subsubsection sect_devguide-libmuttng-auto Auto-generated code
     <em>Signal implementation.</em> As unfortunately we cannot overload

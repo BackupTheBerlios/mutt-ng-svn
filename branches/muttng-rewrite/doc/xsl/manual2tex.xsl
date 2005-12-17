@@ -279,6 +279,10 @@
     <xsl:text>\web{</xsl:text><xsl:value-of select="."/><xsl:text>}</xsl:text>
   </xsl:template>
 
+  <xsl:template match="rfc">
+    <xsl:text>\rfc{</xsl:text><xsl:value-of select="."/><xsl:text>}</xsl:text>
+  </xsl:template>
+
   <xsl:template match="varref">
     <xsl:text>\varref{</xsl:text><xsl:value-of select="."/><xsl:text>}</xsl:text>
   </xsl:template>

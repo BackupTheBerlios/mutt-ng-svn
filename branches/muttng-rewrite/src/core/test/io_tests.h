@@ -30,6 +30,8 @@ class io_tests : public suite {
     void test_io_open (void);
     /** run several tests for @c io_tempfile(). */
     void test_io_tempfile (void);
+    /** @test io_readling(). */
+    void test_io_readline();
   public:
     io_tests(void);
 };

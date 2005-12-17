@@ -191,7 +191,7 @@ class Mailbox : public LibMuttng {
      * @param state State.
      * @return Error message.
      */
-    static const char* strerror (mailbox_query_status state);
+    void strerror (mailbox_query_status state, buffer_t* error);
 
     /**
      * Signal emitted when username for connection is required.
@@ -218,6 +218,8 @@ class Mailbox : public LibMuttng {
     unsigned int haveFilters:1;
     /** URL if any. */
     url_t* url;
+    /** error message */
+    buffer_t errorMsg;
 };
 
 #endif /* !LIBMUTTNG_MAILBOX_MAILBOX_H */

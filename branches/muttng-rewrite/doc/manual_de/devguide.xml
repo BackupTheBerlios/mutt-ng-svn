@@ -736,6 +736,7 @@
               <li><tt>tt</tt>: typewriter font</li>
               <li><tt>em</tt>: emphasise</li>
               <li><tt>b</tt>: bold font</li>
+              <li><tt>footnote</tt>: a footnote</li>
             </ul>
           </li>
 
@@ -774,6 +775,7 @@
               <tr><td><tt>varref</tt></td><td>referencing a configuration variable</td></tr>
               <tr><td><tt>cmdref</tt></td><td>referencing a configuration command</td></tr>
               <tr><td><tt>funcref</tt></td><td>referencing a function</td></tr>
+              <tr><td><tt>rfc</tt></td><td>an RfC number</td></tr>
             </tb>
           </tab> <!--}}}-->
         </p>
@@ -1563,7 +1565,7 @@ buffer_init(&amp;buffer);</listing>
     </subsection>
     <!--}}}-->
 
-    <subsection id="devguide-libmuttng-hashing">
+    <subsection id="devguide-libmuttng-hashing"> <!--{{{-->
       <title>Again: hashing</title>
 
       <p>
@@ -1589,7 +1591,7 @@ buffer_init(&amp;buffer);</listing>
       <listing lang="c" id="sample-libmuttng-hashing"
         title="C++ hashing example" href="libmuttng_hash.cpp"/>
 
-    </subsection>
+    </subsection> <!--}}}-->
  
     <subsection id="devguide-libmuttng-signal"> <!--{{{-->
       <title>Signal handling</title>
@@ -1903,6 +1905,41 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
 
       </subsubsection>
       <!--}}}-->
+
+    </subsection>
+    <!--}}}-->
+
+    <subsection id="devguide-libmuttng-nntp"> <!--{{{-->
+      <title>NNTP support</title>
+
+      <p>
+        Libmuttng supports the Network News Transfer Protocol as
+        defined in <rfc>977</rfc> as well as some extensions
+        described in <rfc>2980</rfc>.<footnote>Each time a connection
+          is established, it's tested which extensions are
+          supported by the server so that libmuttng works fine with
+          a server only supporting <rfc>977</rfc></footnote>
+      </p>
+
+      <subsubsection id="devguigde-libmuttng-nntp-server" title="Default server detection"> <!--{{{-->
+
+        <p>
+          Libmuttng supports the following two ways to detect a
+          default server by priority:
+        </p>
+
+        <ol>
+          <li>the <env>NNTPSERVER</env> environment variable</li>
+          <li>the following standard files containing the servername
+            (comment line may start with <tt>#</tt>):
+            <ol>
+              <li><tt>/etc/nntpserver</tt></li>
+              <li><tt>/etc/news/server</tt></li>
+            </ol>
+          </li>
+        </ol>
+
+      </subsubsection> <!--}}}-->
 
     </subsection>
     <!--}}}-->

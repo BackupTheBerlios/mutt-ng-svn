@@ -99,11 +99,18 @@ class Connection : public LibMuttng {
 
     /**
      * Reads a complete line from the connection into a buffer. The end-of-line 
-     * character(s) are also appended to the buffer.
+     * character(s) are stripped from the buffer.
      * @param buf buffer into which the data should be read.
      * @return number of characters read. -1 if an error occured.
      */
     int readLine(buffer_t * buf);
+
+    /**
+     * Writes buffer to connection. Also add \\r\\n line in any case.
+     * @param buf Buffer with data to send.
+     * @return number of characters written.
+     */
+    int writeLine(buffer_t* buf);
 
     /**
      * Read accessor for tcp_port.
