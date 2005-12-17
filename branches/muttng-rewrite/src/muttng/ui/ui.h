@@ -53,12 +53,28 @@ class UI : public Muttng {
      */
     virtual bool enterPassword (void) = 0;
     /**
-     * Prompt user to answer some question.
+     * Prompt user to answer some yes/no question.
      * @b NOTE: This still is a dummy without proper parameters but
      *    leaves the option to add a GUI with specialized dialogs.
      * @return Success.
      */
     virtual bool answerQuestion (void) = 0;
+    /**
+     * Prompt the user to enter a value.
+     * @param dst Destination buffer for answer.
+     * @param prompt Text prompt.
+     * @return Success.
+     * @bug remove dstlen
+     */
+    virtual bool enterValue(buffer_t* dst, buffer_t* prompt, size_t dstlen) = 0;
+    /**
+     * Prompt the user to enter a password.
+     * @param dst Destination buffer for answer.
+     * @param prompt Text prompt.
+     * @return Success.
+     * @bug remove dstlen
+     */
+    virtual bool enterPassword(buffer_t* dst, buffer_t* prompt, size_t dstlen) = 0;
     /**
      * Display an error message to user.
      * @param message Error message.

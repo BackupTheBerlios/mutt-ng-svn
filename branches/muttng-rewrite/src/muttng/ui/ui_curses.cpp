@@ -36,3 +36,12 @@ void UICurses::displayMessage (const char* message) {
   } else if (message)
     cout << message << endl;
 }
+bool UICurses::enterValue(buffer_t* dst, buffer_t* prompt, size_t dstlen) {
+  (void)dst;(void)prompt;(void)dstlen;
+  return false;
+}
+
+bool UICurses::enterPassword(buffer_t* dst, buffer_t* prompt, size_t dstlen) {
+  (void)dst;(void)prompt;(void)dstlen;
+  return false;
+}

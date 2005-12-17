@@ -1,4 +1,4 @@
-FILES=conf_tool mailx_tool muttng_tool sync_tool tool main
+FILES=conf_tool mailx_tool muttng_tool sync_tool query_tool tool main
 LIB=libtool.a
 BINARY=main
 LINKLIBS=../muttng.o ../event/libevent.a ../ui/libui.a ../config/libconfig.a ../../libmuttng/libmuttng.a ../../core/libcore.a
@@ -8,6 +8,7 @@ all: $(OBJS) $(LIB) $(BINARY)
 	ln -s main muttng-conf || true
 	ln -s main muttng-sync || true
 	ln -s main muttng-mailx || true
+	ln -s main muttng-query || true
 
 include $(CURDIR)/../../../GNUmakefile.whereis
 include $(CURDIR)/../../../GNUmakefile.config.mine

@@ -29,6 +29,8 @@ class UICurses : public UIText {
     bool answerQuestion (void);
     void displayError (const char* message);
     void displayMessage (const char* message);
+    bool enterValue(buffer_t* dst, buffer_t* prompt, size_t dstlen);
+    bool enterPassword(buffer_t* dst, buffer_t* prompt, size_t dstlen);
   private:
     /** whether curses is already running */
     bool isCurses;

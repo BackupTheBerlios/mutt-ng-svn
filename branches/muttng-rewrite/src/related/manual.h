@@ -2176,13 +2176,36 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
 
     @paragraph sect_devguide-libmuttng-mailbox-create Creating a mailbox
           Creating a new instance of a mailbox based on the URL (other ways
-          are not planned), use the Mailbox::fromUrl() function as shown
+          are not planned), use the Mailbox::fromURL() function as shown
           @ref sample-libmuttng-mailbox-create "in the example" .
         
 
     @anchor sample-libmuttng-mailbox-create
     @include libmuttng_mailbox_create.cpp
             
+          Internally, when receiving a request this way, the Mailbox class
+          distincts between the following two base types of mailboxes:
+        
+
+    <ol>
+    <li>local or</li>
+    <li>remote mailbox</li>
+    
+      </ol>
+    
+          For remote mailboxes, all details are to be handled by the RemoteMailbox class.
+          Depending on the protocoll, it queries the final mailbox type for whether
+          it already has a connection or not whereby it does not know why this step
+          is done. If no existing connection was returned in this step, a new one
+          is created. With either the fresh or the existing one the mailbox' constructor
+          is called and a pointer to it returned from RemoteMailbox::fromURL(). For example,
+          the NNTPMailbox class doesn't use a new connection for every new folder to
+          a given host but reuses them as far as possible while POP3Mailbox uses a new
+          connection for every single folder. It's left to the actual implementation to
+          decide such details.
+        
+
+    
     
     @subsubsection sect_devguide-libmuttng-nntp NNTP support
     

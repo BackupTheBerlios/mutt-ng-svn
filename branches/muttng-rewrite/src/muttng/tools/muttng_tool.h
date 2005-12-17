@@ -30,28 +30,6 @@ class MuttngTool : public Tool {
     int main (void);
     const char* getName (void);
     void getUsage (buffer_t* dst);
-
-  private:
-    /**
-     * Dummy for testing connections without UI: Open folder.
-     * @param folder Test Mailbox::fromURL() with this.
-     * @bug remove this.
-     */
-    void doIndexMenu(const char* folder);
-    /**
-     * Dummy for testing connections without UI: Connected to Mailbox::sigGetUsername().
-     * @param url URL to complete.
-     * @return Yes/No.
-     * @bug remove this.
-     */
-    bool getUsername (url_t* url);
-    /**
-     * Dummy for testing connections without UI: Connected to Mailbox::sigGetPassword().
-     * @param url URL to complete.
-     * @return Yes/No.
-     * @bug remove this.
-     */
-    bool getPassword (url_t* url);
 };
 
 #endif /* !MUTTNG_MUTTNG_TOOL_H */

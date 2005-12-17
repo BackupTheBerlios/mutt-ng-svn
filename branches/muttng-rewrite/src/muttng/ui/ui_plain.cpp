@@ -8,6 +8,8 @@
 
 #include "ui_plain.h"
 
+#include "core/str.h"
+
 using namespace std;
 
 UIPlain::UIPlain (void) {}
@@ -27,4 +29,17 @@ void UIPlain::displayError (const char* message) {
 void UIPlain::displayMessage (const char* message) {
   if (message)
     cout << message << endl;
+}
+
+bool UIPlain::enterValue(buffer_t* dst, buffer_t* prompt, size_t dstlen) {
+  char buf[dstlen+1];
+  buf[dstlen] = '\0';
+  std::cout<<prompt->str<<std::endl;
+  std::cin.getline(buf,dstlen);
+  buffer_add_str(dst,buf,-1);
+  return str_len(buf)>0;
+}
+
+bool UIPlain::enterPassword(buffer_t* dst, buffer_t* prompt, size_t dstlen) {
+  return enterValue(dst,prompt,dstlen);
 }

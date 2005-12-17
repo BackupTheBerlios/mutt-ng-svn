@@ -15,6 +15,7 @@
 #include "conf_tool.h"
 #include "mailx_tool.h"
 #include "sync_tool.h"
+#include "query_tool.h"
 
 #define MUTTNG_MAIN_CPP
 #include "../config/global_variables.h"
@@ -46,6 +47,8 @@ int main (int argc, char** argv) {
     tool = new MailxTool (argc, argv);
   else if (str_eq (p, "muttng-sync"))
     tool = new SyncTool (argc, argv);
+  else if (str_eq (p, "muttng-query"))
+    tool = new QueryTool (argc, argv);
   else
     tool = new MuttngTool (argc, argv);
   rc = tool->main ();
