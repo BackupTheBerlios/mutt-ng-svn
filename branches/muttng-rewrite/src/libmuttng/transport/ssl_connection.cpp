@@ -21,8 +21,6 @@ int SSLConnection::doRead(buffer_t * buf, unsigned int len) {
   cbuf = (char*) mem_malloc (len+1);
   read_len = read(fd,cbuf,len);
 
-  DEBUGPRINT(D_SOCKET,("%s:%d << '%s'",hostname.str,tcp_port,cbuf));
-
   switch (read_len) {
     case -1:
       is_connected = false;
@@ -44,8 +42,6 @@ int SSLConnection::doWrite(buffer_t * buf) {
   if (!buf) return -1;
 
   int rc = write(fd,buf->str,buf->len);
-
-  DEBUGPRINT(D_SOCKET,("%s:%d >> '%s'",hostname.str,tcp_port,buf->str));
 
   if (rc<0) {
     is_connected = false;
