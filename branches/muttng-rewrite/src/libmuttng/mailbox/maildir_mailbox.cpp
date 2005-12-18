@@ -41,11 +41,11 @@ bool MaildirMailbox::isMaildir (buffer_t* path, struct stat* st) {
 
 void MaildirMailbox::parseFlags (const char* path) {
   char* p;
-  if ((p = strchr(path,'.'))) {
+  if ((p = (char*)strchr(path,'.'))) {
     /* if filename contains '.', count as new */
     mNew++;
     mTotal++;
-    if ((p = strchr(path,':')) && str_ncmp(p+1,"2,",2)==0 && (p+=2)) {
+    if ((p = (char*)strchr(path,':')) && str_ncmp(p+1,"2,",2)==0 && (p+=2)) {
       /* if filename has flags, see which one */
       while (*p) {
         switch (*p) {
