@@ -761,6 +761,74 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
 
     
     
+    @subsection sect_devguide-principles Principles
+    
+      This section is more a religious one with some basic principles and
+      rules we intent to keep.
+    
+
+    @subsubsection sect_devguide-principles-constant Constant values
+    
+        Unfortunately, there's not <em>the</em> requirement to fulfil in
+        order to get most speed and the most leightweight implementation.
+        Many different aspects contribute to it of which constant values
+        is only one.
+      
+
+    
+        "Constant values" means that whenever a value is known (i.e. constant)
+        at the time of the code writing already, it shouldn't be computed
+        at runtime but the information should be made available for use.
+      
+
+    
+        As this sounds very abstract, a practical example is the core layer's
+        string abstraction: as the various <tt>buffer_add_*</tt> functions internally
+        ensure that <tt>buffer_t::len</tt> always represents the string's current
+        length, use of <tt>strlen(3)</tt> can be avoided. As the buffer
+        API allows to specify a length when adding strings, this should be used
+        whenever possible to prevent the <tt>buffer_add_str()</tt> function
+        from having to compute the length.
+      
+
+    
+    @subsubsection sect_devguide-principles-memory Memory management
+    
+        A very important part is memory management which we do more or less
+        in a not-so-standard way. We use the core layer's string abstraction
+        in many different places.
+      
+
+    
+        The reason for our approach is that we first of all want to stop using
+        constant string buffers by providing expected upper size limits per
+        scenario (which may fail.) Another is that we want to have the system perform
+        as few memory management operations as possible. The buffer API is
+        designed in a way which makes reuse of buffers as simple as possible
+        for mainly two reasons:
+      
+
+    <ol>
+    <li>When working with strings, we don't want to have to deal with
+          memory allocation/deallocation in every single function/method we
+          write. The ideal case is to have one buffer per purpose and object which
+          is initialized at creation and cleaned up at destruction. We hope
+          that this way it's easier to avoid and find memory leaks.</li>
+    <li>The buffer implementation then only will have to grow the buffer when more
+          memory is needed than currently was allocated. This is expected to reduce the
+          use of <tt>malloc(3)</tt> family of calls.</li>
+    
+      </ol>
+    
+        Another important goal is keep memory handling as clean as possible.
+        This practically means that all memory is to be cleaned up after use which
+        includes leaving no memory reachable when an application exits. This not only
+        removes many warnings issued by <tt>valgrind(1)</tt> but also helps to
+        keep the code clean (or enables us at least to check for it.)
+      
+
+    
+    
     @subsection sect_devguide-style Coding style
     @subsubsection sect_hacking-style-doc Documentation
     
@@ -2055,7 +2123,7 @@ disconnectSignals (signal, object);</pre>
     @paragraph sect_devguide-libmuttng-config-register Registering configuration variables
           Registration is done via the mentioned ConfigManager class which
           only knows that there are options but neither that there are
-          different types nor which there are. As a consequence,
+          different types nor which types there are. As a consequence,
           the caller must provide the option allocated elsewhere.
         
 
@@ -2082,17 +2150,30 @@ disconnectSignals (signal, object);</pre>
           design goal behind this way of configuration management. The idea is to keep
           the scope of a variable as small as possible to achieve modularity, separation
           and information hiding, that is, only those source parts which need access
-          to the variable should see it on the one hand, but visibility to the outside
-          of the library must be given on the other hand. This is done in a modular 
+          to the variable's storage should see it on the one hand, but visibility to the outside
+          of the library must be given on the other hand.
+        
+
+              
+          This is done in a modular 
           and flexible way. De-coupling the different parts of the library and client(s)
           is further improved by the fact, that every option has a signal emitted when
-          it changes so that any part can take action when an option of it's choice changes
+          it changes so that every part can take action when an option of its choice changes
           (and as seen with the signal examples, such bindings can even be created temporarily.)
         
 
     
-          The big advantage is that access from the "user space" with "only"average O(1)
+          The big advantage is that access from the "user space" with "only" average O(1)
           is fast enough due to hashing but still "real" O(1) for the parts utilizing it.
+        
+
+    
+          In order to achieve our memory management design goals, the configuration
+          manager cleans up all storage when it's told to, normally when the application
+          is about to exit. The implication is that source parts registering a variable
+          are strongly encouraged to only read its storage but not change it any way. The configuration
+          manager handles allocation and deallocation of memory for the option's storage
+          so it may produce conflicts when the creator tries to do so, too.
         
 
     
@@ -2174,6 +2255,20 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
         all mailboxes can be accessed via an URL only.
       
 
+    
+        The implementation is split into two major parts via inheritance:
+        local and remote folders:
+      
+
+    <ul>
+    <li>local folders</li>
+    <li>remote folders derived from the <tt>RemoteMailbox</tt> class
+          get protected attributes for caching, a connection, as well
+          as a send and a receive buffer. The underlying <tt>RemoteMailbox</tt>
+          class is reposponsible for allocation and de-allocation of the
+          buffers.</li>
+    
+      </ul>
     @paragraph sect_devguide-libmuttng-mailbox-create Creating a mailbox
           Creating a new instance of a mailbox based on the URL (other ways
           are not planned), use the Mailbox::fromURL() function as shown
@@ -2206,6 +2301,55 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
         
 
     
+    
+    @subsubsection sect_devguide-libmuttng-connection Connection handling
+    
+        Behind the generic connection implementation provided as the Connection
+        class, the following implementing classes are transparently hidden behind
+        it:
+      
+
+    <ul>
+    <li><tt>PlainConnection</tt> class provides plaintext, i.e. un-encrypted
+          transport</li>
+    <li><tt>TLSConnection</tt> class provides SSL 3.0 and TLS 1.0 support
+          with the <tt>gnutls</tt> library as backend</li>
+    <li><tt>SSLConnection</tt> class provides SSL 3.0 support
+          with the <tt>openssl</tt> library as backend</li>
+    
+      </ul>
+    
+        As are mailboxes, connections have to be created from an URL so that
+        only for those URLs connections can be created for which a protocoll
+        is known. Alternatively the caller can provide a custom <tt>url_t</tt>
+        structure instead of using the default way which is to call
+        <tt>url_from_string()</tt> for the parsing.
+      
+
+    
+        For a caller, there're only the following functions intended for use:
+      
+
+    <ul>
+    <li><tt>socketConnect()</tt> and <tt>socketDisconnect()</tt> do DNS
+          lookups and open or close the socket.</li>
+    <li><tt>writeLine()</tt> and <tt>readLine()</tt> write or read any data
+          to/from a socket.</li>
+    
+      </ul>
+    
+        As part of the abstraction, the latter two hide the fact that lines written or
+        read end in CRLF: <tt>writeLine()</tt> adds these on its own while
+        <tt>readLine()</tt> strips them.
+      
+
+    
+        The signals <tt>sigPreconnect</tt> and <tt>sigPostconnect</tt> are emitted
+        right before a connection is made and right after it has been closed
+        for clients to catch them. These can be used, for example, to establish
+        and terminate dial-up connections.
+      
+
     
     @subsubsection sect_devguide-libmuttng-nntp NNTP support
     

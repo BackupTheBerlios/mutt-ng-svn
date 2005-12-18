@@ -92,7 +92,7 @@ class NNTPMailbox : public RemoteMailbox {
      */
     bool auth();
     /**
-     * Quit current connection.
+     * Quit current connection, ie logout.
      * @param state State to return.
      * @return State passed in.
      */
@@ -110,10 +110,17 @@ class NNTPMailbox : public RemoteMailbox {
                            void* data = NULL);
     /** get available articles */
     bool groupStat();
-    /** compose error message buffer from servers' response */
+    /**
+     * compose error message buffer from servers' response.
+     * In case of some error, we just report back what the server told
+     * us. Also, this does the logout.
+     */
     void makeError();
+    /** server's first available article */
     unsigned long first;
+    /** server's last available article */
     unsigned long last;
+    /** how many articles server has */
     unsigned long total;
 };
 
