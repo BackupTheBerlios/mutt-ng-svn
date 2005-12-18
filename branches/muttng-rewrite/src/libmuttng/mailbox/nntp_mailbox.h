@@ -24,6 +24,8 @@ class NNTPMailbox : public RemoteMailbox {
 
     /** register all NNTP specific config options */
     static void reg();
+    /** register all NNTP specific memory */
+    static void dereg();
 
     mailbox_query_status openMailbox();
 
@@ -84,10 +86,6 @@ class NNTPMailbox : public RemoteMailbox {
      * @return True if send/receive succeeded, false otherwise.
      */
     bool getSingleCapa(bool* capa, const char* cmd, size_t cmdlen);
-    /** socket send buffer */
-    buffer_t sbuf;
-    /** socket receive buffer */
-    buffer_t rbuf;
     /**
      * Attempt to authenticate if required.
      * @return Success.
@@ -108,7 +106,15 @@ class NNTPMailbox : public RemoteMailbox {
      *   - 1  ok, but no input received
      *   - >2 number of lines read+1
      */
-    unsigned long readList(int (*handler)() = NULL);
+    unsigned long readList(bool (*handler)(buffer_t* line, void* data) = NULL,
+                           void* data = NULL);
+    /** get available articles */
+    bool groupStat();
+    /** compose error message buffer from servers' response */
+    void makeError();
+    unsigned long first;
+    unsigned long last;
+    unsigned long total;
 };
 
 #endif

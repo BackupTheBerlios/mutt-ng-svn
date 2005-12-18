@@ -9,6 +9,8 @@
 
 #include <unit++/unit++.h>
 
+#include "libmuttng/util/url.h"
+
 using namespace unitpp;
 
 /**
@@ -19,6 +21,8 @@ class conn_tests : public suite {
     conn_tests();
     ~conn_tests();
   private:
+    url_t* url;
+    void init();
     void test_connectdisconnect();
     void test_readwrite();
     void test_canread();

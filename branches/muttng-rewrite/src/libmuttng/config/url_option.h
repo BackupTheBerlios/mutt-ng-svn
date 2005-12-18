@@ -22,6 +22,7 @@ class URLOption : public Option {
      * @param store_ Storage for value.
      */
     URLOption(const char* name_, const char* init_, url_t** store_);
+    ~URLOption();
     bool set(const char* value, buffer_t* error);
     bool unset();
     bool reset();

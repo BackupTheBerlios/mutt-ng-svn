@@ -9,6 +9,7 @@
 
 #include "core/intl.h"
 #include "core/str.h"
+#include "core/mem.h"
 
 #include "libmuttng/mailbox/mailbox.h"
 
@@ -77,6 +78,7 @@ void QueryTool::doLogin(const char* url) {
   buffer_init(&error);
   if (!(folder = Mailbox::fromURL(url,&error))) {
     std::cerr << _("Error opening folder '") << (NONULL(url)) << _("': ") << (NONULL(error.str)) << std::endl;
+    mem_free(&error);
     return;
   }
 
@@ -84,9 +86,16 @@ void QueryTool::doLogin(const char* url) {
   connectSignal(folder->sigGetPassword,this,&QueryTool::getPassword);
 
   /* XXX do loop */
-  if ((state = folder->openMailbox()) == MQ_OK)
+  if ((state = folder->openMailbox()) == MQ_OK) {
+    switch ((state = folder->checkMailbox())) {
+    default:
+    buffer_shrink(&error,0);
+    folder->strerror(state,&error);
+    std::cerr << (NONULL(error.str)) << std::endl;
+    break;
+    }
     folder->closeMailbox();
-  else {
+  } else {
     buffer_shrink(&error,0);
     folder->strerror(state,&error);
     std::cerr << (NONULL(error.str)) << std::endl;
@@ -95,6 +104,7 @@ void QueryTool::doLogin(const char* url) {
   disconnectSignals(folder->sigGetUsername,this);
   disconnectSignals(folder->sigGetPassword,this);
   delete folder;
+  mem_free(&error);
 }
 
 bool QueryTool::getUsername (url_t* url) {
@@ -124,7 +134,7 @@ bool QueryTool::getPassword (url_t* url) {
   buffer_add_str(&prompt,url->host,-1);
   if ((rc = ui->enterValue(&value,&prompt,64))) {
     rc = true;
-    str_replace(&url->username,value.str);
+    str_replace(&url->password,value.str);
   }
   buffer_free(&value);
   buffer_free(&prompt);

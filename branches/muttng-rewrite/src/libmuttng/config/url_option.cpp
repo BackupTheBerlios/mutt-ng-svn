@@ -14,6 +14,10 @@ URLOption::URLOption(const char* name_, const char* init_,
   set(init_,NULL);
 }
 
+URLOption::~URLOption() {
+  url_free(*store);
+}
+
 bool URLOption::set(const char* value, buffer_t* error) {
   url_t* u = NULL;
   if (!(u = url_from_string(value,error)))

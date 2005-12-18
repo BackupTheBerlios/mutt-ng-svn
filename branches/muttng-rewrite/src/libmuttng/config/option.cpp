@@ -8,16 +8,18 @@
 #include "config_manager.h"
 
 #include "core/str.h"
+#include "core/mem.h"
 
 Option::Option(const char* name_, const char* init_) : name(name_),init(NULL) {
   buffer_t tmp;
   buffer_init(&tmp);
-  if (buffer_extract_token2(&tmp,init_,M_TOKEN_SPACE,ConfigManager::get)>0)
+  if (buffer_extract_token2(&tmp,init_,0,ConfigManager::get)>0)
     init = str_dup(tmp.str);
   buffer_free(&tmp);
 }
 
-Option::~Option(){}
+Option::~Option(){ mem_free(&init); }
+
 const char* Option::getName() { return name; }
 const char* Option::getInit() { return init; }
 

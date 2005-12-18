@@ -39,9 +39,6 @@ void POP3Mailbox::reg(void) {
 }
 
 mailbox_query_status POP3Mailbox::openMailbox() {
-  buffer_t rbuf, sbuf; /* receive & send buffers */
-  buffer_init(&rbuf);
-  buffer_init(&sbuf);
 
   if (!url || !conn) {
     /* TODO: emit some error? */
@@ -53,9 +50,11 @@ mailbox_query_status POP3Mailbox::openMailbox() {
   if (!url->password && !sigGetPassword.emit (url))
     return MQ_AUTH;
 
+
   if (!url->username || !url->password) {
     return MQ_AUTH;
   }
+
 
   if (conn->socketConnect()==false) {
     return MQ_NOT_CONNECTED;

@@ -11,31 +11,35 @@
 
 #include <unistd.h>
 
-PlainConnection::PlainConnection(url_t* url_) : Connection(url_) {}
-PlainConnection::~PlainConnection() {}
+PlainConnection::PlainConnection(url_t* url_) : Connection(url_) {
+  buffer_init(&rbuf);
+}
+
+PlainConnection::~PlainConnection() {
+  buffer_free(&rbuf);
+}
 
 int PlainConnection::doRead(buffer_t * buf, unsigned int len) {
-  char* cbuf;
   int read_len;
 
-  cbuf = (char*) mem_malloc (len+1);
-  read_len = read(fd,cbuf,len);
-  cbuf[len] = '\0';
+  buffer_grow(&rbuf,len);
+  buffer_shrink(&rbuf,0);
+  read_len = read(fd,rbuf.str,len);
+  rbuf.str[len] = '\0';
+  rbuf.len = len;
 
   switch (read_len) {
     case -1:
       is_connected = false;
-      mem_free (&cbuf);
       return -1;
     case  0:
       is_connected = false;
     default:
       buffer_shrink(buf,0);
-      buffer_add_str(buf,cbuf,read_len);
+      buffer_add_buffer(buf,&rbuf);
       break;
   }
 
-  mem_free (&cbuf);
   return read_len;
 }
 

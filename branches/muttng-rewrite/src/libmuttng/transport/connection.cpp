@@ -31,10 +31,11 @@
 #include <netdb.h>
 #include <sys/socket.h>
 #include <sys/poll.h>
+#include <time.h>
 #include <string.h>
 #include <strings.h>
 
-Connection::Connection(url_t* url_) : is_connected(false), ready(false) {
+Connection::Connection(url_t* url_) : is_connected(false) {
   url = new url_t;
   url->username = str_dup(url_->username);
   url->password = str_dup(url_->password);
@@ -44,11 +45,13 @@ Connection::Connection(url_t* url_) : is_connected(false), ready(false) {
   url->secure = url_->secure;
   url->path = str_dup(url_->path);
   url->proto = url_->proto;
+  buffer_init(&rbuf);
 }
 
 Connection::~Connection() {
   url_free(url);
   delete url;
+  buffer_free(&rbuf);
 }
 
 bool Connection::socketConnect() {
@@ -111,11 +114,6 @@ bool Connection::socketDisconnect() {
 }
 
 int Connection::readUntilSeparator(buffer_t * buf, char sep) {
-  buffer_t rbuf;
-
-  buffer_init(buf);
-  buffer_init(&rbuf);
-
   do {
     buffer_shrink(&rbuf,0);
     int rc = doRead(&rbuf,sizeof(char));
@@ -137,15 +135,16 @@ int Connection::readUntilSeparator(buffer_t * buf, char sep) {
 }
 
 int Connection::readLine(buffer_t * buf) {
+  buffer_shrink(buf,0);
   int rc = readUntilSeparator(buf,'\n');
   buffer_chomp(buf);
-  DEBUGPRINT(D_SOCKET,(" %s:%d << '%s'",url->host,url->port,buf->str));
+  DEBUGPRINT(D_SOCKET,(" %s:%d:%ld < '%s'",url->host,url->port,time(NULL),buf->str));
   return rc;
 }
 
 int Connection::writeLine(buffer_t * buf) {
   if (!buf) return 0;
-  DEBUGPRINT(D_SOCKET,("%s:%d >> '%s'",url->host,url->port,buf->str));
+  DEBUGPRINT(D_SOCKET,("%s:%d:%ld > '%s'",url->host,url->port,time(NULL),buf->str));
   buffer_add_str(buf,"\r\n",2);
   return doWrite(buf);
 }

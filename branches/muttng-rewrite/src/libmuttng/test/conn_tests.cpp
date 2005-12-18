@@ -15,11 +15,16 @@
 
 using namespace unitpp;
 
+void conn_tests::init() {
+  url = new url_t;
+  memset(url,0,sizeof(url_t));
+  url->host = "www.google.com";
+  url->port = 80U;
+  url->secure = false;
+}
+
 void conn_tests::test_connectdisconnect() {
-  buffer_t buf;
-  buffer_init(&buf);
-  buffer_add_str(&buf,"www.google.com",-1);
-  Connection * conn = new PlainConnection(&buf,80);
+  Connection * conn = new PlainConnection(url);
 
   bool return_value;
 
@@ -31,15 +36,11 @@ void conn_tests::test_connectdisconnect() {
 
   assert_eq("socketDisconnect() from www.google.com:80",return_value,true);
 
-  buffer_free(&buf);
   delete conn;
 }
 
 void conn_tests::test_canread() {
-  buffer_t buf;
-  buffer_init(&buf);
-  buffer_add_str(&buf,"www.google.com",-1);
-  Connection * conn = new PlainConnection(&buf,80);
+  Connection * conn = new PlainConnection(url);
 
   bool return_value;
 
@@ -49,9 +50,9 @@ void conn_tests::test_canread() {
 
   buffer_t rbuf;
   buffer_init(&rbuf);
-  buffer_add_str(&rbuf,"GET / HTTP/1.0\r\nHost: www.google.com\r\nUser-Agent: mutt-ng test suite\r\n\r\n",-1);
+  buffer_add_str(&rbuf,"GET / HTTP/1.0\r\nHost: www.google.com\r\nUser-Agent: mutt-ng test suite\r\n",-1);
 
-  conn->doWrite(&rbuf);
+  conn->writeLine(&rbuf);
 
   sleep(1); // actually, this is a race condition, but still good enough for testing
 
@@ -59,16 +60,12 @@ void conn_tests::test_canread() {
 
   conn->socketDisconnect();
 
-  buffer_free(&buf);
   delete conn;
 
 }
 
 void conn_tests::test_readwrite() {
-  buffer_t buf;
-  buffer_init(&buf);
-  buffer_add_str(&buf,"www.google.com",-1);
-  Connection * conn = new PlainConnection(&buf,80);
+  Connection * conn = new PlainConnection(url);
 
   bool return_value;
 
@@ -78,28 +75,26 @@ void conn_tests::test_readwrite() {
 
   buffer_t rbuf;
   buffer_init(&rbuf);
-  buffer_add_str(&rbuf,"GET / HTTP/1.0\r\nHost: www.google.com\r\nUser-Agent: mutt-ng test suite\r\n\r\n",-1);
+  buffer_add_str(&rbuf,"GET / HTTP/1.0\r\nHost: www.google.com\r\nUser-Agent: mutt-ng test suite\r\n",-1);
 
-  assert_eq("doWrite",conn->doWrite(&rbuf),(signed)rbuf.len);
+  assert_eq("writeLine",conn->writeLine(&rbuf),(signed)rbuf.len);
 
   buffer_shrink(&rbuf,0);
   conn->readLine(&rbuf);
-  assert_eq("readLine",buffer_equal1(&rbuf,"HTTP/1.0 302 Found\r\n",-1)!=0,true);
+  assert_eq("readLine",buffer_equal1(&rbuf,"HTTP/1.0 302 Found",-1)!=0,true);
 
   return_value = conn->socketDisconnect();
 
   assert_eq("socketDisconnect() from www.google.com:80",return_value,true);
 
-  buffer_free(&buf);
   delete conn;
 }
 
-
-
 conn_tests::conn_tests() : suite("conn_tests") {
+  add("conn",testcase(this,"init",&conn_tests::init));
   add("conn",testcase(this,"test_connectdisconnect",&conn_tests::test_connectdisconnect));
   add("conn",testcase(this,"test_readwrite",&conn_tests::test_readwrite));
   add("conn",testcase(this,"test_canread",&conn_tests::test_canread));
 }
 
-conn_tests::~conn_tests() { }
+conn_tests::~conn_tests() { delete url; }

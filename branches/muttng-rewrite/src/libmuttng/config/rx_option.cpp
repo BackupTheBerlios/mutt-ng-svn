@@ -16,6 +16,11 @@ RXOption::RXOption(const char* name_, const char* init_,
   set(init_,NULL);
 }
 
+RXOption::~RXOption() {
+  rx_free(*store);
+  mem_free(store);
+}
+
 bool RXOption::set(const char* value, buffer_t* error) {
   rx_t* r = NULL;
   if (!(r = rx_compile(value,error,0)))

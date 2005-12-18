@@ -22,6 +22,7 @@ class RXOption : public Option {
      * @param store_ Storage for value.
      */
     RXOption(const char* name_, const char* init_, rx_t** store_);
+    ~RXOption();
     bool set(const char* value, buffer_t* error);
     bool unset();
     bool reset();

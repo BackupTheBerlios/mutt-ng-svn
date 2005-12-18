@@ -24,6 +24,7 @@ class StringOption : public Option {
      */
     StringOption(const char* name_, const char* init_, char** store_,
                  const char* pattern_ = NULL);
+    ~StringOption();
     bool set(const char* value, buffer_t* error);
     bool unset();
     bool reset();

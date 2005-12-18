@@ -450,10 +450,14 @@ Event::Event (Debug* debug) {
 }
 
 Event::~Event (void) {
+  int i = 0, j = 0;
   DEBUGPRINT(1,("cleanup event handler"));
   while (contextStack->size () != 0)
     unsetContext (0);
   delete (contextStack);
+  for (i = 0; i < C_LAST; i++)
+    for (j = 0; j < E_LAST; j++)
+      mem_free(&bindings[i][j].key);
 }
 
 bool Event::init (void) {

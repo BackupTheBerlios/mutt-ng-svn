@@ -116,9 +116,9 @@ LibMuttng::LibMuttng () {
                                         "us-ascii:iso-8859-1:iso-8859-15:utf-8",
                                         &SendCharset));
 
-    ConfigManager::reg(new SysOption("muttng_core_version",CORE_VERSION));
+    ConfigManager::reg(new SysOption("muttng_core_version","\""CORE_VERSION"\""));
     ConfigManager::reg(new SysOption("muttng_libmuttng_version",
-                                     LIBMUTTNG_VERSION));
+                                     "\""LIBMUTTNG_VERSION"\""));
     ConfigManager::reg(new SysOption("muttng_hostname",Hostname));
     ConfigManager::reg(new SysOption("muttng_system",OSName));
     ConfigManager::reg(new SysOption("muttng_dnsname",Fqdn.str));
@@ -141,7 +141,8 @@ LibMuttng::LibMuttng () {
   LibMuttng::debug = debugObj;
 }
 
-LibMuttng::~LibMuttng (void) {}
+LibMuttng::~LibMuttng (void) {
+}
 
 bool LibMuttng::setDebugLevel (Option* option) {
   (void) option;
@@ -158,8 +159,15 @@ int LibMuttng::getDebugLevel() { return DebugLevel; }
 void LibMuttng::cleanup (void) {
   if (debugObj)
     delete (debugObj);
+#ifdef LIBMUTTNG_NNTP
+  NNTPMailbox::dereg();
+#endif
   mem_free(&Homedir);
   mem_free(&Realname);
   mem_free(&Shell);
   mem_free(&Username);
+  mem_free(&Hostname);
+  mem_free(&OSName);
+  buffer_free(&Fqdn);
+  buffer_free(&AttachMarker);
 }

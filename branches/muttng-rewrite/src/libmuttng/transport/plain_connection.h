@@ -23,6 +23,9 @@ class PlainConnection : public Connection {
     int doWrite(buffer_t * buf);
     bool doOpen();
     bool doClose();
+  private:
+    /** socket receive buffer */
+    buffer_t rbuf;
 };
 
 #endif

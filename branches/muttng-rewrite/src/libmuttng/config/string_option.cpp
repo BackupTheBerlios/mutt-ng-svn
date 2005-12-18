@@ -18,6 +18,12 @@ StringOption::StringOption(const char* name_, const char* init_,
   set(init_,NULL);
 }
 
+StringOption::~StringOption() {
+  mem_free(store);
+  rx_free(pattern);
+  mem_free(&pattern);
+}
+
 bool StringOption::set(const char* value, buffer_t* error) {
   if (pattern && !rx_exec(pattern,value)) {
     if (error) {

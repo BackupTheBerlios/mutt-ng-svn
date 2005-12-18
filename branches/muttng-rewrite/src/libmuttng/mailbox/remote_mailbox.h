@@ -35,6 +35,12 @@ class RemoteMailbox : public Mailbox {
     Connection * conn;
     /** caching object */
     Cache* cache;
+    /** socket send buffer */
+    buffer_t sbuf;
+    /** socket receive buffer */
+    buffer_t rbuf;
+    /** whether connection is authenticated and ready. */
+    bool ready;
 };
 
 #endif

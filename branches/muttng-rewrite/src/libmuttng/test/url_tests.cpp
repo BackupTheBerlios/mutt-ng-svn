@@ -17,7 +17,6 @@
 #include "core/str.h"
 
 /** we need this to avoid default initializer for url_t */
-#define LIBMUTTNG_TEST
 #include "util/url.h"
 
 /**

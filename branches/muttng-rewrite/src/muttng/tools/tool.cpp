@@ -105,6 +105,7 @@ Tool::~Tool () {
   }
   muttngCleanup ();
   delete (this->ui);
+  delete (this->config);
 }
 
 int Tool::genericArg (unsigned char c, const char* arg) {
@@ -126,14 +127,15 @@ int Tool::genericArg (unsigned char c, const char* arg) {
 bool Tool::start (void) {
   buffer_t error, dbg;
   UIPlain ui;
+  bool rc = false;
 
   buffer_init (&error);
   buffer_init(&dbg);
 
-  buffer_add_str(&dbg,DebugLevel,-1);
-
   if (!core_init())
     return false;
+
+  buffer_add_str(&dbg,DebugLevel,-1);
 
   this->libmuttng = new LibMuttng;
 
@@ -147,22 +149,24 @@ bool Tool::start (void) {
     connectSignal(dbglev->sigOptionChange,this,&Tool::catchDebugLevelChange);
   if (!ConfigManager::set("debug_level",&dbg,&error)) {
     std::cerr<<_("Error: ")<<error.str<<std::endl;
-    buffer_free(&error);
-    return false;
+    goto out;
   }
 
   if (!event->init ())
-    return (false);
+    goto out;
 
   buffer_shrink(&error,0);
   this->config = new Config;
   if (!this->config->read(&error)) {
     std::cerr<<_("Error: ")<<error.str<<std::endl;
-    buffer_free(&error);
-    return false;
+    goto out;
   }
+  rc = this->ui->start ();
 
-  return (this->ui->start ());
+out:
+  buffer_free(&error);
+  buffer_free(&dbg);
+  return rc;
 }
 
 bool Tool::end (void) {

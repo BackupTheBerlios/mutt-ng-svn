@@ -38,7 +38,6 @@ Mailbox* Mailbox::fromURL (const char* url_, buffer_t* error) {
   Mailbox* ret = NULL;
   url_t* u = NULL;
 
-
   if (!(u = url_from_string (url_, error)))
     return (NULL);
 
@@ -47,7 +46,7 @@ Mailbox* Mailbox::fromURL (const char* url_, buffer_t* error) {
 #ifdef LIBMUTTNG_IMAP
   case P_IMAP:
 #endif
-#ifdef LIBMUTTNG_POP
+#ifdef LIBMUTTNG_POP3
   case P_POP3:
 #endif
 #ifdef LIBMUTTNG_NNTP
