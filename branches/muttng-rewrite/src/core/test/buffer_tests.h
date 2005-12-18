@@ -16,6 +16,8 @@ using namespace unitpp;
  */
 class buffer_tests : public suite {
     void test_buffer_init();
+    void test_buffer_shrink();
+    void test_buffer_grow();
     void test_buffer_equal1();
     void test_buffer_add_str();
     void test_buffer_add_buffer();

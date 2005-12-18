@@ -23,7 +23,7 @@ void buffer_add_str (buffer_t* buffer, const char* s, int len) {
     len = str_len (s);
   if (!len)
     return;
-  if ((int) (buffer->size - buffer->len) < len+1) {
+  if (len+buffer->len+1 >= buffer->size) {
     buffer->size += (len > BUF_INC ? len : BUF_INC) + (buffer->size == 0);
     mem_realloc (&buffer->str, buffer->size);
   }
@@ -72,10 +72,24 @@ void buffer_add_buffer (buffer_t* dst, buffer_t* src) {
 }
 
 void buffer_shrink (buffer_t* buffer, size_t len) {
-  if (buffer->size && buffer->size > len) {
+  if (!buffer) return;
+  if (buffer->size && buffer->len+1 > len) {
     buffer->len = len;
     buffer->str[len] = '\0';
   }
+}
+
+void buffer_grow (buffer_t* buffer, size_t size) {
+  if (!buffer) return;
+  if (buffer->size==0) {
+    buffer->size = size+1;
+    buffer->str = mem_malloc(buffer->size);
+    buffer->str[0] = '\0';
+    return;
+  }
+  if (buffer->size >= size+1) return;
+  buffer->size = size+1;
+  mem_realloc(&buffer->str,buffer->size);
 }
 
 unsigned int buffer_chomp(buffer_t * buffer) {

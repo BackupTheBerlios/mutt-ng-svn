@@ -24,6 +24,57 @@ void buffer_tests::test_buffer_init() {
   delete b;
 }
 
+void buffer_tests::test_buffer_shrink() {
+  buffer_t tmp;
+  buffer_init(&tmp);
+  size_t i = 0, max = 400;      /* max must be large enough to trigger realloc() */
+  size_t l,s;
+
+  buffer_t* x = NULL;
+  buffer_shrink(x,0);
+  buffer_shrink(x,1000000000);
+  assert_true("didn't crash 'till now ;-)",1);
+
+  for (i = 0; i<max; i++)
+    buffer_add_ch(&tmp,'a');
+
+  s = tmp.size;
+  l = tmp.len;
+
+  buffer_shrink(&tmp,2*max);
+  assert_eq("shrinking to larger value failed (still same size)",s,tmp.size);
+  assert_eq("shrinking to larger value failed (still same length)",l,tmp.len);
+
+  buffer_shrink(&tmp,max/2);
+  assert_eq("shrinking to smaller value worked (still same size)",s,tmp.size);
+  assert_eq("shrinking to smaller value worked (half size)",l/2,tmp.len);
+
+  buffer_free(&tmp);
+}
+
+void buffer_tests::test_buffer_grow() {
+  buffer_t tmp;
+  buffer_init(&tmp);
+
+  buffer_grow(&tmp,0);
+  assert_true("grow(0) has room for at least \\0",tmp.size>0);
+  assert_eq("grow(0) is empty string",0,str_ncmp(tmp.str,"\0",1));
+  assert_eq("grow(0) stores \\0",'\0',*tmp.str);
+
+  buffer_grow(&tmp,23);
+  assert_true("grow(23) has room for 23+\\0",tmp.size>=24);
+
+  buffer_add_str(&tmp,"foobar",6);
+
+  size_t s = tmp.size;
+  size_t l = tmp.len;
+  buffer_grow(&tmp,12);
+  assert_eq("growing to smaller value does nothing (same size)",s,tmp.size);
+  assert_eq("growing to smaller value does nothing (same length)",l,tmp.len);
+
+  buffer_free(&tmp);
+}
+
 /**
  * @test  buffer_equal1().
  * @todo implement more tests
@@ -240,6 +291,8 @@ void buffer_tests::test_buffer_tokenize() {
 
 buffer_tests::buffer_tests() : suite("buffer_tests") {
   add("buffer",testcase(this,"test_buffer_init",&buffer_tests::test_buffer_init));
+  add("buffer",testcase(this,"test_buffer_shrink",&buffer_tests::test_buffer_shrink));
+  add("buffer",testcase(this,"test_buffer_grow",&buffer_tests::test_buffer_grow));
   add("buffer",testcase(this,"test_buffer_equal1",&buffer_tests::test_buffer_equal1));
   add("buffer",testcase(this,"test_buffer_add_str",&buffer_tests::test_buffer_add_str));
   add("buffer",testcase(this,"test_buffer_add_buffer",&buffer_tests::test_buffer_add_buffer));

@@ -121,13 +121,24 @@ void buffer_free (buffer_t* buffer);
  * with len == 0.
  * @param buffer Pointer to buffer for storage.
  * @param len New length.
+ * @test buffer_tests::test_buffer_shrink().
  */
 void buffer_shrink (buffer_t* buffer, size_t len);
+
+/**
+ * Grow buffer so it for sure has requested room. If buffer already is
+ * large enough, nothing is done. The size excludes \\0.
+ * @param buffer Buffer.
+ * @param Size requirements.
+ * @test buffer_tests::test_buffer_grow().
+ */
+void buffer_grow (buffer_t* buffer, size_t size);
 
 /**
  * Remove trailing CR/LF characters from buffer.
  * @param buffer buffer which shall be chomped.
  * @return number of characters chomped.
+ * @test buffer_tests::test_buffer_chomp().
  */
 unsigned int buffer_chomp(buffer_t * buffer);
 
