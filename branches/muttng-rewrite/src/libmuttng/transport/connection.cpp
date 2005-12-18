@@ -35,7 +35,7 @@
 #include <string.h>
 #include <strings.h>
 
-Connection::Connection(url_t* url_) : is_connected(false) {
+Connection::Connection(url_t* url_) : ready(false), is_connected(false) {
   url = new url_t;
   url->username = str_dup(url_->username);
   url->password = str_dup(url_->password);
@@ -46,12 +46,14 @@ Connection::Connection(url_t* url_) : is_connected(false) {
   url->path = str_dup(url_->path);
   url->proto = url_->proto;
   buffer_init(&rbuf);
+  buffer_init(&errorMsg);
 }
 
 Connection::~Connection() {
   url_free(url);
   delete url;
   buffer_free(&rbuf);
+  buffer_free(&errorMsg);
 }
 
 bool Connection::socketConnect() {
@@ -61,13 +63,18 @@ bool Connection::socketConnect() {
    */
   memset(&sin,0,sizeof(sin));
 
+  buffer_shrink(&errorMsg,0);
+
   if (!sigPreconnect.emit(url->host,url->port,url->secure))
     return false;
 
   struct hostent * hp = gethostbyname(url->host);
 
   if (NULL == hp) {
-    printf("hp == NULL\n");
+    buffer_add_str(&errorMsg,_("Error looking up host '"),-1);
+    buffer_add_str(&errorMsg,url->host,-1);
+    buffer_add_str(&errorMsg,_("': "),-1);
+    buffer_add_str(&errorMsg,hstrerror(h_errno),-1);
     return false;
   }
 
@@ -87,7 +94,10 @@ bool Connection::socketConnect() {
    * i.e. the connect() function from the C library.
    */
   if(::connect(fd, (const struct sockaddr *) &sin, sizeof(sin)) < 0) {
-    printf("connect failed: %s\n",strerror(errno));
+    buffer_add_str(&errorMsg,_("Connection to '"),-1);
+    buffer_add_str(&errorMsg,url->host,-1);
+    buffer_add_str(&errorMsg,_("' failed: "),-1);
+    buffer_add_str(&errorMsg,strerror(errno),-1);
     return false;
   }
 
@@ -212,4 +222,9 @@ bool Connection::getSecureVersion(buffer_t* dst) {
 #endif
   (void)dst;
   return false;
+}
+
+const buffer_t* Connection::getError() {
+  if (!errorMsg.len) return NULL;
+  return &errorMsg;
 }

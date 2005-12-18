@@ -49,6 +49,11 @@ class NNTPMailbox : public RemoteMailbox {
 
     mailbox_query_status fetchMessage(Message * msg, unsigned int msgnum);
 
+    unsigned long msgNew();
+    unsigned long msgOld();
+    unsigned long msgTotal();
+    unsigned long msgFlagged();
+
     /**
      * Compute key for caching a message.
      * This is connected to Cache::cacheGetKey.

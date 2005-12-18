@@ -36,6 +36,11 @@ class MHMailbox : public DirMailbox {
      * @return Yes/No.
      */
     static bool isMH (url_t* url_, buffer_t* error);
+
+    unsigned long msgNew();
+    unsigned long msgOld();
+    unsigned long msgTotal();
+    unsigned long msgFlagged();
 }; 
 
 #endif

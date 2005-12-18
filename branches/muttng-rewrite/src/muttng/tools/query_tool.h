@@ -15,6 +15,7 @@
 #include "core/buffer.h"
 
 #include "libmuttng/util/url.h"
+#include "libmuttng/mailbox/mailbox.h"
 
 #include "tool.h"
 
@@ -32,8 +33,15 @@ class QueryTool : public Tool {
     void getUsage (buffer_t* dst);
 
   private:
-    /** testing mailbox login. @param url Folder from command line */
-    void doLogin(const char* url);
+    /** whether to print in colon-mode */
+    bool colon;
+    /**
+     * Print folder stats.
+     * @param folder Folder.
+     */
+    void folderStats(Mailbox* folder);
+    /** testing mailbox login. */
+    void doURLs();
     /**
      * Dummy for testing connections without UI: Connected to Mailbox::sigGetUsername().
      * @param url URL to complete.

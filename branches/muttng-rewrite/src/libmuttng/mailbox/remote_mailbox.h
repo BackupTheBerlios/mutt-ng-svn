@@ -39,8 +39,6 @@ class RemoteMailbox : public Mailbox {
     buffer_t sbuf;
     /** socket receive buffer */
     buffer_t rbuf;
-    /** whether connection is authenticated and ready. */
-    bool ready;
 };
 
 #endif

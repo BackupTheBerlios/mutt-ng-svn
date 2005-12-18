@@ -29,7 +29,7 @@ Mailbox::~Mailbox (void) {
   buffer_free(&errorMsg);
 }
 
-void Mailbox::getUrl (buffer_t* dst) {
+void Mailbox::getURL (buffer_t* dst) {
   if (dst)
     url_to_string (this->url, dst, false);
 }
@@ -75,9 +75,9 @@ void Mailbox::strerror (mailbox_query_status state, buffer_t* error) {
   case MQ_OK: msg = ("ok"); err = false; break;
   case MQ_NEW_MAIL: msg = ("new mail"); err = false; break;
   }
-  buffer_add_str(error,msg,-1);
   if (err && errorMsg.len) {
-    buffer_add_str(error,": ",2);
     buffer_add_buffer(error,&errorMsg);
+    buffer_add_str(error,": ",2);
   }
+  buffer_add_str(error,msg,-1);
 }

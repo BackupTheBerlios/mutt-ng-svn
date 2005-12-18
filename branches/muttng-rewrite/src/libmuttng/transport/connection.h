@@ -143,6 +143,12 @@ class Connection : public LibMuttng {
     url_t* getURL();
 
     /**
+     * Return error message.
+     * @return message or @c NULL if no error occured.
+     */
+    const buffer_t* getError();
+
+    /**
      * Signal emitted prior to opening the connection.
      * The values passed are:
      * -# hostname
@@ -158,6 +164,9 @@ class Connection : public LibMuttng {
      * -# port
      */
     Signal2<const char*,unsigned int> sigPostconnect;
+
+    /** whether connection is authenticated and ready. */
+    bool ready;
 
   protected:
     /** URL */
@@ -184,6 +193,8 @@ class Connection : public LibMuttng {
   private:
     /** socket receive buffer */
     buffer_t rbuf;
+    /** error message buffer */
+    buffer_t errorMsg;
 };
 
 #endif

@@ -20,15 +20,16 @@ using namespace std;
 
 /** Usage string for @c muttng(1). */
 static const char* Usage = N_("\
-Usage: muttng -v\n\
-       muttng -V\n");
+Usage: muttng-query [-c] URL...\n\
+  ");
 
 /** Help string for @c muttng(1). */
 static const char* Options = N_("\
 Options:\n\
+  -c\tPrint output in colon-separated fields.\n\
   ");
 
-QueryTool::QueryTool (int argc, char** argv) : Tool (argc, argv) {
+QueryTool::QueryTool (int argc, char** argv) : Tool (argc, argv),colon(false) {
   this->ui = new UIPlain ();
 }
 
@@ -43,25 +44,30 @@ void QueryTool::getUsage (buffer_t* dst) {
 int QueryTool::main (void) {
   int ch = 0, rc = 0;
 
-  while ((ch = getopt (this->argc, this->argv, "" GENERIC_ARGS)) != -1) {
+  while ((ch = getopt (this->argc, this->argv, "c" GENERIC_ARGS)) != -1) {
     switch (ch) {
-      default:
-        rc = genericArg (ch, optarg);
-        if (rc == -1)
-          displayUsage ();
-        if (rc != 1)
-          return (rc == 0);
-        break;
+    case 'c': colon = true; break;
+    default:
+      rc = genericArg (ch, optarg);
+      if (rc == -1)
+        displayUsage ();
+      if (rc != 1)
+        return (rc == 0);
+      break;
     }
   }
   this->argc -= optind;
   this->argv += optind;
 
+  if (argc==0) {
+    displayUsage();
+    return 1;
+  }
+
   if (!this->start ())
     return (1);
   /* do something */
-  if (argc > 0)
-    doLogin(argv[0]);
+  doURLs();
   this->end ();
   return (0);
 }
@@ -70,41 +76,59 @@ const char* QueryTool::getName (void) {
   return ("muttng-query");
 }
 
-void QueryTool::doLogin(const char* url) {
+void QueryTool::folderStats(Mailbox* folder) {
+  if (!folder) return;
+  static const char* n_sep[] = { N_("Folder: "), N_(", total/new/old/flagged: "), N_("/"), "" };
+  static const char* c_sep[] = { "",             ":",                             ":",     ":" };
+  const char** sep = colon?c_sep:n_sep;
+  buffer_t tmp;
+  buffer_init(&tmp);
+  folder->getURL(&tmp);
+  std::cout<<sep[0]<<tmp.str<<sep[1]<<folder->msgTotal()<<sep[2]<<folder->msgNew()<<sep[2]<<
+    folder->msgOld()<<sep[2]<<folder->msgFlagged()<<sep[3]<<std::endl;
+  buffer_free(&tmp);
+}
+
+void QueryTool::doURLs() {
+  if (argc==0) return;
+
   buffer_t error;
   Mailbox* folder;
   mailbox_query_status state;
-
   buffer_init(&error);
-  if (!(folder = Mailbox::fromURL(url,&error))) {
-    std::cerr << _("Error opening folder '") << (NONULL(url)) << _("': ") << (NONULL(error.str)) << std::endl;
-    mem_free(&error);
-    return;
-  }
 
-  connectSignal(folder->sigGetUsername,this,&QueryTool::getUsername);
-  connectSignal(folder->sigGetPassword,this,&QueryTool::getPassword);
+  for (int i = 0; i < argc; i++) {
 
-  /* XXX do loop */
-  if ((state = folder->openMailbox()) == MQ_OK) {
-    switch ((state = folder->checkMailbox())) {
-    default:
     buffer_shrink(&error,0);
-    folder->strerror(state,&error);
-    std::cerr << (NONULL(error.str)) << std::endl;
-    break;
+
+    if (!(folder = Mailbox::fromURL(argv[i],&error))) {
+      std::cerr << _("Error opening folder '") << (NONULL(argv[i])) << _("': ") << (NONULL(error.str)) << std::endl;
+      continue;
     }
-    folder->closeMailbox();
-  } else {
-    buffer_shrink(&error,0);
-    folder->strerror(state,&error);
-    std::cerr << (NONULL(error.str)) << std::endl;
-  }
 
-  disconnectSignals(folder->sigGetUsername,this);
-  disconnectSignals(folder->sigGetPassword,this);
-  delete folder;
-  mem_free(&error);
+    connectSignal(folder->sigGetUsername,this,&QueryTool::getUsername);
+    connectSignal(folder->sigGetPassword,this,&QueryTool::getPassword);
+
+    if ((state = folder->openMailbox()) == MQ_OK) {
+      if ((state = folder->checkMailbox())) {
+        buffer_shrink(&error,0);
+        folder->strerror(state,&error);
+        std::cerr << _("Error opening folder '") << (NONULL(argv[i])) << _("': ") << (NONULL(error.str)) << std::endl;
+      } else
+        folderStats(folder);
+      folder->closeMailbox();
+    } else {
+      buffer_shrink(&error,0);
+      folder->strerror(state,&error);
+      std::cerr << (NONULL(error.str)) << std::endl;
+    }
+
+    disconnectSignals(folder->sigGetUsername,this);
+    disconnectSignals(folder->sigGetPassword,this);
+
+    delete folder;
+  }
+  buffer_free(&error);
 }
 
 bool QueryTool::getUsername (url_t* url) {

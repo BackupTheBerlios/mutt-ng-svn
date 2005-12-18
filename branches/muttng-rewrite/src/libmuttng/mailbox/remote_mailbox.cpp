@@ -10,14 +10,13 @@
 #include "pop3_mailbox.h"
 #include "nntp_mailbox.h"
 
-RemoteMailbox::RemoteMailbox (url_t* url_, Connection * c) : Mailbox (url_), conn(c), ready(false) {
+RemoteMailbox::RemoteMailbox (url_t* url_, Connection * c) : Mailbox (url_), conn(c) {
   this->haveFilters = 0;
   buffer_init(&rbuf);
   buffer_init(&sbuf);
 }
 
 RemoteMailbox::~RemoteMailbox (void) {
-  DEBUGPRINT(D_SOCKET,("rbuf: 0x%08x",rbuf.str));
   buffer_free(&rbuf);
   buffer_free(&sbuf);
 }

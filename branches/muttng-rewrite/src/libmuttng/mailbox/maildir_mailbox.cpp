@@ -20,3 +20,8 @@ bool MaildirMailbox::isMaildir (url_t* url_, buffer_t* error) {
   (void) error;
   return false;
 }
+
+unsigned long MaildirMailbox::msgNew() { return 0; }
+unsigned long MaildirMailbox::msgOld() { return 0; }
+unsigned long MaildirMailbox::msgTotal() { return 0; }
+unsigned long MaildirMailbox::msgFlagged() { return 0; }

@@ -20,3 +20,8 @@ bool MHMailbox::isMH (url_t* url_, buffer_t* error) {
   (void) error;
   return false;
 }
+
+unsigned long MHMailbox::msgNew() { return 0; }
+unsigned long MHMailbox::msgOld() { return 0; }
+unsigned long MHMailbox::msgTotal() { return 0; }
+unsigned long MHMailbox::msgFlagged() { return 0; }

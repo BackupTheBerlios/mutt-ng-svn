@@ -78,7 +78,7 @@ class Mailbox : public LibMuttng {
      * Get URL for mailbox.
      * @param dst Destination buffer.
      */
-    void getUrl (buffer_t* dst);
+    void getURL (buffer_t* dst);
 
     /**
      * Opens the mailbox.
@@ -129,6 +129,30 @@ class Mailbox : public LibMuttng {
      * - mailbox_query_status::MQ_ERR if some other error happened during check.
      */
     virtual mailbox_query_status checkMailbox() = 0;
+
+    /**
+     * Get number of new unread messages.
+     * @return Count.
+     */
+    virtual unsigned long msgNew() = 0;
+
+    /**
+     * Get number of old unread messages.
+     * @return Count.
+     */
+    virtual unsigned long msgOld() = 0;
+
+    /**
+     * Get number of total messages.
+     * @return Count.
+     */
+    virtual unsigned long msgTotal() = 0;
+
+    /**
+     * Get number of flagged messages.
+     * @return Count.
+     */
+    virtual unsigned long msgFlagged() = 0;
 
     /**
      * Commit message to mailbox.

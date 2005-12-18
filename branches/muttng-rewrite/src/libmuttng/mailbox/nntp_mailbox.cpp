@@ -198,7 +198,7 @@ mailbox_query_status NNTPMailbox::quit(mailbox_query_status status) {
   conn->writeLine(&sbuf);
   if (conn->readLine(&rbuf)>0 && errorMsg.len==0 && *rbuf.str!='2')
     makeError();
-  ready = false;
+  conn->ready = false;
   return status;
 }
 
@@ -208,6 +208,9 @@ mailbox_query_status NNTPMailbox::openMailbox() {
     /* TODO: emit some error? */
     return MQ_NOT_CONNECTED;
   }
+
+  if (conn->ready)
+    return MQ_OK;
 
   buffer_shrink(&errorMsg,0);
 
@@ -221,7 +224,10 @@ mailbox_query_status NNTPMailbox::openMailbox() {
     return MQ_NOT_CONNECTED;
   }
 
-  if (conn->socketConnect()==false) return MQ_NOT_CONNECTED;
+  if (conn->socketConnect()==false) {
+    buffer_add_buffer(&errorMsg,(buffer_t*)conn->getError());
+    return MQ_NOT_CONNECTED;
+  }
   if (conn->readLine(&rbuf)<=0) return MQ_NOT_CONNECTED;
   if (*rbuf.str!='2') {
     makeError();
@@ -243,7 +249,7 @@ mailbox_query_status NNTPMailbox::openMailbox() {
                       haveXGTITLE,haveLISTNEWSGROUPS));
 
   /* we're connected */
-  ready = true;
+  conn->ready = true;
   return MQ_OK;
 }
 
@@ -262,9 +268,7 @@ bool NNTPMailbox::checkACL(acl_bit_t bit) {
 }
 
 mailbox_query_status NNTPMailbox::closeMailbox() {
-  mailbox_query_status ret = quit(MQ_NOT_CONNECTED);
-  conn->socketDisconnect();
-  return ret;
+  return MQ_NOT_CONNECTED;
 }
 
 mailbox_query_status NNTPMailbox::syncMailbox() {
@@ -279,7 +283,7 @@ void NNTPMailbox::makeError() {
     buffer_add_str(&errorMsg,_("'"),-1);
     buffer_chomp(&errorMsg);
   }
-  ready = false;
+  conn->ready = false;
 }
 
 bool NNTPMailbox::groupStat() {
@@ -356,7 +360,7 @@ mailbox_query_status NNTPMailbox::checkMailbox() {
   mailbox_query_status state = MQ_OK;
 
   /* if not opened yet, try it */
-  if (!ready && (state = openMailbox())!=MQ_OK)
+  if (!conn->ready && (state = openMailbox())!=MQ_OK)
     return state;
   if (!groupStat())
     state = MQ_ERR;
@@ -396,3 +400,8 @@ bool NNTPMailbox::cacheGetKey (Message* msg, buffer_t* dst) {
   (void) dst;
   return (false);
 }
+
+unsigned long NNTPMailbox::msgNew() { return 0; }
+unsigned long NNTPMailbox::msgOld() { return 0; }
+unsigned long NNTPMailbox::msgFlagged() { return 0; }
+unsigned long NNTPMailbox::msgTotal() { return total; }

@@ -27,3 +27,8 @@ bool MmdfMailbox::isMmdf (url_t* url_, buffer_t* error) {
   (void) error;
   return false;
 }
+
+unsigned long MmdfMailbox::msgNew() { return 0; }
+unsigned long MmdfMailbox::msgOld() { return 0; }
+unsigned long MmdfMailbox::msgTotal() { return 0; }
+unsigned long MmdfMailbox::msgFlagged() { return 0; }

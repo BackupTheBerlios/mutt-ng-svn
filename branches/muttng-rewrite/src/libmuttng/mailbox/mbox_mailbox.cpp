@@ -27,3 +27,8 @@ bool MboxMailbox::isMbox (url_t* url_, buffer_t* error) {
   (void) error;
   return false;
 }
+
+unsigned long MboxMailbox::msgNew() { return 0; }
+unsigned long MboxMailbox::msgOld() { return 0; }
+unsigned long MboxMailbox::msgTotal() { return 0; }
+unsigned long MboxMailbox::msgFlagged() { return 0; }

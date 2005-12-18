@@ -178,3 +178,8 @@ bool POP3Mailbox::cacheGetKey (Message* msg, buffer_t* dst) {
   (void) dst;
   return (false);
 }
+
+unsigned long POP3Mailbox::msgNew() { return 0; }
+unsigned long POP3Mailbox::msgOld() { return 0; }
+unsigned long POP3Mailbox::msgFlagged() { return 0; }
+unsigned long POP3Mailbox::msgTotal() { return 0; }

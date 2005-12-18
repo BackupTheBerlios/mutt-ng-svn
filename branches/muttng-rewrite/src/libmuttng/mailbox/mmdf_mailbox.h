@@ -31,6 +31,12 @@ class MmdfMailbox : public FileMailbox {
      * @return Yes/No.
      */
     static bool isMmdf (url_t* url_, buffer_t* error);
+
+    unsigned long msgNew();
+    unsigned long msgOld();
+    unsigned long msgTotal();
+    unsigned long msgFlagged();
+
 }; 
 
 #endif

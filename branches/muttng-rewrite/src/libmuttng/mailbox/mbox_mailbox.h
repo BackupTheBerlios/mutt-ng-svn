@@ -24,6 +24,11 @@ class MboxMailbox : public FileMailbox {
 
     void getSeparator (Message* msg);
 
+    unsigned long msgNew();
+    unsigned long msgOld();
+    unsigned long msgTotal();
+    unsigned long msgFlagged();
+
     /**
      * Test whether local URL is a MBOX mailbox.
      * @param url_ URL.
