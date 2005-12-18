@@ -30,7 +30,7 @@ class MmdfMailbox : public FileMailbox {
      * @param error Error buffer.
      * @return Yes/No.
      */
-    static bool isMmdf (url_t* url_, buffer_t* error);
+    static bool isMmdf (buffer_t* path, struct stat* st);
 
     unsigned long msgNew();
     unsigned long msgOld();

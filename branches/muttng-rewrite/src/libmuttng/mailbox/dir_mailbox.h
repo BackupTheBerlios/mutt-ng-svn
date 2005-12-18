@@ -31,8 +31,6 @@ class DirMailbox : public LocalMailbox {
       */
     virtual bool cacheGetKey (Message* msg, buffer_t* dst) = 0;
 
-    mailbox_query_status openMailbox();
-
     bool checkEmpty();
 
     bool checkACL(acl_bit_t bit);
@@ -40,8 +38,6 @@ class DirMailbox : public LocalMailbox {
     mailbox_query_status closeMailbox();
 
     mailbox_query_status syncMailbox();
-
-    mailbox_query_status checkMailbox();
 
     mailbox_query_status commitMessage(Message * msg);
 

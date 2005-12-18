@@ -35,7 +35,7 @@ class MboxMailbox : public FileMailbox {
      * @param error Error buffer.
      * @return Yes/No.
      */
-    static bool isMbox (url_t* url_, buffer_t* error);
+    static bool isMbox (buffer_t* path, struct stat* st);
 
 }; 
 

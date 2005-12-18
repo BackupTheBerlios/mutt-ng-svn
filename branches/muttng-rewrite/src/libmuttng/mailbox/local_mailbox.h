@@ -8,6 +8,9 @@
 
 #include "libmuttng/mailbox/mailbox.h"
 
+#include <sys/types.h>
+#include <sys/stat.h>
+
 /**
  * Mailbox with an underlaying local storage.
  */

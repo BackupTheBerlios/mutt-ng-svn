@@ -22,9 +22,9 @@ void MboxMailbox::getSeparator(Message* msg) {
   (void)msg;
 }
 
-bool MboxMailbox::isMbox (url_t* url_, buffer_t* error) {
-  (void)url_;
-  (void) error;
+bool MboxMailbox::isMbox (buffer_t* path, struct stat* st) {
+  (void) path;
+  (void) st;
   return false;
 }
 

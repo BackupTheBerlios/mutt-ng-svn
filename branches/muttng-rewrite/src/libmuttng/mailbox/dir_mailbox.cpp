@@ -22,10 +22,6 @@ DirMailbox::~DirMailbox (void) {
 #endif
 }
 
-mailbox_query_status DirMailbox::openMailbox() {
-  return MQ_ERR;
-}
-
 bool DirMailbox::checkEmpty() {
   return false;
 }
@@ -40,10 +36,6 @@ mailbox_query_status DirMailbox::closeMailbox() {
 }
 
 mailbox_query_status DirMailbox::syncMailbox() {
-  return MQ_ERR;
-}
-
-mailbox_query_status DirMailbox::checkMailbox() {
   return MQ_ERR;
 }
 

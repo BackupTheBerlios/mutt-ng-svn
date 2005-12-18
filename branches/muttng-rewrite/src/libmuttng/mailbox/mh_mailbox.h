@@ -35,7 +35,11 @@ class MHMailbox : public DirMailbox {
      * @param error Error buffer.
      * @return Yes/No.
      */
-    static bool isMH (url_t* url_, buffer_t* error);
+    static bool isMH (buffer_t* path, struct stat* st);
+
+    mailbox_query_status openMailbox();
+
+    mailbox_query_status checkMailbox();
 
     unsigned long msgNew();
     unsigned long msgOld();

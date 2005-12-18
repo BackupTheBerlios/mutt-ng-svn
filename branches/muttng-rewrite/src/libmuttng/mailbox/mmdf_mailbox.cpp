@@ -22,9 +22,9 @@ void MmdfMailbox::getSeparator(Message* msg) {
   (void)msg;
 }
 
-bool MmdfMailbox::isMmdf (url_t* url_, buffer_t* error) {
-  (void)url_;
-  (void) error;
+bool MmdfMailbox::isMmdf (buffer_t* path, struct stat* st) {
+  (void) path;
+  (void) st;
   return false;
 }
 
