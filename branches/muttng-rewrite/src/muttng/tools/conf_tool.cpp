@@ -11,6 +11,7 @@
 #include "core/intl.h"
 #include "core/mem.h"
 #include "core/str.h"
+#include "core/conv.h"
 
 #include "ui/ui_plain.h"
 
@@ -31,6 +32,8 @@ static const char* Options = N_("\
 Options:\n\
   -a\t\tAnnotated: print defaults if value differs\n\
   -B\t\tList all bindings\n\
+  -c\t\tList supported MIME character sets\n\
+  -C\t\tList supported character set aliases\n\
   -D\t\tDump all non-default variable values\n\
   ");
 
@@ -87,6 +90,7 @@ void ConfTool::do_opts (bool annotated, bool changed) {
 
   delete opts;
   buffer_free (&value);
+  buffer_free (&valid);
 }
 
 void ConfTool::do_bind (bool annotated, bool changed) {
@@ -134,14 +138,22 @@ void ConfTool::do_bind (bool annotated, bool changed) {
   }
 }
 
+static int printline(const char* line) { std::cout<<(NONULL(line))<<std::endl; return 1; }
+
+void ConfTool::do_charsets(bool mime) {
+  conv_charset_list(mime,printline);
+}
+
 int ConfTool::main (void) {
   int ch = 0, rc = 0;
   bool changedOnly = false, annotated = false;
   modes mode = M_OPTS;
 
-  while ((ch = getopt (this->argc, this->argv, "aBD" GENERIC_ARGS)) != -1) {
+  while ((ch = getopt (this->argc, this->argv, "aBcCD" GENERIC_ARGS)) != -1) {
     switch (ch) {
       case 'a': annotated = true; break;
+      case 'c': mode = M_CHARSET_MIME; break;
+      case 'C': mode = M_CHARSET_ALIAS; break;
       case 'D': changedOnly = true; break;
       case 'B': mode = M_BIND; break;
       default:
@@ -160,6 +172,10 @@ int ConfTool::main (void) {
   switch (mode) {
     case M_OPTS: do_opts (annotated, changedOnly); break;
     case M_BIND: do_bind (annotated, changedOnly); break;
+    case M_CHARSET_ALIAS:
+    case M_CHARSET_MIME:
+      do_charsets(mode==M_CHARSET_MIME);
+      break;
   }
 
   this->end ();

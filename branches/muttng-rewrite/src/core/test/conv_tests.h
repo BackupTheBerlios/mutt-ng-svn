@@ -22,6 +22,7 @@ class conv_tests : public suite {
   void test_iconv();
   public:
     conv_tests();
+    ~conv_tests();
 };
 
 #endif

@@ -164,6 +164,14 @@ my %tests = ( # {{{
 
               {
                 lang =>  "c",
+                file =>  "test_bindtextdomain.c",
+                msg =>   "working bind_textdomain_codeset()",
+                def =>   "CORE_HAVE_BIND_TEXTDOMAIN_CODESET",
+                run =>   0,
+              },
+
+              {
+                lang =>  "c",
                 file =>  "test_strsep.c",
                 msg =>   "working strsep()",
                 def =>   "CORE_HAVE_STRSEP",
@@ -178,7 +186,20 @@ my %tests = ( # {{{
                 run =>   1
               },
 
-            ]
+            ],
+
+  "libmuttng" => [
+
+              {
+                lang =>  "c",
+                file =>  "test_langinfo.c",
+                msg =>   "working nl_langinfo(CODESET)",
+                def =>   "LIBMUTTNG_HAVE_LANGINFO_CODESET",
+                run =>   0
+              }
+
+              ]
+
 );
 ### }}}
 
@@ -293,7 +314,7 @@ chomp ($run{"cpp"} = `$options{"make"} -f $basedir/GNUmakefile.sysconf get_cpp 2
 sub compile ($$$$) {
   my ($cmd, $file, $msg, $def) = (@_);
   print "Testing for $msg...";
-  `$cmd $basedir/src/sysconf/$file >/dev/null 2>&1`;
+  print `$cmd -o test $basedir/src/sysconf/$file >/dev/null 2>&1`;
   my $succ = $?>>8;
   print ($succ == 0 ? "yes\n" : "no\n");
   return $succ==0?1:0;
@@ -306,11 +327,11 @@ foreach my $k (keys %tests) {
       $conffiles{$k} .= "/** $$t{'msg'} */\n#define $$t{'def'} $succ\n";
     }
     if ($$t{"run"}) {
-      $conffiles{$k} .= `./a.out` or die "Failed to run test: $!\n";
+      $conffiles{$k} .= `./test` or die "Failed to run test: $!\n";
     }
   }
 }
-unlink ("./a.out");
+unlink ("./test");
 ### }}}
 
 ### construct rest of compile-time files from command line {{{

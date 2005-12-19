@@ -5,7 +5,7 @@ include ./GNUmakefile.config.mine
 include ./GNUmakefile.config
 
 get_c:
-	@ echo "$(CC) $(CFLAGS)"
+	@ echo "$(CC) $(CFLAGS) $(LDFLAGS)"
 
 get_cpp:
-	@ echo "$(CXX) $(CXXFLAGS)"
+	@ echo "$(CXX) $(CXXFLAGS) $(LDFLAGS)"

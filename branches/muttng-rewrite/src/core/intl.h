@@ -43,6 +43,27 @@ extern "C" {
 #  define N_(X) X
 # endif
 
+/**
+ * @def intl_init.
+ * Initialize internationalization.
+ */
+
+#ifdef CORE_INTL
+void intl_init(void);
+#else
+#define intl_init
+#endif
+
+/**
+ * Set encoding of translated messages.
+ * @param encoding Encoding to use.
+ */
+#ifdef CORE_INTL
+void intl_encoding(const char* charset);
+#else
+#define intl_encoding(X)
+#endif
+
 #ifdef __cplusplus
 }
 #endif

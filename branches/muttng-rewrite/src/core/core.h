@@ -15,6 +15,12 @@ extern "C" {
  */
 int core_init(void);
 
+/**
+ * Cleanup core library.
+ * @return Success.
+ */
+int core_cleanup(void);
+
 #ifdef __cplusplus
 }
 #endif

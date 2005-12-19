@@ -25,7 +25,7 @@ typedef struct list_t {
   /** array of pointers to actual data */
   LIST_ITEMTYPE* data;
   /** length */
-  int length;
+  unsigned long length;
 } list_t;
 
 /**
@@ -40,7 +40,7 @@ list_t* list_new (void);
  * @param size Number of elements.
  * @return Pointer to list.
  */
-list_t* list_new2 (int size);
+list_t* list_new2 (unsigned long size);
 
 /**
  * For readability: typedef of deletion callback.
@@ -99,7 +99,7 @@ LIST_ITEMTYPE list_pop_front (list_t** list);
  * @return Item (if any.)
  * @test list_tests::test_pop_idx().
  */
-LIST_ITEMTYPE list_pop_idx (list_t** list, int idx);
+LIST_ITEMTYPE list_pop_idx (list_t** list, unsigned long idx);
 
 /**
  * Copy list by copying pointers only.
@@ -123,8 +123,7 @@ list_t* list_dup (list_t* list, LIST_ITEMTYPE (*dup) (LIST_ITEMTYPE));
  * @param a Item to lookup.
  * @return Index of item in list or negative if not found.
  */
-int list_lookup (list_t* list, int (*cmp) (const LIST_ITEMTYPE, const LIST_ITEMTYPE),
-                 const LIST_ITEMTYPE a);
+unsigned long list_lookup (list_t* list, int (*cmp) (const LIST_ITEMTYPE, const LIST_ITEMTYPE), const LIST_ITEMTYPE a);
 
 #ifdef __cplusplus
 }

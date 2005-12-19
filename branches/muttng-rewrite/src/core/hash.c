@@ -34,16 +34,16 @@ typedef struct {
  * */
 typedef struct {
   /** number of rows (constant) */
-  int size;
+  unsigned long size;
   /** number of items */
-  int fill;
+  unsigned long fill;
   /** rows */
   list_t** rows;
   /** whether key was copied */
   unsigned int dup_key:1;
 } hash_t;
 
-void* hash_new (int size, int dup_key) {
+void* hash_new (unsigned long size, int dup_key) {
   hash_t* ret = mem_calloc (1, sizeof (hash_t));
 
   ret->size = size;
@@ -53,14 +53,14 @@ void* hash_new (int size, int dup_key) {
 }
 
 void hash_destroy (void** t, void (*destroy) (HASH_ITEMTYPE*)) {
-  int r = 0, c = 0;
+  unsigned long r,c;
   hash_t** tab = (hash_t**) t;
 
   if (!tab || !*tab)
     return;
   for (r = 0; r < (*tab)->size; r++)
     if ((*tab)->rows && !list_empty((*tab)->rows[r])) {
-      for (c = 0; c < (*tab)->rows[r]->length; c++) {
+      for (c = 0; c < (unsigned long)(*tab)->rows[r]->length; c++) {
         hash_item_t* t = (hash_item_t*) (*tab)->rows[r]->data[c];
         if ((*tab)->dup_key)
           mem_free (&t->key);
@@ -91,11 +91,11 @@ unsigned int hash_key (const char* k) {
  *      - >= 0: column index
  *      - < 0: not found
  */
-static int _hash_exists (void* t, int row, const void* key) {
-  int i = 0;
+static int _hash_exists (void* t, unsigned long row, const char* key) {
+  unsigned long i;
   hash_t* tab = (hash_t*) t;
 
-  if (!tab || row < 0 || row >= tab->size || list_empty(tab->rows[row]) || !key)
+  if (!tab || row >= tab->size || list_empty(tab->rows[row]) || !key)
     return (-1);
   for (i = 0; i < tab->rows[row]->length; i++) {
 #define cur ((hash_item_t*) tab->rows[row]->data[i])
@@ -107,7 +107,7 @@ static int _hash_exists (void* t, int row, const void* key) {
   return (-1);
 }
 
-int hash_add_hash (void* t, const void* key,
+int hash_add_hash (void* t, const char* key,
                    HASH_ITEMTYPE data, unsigned int code) {
   int row = 0;
   hash_t* tab = (hash_t*) t;
@@ -141,7 +141,7 @@ int hash_add_hash (void* t, const void* key,
  *
  * @return What has been found
  */
-static HASH_ITEMTYPE _hash_find_hash (void* t, const void* key, int remove,
+static HASH_ITEMTYPE _hash_find_hash (void* t, const char* key, int remove,
                                       unsigned int code) {
   int row = 0, col = 0;
   hash_t* tab = (hash_t*) t;
@@ -164,7 +164,7 @@ static HASH_ITEMTYPE _hash_find_hash (void* t, const void* key, int remove,
   return (ret);
 }
 
-int hash_exists_hash (void* t, const void* key, unsigned int code) {
+int hash_exists_hash (void* t, const char* key, unsigned int code) {
   hash_t* tab = (hash_t*) t;
 
   if (!tab || !key)
@@ -172,24 +172,47 @@ int hash_exists_hash (void* t, const void* key, unsigned int code) {
   return (_hash_exists (tab, MOD(code, tab->size), key) >= 0);
 }
 
-HASH_ITEMTYPE hash_find_hash (void* t, const void* key, unsigned int code) {
+HASH_ITEMTYPE hash_find_hash (void* t, const char* key, unsigned int code) {
   return (_hash_find_hash (t, key, 0, code));
 }
 
-HASH_ITEMTYPE hash_del_hash (void* t, const void* key, unsigned int code) {
+HASH_ITEMTYPE hash_del_hash (void* t, const char* key, unsigned int code) {
   return (_hash_find_hash (t, key, 1, code));
 }
 
-void hash_map (void* t, void (*map) (const void*, HASH_ITEMTYPE, unsigned long), unsigned long moredata) {
-  int r = 0, c = 0;
-  hash_t* tab = (hash_t*) t;
+static int itemcmp (const void* a, const void* b) {
+  hash_item_t** i1 = (hash_item_t**)a;
+  hash_item_t** i2 = (hash_item_t**)b;
+  return str_ncmp((*i1)->key,(*i2)->key,(*i1)->keylen);
+}
 
-  if (!tab || !map)
-    return;
+unsigned long hash_map (void* t, int sort, int (*map) (const char*, HASH_ITEMTYPE, unsigned long), unsigned long moredata) {
+  unsigned long r,c,ret=0;
+  hash_t* tab = (hash_t*) t;
+  list_t* tmp = NULL;
+
+  if (!tab)
+    return 0;
+
+  /* if no map function given, we're done already */
+  if (!map)
+    return tab->fill;
+
+  /* create list of fixed size and fill it */
+  tmp = list_new2(tab->fill);
   for (r = 0; r < tab->size; r++)
     if (!list_empty(tab->rows[r]))
       for (c = 0; c < tab->rows[r]->length; c++)
-#define cur ((hash_item_t*) tab->rows[r]->data[c])
-        map (cur->key, cur->data, moredata);
+        tmp->data[ret++] = (LIST_ITEMTYPE)tab->rows[r]->data[c];
+  /* sort list if requested */
+  if (sort)
+    qsort(tmp->data,tmp->length,sizeof(HASH_ITEMTYPE),itemcmp);
+  /* now run callback while it succeeds */
+  for (r = 0, ret = 0; r < tmp->length; r++, ret++)
+#define cur ((hash_item_t*) tmp->data[r])
+    if (!map(cur->key,cur->data,moredata))
+      break;
 #undef cur
+  list_del(&tmp,NULL);
+  return ret;
 }

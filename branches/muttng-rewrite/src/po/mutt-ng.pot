@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2005-12-13 13:57+0000\n"
+"POT-Creation-Date: 2005-12-19 12:55+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,35 +16,54 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../libmuttng/mailbox/local_mailbox.cpp:38
+#: ../libmuttng/mailbox/local_mailbox.cpp:34
+msgid "Failed to detect type of folder '"
+msgstr ""
+
+#: ../libmuttng/mailbox/local_mailbox.cpp:36
+#: ../libmuttng/transport/connection.cpp:76 ../muttng/tools/query_tool.cpp:105
+#: ../muttng/tools/query_tool.cpp:116 ../muttng/config/config.cpp:33
+msgid "': "
+msgstr ""
+
+#: ../libmuttng/mailbox/local_mailbox.cpp:59
 msgid "unsupported mailbox format in '"
 msgstr ""
 
-#: ../libmuttng/mailbox/mailbox.cpp:71
-msgid "general error"
+#.
+#. * do it in two steps so we have only 1 translated message in case
+#. * we use the first part elsewhere, too
+#.
+#: ../libmuttng/mailbox/nntp_mailbox.cpp:222
+msgid "Invalid newsgroup '"
 msgstr ""
 
-#: ../libmuttng/mailbox/mailbox.cpp:72
-msgid "not authenticated"
+#: ../libmuttng/mailbox/nntp_mailbox.cpp:223
+#: ../libmuttng/mailbox/nntp_mailbox.cpp:283
+msgid "'"
 msgstr ""
 
-#: ../libmuttng/mailbox/mailbox.cpp:73
-msgid "not connected"
+#: ../libmuttng/mailbox/nntp_mailbox.cpp:281
+msgid "Server responded: '"
 msgstr ""
 
-#: ../libmuttng/mailbox/mailbox.cpp:74
-msgid "ok"
+#: ../libmuttng/transport/connection.cpp:74
+msgid "Error looking up host '"
 msgstr ""
 
-#: ../libmuttng/mailbox/mailbox.cpp:75
-msgid "new mail"
+#: ../libmuttng/transport/connection.cpp:97
+msgid "Connection to '"
 msgstr ""
 
-#: ../libmuttng/transport/connection.cpp:159
+#: ../libmuttng/transport/connection.cpp:99
+msgid "' failed: "
+msgstr ""
+
+#: ../libmuttng/transport/connection.cpp:180
 msgid "failed to create connection: no URL given"
 msgstr ""
 
-#: ../libmuttng/transport/connection.cpp:165
+#: ../libmuttng/transport/connection.cpp:186
 msgid "failed to create connection: no host and/or port given"
 msgstr ""
 
@@ -87,9 +106,10 @@ msgid "not a number: '"
 msgstr ""
 
 #: ../libmuttng/config/int_option.cpp:59
-#: ../libmuttng/config/string_option.cpp:26
+#: ../libmuttng/config/string_option.cpp:32
 #: ../libmuttng/config/bool_option.cpp:30
 #: ../libmuttng/config/quad_option.cpp:34
+#: ../libmuttng/config/sys_option.cpp:18
 msgid "' is invalid for $"
 msgstr ""
 
@@ -101,7 +121,7 @@ msgstr ""
 msgid "positive"
 msgstr ""
 
-#: ../libmuttng/config/string_option.cpp:49
+#: ../libmuttng/config/string_option.cpp:55
 msgid "string"
 msgstr ""
 
@@ -109,16 +129,28 @@ msgstr ""
 msgid "boolean"
 msgstr ""
 
-#: ../libmuttng/config/url_option.cpp:40
+#: ../libmuttng/config/url_option.cpp:44
 msgid "URL"
 msgstr ""
 
-#: ../libmuttng/config/rx_option.cpp:42
+#: ../libmuttng/config/rx_option.cpp:47
 msgid "regular expression"
 msgstr ""
 
 #: ../libmuttng/config/quad_option.cpp:68
 msgid "quad-option"
+msgstr ""
+
+#: ../libmuttng/config/sys_option.cpp:20
+msgid ": variable is read-only"
+msgstr ""
+
+#: ../libmuttng/config/sys_option.cpp:33
+msgid "system"
+msgstr ""
+
+#: ../libmuttng/config/sys_option.cpp:36
+msgid "read-only"
 msgstr ""
 
 #: ../core/mem.c:21
@@ -137,8 +169,23 @@ msgid ""
 "(please report this error to <mutt-ng-devel@lists.berlios.de>)\n"
 msgstr ""
 
+#: ../core/sigs.c:33
+#, c-format
+msgid "%s...  Exiting.\n"
+msgstr ""
+
+#: ../core/sigs.c:36 ../core/sigs.c:39
+#, c-format
+msgid "Caught %s...  Exiting.\n"
+msgstr ""
+
+#: ../core/sigs.c:41
+#, c-format
+msgid "Caught signal %d...  Exiting.\n"
+msgstr ""
+
 #. * Usage string for @c muttng(1).
-#: ../muttng/tools/conf_tool.cpp:24
+#: ../muttng/tools/conf_tool.cpp:25
 msgid ""
 "Usage: muttng-conf [-D] [-a]\n"
 "       muttng-conf -B [-a]\n"
@@ -146,20 +193,22 @@ msgid ""
 msgstr ""
 
 #. * Help string for @c muttng(1).
-#: ../muttng/tools/conf_tool.cpp:30
+#: ../muttng/tools/conf_tool.cpp:31
 msgid ""
 "Options:\n"
 "  -a\t\tAnnotated: print defaults if value differs\n"
 "  -B\t\tList all bindings\n"
+"  -c\t\tList supported MIME character sets\n"
+"  -C\t\tList supported character set aliases\n"
 "  -D\t\tDump all non-default variable values\n"
 "  "
 msgstr ""
 
-#: ../muttng/tools/conf_tool.cpp:112
+#: ../muttng/tools/conf_tool.cpp:116
 msgid "# Context: "
 msgstr ""
 
-#: ../muttng/tools/conf_tool.cpp:113
+#: ../muttng/tools/conf_tool.cpp:117
 msgid ", group: "
 msgstr ""
 
@@ -220,24 +269,8 @@ msgid ""
 "  "
 msgstr ""
 
-#: ../muttng/tools/muttng_tool.cpp:109
-msgid "Error opening folder '"
-msgstr ""
-
-#: ../muttng/tools/muttng_tool.cpp:109
-msgid "': "
-msgstr ""
-
-#: ../muttng/tools/muttng_tool.cpp:131
-msgid "Enter username for "
-msgstr ""
-
-#: ../muttng/tools/muttng_tool.cpp:141
-msgid "Enter password for "
-msgstr ""
-
 #. * How to reach us
-#: ../muttng/tools/tool.cpp:34
+#: ../muttng/tools/tool.cpp:35
 msgid ""
 "To contact the developers, please mail to <mutt-ng-devel@lists.berlios.de>.\n"
 "To visit the Mutt-ng homepage go to http://www.muttng.org.\n"
@@ -245,7 +278,7 @@ msgid ""
 msgstr ""
 
 #. * Warranty notice
-#: ../muttng/tools/tool.cpp:40
+#: ../muttng/tools/tool.cpp:41
 msgid ""
 "Muttng comes with ABSOLUTELY NO WARRANTY; for details type `muttng -V'.\n"
 "Muttng is free software, and you are welcome to redistribute it\n"
@@ -253,7 +286,7 @@ msgid ""
 msgstr ""
 
 #. * Copyright for original mutt
-#: ../muttng/tools/tool.cpp:46
+#: ../muttng/tools/tool.cpp:47
 msgid ""
 "Muttng is partially based on Mutt:\n"
 "  Copyright (C) 1996-2004 Michael R. Elkins <me@mutt.org>\n"
@@ -266,7 +299,7 @@ msgid ""
 msgstr ""
 
 #. * Copyright from us
-#: ../muttng/tools/tool.cpp:57
+#: ../muttng/tools/tool.cpp:58
 msgid ""
 "Muttng is Copyright (C) 2005:\n"
 "  Copyright (C) 2005 Andreas Krennmair <ak@synflood.at>\n"
@@ -278,7 +311,7 @@ msgid ""
 msgstr ""
 
 #. * short license pointer
-#: ../muttng/tools/tool.cpp:67
+#: ../muttng/tools/tool.cpp:68
 msgid ""
 "This program is free software; you can redistribute it and/or modify\n"
 "it under the terms of the GNU General Public License as published by\n"
@@ -296,7 +329,7 @@ msgid ""
 "USA.\n"
 msgstr ""
 
-#: ../muttng/tools/tool.cpp:83
+#: ../muttng/tools/tool.cpp:84
 msgid ""
 "Generic options:\n"
 "  -d <level>\tDebug at <level>\n"
@@ -307,33 +340,72 @@ msgid ""
 "  -V\t\tShow warranty and license"
 msgstr ""
 
-#: ../muttng/tools/tool.cpp:144
+#: ../muttng/tools/tool.cpp:151 ../muttng/tools/tool.cpp:161
 msgid "Error: "
 msgstr ""
 
-#: ../muttng/tools/tool.cpp:184
+#: ../muttng/tools/tool.cpp:203
 msgid "System: "
 msgstr ""
 
-#: ../muttng/tools/tool.cpp:200
+#: ../muttng/tools/tool.cpp:219
 msgid ""
 "\n"
 "Internal Libraries:\n"
 "  "
 msgstr ""
 
-#: ../muttng/tools/tool.cpp:205
+#: ../muttng/tools/tool.cpp:224
 msgid ""
 "\n"
 "External Libraries:\n"
 msgstr ""
 
-#: ../muttng/tools/tool.cpp:226
+#: ../muttng/tools/tool.cpp:245
 msgid "Mailbox support: MBOX MMDF Maildir MH "
 msgstr ""
 
-#: ../muttng/tools/tool.cpp:241
+#: ../muttng/tools/tool.cpp:260
 msgid "Caching support: "
+msgstr ""
+
+#. * Usage string for @c muttng(1).
+#: ../muttng/tools/query_tool.cpp:22
+msgid ""
+"Usage: muttng-query [-c] URL...\n"
+"  "
+msgstr ""
+
+#. * Help string for @c muttng(1).
+#: ../muttng/tools/query_tool.cpp:27
+msgid ""
+"Options:\n"
+"  -c\tPrint output in colon-separated fields.\n"
+"  "
+msgstr ""
+
+#: ../muttng/tools/query_tool.cpp:81
+msgid "Folder: "
+msgstr ""
+
+#: ../muttng/tools/query_tool.cpp:81
+msgid ", total/new/old/flagged: "
+msgstr ""
+
+#: ../muttng/tools/query_tool.cpp:81
+msgid "/"
+msgstr ""
+
+#: ../muttng/tools/query_tool.cpp:105 ../muttng/tools/query_tool.cpp:116
+msgid "Error opening folder '"
+msgstr ""
+
+#: ../muttng/tools/query_tool.cpp:139
+msgid "Enter username for "
+msgstr ""
+
+#: ../muttng/tools/query_tool.cpp:155
+msgid "Enter password for "
 msgstr ""
 
 #. * help string for E_HELP
@@ -379,4 +451,8 @@ msgstr ""
 #. * help string for E_LINK_THREAD
 #: ../muttng/event/event.cpp:323
 msgid "Link tagged to current message in thread"
+msgstr ""
+
+#: ../muttng/config/config.cpp:31
+msgid "Couldn't read config '"
 msgstr ""

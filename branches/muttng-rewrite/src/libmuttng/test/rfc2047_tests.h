@@ -19,6 +19,7 @@ using namespace unitpp;
 class rfc2047_tests : public suite {
   public:
     rfc2047_tests();
+    ~rfc2047_tests();
   private:
     /** @test rfc2047_decode(). */
     void test_decode();

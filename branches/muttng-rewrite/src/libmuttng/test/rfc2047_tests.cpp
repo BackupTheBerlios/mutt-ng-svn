@@ -8,6 +8,7 @@
 #include <unit++/unit++.h>
 #include "rfc2047_tests.h"
 
+#include "core/core.h"
 #include "core/buffer.h"
 #include "core/str.h"
 #include "libmuttng/util/rfc2047.h"
@@ -88,6 +89,11 @@ void rfc2047_tests::test_decode () {
 }
 
 rfc2047_tests::rfc2047_tests() : suite("rfc2047_tests") {
+  core_init();
   add("rfc2047",testcase(this,"test_rfc2047_decode",
                          &rfc2047_tests::test_decode));
+}
+
+rfc2047_tests::~rfc2047_tests() {
+  core_cleanup();
 }

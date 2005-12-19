@@ -19,16 +19,21 @@
 #include "conv.h"
 #include "str.h"
 #include "mem.h"
+#include "hash.h"
 
 /** alphabet of numbers */
 static const char* Alph = "0123456789abcdef";
 
 #ifdef CORE_LIBICONV
+
+static void* Charsets = NULL;
+
 /**
  * Map strange charset names to MIME ones.
  * The following list has been created manually from the data under:
  * http://www.iana.org/assignments/character-sets
- * Last update: 2000-09-07
+ *
+ * Last update: 2005-12-19
  *
  * Note that it includes only the subset of character sets for which
  * a preferred MIME name is given.
@@ -39,138 +44,167 @@ static struct {
   /** what we want to use instead */
   const char *pref;
 } PreferredMIMENames[] = {
-  {
-  "ansi_x3.4-1968", "us-ascii"}, {
-  "iso-ir-6", "us-ascii"}, {
-  "iso_646.irv:1991", "us-ascii"}, {
-  "ascii", "us-ascii"}, {
-  "iso646-us", "us-ascii"}, {
-  "us", "us-ascii"}, {
-  "ibm367", "us-ascii"}, {
-  "cp367", "us-ascii"}, {
-  "csASCII", "us-ascii"}, {
-  "csISO2022KR", "iso-2022-kr"}, {
-  "csEUCKR", "euc-kr"}, {
-  "csISO2022JP", "iso-2022-jp"}, {
-  "csISO2022JP2", "iso-2022-jp-2"}, {
-  "ISO_8859-1:1987", "iso-8859-1"}, {
-  "iso-ir-100", "iso-8859-1"}, {
-  "iso_8859-1", "iso-8859-1"}, {
-  "latin1", "iso-8859-1"}, {
-  "l1", "iso-8859-1"}, {
-  "IBM819", "iso-8859-1"}, {
-  "CP819", "iso-8859-1"}, {
-  "csISOLatin1", "iso-8859-1"}, {
-  "ISO_8859-2:1987", "iso-8859-2"}, {
-  "iso-ir-101", "iso-8859-2"}, {
-  "iso_8859-2", "iso-8859-2"}, {
-  "latin2", "iso-8859-2"}, {
-  "l2", "iso-8859-2"}, {
-  "csISOLatin2", "iso-8859-2"}, {
-  "ISO_8859-3:1988", "iso-8859-3"}, {
-  "iso-ir-109", "iso-8859-3"}, {
-  "ISO_8859-3", "iso-8859-3"}, {
-  "latin3", "iso-8859-3"}, {
-  "l3", "iso-8859-3"}, {
-  "csISOLatin3", "iso-8859-3"}, {
-  "ISO_8859-4:1988", "iso-8859-4"}, {
-  "iso-ir-110", "iso-8859-4"}, {
-  "ISO_8859-4", "iso-8859-4"}, {
-  "latin4", "iso-8859-4"}, {
-  "l4", "iso-8859-4"}, {
-  "csISOLatin4", "iso-8859-4"}, {
-  "ISO_8859-6:1987", "iso-8859-6"}, {
-  "iso-ir-127", "iso-8859-6"}, {
-  "iso_8859-6", "iso-8859-6"}, {
-  "ECMA-114", "iso-8859-6"}, {
-  "ASMO-708", "iso-8859-6"}, {
-  "arabic", "iso-8859-6"}, {
-  "csISOLatinArabic", "iso-8859-6"}, {
-  "ISO_8859-7:1987", "iso-8859-7"}, {
-  "iso-ir-126", "iso-8859-7"}, {
-  "ISO_8859-7", "iso-8859-7"}, {
-  "ELOT_928", "iso-8859-7"}, {
-  "ECMA-118", "iso-8859-7"}, {
-  "greek", "iso-8859-7"}, {
-  "greek8", "iso-8859-7"}, {
-  "csISOLatinGreek", "iso-8859-7"}, {
-  "ISO_8859-8:1988", "iso-8859-8"}, {
-  "iso-ir-138", "iso-8859-8"}, {
-  "ISO_8859-8", "iso-8859-8"}, {
-  "hebrew", "iso-8859-8"}, {
-  "csISOLatinHebrew", "iso-8859-8"}, {
-  "ISO_8859-5:1988", "iso-8859-5"}, {
-  "iso-ir-144", "iso-8859-5"}, {
-  "ISO_8859-5", "iso-8859-5"}, {
-  "cyrillic", "iso-8859-5"}, {
-  "csISOLatinCyrillic", "iso8859-5"}, {
-  "ISO_8859-9:1989", "iso-8859-9"}, {
-  "iso-ir-148", "iso-8859-9"}, {
-  "ISO_8859-9", "iso-8859-9"}, {
-  "latin5", "iso-8859-9"},      /* this is not a bug */
-  {
-  "l5", "iso-8859-9"}, {
-  "csISOLatin5", "iso-8859-9"}, {
-  "ISO_8859-10:1992", "iso-8859-10"}, {
-  "iso-ir-157", "iso-8859-10"}, {
-  "latin6", "iso-8859-10"},     /* this is not a bug */
-  {
-  "l6", "iso-8859-10" }, {
-  "csISOLatin6", "iso-8859-10" }, {
-  "csKOI8r", "koi8-r"}, {
-  "MS_Kanji", "Shift_JIS"},     /* Note the underscore! */
-  {
-  "csShiftJis", "Shift_JIS"}, {
-  "Extended_UNIX_Code_Packed_Format_for_Japanese", "EUC-JP"}, {
-  "csEUCPkdFmtJapanese", "EUC-JP"}, {
-  "csGB2312", "gb2312"}, {
-  "csbig5", "big5"},
-    /* 
-     * End of official brain damage.  What follows has been taken
-     * from glibc's localedata files. 
-     */
-  {
-  "iso_8859-13", "iso-8859-13"}, {
-  "iso-ir-179", "iso-8859-13"}, {
-  "latin7", "iso-8859-13"},     /* this is not a bug */
-  {
-  "l7", "iso-8859-13"}, {
-  "iso_8859-14", "iso-8859-14"}, {
-  "latin8", "iso-8859-14"},     /* this is not a bug */
-  {
-  "l8", "iso-8859-14"}, {
-  "iso_8859-15", "iso-8859-15"}, {
-  "latin9", "iso-8859-15"},     /* this is not a bug */
-    /* Suggested by Ionel Mugurel Ciobica <tgakic@sg10.chem.tue.nl> */
-  {
-  "latin0", "iso-8859-15"},     /* this is not a bug */
-  {
-  "iso_8859-16", "iso-8859-16"}, {
-  "latin10", "iso-8859-16"},    /* this is not a bug */
-    /* 
-     * David Champion <dgc@uchicago.edu> has observed this with
-     * nl_langinfo under SunOS 5.8. 
-     */
-  {
-  "646", "us-ascii"},
-    /* 
-     * http://www.sun.com/software/white-papers/wp-unicode/
-     */
-  {
-  "eucJP", "euc-jp"}, {
-  "PCK", "Shift_JIS"}, {
-  "ko_KR-euc", "euc-kr"}, {
-  "zh_TW-big5", "big5"},
-    /* seems to be common on some systems */
-  {
-  "sjis", "Shift_JIS"}, {
-  "euc-jp-ms", "eucJP-ms"},
-    /*
-     * If you happen to encounter system-specific brain-damage with
-     * respect to character set naming, please add it above this
-     * comment, and submit a patch to <mutt-dev@mutt.org>. 
-     */
-    /* End of aliases.  Please keep this line last. */
+
+  { "ansi_x3.4-1968", "us-ascii" },
+  { "iso-ir-6", "us-ascii" }, 
+  { "iso_646.irv:1991", "us-ascii"},
+  { "ascii", "us-ascii"}, 
+  { "iso646-us", "us-ascii"}, 
+  { "us", "us-ascii"}, 
+  { "ibm367", "us-ascii"}, 
+  { "cp367", "us-ascii"}, 
+  { "csASCII", "us-ascii"}, 
+
+  { "csISO2022KR", "iso-2022-kr"}, 
+  { "csEUCKR", "euc-kr"}, 
+  { "csISO2022JP", "iso-2022-jp"}, 
+
+  { "csISO2022JP2", "iso-2022-jp-2"}, 
+
+  { "ISO_8859-1:1987", "iso-8859-1"},
+  { "iso-ir-100", "iso-8859-1"},
+  { "iso_8859-1", "iso-8859-1"},
+  { "latin1", "iso-8859-1"},
+  { "l1", "iso-8859-1"},
+  { "IBM819", "iso-8859-1"},
+  { "CP819", "iso-8859-1"},
+  { "csISOLatin1", "iso-8859-1"},
+
+  { "ISO_8859-2:1987", "iso-8859-2"},
+  { "iso-ir-101", "iso-8859-2"},
+  { "iso_8859-2", "iso-8859-2"},
+  { "latin2", "iso-8859-2"},
+  { "l2", "iso-8859-2"},
+  { "csISOLatin2", "iso-8859-2"},
+
+  { "ISO_8859-3:1988", "iso-8859-3"},
+  { "iso-ir-109", "iso-8859-3"},
+  { "ISO_8859-3", "iso-8859-3"},
+  { "latin3", "iso-8859-3"},
+  { "l3", "iso-8859-3"},
+  { "csISOLatin3", "iso-8859-3"},
+
+  { "ISO_8859-4:1988", "iso-8859-4"},
+  { "iso-ir-110", "iso-8859-4"},
+  { "ISO_8859-4", "iso-8859-4"},
+  { "latin4", "iso-8859-4"},
+  { "l4", "iso-8859-4"},
+  { "csISOLatin4", "iso-8859-4"},
+
+  { "ISO_8859-6:1987", "iso-8859-6"},
+  { "iso-ir-127", "iso-8859-6"},
+  { "iso_8859-6", "iso-8859-6"},
+  { "ECMA-114", "iso-8859-6"},
+  { "ASMO-708", "iso-8859-6"},
+  { "arabic", "iso-8859-6"},
+  { "csISOLatinArabic", "iso-8859-6"},
+
+  { "ISO_8859-7:1987", "iso-8859-7"},
+  { "iso-ir-126", "iso-8859-7"},
+  { "ISO_8859-7", "iso-8859-7"},
+  { "ELOT_928", "iso-8859-7"},
+  { "ECMA-118", "iso-8859-7"},
+  { "greek", "iso-8859-7"},
+  { "greek8", "iso-8859-7"},
+  { "csISOLatinGreek", "iso-8859-7"},
+
+  { "ISO_8859-8:1988", "iso-8859-8"},
+  { "iso-ir-138", "iso-8859-8"},
+  { "ISO_8859-8", "iso-8859-8"},
+  { "hebrew", "iso-8859-8"},
+  { "csISOLatinHebrew", "iso-8859-8"},
+
+  { "ISO_8859-5:1988", "iso-8859-5"},
+  { "iso-ir-144", "iso-8859-5"},
+  { "ISO_8859-5", "iso-8859-5"},
+  { "cyrillic", "iso-8859-5"},
+  { "csISOLatinCyrillic", "iso8859-5"},
+
+  { "ISO_8859-9:1989", "iso-8859-9"},
+  { "iso-ir-148", "iso-8859-9"},
+  { "ISO_8859-9", "iso-8859-9"},
+  { "latin5", "iso-8859-9"},      /* this is not a bug */
+  { "l5", "iso-8859-9"},
+  { "csISOLatin5", "iso-8859-9"},
+
+  { "ISO_8859-10:1992", "iso-8859-10"},
+  { "iso-ir-157", "iso-8859-10"},
+  { "latin6", "iso-8859-10"},     /* this is not a bug */
+  { "l6", "iso-8859-10" },
+  { "csISOLatin6", "iso-8859-10" },
+
+  { "csKOI8r", "koi8-r"},
+
+  { "MS_Kanji", "Shift_JIS"},     /* Note the underscore! */
+  { "csShiftJis", "Shift_JIS"},
+
+  { "Extended_UNIX_Code_Packed_Format_for_Japanese", "EUC-JP"},
+  { "csEUCPkdFmtJapanese", "EUC-JP"},
+
+  { "csGB2312", "gb2312"},
+
+  { "csbig5", "big5"},
+
+  /* 
+   * End of official brain damage.  What follows has been taken
+   * from glibc's localedata files. 
+   */
+  { "iso_8859-13", "iso-8859-13"},
+  { "iso-ir-179", "iso-8859-13"},
+  { "latin7", "iso-8859-13"},     /* this is not a bug */
+  { "l7", "iso-8859-13"},
+
+  { "iso_8859-14", "iso-8859-14"},
+  { "latin8", "iso-8859-14"},     /* this is not a bug */
+  { "l8", "iso-8859-14"},
+
+  { "iso_8859-15", "iso-8859-15"},
+  { "latin9", "iso-8859-15"},     /* this is not a bug */
+  /* Suggested by Ionel Mugurel Ciobica <tgakic@sg10.chem.tue.nl> */
+  { "latin0", "iso-8859-15"},     /* this is not a bug */
+
+  { "iso_8859-16", "iso-8859-16"},
+  { "latin10", "iso-8859-16"},    /* this is not a bug */
+
+  /* 
+   * David Champion <dgc@uchicago.edu> has observed this with
+   * nl_langinfo under SunOS 5.8. 
+   */
+  { "646", "us-ascii"},
+  /* 
+   * http://www.sun.com/software/white-papers/wp-unicode/
+   */
+  { "eucJP", "euc-jp"},
+
+  { "PCK", "Shift_JIS"},
+  { "sjis", "Shift_JIS"},
+
+  { "ko_KR-euc", "euc-kr"},
+
+  { "zh_TW-big5", "big5"},
+
+  /* seems to be common on some systems */
+  { "euc-jp-ms", "eucJP-ms"},
+
+  { "ISO_8859-6-E",             "iso-8859-6-e" },
+  { "csISO88596E",              "iso-8859-6-e" },
+
+  { "ISO_8859-6-I",             "iso-8859-6-i" },
+  { "csISO88596I",              "iso-8859-6-i" },
+
+  { "ISO_8859-8-E",             "iso-8859-8-e" },
+  { "csISO88598E",              "iso-8859-8-e" },
+
+  { "ISO_8859-8-I",             "iso-8859-8-i" },
+  { "csISO88598I",              "iso-8859-8-i" },
+
+  /*
+   * If you happen to encounter system-specific brain-damage with
+   * respect to character set naming, please add it above this
+   * comment, and submit a patch to <muttng-devel@lists.berlios.de>.
+   */
+
+  /* End of aliases.  Please keep this line last. */
   {
   NULL, NULL}
 };
@@ -207,6 +241,20 @@ char* conv_itoa2 (char* buf, int num, int pad, int base) {
 }
 
 #ifndef CORE_LIBICONV
+void conv_init () {}
+void conv_cleanup () {}
+void conv_charset_normal (buffer_t* charset) {
+  (void) charset;
+}
+int conv_charset_eq (const char* c1, const char* c2) {
+  return strcmp (s1,s2)==0;
+}
+int conv_charset_list (int mime,
+                       int (*printfunc)(const char*)) {
+  (void)mime;
+  (void)printfunc;
+  return 0;
+}
 int conv_iconv (buffer_t* src, const char* in, const char* out) {
   (void) src; (void) in; (void) out;
   return 1;
@@ -243,8 +291,9 @@ int conv_iconv_version (buffer_t* dst) {
  * RfC2231 which may be wrong in edge cases as this is done here
  * globally for the whole application.
  */
-static void charset_canonical (buffer_t* charset) {
+void conv_charset_normal (buffer_t* charset) {
   size_t i;
+  unsigned int code;
   char *p;
 
   /** @bug catch some common iso-8859-something misspellings */
@@ -261,12 +310,13 @@ static void charset_canonical (buffer_t* charset) {
     strfcpy (scratch, NONULL (name), sizeof (scratch));
 #endif
 
-  for (i = 0; PreferredMIMENames[i].key; i++)
-    if (strcasecmp(charset->str,PreferredMIMENames[i].key) == 0) {
-      buffer_shrink(charset,0);
-      buffer_add_str(charset,PreferredMIMENames[i].pref,-1);
-      return;
-    }
+  code = hash_key(charset->str);
+  if (hash_exists_hash(Charsets,charset->str,code) && 
+      ((i = hash_find_hash(Charsets,charset->str,code)) != ((HASH_ITEMTYPE)-1))) {
+    buffer_shrink(charset,0);
+    buffer_add_str(charset,PreferredMIMENames[i].pref,-1);
+    return;
+  }
 
   /* for cosmetics' sake, transform to lowercase. */
   for (p = charset->str; *p; p++)
@@ -278,6 +328,100 @@ static void charset_canonical (buffer_t* charset) {
    */
   if ((p = strchr(charset->str,'*')))
     buffer_shrink(charset,p-charset->str);
+}
+
+void conv_init () {
+  int i;
+  Charsets = hash_new(2*sizeof(PreferredMIMENames)/(2*sizeof(char*)),0);
+  for (i=0; PreferredMIMENames[i].key; i++) {
+    hash_add(Charsets,PreferredMIMENames[i].key,(HASH_ITEMTYPE)i);
+    hash_add(Charsets,PreferredMIMENames[i].pref,(HASH_ITEMTYPE)-1);
+  }
+}
+
+void conv_cleanup () {
+  hash_destroy(&Charsets,NULL);
+}
+
+/**
+ * Callback for hash_map(): get all MIME charset names.
+ * @param key Charset.
+ * @param idx Index into PreferredMIMENames[].
+ * @param moredata Typecasted printfunc or conv_charset_list().
+ * @return 1.
+ */
+static int list_mime (const char* key, HASH_ITEMTYPE idx,
+                       unsigned long moredata) {
+  int (*printfunc)(const char*) = ((int(*)(const char*)) moredata);
+  if (idx == ((HASH_ITEMTYPE)-1)) 
+    printfunc(key);
+  return 1;
+}
+
+/**
+ * Callback for hash_map(): get all charset aliases.
+ * @param key Charset.
+ * @param idx Index into PreferredMIMENames[].
+ * @param moredata Typecasted printfunc or conv_charset_list().
+ * @return 1.
+ */
+static int list_alias (const char* key, HASH_ITEMTYPE idx,
+                        unsigned long moredata) {
+  int (*printfunc)(const char*) = ((int(*)(const char*)) moredata);
+  (void)idx;
+  printfunc(key);
+  return 1;
+}
+
+#ifdef iconvlist
+/**
+ * Add character set from foreign source, ie libiconvlist().
+ * @param count Size of names array.
+ * @param names Names.
+ * @param data Destination hash table.
+ * @return 0
+ */
+static int add_foreign(unsigned int count, const char* const* names, void* data) {
+  unsigned int i;
+  for (i=0; i<count; i++)
+    hash_add(data,names[i],0);
+  return 0;
+}
+#endif
+
+/**
+ * Callback for hash_map(): Add character set from out source, ie PreferredMIMENames[].
+ * @param key Key.
+ * @param data Index into array.
+ * @param moredata Destination hash table.
+ * @return 1
+ */
+static int add_our(const char* key, HASH_ITEMTYPE data,
+                   unsigned long moredata) {
+  void* table = (void*)moredata;
+  hash_add(table,key,data);
+  return 1;
+}
+
+unsigned long conv_charset_list (int mime, int (*printfunc)(const char*)) {
+  unsigned long rc;
+  if (mime)
+    /* if we do MIME, this is easy */
+    rc = hash_map(Charsets,1,list_mime,(unsigned long)printfunc);
+  else {
+    /*
+     * if we don't do MIME: create temporary table with our and add those
+     * from libiconv (so we have sorting over complete set)
+     */
+    void* tmp = hash_new(hash_fill(Charsets),0);
+    hash_map(Charsets,0,add_our,(unsigned long)tmp);
+#ifdef iconvlist
+    iconvlist(add_foreign,tmp);
+#endif
+    rc = hash_map(tmp,1,list_alias,(unsigned long)printfunc);
+    hash_destroy(&tmp,NULL);
+  }
+  return rc;
 }
 
 /**
@@ -297,8 +441,8 @@ static iconv_t my_iconv_open (const char *tocode, const char *fromcode) {
   buffer_init(&fromcode1);
   buffer_add_str(&fromcode1,fromcode,-1);
 
-  charset_canonical(&tocode1);
-  charset_canonical(&fromcode1);
+  conv_charset_normal(&tocode1);
+  conv_charset_normal(&fromcode1);
 
   cd = iconv_open(tocode1.str,fromcode1.str);
 
@@ -397,8 +541,8 @@ int conv_charset_eq (const char* c1, const char* c2) {
   buffer_init(&ch2);
   buffer_add_str(&ch2,c2,-1);
 
-  charset_canonical(&ch1);
-  charset_canonical(&ch2);
+  conv_charset_normal(&ch1);
+  conv_charset_normal(&ch2);
 
   rc = str_eq(ch1.str,ch2.str);
 

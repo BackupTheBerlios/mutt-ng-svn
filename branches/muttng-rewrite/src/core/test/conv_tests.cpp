@@ -6,6 +6,8 @@
  */
 #include <unit++/unit++.h>
 #include <iostream>
+
+#include "core.h"
 #include "conv.h"
 #include "str.h"
 #include "conv_tests.h"
@@ -105,5 +107,10 @@ void conv_tests::test_iconv() {
 }
 
 conv_tests::conv_tests() : suite("conv_tests") {
+  core_init();
   add("iconv",testcase(this,"test_iconv",&conv_tests::test_iconv));
+}
+
+conv_tests::~conv_tests() {
+  core_cleanup();
 }

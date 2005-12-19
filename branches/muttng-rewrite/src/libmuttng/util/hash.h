@@ -36,7 +36,7 @@ class Hash : public LibMuttng {
      * @param destroy_ Which function to use to free memory upon
      *                 removal of table
      */
-    inline Hash(int size, bool dup_key = false, hashdel_t* destroy_ = NULL) : destroy(destroy_) {
+    inline Hash(unsigned long size, bool dup_key = false, hashdel_t* destroy_ = NULL) : destroy(destroy_) {
       table = hash_new (size, dup_key);
     }
     /** Destructor */
@@ -51,7 +51,7 @@ class Hash : public LibMuttng {
      * @return Success of insertion.
      */
     inline bool add (const char* key, T data, unsigned int code) {
-      return hash_add_hash (table, (void*) key, (HASH_ITEMTYPE) data, code);
+      return hash_add_hash (table, key, (HASH_ITEMTYPE) data, code);
     }
     /**
      * Add item to table.
@@ -70,7 +70,7 @@ class Hash : public LibMuttng {
      * @return Item or @c 0 if not found.
      */
     inline T del (const char* key, unsigned int code) {
-      return ((T) hash_del_hash (table, (void*) key, code));
+      return ((T) hash_del_hash (table, key, code));
     }
     /**
      * Remove item from table.
@@ -88,7 +88,7 @@ class Hash : public LibMuttng {
      * @return Item.
      */
     inline T find (const char* key, unsigned int code) {
-      return ((T) hash_find_hash(table, (void*) key, code));
+      return ((T) hash_find_hash(table, key, code));
     }
     /**
      * Lookup item.
@@ -106,7 +106,7 @@ class Hash : public LibMuttng {
      * @return Found or not.
      */
     inline bool exists (const char* key, unsigned int code) {
-      return (hash_exists_hash(table, (void*) key, code) == 1);
+      return (hash_exists_hash(table, key, code) == 1);
     }
     /**
      * See if item exists.
@@ -119,16 +119,13 @@ class Hash : public LibMuttng {
 
     /**
      * Map a function to all keys.
-     * @param D Type of additional data to pass through.
      * @param map Map function.
+     * @param sort Whether to sort keys.
      * @param moredata Additional data just passed through.
      */
     template<typename D>
-    inline void map (void (*map) (const char* key, T data, D moredata),
-                     D moredata) {
-      hash_map(table,
-               (void(*)(const void*,HASH_ITEMTYPE,unsigned long)) map,
-                (unsigned long) moredata);
+    inline unsigned long map (bool sort, bool (*map) (const char* key, T data, D moredata), D moredata) {
+      return hash_map(table,sort,(int(*)(const char*,HASH_ITEMTYPE,unsigned long)) map,(unsigned long) moredata);
     }
 };
 

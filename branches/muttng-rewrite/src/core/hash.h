@@ -32,7 +32,7 @@ unsigned int hash_key (const char* k);
  * @param dup_key If @c 1, copy key and assume constant otherwise.
  * @return Pointer to storage for hash table
  */
-void* hash_new (int size, int dup_key);
+void* hash_new (unsigned long size, int dup_key);
 
 /**
  * Free all memory allocated for table.
@@ -49,7 +49,7 @@ void hash_destroy (void** table, void (*destroy) (HASH_ITEMTYPE*));
  * @param keycode Already computed code for key.
  * @return Whether item could be inserted or not, i.e. existed or not.
  */
-int hash_add_hash (void* table, const void* key, HASH_ITEMTYPE data, unsigned int keycode);
+int hash_add_hash (void* table, const char* key, HASH_ITEMTYPE data, unsigned int keycode);
 
 /**
  * convencience wrapper around hash_add_hash().
@@ -64,7 +64,7 @@ int hash_add_hash (void* table, const void* key, HASH_ITEMTYPE data, unsigned in
  * @param keycode Already computed code for key.
  * @return Data associated with key if any.
  */
-HASH_ITEMTYPE hash_del_hash (void* table, const void* key, unsigned int keycode);
+HASH_ITEMTYPE hash_del_hash (void* table, const char* key, unsigned int keycode);
 
 /**
  * convencience wrapper around hash_del_hash().
@@ -79,7 +79,7 @@ HASH_ITEMTYPE hash_del_hash (void* table, const void* key, unsigned int keycode)
  * @param keycode Already computed code for key.
  * @return Data associated with key if any.
  */
-HASH_ITEMTYPE hash_find_hash (void* table, const void* key, unsigned int keycode);
+HASH_ITEMTYPE hash_find_hash (void* table, const char* key, unsigned int keycode);
 
 /**
  * convencience wrapper around hash_find_hash().
@@ -96,7 +96,7 @@ HASH_ITEMTYPE hash_find_hash (void* table, const void* key, unsigned int keycode
  * @param keycode Already computed code for key.
  * @return 1 if key exists and 0 otherwise.
  */
-int hash_exists_hash (void* table, const void* key, unsigned int keycode);
+int hash_exists_hash (void* table, const char* key, unsigned int keycode);
 
 /**
  * convencience wrapper around hash_exists_hash().
@@ -105,15 +105,26 @@ int hash_exists_hash (void* table, const void* key, unsigned int keycode);
 #define hash_exists(tab,key) hash_exists_hash(tab,key,hash_key(key))
 
 /**
- * Map function to all items.
- * Don't assume any order of keys.
+ * Map function to all items. Don't assume any order of keys. The
+ * mapping continues while the callback returns success. If no map
+ * function is given, just count how many times it would be called.
  * @param table Hash table.
- * @param map Function callback.
+ * @param sort Whether keys are to be sorted or not.
+ * @param map Optional function callback.
  * @param moredata Additional data passed through.
+ * @return Number of items processed.
  */
-void hash_map (void* table, void (*map) (const void* key, HASH_ITEMTYPE data,
-                                         unsigned long moredata),
-               unsigned long moredata);
+unsigned long hash_map (void* table, int sort, int (*map) (const char* key,
+                                                           HASH_ITEMTYPE data,
+                                                           unsigned long moredata),
+                        unsigned long moredata);
+
+/**
+ * Get number of items in hash table.
+ * @param T hash table.
+ * @return Items.
+ */
+#define hash_fill(T)    hash_map(T,0,NULL,0)
 
 #ifdef __cplusplus
 }

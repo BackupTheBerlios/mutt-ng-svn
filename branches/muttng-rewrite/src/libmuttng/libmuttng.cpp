@@ -24,10 +24,16 @@
 #include "mailbox/nntp_mailbox.h"
 #endif
 
+#ifdef LIBMUTTNG_HAVE_LANGINFO_CODESET
+#include <langinfo.h>
+#endif
+
 #include "core/version.h"
 #include "core/str.h"
 #include "core/mem.h"
 #include "core/net.h"
+#include "core/conv.h"
+#include "core/intl.h"
 
 #include "libmuttng/version.h"
 #include "message/subject_header.h"
@@ -98,6 +104,27 @@ static void get_hostinfo() {
   buffer_free(&domain);
 }
 
+/**
+ * Detect charset from locale. If it's not possible due to missing
+ * nl_langinfo(), use @c iso-8859-1.
+ * @return Charset
+ */
+static const char* get_charset() {
+#ifdef LIBMUTTNG_HAVE_LANGINFO_CODESET
+  buffer_t tmp;
+  buffer_init(&tmp);
+  buffer_add_str(&tmp,nl_langinfo(CODESET),-1);
+  conv_charset_normal(&tmp);
+  if (tmp.len)
+    str_replace(&Charset,tmp.str);
+  buffer_free(&tmp);
+#else
+  Charset = str_dup("iso-8859-1");
+#endif
+  intl_encoding(Charset);
+  return (const char*)Charset;
+}
+
 LibMuttng::LibMuttng () {
   if (!debugObj) {
 
@@ -115,6 +142,9 @@ LibMuttng::LibMuttng () {
     ConfigManager::reg(new StringOption("send_charset",
                                         "us-ascii:iso-8859-1:iso-8859-15:utf-8",
                                         &SendCharset));
+    ConfigManager::reg(new StringOption("charset",
+                                        get_charset(),
+                                        &Charset));
 
     ConfigManager::reg(new SysOption("muttng_core_version","\""CORE_VERSION"\""));
     ConfigManager::reg(new SysOption("muttng_libmuttng_version",

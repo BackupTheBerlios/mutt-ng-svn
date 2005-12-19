@@ -45,6 +45,7 @@
 ./../libmuttng/config/url_option.cpp
 ./../libmuttng/config/rx_option.cpp
 ./../libmuttng/config/quad_option.cpp
+./../libmuttng/config/sys_option.cpp
 ./../core/mem.c
 ./../core/buffer.c
 ./../core/str.c
@@ -52,6 +53,7 @@
 ./../core/io.c
 ./../core/conv.c
 ./../core/hash.c
+./../core/qp.c
 ./../core/list.c
 ./../core/test/test.cpp
 ./../core/test/buffer_tests.cpp
@@ -62,15 +64,21 @@
 ./../core/test/base64_tests.cpp
 ./../core/test/qp_tests.cpp
 ./../core/base64.c
-./../core/qp.c
 ./../core/rx.c
+./../core/command.c
+./../core/core.c
+./../core/sigs.c
+./../core/net.c
+./../core/intl.c
 ./../muttng/tools/conf_tool.cpp
 ./../muttng/tools/main.cpp
 ./../muttng/tools/mailx_tool.cpp
 ./../muttng/tools/sync_tool.cpp
 ./../muttng/tools/muttng_tool.cpp
 ./../muttng/tools/tool.cpp
+./../muttng/tools/query_tool.cpp
 ./../muttng/event/event.cpp
+./../muttng/config/config.cpp
 ./../muttng/ui/ui_plain.cpp
 ./../muttng/ui/ui_curses.cpp
 ./../muttng/ui/ui_text.cpp
@@ -79,4 +87,8 @@
 ./../sysconf/test_strsep.c
 ./../sysconf/test_mmap.c
 ./../sysconf/test_alloca.c
+./../sysconf/test_langinfo.c
 ./../sysconf/test_c99_int.c
+./../sysconf/test_signal.c
+./../sysconf/test_siglist.c
+./../sysconf/test_bindtextdomain.c

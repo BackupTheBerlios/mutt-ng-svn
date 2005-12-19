@@ -173,6 +173,7 @@ bool Tool::end (void) {
   disconnectSignals (event->sigNumOptChange, this);
   disconnectSignals (event->sigContextChange, this);
   ConfigManager::cleanup();
+  core_cleanup();
   return (this->ui->end ());
 }
 

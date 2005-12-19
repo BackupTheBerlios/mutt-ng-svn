@@ -78,13 +78,14 @@ int ConfigManager::get(buffer_t* dst, buffer_t* name) {
  * @param option Unused: the option object itself.
  * @param moredata Destination vector.
  */
-static void add(const char* key, Option* option, std::vector<const char*>* moredata) {
+static bool add(const char* key, Option* option, std::vector<const char*>* moredata) {
   (void) option;
   moredata->push_back(key);
+  return true;
 }
 
 std::vector<const char*>* ConfigManager::getAll() {
   std::vector<const char*>* ret = new std::vector<const char*>;
-  Options->map<std::vector<const char*>* >(add,ret);
+  Options->map<std::vector<const char*>* >(true,add,ret);
   return ret;
 }

@@ -144,6 +144,8 @@ WHERE buffer_t AttachMarker;
 
 /** storage for $send_charset */
 WHERE char* SendCharset INITVAL(NULL);
+/** storage for $charset */
+WHERE char* Charset INITVAL(NULL);
 /** storage for $umask */
 WHERE int Umask INITVAL(0);
 
