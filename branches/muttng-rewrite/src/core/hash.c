@@ -52,7 +52,7 @@ void* hash_new (unsigned long size, int dup_key) {
   return (ret);
 }
 
-void hash_destroy (void** t, void (*destroy) (HASH_ITEMTYPE*)) {
+void hash_destroy (void** t, hash_del_t* destroy) {
   unsigned long r,c;
   hash_t** tab = (hash_t**) t;
 

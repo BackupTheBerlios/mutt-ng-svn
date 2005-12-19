@@ -96,6 +96,14 @@ unsigned long conv_charset_list (int mime,
 int conv_charset_eq (const char* c1, const char* c2);
 
 /**
+ * See if transfer encoding is to be Base64 instead of one
+ * automatically chosen.
+ * @param charset Character set.
+ * @return Force base64 or not.
+ */
+int conv_charset_base64 (const char* charset);
+
+/**
  * Convert a buffer using @c iconv().
  * If no libiconv support was built in, this does nothing at all.
  * @param src Source string to be converted in-place.

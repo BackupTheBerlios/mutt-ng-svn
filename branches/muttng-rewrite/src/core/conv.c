@@ -53,100 +53,100 @@ static struct {
   { "us", "us-ascii"}, 
   { "ibm367", "us-ascii"}, 
   { "cp367", "us-ascii"}, 
-  { "csASCII", "us-ascii"}, 
+  { "csascii", "us-ascii"}, 
 
-  { "csISO2022KR", "iso-2022-kr"}, 
-  { "csEUCKR", "euc-kr"}, 
-  { "csISO2022JP", "iso-2022-jp"}, 
+  { "csiso2022kr", "iso-2022-kr"}, 
+  { "cseuckr", "euc-kr"}, 
+  { "csiso2022jp", "iso-2022-jp"}, 
 
-  { "csISO2022JP2", "iso-2022-jp-2"}, 
+  { "csiso2022jp2", "iso-2022-jp-2"}, 
 
-  { "ISO_8859-1:1987", "iso-8859-1"},
+  { "iso_8859-1:1987", "iso-8859-1"},
   { "iso-ir-100", "iso-8859-1"},
   { "iso_8859-1", "iso-8859-1"},
   { "latin1", "iso-8859-1"},
   { "l1", "iso-8859-1"},
-  { "IBM819", "iso-8859-1"},
-  { "CP819", "iso-8859-1"},
-  { "csISOLatin1", "iso-8859-1"},
+  { "ibm819", "iso-8859-1"},
+  { "cp819", "iso-8859-1"},
+  { "csisolatin1", "iso-8859-1"},
 
-  { "ISO_8859-2:1987", "iso-8859-2"},
+  { "iso_8859-2:1987", "iso-8859-2"},
   { "iso-ir-101", "iso-8859-2"},
   { "iso_8859-2", "iso-8859-2"},
   { "latin2", "iso-8859-2"},
   { "l2", "iso-8859-2"},
-  { "csISOLatin2", "iso-8859-2"},
+  { "csisolatin2", "iso-8859-2"},
 
-  { "ISO_8859-3:1988", "iso-8859-3"},
+  { "iso_8859-3:1988", "iso-8859-3"},
   { "iso-ir-109", "iso-8859-3"},
-  { "ISO_8859-3", "iso-8859-3"},
+  { "iso_8859-3", "iso-8859-3"},
   { "latin3", "iso-8859-3"},
   { "l3", "iso-8859-3"},
-  { "csISOLatin3", "iso-8859-3"},
+  { "csisolatin3", "iso-8859-3"},
 
-  { "ISO_8859-4:1988", "iso-8859-4"},
+  { "iso_8859-4:1988", "iso-8859-4"},
   { "iso-ir-110", "iso-8859-4"},
-  { "ISO_8859-4", "iso-8859-4"},
+  { "iso_8859-4", "iso-8859-4"},
   { "latin4", "iso-8859-4"},
   { "l4", "iso-8859-4"},
-  { "csISOLatin4", "iso-8859-4"},
+  { "csisolatin4", "iso-8859-4"},
 
-  { "ISO_8859-6:1987", "iso-8859-6"},
+  { "iso_8859-6:1987", "iso-8859-6"},
   { "iso-ir-127", "iso-8859-6"},
   { "iso_8859-6", "iso-8859-6"},
-  { "ECMA-114", "iso-8859-6"},
-  { "ASMO-708", "iso-8859-6"},
+  { "ecma-114", "iso-8859-6"},
+  { "asmo-708", "iso-8859-6"},
   { "arabic", "iso-8859-6"},
-  { "csISOLatinArabic", "iso-8859-6"},
+  { "csisolatinarabic", "iso-8859-6"},
 
-  { "ISO_8859-7:1987", "iso-8859-7"},
+  { "iso_8859-7:1987", "iso-8859-7"},
   { "iso-ir-126", "iso-8859-7"},
-  { "ISO_8859-7", "iso-8859-7"},
-  { "ELOT_928", "iso-8859-7"},
-  { "ECMA-118", "iso-8859-7"},
+  { "iso_8859-7", "iso-8859-7"},
+  { "elot_928", "iso-8859-7"},
+  { "ecma-118", "iso-8859-7"},
   { "greek", "iso-8859-7"},
   { "greek8", "iso-8859-7"},
-  { "csISOLatinGreek", "iso-8859-7"},
+  { "csisolatingreek", "iso-8859-7"},
 
-  { "ISO_8859-8:1988", "iso-8859-8"},
+  { "iso_8859-8:1988", "iso-8859-8"},
   { "iso-ir-138", "iso-8859-8"},
-  { "ISO_8859-8", "iso-8859-8"},
+  { "iso_8859-8", "iso-8859-8"},
   { "hebrew", "iso-8859-8"},
-  { "csISOLatinHebrew", "iso-8859-8"},
+  { "csisolatinhebrew", "iso-8859-8"},
 
-  { "ISO_8859-5:1988", "iso-8859-5"},
+  { "iso_8859-5:1988", "iso-8859-5"},
   { "iso-ir-144", "iso-8859-5"},
-  { "ISO_8859-5", "iso-8859-5"},
+  { "iso_8859-5", "iso-8859-5"},
   { "cyrillic", "iso-8859-5"},
-  { "csISOLatinCyrillic", "iso8859-5"},
+  { "csisolatincyrillic", "iso8859-5"},
 
-  { "ISO_8859-9:1989", "iso-8859-9"},
+  { "iso_8859-9:1989", "iso-8859-9"},
   { "iso-ir-148", "iso-8859-9"},
-  { "ISO_8859-9", "iso-8859-9"},
+  { "iso_8859-9", "iso-8859-9"},
   { "latin5", "iso-8859-9"},      /* this is not a bug */
   { "l5", "iso-8859-9"},
-  { "csISOLatin5", "iso-8859-9"},
+  { "csisolatin5", "iso-8859-9"},
 
-  { "ISO_8859-10:1992", "iso-8859-10"},
+  { "iso_8859-10:1992", "iso-8859-10"},
   { "iso-ir-157", "iso-8859-10"},
   { "latin6", "iso-8859-10"},     /* this is not a bug */
   { "l6", "iso-8859-10" },
-  { "csISOLatin6", "iso-8859-10" },
+  { "csisolatin6", "iso-8859-10" },
 
-  { "csKOI8r", "koi8-r"},
+  { "cskoi8r", "koi8-r"},
 
-  { "MS_Kanji", "Shift_JIS"},     /* Note the underscore! */
-  { "csShiftJis", "Shift_JIS"},
+  { "ms_kanji", "shift_jis"},     /* note the underscore! */
+  { "csshiftjis", "shift_jis"},
 
-  { "Extended_UNIX_Code_Packed_Format_for_Japanese", "EUC-JP"},
-  { "csEUCPkdFmtJapanese", "EUC-JP"},
+  { "extended_unix_code_packed_format_for_japanese", "euc-jp"},
+  { "cseucpkdfmtjapanese", "euc-jp"},
 
-  { "csGB2312", "gb2312"},
+  { "csgb2312", "gb2312"},
 
   { "csbig5", "big5"},
 
   /* 
-   * End of official brain damage.  What follows has been taken
+   * end of official brain damage.  what follows has been taken
    * from glibc's localedata files. 
    */
   { "iso_8859-13", "iso-8859-13"},
@@ -160,46 +160,46 @@ static struct {
 
   { "iso_8859-15", "iso-8859-15"},
   { "latin9", "iso-8859-15"},     /* this is not a bug */
-  /* Suggested by Ionel Mugurel Ciobica <tgakic@sg10.chem.tue.nl> */
+  /* suggested by ionel mugurel ciobica <tgakic@sg10.chem.tue.nl> */
   { "latin0", "iso-8859-15"},     /* this is not a bug */
 
   { "iso_8859-16", "iso-8859-16"},
   { "latin10", "iso-8859-16"},    /* this is not a bug */
 
   /* 
-   * David Champion <dgc@uchicago.edu> has observed this with
-   * nl_langinfo under SunOS 5.8. 
+   * david champion <dgc@uchicago.edu> has observed this with
+   * nl_langinfo under sunos 5.8. 
    */
   { "646", "us-ascii"},
   /* 
    * http://www.sun.com/software/white-papers/wp-unicode/
    */
-  { "eucJP", "euc-jp"},
+  { "eucjp", "euc-jp"},
 
-  { "PCK", "Shift_JIS"},
-  { "sjis", "Shift_JIS"},
+  { "pck", "shift_jis"},
+  { "sjis", "shift_jis"},
 
-  { "ko_KR-euc", "euc-kr"},
+  { "ko_kr-euc", "euc-kr"},
 
-  { "zh_TW-big5", "big5"},
+  { "zh_tw-big5", "big5"},
 
   /* seems to be common on some systems */
-  { "euc-jp-ms", "eucJP-ms"},
+  { "euc-jp-ms", "eucjp-ms"},
 
-  { "ISO_8859-6-E",             "iso-8859-6-e" },
-  { "csISO88596E",              "iso-8859-6-e" },
+  { "iso_8859-6-e",             "iso-8859-6-e" },
+  { "csiso88596e",              "iso-8859-6-e" },
 
-  { "ISO_8859-6-I",             "iso-8859-6-i" },
-  { "csISO88596I",              "iso-8859-6-i" },
+  { "iso_8859-6-i",             "iso-8859-6-i" },
+  { "csiso88596i",              "iso-8859-6-i" },
 
-  { "ISO_8859-8-E",             "iso-8859-8-e" },
-  { "csISO88598E",              "iso-8859-8-e" },
+  { "iso_8859-8-e",             "iso-8859-8-e" },
+  { "csiso88598e",              "iso-8859-8-e" },
 
-  { "ISO_8859-8-I",             "iso-8859-8-i" },
-  { "csISO88598I",              "iso-8859-8-i" },
+  { "iso_8859-8-i",             "iso-8859-8-i" },
+  { "csiso88598i",              "iso-8859-8-i" },
 
   /*
-   * If you happen to encounter system-specific brain-damage with
+   * if you happen to encounter system-specific brain-damage with
    * respect to character set naming, please add it above this
    * comment, and submit a patch to <muttng-devel@lists.berlios.de>.
    */
@@ -310,6 +310,10 @@ void conv_charset_normal (buffer_t* charset) {
     strfcpy (scratch, NONULL (name), sizeof (scratch));
 #endif
 
+  /* for cosmetics' sake, transform to lowercase. */
+  for (p = charset->str; *p; p++)
+    *p = tolower (*p);
+
   code = hash_key(charset->str);
   if (hash_exists_hash(Charsets,charset->str,code) && 
       ((i = hash_find_hash(Charsets,charset->str,code)) != ((HASH_ITEMTYPE)-1))) {
@@ -318,9 +322,6 @@ void conv_charset_normal (buffer_t* charset) {
     return;
   }
 
-  /* for cosmetics' sake, transform to lowercase. */
-  for (p = charset->str; *p; p++)
-    *p = tolower (*p);
   /*
    * RfC2231 defines language spec syntax for charsets:
    *    [charset]*[langspec]
@@ -383,8 +384,13 @@ static int list_alias (const char* key, HASH_ITEMTYPE idx,
  */
 static int add_foreign(unsigned int count, const char* const* names, void* data) {
   unsigned int i;
-  for (i=0; i<count; i++)
-    hash_add(data,names[i],0);
+  char* key;
+  for (i=0; i<count; i++) {
+    key = str_dup(names[i]);
+    str_tolower(key);
+    hash_add(data,key,0);
+    mem_free(&key);
+  }
   return 0;
 }
 #endif
@@ -413,7 +419,7 @@ unsigned long conv_charset_list (int mime, int (*printfunc)(const char*)) {
      * if we don't do MIME: create temporary table with our and add those
      * from libiconv (so we have sorting over complete set)
      */
-    void* tmp = hash_new(hash_fill(Charsets),0);
+    void* tmp = hash_new(hash_fill(Charsets),1);
     hash_map(Charsets,0,add_our,(unsigned long)tmp);
 #ifdef iconvlist
     iconvlist(add_foreign,tmp);
@@ -607,3 +613,26 @@ int conv_iconv (buffer_t* src, const char* from, const char* to) {
 }
 
 #endif /* CORE_LIBICONV */
+
+int conv_charset_base64 (const char* charset) {
+  buffer_t tmp;
+  int rc = 0;
+
+  if (!charset || !*charset)
+    return rc;
+
+  buffer_init(&tmp);
+  buffer_add_str(&tmp,charset,-1);
+  conv_charset_normal(&tmp);
+
+  /*
+   * RfC 1468: use base64 for iso-2022-jp
+   * check for length exactly as RfCs also define
+   * iso-2022-jp-[12] for which we can choose encoding
+   */
+  if (buffer_equal1(&tmp,"iso-2022-jp",11))
+    rc = 1;
+
+  buffer_free(&tmp);
+  return rc;
+}

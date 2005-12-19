@@ -30,12 +30,6 @@
 #define ENC_BASE64      2
 
 /**
- * output character sets which attempt to use.
- * @bug make this configurable
- */
-static const char* OutSets[] = { "us-ascii", "iso-8859-1", "iso-8859-15", "utf-8", NULL };
-
-/**
  * hex chars for QP encoder
  */
 static char Hex[] = "0123456789ABCDEF";
@@ -196,23 +190,29 @@ static void encode_as_many (buffer_t* dst, buffer_t* src, const char* in) {
  */
 static void encode_word (buffer_t* dst, const unsigned char* src,
                          size_t len, const char* in) {
-  unsigned short i;
-  buffer_t text_conv, text_enc1, text_enc2;
+  buffer_t text_conv, text_enc1, text_enc2, sets;
+  char* p, *t;
 
   buffer_init(&text_conv);
   buffer_init(&text_enc1);
   buffer_init(&text_enc2);
+  buffer_init(&sets);
 
-  for (i = 0; OutSets[i]; i++) {
+  buffer_add_str(&sets,SendCharset&&*SendCharset?SendCharset:"utf-8",-1);
+
+  for (p = sets.str, t = sets.str; *p; p = strchr(t,':')) {
+    if (*p == ':') p++;
+    if ((t = strchr(p,':'))) *t++ = '\0';
+#if DO_DEBUG
+      std::cout<<"try='"<<(NONULL(p))<<"'"<<std::endl;
+#endif
     buffer_shrink(&text_conv,0);
     buffer_add_str(&text_conv,(char*)src,len);
     /*
      * loop over all character sets we may use for sending and try
      * first one where input can be completely cnverted to
      */
-    /* XXX */
-    (void) SendCharset;
-    if (conv_iconv(&text_conv,in,OutSets[i]) > 0) {
+    if (conv_iconv(&text_conv,in,p) > 0) {
 #if DO_DEBUG
       std::cout<<"will encode='"<<(NONULL(text_conv.str))<<"' (l="<<len<<")"<<std::endl;
 #endif
@@ -220,16 +220,19 @@ static void encode_word (buffer_t* dst, const unsigned char* src,
        * can convert from input to current output charset cleanly;
        * now see if QP or Base64 is shorter
        */
+      bool qp = false;
       buffer_shrink(&text_enc1,0); buffer_shrink(&text_enc2,0);
-      buffer_encode_qp(&text_enc1,&text_conv,'=');
       buffer_encode_base64(&text_enc2,&text_conv);
-      bool qp = text_enc1.len<text_enc2.len;
+      if (!conv_charset_base64(p)) {
+        buffer_encode_qp(&text_enc1,&text_conv,'=');
+        qp = text_enc1.len<text_enc2.len;
+      }
       /*
        * try to encode as a single word; if it doesn't fit,
        * do multiple and we're done
        */
-      if (!encode_as_one(dst,qp?&text_enc1:&text_enc2,qp?ENC_QP:ENC_BASE64,OutSets[i]))
-        encode_as_many(dst,&text_conv,OutSets[i]);
+      if (!encode_as_one(dst,qp?&text_enc1:&text_enc2,qp?ENC_QP:ENC_BASE64,p))
+        encode_as_many(dst,&text_conv,p);
       break;
     }
   }

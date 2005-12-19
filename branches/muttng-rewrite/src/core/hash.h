@@ -35,11 +35,16 @@ unsigned int hash_key (const char* k);
 void* hash_new (unsigned long size, int dup_key);
 
 /**
+ * For readability: typedef of deletion callback.
+ */
+typedef void hash_del_t (HASH_ITEMTYPE*);
+
+/**
  * Free all memory allocated for table.
  * @param table Hash table.
  * @param destroy Function callback used to free data if not @c NULL
  */
-void hash_destroy (void** table, void (*destroy) (HASH_ITEMTYPE*));
+void hash_destroy (void** table, hash_del_t* destroy);
 
 /**
  * Add item.
