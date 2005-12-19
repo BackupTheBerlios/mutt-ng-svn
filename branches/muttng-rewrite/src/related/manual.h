@@ -1915,9 +1915,10 @@ buffer_init(&buffer);
         
 
     
-          The map function takes only a pointer to a callback function as an
+          The map function takes a pointer to a callback function as an
           argument and calls it for every single key-value pair the table
-          contains in a undefined order. This doesn't sound spectacular but
+          contains in a undefined order if no sorting is requested.
+          This doesn't sound spectacular but
           enables a client to count the number of pairs stored, compose a list
           of keys and/or values including custom selection patterns, etc.
         
@@ -1936,6 +1937,16 @@ buffer_init(&buffer);
     @anchor sample-core-hashing
     @include core_hash.c
             
+          What the example doesn't show is that <tt>hash_map()</tt> only
+          executes the callback while it's told to. That means that the
+          callback can make the mapping abort at any point it wishes to
+          (because, for example, it already found what it was looking for.)
+          A @ref sample-libmuttng-hashing "more complete example is provided for libmuttng"  in C++
+          using a typesafe wrapper doing typecasts only though a C equivalent would
+          be exactly the same.
+        
+
+    
     
     @subsubsection sect_devguide-core-conversion Various conversions
     

@@ -18,9 +18,10 @@
  * @param key Key.
  * @param data Value.
  * @param moredata Pointer to integer for counting.
+ * @return 1
  */
-static void map_print(const void* key, HASH_ITEMTYPE data,
-                      unsigned long moredata) {
+static int map_print(const char* key, HASH_ITEMTYPE data,
+                     unsigned long moredata) {
   buffer_t tmp;
   int* count = (int*)moredata;
 
@@ -31,10 +32,11 @@ static void map_print(const void* key, HASH_ITEMTYPE data,
   buffer_init(&tmp);
   buffer_add_num(&tmp,data,3);
   buffer_add_ch(&tmp,':');
-  buffer_add_str(&tmp,(char*)key,-1);
+  buffer_add_str(&tmp,key,-1);
   buffer_add_ch(&tmp,'\n');
   /* print */
   write(1,tmp.str,tmp.len);
+  return 1;
 }
 
 /**
@@ -52,7 +54,7 @@ int main(int argc,char** argv) {
     hash_add(hash,argv[i],i);
 
   /* map the printing function to it */
-  hash_map(hash,map_print,(unsigned long) &count);
+  hash_map(hash,1,map_print,(unsigned long) &count);
 
   /*
    * destroy hash table. no need to pass a callback
