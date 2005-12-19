@@ -30,7 +30,7 @@ static int map_print(const char* key, HASH_ITEMTYPE data,
 
   /* format output line: '%3d:%s\n' */
   buffer_init(&tmp);
-  buffer_add_num(&tmp,data,3);
+  buffer_add_unum(&tmp,data,3);
   buffer_add_ch(&tmp,':');
   buffer_add_str(&tmp,key,-1);
   buffer_add_ch(&tmp,'\n');

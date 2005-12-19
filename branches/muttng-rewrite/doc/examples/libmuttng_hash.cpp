@@ -41,7 +41,7 @@ static bool hash_print (const char* key, int argc, int* counter) {
   buffer_init(&tmp);
   /* format output line: '%3d:%s\n' */
   buffer_init(&tmp);
-  buffer_add_num(&tmp,argc,3);
+  buffer_add_snum(&tmp,argc,3);
   buffer_add_ch(&tmp,':');
   buffer_add_str(&tmp,key,-1);
   /* print */
@@ -67,16 +67,16 @@ static bool hash_print2 (const char* key, int argc, range_t* range) {
   buffer_init(&tmp);
   /* format output line: '%3d:%s (%d+%d=%d)\n' */
   buffer_init(&tmp);
-  buffer_add_num(&tmp,argc,3);
+  buffer_add_snum(&tmp,argc,3);
   buffer_add_ch(&tmp,':');
   buffer_add_str(&tmp,key,-1);
   buffer_add_str(&tmp," (",2);
-  buffer_add_num(&tmp,range->bytes,-1);
+  buffer_add_unum(&tmp,range->bytes,-1);
   buffer_add_ch(&tmp,'+');
-  buffer_add_num(&tmp,len,-1);
+  buffer_add_unum(&tmp,len,-1);
   buffer_add_ch(&tmp,'=');
   range->bytes+=len;
-  buffer_add_num(&tmp,range->bytes,-1);
+  buffer_add_unum(&tmp,range->bytes,-1);
   buffer_add_ch(&tmp,')');
   /* print */
   std::cout<<"   "<<tmp.str<<std::endl;
