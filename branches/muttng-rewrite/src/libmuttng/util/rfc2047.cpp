@@ -199,12 +199,14 @@ static void encode_word (buffer_t* dst, const unsigned char* src,
   buffer_init(&sets);
 
   buffer_add_str(&sets,SendCharset&&*SendCharset?SendCharset:"utf-8",-1);
+  buffer_add_str(&sets,":utf-8",6);
 
-  for (p = sets.str, t = sets.str; *p; p = strchr(t,':')) {
+  for (p = sets.str, t = sets.str; p && *p; ) {
     if (*p == ':') p++;
     if ((t = strchr(p,':'))) *t++ = '\0';
 #if DO_DEBUG
       std::cout<<"try='"<<(NONULL(p))<<"'"<<std::endl;
+      std::cout<<"next='"<<(NONULL(t))<<"'"<<std::endl;
 #endif
     buffer_shrink(&text_conv,0);
     buffer_add_str(&text_conv,(char*)src,len);
@@ -235,6 +237,7 @@ static void encode_word (buffer_t* dst, const unsigned char* src,
         encode_as_many(dst,&text_conv,p);
       break;
     }
+    p = t;
   }
 
   buffer_free(&text_conv);

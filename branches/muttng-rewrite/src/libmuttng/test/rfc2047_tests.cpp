@@ -26,6 +26,7 @@ static struct {
 } Tests[] = {
   { "ascii text", "ascii text", true },
   { "€", "=?UtF-8*de?q?=E2=82=AC?=", true },
+  { "€¤", "=?utf-8?q?=E2=82=AC=C2=A4?=", true },
   { "test ä und üä", "test =?UTF-8*EN?Q?=C3=A4?= und =?iso-8859-1?Q?=FC?=           =?UTF-8*EN?Q?=C3=A4?=", true },
   { "üüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüüü",
     "=?iso-8859-1?Q?"
