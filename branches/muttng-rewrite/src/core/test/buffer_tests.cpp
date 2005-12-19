@@ -150,22 +150,22 @@ void buffer_tests::test_buffer_add_ch() {
   delete b;
 }
 
-/** @test  buffer_add_num2() */
-void buffer_tests::test_buffer_add_num2() {
+/** @test  buffer_add_snum2() */
+void buffer_tests::test_buffer_add_snum2() {
   buffer_t * b = new buffer_t;
   buffer_init(b);
 
-  buffer_add_num2(b,23,-1,10);
+  buffer_add_snum2(b,23,-1,10);
   assert_true("buffer contains 23",buffer_equal1(b,"23",-1));
 
   buffer_shrink(b,0);
 
-  buffer_add_num2(b,24,4,10);
+  buffer_add_snum2(b,24,4,10);
   assert_true("buffer contains 0024",buffer_equal1(b,"0024",-1));
 
   buffer_shrink(b,0);
 
-  buffer_add_num2(b,383833,-1,16);
+  buffer_add_snum2(b,383833,-1,16);
   assert_true("buffer contains 5db59",buffer_equal1(b,"5db59",-1));
 
   /**
@@ -174,16 +174,62 @@ void buffer_tests::test_buffer_add_num2() {
    *   that conv_itoa() doesn't run into buffer overflow
    */
   buffer_shrink(b,0);
-  buffer_add_num2(b,INT_MIN,-1,2);
+  buffer_add_snum2(b,INT_MIN,-1,2);
   assert_true("buffer contains INT_MIN (binary)",b->len == (sizeof(int)*8)+1);
 
   buffer_shrink(b,0);
-  buffer_add_num2(b,INT_MAX,-1,2);
+  buffer_add_snum2(b,LONG_MIN,-1,2);
+  assert_true("buffer contains LONG_MIN (binary)",b->len == (sizeof(long)*8)+1);
+
   /*
    * we have two's complement, i.e. largest positive is:
    * 01111...1, i.e. leading 0 -> do -1
    */
+  buffer_shrink(b,0);
+  buffer_add_snum2(b,INT_MAX,-1,2);
   assert_true("buffer contains INT_MAX (binary)",b->len == (sizeof(int)*8)-1);
+
+  buffer_shrink(b,0);
+  buffer_add_snum2(b,LONG_MAX,-1,2);
+  assert_true("buffer contains LONG_MAX (binary)",b->len == (sizeof(long)*8)-1);
+
+  buffer_shrink(b,0);
+  buffer_add_snum2(b,ULONG_MAX,-1,2);
+  assert_true("wrong usage: buffer_add_snum2(ULONG_MAX)==-1",buffer_equal1(b,"-1",-1));
+
+  delete b;
+}
+
+/** @test  buffer_add_unum2() */
+void buffer_tests::test_buffer_add_unum2() {
+  buffer_t * b = new buffer_t;
+  buffer_init(b);
+
+  buffer_add_unum2(b,23,-1,10);
+  assert_true("buffer contains 23",buffer_equal1(b,"23",-1));
+
+  buffer_shrink(b,0);
+
+  buffer_add_unum2(b,24,4,10);
+  assert_true("buffer contains 0024",buffer_equal1(b,"0024",-1));
+
+  buffer_shrink(b,0);
+
+  buffer_add_unum2(b,383833,-1,16);
+  assert_true("buffer contains 5db59",buffer_equal1(b,"5db59",-1));
+
+  /**
+   * - Test edge case: when converting UINT_MAX to binary we have
+   *   a sign and the largest number of digits, i.e. verify here
+   *   that conv_itoa() doesn't run into buffer overflow
+   */
+  buffer_shrink(b,0);
+  buffer_add_unum2(b,UINT_MAX,-1,2);
+  assert_true("buffer contains UINT_MAX (binary)",b->len == (sizeof(unsigned int)*8));
+
+  buffer_shrink(b,0);
+  buffer_add_unum2(b,ULONG_MAX,-1,2);
+  assert_true("buffer contains ULONG_MAX (binary)",b->len == (sizeof(unsigned long)*8));
 
   delete b;
 }
@@ -297,7 +343,8 @@ buffer_tests::buffer_tests() : suite("buffer_tests") {
   add("buffer",testcase(this,"test_buffer_add_str",&buffer_tests::test_buffer_add_str));
   add("buffer",testcase(this,"test_buffer_add_buffer",&buffer_tests::test_buffer_add_buffer));
   add("buffer",testcase(this,"test_buffer_add_ch",&buffer_tests::test_buffer_add_ch));
-  add("buffer",testcase(this,"test_buffer_add_num2",&buffer_tests::test_buffer_add_num2));
+  add("buffer",testcase(this,"test_buffer_add_snum2",&buffer_tests::test_buffer_add_snum2));
+  add("buffer",testcase(this,"test_buffer_add_unum2",&buffer_tests::test_buffer_add_unum2));
   add("buffer",testcase(this,"test_buffer_chomp",&buffer_tests::test_buffer_chomp));
   add("buffer",testcase(this,"test_buffer_tokenize",&buffer_tests::test_buffer_tokenize));
 }

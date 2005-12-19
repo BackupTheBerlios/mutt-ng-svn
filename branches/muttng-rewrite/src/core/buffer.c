@@ -38,11 +38,18 @@ void buffer_add_ch (buffer_t* buffer, unsigned char ch) {
   buffer_add_str (buffer, buf, 1);
 }
 
-void buffer_add_num2 (buffer_t* buffer, int num, int pad, int base) {
+void buffer_add_snum2 (buffer_t* buffer, long num, short pad, short base) {
   char buf[NUMBUF];
   if (!buffer)
     return;
   buffer_add_str (buffer, conv_itoa2 (buf, num, pad, base), -1);
+}
+
+void buffer_add_unum2 (buffer_t* buffer, unsigned long num, short pad, short base) {
+  char buf[NUMBUF];
+  if (!buffer)
+    return;
+  buffer_add_str (buffer, conv_uitoa2 (buf, num, pad, base), -1);
 }
 
 int buffer_equal1 (buffer_t* buffer, const char* s, int len) {

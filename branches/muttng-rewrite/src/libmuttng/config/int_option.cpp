@@ -55,7 +55,7 @@ bool IntOption::set(const char* value, buffer_t* error) {
   /* value is invalid */
   if (error) {
     buffer_add_ch(error,'\'');
-    buffer_add_num(error,num,-1);
+    buffer_add_snum(error,num,-1);
     buffer_add_str(error,_("' is invalid for $"),-1);
     buffer_add_str(error,name,-1);
   }
@@ -74,7 +74,7 @@ bool IntOption::toggle() { return false; }
 bool IntOption::query(buffer_t* dst) {
   if (!dst)
     return false;
-  buffer_add_num(dst,*store,-1);
+  buffer_add_snum(dst,*store,-1);
   return true;
 }
 
@@ -86,9 +86,9 @@ bool IntOption::validity(buffer_t* dst) {
     buffer_add_str(dst,_("positive"),-1);
   } else if (min != INT_MIN && max != INT_MAX) {  
     buffer_add_ch(dst,'[');
-    buffer_add_num(dst,min,-1);
+    buffer_add_snum(dst,min,-1);
     buffer_add_ch(dst,',');
-    buffer_add_num(dst,max,-1);
+    buffer_add_snum(dst,max,-1);
     buffer_add_ch(dst,']');
   } else
     return false;

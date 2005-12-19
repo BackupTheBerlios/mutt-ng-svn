@@ -81,7 +81,7 @@ void qp_tests::test_decode() {
     buffer_add_str(&msg,"decode(",-1);
     buffer_add_buffer(&msg,&enc);
     buffer_add_str(&msg,")==",-1);
-    buffer_add_num(&msg,ECTable[i].valid,-1);
+    buffer_add_snum(&msg,ECTable[i].valid,-1);
     assert_true(msg.str,buffer_decode_qp(&tmp,&enc,'=',&l)==ECTable[i].valid);
     buffer_shrink(&msg,0);
 

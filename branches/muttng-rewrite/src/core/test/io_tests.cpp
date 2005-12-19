@@ -128,7 +128,7 @@ void io_tests::test_io_open (void) {
     buffer_add_str (&err, "io_tempfile(", 12);
     buffer_add_buffer (&err, &tempfile);
     buffer_add_str (&err, ") = ", 4);
-    buffer_add_num (&err, fd, -1);
+    buffer_add_snum (&err, fd, -1);
     assert_eq (err.str, fd >= 0, fd);
     goto out;
   }
@@ -148,7 +148,7 @@ void io_tests::test_io_open (void) {
     buffer_add_ch (&err, ',');
     buffer_add_buffer (&err, &link);
     buffer_add_str (&err, ") = ", 4);
-    buffer_add_num (&err, l, -1);
+    buffer_add_snum (&err, l, -1);
     assert_eq (err.str, 0, l);
     goto out;
   }
@@ -161,7 +161,7 @@ void io_tests::test_io_open (void) {
     buffer_add_str (&err, "io_open(", 8);
     buffer_add_buffer (&err, &link);
     buffer_add_str (&err, ") = ", 4);
-    buffer_add_num (&err, fd, -1);
+    buffer_add_snum (&err, fd, -1);
     assert_eq (err.str, -1, fd);
     goto out;
   }

@@ -81,13 +81,13 @@ bool Debug::start (void) {
   buffer_add_ch (&fname, '.');
   buffer_add_buffer (&fname, &this->prefix);
   buffer_add_ch (&fname, '.');
-  buffer_add_num (&fname, getpid (), -1);
+  buffer_add_snum (&fname, getpid (), -1);
   buffer_add_ch (&fname, '.');
   len = fname.len;
 
   while (i++ < MAX_DBG_FILES) {
     buffer_shrink (&fname, len);
-    buffer_add_num (&fname, i, -1);
+    buffer_add_snum (&fname, i, -1);
     buffer_add_str (&fname, ".log", 4);
     if (stat (fname.str, &st) == -1)
       break;

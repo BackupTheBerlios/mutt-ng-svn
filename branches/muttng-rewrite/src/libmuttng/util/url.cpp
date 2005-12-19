@@ -291,7 +291,7 @@ void url_to_string (url_t* url, buffer_t* dst, bool pwd) {
   buffer_add_str (dst, url->host, -1);
   if (url->port != url->defport) {
     buffer_add_ch (dst, ':');
-    buffer_add_num (dst, url->port, -1);
+    buffer_add_snum (dst, url->port, -1);
   }
   buffer_add_str (dst, url->path, -1);
 }

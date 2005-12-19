@@ -73,9 +73,9 @@ void buffer_add_ch (buffer_t* buffer, unsigned char ch);
  * @param pad Number of digits for destination. If too few, buffer
  *            will be filled with 0 and truncated otherwise.
  * @param base Number base.
- * @test buffer_tests::test_buffer_add_num2().
+ * @test buffer_tests::test_buffer_add_snum2().
  */
-void buffer_add_num2 (buffer_t* buffer, int num, int pad, int base);
+void buffer_add_snum2 (buffer_t* buffer, long num, short pad, short base);
 
 /**
  * Append number to buffer.
@@ -85,7 +85,10 @@ void buffer_add_num2 (buffer_t* buffer, int num, int pad, int base);
  * @param P Number of digits for destination. If too few, buffer
  *          will be filled with 0 and truncated otherwise.
  */
-#define buffer_add_num(B,N,P)   buffer_add_num2(B,N,P,10)
+#define buffer_add_snum(B,N,P)   buffer_add_snum2(B,N,P,10)
+
+void buffer_add_unum2 (buffer_t* buffer, unsigned long num, short pad, short base);
+#define buffer_add_unum(B,N,P)  buffer_add_unum2(B,N,P,10)
 
 /**
  * Compare buffer to string.

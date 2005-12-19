@@ -210,8 +210,9 @@ static struct {
 };
 #endif /* !CORE_LIBICONV */
 
-char* conv_itoa2 (char* buf, int num, int pad, int base) {
-  int i = NUMBUF-2, p = pad, sign = num < 0;
+char* conv_itoa2 (char* buf, signed long num, short pad, short base) {
+  unsigned short i = NUMBUF-2, sign = num < 0;
+  short p = pad;
 
   buf[NUMBUF-1] = '\0';
   switch (base) {
@@ -237,6 +238,35 @@ char* conv_itoa2 (char* buf, int num, int pad, int base) {
   }
   if (sign)
     buf[i--] = '-';
+  return (buf+i+1);
+}
+
+char* conv_uitoa2 (char* buf, unsigned long num, short pad, short base) {
+  unsigned short i = NUMBUF-2;
+  short p = pad;
+
+  buf[NUMBUF-1] = '\0';
+  switch (base) {
+    case 2:
+    case 8:
+    case 10:
+    case 16:
+      break;
+    default:
+      base = 10;
+      break;
+  }
+  if (num == 0 && pad < 0) {
+    buf[i--] = '0';
+    return (buf+i+1);
+  }
+  if (pad < 0)
+    pad = i;
+  while ((num != 0 || p > 0) && pad > 0) {
+    buf[i--] = Alph[abs (num % base)];
+    num /= base;
+    pad--;
+  }
   return (buf+i+1);
 }
 
@@ -275,9 +305,9 @@ int conv_iconv_version (buffer_t* dst) {
   if (!dst)
     return 1;
   buffer_add_str(dst,"libiconv ",9);
-  buffer_add_num(dst,v>>8,-1);
+  buffer_add_snum(dst,v>>8,-1);
   buffer_add_ch(dst,'.');
-  buffer_add_num(dst,v&0xff,-1);
+  buffer_add_snum(dst,v&0xff,-1);
   return 1;
 }
 

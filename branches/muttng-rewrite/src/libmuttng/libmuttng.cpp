@@ -164,7 +164,7 @@ LibMuttng::LibMuttng () {
 
     buffer_init(&AttachMarker);
     buffer_add_str(&AttachMarker,"\033]9;",3);
-    buffer_add_num(&AttachMarker,(int)time(NULL),-1);
+    buffer_add_snum(&AttachMarker,time(NULL),-1);
     buffer_add_ch(&AttachMarker,'\a');
 
   }

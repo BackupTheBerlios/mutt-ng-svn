@@ -22,7 +22,8 @@ class buffer_tests : public suite {
     void test_buffer_add_str();
     void test_buffer_add_buffer();
     void test_buffer_add_ch();
-    void test_buffer_add_num2();
+    void test_buffer_add_snum2();
+    void test_buffer_add_unum2();
     void test_buffer_chomp();
     void test_buffer_tokenize();
   public:

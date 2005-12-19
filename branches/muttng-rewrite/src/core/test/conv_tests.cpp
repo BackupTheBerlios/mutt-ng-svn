@@ -79,7 +79,7 @@ void conv_tests::test_iconv() {
       buffer_add_str(&msg,"reverse iconv(): str='",-1);
       buffer_add_str(&msg,TestStrings[i].str,-1);
       buffer_add_str(&msg,"' loss=",-1);
-      buffer_add_num(&msg,TestStrings[i].loss,-1);
+      buffer_add_snum(&msg,TestStrings[i].loss,-1);
       buffer_add_str(&msg," toset=",-1);
       buffer_add_str(&msg,ToSets[a],-1);
       buffer_add_str(&msg," got='",-1);
