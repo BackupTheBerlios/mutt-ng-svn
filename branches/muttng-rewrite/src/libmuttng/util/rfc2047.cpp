@@ -15,13 +15,6 @@
 #include <cstring>
 #include <string.h>
 
-/** temporary: debug on stdout? */
-#define DO_DEBUG        0
-
-#if DO_DEBUG
-#include <iostream>
-#endif
-
 /** unsupported encoding */
 #define ENC_INVALID     0
 /** quoted-printable encoding */
@@ -181,15 +174,8 @@ static void encode_as_many (buffer_t* dst, buffer_t* src, const char* in) {
     buffer_add_str(dst,"?=",2);
 }
 
-/**
- * Encode a single raw input word from initial portion of input.
- * @param dst Destination buffer.
- * @param src Source string.
- * @param len Length of initial portion in input.
- * @param in Character set input is encoded in.
- */
-static void encode_word (buffer_t* dst, const unsigned char* src,
-                         size_t len, const char* in) {
+void RfC2047::encode_word (buffer_t* dst, const unsigned char* src,
+                           size_t len, const char* in) {
   buffer_t text_conv, text_enc1, text_enc2, sets;
   char* p, *t;
 
@@ -204,10 +190,8 @@ static void encode_word (buffer_t* dst, const unsigned char* src,
   for (p = sets.str, t = sets.str; p && *p; ) {
     if (*p == ':') p++;
     if ((t = strchr(p,':'))) *t++ = '\0';
-#if DO_DEBUG
-      std::cout<<"try='"<<(NONULL(p))<<"'"<<std::endl;
-      std::cout<<"next='"<<(NONULL(t))<<"'"<<std::endl;
-#endif
+    DEBUGPRINT(D_PARSE,("try='%s'",NONULL(p)));
+    DEBUGPRINT(D_PARSE,("next='%s'",NONULL(t)));
     buffer_shrink(&text_conv,0);
     buffer_add_str(&text_conv,(char*)src,len);
     /*
@@ -215,9 +199,7 @@ static void encode_word (buffer_t* dst, const unsigned char* src,
      * first one where input can be completely cnverted to
      */
     if (conv_iconv(&text_conv,in,p) > 0) {
-#if DO_DEBUG
-      std::cout<<"will encode='"<<(NONULL(text_conv.str))<<"' (l="<<len<<")"<<std::endl;
-#endif
+      DEBUGPRINT(D_PARSE,("will encode='%s' (l=%d)",NONULL(text_conv.str),len));
       /*
        * can convert from input to current output charset cleanly;
        * now see if QP or Base64 is shorter
@@ -245,7 +227,7 @@ static void encode_word (buffer_t* dst, const unsigned char* src,
   buffer_free(&text_enc2);
 }
 
-bool rfc2047_encode (buffer_t* dst, buffer_t* src, const char* in) {
+bool RfC2047::rfc2047_encode (buffer_t* dst, buffer_t* src, const char* in) {
   if (!dst || !src)
     return false;
 
@@ -288,10 +270,8 @@ bool rfc2047_encode (buffer_t* dst, buffer_t* src, const char* in) {
     buffer_add_str(dst,(char*)last,p-last);
   }
 
-#if DO_DEBUG
-  std::cout<<"orig='"<<(NONULL(src->str))<<"'"<<std::endl;
-  std::cout<<"encoded='"<<(NONULL(dst->str))<<"'"<<std::endl;
-#endif
+  DEBUGPRINT(D_PARSE,("orig='%s'",NONULL(src->str)));
+  DEBUGPRINT(D_PARSE,("encoded='%s'",NONULL(dst->str)));
 
   return true;
 }
@@ -347,14 +327,7 @@ static const char *find_encoded_word (const char *str, const char **endptr) {
   return NULL;
 }
 
-/**
- * RfC2047-decode a single word to given output character set.
- * @param dst Destination buffer for storing result.
- * @param src Source string. This is expected to be the result of
- *            find_encoded_word().
- * @param out Output character set.
- */
-static bool decode_word (buffer_t* dst, const char* src, const char* out) {
+bool RfC2047::decode_word (buffer_t* dst, const char* src, const char* out) {
   unsigned short count = 0, enc = 0;
   const char* work, *qmark;
   buffer_t charset, text_enc, text_dec;
@@ -380,23 +353,17 @@ static bool decode_word (buffer_t* dst, const char* src, const char* out) {
     case 2:
       /* get charset */
       buffer_add_str(&charset,work,qmark-work);
-#if DO_DEBUG
-      std::cout<<"charset='"<<charset.str<<"'"<<std::endl;
-#endif
+      DEBUGPRINT(D_PARSE,("charset='%s'",charset.str));
       break;
     case 3:
       /* get encoding */
       enc = is_encoding((unsigned char)*work);
-#if DO_DEBUG
-      std::cout<<"encoding="<<enc<<std::endl;
-#endif
+      DEBUGPRINT(D_PARSE,("encoding=%d",enc));
       break;
     case 4:
       /* get text */
       buffer_add_str(&text_enc,work,qmark-work);
-#if DO_DEBUG
-      std::cout<<"text_enc='"<<text_enc.str<<"'"<<std::endl;
-#endif
+      DEBUGPRINT(D_PARSE,("encoded='%s'",text_enc.str));
       /* decode */
       switch(enc) {
       case ENC_QP:      if (!buffer_decode_qp(&text_dec,&text_enc,'=',NULL)) goto bail; break;
@@ -405,9 +372,7 @@ static bool decode_word (buffer_t* dst, const char* src, const char* out) {
       default:          goto bail; break;
       }
       /* convert (ignoring result) and copy */
-#if DO_DEBUG
-      std::cout<<"text_dec='"<<text_dec.str<<"'"<<std::endl;
-#endif
+      DEBUGPRINT(D_PARSE,("decoded='%s'",text_dec.str));
       conv_iconv(&text_dec,charset.str,out);
       buffer_add_buffer(dst,&text_dec);
       break;
@@ -422,9 +387,7 @@ static bool decode_word (buffer_t* dst, const char* src, const char* out) {
   return true;
 
 bail:
-#if DO_DEBUG
-  std::cout<<"decode failed"<<std::endl;
-#endif
+  DEBUGPRINT(D_PARSE,("decode failed"));
   /* in case of incorrectly encoded words, just reconstruct original as-is */
   buffer_add_str(dst,"=?",2);
   buffer_add_buffer(dst,&charset);
@@ -462,7 +425,7 @@ static inline void add_clean (buffer_t* dst, const char* src, size_t len) {
   }
 }
 
-bool rfc2047_decode (buffer_t* dst, buffer_t* src, const char* out) {
+bool RfC2047::rfc2047_decode (buffer_t* dst, buffer_t* src, const char* out) {
   if (!src)
     return false;
 

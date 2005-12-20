@@ -15,6 +15,7 @@ depend: subdirdepend
 svn-commit:
 	( $(MAKE) -C ./src/muttng/event all && \
 	  $(MAKE) -C ./doc doxygen && \
+	  $(MAKE) test && \
 	  svn diff ) 2>&1 | less && svn commit
 
 include GNUmakefile.subdirs

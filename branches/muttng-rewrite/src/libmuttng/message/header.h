@@ -9,12 +9,13 @@
 #define LIBMUTTNG_MESSAGE_HEADER_H
 
 #include "libmuttng/libmuttng.h"
+#include "libmuttng/util/rfc2047.h"
 #include "core/buffer.h"
 
 /**
  * Message header class.
  */
-class Header : public LibMuttng {
+class Header : protected RfC2047 {
   public:
     /**
     * Constructor. If one of the parameters is NULL, then the according member is initialized with an empty string.

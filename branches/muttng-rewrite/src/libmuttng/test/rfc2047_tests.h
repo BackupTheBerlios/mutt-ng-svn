@@ -10,13 +10,14 @@
 #include <unit++/unit++.h>
 
 #include "core/buffer.h"
+#include "libmuttng/util/rfc2047.h"
 
 using namespace unitpp;
 
 /**
  * RfC2047 tests.
  */
-class rfc2047_tests : public suite {
+class rfc2047_tests : public suite, private RfC2047 {
   public:
     rfc2047_tests();
     ~rfc2047_tests();
