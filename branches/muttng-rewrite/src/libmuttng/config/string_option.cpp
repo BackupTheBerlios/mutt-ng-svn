@@ -5,6 +5,7 @@
  * @brief Implementation: String option
  */
 #include <cstring>
+#include <string.h>
 
 #include "string_option.h"
 #include "core/intl.h"

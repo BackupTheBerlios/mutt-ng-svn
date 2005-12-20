@@ -5,6 +5,7 @@
  * @brief Implementation: Bool option
  */
 #include <cstring>
+#include <string.h>
 
 #include "bool_option.h"
 

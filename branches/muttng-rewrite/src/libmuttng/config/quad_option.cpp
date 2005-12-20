@@ -5,6 +5,7 @@
  * @brief Implementation: Quad option
  */
 #include <cstring>
+#include <string.h>
 
 #include "quad_option.h"
 
