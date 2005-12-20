@@ -128,9 +128,11 @@ class Tool : public Muttng {
      * @param dst Desination buffer for string.
      */
     void doLicense (buffer_t* dst);
-    /** setup all event handlers */
-    void setupEventHandlers (void);
 
+    /** connect all signal handlers */
+    void initSignals (void);
+    /** disconnect all signal handlers */
+    void cleanupSignals (void);
     /**
      * Signal connected to IntOption::sigOptionChange for $debug_level.
      * @param option Option for $debug_level.

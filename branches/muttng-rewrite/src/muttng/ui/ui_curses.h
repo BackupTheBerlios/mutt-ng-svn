@@ -27,8 +27,9 @@ class UICurses : public UIText {
     bool enterFilename (void);
     bool enterPassword (void);
     bool answerQuestion (void);
-    void displayError (const char* message);
-    void displayMessage (const char* message);
+    bool displayError (const buffer_t* message);
+    bool displayMessage (const buffer_t* message);
+    bool displayProgress (const buffer_t* message);
     bool enterValue(buffer_t* dst, buffer_t* prompt, size_t dstlen);
     bool enterPassword(buffer_t* dst, buffer_t* prompt, size_t dstlen);
   private:

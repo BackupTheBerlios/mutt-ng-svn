@@ -78,13 +78,21 @@ class UI : public Muttng {
     /**
      * Display an error message to user.
      * @param message Error message.
+     * @return true
      */
-    virtual void displayError (const char* message) = 0;
+    virtual bool displayError (const buffer_t* message) = 0;
     /**
-     * Display a normal message to user.
+     * Display a normal message to user to see.
      * @param message The message's text.
+     * @return true
      */
-    virtual void displayMessage (const char* message) = 0;
+    virtual bool displayMessage (const buffer_t* message) = 0;
+    /**
+     * Display a normal message to user not necessarily to see.
+     * @param message The message's text.
+     * @return true
+     */
+    virtual bool displayProgress (const buffer_t* message) = 0;
     /**
      * Display version information to user.
      * @param name Name and version info of the Tool.

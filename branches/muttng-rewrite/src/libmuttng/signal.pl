@@ -206,6 +206,19 @@ for (my $i = 1; $i <= $max; $i++) {
   print "}\n\n";
 
   print "/**\n";
+  print " * Connect a function to a signal.\n";
+  print " * \@param signal Target signal to connect to.\n";
+  print " * \@param object The object the handler is a member of.\n";
+  print " * \@param callback The callback function itself.\n";
+  print " * \@test signal_tests::test_signal_connect().\n";
+  print " */\n";
+  print "template<class T,$template_funcXint>\n";
+  print "void connectSignal (Signal${i}<$template_funcXint2>*& signal,\n";
+  print "                    T* object, bool (T::*callback)($template_funcXint3)) {\n";
+  print "  if (signal) signal->insert (new Func${i}<T,$template_funcXint2>(object,callback));\n";
+  print "}\n\n";
+
+  print "/**\n";
   print " * Remove all bindings of an object from a signal.\n";
   print " * \@param signal Signal.\n";
   print " * \@param object Object.\n";
@@ -214,6 +227,17 @@ for (my $i = 1; $i <= $max; $i++) {
   print "template<class T,$template_funcXint>\n";
   print "void disconnectSignals (Signal$i<$template_funcXint2>& signal, T* object) {\n";
   print "  signal.removeAll (object);\n";
+  print "}\n\n";
+
+  print "/**\n";
+  print " * Remove all bindings of an object from a signal.\n";
+  print " * \@param signal Signal.\n";
+  print " * \@param object Object.\n";
+  print " * \@test signal_tests::test_signal_disconnect().\n";
+  print " */\n";
+  print "template<class T,$template_funcXint>\n";
+  print "void disconnectSignals (Signal$i<$template_funcXint2>*& signal, T* object) {\n";
+  print "  if (signal) signal->removeAll (object);\n";
   print "}\n\n";
 
   print "/* }}} */\n\n";

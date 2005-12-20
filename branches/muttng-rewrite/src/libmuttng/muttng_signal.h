@@ -172,6 +172,19 @@ void connectSignal (Signal1<A1>& signal,
 }
 
 /**
+ * Connect a function to a signal.
+ * @param signal Target signal to connect to.
+ * @param object The object the handler is a member of.
+ * @param callback The callback function itself.
+ * @test signal_tests::test_signal_connect().
+ */
+template<class T,class A1>
+void connectSignal (Signal1<A1>*& signal,
+                    T* object, bool (T::*callback)(A1 a)) {
+  if (signal) signal->insert (new Func1<T,A1>(object,callback));
+}
+
+/**
  * Remove all bindings of an object from a signal.
  * @param signal Signal.
  * @param object Object.
@@ -180,6 +193,17 @@ void connectSignal (Signal1<A1>& signal,
 template<class T,class A1>
 void disconnectSignals (Signal1<A1>& signal, T* object) {
   signal.removeAll (object);
+}
+
+/**
+ * Remove all bindings of an object from a signal.
+ * @param signal Signal.
+ * @param object Object.
+ * @test signal_tests::test_signal_disconnect().
+ */
+template<class T,class A1>
+void disconnectSignals (Signal1<A1>*& signal, T* object) {
+  if (signal) signal->removeAll (object);
 }
 
 /* }}} */
@@ -346,6 +370,19 @@ void connectSignal (Signal2<A1,A2>& signal,
 }
 
 /**
+ * Connect a function to a signal.
+ * @param signal Target signal to connect to.
+ * @param object The object the handler is a member of.
+ * @param callback The callback function itself.
+ * @test signal_tests::test_signal_connect().
+ */
+template<class T,class A1,class A2>
+void connectSignal (Signal2<A1,A2>*& signal,
+                    T* object, bool (T::*callback)(A1 a,A2 b)) {
+  if (signal) signal->insert (new Func2<T,A1,A2>(object,callback));
+}
+
+/**
  * Remove all bindings of an object from a signal.
  * @param signal Signal.
  * @param object Object.
@@ -354,6 +391,17 @@ void connectSignal (Signal2<A1,A2>& signal,
 template<class T,class A1,class A2>
 void disconnectSignals (Signal2<A1,A2>& signal, T* object) {
   signal.removeAll (object);
+}
+
+/**
+ * Remove all bindings of an object from a signal.
+ * @param signal Signal.
+ * @param object Object.
+ * @test signal_tests::test_signal_disconnect().
+ */
+template<class T,class A1,class A2>
+void disconnectSignals (Signal2<A1,A2>*& signal, T* object) {
+  if (signal) signal->removeAll (object);
 }
 
 /* }}} */
@@ -525,6 +573,19 @@ void connectSignal (Signal3<A1,A2,A3>& signal,
 }
 
 /**
+ * Connect a function to a signal.
+ * @param signal Target signal to connect to.
+ * @param object The object the handler is a member of.
+ * @param callback The callback function itself.
+ * @test signal_tests::test_signal_connect().
+ */
+template<class T,class A1,class A2,class A3>
+void connectSignal (Signal3<A1,A2,A3>*& signal,
+                    T* object, bool (T::*callback)(A1 a,A2 b,A3 c)) {
+  if (signal) signal->insert (new Func3<T,A1,A2,A3>(object,callback));
+}
+
+/**
  * Remove all bindings of an object from a signal.
  * @param signal Signal.
  * @param object Object.
@@ -533,6 +594,17 @@ void connectSignal (Signal3<A1,A2,A3>& signal,
 template<class T,class A1,class A2,class A3>
 void disconnectSignals (Signal3<A1,A2,A3>& signal, T* object) {
   signal.removeAll (object);
+}
+
+/**
+ * Remove all bindings of an object from a signal.
+ * @param signal Signal.
+ * @param object Object.
+ * @test signal_tests::test_signal_disconnect().
+ */
+template<class T,class A1,class A2,class A3>
+void disconnectSignals (Signal3<A1,A2,A3>*& signal, T* object) {
+  if (signal) signal->removeAll (object);
 }
 
 /* }}} */
@@ -709,6 +781,19 @@ void connectSignal (Signal4<A1,A2,A3,A4>& signal,
 }
 
 /**
+ * Connect a function to a signal.
+ * @param signal Target signal to connect to.
+ * @param object The object the handler is a member of.
+ * @param callback The callback function itself.
+ * @test signal_tests::test_signal_connect().
+ */
+template<class T,class A1,class A2,class A3,class A4>
+void connectSignal (Signal4<A1,A2,A3,A4>*& signal,
+                    T* object, bool (T::*callback)(A1 a,A2 b,A3 c,A4 d)) {
+  if (signal) signal->insert (new Func4<T,A1,A2,A3,A4>(object,callback));
+}
+
+/**
  * Remove all bindings of an object from a signal.
  * @param signal Signal.
  * @param object Object.
@@ -717,6 +802,17 @@ void connectSignal (Signal4<A1,A2,A3,A4>& signal,
 template<class T,class A1,class A2,class A3,class A4>
 void disconnectSignals (Signal4<A1,A2,A3,A4>& signal, T* object) {
   signal.removeAll (object);
+}
+
+/**
+ * Remove all bindings of an object from a signal.
+ * @param signal Signal.
+ * @param object Object.
+ * @test signal_tests::test_signal_disconnect().
+ */
+template<class T,class A1,class A2,class A3,class A4>
+void disconnectSignals (Signal4<A1,A2,A3,A4>*& signal, T* object) {
+  if (signal) signal->removeAll (object);
 }
 
 /* }}} */
@@ -898,6 +994,19 @@ void connectSignal (Signal5<A1,A2,A3,A4,A5>& signal,
 }
 
 /**
+ * Connect a function to a signal.
+ * @param signal Target signal to connect to.
+ * @param object The object the handler is a member of.
+ * @param callback The callback function itself.
+ * @test signal_tests::test_signal_connect().
+ */
+template<class T,class A1,class A2,class A3,class A4,class A5>
+void connectSignal (Signal5<A1,A2,A3,A4,A5>*& signal,
+                    T* object, bool (T::*callback)(A1 a,A2 b,A3 c,A4 d,A5 e)) {
+  if (signal) signal->insert (new Func5<T,A1,A2,A3,A4,A5>(object,callback));
+}
+
+/**
  * Remove all bindings of an object from a signal.
  * @param signal Signal.
  * @param object Object.
@@ -906,6 +1015,17 @@ void connectSignal (Signal5<A1,A2,A3,A4,A5>& signal,
 template<class T,class A1,class A2,class A3,class A4,class A5>
 void disconnectSignals (Signal5<A1,A2,A3,A4,A5>& signal, T* object) {
   signal.removeAll (object);
+}
+
+/**
+ * Remove all bindings of an object from a signal.
+ * @param signal Signal.
+ * @param object Object.
+ * @test signal_tests::test_signal_disconnect().
+ */
+template<class T,class A1,class A2,class A3,class A4,class A5>
+void disconnectSignals (Signal5<A1,A2,A3,A4,A5>*& signal, T* object) {
+  if (signal) signal->removeAll (object);
 }
 
 /* }}} */
@@ -1092,6 +1212,19 @@ void connectSignal (Signal6<A1,A2,A3,A4,A5,A6>& signal,
 }
 
 /**
+ * Connect a function to a signal.
+ * @param signal Target signal to connect to.
+ * @param object The object the handler is a member of.
+ * @param callback The callback function itself.
+ * @test signal_tests::test_signal_connect().
+ */
+template<class T,class A1,class A2,class A3,class A4,class A5,class A6>
+void connectSignal (Signal6<A1,A2,A3,A4,A5,A6>*& signal,
+                    T* object, bool (T::*callback)(A1 a,A2 b,A3 c,A4 d,A5 e,A6 f)) {
+  if (signal) signal->insert (new Func6<T,A1,A2,A3,A4,A5,A6>(object,callback));
+}
+
+/**
  * Remove all bindings of an object from a signal.
  * @param signal Signal.
  * @param object Object.
@@ -1100,6 +1233,17 @@ void connectSignal (Signal6<A1,A2,A3,A4,A5,A6>& signal,
 template<class T,class A1,class A2,class A3,class A4,class A5,class A6>
 void disconnectSignals (Signal6<A1,A2,A3,A4,A5,A6>& signal, T* object) {
   signal.removeAll (object);
+}
+
+/**
+ * Remove all bindings of an object from a signal.
+ * @param signal Signal.
+ * @param object Object.
+ * @test signal_tests::test_signal_disconnect().
+ */
+template<class T,class A1,class A2,class A3,class A4,class A5,class A6>
+void disconnectSignals (Signal6<A1,A2,A3,A4,A5,A6>*& signal, T* object) {
+  if (signal) signal->removeAll (object);
 }
 
 /* }}} */
@@ -1291,6 +1435,19 @@ void connectSignal (Signal7<A1,A2,A3,A4,A5,A6,A7>& signal,
 }
 
 /**
+ * Connect a function to a signal.
+ * @param signal Target signal to connect to.
+ * @param object The object the handler is a member of.
+ * @param callback The callback function itself.
+ * @test signal_tests::test_signal_connect().
+ */
+template<class T,class A1,class A2,class A3,class A4,class A5,class A6,class A7>
+void connectSignal (Signal7<A1,A2,A3,A4,A5,A6,A7>*& signal,
+                    T* object, bool (T::*callback)(A1 a,A2 b,A3 c,A4 d,A5 e,A6 f,A7 g)) {
+  if (signal) signal->insert (new Func7<T,A1,A2,A3,A4,A5,A6,A7>(object,callback));
+}
+
+/**
  * Remove all bindings of an object from a signal.
  * @param signal Signal.
  * @param object Object.
@@ -1299,6 +1456,17 @@ void connectSignal (Signal7<A1,A2,A3,A4,A5,A6,A7>& signal,
 template<class T,class A1,class A2,class A3,class A4,class A5,class A6,class A7>
 void disconnectSignals (Signal7<A1,A2,A3,A4,A5,A6,A7>& signal, T* object) {
   signal.removeAll (object);
+}
+
+/**
+ * Remove all bindings of an object from a signal.
+ * @param signal Signal.
+ * @param object Object.
+ * @test signal_tests::test_signal_disconnect().
+ */
+template<class T,class A1,class A2,class A3,class A4,class A5,class A6,class A7>
+void disconnectSignals (Signal7<A1,A2,A3,A4,A5,A6,A7>*& signal, T* object) {
+  if (signal) signal->removeAll (object);
 }
 
 /* }}} */

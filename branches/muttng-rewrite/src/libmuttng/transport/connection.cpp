@@ -68,13 +68,21 @@ bool Connection::socketConnect() {
   if (!sigPreconnect.emit(url->host,url->port,url->secure))
     return false;
 
+  buffer_shrink(&errorMsg,0);
+  buffer_add_str(&errorMsg,_("Looking up host '"),-1);
+  buffer_add_str(&errorMsg,url->host,-1);
+  size_t len = errorMsg.len;
+  buffer_add_str(&errorMsg,"'...",4);
+
+  displayProgress->emit(&errorMsg);
+
   struct hostent * hp = gethostbyname(url->host);
 
   if (NULL == hp) {
-    buffer_add_str(&errorMsg,_("Error looking up host '"),-1);
-    buffer_add_str(&errorMsg,url->host,-1);
+    buffer_shrink(&errorMsg,len);
     buffer_add_str(&errorMsg,_("': "),-1);
     buffer_add_str(&errorMsg,hstrerror(h_errno),-1);
+    displayError->emit(&errorMsg);
     return false;
   }
 
@@ -84,7 +92,10 @@ bool Connection::socketConnect() {
   sin.sin_port = htons(url->port);
 
   if((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-    printf("socket failed: %s\n",strerror(errno));
+    buffer_shrink(&errorMsg,0);
+    buffer_add_str(&errorMsg,_("socket() call failed: "),-1);
+    buffer_add_str(&errorMsg,strerror(errno),-1);
+    displayError->emit(&errorMsg);
     return false;
   }
 
@@ -94,10 +105,12 @@ bool Connection::socketConnect() {
    * i.e. the connect() function from the C library.
    */
   if(::connect(fd, (const struct sockaddr *) &sin, sizeof(sin)) < 0) {
+    buffer_shrink(&errorMsg,0);
     buffer_add_str(&errorMsg,_("Connection to '"),-1);
     buffer_add_str(&errorMsg,url->host,-1);
     buffer_add_str(&errorMsg,_("' failed: "),-1);
     buffer_add_str(&errorMsg,strerror(errno),-1);
+    displayError->emit(&errorMsg);
     return false;
   }
 
@@ -222,9 +235,4 @@ bool Connection::getSecureVersion(buffer_t* dst) {
 #endif
   (void)dst;
   return false;
-}
-
-const buffer_t* Connection::getError() {
-  if (!errorMsg.len) return NULL;
-  return &errorMsg;
 }

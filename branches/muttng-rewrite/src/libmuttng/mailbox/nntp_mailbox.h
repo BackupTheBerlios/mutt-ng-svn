@@ -127,6 +127,8 @@ class NNTPMailbox : public RemoteMailbox {
     unsigned long last;
     /** how many articles server has */
     unsigned long total;
+    /** error message */
+    buffer_t errorMsg;
 };
 
 #endif

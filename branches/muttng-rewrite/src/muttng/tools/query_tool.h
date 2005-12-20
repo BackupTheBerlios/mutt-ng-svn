@@ -35,6 +35,8 @@ class QueryTool : public Tool {
   private:
     /** whether to print in colon-mode */
     bool colon;
+    /** whether to not print messages */
+    bool quiet;
     /**
      * Print folder stats.
      * @param folder Folder.

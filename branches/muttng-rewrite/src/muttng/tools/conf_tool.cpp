@@ -38,7 +38,7 @@ Options:\n\
   ");
 
 ConfTool::ConfTool (int argc, char** argv) : Tool (argc, argv) {
-  this->ui = new UIPlain ();
+  this->ui = new UIPlain(getName());
 }
 
 ConfTool::~ConfTool () {}

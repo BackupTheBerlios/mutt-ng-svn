@@ -41,6 +41,10 @@
 #include "message/subject_header.h"
 #include "config/config_manager.h"
 
+static Signal1<const buffer_t*> sigProgress;
+static Signal1<const buffer_t*> sigMessage;
+static Signal1<const buffer_t*> sigError;
+
 /** static debug obj for library classes */
 static Debug* debugObj = NULL;
 /** storage for @ref option_debug_level */
@@ -171,7 +175,10 @@ LibMuttng::LibMuttng () {
     buffer_add_ch(&AttachMarker,'\a');
 
   }
-  LibMuttng::debug = debugObj;
+  this->debug = debugObj;
+  this->displayMessage = &sigMessage;
+  this->displayProgress = &sigProgress;
+  this->displayError = &sigError;
 }
 
 LibMuttng::~LibMuttng (void) {

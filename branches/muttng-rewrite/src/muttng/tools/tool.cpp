@@ -23,6 +23,7 @@
 #include "libmuttng/cache/cache.h"
 #include "libmuttng/config/config_manager.h"
 
+#include "ui/ui.h"
 #include "ui/ui_plain.h"
 
 #include "config/global_variables.h"
@@ -126,7 +127,6 @@ int Tool::genericArg (unsigned char c, const char* arg) {
 
 bool Tool::start (void) {
   buffer_t error, dbg;
-  UIPlain ui;
   bool rc = false;
 
   buffer_init (&error);
@@ -142,7 +142,7 @@ bool Tool::start (void) {
   /* since we need it for debugging and... */
   muttngInit (Homedir, getName (), Umask);
 
-  setupEventHandlers ();
+  initSignals();
 
   Option* dbglev = ConfigManager::get("debug_level");
   if (dbglev)
@@ -170,8 +170,7 @@ out:
 }
 
 bool Tool::end (void) {
-  disconnectSignals (event->sigNumOptChange, this);
-  disconnectSignals (event->sigContextChange, this);
+  cleanupSignals();
   ConfigManager::cleanup();
   core_cleanup();
   return (this->ui->end ());
@@ -325,12 +324,23 @@ void Tool::displayUsage (void) {
   getUsage (&usage);
   buffer_add_ch (&usage, '\n');
   buffer_add_str (&usage, GenericOptions, -1);
-  ui->displayMessage (usage.str);
+  ui->displayMessage (&usage);
   buffer_free (&usage);
 }
 
-void Tool::setupEventHandlers (void) {
-  connectSignal (event->sigContextChange, this, &Tool::catchContextChange);
+void Tool::initSignals() {
+  connectSignal(event->sigContextChange,this,&Tool::catchContextChange);
+  connectSignal(libmuttng->displayProgress,this->ui,&UI::displayProgress);
+  connectSignal(libmuttng->displayMessage,this->ui,&UI::displayMessage);
+  connectSignal(libmuttng->displayError,this->ui,&UI::displayError);
+
+}
+
+void Tool::cleanupSignals() {
+  disconnectSignals(event->sigContextChange,this);
+  disconnectSignals(libmuttng->displayProgress,this->ui);
+  disconnectSignals(libmuttng->displayMessage,this->ui);
+  disconnectSignals(libmuttng->displayError,this->ui);
 }
 
 bool Tool::catchDebugLevelChange (Option* option) {

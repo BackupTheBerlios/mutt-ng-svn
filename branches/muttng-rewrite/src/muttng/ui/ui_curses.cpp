@@ -23,19 +23,31 @@ bool UICurses::enterFilename (void) { return (true); }
 bool UICurses::enterPassword (void) { return (true); }
 bool UICurses::answerQuestion (void) { return (true); }
 
-void UICurses::displayError (const char* message) {
+bool UICurses::displayError (const buffer_t* message) {
   if (isCurses) {
     /* former mutt error */
   } else if (message)
-    cerr << message << endl;
+    cerr << message->str << endl;
+  return true;
 }
 
-void UICurses::displayMessage (const char* message) {
+bool UICurses::displayMessage (const buffer_t* message) {
   if (isCurses) {
     /* former mutt_message() */
   } else if (message)
-    cout << message << endl;
+    cout << message->str << endl;
+  /* sleep(1) */
+  return true;
 }
+
+bool UICurses::displayProgress (const buffer_t* message) {
+  if (isCurses) {
+    /* former mutt_message() */
+  } else if (message)
+    cout << message->str << endl;
+  return true;
+}
+
 bool UICurses::enterValue(buffer_t* dst, buffer_t* prompt, size_t dstlen) {
   (void)dst;(void)prompt;(void)dstlen;
   return false;

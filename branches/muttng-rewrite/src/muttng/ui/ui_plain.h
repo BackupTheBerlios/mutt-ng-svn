@@ -21,17 +21,25 @@
  */
 class UIPlain : public UIText {
   public:
-    UIPlain (void);
+    /**
+     * Create new "plain" UI.
+     * @param name_ Name of application for error reporting.
+     */
+    UIPlain (const char* name_);
     ~UIPlain (void);
     bool start (void);
     bool end (void);
     bool enterFilename (void);
     bool enterPassword (void);
     bool answerQuestion (void);
-    void displayError (const char* message);
-    void displayMessage (const char* message);
+    bool displayError (const buffer_t* message);
+    bool displayMessage (const buffer_t* message);
+    bool displayProgress (const buffer_t* message);
     bool enterValue(buffer_t* dst, buffer_t* prompt, size_t dstlen);
     bool enterPassword(buffer_t* dst, buffer_t* prompt, size_t dstlen);
+  private:
+    /** application name */
+    const char* name;
 };
 
 #endif /* !MUTTNG_UI_PLAIN_H */

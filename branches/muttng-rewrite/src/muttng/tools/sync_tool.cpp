@@ -23,7 +23,7 @@ static const char* Usage = N_(" ");
 static const char* Options = N_(" ");
 
 SyncTool::SyncTool (int argc, char** argv) : Tool (argc, argv) {
-  this->ui = new UIPlain ();
+  this->ui = new UIPlain(getName());
 }
 
 SyncTool::~SyncTool () {}

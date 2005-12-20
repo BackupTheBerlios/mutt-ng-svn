@@ -25,8 +25,9 @@ class UIText : public UI {
     virtual bool enterFilename (void) = 0;
     virtual bool enterPassword (void) = 0;
     virtual bool answerQuestion (void) = 0;
-    virtual void displayError (const char* message) = 0;
-    virtual void displayMessage (const char* message) = 0;
+    virtual bool displayError (const buffer_t* message) = 0;
+    virtual bool displayMessage (const buffer_t* message) = 0;
+    virtual bool displayProgress (const buffer_t* message) = 0;
     virtual bool enterValue(buffer_t* dst, buffer_t* prompt, size_t dstlen) = 0;
     virtual bool enterPassword(buffer_t* dst, buffer_t* prompt, size_t dstlen) = 0;
     void displayVersion (const char* name, const char* copyright,

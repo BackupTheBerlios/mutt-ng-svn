@@ -205,17 +205,9 @@ class Mailbox : public LibMuttng {
      * Abstract interface to different modules: create Mailbox
      * object depending on URL.
      * @param url URL string.
-     * @param error Error buffer where error message will be put (if any).
      * @return Mailbox object or @c NULL in case of error.
      */
-    static Mailbox* fromURL (const char* url, buffer_t* error);
-
-    /**
-     * Retrieve error message for state.
-     * @param state State.
-     * @param error Storage for error message.
-     */
-    void strerror (mailbox_query_status state, buffer_t* error);
+    static Mailbox* fromURL (const char* url);
 
     /**
      * Signal emitted when username for connection is required.
@@ -242,8 +234,12 @@ class Mailbox : public LibMuttng {
     unsigned int haveFilters:1;
     /** URL if any. */
     url_t* url;
-    /** error message */
-    buffer_t errorMsg;
+    /**
+     * Get error message for state.
+     * @param state State.
+     * @return Localized error message.
+     */
+    const char* strerror (mailbox_query_status state);
 };
 
 #endif /* !LIBMUTTNG_MAILBOX_MAILBOX_H */

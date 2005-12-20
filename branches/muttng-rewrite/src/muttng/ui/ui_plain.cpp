@@ -10,10 +10,11 @@
 
 #include "core/mem.h"
 #include "core/str.h"
+#include "core/intl.h"
 
 using namespace std;
 
-UIPlain::UIPlain (void) {}
+UIPlain::UIPlain (const char* name_) : name(name_) {}
 UIPlain::~UIPlain (void) {}
 
 bool UIPlain::start (void) { return (true); }
@@ -22,14 +23,26 @@ bool UIPlain::enterFilename (void) { return (true); }
 bool UIPlain::enterPassword (void) { return (true); }
 bool UIPlain::answerQuestion (void) { return (true); }
 
-void UIPlain::displayError (const char* message) {
-  if (message)
-    cerr << message << endl;
+bool UIPlain::displayError (const buffer_t* message) {
+  if (message) {
+    if (name)
+      cerr << name << _(": Error: ");
+    cerr << message->str << endl;
+  }
+  return true;
 }
 
-void UIPlain::displayMessage (const char* message) {
+bool UIPlain::displayMessage (const buffer_t* message) {
   if (message)
-    cout << message << endl;
+    cout << message->str << endl;
+  /* sleep(1) */
+  return true;
+}
+
+bool UIPlain::displayProgress (const buffer_t* message) {
+  if (message)
+    cout << message->str << endl;
+  return true;
 }
 
 bool UIPlain::enterValue(buffer_t* dst, buffer_t* prompt, size_t dstlen) {

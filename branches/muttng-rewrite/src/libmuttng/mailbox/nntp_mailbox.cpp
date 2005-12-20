@@ -67,9 +67,12 @@ NNTPMailbox::NNTPMailbox (url_t* url_, Connection * c = NULL) : RemoteMailbox (u
     DEBUGPRINT(D_MOD,("adding connection for %s:%d at end",url->host,url->port));
     Connections.push_back(c);
   }
+  buffer_init(&errorMsg);
 }
 
-NNTPMailbox::~NNTPMailbox (void) {}
+NNTPMailbox::~NNTPMailbox (void) {
+  buffer_free(&errorMsg);
+}
 
 void NNTPMailbox::reg() {
   char* p;
@@ -221,13 +224,14 @@ mailbox_query_status NNTPMailbox::openMailbox() {
      */
     buffer_add_str(&errorMsg,_("Invalid newsgroup '"),-1);
     buffer_add_str(&errorMsg,_("'"),-1);
+    displayError->emit(&errorMsg);
     return MQ_NOT_CONNECTED;
   }
 
   if (conn->socketConnect()==false) {
-    buffer_add_buffer(&errorMsg,(buffer_t*)conn->getError());
     return MQ_NOT_CONNECTED;
   }
+
   if (conn->readLine(&rbuf)<=0) return MQ_NOT_CONNECTED;
   if (*rbuf.str!='2') {
     makeError();
@@ -283,6 +287,8 @@ void NNTPMailbox::makeError() {
     buffer_add_str(&errorMsg,_("'"),-1);
     buffer_chomp(&errorMsg);
   }
+  DEBUGPRINT(D_MOD,("%s",errorMsg.str));
+  displayError->emit(&errorMsg);
   conn->ready = false;
 }
 

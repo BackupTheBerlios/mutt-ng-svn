@@ -20,17 +20,18 @@ using namespace std;
 
 /** Usage string for @c muttng(1). */
 static const char* Usage = N_("\
-Usage: muttng-query [-c] URL...\n\
+Usage: muttng-query [-c] [-q] URL...\n\
   ");
 
 /** Help string for @c muttng(1). */
 static const char* Options = N_("\
 Options:\n\
   -c\tPrint output in colon-separated fields.\n\
+  -q\tSuppress informational messages for non-colon output.\n\
   ");
 
 QueryTool::QueryTool (int argc, char** argv) : Tool (argc, argv),colon(false) {
-  this->ui = new UIPlain ();
+  this->ui = new UIPlain(getName());
 }
 
 QueryTool::~QueryTool () {}
@@ -43,10 +44,15 @@ void QueryTool::getUsage (buffer_t* dst) {
 
 int QueryTool::main (void) {
   int ch = 0, rc = 0;
+  bool quiet = false;
 
-  while ((ch = getopt (this->argc, this->argv, "c" GENERIC_ARGS)) != -1) {
+  while ((ch = getopt (this->argc, this->argv, "cq" GENERIC_ARGS)) != -1) {
     switch (ch) {
-    case 'c': colon = true; break;
+    case 'q':
+    case 'c':
+      if (ch == 'c') colon = true;
+      quiet = true;
+      break;
     default:
       rc = genericArg (ch, optarg);
       if (rc == -1)
@@ -66,6 +72,12 @@ int QueryTool::main (void) {
 
   if (!this->start ())
     return (1);
+
+  if (quiet) {
+    disconnectSignals(this->libmuttng->displayMessage,this->ui);
+    disconnectSignals(this->libmuttng->displayProgress,this->ui);
+  }
+
   /* do something */
   doURLs();
   this->end ();
@@ -92,43 +104,23 @@ void QueryTool::folderStats(Mailbox* folder) {
 void QueryTool::doURLs() {
   if (argc==0) return;
 
-  buffer_t error;
   Mailbox* folder;
-  mailbox_query_status state;
-  buffer_init(&error);
 
   for (int i = 0; i < argc; i++) {
-
-    buffer_shrink(&error,0);
-
-    if (!(folder = Mailbox::fromURL(argv[i],&error))) {
-      std::cerr << _("Error opening folder '") << (NONULL(argv[i])) << _("': ") << (NONULL(error.str)) << std::endl;
+    if (!(folder = Mailbox::fromURL(argv[i])))
       continue;
-    }
-
     connectSignal(folder->sigGetUsername,this,&QueryTool::getUsername);
     connectSignal(folder->sigGetPassword,this,&QueryTool::getPassword);
-
-    if ((state = folder->openMailbox()) == MQ_OK) {
-      if ((state = folder->checkMailbox())) {
-        buffer_shrink(&error,0);
-        folder->strerror(state,&error);
-        std::cerr << _("Error opening folder '") << (NONULL(argv[i])) << _("': ") << (NONULL(error.str)) << std::endl;
-      } else
+    if (folder->openMailbox() == MQ_OK) {
+      if (folder->checkMailbox() == MQ_OK)
         folderStats(folder);
       folder->closeMailbox();
-    } else {
-      buffer_shrink(&error,0);
-      folder->strerror(state,&error);
-      std::cerr << (NONULL(error.str)) << std::endl;
     }
-
+    /* not really needed as folder gets destroyed, but... */
     disconnectSignals(folder->sigGetUsername,this);
     disconnectSignals(folder->sigGetPassword,this);
-
     delete folder;
   }
-  buffer_free(&error);
 }
 
 bool QueryTool::getUsername (url_t* url) {

@@ -82,6 +82,30 @@ class LibMuttng {
     int getDebugLevel();
     /** Cleanup after use of library. */
     void cleanup (void);
+
+    /**
+     * Signal emitted when some part wants to display progress messages.
+     * Parameters are in order:
+     * -# message
+     */
+    Signal1<const buffer_t*>* displayProgress;
+
+    /**
+     * Signal emitted when some part wants to display informational
+     * messages and wants to have the user see it. This slightly differs
+     * from displayProgress signal as this one is more important.
+     * Parameters are in order:
+     * -# message
+     */
+    Signal1<const buffer_t*>* displayMessage;
+
+    /**
+     * Signal emitted when some part wants to display an error message.
+     * Parameters are in order:
+     * -# message
+     */
+    Signal1<const buffer_t*>* displayError;
+
   protected:
     /**
      * Signal handler catching changes of $debug_level.
