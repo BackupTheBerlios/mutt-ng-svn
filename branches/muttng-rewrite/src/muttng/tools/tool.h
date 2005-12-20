@@ -23,7 +23,7 @@
 #include "config/config.h"
 
 /** generic command-line arguments common for all tools. */
-#define GENERIC_ARGS    "vVhnF:d:"
+#define GENERIC_ARGS    "vVhnF:d:q"
 
 /**
  * Abstract superclass for building binaries with a user interface based
@@ -63,6 +63,8 @@ class Tool : public Muttng {
      */
     virtual void getUsage (buffer_t* dst) = 0;
   protected:
+    /** whether -q switch appeared on command line */
+    bool quiet;
     /**
      * For use by inheriting classes: see if some argument is a generic
      * one for all tools. This already does handle it.

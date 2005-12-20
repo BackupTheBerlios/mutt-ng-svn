@@ -20,14 +20,13 @@ using namespace std;
 
 /** Usage string for @c muttng(1). */
 static const char* Usage = N_("\
-Usage: muttng-query [-c] [-q] URL...\n\
+Usage: muttng-query [-c] URL...\n\
   ");
 
 /** Help string for @c muttng(1). */
 static const char* Options = N_("\
 Options:\n\
   -c\tPrint output in colon-separated fields.\n\
-  -q\tSuppress informational messages for non-colon output.\n\
   ");
 
 QueryTool::QueryTool (int argc, char** argv) : Tool (argc, argv),colon(false) {
@@ -44,14 +43,14 @@ void QueryTool::getUsage (buffer_t* dst) {
 
 int QueryTool::main (void) {
   int ch = 0, rc = 0;
-  bool quiet = false;
 
-  while ((ch = getopt (this->argc, this->argv, "cq" GENERIC_ARGS)) != -1) {
+  while ((ch = getopt (this->argc, this->argv, "c" GENERIC_ARGS)) != -1) {
     switch (ch) {
-    case 'q':
     case 'c':
-      if (ch == 'c') colon = true;
-      quiet = true;
+      colon = true;
+      /* fallthrough */
+    case 'q':
+      Tool::quiet = true;
       break;
     default:
       rc = genericArg (ch, optarg);
@@ -72,11 +71,6 @@ int QueryTool::main (void) {
 
   if (!this->start ())
     return (1);
-
-  if (quiet) {
-    disconnectSignals(this->libmuttng->displayMessage,this->ui);
-    disconnectSignals(this->libmuttng->displayProgress,this->ui);
-  }
 
   /* do something */
   doURLs();

@@ -88,6 +88,7 @@ Generic options:\n\
   -F <file>\tRead <file> instead of default user configuration\n\
   -h\t\tThis help screen\n\
   -n\t\tDo not read the system configuration file\n\
+  -q\t\tSuppress all informational messages\n\
   -v\t\tShow version info and compile-time options\n\
   -V\t\tShow warranty and license");
 
@@ -97,6 +98,7 @@ Tool::Tool (int argc, char** argv) {
   this->readGlobal = true;
   this->altConfig = NULL;
   this->libmuttng = NULL;
+  this->quiet = false;
 }
 
 Tool::~Tool () {
@@ -118,6 +120,7 @@ int Tool::genericArg (unsigned char c, const char* arg) {
     case 'n': readGlobal = false; break;
     case 'F': altConfig = arg; break;
     case 'd': DebugLevel = optarg; break;
+    case 'q': quiet = true; break;
     case '?':
     default:
       return (-1);
@@ -330,16 +333,20 @@ void Tool::displayUsage (void) {
 
 void Tool::initSignals() {
   connectSignal(event->sigContextChange,this,&Tool::catchContextChange);
-  connectSignal(libmuttng->displayProgress,this->ui,&UI::displayProgress);
-  connectSignal(libmuttng->displayMessage,this->ui,&UI::displayMessage);
+  if (!quiet) {
+    connectSignal(libmuttng->displayProgress,this->ui,&UI::displayProgress);
+    connectSignal(libmuttng->displayMessage,this->ui,&UI::displayMessage);
+  }
   connectSignal(libmuttng->displayError,this->ui,&UI::displayError);
 
 }
 
 void Tool::cleanupSignals() {
   disconnectSignals(event->sigContextChange,this);
-  disconnectSignals(libmuttng->displayProgress,this->ui);
-  disconnectSignals(libmuttng->displayMessage,this->ui);
+  if (!quiet) {
+    disconnectSignals(libmuttng->displayProgress,this->ui);
+    disconnectSignals(libmuttng->displayMessage,this->ui);
+  }
   disconnectSignals(libmuttng->displayError,this->ui);
 }
 
