@@ -82,7 +82,7 @@ const char* IntOption::getType() { return _("number"); }
 
 bool IntOption::validity(buffer_t* dst) {
   if (!dst) return true;
-  if (min == INT_MIN && max == INT_MAX) {
+  if (min == 0 && max == INT_MAX) {
     buffer_add_str(dst,_("positive"),-1);
   } else if (min != INT_MIN && max != INT_MAX) {  
     buffer_add_ch(dst,'[');

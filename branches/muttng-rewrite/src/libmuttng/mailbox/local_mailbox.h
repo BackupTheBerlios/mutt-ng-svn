@@ -30,6 +30,12 @@ class LocalMailbox : public Mailbox {
      * @return Mailbox or @c NULL in case of error.
      */
     static Mailbox* fromURL (url_t* url_,buffer_t* error);
-}; 
+
+    /**
+     * Register variables specific to local mailboxes.
+     */
+    static void reg();
+
+};
 
 #endif

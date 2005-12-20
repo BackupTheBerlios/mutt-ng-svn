@@ -10,6 +10,8 @@
 
 #include "core/intl.h"
 
+#include "libmuttng/config/config_manager.h"
+
 #include "local_mailbox.h"
 
 #include "mbox_mailbox.h"
@@ -17,11 +19,20 @@
 #include "maildir_mailbox.h"
 #include "mh_mailbox.h"
 
+static int Timeout = 0;
+static char* DefaultType = NULL;
+
 LocalMailbox::LocalMailbox (url_t* url_) : Mailbox (url_) {
   this->haveFilters = 1;
 }
 
 LocalMailbox::~LocalMailbox (void) {
+}
+
+void LocalMailbox::reg() {
+  Option* opt = ConfigManager::reg(new IntOption("local_mail_check","30",&Timeout,false));
+  ConfigManager::reg(new SynOption("mail_check",opt));
+  ConfigManager::reg(new StringOption("mbox_type","maildir",&DefaultType,"^(mbox|mmdf|maildir|mh)$"));
 }
 
 Mailbox* LocalMailbox::fromURL (url_t* url_, buffer_t* error) {

@@ -68,7 +68,7 @@ int rx_eq (const rx_t* r1, const rx_t* r2) {
 int rx_exec (rx_t* rx, const char* str) {
   if (!rx || !rx->rx)
     return 0;
-  return regexec(rx->rx,str,(size_t)0,(regmatch_t*)0,(int)0);
+  return regexec(rx->rx,str,(size_t)0,(regmatch_t*)0,(int)0)==0;
 }
 
 #else /* !CORE_WANT_PCRE */

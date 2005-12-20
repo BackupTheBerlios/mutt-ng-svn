@@ -20,6 +20,7 @@
 #include "libmuttng/config/rx_option.h"
 #include "libmuttng/config/quad_option.h"
 #include "libmuttng/config/sys_option.h"
+#include "libmuttng/config/syn_option.h"
 
 #include "core/buffer.h"
 
@@ -36,9 +37,9 @@ class ConfigManager {
     /**
      * Register a new option.
      * @param option Option.
-     * @return Success (i.e. didn't exist yet).
+     * @return The option if added and @c NULL if it existed already.
      */
-    static bool reg(Option* option);
+    static Option* reg(Option* option);
     /**
      * Set an option to a different value.
      * @param name Name of option.

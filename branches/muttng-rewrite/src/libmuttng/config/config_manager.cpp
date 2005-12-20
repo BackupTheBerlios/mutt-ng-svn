@@ -40,16 +40,16 @@ bool ConfigManager::cleanup() {
   return true;
 }
 
-bool ConfigManager::reg(Option* option) {
+Option* ConfigManager::reg(Option* option) {
   init();
   if (!option)
-    return false;
+    return NULL;
   if (Options->exists(option->getName())) {
     delete option;
-    return false;
+    return NULL;
   }
   Options->add(option->getName(),option);
-  return true;
+  return option;
 }
 
 bool ConfigManager::set(const char* name, buffer_t* value, buffer_t* error) {

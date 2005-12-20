@@ -24,6 +24,8 @@
 #include "mailbox/nntp_mailbox.h"
 #endif
 
+#include "mailbox/local_mailbox.h"
+
 #ifdef LIBMUTTNG_HAVE_LANGINFO_CODESET
 #include <langinfo.h>
 #endif
@@ -154,6 +156,7 @@ LibMuttng::LibMuttng () {
     ConfigManager::reg(new SysOption("muttng_dnsname",Fqdn.str));
 
     /* register all options within library modules */
+    LocalMailbox::reg();
 #ifdef LIBMUTTNG_POP3
     POP3Mailbox::reg();
 #endif
