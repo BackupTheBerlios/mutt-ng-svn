@@ -4,6 +4,8 @@
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Bool option
  */
+#include <cstring>
+
 #include "bool_option.h"
 
 #include "core/intl.h"

@@ -3,6 +3,8 @@
  * @file core/rx.c
  * @brief Implementation: Regular expressions
  */
+#include <string.h>
+
 #include "core_features.h"
 
 #include "rx.h"

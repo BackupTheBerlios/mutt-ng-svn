@@ -21,9 +21,6 @@
 #include "mem.h"
 #include "hash.h"
 
-/** alphabet of numbers */
-static const char* Alph = "0123456789abcdef";
-
 #ifdef CORE_LIBICONV
 
 static void* Charsets = NULL;
@@ -209,66 +206,6 @@ static struct {
   NULL, NULL}
 };
 #endif /* !CORE_LIBICONV */
-
-char* conv_itoa2 (char* buf, signed long num, short pad, short base) {
-  unsigned short i = NUMBUF-2, sign = num < 0;
-  short p = pad;
-
-  buf[NUMBUF-1] = '\0';
-  switch (base) {
-    case 2:
-    case 8:
-    case 10:
-    case 16:
-      break;
-    default:
-      base = 10;
-      break;
-  }
-  if (num == 0 && pad < 0) {
-    buf[i--] = '0';
-    return (buf+i+1);
-  }
-  if (pad < 0)
-    pad = i;
-  while ((num != 0 || p > 0) && i >= sign && pad > 0) {
-    buf[i--] = Alph[abs (num % base)];
-    num /= base;
-    pad--;
-  }
-  if (sign)
-    buf[i--] = '-';
-  return (buf+i+1);
-}
-
-char* conv_uitoa2 (char* buf, unsigned long num, short pad, short base) {
-  unsigned short i = NUMBUF-2;
-  short p = pad;
-
-  buf[NUMBUF-1] = '\0';
-  switch (base) {
-    case 2:
-    case 8:
-    case 10:
-    case 16:
-      break;
-    default:
-      base = 10;
-      break;
-  }
-  if (num == 0 && pad < 0) {
-    buf[i--] = '0';
-    return (buf+i+1);
-  }
-  if (pad < 0)
-    pad = i;
-  while ((num != 0 || p > 0) && pad > 0) {
-    buf[i--] = Alph[abs (num % base)];
-    num /= base;
-    pad--;
-  }
-  return (buf+i+1);
-}
 
 #ifndef CORE_LIBICONV
 void conv_init () {}

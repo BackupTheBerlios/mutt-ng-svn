@@ -64,36 +64,6 @@ char *str_ncat (char *d, size_t l, const char *s, size_t sl)
   return p;
 }
 
-int str_cmp (const char *a, const char *b)
-{
-  return strcmp (NONULL (a), NONULL (b));
-}
-
-int str_casecmp (const char *a, const char *b)
-{
-  return strcasecmp (NONULL (a), NONULL (b));
-}
-
-int str_ncmp (const char *a, const char *b, size_t l)
-{
-  return strncmp (NONULL (a), NONULL (b), l);
-}
-
-int str_ncasecmp (const char *a, const char *b, size_t l)
-{
-  return strncasecmp (NONULL (a), NONULL (b), l);
-}
-
-size_t str_len (const char *a)
-{
-  return a ? strlen (a) : 0;
-}
-
-int str_coll (const char *a, const char *b)
-{
-  return strcoll (NONULL (a), NONULL (b));
-}
-
 void str_replace (char **p, const char *s)
 {
   mem_free (p);
@@ -170,10 +140,6 @@ const char *str_isstr (const char *haystack, const char *needle)
     haystack++;
   }
   return NULL;
-}
-
-int str_eq (const char* s1, const char* s2) {
-  return (str_eq2 (s1, s2, str_len (s2)));
 }
 
 int str_eq2 (const char* s1, const char* s2, size_t s2len) {

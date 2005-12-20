@@ -106,27 +106,27 @@ char *str_ncat (char* d, size_t l, const char* s, size_t sl);
 /**
  * <tt>NULL</tt>-aware @c strcmp() wrapper.
  */
-int str_cmp (const char* a, const char* b);
+#define str_cmp(A,B)            strcmp(NONULL(A),NONULL(B))
 /**
  * <tt>NULL</tt>-aware @c strcasecmp() wrapper.
  */
-int str_casecmp (const char* a, const char* b);
+#define str_casecmp(A,B)        strcasecmp(NONULL(A),NONULL(B))
 /**
  * <tt>NULL</tt>-aware @c strncmp() wrapper.
  */
-int str_ncmp (const char* a, const char* b, size_t l);
+#define str_ncmp(A,B,L)         strncmp(NONULL(A),NONULL(B),L)
 /**
  * <tt>NULL</tt>-aware @c strncasecmp() wrapper.
  */
-int str_ncasecmp (const char* a, const char* b, size_t l);
+#define str_ncasecmp(A,B,L)     strncasecmp(NONULL(A),NONULL(B),L)
 /**
  * <tt>NULL</tt>-aware @c strcoll() wrapper.
  */
-int str_coll (const char* a, const char* b);
+#define str_coll(A,B)           strcoll(NONULL(A),NONULL(B))
 /**
  * <tt>NULL</tt>-aware @c strlen() wrapper.
  */
-size_t str_len (const char* a);
+#define str_len(A)              (A?strlen(A):0)
 
 /**
  * Convert string to lower case.
@@ -165,11 +165,11 @@ void str_adjust (char** p);
 /**
  * Test two strings for equality.
  * Total length as well as contents must be identical for success.
- * @param s1 1st string.
- * @param s2 2nd string.
+ * @param B 1st string.
+ * @param A 2nd string.
  * @return Equality or not.
  */
-int str_eq (const char* s1, const char* s2);
+#define str_eq(A,B)             str_eq2(A,B,str_len(B))
 /**
  * Test two strings for equality.
  * Total length as well as contents must be identical for success.

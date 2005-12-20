@@ -4,6 +4,8 @@
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Quad option
  */
+#include <cstring>
+
 #include "quad_option.h"
 
 #include "core/intl.h"
