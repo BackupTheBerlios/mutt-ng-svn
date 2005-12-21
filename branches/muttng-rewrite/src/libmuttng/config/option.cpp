@@ -15,6 +15,7 @@ Option::Option(const char* name_, const char* init_) : name(name_),init(NULL) {
   buffer_init(&tmp);
   if (buffer_extract_token2(&tmp,init_,0,ConfigManager::get)>0)
     init = str_dup(tmp.str);
+  if (!init) init = str_dup("");
   buffer_free(&tmp);
 }
 

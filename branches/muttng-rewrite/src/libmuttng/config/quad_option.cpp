@@ -14,7 +14,7 @@
 
 QuadOption::QuadOption(const char* name_, const char* init_,
                        unsigned short* store_) : Option(name_,init_), store(store_) {
-  set(init_,NULL);
+  set(init,NULL);
 }
 
 bool QuadOption::set(const char* value, buffer_t* error) {

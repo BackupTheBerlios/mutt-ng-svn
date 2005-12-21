@@ -7,6 +7,7 @@
  */
 #include "libmuttng/libmuttng_features.h"
 
+#define CONNECTION_MAIN_CPP
 #include "connection.h"
 #include "plain_connection.h"
 #ifdef LIBMUTTNG_SSL_OPENSSL
@@ -63,9 +64,29 @@ Connection::~Connection() {
 
 void Connection::reg() {
   ConfigManager::reg(new IntOption("connect_timeout","30",&ConnectTimeout,false));
+  ConfigManager::reg(new IntOption("ssl_min_dh_prime_bits","0",&SSLDHPrimeBits,false));
+  ConfigManager::reg(new StringOption("ssl_client_cert","",&SSLClientCert));
+  ConfigManager::reg(new StringOption("certificate_file","$HOME/.mutt_certificates",&SSLCertFile));
+  ConfigManager::reg(new StringOption("entropy_file","",&SSLEntropyFile));
+  ConfigManager::reg(new StringOption("ssl_ca_certificates_file","",&SSLCaCertFile));
+  ConfigManager::reg(new BoolOption("use_sslv3","true",&UseSSL3));
+  ConfigManager::reg(new BoolOption("use_tlsv1","true",&UseTLS1));
+}
+
+size_t Connection::makeMsg (const char* msg) {
+  buffer_shrink(&errorMsg,0);
+  buffer_add_str(&errorMsg,msg,-1);
+  buffer_add_str(&errorMsg," '",2);
+  buffer_add_str(&errorMsg,url->host,-1);
+  buffer_add_ch(&errorMsg,'\'');
+  size_t ret = errorMsg.len;
+  buffer_add_str(&errorMsg,"...",3);
+  return ret;
 }
 
 bool Connection::socketConnect() {
+  size_t msglen;
+
   /*
    * TODO: we need to differentiate between different errors.
    * Shall we use exceptions to do that?
@@ -77,19 +98,14 @@ bool Connection::socketConnect() {
   if (!sigPreconnect.emit(url->host,url->port,url->secure))
     return false;
 
-  buffer_shrink(&errorMsg,0);
-  buffer_add_str(&errorMsg,_("Looking up host '"),-1);
-  buffer_add_str(&errorMsg,url->host,-1);
-  size_t len = errorMsg.len;
-  buffer_add_str(&errorMsg,"'...",4);
-
+  msglen = makeMsg(_("Looking up host"));
   displayProgress->emit(&errorMsg);
 
   struct hostent * hp = gethostbyname(url->host);
 
   if (NULL == hp) {
-    buffer_shrink(&errorMsg,len);
-    buffer_add_str(&errorMsg,_("': "),-1);
+    buffer_shrink(&errorMsg,msglen);
+    buffer_add_str(&errorMsg,_(": "),-1);
     buffer_add_str(&errorMsg,hstrerror(h_errno),-1);
     displayError->emit(&errorMsg);
     return false;
@@ -101,7 +117,8 @@ bool Connection::socketConnect() {
   sin.sin_port = htons(url->port);
 
   if((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
-    buffer_shrink(&errorMsg,0);
+    buffer_shrink(&errorMsg,msglen);
+    buffer_add_str(&errorMsg,_(": "),-1);
     buffer_add_str(&errorMsg,_("socket() call failed: "),-1);
     buffer_add_str(&errorMsg,strerror(errno),-1);
     displayError->emit(&errorMsg);
@@ -111,16 +128,17 @@ bool Connection::socketConnect() {
   if (ConnectTimeout > 0)
     alarm(ConnectTimeout);
 
+  msglen = makeMsg(_("Connecting to"));
+  displayProgress->emit(&errorMsg);
+
   /*
    * just in case somebody asks, the "::" in this case is the scope
    * operator, and means "call the connect() function in the 'root' scope.",
    * i.e. the connect() function from the C library.
    */
   if(::connect(fd, (const struct sockaddr *) &sin, sizeof(sin)) < 0) {
-    buffer_shrink(&errorMsg,0);
-    buffer_add_str(&errorMsg,_("Connection to '"),-1);
-    buffer_add_str(&errorMsg,url->host,-1);
-    buffer_add_str(&errorMsg,_("' failed: "),-1);
+    buffer_shrink(&errorMsg,msglen);
+    buffer_add_str(&errorMsg,_(": "),-1);
     buffer_add_str(&errorMsg,strerror(errno),-1);
     displayError->emit(&errorMsg);
     return false;

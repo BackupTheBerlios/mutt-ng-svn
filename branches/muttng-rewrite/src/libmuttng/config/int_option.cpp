@@ -12,7 +12,7 @@
 IntOption::IntOption(const char* name_, const char* init_,
                      int* store_, int min_, int max_) : 
   Option(name_,init_), store(store_), min(min_), max(max_) {
-  set(init_,NULL);
+  set(init,NULL);
 }
 
 IntOption::IntOption(const char* name_, const char* init_,

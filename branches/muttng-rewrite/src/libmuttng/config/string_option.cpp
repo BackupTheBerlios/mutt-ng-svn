@@ -18,7 +18,7 @@ StringOption::StringOption(const char* name_, const char* init_,
     pattern = rx_compile(pattern_,NULL,0);
   else
     pattern = NULL;
-  set(init_,NULL);
+  set(init,NULL);
 }
 
 StringOption::~StringOption() {

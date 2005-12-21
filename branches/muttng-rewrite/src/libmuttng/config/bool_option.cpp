@@ -14,7 +14,7 @@
 
 BoolOption::BoolOption(const char* name_, const char* init_,
                        bool* store_) : Option(name_,init_), store(store_) {
-  set(init_,NULL);
+  set(init,NULL);
 }
 
 bool BoolOption::set(const char* value, buffer_t* error) {

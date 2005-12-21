@@ -13,7 +13,7 @@
 
 RXOption::RXOption(const char* name_, const char* init_,
                    rx_t** store_) : Option(name_,init_), store(store_) {
-  set(init_,NULL);
+  set(init,NULL);
 }
 
 RXOption::~RXOption() {

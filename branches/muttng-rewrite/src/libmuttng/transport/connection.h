@@ -192,7 +192,39 @@ class Connection : public LibMuttng {
     buffer_t rbuf;
     /** error message buffer */
     buffer_t errorMsg;
+    /**
+     * Fill error buffer with progress message. This is
+     * "msg+host+..."
+     * @param msg Message to which hostname is appended.
+     * @return Length of string without "..." for shrinking buffer
+     * and appending error message.
+     */
+    size_t makeMsg (const char* msg);
 };
+
+#ifdef WHERE
+#undef WHERE
+#endif
+
+#ifdef INITVAL
+#undef INITVAL
+#endif
+
+#ifdef CONNECTION_MAIN_CPP
+#define WHERE
+#define INITVAL(X)      =X
+#else
+#define WHERE extern
+#define INITVAL(X)
+#endif
+
+WHERE char* SSLClientCert INITVAL(NULL);
+WHERE char* SSLCertFile INITVAL(NULL);
+WHERE char* SSLEntropyFile INITVAL(NULL);
+WHERE int SSLDHPrimeBits INITVAL(NULL);
+WHERE char* SSLCaCertFile INITVAL(NULL);
+WHERE bool UseTLS1 INITVAL(true);
+WHERE bool UseSSL3 INITVAL(true);
 
 #endif
 /** @} */
