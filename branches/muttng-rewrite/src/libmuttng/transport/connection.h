@@ -162,6 +162,9 @@ class Connection : public LibMuttng {
     /** whether connection is authenticated and ready. */
     bool ready;
 
+    /** register connection specific variables */
+    static void reg();
+
   protected:
     /** URL */
     url_t* url;

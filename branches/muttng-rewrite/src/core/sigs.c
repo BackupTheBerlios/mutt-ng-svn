@@ -90,6 +90,9 @@ CORE_SIGTYPE sigs_sighandler (int sig)
 #endif
     break;
 
+  case SIGALRM:
+    break;
+
   }
   errno = save_errno;
 }
@@ -205,11 +208,11 @@ void sigs_block_signals_system (void)
   }
 }
 
-void sigs_unblock_signals_system (int catch)
+void sigs_unblock_signals_system (int docatch)
 {
   if (sys_blocked) {
     sigprocmask (SIG_UNBLOCK, &SigsetSys, NULL);
-    if (catch) {
+    if (docatch) {
       sigaction (SIGQUIT, &SysOldQuit, NULL);
       sigaction (SIGINT, &SysOldInt, NULL);
     }

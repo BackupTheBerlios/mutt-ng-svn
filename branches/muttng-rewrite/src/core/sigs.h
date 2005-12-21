@@ -36,7 +36,7 @@ void sigs_unblock_signals (void);
 
 void sigs_block_signals_system (void);
 
-void sigs_unblock_signals_system (int catch);
+void sigs_unblock_signals_system (int docatch);
 
 void sigs_allow_interrupt (int disposition);
 

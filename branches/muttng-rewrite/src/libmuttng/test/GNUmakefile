@@ -4,7 +4,7 @@ include $(CURDIR)/../../../GNUmakefile.config
 
 CXXFLAGS+=-I.. -I../.. $(CXXFLAGS_UNITPP) $(CXXFLAGS_ICONV) -DLIBMUTTNG_TEST
 LDFLAGS+=$(LDFLAGS_UNITPP) $(LDFLAGS_ICONV)
-LINKOBJS=test.o signal_tests.o url_tests.o conn_tests.o header_tests.o rfc2047_tests.o
+LINKOBJS=test.o signal_tests.o url_tests.o conn_tests.o header_tests.o rfc2047_tests.o lib_tests.o
 LINKLIBS=./../libmuttng.a ./../../core/libcore.a
 
 all: 

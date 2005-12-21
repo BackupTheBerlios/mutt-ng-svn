@@ -333,6 +333,13 @@ void buffer_tests::test_buffer_tokenize() {
   tokenize(&dst,&src,"a b","a b",M_TOKEN_SPACE);
   tokenize(&dst,&src,"a\\ b","a b",0);
   tokenize(&dst,&src,"\"a b\" \"b a\"","a b b a",M_TOKEN_SPACE);
+  /** - whether backtick expansion and quoting works */
+  tokenize(&dst,&src,"'f`echo o`o'","f`echo o`o",0);
+  tokenize(&dst,&src,"f`echo o`o","foo",0);
+  tokenize(&dst,&src,"\"f`echo o`o\"","foo",0);
+  tokenize(&dst,&src,"\"`echo tEstSTRinG | tr 'A-Z' 'a-z' | tr 'A-Za-z' 'N-ZA-Mn-za-n'`\"","grfgfgevat",0);
+  tokenize(&dst,&src,"\"`( ls /bin/nonexistent >/dev/null 2>&1) && echo yes || echo no`\"","no",0);
+  tokenize(&dst,&src,"\"`( ls / >/dev/null 2>&1) && echo yes || echo no`\"","yes",0);
 }
 
 buffer_tests::buffer_tests() : suite("buffer_tests") {

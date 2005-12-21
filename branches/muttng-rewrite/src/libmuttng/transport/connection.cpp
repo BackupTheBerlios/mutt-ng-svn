@@ -19,8 +19,10 @@
 #include "core/mem.h"
 #include "core/intl.h"
 #include "core/str.h"
+#include "core/sigs.h"
 
-#include "util/url.h"
+#include "libmuttng/util/url.h"
+#include "libmuttng/config/config_manager.h"
 
 #include <stdio.h>
 #include <errno.h>
@@ -34,6 +36,9 @@
 #include <time.h>
 #include <string.h>
 #include <strings.h>
+#include <iostream>
+
+static int ConnectTimeout = 0;
 
 Connection::Connection(url_t* url_) : ready(false), is_connected(false) {
   url = new url_t;
@@ -54,6 +59,10 @@ Connection::~Connection() {
   delete url;
   buffer_free(&rbuf);
   buffer_free(&errorMsg);
+}
+
+void Connection::reg() {
+  ConfigManager::reg(new IntOption("connect_timeout","30",&ConnectTimeout,false));
 }
 
 bool Connection::socketConnect() {
@@ -99,6 +108,9 @@ bool Connection::socketConnect() {
     return false;
   }
 
+  if (ConnectTimeout > 0)
+    alarm(ConnectTimeout);
+
   /*
    * just in case somebody asks, the "::" in this case is the scope
    * operator, and means "call the connect() function in the 'root' scope.",
@@ -113,6 +125,8 @@ bool Connection::socketConnect() {
     displayError->emit(&errorMsg);
     return false;
   }
+
+  alarm(0);
 
   if (!doOpen()) {
     DEBUGPRINT(D_MOD,("doOpen() for %s:%d failed",url->host,url->port));

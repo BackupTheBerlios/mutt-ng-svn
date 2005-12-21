@@ -25,6 +25,7 @@
 #endif
 
 #include "mailbox/local_mailbox.h"
+#include "libmuttng/transport/connection.h"
 
 #ifdef LIBMUTTNG_HAVE_LANGINFO_CODESET
 #include <langinfo.h>
@@ -168,6 +169,7 @@ LibMuttng::LibMuttng () {
     NNTPMailbox::reg();
 #endif
     SubjectHeader::reg();
+    Connection::reg();
 
     buffer_init(&AttachMarker);
     buffer_add_str(&AttachMarker,"\033]9;",3);

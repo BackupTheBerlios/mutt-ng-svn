@@ -9,6 +9,9 @@
 
 #include <unit++/unit++.h>
 
+#include "core/buffer.h"
+
+#include "lib_tests.h"
 #include "libmuttng/util/url.h"
 
 using namespace unitpp;
@@ -16,7 +19,7 @@ using namespace unitpp;
 /**
  * Connection unit test
  */
-class conn_tests : public suite {
+class conn_tests : public suite, public lib_tests {
   public:
     conn_tests();
     ~conn_tests();

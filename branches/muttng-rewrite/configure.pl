@@ -39,6 +39,18 @@ my %features = ( # {{{
                              fmt =>     "=s"
                             },
 
+  "debug"               => { conf =>    "DEBUG",
+                             text =>    "Compile debug version",
+                             help =>    "Whether to compile a debug version",
+                             value =>   ""
+                            },
+
+  "profile"             => { conf =>    "PROFILE",
+                             text =>    "Compile profiling version",
+                             help =>    "Whether to compile a profiling version",
+                             value =>   ""
+                            },
+
   ### core ###
 
   "with-gettext"        => { key =>     "CORE_INTL",

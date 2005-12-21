@@ -12,6 +12,8 @@
 #include "mem.h"
 #include "str.h"
 #include "conv.h"
+#include "command.h"
+#include "io.h"
 
 /** we grow buffer on demand by this size */
 #define BUF_INC         256
@@ -354,6 +356,49 @@ static int extract_var(buffer_t* dst, char** work, int(*expand)(buffer_t*,buffer
   return 1;
 }
 
+static int extract_backticks(buffer_t* dst, char** work) {
+  char* p = *work;
+  buffer_t cmd, tmp;
+  pid_t pid;
+  FILE* fp;
+  unsigned int rc;
+
+  do {
+    if ((p = strpbrk (p, "\\`"))) {
+      /* skip any quoted chars */
+      if (*p == '\\')
+        p += 2;
+    }
+  } while (p && *p != '`');
+
+  /* mistmatched backticks? */
+  if (!p) return 0;
+
+  buffer_init(&cmd);
+
+  buffer_add_str(&cmd,*work,p-*work);
+
+  if ((pid = command_filter(cmd.str,NULL,&fp,NULL))<0) {
+    buffer_free(&cmd);
+    return 0;
+  }
+
+  buffer_free(&cmd);
+
+  *work = p+1;
+
+  /* read line: io_readline() shrinks buffer -> tmp copy */
+  buffer_init(&tmp);
+  rc = io_readline(&tmp,fp);
+  fclose(fp);
+  command_filter_wait(pid);
+
+  buffer_add_buffer(dst,&tmp);
+  buffer_free(&tmp);
+
+  return 1;
+}
+
 size_t buffer_extract_token  (buffer_t* dst, buffer_t* token, int flags,
                               int(*expand)(buffer_t*,buffer_t*)) {
   if (!dst || !token || !token->len)
@@ -401,67 +446,10 @@ size_t buffer_extract_token2 (buffer_t* dst, const char* token, int flags,
       if (!extract_var(dst,&work,expand))
         return (const char*)work-token;
     }
-#if 0
     else if (ch == '`' && (!qc || qc == '"')) {
-      FILE *fp;
-      pid_t pid;
-      char *cmd, *ptr;
-      size_t expnlen;
-      BUFFER expn;
-      int line = 0;
-
-      pc = tok->dptr;
-      do {
-        if ((pc = strpbrk (pc, "\\`"))) {
-          /* skip any quoted chars */
-          if (*pc == '\\')
-            pc += 2;
-        }
-      } while (pc && *pc != '`');
-      if (!pc) {
-        debug_print (1, ("mismatched backtics\n"));
-        return (-1);
-      }
-      cmd = str_substrdup (tok->dptr, pc);
-      if ((pid = mutt_create_filter (cmd, NULL, &fp, NULL)) < 0) {
-        debug_print (1, ("unable to fork command: %s\n", cmd));
-        mem_free (&cmd);
-        return (-1);
-      }
-      mem_free (&cmd);
-
-      tok->dptr = pc + 1;
-
-      /* read line */
-      memset (&expn, 0, sizeof (expn));
-      expn.data = mutt_read_line (NULL, &expn.dsize, fp, &line);
-      fclose (fp);
-      mutt_wait_filter (pid);
-
-      /* if we got output, make a new string consiting of the shell ouptput
-         plus whatever else was left on the original line */
-      /* BUT: If this is inside a quoted string, directly add output to 
-       * the token */
-      if (expn.data && qc) {
-        mutt_buffer_addstr (dest, expn.data);
-        mem_free (&expn.data);
-      }
-      else if (expn.data) {
-        expnlen = str_len (expn.data);
-        tok->dsize = expnlen + str_len (tok->dptr) + 1;
-        ptr = mem_malloc (tok->dsize);
-        memcpy (ptr, expn.data, expnlen);
-        strcpy (ptr + expnlen, tok->dptr);      /* __STRCPY_CHECKED__ */
-        if (tok->destroy)
-          mem_free (&tok->data);
-        tok->data = ptr;
-        tok->dptr = ptr;
-        tok->destroy = 1;       /* mark that the caller should destroy this data */
-        ptr = NULL;
-        mem_free (&expn.data);
-      }
+      if (!extract_backticks(dst,&work))
+        return (const char*)work-token;
     }
-#endif
     else
       buffer_add_ch(dst,ch);
   }
