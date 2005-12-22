@@ -81,6 +81,14 @@ class UI : public Muttng {
      * @return true
      */
     virtual bool displayError (const buffer_t* message) = 0;
+
+    /**
+     * Display a warning message to user.
+     * @param message Error message.
+     * @return true
+     */
+    virtual bool displayWarning (const buffer_t* message) = 0;
+
     /**
      * Display a normal message to user to see.
      * @param message The message's text.

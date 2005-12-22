@@ -32,6 +32,15 @@ bool UIPlain::displayError (const buffer_t* message) {
   return true;
 }
 
+bool UIPlain::displayWarning (const buffer_t* message) {
+  if (message) {
+    if (name)
+      cerr << name << _(": Warning: ");
+    cerr << message->str << endl;
+  }
+  return true;
+}
+
 bool UIPlain::displayMessage (const buffer_t* message) {
   if (message)
     cout << message->str << endl;

@@ -31,6 +31,14 @@ bool UICurses::displayError (const buffer_t* message) {
   return true;
 }
 
+bool UICurses::displayWarning (const buffer_t* message) {
+  if (isCurses) {
+    /* former mutt error */
+  } else if (message)
+    cerr << message->str << endl;
+  return true;
+}
+
 bool UICurses::displayMessage (const buffer_t* message) {
   if (isCurses) {
     /* former mutt_message() */

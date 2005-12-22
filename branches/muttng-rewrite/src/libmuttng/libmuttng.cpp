@@ -45,6 +45,7 @@
 static Signal1<const buffer_t*> sigProgress;
 static Signal1<const buffer_t*> sigMessage;
 static Signal1<const buffer_t*> sigError;
+static Signal1<const buffer_t*> sigWarning;
 
 /** static debug obj for library classes */
 static Debug* debugObj = NULL;
@@ -181,6 +182,7 @@ LibMuttng::LibMuttng () {
   this->displayMessage = &sigMessage;
   this->displayProgress = &sigProgress;
   this->displayError = &sigError;
+  this->displayWarning = &sigWarning;
 }
 
 LibMuttng::~LibMuttng (void) {

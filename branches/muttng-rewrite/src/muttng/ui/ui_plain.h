@@ -32,6 +32,7 @@ class UIPlain : public UIText {
     bool enterFilename (void);
     bool enterPassword (void);
     bool answerQuestion (void);
+    bool displayWarning (const buffer_t* message);
     bool displayError (const buffer_t* message);
     bool displayMessage (const buffer_t* message);
     bool displayProgress (const buffer_t* message);

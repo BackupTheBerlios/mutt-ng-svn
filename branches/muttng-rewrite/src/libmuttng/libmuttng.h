@@ -106,6 +106,13 @@ class LibMuttng {
      */
     Signal1<const buffer_t*>* displayError;
 
+    /**
+     * Signal emitted when some part wants to display a warning message.
+     * Parameters are in order:
+     * -# message
+     */
+    Signal1<const buffer_t*>* displayWarning;
+
   protected:
     /**
      * Signal handler catching changes of $debug_level.

@@ -338,6 +338,7 @@ void Tool::initSignals() {
     connectSignal(libmuttng->displayMessage,this->ui,&UI::displayMessage);
   }
   connectSignal(libmuttng->displayError,this->ui,&UI::displayError);
+  connectSignal(libmuttng->displayWarning,this->ui,&UI::displayWarning);
 
 }
 
@@ -348,6 +349,7 @@ void Tool::cleanupSignals() {
     disconnectSignals(libmuttng->displayMessage,this->ui);
   }
   disconnectSignals(libmuttng->displayError,this->ui);
+  disconnectSignals(libmuttng->displayWarning,this->ui);
 }
 
 bool Tool::catchDebugLevelChange (Option* option) {
