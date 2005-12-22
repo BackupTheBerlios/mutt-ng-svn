@@ -174,15 +174,23 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error) {
   else
     t = src;
 
-  if ((p = strchr (t, ':'))) {
-    *p++ = '\0';
-    if (str_len (p) == 0)
-      goto field_error;
-    url->port = atoi (p);
+  /* see if we have either ] for IPv6 addr or ':' */
+  if ((p = strrchr(t,']')) || (p = strrchr (t, ':'))) {
+    /* IPv6, only assume port if after IP addr we have ':' */
+    if (*p == ':' || (*p == ']' && *(p+1) == ':' && p++)) {
+      if (str_len (p+1) == 0)
+        goto field_error;
+      *p++ = '\0';
+      url->port = atoi (p);
+    }
   }
 
-  if (t && *t)
-    url->host = str_dup (t);
+  if (t && *t) {
+    size_t hostlen = str_len(t);
+    /* skip [ and ] if present */
+    url->host = str_substrdup(t+(*t=='['?1:0), t+hostlen-(t[hostlen-1]==']'?1:0));
+  }
+
   if (!url_decode (&url->host, &chars)) {
     err = url->host;
     goto decode_error;

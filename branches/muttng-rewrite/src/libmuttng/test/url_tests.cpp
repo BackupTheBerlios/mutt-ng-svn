@@ -48,6 +48,7 @@ static struct {
   url_t url;
 } ValidURLTable[] = {
 
+  /* imap */
   { "imap://location",                           { NULL,   NULL,     "location", 0,0,   false, "/",   P_IMAP } },
   { "imap://location/",                          { NULL,   NULL,     "location", 0,0,   false, "/",   P_IMAP } },
   { "imap://location/path",                      { NULL,   NULL,     "location", 0,0,   false, "/path", P_IMAP } },
@@ -56,14 +57,22 @@ static struct {
   { "imap://user:secret@location:0815/path",     { "user", "secret", "location", 815,0, false, "/path", P_IMAP } },
   { "imap://user@host:secret@location:0815/path",
     { "user@host", "secret", "location", 815, 0, false, "/path", P_IMAP } },
-
+  /* mostly same as above but secure */
   { "imaps://location",                          { NULL,   NULL,     "location", 0,0,   true,  "/",   P_IMAP } },
   { "imaps://location/",                         { NULL,   NULL,     "location", 0,0,   true,  "/",   P_IMAP } },
   { "imaps://location/path",                     { NULL,   NULL,     "location", 0,0,   true,  "/path", P_IMAP } },
   { "imaps://user@location/path",                { "user", NULL,     "location", 0,0,   true,  "/path", P_IMAP } },
   { "imaps://user:secret@location/path",         { "user", "secret", "location", 0,0,   true,  "/path", P_IMAP } },
   { "imaps://user:secret@location:0815/path",    { "user", "secret", "location", 815,0, true,  "/path", P_IMAP } },
-
+  /* raw IPv4 addresses in host part */
+  { "imaps://user@1.2.3.4:815/path",             { "user", NULL,     "1.2.3.4",  815,0, true,  "/path", P_IMAP } },
+  /* raw IPv6 address for loopback in host part */
+  { "imaps://user@[::1]:815/path",               { "user", NULL,     "::1",      815,0, true,  "/path", P_IMAP } },
+  /* raw IPv6 address with KAME-style interface embedded for loopback */
+  { "imaps://user@[fe80::1%25lo0]:815/path",     { "user", NULL,     "fe80::1%lo0", 815,0, true,  "/path", P_IMAP } },
+  /* raw IPv6 address with KAME-style interface embedded for loopback */
+  { "imaps://user@[fe80::1%25lo0]/path",         { "user", NULL,     "fe80::1%lo0", 0,0, true,  "/path", P_IMAP } },
+  /* file:// is somewhat special */
   { "file:///tmp",                               { NULL,   NULL,     NULL,       0,0,   false, "/tmp", P_FILE } },
   { "file:///",                                  { NULL,   NULL,     NULL,       0,0,   false, "/",    P_FILE } },
   { "file:///dev%2Fn%75ll",                      { NULL,   NULL,     NULL,       0,0,   false, "/dev/null",    P_FILE } },

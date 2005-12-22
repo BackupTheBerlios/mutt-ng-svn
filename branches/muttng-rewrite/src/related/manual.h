@@ -405,7 +405,19 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         and <tt>file.</tt> The <tt>file</tt> protocol is treated specially as it
         doesn't allow the secure pointer <tt>[s]</tt> and only contains a
         path. For compatibility reasons, if an URL doesn't contain a
-        protocoll, <tt>file</tt> is assumed.</li>
+        protocoll, <tt>file</tt> is assumed. The host part is treated specially
+        in some way and may contain domain names as well IP addresses. For
+        specifying IPv6 addresses, it has to enclosed in <tt>[]</tt>. For
+        example, a secure IMAP connection to IPv6 loopback on port
+        <tt>4711</tt> for user <tt>joe</tt> with password <tt>secret</tt> is:
+        <pre>
+imaps://joe:secret@[::1]:4711/</pre>.
+        For implementations such as KAME-derived ones <em>(as found on BSD systems)</em>,
+        an interface ID may be specified the usual way by appending <tt>%ID</tt>. Note that
+        as <tt>%</tt> is used to encode non-ASCII or other special characters in
+        URLs, it has to be encoded like so (note the encoded <tt>%25</tt>):
+        <pre>
+imaps://joe:secret@[fe80::1%25lo0]:4711/</pre></li>
     <li><b><tt>regular expression</tt></b>. A regular expression.</li>
     <li><b><tt>system</tt></b>. A read-only system variable. These can be only
         queried or used but not set or changed by the user but may change
@@ -2233,6 +2245,20 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
       
 
     
+        The host part is treated specially in some way and may contain domain names
+        as well IP addresses. For specifying IPv6 addresses, it has to enclosed in
+        <tt>[]</tt>. For example, a secure IMAP connection to IPv6 loopback on port
+        <tt>4711</tt> for user <tt>joe</tt> with password <tt>secret</tt> is:
+        <pre>
+imaps://joe:secret@[::1]:4711/</pre>.
+        For implementations such as KAME-derived ones <em>(as found on BSD systems)</em>,
+        an interface ID may be specified the usual way by appending <tt>%ID</tt>. Note that
+        as <tt>%</tt> is used to encode non-ASCII or other special characters in
+        URLs, it has to be encoded like so (note the encoded <tt>%25</tt>):
+        <pre>
+imaps://joe:secret@[fe80::1%25lo0]:4711/</pre>
+
+    
         LibMuttng supports parsing a string into such an URL and <em>always</em>
         fully qualifies the path, i.e. it will always have a leading slash (if no path
         is contained in the string, the path is just the slash.)
@@ -2359,6 +2385,11 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
         right before a connection is made and right after it has been closed
         for clients to catch them. These can be used, for example, to establish
         and terminate dial-up connections.
+      
+
+    
+        The implementation is portable and protocoll independent so that
+        IPv6 is of course supported.
       
 
     

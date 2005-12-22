@@ -85,58 +85,69 @@ size_t Connection::makeMsg (const char* msg) {
 }
 
 bool Connection::socketConnect() {
-  size_t msglen;
-
   /*
    * TODO: we need to differentiate between different errors.
    * Shall we use exceptions to do that?
    */
-  memset(&sin,0,sizeof(sin));
-
   buffer_shrink(&errorMsg,0);
 
   if (!sigPreconnect.emit(url->host,url->port,url->secure))
     return false;
 
-  msglen = makeMsg(_("Looking up host"));
+  size_t msglen = makeMsg(_("Looking up host"));
   displayProgress->emit(&errorMsg);
 
-  struct hostent * hp = gethostbyname(url->host);
+  buffer_t port;
+  buffer_init(&port);
+  buffer_grow(&port,5);
+  buffer_add_snum(&port,url->port,-1);
 
-  if (NULL == hp) {
+  struct addrinfo hints, *res, *r;
+  int error;
+
+  memset(&hints,0,sizeof(hints));
+  hints.ai_family = PF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+
+  if ((error = getaddrinfo(url->host,port.str,&hints,&res))<0) {
     buffer_shrink(&errorMsg,msglen);
     buffer_add_str(&errorMsg,_(": "),-1);
-    buffer_add_str(&errorMsg,hstrerror(h_errno),-1);
+    buffer_add_str(&errorMsg,gai_strerror(error),-1);
     displayError->emit(&errorMsg);
+    buffer_free(&port);
     return false;
   }
 
-  sin.sin_family = AF_INET;
+  buffer_free(&port);
 
-  bcopy(hp->h_addr, (char *) &sin.sin_addr, hp->h_length);
-  sin.sin_port = htons(url->port);
-
-  if((fd = socket(AF_INET, SOCK_STREAM, 0)) < 0) {
+  if (NULL==res) {
     buffer_shrink(&errorMsg,msglen);
     buffer_add_str(&errorMsg,_(": "),-1);
-    buffer_add_str(&errorMsg,_("socket() call failed: "),-1);
-    buffer_add_str(&errorMsg,strerror(errno),-1);
+    buffer_add_str(&errorMsg,_("no addresses."),-1);
     displayError->emit(&errorMsg);
     return false;
   }
-
-  if (ConnectTimeout > 0)
-    alarm(ConnectTimeout);
 
   msglen = makeMsg(_("Connecting to"));
   displayProgress->emit(&errorMsg);
 
-  /*
-   * just in case somebody asks, the "::" in this case is the scope
-   * operator, and means "call the connect() function in the 'root' scope.",
-   * i.e. the connect() function from the C library.
-   */
-  if(::connect(fd, (const struct sockaddr *) &sin, sizeof(sin)) < 0) {
+  for (r = res; r; r = r->ai_next) {
+    if ((fd = socket(r->ai_family,r->ai_socktype,0))<0)
+      continue;
+    if (ConnectTimeout > 0)
+      alarm(ConnectTimeout);
+    if (::connect(fd,r->ai_addr,r->ai_addrlen)<0) {
+      close(fd);
+      continue;
+    }
+    alarm(0);
+    is_connected = true;
+    freeaddrinfo(res);
+    break;
+  }
+
+  if (!is_connected) {
+    freeaddrinfo(res);
     buffer_shrink(&errorMsg,msglen);
     buffer_add_str(&errorMsg,_(": "),-1);
     buffer_add_str(&errorMsg,strerror(errno),-1);
@@ -144,14 +155,12 @@ bool Connection::socketConnect() {
     return false;
   }
 
-  alarm(0);
-
   if (!doOpen()) {
     DEBUGPRINT(D_MOD,("doOpen() for %s:%d failed",url->host,url->port));
+    is_connected = false;
     return false;
   }
 
-  is_connected = true;
   return true;
 }
 

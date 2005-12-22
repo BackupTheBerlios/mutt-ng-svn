@@ -174,8 +174,6 @@ class Connection : public LibMuttng {
      * mechanism system will be implemented
      */
     int fd; 
-    /** socket address */
-    struct sockaddr_in sin;
     /** whether connection is established */
     bool is_connected;
     /**
