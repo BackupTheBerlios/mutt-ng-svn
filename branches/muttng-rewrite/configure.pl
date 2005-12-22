@@ -70,6 +70,15 @@ my %features = ( # {{{
                              fmt =>     "=s",
                              group =>   [ "core" ] },
 
+  "with-idn"            => { key =>     "CORE_LIBIDN",
+                             conf =>    "LIBIDNDIR",
+                             help =>    "Where libidn is installed",
+                             text =>    "Whether to use libidn",
+                             config =>  "LIBIDNDIR",
+                             value =>   "",
+                             fmt =>     "=s",
+                             group =>   [ "core" ] },
+
   "shell"               => { key =>     "CORE_SHELL",
                              help =>    "Where the shell for command execution is located",
                              text =>    "Which shell to use for executing commands",

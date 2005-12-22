@@ -18,6 +18,20 @@ extern "C" {
  */
 int net_dnsdomainname (buffer_t* dst);
 
+#define MI_MAY_BE_IRREVERSIBLE  (1<<0)
+
+int net_host_to_local (buffer_t* dst, buffer_t* src,
+                       const char* local, unsigned short flags);
+
+int net_local_to_host (buffer_t* dst, buffer_t* src, const char* local);
+
+/**
+ * Get libidn version.
+ * @param dst Optional destination buffer.
+ * @return Wether compiled with libidn support or not.
+ */
+int net_idna_version (buffer_t* dst);
+
 #ifdef __cplusplus
 }
 #endif

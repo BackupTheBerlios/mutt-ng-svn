@@ -19,7 +19,7 @@ depend:
 	mkdep $(CXXFLAGS) $(SRCS) || ( ( $(CXX) $(DEPFLAG) $(CXXFLAGS) $(SRCS) ) > ./.depend || true )
 
 $(BINARY): $(BINARY).o $(LIB) $(foreach lib,$(wildcard $(CURDIR)/$(lib)),$(LINKLIBS))
-	$(CXX) -o $@ $(LDFLAGS) $^ $(LDFLAGS_SSL) $(LDFLAGS_LIBICONV)
+	$(CXX) -o $@ $(LDFLAGS) $^ $(LDFLAGS_SSL) $(LDFLAGS_LIBICONV) $(LDFLAGS_LIBIDN)
 
 # if there is a file called `.depend' in current dir, include it
 ifneq ($(wildcard $(CURDIR)/.depend),)

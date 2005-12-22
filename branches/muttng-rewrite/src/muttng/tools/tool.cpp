@@ -12,6 +12,7 @@
 #include "core/core.h"
 #include "core/version.h"
 #include "core/conv.h"
+#include "core/net.h"
 #include "core/intl.h"
 #include "core/buffer.h"
 #include "core/str.h"
@@ -228,6 +229,11 @@ void Tool::doSystem (buffer_t* dst) {
   if (conv_iconv_version(NULL)) {
     buffer_add_str(dst,"  ",2);
     conv_iconv_version(dst);
+    buffer_add_ch(dst,'\n');
+  }
+  if (net_idna_version(NULL)) {
+    buffer_add_str(dst,"  ",2);
+    net_idna_version(dst);
     buffer_add_ch(dst,'\n');
   }
   if (Connection::getSecureVersion(NULL)) {

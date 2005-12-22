@@ -10,6 +10,7 @@ ifneq ($(GETTEXTDIR),)
 FILES+=intl
 CFLAGS+=-DCORE_LOCALEDIR="\"$(CURDIR)/../po\""
 endif
+CFLAGS+=$(CFLAGS_LIBIDN)
 LIB:=libcore.a
 
 SUBDIRS=test
