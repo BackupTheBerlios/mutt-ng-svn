@@ -413,9 +413,9 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         <pre>
 imaps://joe:secret@[::1]:4711/</pre>.
         For implementations such as KAME-derived ones <em>(as found on BSD systems)</em>,
-        an interface ID may be specified the usual way by appending <tt>%ID</tt>. Note that
-        as <tt>%</tt> is used to encode non-ASCII or other special characters in
-        URLs, it has to be encoded like so (note the encoded <tt>%25</tt>):
+        an interface ID may be specified the usual way by appending <tt>\%ID</tt>. Note that
+        as <tt>\%</tt> is used to encode non-ASCII or other special characters in
+        URLs, it has to be encoded like so (note the encoded <tt>\%25</tt>):
         <pre>
 imaps://joe:secret@[fe80::1%25lo0]:4711/</pre></li>
     <li><b><tt>regular expression</tt></b>. A regular expression.</li>
@@ -1807,6 +1807,66 @@ buffer_init(&buffer);
     @include core_buffer_format2.c
             
     @paragraph sect_devguide-core-string-recode Encoding and decoding
+          Currently, buffers can be encoded and decoded from and to the following formats:
+        
+
+    <ul>
+    <li><tt>base64</tt></li>
+    <li><tt>quoted-printable</tt></li>
+    
+      </ul>
+    
+          These not need much documentation, please see the doxygen part for usage details.
+        
+
+    
+    @paragraph sect_devguide-core-string-charset Character Sets
+          The string handling part of the core layer contains a very simple but suffiently
+          convenient interface for convertion a buffer from any to any character set
+          while being aware of many officially defined character set aliases.
+        
+
+    
+          The implementation in <tt>conv.c</tt> is basically taken from the old mutt code base
+          and contains wrappers around <tt>libiconv</tt> converting everything by force.
+        
+
+    
+          The most important function is <tt>conv_iconv()</tt> converting a buffer in-place.
+        
+
+    
+          Besides it, the following functions are to be used for handling character
+          sets:
+        
+
+    <ul>
+    <li><tt>conv_charset_normal()</tt>: in case a passed in character set is
+            known to be an alias for another, the contents is replaced with the
+            lowercase non-alias name</li>
+    <li><tt>conv_charset_eq()</tt>: normalizes two given character sets and
+            checks for equality</li>
+    <li><tt>conv_charset_base64()</tt>: certain RfCs were written defining
+            preferred character sets and transport encoding for various languages. To
+            not have special treatment and checks all over the place, this is the main
+            function to test whether <tt>base64</tt> encoding should be used. Otherwise
+            the caller is free to choose.</li>
+    <li><tt>conv_charset_list()</tt>: passes as many known character sets or
+            aliases to a callback as the callback accepts them</li>
+    
+      </ul>
+    
+          The <tt>conv_iconv_version()</tt> appends the version of <tt>libiconv</tt> used
+          to a destination buffer.
+        
+
+    
+          The <tt>conv_init()</tt> and <tt>conv_cleanup()</tt> functions are not intended
+          for use by clients; clients should use <tt>core_init()</tt> and <tt>core_cleanup()</tt>
+          instead.
+        
+
+    
     @paragraph sect_devguide-core-string-token Tokenizer
     
     @subsubsection sect_devguide-core-list Generic list
@@ -1936,6 +1996,18 @@ buffer_init(&buffer);
         
 
     
+          During runtime of the <tt>hash_map()</tt> function, the table will
+          be locked (see next section.)
+        
+
+    
+    @paragraph sect_devguide-core-hashing-locking Locking
+          A table can be locked: while it's in that state, no insertions or
+          removals will succeed. As a consistent and constant state is important
+          for the <tt>hash_map()</tt> function, a table is locked during its run.
+        
+
+    
     @paragraph sect_devguide-core-hashing-example Example
           As uses of hashing may appear in lots of different fashions, it's
           difficult to provide a complete and useful example. The
@@ -1960,9 +2032,140 @@ buffer_init(&buffer);
 
     
     
-    @subsubsection sect_devguide-core-conversion Various conversions
-    
     @subsubsection sect_devguide-core-intl Internationalization
+    
+        As usual, the support for internationalization is built on top of GNU gettext.
+        The file <tt>intl.h</tt> defines the following two macros for use regardless
+        whether the caller wishes to link in gettext or not:
+      
+
+    <ol>
+    <li><tt>_(X)</tt>: the string <tt>X</tt> is to be translated. This is
+          to be used in regular code.</li>
+    <li><tt>N_(X)</tt>: is the same as the above but for use with in places
+          with constant initialization such as static arrays or strings.</li>
+    
+      </ol>
+    
+        It's still inconsistent: as soon as the client knows its local character set,
+        it should call <tt>intl_encoding()</tt>. This is planned to be merged into
+        the <tt>core_init()</tt> call.
+      
+
+    
+    @subsubsection sect_devguide-core-net Networking
+    
+        The core library has two features currently regarding networking:
+      
+
+    <ol>
+    <li>it can parse <tt>/etc/resolv.conf</tt> for a systems (assumed) DNS domain
+          name via <tt>net_dnsdomainname()</tt></li>
+    <li>it supports IDN (international domain names)</li>
+    
+      </ol>
+    @paragraph sect_devguide-core-net-idn IDN
+          The IDN support is build upon <tt>libidn</tt> and only consists of
+          two functions:
+        
+
+    <ol>
+    <li>convert an international domain name from a local character set
+            to the actual ASCII-DNS name</li>
+    <li>convert from ASCII-DNS to a local character set</li>
+    
+      </ol>
+    
+          All valid international domain names can be converted to an ASCII-DNS
+          equivalent.
+        
+
+    
+          However, when converting from ASCII-DNS back to a local character
+          set, characters may appear which cannot be represented in the target
+          character set. In such cases the caller is free to choose whether loss
+          is acceptable or not by passing the right flag to
+          <tt>net_idn2local()</tt>.
+        
+
+    
+          In case of errors encoutered, the decoded or encoded version is just
+          the very same as the original.
+        
+
+    
+    
+    @subsubsection sect_devguide-core-rx Regular expressions
+    
+        The core library contains an abstraction layer for regular expressions
+        allowing different backends and more convenient handling.
+      
+
+    
+        "Convenience" means for instance to have a printable version of the
+        pattern available at any time instead of only the compiled version.
+      
+
+    
+        The only backend supported at the moment is the usual system's regular expression
+        implementation <tt>regex(3)</tt> but support for
+        <tt>pcre(3)</tt> will be built in, too.
+      
+
+    
+    @subsubsection sect_devguide-core-signals Signal handling
+    
+    @subsubsection sect_devguide-core-commands Command handling
+    
+        The core library contains convenient functions for running external
+        commands in different ways:
+      
+
+    <ol>
+    <li>either "standalone" or</li>
+    <li>as filter</li>
+    
+      </ol>
+    
+        The "standalone" way is via <tt>command_run()</tt> which internally
+        executes the command using <tt>sh(1)</tt> to not have to mess with
+        setting up a command-line preparing routing.
+      
+
+    
+        The filter mode can be used to run command with pre-defined <tt>stdin</tt>,
+        <tt>stdout</tt> and <tt>stderr</tt> file descriptors to, for example,
+        make a command read input from a file and print the output to another.
+        This can also be achieved using shell redirection in
+        <tt>command_run()</tt> but callers may have the files opened
+        already so <tt>command_filter()</tt> is a better alternative.
+      
+
+    
+    @subsubsection sect_devguide-core-io Basic I/O
+    
+        The files <tt>io.c</tt> and <tt>io.h</tt> respectively define various
+        filesystem- or I/O-related functions:
+      
+
+    <ul>
+    <li><tt>io_open_read()</tt> is built on top of the command handling and
+          can be used to abstract from a source of input. As known from
+          muttng's source command, instead of from a file the output may come from
+          a command being executed if the filename ends in <tt>|</tt>. This is the
+          only function behind it.</li>
+    <li><tt>io_tempfile()</tt> can be used to obtain opened temporary files
+          more flexibly as it allowes for custom directories or name suggestions.</li>
+    <li><tt>io_readline()</tt> can be used to read arbitrary long lines from
+          input files while supporting linue continuations: if a line ends with
+          a backslash, the it's concatenated with the next line(s) unless one line
+          is finished.</li>
+    
+      </ul>
+    
+        Other functions defined in <tt>io.h</tt> mainly are sanity wrappers.
+      
+
     
     @subsubsection sect_devguide-core-extending Extending the library
     
@@ -2030,7 +2233,10 @@ buffer_init(&buffer);
     @subsubsection sect_devguide-libmuttng-signal Signal handling
     
         Libmuttng contains a very simple, easy to use and typesafe signal
-        handling interface. Though signals will be used within the library,
+        handling interface. In fact, "signal" is a little misleading as
+        it's after all a callback interface but since it's used to signal
+        a certain action, event or request to interested parts, we call
+        it "signal." Though signals will be used within the library,
         too, it's use is not limited to connecting handlers in the client
         to events in the library but may also be used to pass signals
         only within the client.
@@ -2252,11 +2458,17 @@ proto[s]://[username[:password]@]host[:port][/path]</pre>
         <pre>
 imaps://joe:secret@[::1]:4711/</pre>.
         For implementations such as KAME-derived ones <em>(as found on BSD systems)</em>,
-        an interface ID may be specified the usual way by appending <tt>%ID</tt>. Note that
-        as <tt>%</tt> is used to encode non-ASCII or other special characters in
-        URLs, it has to be encoded like so (note the encoded <tt>%25</tt>):
+        an interface ID may be specified the usual way by appending <tt>\%ID</tt>. Note that
+        as <tt>\%</tt> is used to encode non-ASCII or other special characters in
+        URLs, it has to be encoded like so (note the encoded <tt>\%25</tt>):
         <pre>
 imaps://joe:secret@[fe80::1%25lo0]:4711/</pre>
+
+    
+        For further complication: the hostname, if it's not an IPv4 or IPv6 address,
+        is expected to be an international domain encoded in the clients character set.
+        It's parsed into punycode internally.
+      
 
     
         LibMuttng supports parsing a string into such an URL and <em>always</em>
@@ -2393,6 +2605,13 @@ imaps://joe:secret@[fe80::1%25lo0]:4711/</pre>
       
 
     
+        To save resources, the Connection class maintains a list of connections created
+        so far in order to recycle them. The decission is made based on whether
+        <tt>url_eq()</tt> reports equality for two URLs or not. This is weak and will
+        be fine-tuned.
+      
+
+    
     @subsubsection sect_devguide-libmuttng-nntp NNTP support
     
         Libmuttng supports the Network News Transfer Protocol as
@@ -2450,6 +2669,57 @@ imaps://joe:secret@[fe80::1%25lo0]:4711/</pre>
     
     
     @subsection sect_devguide-muttng Muttng
+    @subsubsection sect_devguide-muttng-tools Binaries
+    
+        Based on the core and libmuttng libraries, a number of clients or
+        tools are built.
+      
+
+    
+        All tools are derived from a single base class and support a set of
+        @ref table-cli-common "common command-line options" .
+      
+
+    @anchor table-cli-common
+    @htmlonly
+    <p class="title">Common command-line options</p>
+      <table class="ordinary" rowsep="1" summary="Common command-line options">
+    <thead><tr><td>Switch</td><td>Argument</td><td>Meaning</td></tr>
+    </thead><tbody><tr><td>-d</td><td>level</td><td>Set debug level</td></tr>
+    <tr><td>-F</td><td>file</td><td>Read non-standard config file</td></tr>
+    <tr><td>-h</td><td></td><td>Help screen</td></tr>
+    <tr><td>-n</td><td></td><td>Bypass system config file</td></tr>
+    <tr><td>-q</td><td></td><td>Quiet mode</td></tr>
+    <tr><td>-v</td><td></td><td>Show version info</td></tr>
+    <tr><td>-V</td><td></td><td>Show warranty and license</td></tr>
+    </tbody>
+      </table>
+      @endhtmlonly
+    
+
+    @paragraph sect_devguide-muttng-tools-muttng muttng<tt>muttng(1)</tt> is the main user agent.
+        
+
+    
+    @paragraph sect_devguide-muttng-tools-sync muttng-sync<tt>muttng-sync(1)</tt> is a tool capable of bi-directional syncing any
+          two folders (as far as supported.)
+        
+
+    
+    @paragraph sect_devguide-muttng-tools-mailx muttng-mailx<tt>muttng-mailx(1)</tt> is a true replacement for <tt>mailx(1)</tt>'s send mode.
+        
+
+    
+    @paragraph sect_devguide-muttng-tools-query muttng-query<tt>muttng-query(1)</tt> is a tool to query folders and other items
+          preferrably for use in scripts and other applications.
+        
+
+    
+    @paragraph sect_devguide-muttng-tools-conf muttng-conf<tt>muttng-conf(1)</tt> is a powerful configuration diagnostics tool.
+        
+
+    
+    
     @subsubsection sect_devguide-muttng-auto Auto-generated code
     
     @subsubsection sect_devguide-muttng-extending Extending

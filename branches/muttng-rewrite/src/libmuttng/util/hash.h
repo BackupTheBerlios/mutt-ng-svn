@@ -127,6 +127,19 @@ class Hash : public LibMuttng {
     inline unsigned long map (bool sort, bool (*map) (const char* key, T data, D moredata), D moredata) {
       return hash_map(table,sort,(int(*)(const char*,HASH_ITEMTYPE,unsigned long)) map,(unsigned long) moredata);
     }
+
+    /**
+     * Lock hash table so that write operations fail unless unlocked again.
+     * @return True if the table was unlocked, false otherwise.
+     */
+    inline bool lock () { return hash_lock(table)==1; }
+
+    /**
+     * Unlock hash table so that write operations may succeed unless locked again.
+     * @return True if the table was locked, false otherwise.
+     */
+    inline bool unlock () { return hash_lock(table)==1; }
+
 };
 
 #endif

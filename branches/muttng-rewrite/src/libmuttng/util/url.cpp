@@ -142,6 +142,7 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error, const char* 
   url->username = NULL;
   url->password = NULL;
   url->host = NULL;
+  url->idn_host = NULL;
   url->port = url->defport;
   url->path = NULL;
 
@@ -191,30 +192,31 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error, const char* 
     size_t hostlen = str_len(t);
     /* skip [ and ] if present */
     url->host = str_substrdup(t+(*t=='['?1:0), t+hostlen-(t[hostlen-1]==']'?1:0));
-  }
 
-  if (!url_decode (&url->host, &chars)) {
-    err = url->host;
-    goto decode_error;
-  }
+    if (!url_decode (&url->host, &chars)) {
+      err = url->host;
+      goto decode_error;
+    }
 
-  buffer_t input,output;
-  buffer_init(&input);
-  buffer_init(&output);
+    buffer_t input,output;
+    buffer_init(&input);
+    buffer_init(&output);
 
-  buffer_add_str(&input,url->host,-1);
+    buffer_add_str(&input,url->host,-1);
 
-  if (!net_local2idn(&output,&input,local)) {
-    err = url->host;
+    if (!net_local2idn(&output,&input,local)) {
+      err = url->host;
+      buffer_free(&input);
+      buffer_free(&output);
+      goto idn_error;
+    }
+
+    url->idn_host = str_dup(output.str);
+
     buffer_free(&input);
     buffer_free(&output);
-    goto idn_error;
+
   }
-
-  url->idn_host = str_dup(output.str);
-
-  buffer_free(&input);
-  buffer_free(&output);
 
   /* always fully qualify path with leading '/' */
   pathlen = str_len (path);

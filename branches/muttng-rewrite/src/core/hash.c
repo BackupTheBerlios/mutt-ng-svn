@@ -233,3 +233,23 @@ unsigned long hash_map (void* t, int sort, int (*map) (const char*, HASH_ITEMTYP
   list_del(&tmp,NULL);
   return ret;
 }
+
+int hash_lock (void* table) {
+  int rc = 0;
+  hash_t* tab = (hash_t*) table;
+  if (tab) {
+    rc = !tab->locked;
+    tab->locked=1;
+  }
+  return rc;
+}
+
+int hash_unlock (void* table) {
+  int rc = 0;
+  hash_t* tab = (hash_t*) table;
+  if (tab) {
+    rc = tab->locked;
+    tab->locked=0;
+  }
+  return rc;
+}

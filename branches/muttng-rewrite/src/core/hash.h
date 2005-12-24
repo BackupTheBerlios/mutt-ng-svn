@@ -131,6 +131,25 @@ unsigned long hash_map (void* table, int sort, int (*map) (const char* key,
  */
 #define hash_fill(T)    hash_map(T,0,NULL,0)
 
+/**
+ * Lock a table. All write operations will fail until it is unlocked
+ * again.
+ * @param table Hash table.
+ * @return
+ *   - 1 if table was unlocked
+ *   - 0 if table was already locked
+ */
+int hash_lock (void* table);
+
+/**
+ * Unlock a table. All write operations will work again.
+ * @param table Hash table.
+ * @return
+ *   - 1 if table was locked.
+ *   - 0 if table was already unlocked
+ */
+int hash_unlock (void* table);
+
 #ifdef __cplusplus
 }
 #endif

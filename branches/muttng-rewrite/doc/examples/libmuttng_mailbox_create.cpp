@@ -15,17 +15,12 @@
  * @return 0 on success, 1 otherwise.
  */
 int main (int argc, char** argv) {
-  buffer_t error;
   Mailbox* folder = NULL;
 
-  buffer_init(&error);
-
   if (argc >= 2) {
-    if (!(folder = Mailbox::fromURL (argv[1], &error))) {
+    if (!(folder = Mailbox::fromURL (argv[1]))) {
       /* error: likely URL is wrong */
-      std::cerr << "Error opening folder '" << argv[1] <<
-        "': " << (error.str?error.str:"") << std::endl;
-      buffer_free(&error);
+      /* XXX */
       return 1;
     } else {
       /* success */

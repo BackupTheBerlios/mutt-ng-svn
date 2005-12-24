@@ -14,7 +14,7 @@ include $(CURDIR)/../../GNUmakefile.compile_cpp
 test: $(OBJS) $(APPS)
 
 app_%: %.o
-	$(CXX) -o $@ $^ $(LDFLAGS) $(LDFLAGS_SSL) $(LDFLAGS_LIBICONV) ./../../src/libmuttng/libmuttng.a ./../../src/core/libcore.a
+	$(CXX) -o $@ $^ $(LDFLAGS) $(LDFLAGS_SSL) $(LDFLAGS_LIBICONV) $(LDFLAGS_LIBIDN) ./../../src/libmuttng/libmuttng.a ./../../src/core/libcore.a
 
 extraclean:
 	rm -rf $(OBJS) $(APPS)

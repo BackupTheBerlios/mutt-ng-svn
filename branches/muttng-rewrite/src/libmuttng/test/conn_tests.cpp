@@ -11,6 +11,7 @@
 #include "conn_tests.h"
 
 #include "core/buffer.h"
+#include "core/str.h"
 #include "transport/plain_connection.h"
 
 using namespace unitpp;
@@ -91,7 +92,7 @@ void conn_tests::test_readwrite() {
 
   buffer_shrink(&rbuf,0);
   conn->readLine(&rbuf);
-  assert_eq("readLine",buffer_equal1(&rbuf,"HTTP/1.0 302 Found",-1)!=0,true);
+  assert_eq("readLine",str_ncmp(rbuf.str,"HTTP/1.0 ",9),0);
 
   return_value = conn->socketDisconnect();
 

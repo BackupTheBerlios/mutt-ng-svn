@@ -14,7 +14,7 @@ include $(CURDIR)/../../GNUmakefile.compile_c
 test: $(OBJS) $(APPS)
 
 app_%: %.o
-	$(CC) -o $@ $^ $(LDFLAGS) $(LDFLAGS_SSL) $(LDFLAGS_LIBICONV) ./../../src/core/libcore.a
+	$(CC) -o $@ $^ $(LDFLAGS) $(LDFLAGS_SSL) $(LDFLAGS_LIBICONV) $(LDFLAGS_LIBIDN) ./../../src/core/libcore.a
 
 extraclean:
 	rm -rf $(OBJS) $(APPS)

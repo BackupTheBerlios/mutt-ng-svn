@@ -247,9 +247,9 @@ proto[s]://[username[:password]@]host[:port]/path</pre>
         <pre>
 imaps://joe:secret@[::1]:4711/</pre>.
         For implementations such as KAME-derived ones<footnote>as found on BSD systems</footnote>,
-        an interface ID may be specified the usual way by appending <tt>%ID</tt>. Note that
-        as <tt>%</tt> is used to encode non-ASCII or other special characters in
-        URLs, it has to be encoded like so (note the encoded <tt>%25</tt>):
+        an interface ID may be specified the usual way by appending <tt>\%ID</tt>. Note that
+        as <tt>\%</tt> is used to encode non-ASCII or other special characters in
+        URLs, it has to be encoded like so (note the encoded <tt>\%25</tt>):
         <pre>
 imaps://joe:secret@[fe80::1%25lo0]:4711/</pre></li>
       <li><b><tt>regular expression</tt></b>. A regular expression.</li>

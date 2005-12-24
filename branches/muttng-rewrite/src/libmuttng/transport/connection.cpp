@@ -153,6 +153,7 @@ bool Connection::socketConnect() {
     if (ConnectTimeout > 0)
       alarm(ConnectTimeout);
     if (::connect(fd,r->ai_addr,r->ai_addrlen)<0) {
+      alarm(0);
       close(fd);
       continue;
     }
@@ -211,7 +212,6 @@ int Connection::readUntilSeparator(buffer_t * buf, char sep) {
         break;
     }
   } while (sep != rbuf.str[0]);
-  buf->len = str_len(buf->str);
   return buf->len;
 }
 
