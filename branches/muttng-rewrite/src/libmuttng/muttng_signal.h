@@ -91,9 +91,11 @@ class Signal1 {
      * @test signal_tests::test_signal_loop().
      */
     bool running;
+    /** how many callbacks we have */
+    unsigned short handlers;
   public:
     /** constructor */
-    Signal1 () { first=0; running = false; }
+    Signal1 () { first=0; running = false; handlers = 0; }
     /** delete a signal */
     ~Signal1 () {
       for (callbacks i = first; i != 0 ; ) {
@@ -110,6 +112,7 @@ class Signal1 {
     void insert (callbacks item) {
       item->next = first;
       first = item;
+      handlers++;
     }
     /**
      * Remove all bindings for given object from signal.
@@ -125,10 +128,12 @@ class Signal1 {
             first = i->next;
             delete i;
             i = first;
+            handlers--;
           } else {
             last->next = i->next;
             delete i;
             i = last->next;
+            handlers--;
           }
         } else {
           last = i;
@@ -156,6 +161,8 @@ class Signal1 {
       running = false;
       return (true);
     }
+    /** get number of callbacks bound */
+    unsigned short getHandlers() { return handlers; }
 };
 
 /**
@@ -288,9 +295,11 @@ class Signal2 {
      * @test signal_tests::test_signal_loop().
      */
     bool running;
+    /** how many callbacks we have */
+    unsigned short handlers;
   public:
     /** constructor */
-    Signal2 () { first=0; running = false; }
+    Signal2 () { first=0; running = false; handlers = 0; }
     /** delete a signal */
     ~Signal2 () {
       for (callbacks i = first; i != 0 ; ) {
@@ -307,6 +316,7 @@ class Signal2 {
     void insert (callbacks item) {
       item->next = first;
       first = item;
+      handlers++;
     }
     /**
      * Remove all bindings for given object from signal.
@@ -322,10 +332,12 @@ class Signal2 {
             first = i->next;
             delete i;
             i = first;
+            handlers--;
           } else {
             last->next = i->next;
             delete i;
             i = last->next;
+            handlers--;
           }
         } else {
           last = i;
@@ -354,6 +366,8 @@ class Signal2 {
       running = false;
       return (true);
     }
+    /** get number of callbacks bound */
+    unsigned short getHandlers() { return handlers; }
 };
 
 /**
@@ -490,9 +504,11 @@ class Signal3 {
      * @test signal_tests::test_signal_loop().
      */
     bool running;
+    /** how many callbacks we have */
+    unsigned short handlers;
   public:
     /** constructor */
-    Signal3 () { first=0; running = false; }
+    Signal3 () { first=0; running = false; handlers = 0; }
     /** delete a signal */
     ~Signal3 () {
       for (callbacks i = first; i != 0 ; ) {
@@ -509,6 +525,7 @@ class Signal3 {
     void insert (callbacks item) {
       item->next = first;
       first = item;
+      handlers++;
     }
     /**
      * Remove all bindings for given object from signal.
@@ -524,10 +541,12 @@ class Signal3 {
             first = i->next;
             delete i;
             i = first;
+            handlers--;
           } else {
             last->next = i->next;
             delete i;
             i = last->next;
+            handlers--;
           }
         } else {
           last = i;
@@ -557,6 +576,8 @@ class Signal3 {
       running = false;
       return (true);
     }
+    /** get number of callbacks bound */
+    unsigned short getHandlers() { return handlers; }
 };
 
 /**
@@ -697,9 +718,11 @@ class Signal4 {
      * @test signal_tests::test_signal_loop().
      */
     bool running;
+    /** how many callbacks we have */
+    unsigned short handlers;
   public:
     /** constructor */
-    Signal4 () { first=0; running = false; }
+    Signal4 () { first=0; running = false; handlers = 0; }
     /** delete a signal */
     ~Signal4 () {
       for (callbacks i = first; i != 0 ; ) {
@@ -716,6 +739,7 @@ class Signal4 {
     void insert (callbacks item) {
       item->next = first;
       first = item;
+      handlers++;
     }
     /**
      * Remove all bindings for given object from signal.
@@ -731,10 +755,12 @@ class Signal4 {
             first = i->next;
             delete i;
             i = first;
+            handlers--;
           } else {
             last->next = i->next;
             delete i;
             i = last->next;
+            handlers--;
           }
         } else {
           last = i;
@@ -765,6 +791,8 @@ class Signal4 {
       running = false;
       return (true);
     }
+    /** get number of callbacks bound */
+    unsigned short getHandlers() { return handlers; }
 };
 
 /**
@@ -909,9 +937,11 @@ class Signal5 {
      * @test signal_tests::test_signal_loop().
      */
     bool running;
+    /** how many callbacks we have */
+    unsigned short handlers;
   public:
     /** constructor */
-    Signal5 () { first=0; running = false; }
+    Signal5 () { first=0; running = false; handlers = 0; }
     /** delete a signal */
     ~Signal5 () {
       for (callbacks i = first; i != 0 ; ) {
@@ -928,6 +958,7 @@ class Signal5 {
     void insert (callbacks item) {
       item->next = first;
       first = item;
+      handlers++;
     }
     /**
      * Remove all bindings for given object from signal.
@@ -943,10 +974,12 @@ class Signal5 {
             first = i->next;
             delete i;
             i = first;
+            handlers--;
           } else {
             last->next = i->next;
             delete i;
             i = last->next;
+            handlers--;
           }
         } else {
           last = i;
@@ -978,6 +1011,8 @@ class Signal5 {
       running = false;
       return (true);
     }
+    /** get number of callbacks bound */
+    unsigned short getHandlers() { return handlers; }
 };
 
 /**
@@ -1126,9 +1161,11 @@ class Signal6 {
      * @test signal_tests::test_signal_loop().
      */
     bool running;
+    /** how many callbacks we have */
+    unsigned short handlers;
   public:
     /** constructor */
-    Signal6 () { first=0; running = false; }
+    Signal6 () { first=0; running = false; handlers = 0; }
     /** delete a signal */
     ~Signal6 () {
       for (callbacks i = first; i != 0 ; ) {
@@ -1145,6 +1182,7 @@ class Signal6 {
     void insert (callbacks item) {
       item->next = first;
       first = item;
+      handlers++;
     }
     /**
      * Remove all bindings for given object from signal.
@@ -1160,10 +1198,12 @@ class Signal6 {
             first = i->next;
             delete i;
             i = first;
+            handlers--;
           } else {
             last->next = i->next;
             delete i;
             i = last->next;
+            handlers--;
           }
         } else {
           last = i;
@@ -1196,6 +1236,8 @@ class Signal6 {
       running = false;
       return (true);
     }
+    /** get number of callbacks bound */
+    unsigned short getHandlers() { return handlers; }
 };
 
 /**
@@ -1348,9 +1390,11 @@ class Signal7 {
      * @test signal_tests::test_signal_loop().
      */
     bool running;
+    /** how many callbacks we have */
+    unsigned short handlers;
   public:
     /** constructor */
-    Signal7 () { first=0; running = false; }
+    Signal7 () { first=0; running = false; handlers = 0; }
     /** delete a signal */
     ~Signal7 () {
       for (callbacks i = first; i != 0 ; ) {
@@ -1367,6 +1411,7 @@ class Signal7 {
     void insert (callbacks item) {
       item->next = first;
       first = item;
+      handlers++;
     }
     /**
      * Remove all bindings for given object from signal.
@@ -1382,10 +1427,12 @@ class Signal7 {
             first = i->next;
             delete i;
             i = first;
+            handlers--;
           } else {
             last->next = i->next;
             delete i;
             i = last->next;
+            handlers--;
           }
         } else {
           last = i;
@@ -1419,6 +1466,8 @@ class Signal7 {
       running = false;
       return (true);
     }
+    /** get number of callbacks bound */
+    unsigned short getHandlers() { return handlers; }
 };
 
 /**

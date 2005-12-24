@@ -88,7 +88,7 @@ class LibMuttng {
      * Parameters are in order:
      * -# message
      */
-    Signal1<const buffer_t*>* displayProgress;
+    static Signal1<const buffer_t*> displayProgress;
 
     /**
      * Signal emitted when some part wants to display informational
@@ -97,21 +97,21 @@ class LibMuttng {
      * Parameters are in order:
      * -# message
      */
-    Signal1<const buffer_t*>* displayMessage;
+    static Signal1<const buffer_t*> displayMessage;
 
     /**
      * Signal emitted when some part wants to display an error message.
      * Parameters are in order:
      * -# message
      */
-    Signal1<const buffer_t*>* displayError;
+    static Signal1<const buffer_t*> displayError;
 
     /**
      * Signal emitted when some part wants to display a warning message.
      * Parameters are in order:
      * -# message
      */
-    Signal1<const buffer_t*>* displayWarning;
+    static Signal1<const buffer_t*> displayWarning;
 
   protected:
     /**

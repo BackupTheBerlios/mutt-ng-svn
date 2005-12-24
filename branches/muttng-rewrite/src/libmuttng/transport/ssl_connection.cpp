@@ -7,6 +7,7 @@
 
 #include "core/mem.h"
 #include "core/intl.h"
+#include "core/str.h"
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -80,7 +81,7 @@ int SSLConnection::add_entropy (const char *file) {
   buffer_add_str(&msg,_("Filling entropy pool: '"),-1);
   buffer_add_str(&msg,file,-1);
   buffer_add_str(&msg,_("'..."),-1);
-  displayProgress->emit(&msg);
+  displayProgress.emit(&msg);
 
   /* check that the file permissions are secure */
   if (st.st_uid != getuid () ||
@@ -90,7 +91,7 @@ int SSLConnection::add_entropy (const char *file) {
     buffer_add_str(&msg,_("Entropy file '"),-1);
     buffer_add_str(&msg,file,-1);
     buffer_add_str(&msg,_("' has insecure permissions."),-1);
-    displayError->emit(&msg);
+    displayError.emit(&msg);
     buffer_free(&msg);
     return -1;
   }
@@ -138,7 +139,7 @@ void SSLConnection::init () {
     if (!HAVE_ENTROPY ()) {
       buffer_t msg; buffer_init(&msg);
       buffer_add_str(&msg,_("Failed to find enough entropy on your system"),-1);
-      displayError->emit(&msg);
+      displayError.emit(&msg);
       buffer_free(&msg);
       buffer_free(&path);
       return;
@@ -282,7 +283,7 @@ bool SSLConnection::checkCertDigest() {
   unsigned char peermd[EVP_MAX_MD_SIZE];
   unsigned int peermdlen;
   X509 *c = NULL; 
-  bool pass = 0;
+  bool pass = false;
   FILE *fp;
   buffer_t msg;
 
@@ -291,29 +292,29 @@ bool SSLConnection::checkCertDigest() {
   if (X509_cmp_current_time (X509_get_notBefore (cert)) >= 0) {
     buffer_shrink(&msg,0);
     buffer_add_str(&msg,_("Server certificate is not yet valid."),-1);
-    displayError->emit(&msg);
+    displayError.emit(&msg);
     buffer_free(&msg);
     return 0;
   }
   if (X509_cmp_current_time (X509_get_notAfter (cert)) <= 0) { 
     buffer_shrink(&msg,0);
     buffer_add_str(&msg,_("Server certificate has expired."),-1);
-    displayError->emit(&msg);
+    displayError.emit(&msg);
     buffer_free(&msg);
     return 0;
   }
   buffer_free(&msg);
 
   if ((fp = fopen (SSLCertFile, "rt")) == NULL)
-    return 0;
+    return false;
 
   if (!X509_digest (cert, EVP_sha1 (), peermd, &peermdlen)) {
     fclose (fp);
-    return 0;
+    return false;
   }
 
   while ((c = READ_X509_KEY (fp, &c)) != NULL) { 
-    pass = X509_cmp (c, peermd, peermdlen) ? 0 : 1;
+    pass = X509_cmp (c, peermd, peermdlen);
     if (pass)
       break;
   }
@@ -321,7 +322,85 @@ bool SSLConnection::checkCertDigest() {
   X509_free(c);
   fclose (fp);
 
-  return true;
+  return pass;
+}
+
+char* SSLConnection::X509_get_part (char *line, const char *ndx) {
+  static char ret[128];
+  char *c, *c2;
+
+  strfcpy (ret, _("Unknown"), sizeof (ret)); 
+
+  c = strstr (line, ndx);
+  if (c) {
+    c += str_len (ndx);
+    c2 = strchr (c, '/');
+    if (c2) 
+      *c2 = '\0'; 
+    strfcpy (ret, c, sizeof (ret)); 
+    if (c2) 
+      *c2 = '/';
+  }
+
+  return ret;
+}
+
+void SSLConnection::X509_fingerprint (char *s, int l, X509 * cert) {
+  unsigned char md[EVP_MAX_MD_SIZE];
+  unsigned int n;
+  int j;
+
+  if (!X509_digest (cert, EVP_md5 (), md, &n)) {
+    snprintf (s, l, "%s", _("[unable to calculate]"));
+  }
+  else {
+    for (j = 0; j < (int) n; j++) {
+      char ch[8];
+
+      snprintf (ch, 8, "%02X%s", md[j], (j % 2 ? " " : ""));
+      str_cat (s, l, ch);
+    }
+  }
+}
+
+char* SSLConnection::asn1time_to_string (ASN1_UTCTIME * tm) {
+  static char buf[64];
+  BIO *bio;
+
+  strfcpy (buf, _("[invalid date]"), sizeof (buf));
+
+  bio = BIO_new (BIO_s_mem ());
+  if (bio) {
+    if (ASN1_TIME_print (bio, tm))
+      (void) BIO_read (bio, buf, sizeof (buf));
+    BIO_free (bio);
+  }
+
+  return buf;
+}
+
+void SSLConnection::fillCertInfo(certinfo_t* dst, X509_NAME* (*getinfo)(X509*)) {
+  static const char* part[] = { "/CN=", "/Email=", "/O=", "/OU=", "/L=", "/ST=", "/C=" };
+  char* name = NULL, *c;
+  char** str = NULL;
+  unsigned short i;
+  char buf[128];
+
+  name = X509_NAME_oneline(getinfo(cert),buf,sizeof(buf));
+  for (i=0; i<7; i++) {
+    c = X509_get_part(name,part[i]);
+    switch(i) {
+    case 0: str = &dst->name; break;
+    case 1: str = &dst->contact; break;
+    case 2: str = &dst->org; break;
+    case 3: str = &dst->unit; break;
+    case 4: str = &dst->location; break;
+    case 5: str = &dst->state; break;
+    case 6: str = &dst->country; break;
+    default: break;
+    }
+    if (str) *str = str_dup(c);
+  }
 }
 
 bool SSLConnection::checkCert() {
@@ -344,8 +423,33 @@ bool SSLConnection::checkCert() {
     return true;
   }
 
-  /* emit signal */
-  return false;
+  if (sigCheckCertificate.getHandlers()==0) {
+    buffer_t error;
+    buffer_init(&error);
+    buffer_add_str(&error,_("Library programming error: no handlers for certificate check. Report this!"),-1);
+    displayError.emit(&error);
+    buffer_free(&error);
+    return false;
+  }
+
+  certinfo_t owner = certinfo_t(), issuer = certinfo_t();
+  char fp[128], *from, *to;
+  certcheck_t result = CERT_REJECT;
+
+  fillCertInfo(&owner,X509_get_subject_name);
+  fillCertInfo(&issuer,X509_get_issuer_name);
+  X509_fingerprint(fp,sizeof(fp),cert);
+  from = str_dup(asn1time_to_string(X509_get_notBefore(cert)));
+  to = str_dup(asn1time_to_string(X509_get_notAfter(cert)));
+
+  bool rc = sigCheckCertificate.emit(&owner,&issuer,fp,from,to,&result);
+
+  freeCertInfo(&owner);
+  freeCertInfo(&issuer);
+  mem_free(&from);
+  mem_free(&to);
+
+  return rc;
 }
 
 bool SSLConnection::negotiate () {
@@ -375,7 +479,7 @@ bool SSLConnection::negotiate () {
     buffer_shrink(&msg,0);
     buffer_add_str(&msg,(_("OpenSSL's connect() failed: ")),-1);
     buffer_add_str(&msg,errmsg,-1);
-    displayError->emit(&msg);
+    displayError.emit(&msg);
     buffer_free(&msg);
     return false;
   }
@@ -383,7 +487,7 @@ bool SSLConnection::negotiate () {
   if (!(cert = SSL_get_peer_certificate (ssl))) {
     buffer_shrink(&msg,0);
     buffer_add_str(&msg,_("Unable to get certificate from peer"),-1);
-    displayError->emit(&msg);
+    displayError.emit(&msg);
     buffer_free(&msg);
     return false;
   }
@@ -427,7 +531,7 @@ bool SSLConnection::doOpen() {
   buffer_add_str(&msg," (",2);
   buffer_add_str(&msg,SSL_get_cipher_name(ssl),-1);
   buffer_add_ch(&msg,')');
-  displayProgress->emit(&msg);
+  displayProgress.emit(&msg);
   buffer_free(&msg);
 
   return true;

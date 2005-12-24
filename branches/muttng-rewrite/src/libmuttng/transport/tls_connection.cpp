@@ -86,7 +86,7 @@ bool TLSConnection::doOpen() {
     buffer_t tmp;
     buffer_init(&tmp);
     buffer_add_str(&tmp,_("All available protocols for TLS/SSL connection disabled"),-1);
-    displayError->emit(&tmp);
+    displayError.emit(&tmp);
     buffer_free(&tmp);
     return doClose();
   }
@@ -126,8 +126,9 @@ bool TLSConnection::doOpen() {
     return doClose();
   }
 
-  if (!sigCheckCertificate.emit(/* XXX */ 0))
-    return doClose();
+  /* XXX 
+  if (!sigCheckCertificate.emit(0))
+    return doClose(); */
 
   /* set Security Strength Factor (SSF) for SASL */
   /* NB: gnutls_cipher_get_key_size() returns key length in bytes */
@@ -141,7 +142,7 @@ bool TLSConnection::doOpen() {
   buffer_add_str(&msg,gnutls_kx_get_name(gnutls_kx_get(state)),-1);buffer_add_ch(&msg,'/');
   buffer_add_str(&msg,gnutls_cipher_get_name(gnutls_cipher_get(state)),-1);buffer_add_ch(&msg,'/');
   buffer_add_str(&msg,gnutls_mac_get_name(gnutls_mac_get(state)),-1);buffer_add_ch(&msg,')');
-  displayProgress->emit(&msg);
+  displayProgress.emit(&msg);
   buffer_free(&msg);
 
   is_connected = true;

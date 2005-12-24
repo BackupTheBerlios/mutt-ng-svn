@@ -188,7 +188,7 @@ mailbox_query_status NNTPMailbox::openMailbox() {
      */
     buffer_add_str(&errorMsg,_("Invalid newsgroup '"),-1);
     buffer_add_str(&errorMsg,_("'"),-1);
-    displayError->emit(&errorMsg);
+    displayError.emit(&errorMsg);
     return MQ_NOT_CONNECTED;
   }
 
@@ -252,7 +252,7 @@ void NNTPMailbox::makeError() {
     buffer_chomp(&errorMsg);
   }
   DEBUGPRINT(D_MOD,("%s",errorMsg.str));
-  displayError->emit(&errorMsg);
+  displayError.emit(&errorMsg);
   conn->ready = false;
 }
 

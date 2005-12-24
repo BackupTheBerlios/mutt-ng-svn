@@ -151,4 +151,5 @@ void Debug::printLine (const char* fmt, ...) {
   vfprintf (fp, fmt, ap);
   va_end (ap);
   fputc ('\n', fp);
+  fflush(fp);
 }

@@ -80,6 +80,14 @@ class SSLConnection : public Connection {
     int add_entropy(const char* file);
     /** Initialize OpenSSL library */
     void init();
+    /**
+     * Fill certinfo_t structure.
+     * @param dst Destination.
+     */
+    void fillCertInfo(certinfo_t* dst, X509_NAME* (*get)(X509*));
+    char* X509_get_part (char *line, const char *ndx);
+    char* asn1time_to_string (ASN1_UTCTIME * tm);
+    void X509_fingerprint (char *s, int l, X509 * cert);
 };
 
 #endif

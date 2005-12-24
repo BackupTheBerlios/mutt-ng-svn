@@ -41,23 +41,21 @@
 #include "core/net.h"
 #include "core/conv.h"
 #include "core/intl.h"
+#include "core/core.h"
 
 #include "libmuttng/version.h"
 #include "message/subject_header.h"
 #include "config/config_manager.h"
 
-/** Storage for LibMuttng::displayProgress */
-static Signal1<const buffer_t*> sigProgress;
-/** Storage for LibMuttng::displayMessage */
-static Signal1<const buffer_t*> sigMessage;
-/** Storage for LibMuttng::displayError */
-static Signal1<const buffer_t*> sigError;
-/** Storage for LibMuttng::displayWarning */
-static Signal1<const buffer_t*> sigWarning;
 /** static debug obj for library classes */
 static Debug* debugObj = NULL;
 /** storage for @ref option_debug_level */
 static int DebugLevel = 0;
+
+Signal1<const buffer_t*> LibMuttng::displayMessage;
+Signal1<const buffer_t*> LibMuttng::displayProgress;
+Signal1<const buffer_t*> LibMuttng::displayWarning;
+Signal1<const buffer_t*> LibMuttng::displayError;
 
 /** get info about user */
 static void get_userinfo() {
@@ -143,6 +141,8 @@ static const char* get_charset() {
 LibMuttng::LibMuttng () {
   if (!debugObj) {
 
+    core_init();
+
     /* before we have all library-internal options, get other stuff */
     get_userinfo();
     get_hostinfo();
@@ -189,18 +189,13 @@ LibMuttng::LibMuttng () {
     buffer_add_snum(&AttachMarker,time(NULL),-1);
     buffer_add_ch(&AttachMarker,'\a');
 
-    connectSignal(sigMessage,this,&LibMuttng::debugMessage);
-    connectSignal(sigProgress,this,&LibMuttng::debugProgress);
-    connectSignal(sigWarning,this,&LibMuttng::debugWarning);
-    connectSignal(sigError,this,&LibMuttng::debugError);
-
+    connectSignal(displayMessage,this,&LibMuttng::debugMessage);
+    connectSignal(displayProgress,this,&LibMuttng::debugProgress);
+    connectSignal(displayWarning,this,&LibMuttng::debugWarning);
+    connectSignal(displayError,this,&LibMuttng::debugError);
   }
 
   this->debug = debugObj;
-  this->displayMessage = &sigMessage;
-  this->displayProgress = &sigProgress;
-  this->displayError = &sigError;
-  this->displayWarning = &sigWarning;
 }
 
 LibMuttng::~LibMuttng (void) {}

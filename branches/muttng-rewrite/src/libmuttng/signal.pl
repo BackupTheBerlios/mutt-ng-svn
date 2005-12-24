@@ -125,9 +125,11 @@ for (my $i = 1; $i <= $max; $i++) {
   print "     * \@test signal_tests::test_signal_loop().\n";
   print "     */\n";
   print "    bool running;\n";
+  print "    /** how many callbacks we have */\n";
+  print "    unsigned short handlers;\n";
   print "  public:\n";
   print "    /** constructor */\n";
-  print "    Signal$i () { first=0; running = false; }\n";
+  print "    Signal$i () { first=0; running = false; handlers = 0; }\n";
   print "    /** delete a signal */\n";
   print "    ~Signal$i () {\n";
   print "      for (callbacks i = first; i != 0 ; ) {\n";
@@ -144,6 +146,7 @@ for (my $i = 1; $i <= $max; $i++) {
   print "    void insert (callbacks item) {\n";
   print "      item->next = first;\n";
   print "      first = item;\n";
+  print "      handlers++;\n";
   print "    }\n";
   print "    /**\n";
   print "     * Remove all bindings for given object from signal.\n";
@@ -158,11 +161,13 @@ for (my $i = 1; $i <= $max; $i++) {
   print "          if (first == i) {\n";
   print "            first = i->next;\n";
   print "            delete i;\n";
-  print "            i = first;\n"; 
+  print "            i = first;\n";
+  print "            handlers--;\n";
   print "          } else {\n";
   print "            last->next = i->next;\n";
   print "            delete i;\n";
   print "            i = last->next;\n";
+  print "            handlers--;\n";
   print "          }\n";
   print "        } else {\n";
   print "          last = i;\n";
@@ -190,6 +195,8 @@ for (my $i = 1; $i <= $max; $i++) {
   print "      running = false;\n";
   print "      return (true);\n";
   print "    }\n";
+  print "    /** get number of callbacks bound */\n";
+  print "    unsigned short getHandlers() { return handlers; }\n";
   print "};\n\n";
 
   print "/**\n";

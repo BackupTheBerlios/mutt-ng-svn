@@ -43,7 +43,7 @@ Mailbox* Mailbox::fromURL (const char* url_) {
   buffer_add_str(&error,_("': "),-1);
 
   if (!(u = url_from_string (url_, &error))) {
-//    displayError->emit(&error);
+    displayError.emit(&error);
     buffer_free(&error);
     return (NULL);
   }
@@ -67,7 +67,7 @@ Mailbox* Mailbox::fromURL (const char* url_) {
     break;
   default:
     buffer_add_str(&error,_("protocoll unsupported."),-1);
-    // displayError->emit(&error);
+    displayError.emit(&error);
     break;
   }
   buffer_free(&error);

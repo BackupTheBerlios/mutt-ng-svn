@@ -8,10 +8,14 @@
 #include "intl.h"
 #include "conv.h"
 
+static unsigned short init = 0;
+
 int core_init(void) {
+  if (init) return 1;
   sigs_signal_init();
   intl_init();
   conv_init();
+  init = 1;
   return 1;
 }
 

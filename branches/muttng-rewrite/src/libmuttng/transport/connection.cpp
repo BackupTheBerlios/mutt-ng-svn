@@ -47,6 +47,8 @@ static int ConnectTimeout = 0;
 /** Connections */
 static std::vector<Connection*> Connections;
 
+Signal6<certinfo_t*,certinfo_t*,const char*,const char*,const char*,certcheck_t*> Connection::sigCheckCertificate;
+
 Connection::Connection(url_t* url_) : ready(false), is_connected(false) {
   url = new url_t;
   url->username = str_dup(url_->username);
@@ -111,7 +113,7 @@ bool Connection::socketConnect() {
     return false;
 
   size_t msglen = makeMsg(_("Looking up host"));
-  displayProgress->emit(&errorMsg);
+  displayProgress.emit(&errorMsg);
 
   buffer_t port;
   buffer_init(&port);
@@ -129,7 +131,7 @@ bool Connection::socketConnect() {
     buffer_shrink(&errorMsg,msglen);
     buffer_add_str(&errorMsg,_(": "),-1);
     buffer_add_str(&errorMsg,gai_strerror(error),-1);
-    displayError->emit(&errorMsg);
+    displayError.emit(&errorMsg);
     buffer_free(&port);
     return false;
   }
@@ -140,12 +142,12 @@ bool Connection::socketConnect() {
     buffer_shrink(&errorMsg,msglen);
     buffer_add_str(&errorMsg,_(": "),-1);
     buffer_add_str(&errorMsg,_("no addresses."),-1);
-    displayError->emit(&errorMsg);
+    displayError.emit(&errorMsg);
     return false;
   }
 
   msglen = makeMsg(_("Connecting to"));
-  displayProgress->emit(&errorMsg);
+  displayProgress.emit(&errorMsg);
 
   for (r = res; r; r = r->ai_next) {
     if ((fd = socket(r->ai_family,r->ai_socktype,0))<0)
@@ -168,7 +170,7 @@ bool Connection::socketConnect() {
     buffer_shrink(&errorMsg,msglen);
     buffer_add_str(&errorMsg,_(": "),-1);
     buffer_add_str(&errorMsg,strerror(errno),-1);
-    displayError->emit(&errorMsg);
+    displayError.emit(&errorMsg);
     return false;
   }
 
@@ -303,4 +305,15 @@ bool Connection::getSecureVersion(buffer_t* dst) {
 #endif
   (void)dst;
   return false;
+}
+
+void Connection::freeCertInfo(certinfo_t* src) {
+  if (!src) return;
+  mem_free(&src->name);
+  mem_free(&src->contact);
+  mem_free(&src->org);
+  mem_free(&src->unit);
+  mem_free(&src->location);
+  mem_free(&src->state);
+  mem_free(&src->country);
 }

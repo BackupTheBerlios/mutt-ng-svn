@@ -25,6 +25,28 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
+typedef struct certinfo_t {
+  char* name;
+  char* contact;
+  char* org;
+  char* unit;
+  char* location;
+  char* state;
+  char* country;
+  certinfo_t() {
+    name = NULL; contact = NULL;
+    org = NULL; unit = NULL;
+    location = NULL; state = NULL;
+    country = NULL;
+  }
+} certinfo_t;
+
+enum certcheck_t {
+  CERT_REJECT = 0,
+  CERT_SESSION,
+  CERT_ALWAYS
+};
+
 /**
  * Abstract TCP connection.
  */
@@ -174,6 +196,19 @@ class Connection : public LibMuttng {
     /** deregister connection specific items */
     static void dereg();
 
+    /**
+     * Signal emitted prior to accepting a certificate, if any.
+     * This can be used by clients to decide whether to accept
+     * or discard a certificate. The arguments are in order:
+     * -# owner
+     * -# issuer
+     * -# fingerprint
+     * -# valid since
+     * -# valid until
+     * -# what to do with certificate
+     */
+    static Signal6<certinfo_t*,certinfo_t*,const char*,const char*,const char*,certcheck_t*> sigCheckCertificate;
+
   protected:
     /** URL */
     url_t* url;
@@ -185,15 +220,16 @@ class Connection : public LibMuttng {
     int fd; 
     /** whether connection is established */
     bool is_connected;
+
     /**
-     * Signal emitted prior to accepting a certificate, if any.
-     * This can be used by clients to decide whether to accept
-     * or discard a certificate.
-     * @todo pass certificate rather dummy int argument
+     * Free memory consumed by certinfo_t structure.
+     * @param src Source.
      */
-    Signal1<int> sigCheckCertificate;
+    void freeCertInfo(certinfo_t* src);
+
     /** Security Strength Factor for secure connections */
     int ssf;
+
   private:
     /** receive buffer */
     buffer_t rbuf;

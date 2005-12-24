@@ -44,6 +44,7 @@ void list_del (list_t** l, list_del_t* del) {
 }
 
 void list_push_back (list_t** l, LIST_ITEMTYPE p) {
+  if (!l) return;
   if (!*l)
     *l = list_new ();
   mem_realloc (&(*l)->data, (++(*l)->length)*sizeof(LIST_ITEMTYPE));
@@ -65,7 +66,7 @@ LIST_ITEMTYPE list_pop_back (list_t** l) {
     return (0);
   p = (*l)->data[(*l)->length-1];
   if ((*l)->length-1 == 0)
-    mem_free (l);
+    list_del(l,NULL);
   else 
     mem_realloc (&(*l)->data, --((*l)->length)*sizeof(LIST_ITEMTYPE));
   return (p);
@@ -77,7 +78,7 @@ LIST_ITEMTYPE list_pop_front (list_t** l) {
     return (0);
   p = (*l)->data[0];
   if ((*l)->length-1 == 0)
-    mem_free (l);
+    list_del(l,NULL);
   else {
     memmove (&(*l)->data[0], &(*l)->data[1], (--((*l)->length))*sizeof(LIST_ITEMTYPE));
     mem_realloc (&(*l)->data, (*l)->length*sizeof(LIST_ITEMTYPE));
@@ -93,7 +94,7 @@ LIST_ITEMTYPE list_pop_idx (list_t** l, unsigned long c) {
     return (list_pop_back (l));
   p = (*l)->data[c];
   if ((*l)->length-1 == 0)
-    mem_free (l);
+    list_del(l,NULL);
   else {
     memmove (&(*l)->data[c], &(*l)->data[c+1], ((*l)->length-c)*sizeof(LIST_ITEMTYPE));
     mem_realloc (&(*l)->data, (--((*l)->length))*sizeof(LIST_ITEMTYPE));
