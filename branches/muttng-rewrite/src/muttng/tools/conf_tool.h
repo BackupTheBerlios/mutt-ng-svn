@@ -35,10 +35,6 @@ class ConfTool : public Tool {
       M_OPTS = 0,
       /** print bindings */
       M_BIND,
-      /** print mime charsets */
-      M_CHARSET_MIME,
-      /** print charset aliases */
-      M_CHARSET_ALIAS
     };
     /**
      * Handle default: print options.
@@ -56,11 +52,6 @@ class ConfTool : public Tool {
      *                @c -D command line option.
      */
     void do_bind (bool annotated, bool changed);
-    /**
-     * Print charsets.
-     * @param mime Whether to print MIME or aliases.
-     */
-    void do_charsets (bool mime);
 };
 
 #endif /* !MUTTNG_CONF_TOOL_H */

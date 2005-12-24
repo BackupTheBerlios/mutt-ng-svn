@@ -47,8 +47,10 @@ typedef struct url_t {
   char* username;
   /** optional: password */
   char* password;
-  /** optional: host */
+  /** optional: host in user's locale */
   char* host;
+  /** optional: host encoded in IDN */
+  char* idn_host;
   /** optional: port */
   unsigned short port;
   /** default port; don't touch */
@@ -70,6 +72,7 @@ typedef struct url_t {
     username = NULL;
     password = NULL;
     host = NULL;
+    idn_host = NULL;
     port = 0;
     defport = defport_;
     secure = secure_;
@@ -81,13 +84,16 @@ typedef struct url_t {
 /**
  * Parse string into url_t.
  * @param url URL as string.
+ * @param local Local character set.
  * @param error Buffer where to put error messages.
  * @return url_t structure or @c NULL for failure.
  * @test url_tests::test_invalid_proto().
  * @test url_tests::test_parse().
  * @test url_tests::test_decode().
  */
-url_t* url_from_string (const char* url, buffer_t* error);
+url_t* url_from_string (const char* url,
+                        buffer_t* error,
+                        const char* local = Charset);
 
 /**
  * Convert url_t back into string.
@@ -108,10 +114,11 @@ void url_free (url_t* url);
  * Test whether to URLs are equal.
  * @param url1 1st url.
  * @param url2 2nd url.
+ * @param path Whether to compare paths.
  * @return Yes/No.
  * @test url_tests::test_parse().
  */
-bool url_eq (url_t* url1, url_t* url2);
+bool url_eq (url_t* url1, url_t* url2, bool path=true);
 
 /**
  * For a given protocoll, obtain default port.

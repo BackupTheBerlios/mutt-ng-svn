@@ -15,6 +15,7 @@
 
 using namespace unitpp;
 
+/** initialize conn_tests::url */
 void conn_tests::init() {
   url = new url_t;
   memset(url,0,sizeof(url_t));
@@ -23,6 +24,10 @@ void conn_tests::init() {
   url->secure = false;
 }
 
+/**
+ * @test Connection::socketConnect().
+ * @test Connection::socketDisconnect().
+ */
 void conn_tests::test_connectdisconnect() {
   Connection * conn = new PlainConnection(url);
 
@@ -39,6 +44,7 @@ void conn_tests::test_connectdisconnect() {
   delete conn;
 }
 
+/** @test Connection::canRead(). */
 void conn_tests::test_canread() {
   Connection * conn = new PlainConnection(url);
 
@@ -64,6 +70,10 @@ void conn_tests::test_canread() {
 
 }
 
+/**
+ * @test Connection::writeLine().
+ * @test Connection::readLine().
+ */
 void conn_tests::test_readwrite() {
   Connection * conn = new PlainConnection(url);
 

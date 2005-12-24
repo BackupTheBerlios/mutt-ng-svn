@@ -15,7 +15,9 @@ using namespace unitpp;
  * conversion unit testing class
  */
 class net_tests : public suite {
+  /** @test net_idn2local(). */
   void test_to_local();
+  /** @test net_local2idn(). */
   void test_from_local();
   public:
     net_tests();

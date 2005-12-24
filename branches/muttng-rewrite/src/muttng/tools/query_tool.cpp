@@ -10,6 +10,8 @@
 #include "core/intl.h"
 #include "core/str.h"
 #include "core/mem.h"
+#include "core/net.h"
+#include "core/conv.h"
 
 #include "libmuttng/mailbox/mailbox.h"
 
@@ -20,13 +22,18 @@ using namespace std;
 
 /** Usage string for @c muttng(1). */
 static const char* Usage = N_("\
-Usage: muttng-query [-c] URL...\n\
+Usage: muttng-query [-q] [-m] URL...\n\
+       muttng-query -i Host...\n\
+       muttng-query -c/-C\n\
   ");
 
 /** Help string for @c muttng(1). */
 static const char* Options = N_("\
 Options:\n\
-  -c\tPrint output in colon-separated fields.\n\
+  -c\t\tList supported MIME character sets\n\
+  -C\t\tList supported character set aliases\n\
+  -i\t\tConvert given IDN domain names using punycode.\n\
+  -m\t\tPrint output in machine-readable format.\n\
   ");
 
 QueryTool::QueryTool (int argc, char** argv) : Tool (argc, argv),colon(false) {
@@ -42,16 +49,17 @@ void QueryTool::getUsage (buffer_t* dst) {
 }
 
 int QueryTool::main (void) {
-  int ch = 0, rc = 0;
+  int ch = 0, rc = 0, args = 1;
+  QueryTool::modes mode = M_MAILBOX_QUERY;
 
-  while ((ch = getopt (this->argc, this->argv, "c" GENERIC_ARGS)) != -1) {
+  while ((ch = getopt (this->argc, this->argv, "cCim" GENERIC_ARGS)) != -1) {
     switch (ch) {
-    case 'c':
-      colon = true;
+    case 'm': colon = true;
       /* fallthrough */
-    case 'q':
-      Tool::quiet = true;
-      break;
+    case 'q': Tool::quiet = true; break;
+    case 'i': mode = M_IDN; break;
+    case 'c': mode = M_CHARSET_MIME; args = 0; break;
+    case 'C': mode = M_CHARSET_ALIAS; args = 0; break;
     default:
       rc = genericArg (ch, optarg);
       if (rc == -1)
@@ -64,7 +72,7 @@ int QueryTool::main (void) {
   this->argc -= optind;
   this->argv += optind;
 
-  if (argc==0) {
+  if (argc<args) {
     displayUsage();
     return 1;
   }
@@ -73,7 +81,14 @@ int QueryTool::main (void) {
     return (1);
 
   /* do something */
-  doURLs();
+  switch(mode) {
+  case M_MAILBOX_QUERY: doURLs(); break;
+  case M_IDN: doIDN(); break;
+  case M_CHARSET_ALIAS:
+  case M_CHARSET_MIME:
+    doCharsets(mode==M_CHARSET_MIME);
+    break;
+  }
   this->end ();
   return (0);
 }
@@ -115,6 +130,32 @@ void QueryTool::doURLs() {
     disconnectSignals(folder->sigGetPassword,this);
     delete folder;
   }
+}
+
+void QueryTool::doIDN() {
+  buffer_t in,out;
+  buffer_init(&in);
+  buffer_init(&out);
+  for (int i = 0; i < argc; i++) {
+    buffer_shrink(&in,0);
+    buffer_shrink(&out,0);
+    buffer_add_str(&in,argv[i],-1);
+    net_local2idn(&out,&in,Charset);
+    std::cout<<in.str<<": "<<out.str<<std::endl;
+  }
+  buffer_free(&in);
+  buffer_free(&out);
+}
+
+/**
+ * Callback for conv_charset_list(): just print line
+ * @param line Line.
+ * @return 1.
+ */
+static int printline(const char* line) { std::cout<<(NONULL(line))<<std::endl; return 1; }
+
+void QueryTool::doCharsets(bool mime) {
+  conv_charset_list(mime,printline);
 }
 
 bool QueryTool::getUsername (url_t* url) {

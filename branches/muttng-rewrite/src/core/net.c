@@ -15,10 +15,6 @@
 #include <ctype.h>
 #include <string.h>
 
-#ifndef STDC_HEADERS
-int fclose ();
-#endif
-
 #ifdef CORE_LIBIDN
 #include <idna.h>
 #include <stringprep.h>
@@ -89,6 +85,13 @@ int net_dnsdomainname (buffer_t* dst) {
   return 0;
 }
 
+/**
+ * See if string contains ASCII-only characters.
+ * @param s String.
+ * @return Yes/No.
+ * @bug We really need to find a central place once for all those tiny
+ * tool functions instead of adding them everywhere...
+ */
 static inline int is_ascii(const char* s) {
   register const char* p = s&&*s?s:"";
   while (*p) {
@@ -99,7 +102,7 @@ static inline int is_ascii(const char* s) {
 }
 
 #ifndef CORE_LIBIDN
-int net_host_to_local (buffer_t* dst, buffer_t* src,
+int net_idn2local (buffer_t* dst, buffer_t* src,
                        const char* local, unsigned short flags) {
   (void) local; (void) flags;
   if (!dst || !src) return 0;
@@ -107,20 +110,20 @@ int net_host_to_local (buffer_t* dst, buffer_t* src,
   buffer_add_buffer(dst,src);
   return 1;
 }
-int net_local_to_host (buffer_t* dst, buffer_t* src, const char* local) {
+int net_local2idn (buffer_t* dst, buffer_t* src, const char* local) {
   (void) local;
   if (!dst || !src) return 0;
   buffer_shrink(dst,0);
   buffer_add_buffer(dst,src);
   return is_ascii(dst->str);
 }
-int net_idna_version (buffer_t*dst) {
+int net_idn_version (buffer_t*dst) {
   (void) dst;
   return 0;
 }
 #else /* !CORE_LIBIDN */
 
-int net_host_to_local (buffer_t* dst, buffer_t* src,
+int net_idn2local (buffer_t* dst, buffer_t* src,
                        const char* local, unsigned short flags) {
 
   if (!dst || !src || !local) return 0;
@@ -134,7 +137,7 @@ int net_host_to_local (buffer_t* dst, buffer_t* src,
   if (!conv_iconv(dst,"utf-8",local))
     goto notrans;
 
-  if ((flags & MI_MAY_BE_IRREVERSIBLE)) {
+  if (!(flags & MI_MAY_BE_IRREVERSIBLE)) {
     int irrev = 0;
     buffer_t tmp;
     char* tmp2 = NULL;
@@ -162,7 +165,7 @@ notrans:
   return 0;
 }
 
-int net_local_to_host (buffer_t* dst, buffer_t* src, const char* local) {
+int net_local2idn (buffer_t* dst, buffer_t* src, const char* local) {
   short rc = 0;
   buffer_t tmp;
 
@@ -188,7 +191,7 @@ int net_local_to_host (buffer_t* dst, buffer_t* src, const char* local) {
   return rc && is_ascii(dst->str);
 }
 
-int net_idna_version (buffer_t* dst) {
+int net_idn_version (buffer_t* dst) {
   if (!dst) return 1;
   buffer_add_str(dst,"libidn ",7);
   buffer_add_str(dst,stringprep_check_version(NULL),-1);

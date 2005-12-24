@@ -24,6 +24,7 @@ class conn_tests : public suite, public lib_tests {
     conn_tests();
     ~conn_tests();
   private:
+    /** url for testing */
     url_t* url;
     void init();
     void test_connectdisconnect();

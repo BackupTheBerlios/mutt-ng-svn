@@ -24,6 +24,7 @@ class lib_tests : public LibMuttng {
     lib_tests();
     ~lib_tests();
   private:
+    /** handler for message display signals of LibMuttng */
     bool displayText (const buffer_t* message);
 };
 

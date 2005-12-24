@@ -66,7 +66,7 @@ void buffer_add_buffer (buffer_t* dst, buffer_t* src);
 void buffer_add_ch (buffer_t* buffer, unsigned char ch);
 
 /**
- * Append number to buffer.
+ * Append signed number to buffer.
  * Memory for buffer and contents will be @c malloc'd as needed.
  * @param buffer Pointer to buffer for storage.
  * @param num Number to append.
@@ -78,7 +78,7 @@ void buffer_add_ch (buffer_t* buffer, unsigned char ch);
 void buffer_add_snum2 (buffer_t* buffer, long num, short pad, short base);
 
 /**
- * Append number to buffer.
+ * Append signed number to buffer.
  * Memory for buffer and contents will be @c malloc'd as needed.
  * @param B Pointer to buffer for storage.
  * @param N Number to append.
@@ -87,7 +87,26 @@ void buffer_add_snum2 (buffer_t* buffer, long num, short pad, short base);
  */
 #define buffer_add_snum(B,N,P)   buffer_add_snum2(B,N,P,10)
 
+/**
+ * Append unsigned number to buffer.
+ * Memory for buffer and contents will be @c malloc'd as needed.
+ * @param buffer Pointer to buffer for storage.
+ * @param num Number to append.
+ * @param pad Number of digits for destination. If too few, buffer
+ *            will be filled with 0 and truncated otherwise.
+ * @param base Number base.
+ * @test buffer_tests::test_buffer_add_snum2().
+ */
 void buffer_add_unum2 (buffer_t* buffer, unsigned long num, short pad, short base);
+
+/**
+ * Append unsigned number to buffer.
+ * Memory for buffer and contents will be @c malloc'd as needed.
+ * @param B Pointer to buffer for storage.
+ * @param N Number to append.
+ * @param P Number of digits for destination. If too few, buffer
+ *          will be filled with 0 and truncated otherwise.
+ */
 #define buffer_add_unum(B,N,P)  buffer_add_unum2(B,N,P,10)
 
 /**
@@ -132,7 +151,7 @@ void buffer_shrink (buffer_t* buffer, size_t len);
  * Grow buffer so it for sure has requested room. If buffer already is
  * large enough, nothing is done. The size excludes \\0.
  * @param buffer Buffer.
- * @param Size requirements.
+ * @param size Size requirements.
  * @test buffer_tests::test_buffer_grow().
  */
 void buffer_grow (buffer_t* buffer, size_t size);

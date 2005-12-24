@@ -140,6 +140,10 @@ mailbox_query_status POP3Mailbox::closeMailbox() {
   /* TODO: synchronize content of mailbox */
   if (conn->ready) {
     buffer_shrink(&sbuf,0);
+    buffer_add_str(&sbuf,"RSET",4);
+    conn->writeLine(&sbuf);
+    conn->readLine(&rbuf);
+    buffer_shrink(&sbuf,0);
     buffer_add_str(&sbuf,"QUIT",4);
     conn->writeLine(&sbuf);
     conn->readLine(&rbuf);

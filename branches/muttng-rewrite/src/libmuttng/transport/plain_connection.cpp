@@ -11,22 +11,15 @@
 
 #include <unistd.h>
 
-PlainConnection::PlainConnection(url_t* url_) : Connection(url_) {
-  buffer_init(&rbuf);
-}
-
-PlainConnection::~PlainConnection() {
-  buffer_free(&rbuf);
-}
+PlainConnection::PlainConnection(url_t* url_) : Connection(url_) {}
+PlainConnection::~PlainConnection() {}
 
 int PlainConnection::doRead(buffer_t * buf, unsigned int len) {
   int read_len;
 
-  buffer_grow(&rbuf,len);
-  buffer_shrink(&rbuf,0);
-  read_len = read(fd,rbuf.str,len);
-  rbuf.str[len] = '\0';
-  rbuf.len = len;
+  buffer_grow(buf,len+1);
+  buffer_shrink(buf,0);
+  read_len = read(fd,buf->str,len);
 
   switch (read_len) {
     case -1:
@@ -35,11 +28,8 @@ int PlainConnection::doRead(buffer_t * buf, unsigned int len) {
     case  0:
       is_connected = false;
     default:
-      buffer_shrink(buf,0);
-      buffer_add_buffer(buf,&rbuf);
       break;
   }
-
   return read_len;
 }
 

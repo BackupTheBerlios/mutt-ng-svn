@@ -7,6 +7,7 @@
 
 #include <locale.h>
 
+/** package name for localization */
 #define CORE_PACKAGE    "muttng"
 
 void intl_init() {

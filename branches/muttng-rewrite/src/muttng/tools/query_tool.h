@@ -31,8 +31,18 @@ class QueryTool : public Tool {
     int main (void);
     const char* getName (void);
     void getUsage (buffer_t* dst);
-
   private:
+    /** modes we know */
+    enum modes {
+      /** default: query given folders */
+      M_MAILBOX_QUERY = 0,
+      /** with -i: turn given hosts into IDN */
+      M_IDN,
+      /** print mime charsets */
+      M_CHARSET_MIME,
+      /** print charset aliases */
+      M_CHARSET_ALIAS
+    };
     /** whether to print in colon-mode */
     bool colon;
     /** whether to not print messages */
@@ -44,6 +54,13 @@ class QueryTool : public Tool {
     void folderStats(Mailbox* folder);
     /** testing mailbox login. */
     void doURLs();
+    /** testing IDN conversions. */
+    void doIDN();
+    /**
+     * Print charsets.
+     * @param mime Whether to print MIME or aliases.
+     */
+    void doCharsets (bool mime);
     /**
      * Dummy for testing connections without UI: Connected to Mailbox::sigGetUsername().
      * @param url URL to complete.

@@ -64,6 +64,7 @@ class POP3Mailbox : public RemoteMailbox {
      */
     bool cacheGetKey (Message* msg, buffer_t* dst);
   private:
+    /** number of total messages */
     unsigned long total;
 };
 

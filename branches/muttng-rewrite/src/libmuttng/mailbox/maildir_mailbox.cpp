@@ -11,6 +11,7 @@
 #include <iostream>
 #include "core/str.h"
 
+/** subdirs for Maildir */
 static const char* dirs[] = { "/new", "/cur", "/tmp", NULL };
 
 MaildirMailbox::MaildirMailbox(url_t* url_) : DirMailbox(url_),mNew(0),mTotal(0),mFlagged(0) {}

@@ -26,6 +26,11 @@ class rfc2047_tests : public suite, private RfC2047 {
     void test_decode();
     /** @test rfc2047_decode(). */
     void test_decode_buf(buffer_t* dst);
+    /**
+     * See if string is ASCII-clean.
+     * @param src Source buffer.
+     * @return Length of clean initial portion.
+     */
     size_t isclean(buffer_t* src);
 };
 

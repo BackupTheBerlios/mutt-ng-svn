@@ -28,27 +28,23 @@ static void init () {
 
 TLSConnection::TLSConnection(url_t* url_) : Connection(url_) {
   if (!did_init) init();
-  buffer_init(&rbuf);
 }
-TLSConnection::~TLSConnection() {
-  buffer_free(&rbuf);
-}
+
+TLSConnection::~TLSConnection() {}
 
 int TLSConnection::doRead(buffer_t * buf, unsigned int len) {
   if (!is_connected)
     return -1;
 
-  buffer_grow(&rbuf,len+1);
-  buffer_shrink(&rbuf,0);
-  int ret = gnutls_record_recv(state,rbuf.str,len);
+  buffer_grow(buf,len+1);
+  buffer_shrink(buf,0);
+  int ret = gnutls_record_recv(state,buf->str,len);
 
   if (gnutls_error_is_fatal(ret) == 1) {
     is_connected = false;
     DEBUGPRINT(D_MOD,("gnutls_record_recv(): %d, %s",ret,gnutls_strerror(ret)));
-    mem_free(&rbuf);
     return -1;
   }
-  buffer_add_str(buf,rbuf.str,ret);
   return ret;
 }
 
@@ -146,7 +142,6 @@ bool TLSConnection::doOpen() {
   buffer_add_str(&msg,gnutls_cipher_get_name(gnutls_cipher_get(state)),-1);buffer_add_ch(&msg,'/');
   buffer_add_str(&msg,gnutls_mac_get_name(gnutls_mac_get(state)),-1);buffer_add_ch(&msg,')');
   displayProgress->emit(&msg);
-  DEBUGPRINT(D_SOCKET,("%s",msg.str));
   buffer_free(&msg);
 
   is_connected = true;

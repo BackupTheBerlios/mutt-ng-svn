@@ -24,6 +24,7 @@ void buffer_tests::test_buffer_init() {
   delete b;
 }
 
+/** @test buffer_shrink(). */
 void buffer_tests::test_buffer_shrink() {
   buffer_t tmp;
   buffer_init(&tmp);
@@ -52,6 +53,7 @@ void buffer_tests::test_buffer_shrink() {
   buffer_free(&tmp);
 }
 
+/** @test buffer_grow(). */
 void buffer_tests::test_buffer_grow() {
   buffer_t tmp;
   buffer_init(&tmp);

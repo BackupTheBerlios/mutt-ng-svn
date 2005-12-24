@@ -27,8 +27,6 @@ class TLSConnection : public Connection {
     /** @copydoc Connection::getVersion(). */
     static bool getVersion(buffer_t* dst);
   private:
-    /** receive buffer */
-    buffer_t rbuf;
     /** state of GNUTLS session. */
     gnutls_session state;
     /** credentials for managing certs. */

@@ -31,8 +31,8 @@ class MaildirMailbox : public DirMailbox {
 
     /**
      * Test whether local URL is a Maildir mailbox.
-     * @param url_ URL.
-     * @param error Error buffer.
+     * @param path Path.
+     * @param st Result of last stat(2) call.
      * @return Yes/No.
      */
     static bool isMaildir (buffer_t* path, struct stat* st);
@@ -47,9 +47,16 @@ class MaildirMailbox : public DirMailbox {
     unsigned long msgFlagged();
 
   private:
+    /**
+     * Parse filename and update counters.
+     * @param path Filename.
+     */
     void parseFlags (const char* path);
+    /** number of new messages */
     unsigned long mNew;
+    /** number of total messages */
     unsigned long mTotal;
+    /** number of flagged messages */
     unsigned long mFlagged;
 };
 

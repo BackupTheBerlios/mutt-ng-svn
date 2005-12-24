@@ -121,6 +121,7 @@ static inline char* conv_uitoa2 (char* buf, unsigned long num, short pad, short 
   return (NUMBUF-pad-1<0)?buf:buf+(NUMBUF-pad-1);
 }
 
+/** @copydoc buffer_add_str(). */
 static inline void _buffer_add_str(buffer_t* buffer, const char* s, int len) {
   if (!buffer)
     return;
@@ -356,6 +357,13 @@ static int extract_var(buffer_t* dst, char** work, int(*expand)(buffer_t*,buffer
   return 1;
 }
 
+/**
+ * Helper for buffer_extract_token(): handle backticks. This means to
+ * run a command and replace the backtick sequence with its output.
+ * @param dst Destination buffer.
+ * @param work Working pointer set to end of sequence parsed.
+ * @return Success.
+ */
 static int extract_backticks(buffer_t* dst, char** work) {
   char* p = *work;
   buffer_t cmd, tmp;

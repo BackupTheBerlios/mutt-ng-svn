@@ -6,6 +6,7 @@
 /**
  * @file libmuttng/transport/connection.h
  * @author Andreas Krennmair <ak@synflood.at>
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: plain TCP connection
  * @todo implementation is completely missing.
  */
@@ -39,12 +40,14 @@ class Connection : public LibMuttng {
     /**
      * Start connection.
      * @return true if connection succeeded, false if connection failed.
+     * @test conn_tests::test_connectdisconnect().
      */
     bool socketConnect();
 
     /**
      * Close connection.
      * @return true if close succeeded, false if connection failed.
+     * @test conn_tests::test_connectdisconnect().
      */
     bool socketDisconnect();
 
@@ -99,6 +102,7 @@ class Connection : public LibMuttng {
      * character(s) are stripped from the buffer.
      * @param buf buffer into which the data should be read.
      * @return number of characters read. -1 if an error occured.
+     * @test conn_tests::test_readwrite().
      */
     int readLine(buffer_t * buf);
 
@@ -106,12 +110,14 @@ class Connection : public LibMuttng {
      * Writes buffer to connection. Also add \\r\\n line in any case.
      * @param buf Buffer with data to send.
      * @return number of characters written.
+     * @test conn_tests::test_readwrite().
      */
     int writeLine(buffer_t* buf);
 
     /**
      * Determines whether there is data ready to be read.
      * @return true if there is data ready to be read, otherwise false.
+     * @test conn_tests::test_canread().
      */
     bool canRead();
 
@@ -165,6 +171,9 @@ class Connection : public LibMuttng {
     /** register connection specific variables */
     static void reg();
 
+    /** deregister connection specific items */
+    static void dereg();
+
   protected:
     /** URL */
     url_t* url;
@@ -186,7 +195,7 @@ class Connection : public LibMuttng {
     /** Security Strength Factor for secure connections */
     int ssf;
   private:
-    /** socket receive buffer */
+    /** receive buffer */
     buffer_t rbuf;
     /** error message buffer */
     buffer_t errorMsg;
@@ -200,10 +209,19 @@ class Connection : public LibMuttng {
     size_t makeMsg (const char* msg);
 };
 
+/**
+ * @def WHERE
+ * Neat trick to have storage+visibility of options: define storage location.
+ */
 #ifdef WHERE
 #undef WHERE
 #endif
 
+/**
+ * @def INITVAL(X).
+ * Neat trick to have storage+visibility of options: set initial value.
+ * @param X Inititial value.
+ */
 #ifdef INITVAL
 #undef INITVAL
 #endif
@@ -216,12 +234,17 @@ class Connection : public LibMuttng {
 #define INITVAL(X)
 #endif
 
+/** storage for @ref option_ssl_client_cert */
 WHERE char* SSLClientCert INITVAL(NULL);
+/** storage for @ref option_ssl_certificate_file */
 WHERE char* SSLCertFile INITVAL(NULL);
-WHERE char* SSLEntropyFile INITVAL(NULL);
+/** storage for @ref option_ssl_min_dh_prime_bits */
 WHERE int SSLDHPrimeBits INITVAL(NULL);
+/** storage for @ref option_ssl_ca_certificates_file */
 WHERE char* SSLCaCertFile INITVAL(NULL);
+/** storage for @ref option_ssl_use_tlsv1 */
 WHERE bool UseTLS1 INITVAL(true);
+/** storage for @ref option_ssl_use_sslv3 */
 WHERE bool UseSSL3 INITVAL(true);
 
 #endif

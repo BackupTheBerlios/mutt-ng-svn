@@ -25,9 +25,9 @@ class MmdfMailbox : public FileMailbox {
     void getSeparator (Message* msg);
 
     /**
-     * Test whether local URL is a MMDF mailbox.
-     * @param url_ URL.
-     * @param error Error buffer.
+     * Test whether local URL is a MH mailbox.
+     * @param path Path.
+     * @param st Result of last stat(2) call.
      * @return Yes/No.
      */
     static bool isMmdf (buffer_t* path, struct stat* st);

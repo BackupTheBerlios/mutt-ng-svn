@@ -12,6 +12,7 @@
 #include <unistd.h>
 #include <time.h>
 
+/** needed to get WHERE and INITVAL working */
 #define LIBMUTTNG_MAIN_CPP      1
 #include "libmuttng.h"
 
@@ -22,6 +23,9 @@
 #endif
 #ifdef LIBMUTTNG_NNTP
 #include "mailbox/nntp_mailbox.h"
+#endif
+#ifdef LIBMUTTNG_SSL_OPENSSL
+#include "transport/ssl_connection.h"
 #endif
 
 #include "mailbox/local_mailbox.h"
@@ -42,11 +46,14 @@
 #include "message/subject_header.h"
 #include "config/config_manager.h"
 
+/** Storage for LibMuttng::displayProgress */
 static Signal1<const buffer_t*> sigProgress;
+/** Storage for LibMuttng::displayMessage */
 static Signal1<const buffer_t*> sigMessage;
+/** Storage for LibMuttng::displayError */
 static Signal1<const buffer_t*> sigError;
+/** Storage for LibMuttng::displayWarning */
 static Signal1<const buffer_t*> sigWarning;
-
 /** static debug obj for library classes */
 static Debug* debugObj = NULL;
 /** storage for @ref option_debug_level */
@@ -169,15 +176,26 @@ LibMuttng::LibMuttng () {
 #ifdef LIBMUTTNG_NNTP
     NNTPMailbox::reg();
 #endif
+
     SubjectHeader::reg();
+
     Connection::reg();
+#ifdef LIBMUTTNG_SSL_OPENSSL
+    SSLConnection::reg();
+#endif
 
     buffer_init(&AttachMarker);
     buffer_add_str(&AttachMarker,"\033]9;",3);
     buffer_add_snum(&AttachMarker,time(NULL),-1);
     buffer_add_ch(&AttachMarker,'\a');
 
+    connectSignal(sigMessage,this,&LibMuttng::debugMessage);
+    connectSignal(sigProgress,this,&LibMuttng::debugProgress);
+    connectSignal(sigWarning,this,&LibMuttng::debugWarning);
+    connectSignal(sigError,this,&LibMuttng::debugError);
+
   }
+
   this->debug = debugObj;
   this->displayMessage = &sigMessage;
   this->displayProgress = &sigProgress;
@@ -185,8 +203,7 @@ LibMuttng::LibMuttng () {
   this->displayWarning = &sigWarning;
 }
 
-LibMuttng::~LibMuttng (void) {
-}
+LibMuttng::~LibMuttng (void) {}
 
 bool LibMuttng::setDebugLevel (Option* option) {
   (void) option;
@@ -201,11 +218,18 @@ bool LibMuttng::setDebugLevel (int level) {
 int LibMuttng::getDebugLevel() { return DebugLevel; }
 
 void LibMuttng::cleanup (void) {
+
+  disconnectSignals(displayMessage,this);
+  disconnectSignals(displayProgress,this);
+  disconnectSignals(displayError,this);
+  disconnectSignals(displayWarning,this);
+
   if (debugObj)
     delete (debugObj);
-#ifdef LIBMUTTNG_NNTP
-  NNTPMailbox::dereg();
+#ifdef LIBMUTTNG_SSL_OPENSSL
+    SSLConnection::dereg();
 #endif
+  Connection::dereg();
   mem_free(&Homedir);
   mem_free(&Realname);
   mem_free(&Shell);
@@ -214,4 +238,24 @@ void LibMuttng::cleanup (void) {
   mem_free(&OSName);
   buffer_free(&Fqdn);
   buffer_free(&AttachMarker);
+}
+
+bool LibMuttng::debugError(const buffer_t* msg) {
+  DEBUGPRINT(D_EVENT,("ERROR: %s",msg->str));
+  return true;
+}
+
+bool LibMuttng::debugWarning(const buffer_t* msg) {
+  DEBUGPRINT(D_EVENT,("WARNING: %s",msg->str));
+  return true;
+}
+
+bool LibMuttng::debugMessage(const buffer_t* msg) {
+  DEBUGPRINT(D_EVENT,("MESSAGE: %s",msg->str));
+  return true;
+}
+
+bool LibMuttng::debugProgress(const buffer_t* msg) {
+  DEBUGPRINT(D_EVENT,("PROGRESS: %s",msg->str));
+  return true;
 }

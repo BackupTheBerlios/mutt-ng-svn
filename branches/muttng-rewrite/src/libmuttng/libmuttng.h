@@ -122,12 +122,30 @@ class LibMuttng {
     bool setDebugLevel (Option* option);
     /** library-wide debug object */
     Debug* debug;
+  private:
+    /** handler for displayError signal: print text to debug file */
+    bool debugError(const buffer_t* msg);
+    /** handler for displayWarning signal: print text to debug file */
+    bool debugWarning(const buffer_t* msg);
+    /** handler for displayMessage signal: print text to debug file */
+    bool debugMessage(const buffer_t* msg);
+    /** handler for displayProgress signal: print text to debug file */
+    bool debugProgress(const buffer_t* msg);
 };
 
+/**
+ * @def WHERE
+ * Neat trick to have storage+visibility of options: define storage location.
+ */
 #ifdef WHERE
 #undef WHERE
 #endif
 
+/**
+ * @def INITVAL(X).
+ * Neat trick to have storage+visibility of options: set initial value.
+ * @param X Inititial value.
+ */
 #ifdef INITVAL
 #undef INITVAL
 #endif

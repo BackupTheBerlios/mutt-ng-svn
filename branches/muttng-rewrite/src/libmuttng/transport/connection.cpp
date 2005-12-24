@@ -2,6 +2,7 @@
 /**
  * @file libmuttng/transport/connection.cpp
  * @author Andreas Krennmair <ak@synflood.at>
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: plain TCP connection
  * @todo implementation is completely missing.
  */
@@ -37,22 +38,28 @@
 #include <time.h>
 #include <string.h>
 #include <strings.h>
-#include <iostream>
 
+#include <iostream>
+#include <vector>
+
+/** storage for @ref option_connect_timeout */
 static int ConnectTimeout = 0;
+/** Connections */
+static std::vector<Connection*> Connections;
 
 Connection::Connection(url_t* url_) : ready(false), is_connected(false) {
   url = new url_t;
   url->username = str_dup(url_->username);
   url->password = str_dup(url_->password);
   url->host = str_dup(url_->host);
+  url->idn_host = str_dup(url_->idn_host);
   url->port = url_->port;
   url->defport = url_->defport;
   url->secure = url_->secure;
   url->path = str_dup(url_->path);
   url->proto = url_->proto;
-  buffer_init(&rbuf);
   buffer_init(&errorMsg);
+  buffer_init(&rbuf);
 }
 
 Connection::~Connection() {
@@ -66,11 +73,20 @@ void Connection::reg() {
   ConfigManager::reg(new IntOption("connect_timeout","30",&ConnectTimeout,false));
   ConfigManager::reg(new IntOption("ssl_min_dh_prime_bits","0",&SSLDHPrimeBits,false));
   ConfigManager::reg(new StringOption("ssl_client_cert","",&SSLClientCert));
-  ConfigManager::reg(new StringOption("certificate_file","$HOME/.mutt_certificates",&SSLCertFile));
-  ConfigManager::reg(new StringOption("entropy_file","",&SSLEntropyFile));
+  /* XXX SYN */
+  Option* opt = ConfigManager::reg(new StringOption("ssl_certificate_file","$HOME/.mutt_certificates",&SSLCertFile));
+  ConfigManager::reg(new SynOption("certificate_file",opt));
   ConfigManager::reg(new StringOption("ssl_ca_certificates_file","",&SSLCaCertFile));
-  ConfigManager::reg(new BoolOption("use_sslv3","true",&UseSSL3));
-  ConfigManager::reg(new BoolOption("use_tlsv1","true",&UseTLS1));
+  ConfigManager::reg(new BoolOption("ssl_use_sslv3","true",&UseSSL3));
+  ConfigManager::reg(new BoolOption("ssl_use_tlsv1","true",&UseTLS1));
+}
+
+void Connection::dereg() {
+  while(Connections.size()!=0) {
+    Connection* conn = Connections.back();
+    Connections.pop_back();
+    delete conn;
+  }
 }
 
 size_t Connection::makeMsg (const char* msg) {
@@ -109,7 +125,7 @@ bool Connection::socketConnect() {
   hints.ai_family = PF_UNSPEC;
   hints.ai_socktype = SOCK_STREAM;
 
-  if ((error = getaddrinfo(url->host,port.str,&hints,&res))<0) {
+  if ((error = getaddrinfo(url->idn_host,port.str,&hints,&res))<0) {
     buffer_shrink(&errorMsg,msglen);
     buffer_add_str(&errorMsg,_(": "),-1);
     buffer_add_str(&errorMsg,gai_strerror(error),-1);
@@ -195,6 +211,7 @@ int Connection::readUntilSeparator(buffer_t * buf, char sep) {
         break;
     }
   } while (sep != rbuf.str[0]);
+  buf->len = str_len(buf->str);
   return buf->len;
 }
 
@@ -241,6 +258,13 @@ Connection * Connection::fromURL(url_t * url, buffer_t* error) {
     return NULL;
   }
 
+  size_t i;
+  /* try to find "cached" connection */
+  for (i=0; i<Connections.size(); i++) {
+    if (url_eq(Connections[i]->getURL(),url,false))
+      return Connections[i];
+  }
+
   Connection * conn = NULL;
 #if defined(LIBMUTTNG_SSL_OPENSSL) || defined(LIBMUTTNG_SSL_GNUTLS)
   if (url->secure)
@@ -254,6 +278,9 @@ Connection * Connection::fromURL(url_t * url, buffer_t* error) {
   else
 #endif
     conn = new PlainConnection(url);
+
+  if (conn)
+    Connections.push_back(conn);
 
   return conn;
 }

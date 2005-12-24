@@ -15,6 +15,7 @@
 #include "core/mem.h"
 #include "core/intl.h"
 #include "core/qp.h"
+#include "core/net.h"
 
 #include "url.h"
 
@@ -126,10 +127,11 @@ static urlproto_t url_get_proto (const char* s, bool* secure,
  *   - empty fields (like username) though format implies an optional field
  * @param url Destination.
  * @param src Source string.
+ * @param local Local character set.
  * @param error Error buffer.
  * @return Success.
  */
-static bool parse_userhost (url_t* url, char* src, buffer_t* error) {
+static bool parse_userhost (url_t* url, char* src, buffer_t* error, const char* local) {
   char *t;
   char *p;
   char *path;
@@ -196,6 +198,24 @@ static bool parse_userhost (url_t* url, char* src, buffer_t* error) {
     goto decode_error;
   }
 
+  buffer_t input,output;
+  buffer_init(&input);
+  buffer_init(&output);
+
+  buffer_add_str(&input,url->host,-1);
+
+  if (!net_local2idn(&output,&input,local)) {
+    err = url->host;
+    buffer_free(&input);
+    buffer_free(&output);
+    goto idn_error;
+  }
+
+  url->idn_host = str_dup(output.str);
+
+  buffer_free(&input);
+  buffer_free(&output);
+
   /* always fully qualify path with leading '/' */
   pathlen = str_len (path);
   url->path = (char*) mem_malloc (pathlen+2);
@@ -223,16 +243,23 @@ field_error:
     buffer_add_str (error, _("empty field in URL"), -1);
   url_free (url);
   return (false);
+
+idn_error:
+  if (error)
+    buffer_add_str (error, _("bad IDN in hostname"), -1);
+  url_free (url);
+  return (false);
 }
 
 void url_free (url_t* url) {
   mem_free (&url->username);
   mem_free (&url->password);
   mem_free (&url->host);
+  mem_free (&url->idn_host);
   mem_free (&url->path);
 }
 
-url_t* url_from_string (const char* url, buffer_t* error) {
+url_t* url_from_string (const char* url, buffer_t* error, const char* local) {
   char* tmp = NULL, *buf = NULL;
   url_t* ret = NULL;
   urlproto_t proto = P_LAST;
@@ -246,7 +273,7 @@ url_t* url_from_string (const char* url, buffer_t* error) {
   buf = str_dup (url);
   tmp = strchr (buf, ':') + 1;
 
-  if (!parse_userhost (ret, tmp, error))
+  if (!parse_userhost (ret, tmp, error, local))
     goto error;
 
   /* treat file:// specially */
@@ -276,7 +303,8 @@ error:
 }
 
 void url_to_string (url_t* url, buffer_t* dst, bool pwd) {
-  int i = 0;
+  unsigned short int i = 0;
+  bool ip6 = false;
 
   if (!url || !dst)
     return;
@@ -296,7 +324,10 @@ void url_to_string (url_t* url, buffer_t* dst, bool pwd) {
     }
     buffer_add_ch (dst, '@');
   }
+  ip6 = strchr(url->host,':')!=NULL;
+  if (ip6) buffer_add_ch(dst,'[');
   buffer_add_str (dst, url->host, -1);
+  if (ip6) buffer_add_ch(dst,']');
   if (url->port != url->defport) {
     buffer_add_ch (dst, ':');
     buffer_add_snum (dst, url->port, -1);
@@ -304,13 +335,13 @@ void url_to_string (url_t* url, buffer_t* dst, bool pwd) {
   buffer_add_str (dst, url->path, -1);
 }
 
-bool url_eq (url_t* url1, url_t* url2) {
+bool url_eq (url_t* url1, url_t* url2, bool path) {
   if (!url1 || !url2)
     return (!url1 && !url2);
   return (str_eq (url1->username, url2->username) &&
           str_eq (url1->password, url2->password) &&
           str_eq (url1->host, url2->host) &&
-          str_eq (url1->path, url2->path) &&
+          (!path || str_eq (url1->path, url2->path)) &&
           url1->port == url2->port &&
           url1->secure == url2->secure &&
           url1->proto == url2->proto);

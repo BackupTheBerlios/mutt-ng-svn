@@ -24,8 +24,6 @@ class NNTPMailbox : public RemoteMailbox {
 
     /** register all NNTP specific config options */
     static void reg();
-    /** register all NNTP specific memory */
-    static void dereg();
 
     mailbox_query_status openMailbox();
 
@@ -63,13 +61,6 @@ class NNTPMailbox : public RemoteMailbox {
      */
     bool cacheGetKey (Message* msg, buffer_t* dst);
 
-    /**
-     * For a given URL, see if there's a usable one available already.
-     * @param url_ URL.
-     * @return Connection if found and @c NULL otherwise.
-     */
-    static Connection* findConnection(url_t* url_);
-
   private:
     /** whether server supports XPAT command */
     bool haveXPAT;
@@ -106,6 +97,7 @@ class NNTPMailbox : public RemoteMailbox {
      * Read reponse list and call function on it. If the callback
      * returns false, it won't be called any longer.
      * @param handler Optional callback.
+     * @param data Data passed to handler.
      * @return
      *   - 0  (network) error
      *   - 1  ok, but no input received

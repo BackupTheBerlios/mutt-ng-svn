@@ -6,61 +6,452 @@
 #include "ssl_connection.h"
 
 #include "core/mem.h"
+#include "core/intl.h"
 
+#include <sys/types.h>
+#include <sys/stat.h>
 #include <unistd.h>
+#include <limits.h>
+
+#include <cstring>
+#include <vector>
 
 #include <openssl/opensslv.h>
+#include <openssl/ssl.h>
+#include <openssl/x509.h>
+#include <openssl/err.h>
+#include <openssl/rand.h>
 
-SSLConnection::SSLConnection(url_t* url_) : Connection(url_) {}
+#include "libmuttng/config/config_manager.h"
+
+#if OPENSSL_VERSION_NUMBER >= 0x00904000L
+#define READ_X509_KEY(fp, key)  PEM_read_X509(fp, key, NULL, NULL)
+#else
+#define READ_X509_KEY(fp, key)  PEM_read_X509(fp, key, NULL)
+#endif
+
+/* Just in case OpenSSL doesn't define DEVRANDOM */
+#ifndef DEVRANDOM
+#define DEVRANDOM "/dev/urandom"
+#endif
+
+/* This is ugly, but as RAND_status came in on OpenSSL version 0.9.5
+ * and the code has to support older versions too, this is seemed to
+ * be cleaner way compared to having even uglier #ifdefs all around.
+ */
+#ifdef HAVE_RAND_STATUS
+#define HAVE_ENTROPY()  (RAND_status() == 1)
+#else
+/** how many entropy bytes we managed to gather manually */
+static int entropy_byte_count = 0;
+
+/* OpenSSL fills the entropy pool from /dev/urandom if it exists */
+#define HAVE_ENTROPY()  (!access(DEVRANDOM, R_OK) || entropy_byte_count >= 16)
+#endif
+
+/** whether OpenSSL library is initialized */
+static bool did_init = false;
+/** cache of certificates for session */
+static std::vector<X509*> Certs;
+/** storage for @ref option_ssl_entropy_file */
+static char* SSLEntropyFile = NULL;
+/** storage for @ref option_ssl_usesystemcerts */
+static bool UseSysCerts = false;
+
+SSLConnection::SSLConnection(url_t* url_) :
+  Connection(url_),ctx(NULL),ssl(NULL),cert(NULL) {
+  if (!did_init) init();
+}
+
 SSLConnection::~SSLConnection() {}
 
+int SSLConnection::add_entropy (const char *file) {
+  struct stat st;
+  int n = -1;
+  buffer_t msg;
+  buffer_init(&msg);
+
+  if (!file)
+    return 0;
+
+  if (stat (file, &st) == -1)
+    return errno == ENOENT ? 0 : -1;
+
+  buffer_add_str(&msg,_("Filling entropy pool: '"),-1);
+  buffer_add_str(&msg,file,-1);
+  buffer_add_str(&msg,_("'..."),-1);
+  displayProgress->emit(&msg);
+
+  /* check that the file permissions are secure */
+  if (st.st_uid != getuid () ||
+      ((st.st_mode & (S_IWGRP | S_IRGRP)) != 0) ||
+      ((st.st_mode & (S_IWOTH | S_IROTH)) != 0)) {
+    buffer_shrink(&msg,0);
+    buffer_add_str(&msg,_("Entropy file '"),-1);
+    buffer_add_str(&msg,file,-1);
+    buffer_add_str(&msg,_("' has insecure permissions."),-1);
+    displayError->emit(&msg);
+    buffer_free(&msg);
+    return -1;
+  }
+
+#ifdef HAVE_RAND_EGD
+  n = RAND_egd (file);
+#endif
+  if (n <= 0)
+    n = RAND_load_file (file, -1);
+
+#ifndef HAVE_RAND_STATUS
+  if (n > 0)
+    entropy_byte_count += n;
+#endif
+  buffer_free(&msg);
+  return n;
+}
+
+void SSLConnection::init () {
+
+  did_init = false;
+
+  buffer_t path;
+  buffer_init(&path);
+  buffer_grow(&path,_POSIX_PATH_MAX+1);
+
+  if (!HAVE_ENTROPY ()) {
+    /* load entropy from files */
+    if (SSLEntropyFile)
+      add_entropy (SSLEntropyFile);
+    add_entropy (RAND_file_name (path.str,path.size));
+
+    /* load entropy from egd sockets */
+#ifdef HAVE_RAND_EGD
+    add_entropy (getenv ("EGDSOCKET"));
+    buffer_shrink(&path,0);
+    buffer_add_str(&path,NONULL(Homedir),-1);
+    buffer_add_str(&path,"/.entropy",9);
+    add_entropy (path.str);
+    add_entropy ("/tmp/entropy");
+#endif
+
+    /* shuffle $RANDFILE (or ~/.rnd if unset) */
+    RAND_write_file (RAND_file_name (path.str,path.size));
+    if (!HAVE_ENTROPY ()) {
+      buffer_t msg; buffer_init(&msg);
+      buffer_add_str(&msg,_("Failed to find enough entropy on your system"),-1);
+      displayError->emit(&msg);
+      buffer_free(&msg);
+      buffer_free(&path);
+      return;
+    }
+  }
+
+  /*
+   * I don't think you can do this just before reading the error.
+   * The call itself might clobber the last SSL error.
+   */
+  SSL_load_error_strings ();
+  SSL_library_init ();
+  did_init = true;
+  buffer_free(&path);
+}
+
+void SSLConnection::reg() {
+  Option* opt = ConfigManager::reg(new StringOption("ssl_entropy_file","",&SSLEntropyFile));
+  ConfigManager::reg(new SynOption("entropy_file",opt));
+  ConfigManager::reg(new BoolOption("ssl_usesystemcerts","true",&UseSysCerts));
+}
+
+void SSLConnection::dereg() {
+  while (Certs.size()!=0) {
+    X509* tmp = Certs.back();
+    Certs.pop_back();
+    X509_free(tmp);
+  }
+}
+
 int SSLConnection::doRead(buffer_t * buf, unsigned int len) {
-  char* cbuf;
   int read_len;
 
-  cbuf = (char*) mem_malloc (len+1);
-  read_len = read(fd,cbuf,len);
+  buffer_grow(buf,len);
+  buffer_shrink(buf,0);
+  read_len = SSL_read(ssl,buf->str,len);
 
   switch (read_len) {
     case -1:
       is_connected = false;
-      mem_free (&cbuf);
       return -1;
-    case  0:
+    case 0:
       is_connected = false;
     default:
-      buffer_shrink(buf,0);
-      buffer_add_str(buf,cbuf,read_len);
       break;
   }
-
-  mem_free (&cbuf);
   return read_len;
 }
 
 int SSLConnection::doWrite(buffer_t * buf) {
   if (!buf) return -1;
-
-  int rc = write(fd,buf->str,buf->len);
-
-  if (rc<0) {
-    is_connected = false;
-  }
-
+  int rc = SSL_write(ssl,buf->str,buf->len);
+  if (rc<0) is_connected = false;
   return rc;
 }
 
-bool SSLConnection::doOpen() { return false; }
-bool SSLConnection::doClose() { return false; }
+void SSLConnection::getClientCert() {
+  if (SSLClientCert) {
+    /* XXX
+    SSL_CTX_set_default_passwd_cb_userdata (ssldata->ctx, &conn->account);
+    SSL_CTX_set_default_passwd_cb (ssldata->ctx, ssl_passwd_cb);
+     */
+    SSL_CTX_use_certificate_file(ctx,SSLClientCert,SSL_FILETYPE_PEM);
+    SSL_CTX_use_PrivateKey_file(ctx,SSLClientCert,SSL_FILETYPE_PEM);
+  }
+}
+
+bool SSLConnection::checkCertCache() {
+  unsigned char peermd[EVP_MAX_MD_SIZE];
+  unsigned int peermdlen;
+  size_t i;
+
+  if (!X509_digest (cert, EVP_sha1(), peermd, &peermdlen)) 
+    return false;
+
+  for (i=0; i<Certs.size(); i++) {
+    if (X509_cmp(Certs[i],peermd,peermdlen)) {
+      DEBUGPRINT(D_SOCKET,("found cached cert at %d",i));
+      return true;
+    }
+  }
+  return false;
+}
+
+bool SSLConnection::checkCertSigner() {
+  X509_STORE_CTX xsc;
+  X509_STORE *c;
+  bool pass = false;
+
+  if (!(c = X509_STORE_new())) return false;
+
+  if (UseSysCerts) {
+    if (!X509_STORE_set_default_paths (c)) {
+      DEBUGPRINT(D_SOCKET,(("X509_STORE_set_default_paths failed")));
+    }
+  }
+
+  if (!X509_STORE_load_locations (c, SSLCertFile, NULL)) {
+    DEBUGPRINT(D_SOCKET,("X509_STORE_load_locations_failed"));
+  }
+
+  if (!pass) {
+    /* nothing to do */
+    X509_STORE_free (c);
+    return 0;
+  }
+
+  X509_STORE_CTX_init (&xsc, c, cert, NULL);
+  pass = (X509_verify_cert (&xsc) > 0);
+  X509_STORE_CTX_cleanup (&xsc);
+  X509_STORE_free (c);
+
+  return pass;
+}
+
+bool SSLConnection::X509_cmp (X509 *c, unsigned char *peermd,
+                             unsigned int peermdlen) {
+  unsigned char md[EVP_MAX_MD_SIZE];
+  unsigned int mdlen;
+
+  /*
+   * Avoid CPU-intensive digest calculation if the certificates are not
+   * even remotely equal.
+   */
+  if (X509_subject_name_cmp (cert, c) != 0 ||
+      X509_issuer_name_cmp (cert, c) != 0)
+    return false;
+
+  if (!X509_digest (c, EVP_sha1(), md, &mdlen) || peermdlen != mdlen)
+    return false;
+
+  if (memcmp(peermd, md, mdlen) != 0)
+    return false;
+
+  return false;
+}
+
+bool SSLConnection::checkCertDigest() {
+  unsigned char peermd[EVP_MAX_MD_SIZE];
+  unsigned int peermdlen;
+  X509 *c = NULL; 
+  bool pass = 0;
+  FILE *fp;
+  buffer_t msg;
+
+  buffer_init(&msg);
+  /* expiration check */
+  if (X509_cmp_current_time (X509_get_notBefore (cert)) >= 0) {
+    buffer_shrink(&msg,0);
+    buffer_add_str(&msg,_("Server certificate is not yet valid."),-1);
+    displayError->emit(&msg);
+    buffer_free(&msg);
+    return 0;
+  }
+  if (X509_cmp_current_time (X509_get_notAfter (cert)) <= 0) { 
+    buffer_shrink(&msg,0);
+    buffer_add_str(&msg,_("Server certificate has expired."),-1);
+    displayError->emit(&msg);
+    buffer_free(&msg);
+    return 0;
+  }
+  buffer_free(&msg);
+
+  if ((fp = fopen (SSLCertFile, "rt")) == NULL)
+    return 0;
+
+  if (!X509_digest (cert, EVP_sha1 (), peermd, &peermdlen)) {
+    fclose (fp);
+    return 0;
+  }
+
+  while ((c = READ_X509_KEY (fp, &c)) != NULL) { 
+    pass = X509_cmp (c, peermd, peermdlen) ? 0 : 1;
+    if (pass)
+      break;
+  }
+
+  X509_free(c);
+  fclose (fp);
+
+  return true;
+}
+
+bool SSLConnection::checkCert() {
+  /* check session cache first */
+  if (checkCertCache()) {
+    DEBUGPRINT(D_SOCKET,("using cached cert"));
+    return true;
+  }
+
+  if (checkCertSigner()) {
+    DEBUGPRINT(D_SOCKET,("signer check passed"));
+    Certs.push_back(cert);
+    return true;
+  }
+
+  /* automatic check from user's database */
+  if (SSLCertFile && checkCertDigest()) {
+    DEBUGPRINT(D_SOCKET,("digest check passed"));
+    Certs.push_back(cert);
+    return true;
+  }
+
+  /* emit signal */
+  return false;
+}
+
+bool SSLConnection::negotiate () {
+  int err;
+  const char *errmsg;
+  buffer_t msg;
+
+  buffer_init(&msg);
+
+#if OPENSSL_VERSION_NUMBER >= 0x00906000L
+  /* This only exists in 0.9.6 and above. Without it we may get interrupted
+   *   reads or writes. Bummer. */
+  SSL_set_mode (ssl, SSL_MODE_AUTO_RETRY);
+#endif
+
+  if ((err = SSL_connect (ssl)) != 1) {
+    switch (SSL_get_error (ssl, err)) {
+    case SSL_ERROR_SYSCALL:
+      errmsg = _("I/O error");
+      break;
+    case SSL_ERROR_SSL:
+      errmsg = ERR_error_string (ERR_get_error (), NULL);
+      break;
+    default:
+      errmsg = _("unknown error");
+    }
+    buffer_shrink(&msg,0);
+    buffer_add_str(&msg,(_("OpenSSL's connect() failed: ")),-1);
+    buffer_add_str(&msg,errmsg,-1);
+    displayError->emit(&msg);
+    buffer_free(&msg);
+    return false;
+  }
+
+  if (!(cert = SSL_get_peer_certificate (ssl))) {
+    buffer_shrink(&msg,0);
+    buffer_add_str(&msg,_("Unable to get certificate from peer"),-1);
+    displayError->emit(&msg);
+    buffer_free(&msg);
+    return false;
+  }
+
+  if (!checkCert())
+    return false;
+
+  return true;
+}
+
+bool SSLConnection::doOpen() {
+  if (!did_init) return false;
+
+  ctx = SSL_CTX_new (SSLv23_client_method ());
+
+  /* disable SSL protocols as needed */
+  if (!UseTLS1) {
+    SSL_CTX_set_options (ctx, SSL_OP_NO_TLSv1);
+  }
+  if (!UseSSL3) {
+    SSL_CTX_set_options (ctx, SSL_OP_NO_SSLv3);
+  }
+  if (!UseTLS1 && !UseSSL3)
+    return false;
+
+  getClientCert ();
+
+  ssl = SSL_new (ctx);
+  SSL_set_fd (ssl,fd);
+
+  if (!negotiate ())
+    return false;
+
+  int maxbits;
+  ssf = SSL_CIPHER_get_bits (SSL_get_current_cipher (ssl),&maxbits);
+
+  buffer_t msg;
+  buffer_init(&msg);
+  buffer_add_str(&msg,_("SSL/TLS connection using "),-1);
+  buffer_add_str(&msg,SSL_get_cipher_version(ssl),-1);
+  buffer_add_str(&msg," (",2);
+  buffer_add_str(&msg,SSL_get_cipher_name(ssl),-1);
+  buffer_add_ch(&msg,')');
+  displayProgress->emit(&msg);
+  buffer_free(&msg);
+
+  return true;
+}
+
+bool SSLConnection::doClose() {
+  if (ssl) SSL_free(ssl);
+  if (ctx) SSL_CTX_free(ctx);
+  return true;
+}
+
+static inline unsigned char pl(unsigned short a) {
+  switch(a) {
+  case 0: return ' ';
+  default: return 'a'+a-1;
+  }
+  return ' ';
+}
 
 bool SSLConnection::getVersion (buffer_t* dst) {
-  static char a[] = " abcdefghijklmnopqrstuvwxyz";
   if (!dst)
     return true;
   buffer_add_str(dst,"openssl ",8);
   buffer_add_snum(dst,(OPENSSL_VERSION_NUMBER>>28)&0xf,-1);buffer_add_ch(dst,'.');
   buffer_add_snum(dst,(OPENSSL_VERSION_NUMBER>>20)&0xff,-1);buffer_add_ch(dst,'.');
   buffer_add_snum(dst,(OPENSSL_VERSION_NUMBER>>12)&0xff,-1);
-  buffer_add_ch(dst,a[((OPENSSL_VERSION_NUMBER>>4)&0xff)%27]);
+  buffer_add_ch(dst,pl(((OPENSSL_VERSION_NUMBER>>4)&0xff)%27));
   return true;
 }

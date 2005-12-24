@@ -41,6 +41,11 @@ typedef struct {
   list_t** rows;
   /** whether key was copied */
   unsigned int dup_key:1;
+  /**
+   * Whether insertion is locked. We need to do this while we're running
+   * hash_map() to not mess with list size etc.
+   */
+  unsigned int locked:1;
 } hash_t;
 
 void* hash_new (unsigned long size, int dup_key) {
@@ -56,8 +61,9 @@ void hash_destroy (void** t, hash_del_t* destroy) {
   unsigned long r,c;
   hash_t** tab = (hash_t**) t;
 
-  if (!tab || !*tab)
-    return;
+  if (!tab || !*tab) return;
+  if ((*tab)->locked) return;
+
   for (r = 0; r < (*tab)->size; r++)
     if ((*tab)->rows && !list_empty((*tab)->rows[r])) {
       for (c = 0; c < (unsigned long)(*tab)->rows[r]->length; c++) {
@@ -113,8 +119,9 @@ int hash_add_hash (void* t, const char* key,
   hash_t* tab = (hash_t*) t;
   hash_item_t* item = NULL;
 
-  if (!tab || !key)
+  if (!tab || tab->locked || !key)
     return (0);
+
   row = MOD(code, tab->size);
   if (_hash_exists (tab, row, key) < 0) {
     item = mem_malloc (sizeof (hash_item_t));
@@ -147,8 +154,9 @@ static HASH_ITEMTYPE _hash_find_hash (void* t, const char* key, int remove,
   hash_t* tab = (hash_t*) t;
   HASH_ITEMTYPE ret;
 
-  if (!tab || !key)
-    return (0);
+  if (!tab || !key) return (0);
+  if (tab->locked && remove) return 0;
+
   row = MOD(code, tab->size);
   if ((col = _hash_exists (tab, row, key)) < 0)
     return (0);
@@ -180,6 +188,13 @@ HASH_ITEMTYPE hash_del_hash (void* t, const char* key, unsigned int code) {
   return (_hash_find_hash (t, key, 1, code));
 }
 
+/**
+ * For sorting items prior to calling hash_map()'s callback: compare two
+ * keys.
+ * @param a Typecasted pointer to 1st hash_item_t structure.
+ * @param b Typecasted pointer to 2nd hash_item_t structure.
+ * @return str_ncmp(a,b)
+ */
 static int itemcmp (const void* a, const void* b) {
   hash_item_t** i1 = (hash_item_t**)a;
   hash_item_t** i2 = (hash_item_t**)b;
@@ -208,11 +223,13 @@ unsigned long hash_map (void* t, int sort, int (*map) (const char*, HASH_ITEMTYP
   if (sort)
     qsort(tmp->data,tmp->length,sizeof(HASH_ITEMTYPE),itemcmp);
   /* now run callback while it succeeds */
+  tab->locked = 1;
   for (r = 0, ret = 0; r < tmp->length; r++, ret++)
 #define cur ((hash_item_t*) tmp->data[r])
     if (!map(cur->key,cur->data,moredata))
       break;
 #undef cur
+  tab->locked = 0;
   list_del(&tmp,NULL);
   return ret;
 }

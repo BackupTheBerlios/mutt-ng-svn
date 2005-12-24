@@ -31,8 +31,8 @@ class MHMailbox : public DirMailbox {
 
     /**
      * Test whether local URL is a MH mailbox.
-     * @param url_ URL.
-     * @param error Error buffer.
+     * @param path Path.
+     * @param st Result of last stat(2) call.
      * @return Yes/No.
      */
     static bool isMH (buffer_t* path, struct stat* st);

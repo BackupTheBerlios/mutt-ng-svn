@@ -15,10 +15,15 @@
 
 using namespace unitpp;
 
+/** test IDNs */
 static struct {
+  /** local UTF-8 string */
   const char* utf8;
+  /** local Latin1 string */
   const char* latin1;
+  /** manually encoded ASCII-IDN in punycode */
   const char* puny;
+  /** whether IDN can be decoded to latin1 <em>and</em> utf-8 */
   bool full;
 } Tests[] = {
   { "müller.de", "m\xfcller.de", "xn--mller-kva.de", true },
@@ -39,12 +44,12 @@ void net_tests::test_to_local () {
     buffer_add_str(&src,Tests[i].puny,-1);
 
     buffer_free(&dst); buffer_init(&dst);
-    assert_true("net_host_to_local(utf8) works #1",net_host_to_local(&dst,&src,"utf-8",0));
-    assert_true("net_host_to_local(utf8) works #2",buffer_equal1(&dst,Tests[i].utf8,-1));
+    assert_true("net_idn2local(utf8) works #1",net_idn2local(&dst,&src,"utf-8",0));
+    assert_true("net_idn2local(utf8) works #2",buffer_equal1(&dst,Tests[i].utf8,-1));
 
     buffer_free(&dst); buffer_init(&dst);
-    assert_true("net_host_to_local(latin1) works #1",net_host_to_local(&dst,&src,"latin1",0)==Tests[i].full);
-    assert_true("net_host_to_local(latin1) works #2",buffer_equal1(&dst,Tests[i].latin1,-1)==Tests[i].full);
+    assert_true("net_idn2local(latin1) works #1",net_idn2local(&dst,&src,"latin1",0)==Tests[i].full);
+    assert_true("net_idn2local(latin1) works #2",buffer_equal1(&dst,Tests[i].latin1,-1)==Tests[i].full);
   }
 
   buffer_free(&src);
@@ -62,16 +67,16 @@ void net_tests::test_from_local () {
 
     buffer_shrink(&src,0); buffer_add_str(&src,Tests[i].utf8,-1);
     buffer_free(&dst); buffer_init(&dst);
-    assert_true("net_local_to_host(utf8) works #1",net_local_to_host(&dst,&src,"utf-8"));
-    assert_true("net_local_to_host(utf8) works #2",buffer_equal1(&dst,Tests[i].puny,-1));
+    assert_true("net_local2idn(utf8) works #1",net_local2idn(&dst,&src,"utf-8"));
+    assert_true("net_local2idn(utf8) works #2",buffer_equal1(&dst,Tests[i].puny,-1));
 
     if (!Tests[i].full || !Tests[i].latin1) 
       continue;
 
     buffer_shrink(&src,0); buffer_add_str(&src,Tests[i].latin1,-1);
     buffer_free(&dst); buffer_init(&dst);
-    assert_true("net_local_to_host(utf8) works #1",net_local_to_host(&dst,&src,"latin1"));
-    assert_true("net_local_to_host(utf8) works #2",buffer_equal1(&dst,Tests[i].puny,-1));
+    assert_true("net_local2idn(utf8) works #1",net_local2idn(&dst,&src,"latin1"));
+    assert_true("net_local2idn(utf8) works #2",buffer_equal1(&dst,Tests[i].puny,-1));
   }
 
   buffer_free(&src);

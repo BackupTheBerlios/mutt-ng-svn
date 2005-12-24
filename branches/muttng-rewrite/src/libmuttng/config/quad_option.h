@@ -31,6 +31,7 @@ class QuadOption : public Option {
   private:
     /** quad-option states */
     enum state { M_YES = 0, M_NO, M_ASK_YES, M_ASK_NO };
+    /** storage for value */
     unsigned short* store;
 };
 

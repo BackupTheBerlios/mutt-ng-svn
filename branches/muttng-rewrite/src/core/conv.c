@@ -23,6 +23,7 @@
 
 #ifdef CORE_LIBICONV
 
+/** Hash table of known character sets for faster access */
 static void* Charsets = NULL;
 
 /**

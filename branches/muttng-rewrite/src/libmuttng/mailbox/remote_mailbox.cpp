@@ -25,14 +25,8 @@ Mailbox* RemoteMailbox::fromURL (url_t* url_, buffer_t* error) {
   Connection* conn = NULL;
   Mailbox* ret = NULL;
 
-  /* first, depending on mailbox type, see if it has a connection already */
-  switch(url_->proto) {
-  case P_NNTP: conn = NNTPMailbox::findConnection(url_); break;
-  default: break;
-  }
-
   /* if not, create new one */
-  if (!conn && !(conn = Connection::fromURL(url_,error)))
+  if (!(conn = Connection::fromURL(url_,error)))
     return NULL;
 
   /* finally, create mailbox */

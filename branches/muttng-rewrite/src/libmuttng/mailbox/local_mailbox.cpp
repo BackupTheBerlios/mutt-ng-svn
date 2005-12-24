@@ -19,7 +19,9 @@
 #include "maildir_mailbox.h"
 #include "mh_mailbox.h"
 
+/** storage for @ref option_local_mail_check */
 static int Timeout = 0;
+/** storage for @ref option_mbox_type */
 static char* DefaultType = NULL;
 
 LocalMailbox::LocalMailbox (url_t* url_) : Mailbox (url_) {

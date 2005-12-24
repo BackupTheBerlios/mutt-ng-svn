@@ -31,8 +31,8 @@ class MboxMailbox : public FileMailbox {
 
     /**
      * Test whether local URL is a MBOX mailbox.
-     * @param url_ URL.
-     * @param error Error buffer.
+     * @param path Path.
+     * @param st Result of last stat(2) call.
      * @return Yes/No.
      */
     static bool isMbox (buffer_t* path, struct stat* st);

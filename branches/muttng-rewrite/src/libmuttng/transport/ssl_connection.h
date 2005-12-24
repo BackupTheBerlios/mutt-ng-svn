@@ -9,6 +9,9 @@
 
 #include "connection.h"
 
+#include <openssl/ssl.h>
+#include <openssl/x509.h>
+
 /**
  * Abstract TCP connection.
  */
@@ -23,6 +26,60 @@ class SSLConnection : public Connection {
     bool doClose();
     /** @copydoc Connection::getVersion(). */
     static bool getVersion(buffer_t* dst);
+    /** register SSL specific variables */
+    static void reg();
+    /** deregister internal items */
+    static void dereg();
+  private:
+    /** SSL context */
+    SSL_CTX* ctx;
+    /** SSL state */
+    SSL* ssl;
+    /** Peer certificate */
+    X509* cert;
+    /** Get client's certificate */
+    void getClientCert();
+    /**
+     * Negotiate SSL options and check certificate.
+     * @return Success.
+     */
+    bool negotiate();
+    /**
+     * Check certificate.
+     * @return Valid/acceptable or not.
+     */
+    bool checkCert();
+    /**
+     * Check certificate by checking internal cache.
+     * @return Success, ie certificate is cached for session.
+     */
+    bool checkCertCache();
+    /**
+     * Check certificate by checking signer.
+     * @return Success.
+     */
+    bool checkCertSigner();
+    /**
+     * Check certificate by digest, ie user's db.
+     * @return Success.
+     */
+    bool checkCertDigest();
+    /**
+     * See if passed certificate is a candiate for being same as ours.
+     * @param c Cert to check.
+     * @param peermd ?
+     * @param peermdlen ?
+     * @return Equal or not.
+     */
+    bool X509_cmp (X509 *c, unsigned char *peermd, unsigned int peermdlen);
+    /**
+     * Manually feed OpenSSL with entropy.
+     * @param file From which file to feed.
+     * @return How many entropy bytes we gathered manually.
+     */
+    int add_entropy(const char* file);
+    /** Initialize OpenSSL library */
+    void init();
 };
 
 #endif

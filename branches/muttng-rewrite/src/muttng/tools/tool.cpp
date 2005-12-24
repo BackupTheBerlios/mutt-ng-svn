@@ -231,9 +231,9 @@ void Tool::doSystem (buffer_t* dst) {
     conv_iconv_version(dst);
     buffer_add_ch(dst,'\n');
   }
-  if (net_idna_version(NULL)) {
+  if (net_idn_version(NULL)) {
     buffer_add_str(dst,"  ",2);
-    net_idna_version(dst);
+    net_idn_version(dst);
     buffer_add_ch(dst,'\n');
   }
   if (Connection::getSecureVersion(NULL)) {

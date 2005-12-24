@@ -20,11 +20,11 @@ extern "C" {
 
 /** regular expression abstraction */
 typedef struct rx_t {
-  /* printable version */
+  /** printable version */
   char *pattern;
-  /* compiled expression */
+  /** compiled expression */
   regex_t *rx;
-  /* do not match */
+  /** do not match */
   int no;
 } rx_t;
 

@@ -44,7 +44,7 @@ extern "C" {
 # endif
 
 /**
- * @def intl_init.
+ * @def intl_init().
  * Initialize internationalization.
  */
 
@@ -55,8 +55,9 @@ void intl_init(void);
 #endif
 
 /**
+ * @def intl_encoding(charset).
  * Set encoding of translated messages.
- * @param encoding Encoding to use.
+ * @param charset Character encoding to use.
  */
 #ifdef CORE_INTL
 void intl_encoding(const char* charset);
