@@ -34,7 +34,7 @@ class ConfTool : public Tool {
       /** print options */
       M_OPTS = 0,
       /** print bindings */
-      M_BIND,
+      M_BIND
     };
     /**
      * Handle default: print options.

@@ -233,17 +233,19 @@ bool SSLConnection::checkCertSigner() {
   if (UseSysCerts) {
     if (!X509_STORE_set_default_paths (c)) {
       DEBUGPRINT(D_SOCKET,(("X509_STORE_set_default_paths failed")));
-    }
+    } else
+      pass = true;
   }
 
   if (!X509_STORE_load_locations (c, SSLCertFile, NULL)) {
     DEBUGPRINT(D_SOCKET,("X509_STORE_load_locations_failed"));
-  }
+  } else
+    pass = true;
 
   if (!pass) {
     /* nothing to do */
     X509_STORE_free (c);
-    return 0;
+    return false;
   }
 
   X509_STORE_CTX_init (&xsc, c, cert, NULL);

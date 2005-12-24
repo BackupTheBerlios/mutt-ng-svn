@@ -6,6 +6,7 @@ SUBDIRS=mailbox crypto message test util transport config
 ifeq ($(WANT_CACHE),1)
 SUBDIRS+=cache
 endif
+CXXFLAGS+=$(CXXFLAGS_SSL)
 
 all: muttng_signal.h
 	@ $(MAKE) subdirs
