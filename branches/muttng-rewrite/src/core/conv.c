@@ -214,10 +214,10 @@ void conv_cleanup () {}
 void conv_charset_normal (buffer_t* charset) {
   (void) charset;
 }
-int conv_charset_eq (const char* c1, const char* c2) {
+int conv_charset_eq (const char* s1, const char* s2) {
   return strcmp (s1,s2)==0;
 }
-int conv_charset_list (int mime,
+unsigned long conv_charset_list (int mime,
                        int (*printfunc)(const char*)) {
   (void)mime;
   (void)printfunc;

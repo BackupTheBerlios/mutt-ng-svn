@@ -275,7 +275,7 @@ WHERE char* SSLClientCert INITVAL(NULL);
 /** storage for @ref option_ssl_certificate_file */
 WHERE char* SSLCertFile INITVAL(NULL);
 /** storage for @ref option_ssl_min_dh_prime_bits */
-WHERE int SSLDHPrimeBits INITVAL(NULL);
+WHERE int SSLDHPrimeBits INITVAL(0);
 /** storage for @ref option_ssl_ca_certificates_file */
 WHERE char* SSLCaCertFile INITVAL(NULL);
 /** storage for @ref option_ssl_use_tlsv1 */

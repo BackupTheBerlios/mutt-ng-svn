@@ -13,7 +13,9 @@ static unsigned short init = 0;
 int core_init(void) {
   if (init) return 1;
   sigs_signal_init();
+#ifdef CORE_INTL
   intl_init();
+#endif
   conv_init();
   init = 1;
   return 1;
