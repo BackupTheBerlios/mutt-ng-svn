@@ -9,15 +9,13 @@
 
 #include "rx.h"
 
+#ifdef CORE_POSIX_PCRE
+#include <pcre.h>
+#endif
+
 #include "mem.h"
 #include "str.h"
 #include "buffer.h"
-
-#ifndef CORE_WANT_PCRE
-
-/*
- * usual system regex
- */
 
 #ifndef REG_WORDS
 /**
@@ -73,10 +71,13 @@ int rx_exec (rx_t* rx, const char* str) {
   return regexec(rx->rx,str,(size_t)0,(regmatch_t*)0,(int)0)==0;
 }
 
-#else /* !CORE_WANT_PCRE */
-
-/*
- * PCRE-based regex
- */
-
+int rx_version (buffer_t* dst) {
+#ifdef CORE_POSIX_PCRE
+  if (!dst) return 1;
+  buffer_add_str(dst,"pcre ",5);
+  buffer_add_str(dst,pcre_version(),-1);
+  return 1;
+#else
+  return 0;
 #endif
+}

@@ -16,6 +16,7 @@
 #include "core/intl.h"
 #include "core/buffer.h"
 #include "core/str.h"
+#include "core/rx.h"
 
 #include "libmuttng/version.h"
 #include "libmuttng/debug.h"
@@ -234,6 +235,11 @@ void Tool::doSystem (buffer_t* dst) {
   if (net_idn_version(NULL)) {
     buffer_add_str(dst,"  ",2);
     net_idn_version(dst);
+    buffer_add_ch(dst,'\n');
+  }
+  if (rx_version(NULL)) {
+    buffer_add_str(dst,"  ",2);
+    rx_version(dst);
     buffer_add_ch(dst,'\n');
   }
   if (Connection::getSecureVersion(NULL)) {

@@ -70,6 +70,15 @@ my %features = ( # {{{
                              fmt =>     "=s",
                              group =>   [ "core" ] },
 
+  "with-pcre"           => { key =>     "CORE_POSIX_PCRE",
+                             conf =>    "LIBPCREDIR",
+                             help =>    "Where libpcre is installed",
+                             text =>    "Whether to use pcre for POSIX regex support",
+                             config =>  "LIBPCREDIR",
+                             value =>   "",
+                             fmt =>     "=s",
+                             group =>   [ "core" ] },
+
   "with-idn"            => { key =>     "CORE_LIBIDN",
                              conf =>    "LIBIDNDIR",
                              help =>    "Where libidn is installed",

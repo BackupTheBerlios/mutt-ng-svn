@@ -14,7 +14,13 @@
 extern "C" {
 #endif
 
+#include "core_features.h"
+
+#ifdef CORE_POSIX_PCRE
+#include <pcreposix.h>
+#else
 #include <regex.h>
+#endif
 
 #include "buffer.h"
 
@@ -64,6 +70,13 @@ int rx_exec (rx_t* rx, const char* str);
  * @return 1 if equal, 0 otherwise.
  */
 int rx_eq (const rx_t* rx1, const rx_t* rx2);
+
+/**
+ * Get regular expression backend version.
+ * @param dst Optional destination buffer.
+ * @return Wether compiled with pcre support or not.
+ */
+int rx_version (buffer_t* dst);
 
 #ifdef __cplusplus
 }
