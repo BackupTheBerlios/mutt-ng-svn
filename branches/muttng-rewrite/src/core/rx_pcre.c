@@ -8,13 +8,13 @@
 #include "core_features.h"
 
 #include "rx.h"
-
-#include <pcre.h>
-
 #include "mem.h"
 #include "str.h"
 #include "buffer.h"
 #include "intl.h"
+#include "alloca.h"
+
+#include <pcre.h>
 
 typedef struct pcreregex_t {
   pcre* rx;

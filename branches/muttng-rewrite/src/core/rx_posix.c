@@ -8,11 +8,12 @@
 #include "core_features.h"
 
 #include "rx.h"
-
-#include <regex.h>
 #include "mem.h"
 #include "str.h"
 #include "buffer.h"
+#include "alloca.h"
+
+#include <regex.h>
 
 #ifndef REG_WORDS
 /**
