@@ -141,7 +141,7 @@ void QueryTool::doIDN() {
     buffer_shrink(&out,0);
     buffer_add_str(&in,argv[i],-1);
     net_local2idn(&out,&in,Charset);
-    std::cout<<in.str<<": "<<out.str<<std::endl;
+    std::cout<<in.str<<":"<<(colon?"":" ")<<out.str<<(colon?":":"")<<std::endl;
   }
   buffer_free(&in);
   buffer_free(&out);
@@ -152,10 +152,17 @@ void QueryTool::doIDN() {
  * @param line Line.
  * @return 1.
  */
-static int printline(const char* line) { std::cout<<(NONULL(line))<<std::endl; return 1; }
+static int printline1(const char* line) { std::cout<<(NONULL(line))<<std::endl; return 1; }
+
+/**
+ * Callback for conv_charset_list(): just print line for colon mode
+ * @param line Line.
+ * @return 1.
+ */
+static int printline2(const char* line) { std::cout<<(NONULL(line))<<":"<<std::endl; return 1; }
 
 void QueryTool::doCharsets(bool mime) {
-  conv_charset_list(mime,printline);
+  conv_charset_list(mime,colon?printline2:printline1);
 }
 
 bool QueryTool::getUsername (url_t* url) {

@@ -70,7 +70,7 @@ my %features = ( # {{{
                              fmt =>     "=s",
                              group =>   [ "core" ] },
 
-  "with-pcre"           => { key =>     "CORE_POSIX_PCRE",
+  "with-pcre"           => { key =>     "CORE_PCRE",
                              conf =>    "LIBPCREDIR",
                              help =>    "Where libpcre is installed",
                              text =>    "Whether to use pcre for POSIX regex support",
@@ -226,6 +226,14 @@ my %tests = ( # {{{
                 msg =>   "working nl_langinfo(CODESET)",
                 def =>   "LIBMUTTNG_HAVE_LANGINFO_CODESET",
                 run =>   0
+              },
+
+              {
+                lang =>  "c",
+                file =>  "test_getaddrinfo.c",
+                msg =>   "working getaddrinfo()",
+                def =>   "LIBMUTTNG_HAVE_GETADDRINFO",
+                run =>   0
               }
 
               ]
@@ -344,12 +352,14 @@ chomp ($run{"cpp"} = `$options{"make"} -f $basedir/GNUmakefile.sysconf get_cpp 2
 sub compile ($$$$) {
   my ($cmd, $file, $msg, $def) = (@_);
   print "Testing for $msg...";
-  print `$cmd -o test $basedir/src/sysconf/$file >/dev/null 2>&1`;
+  `echo '\$ $cmd -o test $basedir/src/sysconf/$file >>$basedir/configure.log 2>&1' >>$basedir/configure.log`;
+  `$cmd -o test $basedir/src/sysconf/$file >>$basedir/configure.log 2>&1`;
   my $succ = $?>>8;
   print ($succ == 0 ? "yes\n" : "no\n");
   return $succ==0?1:0;
 }
 
+unlink ("$basedir/configure.log");
 foreach my $k (keys %tests) {
   foreach my $t (@{$tests{$k}}) {
     my $succ = &compile ($run{$$t{"lang"}}, $$t{"file"}, $$t{"msg"}, $$t{"def"});
@@ -357,7 +367,8 @@ foreach my $k (keys %tests) {
       $conffiles{$k} .= "/** $$t{'msg'} */\n#define $$t{'def'} $succ\n";
     }
     if ($$t{"run"}) {
-      $conffiles{$k} .= `./test` or die "Failed to run test: $!\n";
+      `echo '\$ ./test >>$basedir/configure.log' >>$basedir/configure.log`;
+      $conffiles{$k} .= `./test 2>/dev/null | tee -a $basedir/configure.log` or die "Failed to run test: $!\n";
     }
   }
 }

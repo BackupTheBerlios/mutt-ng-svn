@@ -14,22 +14,22 @@
 extern "C" {
 #endif
 
-#include "core_features.h"
-
-#ifdef CORE_POSIX_PCRE
-#include <pcreposix.h>
-#else
-#include <regex.h>
-#endif
-
 #include "buffer.h"
+
+/** abstract representation of a match */
+typedef struct rx_match_t {
+  /** start offset into subject string */
+  size_t start;
+  /** first char after end of match */
+  size_t end;
+} rx_match_t;
 
 /** regular expression abstraction */
 typedef struct rx_t {
   /** printable version */
   char *pattern;
   /** compiled expression */
-  regex_t *rx;
+  void* rx;
   /** do not match */
   int no;
 } rx_t;
@@ -56,12 +56,20 @@ rx_t* rx_compile (const char* pattern, buffer_t* error, int flags);
 void rx_free (rx_t* rx);
 
 /**
- * Execute search.
+ * Only see if string matches, don't obtain any details.
  * @param rx Previously compiled rx_t.
  * @param str String to match.
- * @bug find abstract match description
  */
-int rx_exec (rx_t* rx, const char* str);
+int rx_match (rx_t* rx, const char* str);
+
+/**
+ * See if string matches and obtain any details.
+ * @param rx Previously compiled rx_t.
+ * @param str String to match.
+ * @param matches Storage for matches.
+ * @param matchcnt How many matches to obtain.
+ */
+int rx_exec (rx_t* rx, const char* str, rx_match_t* matches, size_t matchcnt);
 
 /**
  * Compare two rx_t for equality.

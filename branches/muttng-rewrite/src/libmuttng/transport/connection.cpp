@@ -120,6 +120,8 @@ bool Connection::socketConnect() {
   buffer_grow(&port,5);
   buffer_add_snum(&port,url->port,-1);
 
+#ifdef LIBMUTTNG_HAVE_GETADDRINFO
+  /* for systems with getaddrinfo(), i.e. IPv4+6 */
   struct addrinfo hints, *res, *r;
   int error;
 
@@ -165,8 +167,52 @@ bool Connection::socketConnect() {
     break;
   }
 
-  if (!is_connected) {
+  if (!is_connected)
     freeaddrinfo(res);
+
+#else /* LIBMUTTNG_HAVE_GETADDRINFO */
+
+  /* systems without getaddrinfo() */
+
+  struct sockaddr_in sin;
+  struct hostent *he;
+  int i;
+
+  memset (&sin, 0, sizeof (sin)); 
+  sin.sin_port = htons (url->port);
+  sin.sin_family = AF_INET;
+
+  if ((he = gethostbyname (url->idn_host)) == NULL) {
+    buffer_shrink(&errorMsg,msglen);
+    buffer_add_str(&errorMsg,_(": "),-1);
+    buffer_add_str(&errorMsg,hstrerror(h_errno),-1);
+    displayError.emit(&errorMsg);
+    buffer_free(&port);
+    return false;
+  }
+
+  msglen = makeMsg(_("Connecting to"));
+  displayProgress.emit(&errorMsg);
+
+  for (i = 0; he->h_addr_list[i] != NULL; i++) {
+    memcpy (&sin.sin_addr, he->h_addr_list[i], he->h_length);
+    if ((fd = socket(PF_INET,SOCK_STREAM,IPPROTO_IP))<0)
+      continue;
+    if (ConnectTimeout > 0)
+      alarm(ConnectTimeout);
+    if (::connect(fd,(const struct sockaddr*)&sin,sizeof(sin))<0) {
+      alarm(0);
+      close(fd);
+      continue;
+    }
+    alarm(0);
+    is_connected = true;
+    break;
+  }
+
+#endif /* LIBMUTTNG_HAVE_GETADDRINFO */
+
+  if (!is_connected) {
     buffer_shrink(&errorMsg,msglen);
     buffer_add_str(&errorMsg,_(": "),-1);
     buffer_add_str(&errorMsg,strerror(errno),-1);
@@ -181,6 +227,7 @@ bool Connection::socketConnect() {
   }
 
   return true;
+
 }
 
 bool Connection::socketDisconnect() {

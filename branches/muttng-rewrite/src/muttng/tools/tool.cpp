@@ -280,6 +280,19 @@ void Tool::doSystem (buffer_t* dst) {
 #endif
   buffer_add_ch(dst,'\n');
 #endif
+
+  buffer_add_str(dst,_("Misc. Options:\n"),-1);
+  buffer_add_str(dst,"  ",2);
+#ifdef LIBMUTTNG_HAVE_GETADDRINFO
+  buffer_add_str(dst,"+IPv6",5);
+#else
+  buffer_add_str(dst,"-IPv6",5);
+#endif
+#ifdef CORE_PCRE
+  buffer_add_str(dst," +regex_pcre -regex_posix",25);
+#else
+  buffer_add_str(dst," -regex_pcre +regex_posix",25);
+#endif
 }
 
 void Tool::doLicense (buffer_t* dst) {

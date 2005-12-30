@@ -28,7 +28,7 @@ StringOption::~StringOption() {
 }
 
 bool StringOption::set(const char* value, buffer_t* error) {
-  if (pattern && !rx_exec(pattern,value)) {
+  if (pattern && !rx_match(pattern,value)) {
     if (error) {
       buffer_add_ch(error,'\'');
       buffer_add_str(error,value,-1);
