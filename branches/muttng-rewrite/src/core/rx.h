@@ -45,6 +45,7 @@ typedef struct rx_t {
  * @param error Optional buffer for error message.
  * @param flags Flags. See RX_*.
  * @return rx_t pointer or @c NULL in case of error.
+ * @test rx_tests::test_rx_compile().
  */
 rx_t* rx_compile (const char* pattern, buffer_t* error, int flags);
 
@@ -52,6 +53,7 @@ rx_t* rx_compile (const char* pattern, buffer_t* error, int flags);
  * Free memory for rx_t structure.
  * @b NOTE: This does not free the structure itself.
  * @param rx rx_t structure.
+ * @test rx_tests::test_rx_compile().
  */
 void rx_free (rx_t* rx);
 
@@ -59,6 +61,7 @@ void rx_free (rx_t* rx);
  * Only see if string matches, don't obtain any details.
  * @param rx Previously compiled rx_t.
  * @param str String to match.
+ * @test rx_tests::test_rx_match().
  */
 int rx_match (rx_t* rx, const char* str);
 
