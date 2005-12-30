@@ -37,6 +37,9 @@ class MboxMailbox : public FileMailbox {
      */
     static bool isMbox (buffer_t* path, struct stat* st);
 
+    /** register MBOX specific stuff */
+    static void reg();
+
 }; 
 
 #endif

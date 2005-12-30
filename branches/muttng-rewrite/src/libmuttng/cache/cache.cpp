@@ -10,6 +10,7 @@
 #include "cache.h"
 
 #include "../libmuttng_features.h"
+#include "libmuttng/config/config_manager.h"
 
 #ifdef LIBMUTTNG_CACHE_QDBM
 #include "cache_qdbm.h"
@@ -30,6 +31,13 @@ bool Cache::getVersion(buffer_t* dst) {
   return QDBMCache::getVersion(dst);
 #endif
   return false;
+}
+
+void Cache::reg() {
+  ConfigManager::regFeature("cache");
+#ifdef LIBMUTTNG_CACHE_QDBM
+  ConfigManager::regFeature("qdbm");
+#endif
 }
 
 /** @} */

@@ -19,6 +19,8 @@ class ImapMailbox : public RemoteMailbox {
      */
     ImapMailbox (url_t* url_);
     ~ImapMailbox ();
+    /** register IMAP specific stuff */
+    static void reg();
 }; 
 
 #endif

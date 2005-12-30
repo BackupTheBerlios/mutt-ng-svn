@@ -109,8 +109,8 @@ Tool::~Tool () {
     delete (this->libmuttng);
   }
   muttngCleanup ();
-  delete (this->ui);
-  delete (this->config);
+  if (this->ui) delete (this->ui);
+  if (this->config) delete (this->config);
 }
 
 int Tool::genericArg (unsigned char c, const char* arg) {
@@ -256,42 +256,33 @@ void Tool::doSystem (buffer_t* dst) {
   }
 #endif
 
-  buffer_add_str(dst,_("Mailbox support: MBOX MMDF Maildir MH "),-1);
-#if defined(LIBMUTTNG_POP3) || defined(LIBMUTTNG_IMAP) || defined(LIBMUTTNG_NNTP)
-#ifdef LIBMUTTNG_POP3
-  buffer_add_str(dst,"POP3 ",5);
-#endif
-#ifdef LIBMUTTNG_IMAP
-  buffer_add_str(dst,"IMAP ",5);
-#endif
-#ifdef LIBMUTTNG_NNTP
-  buffer_add_str(dst,"NNTP ",5);
-#endif
-  buffer_add_ch(dst,'\n');
-#endif
-
-#if defined(LIBMUTTNG_CACHE_QDBM) || defined(LIBMUTTNG_CACHE_GDBM)
-  buffer_add_str(dst,_("Caching support: "),-1);
-#ifdef LIBMUTTNG_CACHE_QDBM
-  buffer_add_str(dst,"qdbm",4);
-#endif
-#ifdef LIBMUTTNG_CACHE_GDBM
-  buffer_add_str(dst,"gdbm",4);
-#endif
-  buffer_add_ch(dst,'\n');
-#endif
-
-  buffer_add_str(dst,_("Misc. Options:\n"),-1);
+  buffer_add_str(dst,_("System options:\n"),-1);
   buffer_add_str(dst,"  ",2);
-#ifdef LIBMUTTNG_HAVE_GETADDRINFO
-  buffer_add_str(dst,"+IPv6",5);
+
+#ifdef CORE_HAVE_ALLOCA
+  buffer_add_str(dst,"+alloca()",9);
 #else
-  buffer_add_str(dst,"-IPv6",5);
+  buffer_add_str(dst,"-alloca()",9);
+#endif
+#ifdef CORE_HAVE_MMAP
+  buffer_add_str(dst," +mmap()",8);
+#else
+  buffer_add_str(dst," -mmap()",8);
+#endif
+#ifdef CORE_HAVE_STRSEP
+  buffer_add_str(dst," +strsep()",10);
+#else
+  buffer_add_str(dst," -strsep()",10);
 #endif
 #ifdef CORE_PCRE
   buffer_add_str(dst," +regex_pcre -regex_posix",25);
 #else
   buffer_add_str(dst," -regex_pcre +regex_posix",25);
+#endif
+#ifdef LIBMUTTNG_HAVE_GETADDRINFO
+  buffer_add_str(dst," +IPv6",6);
+#else
+  buffer_add_str(dst," -IPv6",6);
 #endif
 
   buffer_add_ch(dst,'\n');
@@ -299,7 +290,7 @@ void Tool::doSystem (buffer_t* dst) {
   std::vector<const char*>* features = ConfigManager::getFeatures();
   if (features->size()>0) {
     size_t i=0,w=0,l=0;
-    buffer_add_str(dst,_("Features:\n"),-1);
+    buffer_add_str(dst,_("Compile-time features:\n"),-1);
     for (i=0; i<features->size(); i++) {
       l = str_len(features->at(i));
       if (w+l > 80) {
@@ -308,14 +299,14 @@ void Tool::doSystem (buffer_t* dst) {
       }
       if (w == 0)
         buffer_add_str(dst,"  ",2);
-      buffer_add_str(dst,"feature_",8);
       buffer_add_str(dst,features->at(i),l);
       buffer_add_ch(dst,' ');
-      w+=l+9;
+      w+=l+1;
     }
   }
-
   delete features;
+
+  buffer_add_ch(dst,'\n');
 }
 
 void Tool::doLicense (buffer_t* dst) {

@@ -81,6 +81,10 @@ void Connection::reg() {
   ConfigManager::regOption(new StringOption("ssl_ca_certificates_file","",&SSLCaCertFile));
   ConfigManager::regOption(new BoolOption("ssl_use_sslv3","true",&UseSSL3));
   ConfigManager::regOption(new BoolOption("ssl_use_tlsv1","true",&UseTLS1));
+#ifdef LIBMUTTNG_HAVE_GETADDRINFO
+  ConfigManager::regFeature("ipv6");
+#endif
+
 }
 
 void Connection::dereg() {

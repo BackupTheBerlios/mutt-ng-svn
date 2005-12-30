@@ -5,7 +5,7 @@
  */
 /**
  * @file core/rx.h
- * @brief Interface: Regular expressions
+ * @brief Interface: Regular expression support
  */
 #ifndef CORE_RX_H
 #define CORE_RX_H
@@ -28,9 +28,9 @@ typedef struct rx_match_t {
 typedef struct rx_t {
   /** printable version */
   char *pattern;
-  /** compiled expression */
+  /** compiled expression. DON'T TOUCH!!1! */
   void* rx;
-  /** do not match */
+  /** do not match. DON'T TOUCH!!1! */
   int no;
 } rx_t;
 
@@ -44,10 +44,11 @@ typedef struct rx_t {
  * @param pattern Pattern.
  * @param error Optional buffer for error message.
  * @param flags Flags. See RX_*.
+ * @param no String should not match pattern.
  * @return rx_t pointer or @c NULL in case of error.
  * @test rx_tests::test_rx_compile().
  */
-rx_t* rx_compile (const char* pattern, buffer_t* error, int flags);
+rx_t* rx_compile (const char* pattern, buffer_t* error, int flags, int no);
 
 /**
  * Free memory for rx_t structure.

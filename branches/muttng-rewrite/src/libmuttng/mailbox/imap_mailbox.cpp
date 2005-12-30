@@ -4,7 +4,7 @@
  * @brief Implementation: IMAP Mailbox
  */
 #include <stdlib.h>
-
+#include "libmuttng/config/config_manager.h"
 #include "imap_mailbox.h"
 
 ImapMailbox::ImapMailbox (url_t* url_) : RemoteMailbox (url_) {
@@ -14,4 +14,8 @@ ImapMailbox::ImapMailbox (url_t* url_) : RemoteMailbox (url_) {
 }
 
 ImapMailbox::~ImapMailbox (void) {
+}
+
+void ImapMailbox::reg() {
+  ConfigManager::regFeature("imap");
 }

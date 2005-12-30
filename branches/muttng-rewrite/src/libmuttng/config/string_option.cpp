@@ -15,7 +15,7 @@
 StringOption::StringOption(const char* name_, const char* init_,
                            char** store_, const char* pattern_) : Option(name_,init_), store(store_) {
   if (pattern_)
-    pattern = rx_compile(pattern_,NULL,0);
+    pattern = rx_compile(pattern_,NULL,0,0);
   else
     pattern = NULL;
   set(init,NULL);

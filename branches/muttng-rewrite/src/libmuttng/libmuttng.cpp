@@ -24,6 +24,9 @@
 #ifdef LIBMUTTNG_NNTP
 #include "mailbox/nntp_mailbox.h"
 #endif
+#ifdef LIBMUTTNG_IMAP
+#include "mailbox/imap_mailbox.h"
+#endif
 #ifdef LIBMUTTNG_SSL_OPENSSL
 #include "transport/ssl_connection.h"
 #endif
@@ -31,7 +34,15 @@
 #include "transport/tls_connection.h"
 #endif
 
-#include "mailbox/local_mailbox.h"
+#ifdef LIBMUTTNG_CACHE_QDBM
+#include "cache/cache.h"
+#endif
+
+#include "mailbox/mbox_mailbox.h"
+#include "mailbox/mmdf_mailbox.h"
+#include "mailbox/mh_mailbox.h"
+#include "mailbox/maildir_mailbox.h"
+
 #include "libmuttng/transport/connection.h"
 
 #ifdef LIBMUTTNG_HAVE_LANGINFO_CODESET
@@ -179,6 +190,13 @@ LibMuttng::LibMuttng () {
 #ifdef LIBMUTTNG_NNTP
     NNTPMailbox::reg();
 #endif
+#ifdef LIBMUTTNG_IMAP
+    ImapMailbox::reg();
+#endif
+    MboxMailbox::reg();
+    MmdfMailbox::reg();
+    MHMailbox::reg();
+    MaildirMailbox::reg();
 
     SubjectHeader::reg();
 
@@ -188,6 +206,23 @@ LibMuttng::LibMuttng () {
 #endif
 #ifdef LIBMUTTNG_SSL_GNUTLS
     TLSConnection::reg();
+#endif
+
+#ifdef LIBMUTTNG_CACHE_QDBM
+    Cache::reg();
+#endif
+
+#ifdef CORE_LIBICONV
+    ConfigManager::regFeature("iconv");
+#endif
+#ifdef CORE_INTL
+    ConfigManager::regFeature("intl");
+#endif
+#ifdef CORE_PCRE
+    ConfigManager::regFeature("pcre");
+#endif
+#ifdef CORE_LIBIDN
+    ConfigManager::regFeature("idna");
 #endif
 
     buffer_init(&AttachMarker);

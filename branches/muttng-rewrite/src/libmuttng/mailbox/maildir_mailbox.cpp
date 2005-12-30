@@ -4,7 +4,7 @@
  * @brief Implementation: Maildir Mailbox base class
  */
 #include "maildir_mailbox.h"
-
+#include "libmuttng/config/config_manager.h"
 #include <sys/types.h>
 #include <dirent.h>
 #include <cstring>
@@ -22,6 +22,10 @@ bool MaildirMailbox::cacheGetKey (Message* msg, buffer_t* dst) {
   (void)msg;
   (void)dst;
   return false;
+}
+
+void MaildirMailbox::reg() {
+  ConfigManager::regFeature("maildir");
 }
 
 bool MaildirMailbox::isMaildir (buffer_t* path, struct stat* st) {

@@ -180,6 +180,10 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     <li>Though technically optional it's higly recommended to have
         libiconv installed which is used for conversions between
         different characte sets/encodings.</li>
+    <li>For supporting internationalized domain names, optionally libidn
+        is required.</li>
+    <li>For perl-comatible regular expressions ("PCRE") instead of
+        POSIX-compatible, libpcre is required.</li>
     
       </ul>
     
@@ -2166,6 +2170,44 @@ buffer_init(&buffer);
         Other functions defined in <tt>io.h</tt> mainly are sanity wrappers.
       
 
+    
+    @subsubsection sect_devguide-core-rx Regular expressions
+    
+        The core layer supports two types of regular expressions:
+      
+
+    <ol>
+    <li>POSIX: it must be provided by the system</li>
+    <li>PCRE: for perl-compatibility, libpcre must be installed</li>
+    
+      </ol>
+    
+        All details are hidden behind a structure named <tt>rx_t</tt> as defined
+        in <tt>rx.h</tt>. Among the feature to always store a printable version
+        of the pattern along with the compiled one, it also allows to specify whether
+        a subject string should not match a pattern.
+      
+
+    
+        The functions provided are:
+      
+
+    <ul>
+    <li><tt>rc_compile()</tt> and <tt>rx_free()</tt>: compile a pattern and
+          free all memory allocated for a <tt>rx_t</tt> structure</li>
+    <li><tt>rc_match()</tt> and <tt>rc_exec()</tt>: see if a subject string
+          matches the pattern. These two are identical except that for the latter
+          the caller must provide storage for a <tt>rx_match_t</tt> array which is used to
+          encode where matches are located. The first only tests whether it matches
+          at all.</li>
+    <li><tt>rc_eq()</tt>: a very weak way to compare to regular expressions by
+          comparing their string representations. It's weak since the following two
+          patterns are identical though their strings are different:
+          <tt>[ab]{2}[ab]{2,}</tt> and <tt>[ab]{4,}</tt>.</li>
+    <li><tt>rx_version()</tt>: in case a library is used for regular expression
+          support, this obtains its version number.</li>
+    
+      </ul>
     
     @subsubsection sect_devguide-core-extending Extending the library
     

@@ -40,6 +40,10 @@
       <li>Though technically optional it's higly recommended to have
         libiconv installed which is used for conversions between
         different characte sets/encodings.</li>
+      <li>For supporting internationalized domain names, optionally libidn
+        is required.</li>
+      <li>For perl-comatible regular expressions ("PCRE") instead of
+        POSIX-compatible, libpcre is required.</li>
     </ul>
 
     <p>

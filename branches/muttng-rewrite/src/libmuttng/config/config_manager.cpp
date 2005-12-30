@@ -5,9 +5,7 @@
  * @brief Implementation: Configuration Manager
  */
 #include "config_manager.h"
-
-#include <algorithm>
-
+#include "core/str.h"
 #include "libmuttng/util/hash.h"
 
 /** internal hash table of options */
@@ -63,7 +61,13 @@ Option* ConfigManager::regOption(Option* option) {
 void ConfigManager::regFeature(const char* name) {
   init();
   if (!name && !*name) return;
-  Features->add(name,NULL);
+  size_t len = str_len(name)+8;
+  char* p = (char*)mem_malloc(len+1);
+  memcpy(p,"feature_",8);
+  memcpy(p+8,name,len-8);
+  p[len] = '\0';
+  Features->add(p,NULL);
+  mem_free(&p);
 }
 
 bool ConfigManager::set(const char* name, buffer_t* value, buffer_t* error) {

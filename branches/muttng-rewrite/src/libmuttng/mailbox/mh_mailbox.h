@@ -45,6 +45,10 @@ class MHMailbox : public DirMailbox {
     unsigned long msgOld();
     unsigned long msgTotal();
     unsigned long msgFlagged();
+
+    /** register MH specific stuff */
+    static void reg();
+
 }; 
 
 #endif

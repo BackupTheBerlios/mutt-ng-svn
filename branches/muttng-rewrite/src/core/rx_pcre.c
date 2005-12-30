@@ -1,7 +1,8 @@
 /** @ingroup core_rx */
 /**
- * @file core/rx.c
- * @brief Implementation: Regular expressions
+ * @file core/rx_pcre.c
+ * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
+ * @brief Implementation: PCRE regular expression support
  */
 #include <string.h>
 
@@ -28,7 +29,7 @@ static int pcre_flags (int flags) {
   return f;
 }
 
-rx_t *rx_compile (const char* pattern, buffer_t* error, int flags) {
+rx_t *rx_compile (const char* pattern, buffer_t* error, int flags, int no) {
   int f = 0, erroff=0;
   rx_t *pp = mem_calloc (1, sizeof (rx_t));
   const char* errptr = NULL;
@@ -38,6 +39,7 @@ rx_t *rx_compile (const char* pattern, buffer_t* error, int flags) {
   f = pcre_flags(flags);
 
   pp->pattern = str_dup (pattern);
+  pp->no = no ? PCRE_ERROR_NOMATCH : 0;
   regex = mem_calloc(1,sizeof(pcreregex_t));
   pp->rx = (void*)regex;
   if (!(regex->rx = pcre_compile(NONULL(pattern),0,&errptr,&erroff,NULL))) {
@@ -77,7 +79,7 @@ int rx_match (rx_t* rx, const char* str) {
     return 0;
   regex = (pcreregex_t*)rx->rx;
   return pcre_exec(regex->rx,regex->extra,str,str_len(str),
-                   0,0,NULL,0)==0;
+                   0,0,NULL,0)==rx->no;
 }
 
 int rx_exec (rx_t* rx, const char* str, rx_match_t* matches, size_t matchcnt) {
@@ -95,14 +97,17 @@ int rx_exec (rx_t* rx, const char* str, rx_match_t* matches, size_t matchcnt) {
   regex = (pcreregex_t*)rx->rx;
   m = alloca(matchcnt*sizeof(int)*3);
 
+  for (i=0; i<3*matchcnt; i++)
+    m[i] = (size_t)-1;
+
   if ((rc = pcre_exec(regex->rx,regex->extra,str,str_len(str),
-                      0,0,m,matchcnt*sizeof(int)*3))==0) {
+                      0,0,m,matchcnt*sizeof(int)*3))==rx->no) {
     for (i=0,j=0; i<(matchcnt*3); i+=3,j++) {
       matches[j].start = (signed)m[i];
       matches[j].end = (signed)m[i+1];
     }
   }
-  return rc==0;
+  return rc==rx->no;
 }
 
 int rx_version (buffer_t* dst) {

@@ -1,7 +1,7 @@
 /** @ingroup core_rx */
 /**
- * @file core/rx.c
- * @brief Implementation: Regular expressions
+ * @file core/rx_posic.c
+ * @brief Implementation: POSIX regular expression support
  */
 #include <string.h>
 
@@ -30,7 +30,7 @@ static int posix_flags (int flags) {
   return f;
 }
 
-rx_t *rx_compile (const char* pattern, buffer_t* error, int flags) {
+rx_t *rx_compile (const char* pattern, buffer_t* error, int flags, int no) {
   int f = 0, err;
   rx_t *pp = mem_calloc (1, sizeof (rx_t));
 
@@ -38,6 +38,7 @@ rx_t *rx_compile (const char* pattern, buffer_t* error, int flags) {
   f = posix_flags(flags);
 
   pp->pattern = str_dup (pattern);
+  pp->no = no ? REG_NOMATCH : 0;
   pp->rx = mem_calloc (1, sizeof (regex_t));
   if ((err = regcomp((regex_t*)pp->rx, NONULL(pattern), f)) != 0) {
     if (error) {
@@ -72,7 +73,7 @@ int rx_eq (const rx_t* r1, const rx_t* r2) {
 int rx_match (rx_t* rx, const char* str) {
   if (!rx || !rx->rx)
     return 0;
-  return regexec((regex_t*)rx->rx,str,(size_t)0,(regmatch_t*)0,0)==0;
+  return regexec((regex_t*)rx->rx,str,(size_t)0,(regmatch_t*)0,0)==rx->no;
 }
 
 int rx_exec (rx_t* rx, const char* str, rx_match_t* matches, size_t matchcnt) {
@@ -85,14 +86,18 @@ int rx_exec (rx_t* rx, const char* str, rx_match_t* matches, size_t matchcnt) {
 
   if (!rx || !rx->rx)
     return 0;
+
   m = alloca(matchcnt*sizeof(regmatch_t));
-  if ((rc = regexec((regex_t*)rx->rx,str,matchcnt,m,0))==0) {
+  for (i=0; i<matchcnt; i++)
+    m[i] = -1;
+
+  if ((rc = regexec((regex_t*)rx->rx,str,matchcnt,m,0))==rx->no) {
     for (i=0; i<matchcnt; i++) {
       matches[i].start = m[i].rm_so;
       matches[i].end = m[i].rm_eo;
     }
   }
-  return rc==0;
+  return rc==rx->no;
 }
 
 int rx_version (buffer_t* dst) { (void) dst; return 0; }

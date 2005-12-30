@@ -22,7 +22,7 @@ class NNTPMailbox : public RemoteMailbox {
     NNTPMailbox (url_t* url_, Connection* c);
     ~NNTPMailbox ();
 
-    /** register all NNTP specific config options */
+    /** register NNTP specific stuff */
     static void reg();
 
     mailbox_query_status openMailbox();

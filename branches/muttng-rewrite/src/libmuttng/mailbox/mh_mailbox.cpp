@@ -4,12 +4,16 @@
  * @brief Implementation: MH Mailbox base class
  */
 #include "mh_mailbox.h"
-
+#include "libmuttng/config/config_manager.h"
 #include <unistd.h>
 
 MHMailbox::MHMailbox(url_t* url_) : DirMailbox(url_) {}
 
 MHMailbox::~MHMailbox() {}
+
+void MHMailbox::reg() {
+  ConfigManager::regFeature("mh");
+}
 
 bool MHMailbox::cacheGetKey (Message* msg, buffer_t* dst) {
   (void)msg;

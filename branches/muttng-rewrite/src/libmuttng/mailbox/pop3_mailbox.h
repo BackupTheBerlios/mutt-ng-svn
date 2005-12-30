@@ -22,7 +22,7 @@ class POP3Mailbox : public RemoteMailbox {
     POP3Mailbox (url_t* url_, Connection * c = NULL);
     ~POP3Mailbox ();
 
-    /** register all POP3 specific config options */
+    /** register all POP3 specific stuff */
     static void reg();
 
     /**

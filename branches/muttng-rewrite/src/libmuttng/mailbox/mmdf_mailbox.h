@@ -37,6 +37,9 @@ class MmdfMailbox : public FileMailbox {
     unsigned long msgTotal();
     unsigned long msgFlagged();
 
+    /** register MMDF specific stuff */
+    static void reg();
+
 }; 
 
 #endif

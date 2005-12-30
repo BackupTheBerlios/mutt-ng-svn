@@ -4,7 +4,7 @@
  * @brief Implementation: MBOX Mailbox class
  */
 #include <stdlib.h>
-
+#include "libmuttng/config/config_manager.h"
 #include "mbox_mailbox.h"
 
 MboxMailbox::MboxMailbox (url_t* url_) : FileMailbox (url_) {
@@ -12,6 +12,10 @@ MboxMailbox::MboxMailbox (url_t* url_) : FileMailbox (url_) {
 }
 
 MboxMailbox::~MboxMailbox (void) {
+}
+
+void MboxMailbox::reg() {
+  ConfigManager::regFeature("mbox");
 }
 
 bool MboxMailbox::isSeparator() {

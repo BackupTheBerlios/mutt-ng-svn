@@ -23,7 +23,7 @@ RXOption::~RXOption() {
 
 bool RXOption::set(const char* value, buffer_t* error) {
   rx_t* r = NULL;
-  if (!(r = rx_compile(value,error,0)))
+  if (!(r = rx_compile(value,error,0,0)))
     return false;
   bool change = !rx_eq(r,*store);
   rx_free(*store);

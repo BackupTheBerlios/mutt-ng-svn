@@ -46,6 +46,9 @@ class MaildirMailbox : public DirMailbox {
     unsigned long msgTotal();
     unsigned long msgFlagged();
 
+    /** register Maildir specific stuff */
+    static void reg();
+
   private:
     /**
      * Parse filename and update counters.

@@ -59,7 +59,7 @@ void rx_tests::test_rx_compile() {
   buffer_init(&msg);
   for (i=0; RX[i].pattern; i++) {
     buffer_shrink(&msg,0);
-    rx_t* rx = rx_compile(RX[i].pattern,NULL,0);
+    rx_t* rx = rx_compile(RX[i].pattern,NULL,0,0);
     buffer_add_str(&msg,"rx_compile(",-1);
     buffer_add_str(&msg,RX[i].pattern,-1);
     buffer_add_str(&msg,") works",-1);
@@ -76,7 +76,7 @@ void rx_tests::test_rx_match() {
   buffer_init(&msg);
   for (i=0; RX[i].pattern; i++) {
     buffer_shrink(&msg,0);
-    rx_t* rx = rx_compile(RX[i].pattern,NULL,0);
+    rx_t* rx = rx_compile(RX[i].pattern,NULL,0,0);
     if (!RX[i].valid || !RX[i].match) continue;
     buffer_add_str(&msg,"rx_match(",-1);
     buffer_add_str(&msg,RX[i].pattern,-1); buffer_add_ch(&msg,',');

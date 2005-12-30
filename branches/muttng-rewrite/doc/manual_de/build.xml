@@ -42,6 +42,10 @@
       <li>Zwar technisch optional aber dringend empfohlen wird die Installation
         von libiconv, die für das Konvertieren von Zeichensätzen/-kodierungen
         benötigt wird.</li>
+      <li>Für die Unterstützung von internationalen Domainnamen wird
+        optional libidn benötigt.</li>
+      <li>Für Perl-kompatible reguläre Ausdrücke ("PCRE") statt POSIX-kompatiblen
+        wird libpcre benötigt.</li>
     </ul>
 
     <p>

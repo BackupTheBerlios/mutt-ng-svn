@@ -43,6 +43,10 @@ class Cache : public LibMuttng {
      * @return pointer to module.
      */
     static Cache* create();
+
+    /** register all caching specific stuff */
+    static void reg();
+
     /**
      * Get version of caching module.
      * @param dst Optional destination buffer.

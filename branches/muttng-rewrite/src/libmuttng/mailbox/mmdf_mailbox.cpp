@@ -4,7 +4,7 @@
  * @brief Implementation: MMDF Mailbox class
  */
 #include <stdlib.h>
-
+#include "libmuttng/config/config_manager.h"
 #include "mmdf_mailbox.h"
 
 MmdfMailbox::MmdfMailbox (url_t* url_) : FileMailbox (url_) {
@@ -12,6 +12,10 @@ MmdfMailbox::MmdfMailbox (url_t* url_) : FileMailbox (url_) {
 }
 
 MmdfMailbox::~MmdfMailbox (void) {
+}
+
+void MmdfMailbox::reg() {
+  ConfigManager::regFeature("mmdf");
 }
 
 bool MmdfMailbox::isSeparator() {
