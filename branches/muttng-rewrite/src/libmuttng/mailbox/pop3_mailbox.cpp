@@ -36,8 +36,9 @@ POP3Mailbox::~POP3Mailbox (void) {
 }
 
 void POP3Mailbox::reg(void) {
-  ConfigManager::reg(new StringOption("pop_user","",&DefaultUser));
-  ConfigManager::reg(new StringOption("pop_pass","",&DefaultPassword));
+  ConfigManager::regOption(new StringOption("pop_user","",&DefaultUser));
+  ConfigManager::regOption(new StringOption("pop_pass","",&DefaultPassword));
+  ConfigManager::regFeature("imap");
 }
 
 mailbox_query_status POP3Mailbox::openMailbox() {

@@ -7,6 +7,8 @@
  */
 #include "tls_connection.h"
 
+#include "libmuttng/config/config_manager.h"
+
 #include <gnutls/openssl.h>
 
 #include "core/mem.h"
@@ -31,6 +33,11 @@ TLSConnection::TLSConnection(url_t* url_) : Connection(url_) {
 }
 
 TLSConnection::~TLSConnection() {}
+
+void TLSConnection::reg() {
+  ConfigManager::regFeature("ssl");
+  ConfigManager::regFeature("gnutls");
+}
 
 int TLSConnection::doRead(buffer_t * buf, unsigned int len) {
   if (!is_connected)

@@ -32,9 +32,9 @@ LocalMailbox::~LocalMailbox (void) {
 }
 
 void LocalMailbox::reg() {
-  Option* opt = ConfigManager::reg(new IntOption("local_mail_check","30",&Timeout,false));
-  ConfigManager::reg(new SynOption("mail_check",opt));
-  ConfigManager::reg(new StringOption("mbox_type","maildir",&DefaultType,"^(mbox|mmdf|maildir|mh)$"));
+  Option* opt = ConfigManager::regOption(new IntOption("local_mail_check","30",&Timeout,false));
+  ConfigManager::regOption(new SynOption("mail_check",opt));
+  ConfigManager::regOption(new StringOption("mbox_type","maildir",&DefaultType,"^(mbox|mmdf|maildir|mh)$"));
 }
 
 Mailbox* LocalMailbox::fromURL (url_t* url_, buffer_t* error) {

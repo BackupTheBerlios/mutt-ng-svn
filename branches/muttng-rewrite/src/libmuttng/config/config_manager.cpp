@@ -10,8 +10,10 @@
 
 #include "libmuttng/util/hash.h"
 
-/** internal hash tables of options */
+/** internal hash table of options */
 static Hash<Option*>* Options = NULL;
+/** internal hash table of features */
+static Hash<void*>* Features = NULL;
 
 /**
  * Free up memory for an Option object. Used as callback with
@@ -29,6 +31,8 @@ ConfigManager::~ConfigManager(){}
 bool ConfigManager::init() {
   if (!Options)
     Options = new Hash<Option*>(1000,false,free_option);
+  if (!Features)
+    Features = new Hash<void*>(20,true,NULL);
   return true;
 }
 
@@ -37,10 +41,14 @@ bool ConfigManager::cleanup() {
     delete Options;
     Options = NULL;
   }
+  if (Features) {
+    delete Features;
+    Features = NULL;
+  }
   return true;
 }
 
-Option* ConfigManager::reg(Option* option) {
+Option* ConfigManager::regOption(Option* option) {
   init();
   if (!option)
     return NULL;
@@ -50,6 +58,12 @@ Option* ConfigManager::reg(Option* option) {
   }
   Options->add(option->getName(),option);
   return option;
+}
+
+void ConfigManager::regFeature(const char* name) {
+  init();
+  if (!name && !*name) return;
+  Features->add(name,NULL);
 }
 
 bool ConfigManager::set(const char* name, buffer_t* value, buffer_t* error) {
@@ -72,20 +86,12 @@ int ConfigManager::get(buffer_t* dst, buffer_t* name) {
   return 1;
 }
 
-/**
- * Used as callback for Hash::map(): simply add option name to vector.
- * @param key The name of the option.
- * @param option Unused: the option object itself.
- * @param moredata Destination vector.
- */
-static bool add(const char* key, Option* option, std::vector<const char*>* moredata) {
-  (void) option;
-  moredata->push_back(key);
-  return true;
+std::vector<const char*>* ConfigManager::getOptions() {
+  init();
+  return Options->getKeys();
 }
 
-std::vector<const char*>* ConfigManager::getAll() {
-  std::vector<const char*>* ret = new std::vector<const char*>;
-  Options->map<std::vector<const char*>* >(true,add,ret);
-  return ret;
+std::vector<const char*>* ConfigManager::getFeatures() {
+  init();
+  return Features->getKeys();
 }

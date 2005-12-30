@@ -39,7 +39,12 @@ class ConfigManager {
      * @param option Option.
      * @return The option if added and @c NULL if it existed already.
      */
-    static Option* reg(Option* option);
+    static Option* regOption(Option* option);
+    /**
+     * Register a new feature.
+     * @param name Name of feature.
+     */
+    static void regFeature(const char* name);
     /**
      * Set an option to a different value.
      * @param name Name of option.
@@ -69,10 +74,15 @@ class ConfigManager {
     /** Cleanup after use, ie when application exists */
     static bool cleanup();
     /**
-     * Get list of all know options in any order.
+     * Get list of all know options in sorted order.
      * @return List.
      */
-    static std::vector<const char*>* getAll();
+    static std::vector<const char*>* getOptions();
+    /**
+     * Get list of all known features in sorted order
+     * @return List.
+     */
+    static std::vector<const char*>* getFeatures();
 };
 
 #endif /* !LIBMUTTNG_CONFIG_CONFIG_MANAGER_H */

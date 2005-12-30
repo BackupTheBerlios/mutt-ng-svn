@@ -27,6 +27,9 @@
 #ifdef LIBMUTTNG_SSL_OPENSSL
 #include "transport/ssl_connection.h"
 #endif
+#ifdef LIBMUTTNG_SSL_GNUTLS
+#include "transport/tls_connection.h"
+#endif
 
 #include "mailbox/local_mailbox.h"
 #include "libmuttng/transport/connection.h"
@@ -153,20 +156,20 @@ LibMuttng::LibMuttng () {
     Option* d = new IntOption("debug_level","0",&DebugLevel,0,5);
     connectSignal<LibMuttng,Option*>(d->sigOptionChange,this,
                                      &LibMuttng::setDebugLevel);
-    ConfigManager::reg(d);
-    ConfigManager::reg(new StringOption("send_charset",
+    ConfigManager::regOption(d);
+    ConfigManager::regOption(new StringOption("send_charset",
                                         "us-ascii:iso-8859-1:iso-8859-15:utf-8",
                                         &SendCharset));
-    ConfigManager::reg(new StringOption("charset",
+    ConfigManager::regOption(new StringOption("charset",
                                         get_charset(),
                                         &Charset));
 
-    ConfigManager::reg(new SysOption("muttng_core_version","\""CORE_VERSION"\""));
-    ConfigManager::reg(new SysOption("muttng_libmuttng_version",
+    ConfigManager::regOption(new SysOption("muttng_core_version","\""CORE_VERSION"\""));
+    ConfigManager::regOption(new SysOption("muttng_libmuttng_version",
                                      "\""LIBMUTTNG_VERSION"\""));
-    ConfigManager::reg(new SysOption("muttng_hostname",Hostname));
-    ConfigManager::reg(new SysOption("muttng_system",OSName));
-    ConfigManager::reg(new SysOption("muttng_dnsname",Fqdn.str));
+    ConfigManager::regOption(new SysOption("muttng_hostname",Hostname));
+    ConfigManager::regOption(new SysOption("muttng_system",OSName));
+    ConfigManager::regOption(new SysOption("muttng_dnsname",Fqdn.str));
 
     /* register all options within library modules */
     LocalMailbox::reg();
@@ -182,6 +185,9 @@ LibMuttng::LibMuttng () {
     Connection::reg();
 #ifdef LIBMUTTNG_SSL_OPENSSL
     SSLConnection::reg();
+#endif
+#ifdef LIBMUTTNG_SSL_GNUTLS
+    TLSConnection::reg();
 #endif
 
     buffer_init(&AttachMarker);

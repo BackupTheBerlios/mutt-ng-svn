@@ -72,15 +72,15 @@ Connection::~Connection() {
 }
 
 void Connection::reg() {
-  ConfigManager::reg(new IntOption("connect_timeout","30",&ConnectTimeout,false));
-  ConfigManager::reg(new IntOption("ssl_min_dh_prime_bits","0",&SSLDHPrimeBits,false));
-  ConfigManager::reg(new StringOption("ssl_client_cert","",&SSLClientCert));
+  ConfigManager::regOption(new IntOption("connect_timeout","30",&ConnectTimeout,false));
+  ConfigManager::regOption(new IntOption("ssl_min_dh_prime_bits","0",&SSLDHPrimeBits,false));
+  ConfigManager::regOption(new StringOption("ssl_client_cert","",&SSLClientCert));
   /* XXX SYN */
-  Option* opt = ConfigManager::reg(new StringOption("ssl_certificate_file","$HOME/.mutt_certificates",&SSLCertFile));
-  ConfigManager::reg(new SynOption("certificate_file",opt));
-  ConfigManager::reg(new StringOption("ssl_ca_certificates_file","",&SSLCaCertFile));
-  ConfigManager::reg(new BoolOption("ssl_use_sslv3","true",&UseSSL3));
-  ConfigManager::reg(new BoolOption("ssl_use_tlsv1","true",&UseTLS1));
+  Option* opt = ConfigManager::regOption(new StringOption("ssl_certificate_file","$HOME/.mutt_certificates",&SSLCertFile));
+  ConfigManager::regOption(new SynOption("certificate_file",opt));
+  ConfigManager::regOption(new StringOption("ssl_ca_certificates_file","",&SSLCaCertFile));
+  ConfigManager::regOption(new BoolOption("ssl_use_sslv3","true",&UseSSL3));
+  ConfigManager::regOption(new BoolOption("ssl_use_tlsv1","true",&UseTLS1));
 }
 
 void Connection::dereg() {

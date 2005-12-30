@@ -26,6 +26,8 @@ class TLSConnection : public Connection {
     bool doClose();
     /** @copydoc Connection::getVersion(). */
     static bool getVersion(buffer_t* dst);
+    /** register gnutls specific stuff */
+    static void reg();
   private:
     /** state of GNUTLS session. */
     gnutls_session state;

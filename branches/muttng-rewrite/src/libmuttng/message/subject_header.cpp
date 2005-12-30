@@ -20,5 +20,5 @@ bool SubjectHeader::encode() { return true; }
 bool SubjectHeader::decode() { return true; }
 
 void SubjectHeader::reg() {
-  ConfigManager::reg(new RXOption("reply_regexp","'^(re([\\[0-9\\]+])*|aw):[ \t]*'",&ReplyRegex));
+  ConfigManager::regOption(new RXOption("reply_regexp","'^(re([\\[0-9\\]+])*|aw):[ \t]*'",&ReplyRegex));
 }

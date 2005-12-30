@@ -157,9 +157,11 @@ void SSLConnection::init () {
 }
 
 void SSLConnection::reg() {
-  Option* opt = ConfigManager::reg(new StringOption("ssl_entropy_file","",&SSLEntropyFile));
-  ConfigManager::reg(new SynOption("entropy_file",opt));
-  ConfigManager::reg(new BoolOption("ssl_usesystemcerts","true",&UseSysCerts));
+  Option* opt = ConfigManager::regOption(new StringOption("ssl_entropy_file","",&SSLEntropyFile));
+  ConfigManager::regOption(new SynOption("entropy_file",opt));
+  ConfigManager::regOption(new BoolOption("ssl_usesystemcerts","true",&UseSysCerts));
+  ConfigManager::regFeature("ssl");
+  ConfigManager::regFeature("openssl");
 }
 
 void SSLConnection::dereg() {

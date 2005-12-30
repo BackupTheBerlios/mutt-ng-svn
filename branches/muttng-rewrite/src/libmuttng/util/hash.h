@@ -28,6 +28,12 @@ class Hash : public LibMuttng {
     hashdel_t* destroy;
     /** table */
     void* table;
+    static inline int getkeys(const char* key, unsigned long unused, unsigned long data) {
+      (void) unused;
+      std::vector<const char*>* dst = (std::vector<const char*>*) data;
+      dst->push_back(key);
+      return 1;
+    }
   public:
     /**
      * Construct new hash table.
@@ -126,6 +132,17 @@ class Hash : public LibMuttng {
     template<typename D>
     inline unsigned long map (bool sort, bool (*map) (const char* key, T data, D moredata), D moredata) {
       return hash_map(table,sort,(int(*)(const char*,HASH_ITEMTYPE,unsigned long)) map,(unsigned long) moredata);
+    }
+
+    /**
+     * Get all keys.
+     * @param sort Whether to sort keys.
+     * @return Keys.
+     */
+    inline std::vector<const char*>* getKeys (bool sort=true) {
+      std::vector<const char*>* ret = new std::vector<const char*>;
+      hash_map(table,sort,getkeys,(unsigned long) ret);
+      return ret;
     }
 
     /**

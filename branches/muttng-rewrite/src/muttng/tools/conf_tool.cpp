@@ -48,7 +48,7 @@ void ConfTool::getUsage (buffer_t* dst) {
 
 void ConfTool::do_opts (bool annotated, bool changed) {
   (void)annotated;(void)changed;
-  std::vector<const char*>* opts = ConfigManager::getAll();
+  std::vector<const char*>* opts = ConfigManager::getOptions();
   size_t i;
   buffer_t value, valid;
   const char* name, *init, *type;

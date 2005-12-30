@@ -293,6 +293,29 @@ void Tool::doSystem (buffer_t* dst) {
 #else
   buffer_add_str(dst," -regex_pcre +regex_posix",25);
 #endif
+
+  buffer_add_ch(dst,'\n');
+
+  std::vector<const char*>* features = ConfigManager::getFeatures();
+  if (features->size()>0) {
+    size_t i=0,w=0,l=0;
+    buffer_add_str(dst,_("Features:\n"),-1);
+    for (i=0; i<features->size(); i++) {
+      l = str_len(features->at(i));
+      if (w+l > 80) {
+        buffer_add_ch(dst,'\n');
+        w = 0;
+      }
+      if (w == 0)
+        buffer_add_str(dst,"  ",2);
+      buffer_add_str(dst,"feature_",8);
+      buffer_add_str(dst,features->at(i),l);
+      buffer_add_ch(dst,' ');
+      w+=l+9;
+    }
+  }
+
+  delete features;
 }
 
 void Tool::doLicense (buffer_t* dst) {

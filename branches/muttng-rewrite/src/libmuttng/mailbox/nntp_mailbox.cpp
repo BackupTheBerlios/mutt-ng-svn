@@ -88,9 +88,10 @@ void NNTPMailbox::reg() {
     buffer_free(&line);
     buffer_free(&host);
   }
-  ConfigManager::reg(new StringOption("nntp_user","",&DefaultUser));
-  ConfigManager::reg(new StringOption("nntp_pass","",&DefaultPassword));
-  ConfigManager::reg(new StringOption("nntp_host",NONULL(DefaultHost),&DefaultHost));
+  ConfigManager::regOption(new StringOption("nntp_user","",&DefaultUser));
+  ConfigManager::regOption(new StringOption("nntp_pass","",&DefaultPassword));
+  ConfigManager::regOption(new StringOption("nntp_host",NONULL(DefaultHost),&DefaultHost));
+  ConfigManager::regFeature("nntp");
 }
 
 bool NNTPMailbox::getSingleCapa(bool* capa, const char* cmd, size_t cmdlen) {

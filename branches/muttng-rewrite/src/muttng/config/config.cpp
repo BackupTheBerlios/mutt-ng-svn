@@ -103,5 +103,5 @@ bool Config::read(buffer_t* error) {
 }
 
 void Config::reg() {
-  ConfigManager::reg(new StringOption("config_charset",NULL,&ConfigCharset));
+  ConfigManager::regOption(new StringOption("config_charset",NULL,&ConfigCharset));
 }
