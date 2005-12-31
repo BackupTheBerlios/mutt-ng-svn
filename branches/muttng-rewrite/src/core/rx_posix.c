@@ -89,7 +89,7 @@ int rx_exec (rx_t* rx, const char* str, rx_match_t* matches, size_t matchcnt) {
 
   m = alloca(matchcnt*sizeof(regmatch_t));
   for (i=0; i<matchcnt; i++)
-    m[i] = -1;
+    m[i].rm_so = m[i].rm_eo = -1;
 
   if ((rc = regexec((regex_t*)rx->rx,str,matchcnt,m,0))==rx->no) {
     for (i=0; i<matchcnt; i++) {

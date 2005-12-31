@@ -101,7 +101,7 @@ int rx_exec (rx_t* rx, const char* str, rx_match_t* matches, size_t matchcnt) {
     m[i] = (size_t)-1;
 
   if ((rc = pcre_exec(regex->rx,regex->extra,str,str_len(str),
-                      0,0,m,matchcnt*sizeof(int)*3))==rx->no) {
+                      0,0,m,matchcnt*3))==rx->no) {
     for (i=0,j=0; i<(matchcnt*3); i+=3,j++) {
       matches[j].start = (signed)m[i];
       matches[j].end = (signed)m[i+1];

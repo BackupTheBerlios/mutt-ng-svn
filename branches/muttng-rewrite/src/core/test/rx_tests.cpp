@@ -26,7 +26,6 @@ static struct {
   /** whether string matches regex */
   bool match;
 } RX[] = {
-  { "", true, "", false },
   { "^[", false, "l33t", false },
 
   { "^[.]+$", true, "...", true },
@@ -60,9 +59,9 @@ void rx_tests::test_rx_compile() {
   for (i=0; RX[i].pattern; i++) {
     buffer_shrink(&msg,0);
     rx_t* rx = rx_compile(RX[i].pattern,NULL,0,0);
-    buffer_add_str(&msg,"rx_compile(",-1);
+    buffer_add_str(&msg,"rx_compile('",-1);
     buffer_add_str(&msg,RX[i].pattern,-1);
-    buffer_add_str(&msg,") works",-1);
+    buffer_add_str(&msg,"') works",-1);
     assert_true(msg.str,(RX[i].valid && rx!=NULL) || (!RX[i].valid && rx==NULL));
     rx_free(rx);
     assert_true("rx_free() works",rx==NULL || (rx->pattern==NULL && rx->rx==NULL));
