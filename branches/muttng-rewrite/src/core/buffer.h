@@ -164,6 +164,20 @@ void buffer_grow (buffer_t* buffer, size_t size);
  */
 unsigned int buffer_chomp(buffer_t * buffer);
 
+/*
+ * Prepare buffer for tokenizer. Preparation includes expanding all
+ * non-single-quoted commands (in backticks) and variables (with an
+ * optional callback for non-environment variables).
+ * @param dst Destination buffer.
+ * @param src Source buffer.
+ * @param expand Optional callback for expand variables not defined
+ *               in the current environment.
+ * @return Number of chars read.
+ * @test buffer_tests::test_buffer_tokenize().
+ */
+size_t buffer_expand (buffer_t* dst, buffer_t* src,
+                      int(*expand)(buffer_t* dst,buffer_t* var));
+
 /** flag for buffer_extract_token(): treat '=' as a special */
 #define M_TOKEN_EQUAL           1
 /** flag for buffer_extract_token(): ^X to CTRL+X */
@@ -182,9 +196,6 @@ unsigned int buffer_chomp(buffer_t * buffer);
 /**
  * Expand special sequences of source buffer to destination buffer.
  *
- * Special sequences include environment/other variables, control
- * characters, embedded commands via backticks, etc.
- *
  * The implementation is senstive to different quoting types. Special
  * sequences in "-quotes will be expanded while those in ' will just
  * be copied.
@@ -192,16 +203,13 @@ unsigned int buffer_chomp(buffer_t * buffer);
  * @param dst Destination buffer.
  * @param token Source buffer.
  * @param flags Flags, see M_TOKEN_*.
- * @param expand Optional callback to call if a variable doesn't seem to
- *               be an environment variable.
  * @return Number of characters parsed from token.
+ * @test buffer_tests::test_buffer_tokenize().
  */
-size_t buffer_extract_token (buffer_t* dst, buffer_t* token, int flags,
-                             int(*expand)(buffer_t*,buffer_t*));
+size_t buffer_extract_token (buffer_t* dst, buffer_t* token, int flags);
 
 /** @copydoc buffer_extract_token(). */
-size_t buffer_extract_token2 (buffer_t* dst, const char* token, int flags,
-                             int(*expand)(buffer_t*,buffer_t*));
+size_t buffer_extract_token2 (buffer_t* dst, const char* token, int flags);
 
 /**
  * printf()-like format a buffer.

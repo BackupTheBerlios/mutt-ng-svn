@@ -25,7 +25,7 @@ static Hash<buffer_t*>* FileStack = NULL;
 bool Config::config_read_file(buffer_t* path, buffer_t* error) {
   FILE* fp = NULL;
   pid_t filter;
-  buffer_t line, localline;
+  buffer_t line, localline, expand;
   size_t count;
   char* p;
   /* hash code for path so we don't need to compute several times */
@@ -43,6 +43,7 @@ bool Config::config_read_file(buffer_t* path, buffer_t* error) {
 
   buffer_init(&line);
   buffer_init(&localline);
+  buffer_init(&expand);
 
   if (!(fp = io_open_read(path->str,&filter))) {
     buffer_add_str(error,_("Couldn't read config '"),-1);
@@ -68,17 +69,21 @@ bool Config::config_read_file(buffer_t* path, buffer_t* error) {
       /* with no $config_charset, use as-is */
       use = &line;
 
-    p = use->str;
+    buffer_shrink(&expand,0);
+    if (!buffer_expand(&expand,use,ConfigManager::get)) continue;
+
+    p = expand.str;
     SKIPWS(p);
     /* skip empty and comment lines */
     if (!p || !*p || *p == '#') continue;
 
-    DEBUGPRINT(D_PARSE,("got config line: '%s'",use->str));
+    DEBUGPRINT(D_PARSE,("got config line: '%s'",p));
   }
 
   io_fclose(&fp);
   command_filter_wait(filter);
 
+  buffer_free(&expand);
   buffer_free(&line);
   buffer_free(&localline);
 

@@ -280,12 +280,14 @@ void buffer_tests::test_buffer_chomp() {
 static void tokenize(buffer_t* dst, buffer_t* src,
                      const char* in, const char* expect,
                      int flags, int l=-1) {
+  buffer_t tmp;
+  buffer_init(&tmp);
   if (l<=0) l=str_len(in);
   buffer_shrink(dst,0);
   buffer_shrink(src,0);
   buffer_add_str(src,in,-1);
-  size_t len = buffer_extract_token(dst,src,flags,NULL);
-  assert_eq("all characters parsed from source",l,(int)len);
+  assert_true("buffer_expand()",buffer_expand(&tmp,src,NULL)>0);
+  assert_true("buffer_extract_token()",buffer_extract_token(dst,&tmp,flags)>0);
   buffer_t msg;
   buffer_init(&msg);
   buffer_add_ch(&msg,'\'');
@@ -296,10 +298,11 @@ static void tokenize(buffer_t* dst, buffer_t* src,
   buffer_add_buffer(&msg,dst);
   buffer_add_ch(&msg,'\'');
   assert_true(msg.str,buffer_equal1(dst,expect,-1));
+  buffer_free(&tmp);
 }
 
 /**
- * @test buffer_extract_token()
+ * @test buffer_extract_token().
  * @todo add more tricky tests playing with flags
  */
 void buffer_tests::test_buffer_tokenize() {

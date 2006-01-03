@@ -75,7 +75,7 @@ void NNTPMailbox::reg() {
     for (i = 0; i>=0 && HostFiles[i]; i++) {
       if ((fp = io_fopen(HostFiles[i],"r",-1))) {
         while(io_readline(&line,fp)!=0) {
-          buffer_extract_token(&host,&line,0,NULL);
+          buffer_extract_token(&host,&line,0);
           if (host.str && *host.str != '#') {
             str_replace(&DefaultHost,host.str);
             i = -2;
@@ -310,7 +310,7 @@ bool NNTPMailbox::groupStat() {
     buffer_init(&tmp);
     size_t off = 4;
     unsigned short c = 0;
-    while ((off += buffer_extract_token2(&tmp,rbuf.str+off,0,NULL)) < rbuf.len) {
+    while ((off += buffer_extract_token2(&tmp,rbuf.str+off,0)) < rbuf.len) {
       switch (++c) {
       case 1: total = atoi(tmp.str); break;
       case 2: first = atoi(tmp.str); break;

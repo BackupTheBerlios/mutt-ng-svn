@@ -407,15 +407,13 @@ static int extract_backticks(buffer_t* dst, char** work) {
   return 1;
 }
 
-size_t buffer_extract_token  (buffer_t* dst, buffer_t* token, int flags,
-                              int(*expand)(buffer_t*,buffer_t*)) {
+size_t buffer_extract_token (buffer_t* dst, buffer_t* token, int flags) {
   if (!dst || !token || !token->len)
     return 0;
-  return buffer_extract_token2(dst,(const char*)token->str,flags,expand);
+  return buffer_extract_token2(dst,(const char*)token->str,flags);
 }
 
-size_t buffer_extract_token2 (buffer_t* dst, const char* token, int flags,
-                              int(*expand)(buffer_t*,buffer_t*)) { 
+size_t buffer_extract_token2 (buffer_t* dst, const char* token, int flags) {
   char ch;
   char qc=0;    /* quote character */
   char* work;   /* working pointer into token->str */
@@ -447,15 +445,6 @@ size_t buffer_extract_token2 (buffer_t* dst, const char* token, int flags,
     }
     else if (ch == '^' && (flags & M_TOKEN_CONDENSE)) {
       if (!extract_control(dst,&work))
-        return (const char*)work-token;
-    }
-    else if (ch == '$' && (!qc || qc == '"')
-             && (*work == '{' || isalpha ((unsigned char) *work))) {
-      if (!extract_var(dst,&work,expand))
-        return (const char*)work-token;
-    }
-    else if (ch == '`' && (!qc || qc == '"')) {
-      if (!extract_backticks(dst,&work))
         return (const char*)work-token;
     }
     else
@@ -501,4 +490,37 @@ int buffer_format (buffer_t* dst, buffer_t* src,
     p++;
   }
   return ret;
+}
+
+size_t buffer_expand (buffer_t* dst, buffer_t* src,
+                      int(*expand)(buffer_t* dst,buffer_t* var)) {
+  char* p;
+  unsigned char quote = '\0';
+
+  if (!dst || !src) return -1;
+  buffer_grow(dst,src->len);
+  buffer_shrink(dst,0);
+  p = src->str;
+  while (p-src->str < (signed)src->len) {
+    if (*p == '\'' || *p == '"')
+      quote = (*p==quote)?'\0':*p;
+    else {
+      if (*p == '$' && quote != '\'') {
+        p++;
+        extract_var(dst,&p,expand);
+        continue;
+      }
+      if (*p == '`' && quote != '\'') {
+        p++;
+        extract_backticks(dst,&p);
+        continue;
+      }
+      if (*p == '\\')
+        buffer_add_ch(dst,*p++);
+    }
+    buffer_add_ch(dst,*p++);
+  }
+  /* if quote left after end, we have mismached quotes */
+  if (quote!='\0') return -1;
+  return p-src->str;
 }

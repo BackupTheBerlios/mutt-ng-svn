@@ -180,7 +180,7 @@ mailbox_query_status POP3Mailbox::checkMailbox() {
   buffer_init(&tmp);
   size_t off = 4;
   unsigned short c = 0;
-  while ((off += buffer_extract_token2(&tmp,rbuf.str+off,0,NULL)) < rbuf.len) {
+  while ((off += buffer_extract_token2(&tmp,rbuf.str+off,0)) < rbuf.len) {
     switch (++c) {
     case 1: total = atoi(tmp.str); break;
     default: break;
