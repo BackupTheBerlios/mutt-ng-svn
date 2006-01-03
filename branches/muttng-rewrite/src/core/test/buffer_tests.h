@@ -26,6 +26,7 @@ class buffer_tests : public suite {
     void test_buffer_add_unum2();
     void test_buffer_chomp();
     void test_buffer_tokenize();
+    void test_buffer_format();
   public:
     buffer_tests();
 };

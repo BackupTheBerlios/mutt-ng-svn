@@ -203,6 +203,23 @@ size_t buffer_extract_token (buffer_t* dst, buffer_t* token, int flags,
 size_t buffer_extract_token2 (buffer_t* dst, const char* token, int flags,
                              int(*expand)(buffer_t*,buffer_t*));
 
+/**
+ * printf()-like format a buffer.
+ * @param dst Destination buffer.
+ * @param src Source buffer.
+ * @param callback Callback to use for expansion.
+ *                 For the @c fmt parameter, the buffer just contains
+ *                 offsets into the source and correct length info
+ *                 (i.e. no memory copy), so please please please make
+ *                 use of the length info.
+ * @return
+ *   - -1 in case of error
+ *   - number of times callback was called
+ * @test buffer_tests::test_buffer_format().
+ */
+int buffer_format (buffer_t* dst, buffer_t* src,
+                   int callback(buffer_t* dst, buffer_t* fmt, unsigned char c));
+
 #ifdef __cplusplus
 }
 #endif

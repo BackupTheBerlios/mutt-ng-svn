@@ -344,6 +344,55 @@ void buffer_tests::test_buffer_tokenize() {
   tokenize(&dst,&src,"\"`( ls / >/dev/null 2>&1) && echo yes || echo no`\"","yes",0);
 }
 
+/**
+ * Callback for buffer_format().
+ * @param dst Destination buffer.
+ * @param fmt String format.
+ * @param c Expando.
+ * @return 1 if known expando, 0 otherwise
+ */
+static int fmt(buffer_t* dst, buffer_t* fmt, unsigned char c) {
+  switch (c) {
+  case 'a':
+    assert_eq("no fmt::len for %a",0U,fmt->len);
+    assert_eq("no fmt::size for %a",0U,fmt->size);
+    buffer_add_str(dst,"/dev/null",-1);
+    break;
+  case 'b':
+    assert_eq("1 fmt::len for %a",1U,fmt->len);
+    assert_eq("1 fmt::size for %a",1U,fmt->size);
+    int tmp = *fmt->str-'0';
+    buffer_add_snum(dst,0,tmp);
+    break;
+  default:
+    return 0;
+  }
+  return 1;
+}
+
+/** @test buffer_format(). */
+void buffer_tests::test_buffer_format() {
+  buffer_t src,dst;
+
+  buffer_init(&src);
+  buffer_init(&dst);
+
+  buffer_shrink(&src,0); buffer_shrink(&dst,0);
+  buffer_add_str(&src,"vim '%a'",-1);
+  assert_eq("all fields of buffer_format(%a)",1,buffer_format(&dst,&src,fmt));
+  assert_true("buffer_format(%a) produces \"vim '/dev/null'\"",buffer_equal1(&dst,"vim '/dev/null'",-1));
+
+  buffer_shrink(&src,0); buffer_shrink(&dst,0);
+  buffer_add_str(&src,"vim '%%a'",-1);
+  assert_eq("all fields of buffer_format(%%a)",0,buffer_format(&dst,&src,fmt));
+  assert_true("buffer_format(%%a) produces \"vim '%a'\"",buffer_equal1(&dst,"vim '%a'",-1));
+
+  buffer_shrink(&src,0); buffer_shrink(&dst,0);
+  buffer_add_str(&src,"vim '%4b'",-1);
+  assert_eq("all fields of buffer_format(%4b)",1,buffer_format(&dst,&src,fmt));
+  assert_true("buffer_format(%4b) produces \"vim '0000'\"",buffer_equal1(&dst,"vim '0000'",-1));
+}
+
 buffer_tests::buffer_tests() : suite("buffer_tests") {
   add("buffer",testcase(this,"test_buffer_init",&buffer_tests::test_buffer_init));
   add("buffer",testcase(this,"test_buffer_shrink",&buffer_tests::test_buffer_shrink));
@@ -356,4 +405,5 @@ buffer_tests::buffer_tests() : suite("buffer_tests") {
   add("buffer",testcase(this,"test_buffer_add_unum2",&buffer_tests::test_buffer_add_unum2));
   add("buffer",testcase(this,"test_buffer_chomp",&buffer_tests::test_buffer_chomp));
   add("buffer",testcase(this,"test_buffer_tokenize",&buffer_tests::test_buffer_tokenize));
+  add("buffer",testcase(this,"test_buffer_format",&buffer_tests::test_buffer_format));
 }
