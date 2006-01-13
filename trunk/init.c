@@ -279,10 +279,26 @@ static void sys_to_string (char* dst, size_t dstlen,
     val = CurrentFolder;
   } else if (ascii_strcmp ("muttng_folder_name", option->option) == 0 &&
              CurrentFolder && *CurrentFolder) {
-    if ((t = strrchr (CurrentFolder, '/')) != NULL)
+
+    size_t Maildirlength = str_len (Maildir);
+
+    /*
+     * if name starts with $folder, just strip it to keep hierarchy
+     * $folder=imap://host, path=imap://host/inbox/b -> inbox/b
+     */
+    if (Maildirlength > 0 && str_ncmp (CurrentFolder, Maildir, 
+                                      Maildirlength) == 0 && 
+       str_len (CurrentFolder) > Maildirlength) {
+     val = CurrentFolder + Maildirlength;
+     if (Maildir[strlen(Maildir)-1]!='/')
+       val += 1;
+     /* if not $folder, just use everything after last / */
+    } else if ((t = strrchr (CurrentFolder, '/')) != NULL)
       val = t+1;
+    /* default: use as-is */
     else
       val = CurrentFolder;
+
   } else
     val = option->init;
 

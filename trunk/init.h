@@ -1529,9 +1529,20 @@ struct option_t MuttVars[] = {
   /*
    ** .pp
    ** \fIThis is a read-only system property and, at runtime,
-   ** specifies the last part of the full path or URI of the
-   ** folder currently open (if any), i.e. everything after
-   ** the last ``/''.\fP
+   ** specifies the actual name of the folder as far as it could
+   ** be detected.\fP
+   ** .pp
+   ** For detection, $$$folder is first taken into account
+   ** and simply stripped to form the result when a match is found. For
+   ** example, with $$$folder being \fTimap://host\fP and the folder is
+   ** \fTimap://host/INBOX/foo\fP, $$$muttng_folder_name will be just
+   ** \fTINBOX/foo\fP.)
+   ** .pp
+   ** Second, if the initial portion of a name is not $$$folder,
+   ** the result will be everything after the last ``/''.
+   ** .pp
+   ** Third and last, the result will be just the name if neither
+   ** $$$folder nor a ``/'' were found in the name.
    */
   {"muttng_pwd", DT_SYS, R_NONE, 0, "" },
   /*

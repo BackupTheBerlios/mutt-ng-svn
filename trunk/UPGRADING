@@ -10,6 +10,10 @@ This document is not the place for verbose documentation; it only offers
 the necessary keywords to look them up in the manual, ChangeLog or other
 sources of information.
 
+2006-01-13:
+
+  The semantics for $muttng_folder_name has slightly changed, see docs.
+
 2005-10-23:
 
   The %u expando for $sidebar_number_format has been added.
