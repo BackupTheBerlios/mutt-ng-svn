@@ -37,6 +37,8 @@
 #include <ctype.h>
 #include <stdlib.h>
 
+#define WANT_LISTGROUP_COMMAND          0
+
 static unsigned int _checked = 0;
 
 void nntp_sync_sidebar (NNTP_DATA* data) {
@@ -60,7 +62,6 @@ void nntp_sync_sidebar (NNTP_DATA* data) {
             *data->nserv->conn->account.pass ? data->nserv->conn->account.pass : "",
             data->nserv->conn->account.host,
             data->group);
-  debug_print (4, ("group == '%s'\n", buf));
 
   /* bail out if group not found via mailboxes */
   if ((i = buffy_lookup (buf)) < 0)
@@ -216,11 +217,13 @@ static int nntp_attempt_features (NNTP_SERVER * serv)
   if (str_ncmp ("500", buf, 3))
     serv->hasXPAT = 1;
 
+#if WANT_LISTGROUP_COMMAND
   mutt_socket_write (conn, "LISTGROUP\r\n");
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
     return (nntp_connect_error (serv));
   if (str_ncmp ("500", buf, 3))
     serv->hasLISTGROUP = 1;
+#endif
 
   mutt_socket_write (conn, "XGTITLE +\r\n");
   if (mutt_socket_readln (buf, sizeof (buf), conn) < 0)
@@ -633,6 +636,8 @@ typedef struct {
 } FETCH_CONTEXT;
 
 #define fc ((FETCH_CONTEXT *) c)
+
+#if WANT_LISTGROUP_COMMAND
 static int _nntp_fetch_numbers (unsigned int num, void *c)
 {
   if (num < fc->base || num > fc->last)
@@ -646,6 +651,7 @@ static int nntp_fetch_numbers (char *line, void *c)
     return 0;
   return (_nntp_fetch_numbers ((unsigned int) atoi (line), c));
 }
+#endif
 
 static int add_xover_line (char *line, void *c)
 {
@@ -706,6 +712,7 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
   fc.base = first;
   fc.last = last;
   fc.messages = mem_calloc (last - first + 1, sizeof (unsigned short));
+#if WANT_LISTGROUP_COMMAND
   if (nntp_data->nserv->hasLISTGROUP) {
     snprintf (buf, sizeof (buf), "LISTGROUP %s\r\n", nntp_data->group);
     if (mutt_nntp_fetch (nntp_data, buf, NULL, NULL, nntp_fetch_numbers, &fc, 0) !=
@@ -720,9 +727,12 @@ static int nntp_fetch_headers (CONTEXT * ctx, unsigned int first,
     }
   }
   else {
+#endif
     for (num = 0; num < last - first + 1; num++)
       fc.messages[num] = 1;
+#if WANT_LISTGROUP_COMMAND
   }
+#endif
 
   /* CACHE: must be loaded xover cache here */
   num = nntp_data->lastCached - first + 1;
