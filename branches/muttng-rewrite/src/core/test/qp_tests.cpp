@@ -6,7 +6,7 @@
  */
 #include <iostream>
 
-#include "qp.h"
+#include "buffer.h"
 #include "qp_tests.h"
 
 /** table with test strings */
@@ -52,7 +52,7 @@ void qp_tests::test_encode() {
     buffer_add_str(&dec,ECTable[i].decoded,-1);
     buffer_add_str(&enc,ECTable[i].encoded,-1);
 
-    buffer_encode_qp(&tmp,&dec,'=');
+    buffer_qp_encode(&tmp,&dec,'=');
 
     buffer_add_str(&msg,"'",-1);
     buffer_add_buffer(&msg,&dec);
@@ -82,7 +82,7 @@ void qp_tests::test_decode() {
     buffer_add_buffer(&msg,&enc);
     buffer_add_str(&msg,")==",-1);
     buffer_add_snum(&msg,ECTable[i].valid,-1);
-    assert_true(msg.str,buffer_decode_qp(&tmp,&enc,'=',&l)==ECTable[i].valid);
+    assert_true(msg.str,buffer_qp_decode(&tmp,&enc,'=',&l)==ECTable[i].valid);
     buffer_shrink(&msg,0);
 
     buffer_add_str(&msg,"'",-1);
@@ -112,9 +112,9 @@ void qp_tests::test_both() {
     buffer_add_str(&enc,ECTable[i].encoded,-1);
 
     /* first encode */
-    buffer_encode_qp(&tmp,&dec,'=');
+    buffer_qp_encode(&tmp,&dec,'=');
     /* then decode back */
-    assert_true("decode works",buffer_decode_qp(&tmp2,&tmp,'=',NULL));
+    assert_true("decode works",buffer_qp_decode(&tmp2,&tmp,'=',NULL));
 
     buffer_add_str(&msg,"'",-1);
     buffer_add_buffer(&msg,&dec);

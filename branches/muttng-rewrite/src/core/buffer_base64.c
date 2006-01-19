@@ -1,6 +1,6 @@
 /** @ingroup core_conv */
 /**
- * @file core/base64.c
+ * @file core/buffer_base64.c
  * @author Felix von Leitner <felix-libowfat@fefe.de>
  * @brief Implementation: Base64 conversions
  *
@@ -11,7 +11,6 @@
  * and is licensed under the GNU General Public License.
  */
 #include "buffer.h"
-#include "base64.h"
 
 /** alphabet */
 static const char base64[]="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
@@ -37,7 +36,7 @@ static inline int dec(unsigned char x) {
   }
 }
 
-int buffer_decode_base64(buffer_t * dest,const buffer_t * src, size_t* chars) {
+int buffer_base64_decode(buffer_t * dest,const buffer_t * src, size_t* chars) {
   unsigned short tmp=0,bits=0,rc=1;
   register const unsigned char* s=(const unsigned char*) src->str;
   if (chars)
@@ -66,7 +65,7 @@ int buffer_decode_base64(buffer_t * dest,const buffer_t * src, size_t* chars) {
   return rc;
 }
 
-void buffer_encode_base64(buffer_t * dest,const buffer_t * src) {
+void buffer_base64_encode(buffer_t * dest,const buffer_t * src) {
   register const unsigned char* s=(const unsigned char*) src->str;
   unsigned short bits=0,temp=0;
   unsigned long written=0,i;

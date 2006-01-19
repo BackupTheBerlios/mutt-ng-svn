@@ -4,11 +4,11 @@
  * @{
  */
 /**
- * @file core/qp.h
+ * @file core/buffer_qp.h
  * @brief Inteface: Quoted-printable conversions
  */
-#ifndef CORE_QP_H
-#define CORE_QP_H
+#ifndef CORE_BUFFER_QP_H
+#define CORE_BUFFER_QP_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,7 +28,7 @@ extern "C" {
  *              out at which place an error occured.
  * @return Success.
  */
-int buffer_decode_qp (buffer_t* dst, const buffer_t* src, unsigned char c, size_t* chars);
+int buffer_qp_decode(buffer_t* dst, const buffer_t* src, unsigned char c, size_t* chars);
 
 /**
  * Encode string to QP.
@@ -37,7 +37,7 @@ int buffer_decode_qp (buffer_t* dst, const buffer_t* src, unsigned char c, size_
  * @param c Magic QP character. This is @c % for URLs
  *          and mostly @c = in all other cases.
  */
-void buffer_encode_qp (buffer_t* dst, const buffer_t* src, unsigned char c);
+void buffer_qp_encode(buffer_t* dst, const buffer_t* src, unsigned char c);
 
 #ifdef __cplusplus
 }

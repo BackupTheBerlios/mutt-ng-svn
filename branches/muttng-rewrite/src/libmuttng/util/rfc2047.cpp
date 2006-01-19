@@ -7,9 +7,8 @@
 #include "libmuttng/util/rfc2047.h"
 #include "libmuttng/libmuttng.h"
 
+#include "core/buffer.h"
 #include "core/conv.h"
-#include "core/qp.h"
-#include "core/base64.h"
 #include "core/str.h"
 
 #include <cstring>
@@ -206,9 +205,9 @@ void RfC2047::encode_word (buffer_t* dst, const unsigned char* src,
        */
       bool qp = false;
       buffer_shrink(&text_enc1,0); buffer_shrink(&text_enc2,0);
-      buffer_encode_base64(&text_enc2,&text_conv);
+      buffer_base64_encode(&text_enc2,&text_conv);
       if (!conv_charset_base64(p)) {
-        buffer_encode_qp(&text_enc1,&text_conv,'=');
+        buffer_qp_encode(&text_enc1,&text_conv,'=');
         qp = text_enc1.len<text_enc2.len;
       }
       /*
@@ -366,8 +365,8 @@ bool RfC2047::decode_word (buffer_t* dst, const char* src, const char* out) {
       DEBUGPRINT(D_PARSE,("encoded='%s'",text_enc.str));
       /* decode */
       switch(enc) {
-      case ENC_QP:      if (!buffer_decode_qp(&text_dec,&text_enc,'=',NULL)) goto bail; break;
-      case ENC_BASE64:  if (!buffer_decode_base64(&text_dec,&text_enc,NULL)) goto bail; break;
+      case ENC_QP:      if (!buffer_qp_decode(&text_dec,&text_enc,'=',NULL)) goto bail; break;
+      case ENC_BASE64:  if (!buffer_base64_decode(&text_dec,&text_enc,NULL)) goto bail; break;
       case ENC_INVALID:
       default:          goto bail; break;
       }

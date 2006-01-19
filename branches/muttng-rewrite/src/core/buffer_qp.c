@@ -1,11 +1,12 @@
 /** @ingroup core_conv */
 /**
- * @file core/qp.c
+ * @file core/buffer_qp.c
  * @brief Implementation: Quoted-printable conversions
  */
 #include <ctype.h>
 #include <string.h>
-#include "qp.h"
+
+#include "buffer.h"
 
 /** alphabet */
 static const char Hex[] = { "0123456789ABCDEF" };
@@ -60,7 +61,7 @@ static inline int special (unsigned char c) {
   }
 }
 
-void buffer_encode_qp (buffer_t* dst, const buffer_t* src, unsigned char c) {
+void buffer_qp_encode(buffer_t* dst, const buffer_t* src, unsigned char c) {
   int i = 0;
   if (!src || !dst)
     return;
@@ -77,7 +78,7 @@ void buffer_encode_qp (buffer_t* dst, const buffer_t* src, unsigned char c) {
   }
 }
 
-int buffer_decode_qp (buffer_t* dst, const buffer_t* src, unsigned char c, size_t* chars) {
+int buffer_qp_decode(buffer_t* dst, const buffer_t* src, unsigned char c, size_t* chars) {
   int i = 0;
 
   if (!src || !dst)

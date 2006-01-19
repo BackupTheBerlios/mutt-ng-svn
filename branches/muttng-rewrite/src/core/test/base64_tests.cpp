@@ -4,7 +4,7 @@
  * @author Andreas Krennmair <ak@synflood.at>
  * @brief Implementation: base64 unit tests
  */
-#include "base64.h"
+#include "buffer.h"
 #include "base64_tests.h"
 
 /** table with test strings */
@@ -40,7 +40,7 @@ void base64_tests::test_encode() {
     buffer_add_str(&dec,ECTable[i].decoded,-1);
     buffer_add_str(&enc,ECTable[i].encoded,-1);
 
-    buffer_encode_base64(&tmp,&dec);
+    buffer_base64_encode(&tmp,&dec);
 
     buffer_add_str(&msg,"'",-1);
     buffer_add_buffer(&msg,&dec);
@@ -63,7 +63,7 @@ void base64_tests::test_decode() {
     buffer_add_str(&dec,ECTable[i].decoded,-1);
     buffer_add_str(&enc,ECTable[i].encoded,-1);
 
-    assert_true("decode works",buffer_decode_base64(&tmp,&enc,NULL));
+    assert_true("decode works",buffer_base64_decode(&tmp,&enc,NULL));
 
     buffer_add_str(&msg,"'",-1);
     buffer_add_buffer(&msg,&enc);
@@ -90,9 +90,9 @@ void base64_tests::test_both() {
     buffer_add_str(&enc,ECTable[i].encoded,-1);
 
     /* first encode */
-    buffer_encode_base64(&tmp,&dec);
+    buffer_base64_encode(&tmp,&dec);
     /* then decode back */
-    assert_true("decode works",buffer_decode_base64(&tmp2,&tmp,NULL));
+    assert_true("decode works",buffer_base64_decode(&tmp2,&tmp,NULL));
 
     buffer_add_str(&msg,"'",-1);
     buffer_add_buffer(&msg,&dec);

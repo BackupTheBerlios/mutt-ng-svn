@@ -1,10 +1,10 @@
 /** @ingroup core_conv */
 /**
- * @file core/base64.h
+ * @file core/buffer_base64.h
  * @brief Interface: Base64 conversions
  */
-#ifndef CORE_BASE64__H
-#define CORE_BASE64__H
+#ifndef CORE_BUFFER_BASE64_H
+#define CORE_BUFFER_BASE64_H
 
 #include "buffer.h"
 
@@ -21,14 +21,14 @@ extern "C" {
  *              out at which place an error occured.
  * @return Success.
  */
-int buffer_decode_base64(buffer_t * dest, const buffer_t * src, size_t* chars);
+int buffer_base64_decode(buffer_t * dest, const buffer_t * src, size_t* chars);
 
 /**
  * Encodes a buffer to base64.
  * @param dest buffer into which the encoded string shall be written.
  * @param src buffer which shall be encoded.
  */
-void buffer_encode_base64(buffer_t * dest, const buffer_t * src);
+void buffer_base64_encode(buffer_t * dest, const buffer_t * src);
 
 #ifdef __cplusplus
 }
