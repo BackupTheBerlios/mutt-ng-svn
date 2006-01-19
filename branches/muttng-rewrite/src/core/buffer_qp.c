@@ -2,6 +2,8 @@
 /**
  * @file core/buffer_qp.c
  * @brief Implementation: Quoted-printable conversions
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <ctype.h>
 #include <string.h>

@@ -3,6 +3,8 @@
  * @file libmuttng/config/int_option.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Integer option
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "int_option.h"
 #include "core/intl.h"

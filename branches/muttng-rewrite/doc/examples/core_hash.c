@@ -3,6 +3,8 @@
  * @file examples/core_hash.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Example: Hash table
+ *
+ * This file is published as public domain.
  */
 
 /* for write(2) */

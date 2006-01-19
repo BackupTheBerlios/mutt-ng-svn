@@ -1,6 +1,8 @@
 /**
  * @file core/core.c
  * @brief Implementation: Misc library functions
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "core.h"
 

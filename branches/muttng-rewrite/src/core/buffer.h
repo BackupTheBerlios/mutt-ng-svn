@@ -3,6 +3,8 @@
  * @file core/buffer.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: String buffer
+ *
+ * This file is published under the GNU Lesser General Public License.
  */
 #ifndef MUTTNG_CORE_BUFFER_H
 #define MUTTNG_CORE_BUFFER_H

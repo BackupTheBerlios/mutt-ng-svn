@@ -9,6 +9,8 @@
  * @file muttng/tools/mailx_tool.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: muttng-mailx(1)
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_MAILX_TOOL_H
 #define MUTTNG_MAILX_TOOL_H

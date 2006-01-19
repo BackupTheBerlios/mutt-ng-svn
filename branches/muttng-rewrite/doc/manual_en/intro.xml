@@ -147,30 +147,32 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
   
   <section id="introduction-copyright"> <!--{{{-->
     <title>Copyright</title>
-    
+
+    <p>
+      Muttng is Copyright (C) 2005-06 Andreas Krennmair
+      <email>ak@synflood.at</email> and others.
+    </p>
+
     <p>
       Mutt is Copyright (C) 1996-2000 Michael R. Elkins
       <email>me@cs.hmc.edu</email> and others.
     </p>
-    
+
     <p>
-      This program is free software; you can redistribute it and/or modify
-      it under the terms of the GNU General Public License as published by
-      the Free Software Foundation; either version 2 of the License, or
-      (at your option) any later version.
+      Muttng is published as source code with a license
+      depending on individual files. The licenses are: GNU General Public
+      License, GNU Lesser General Public License and "public domain" (i.e. no
+      specific licensing terms attached.)
     </p>
-    
+
     <p>
-      This program is distributed in the hope that it will be useful,
-      but WITHOUT ANY WARRANTY; without even the implied warranty of
-      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-      GNU General Public License for more details.
+      Copies of the GPL and LGPL can be found as files GPL and LGPL in the root
+      directory of the source.
     </p>
-    
+
     <p>
-      You should have received a copy of the GNU General Public License
-      along with this program; if not, write to the Free Software
-      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+      The header of each file contains its specific licensing terms; a complete list
+      can be found at the end of this document.
     </p>
     
   </section>

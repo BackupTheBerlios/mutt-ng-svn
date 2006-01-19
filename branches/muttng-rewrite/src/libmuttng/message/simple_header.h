@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/message/simple_header.h
  * @brief Generic MIME message header
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_MESSAGE_SIMPLE_HEADER_H
 #define LIBMUTTNG_MESSAGE_SIMPLE_HEADER_H

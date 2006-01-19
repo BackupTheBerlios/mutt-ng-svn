@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/transport/ssl_connection.h
  * @brief Interface: OpenSSL-based TCP connection
+ *
+ * This file is published under the GNU General Public License.
  */
 
 #ifndef LIBMUTTNG_TRANSPORT_SSL_CONNECTION__H

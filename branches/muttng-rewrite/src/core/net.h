@@ -1,6 +1,8 @@
 /**
  * @file core/net.h
  * @brief Interface: Network-related routines
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef CORE_NET_H
 #define CORE_NET_H

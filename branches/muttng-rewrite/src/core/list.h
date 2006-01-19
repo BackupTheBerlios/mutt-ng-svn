@@ -7,6 +7,8 @@
  * @file core/list.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Generic List
+ *
+ * This file is published under the GNU Lesser General Public License.
  */
 #ifndef MUTTNG_CORE_LIST_H
 #define MUTTNG_CORE_LIST_H

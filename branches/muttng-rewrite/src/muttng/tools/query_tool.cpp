@@ -3,6 +3,8 @@
  * @file muttng/tools/query_tool.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: muttng-query(1)
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <unistd.h>
 #include <iostream>

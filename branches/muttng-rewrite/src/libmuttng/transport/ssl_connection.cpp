@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/transport/ssl_connection.cpp
  * @brief Implementation: OpenSSL-based TCP connection
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "ssl_connection.h"
 

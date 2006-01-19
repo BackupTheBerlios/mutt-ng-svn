@@ -3,6 +3,8 @@
  * @file libmuttng/config/url_option.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: URL option
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "url_option.h"
 #include "core/intl.h"

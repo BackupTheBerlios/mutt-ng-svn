@@ -3,6 +3,8 @@
  * @file core/rx_pcre.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: PCRE regular expression support
+ *
+ * This file is published under the GNU Lesser General Public License.
  */
 #include <string.h>
 

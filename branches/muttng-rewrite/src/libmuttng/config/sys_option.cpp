@@ -3,6 +3,8 @@
  * @file libmuttng/config/sys_option.cpp
  * @author rocco rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: system option
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "sys_option.h"
 #include "config_manager.h"

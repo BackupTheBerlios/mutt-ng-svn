@@ -4,6 +4,8 @@
  * @author Copyright (C) 2001 Marco d'Itri <md@linux.it>
  * @author Copyright (C) 2001-2004 Andrew McDonald <andrew@mcdonald.org.uk>
  * @brief Interface: GNUTLS-based TCP connection
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_TRANSPORT_TLS_CONNECTION__H
 #define LIBMUTTNG_TRANSPORT_TLS_CONNECTION__H

@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/cache/cache_qdbm.cpp
  * @brief Implementation: QDBM-based caching
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "cache_qdbm.h"
 

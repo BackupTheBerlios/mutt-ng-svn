@@ -2,6 +2,8 @@
  * @file core/command.c
  * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
  * @brief Implementation: Commands
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <stdlib.h>
 #include <signal.h>

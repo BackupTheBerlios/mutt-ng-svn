@@ -4,6 +4,8 @@
  * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
  * @author Copyright (C) 1999-2000 Thomas Roessler <roessler@does-not-exist.org>
  * @brief Implementation: I/O routines
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <sys/types.h>
 #include <sys/stat.h>

@@ -2,7 +2,9 @@
 /**
  * @file libmuttng/config/rx_option.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
- * @brief Boolerface: Regex option
+ * @brief Interface: Regex option
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_CONFIG_REGEX_OPTION_H
 #define LIBMUTTNG_CONFIG_REGEX_OPTION_H

@@ -3,6 +3,8 @@
  * @file libmuttng/util/hash.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Typesafe wrapper for hash_t
+ *
+ * This file is published under the GNU Lesser General Public License.
  */
 #ifndef LIBMUTTNG_UTIL_HASH_H
 #define LIBMUTTNG_UTIL_HASH_H

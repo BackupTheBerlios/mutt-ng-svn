@@ -8,6 +8,8 @@
  * @file muttng/tools/muttng_tool.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: muttng(1)
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_MUTTNG_TOOL_H
 #define MUTTNG_MUTTNG_TOOL_H

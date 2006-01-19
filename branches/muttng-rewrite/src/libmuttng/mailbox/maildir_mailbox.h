@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/maildir_mailbox.h
  * @brief Interface: Maildir Mailbox base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_MAILBOX_MAILDIR_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_MAILDIR_MAILBOX_H

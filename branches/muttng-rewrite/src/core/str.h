@@ -8,6 +8,8 @@
  * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
  * @author Copyright (C) 1999-2000 Thomas Roessler <roessler@does-not-exist.org>
  * @brief Interface: Sanity string handling
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_CORE_STR_H
 #define MUTTNG_CORE_STR_H

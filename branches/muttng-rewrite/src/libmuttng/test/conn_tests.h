@@ -3,6 +3,8 @@
  * @file libmuttng/test/conn_tests.h
  * @author Andreas Krennmair <ak@synflood.at>
  * @brief Interface: Connection unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_TEST_CONN_TESTS_H
 #define LIBMUTTNG_TEST_CONN_TESTS_H

@@ -3,6 +3,8 @@
  * @file libmuttng/test/url_tests.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: URL unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <unit++/unit++.h>
 

@@ -3,6 +3,8 @@
  * @file libmuttng/config/rx_option.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Regex option
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "rx_option.h"
 #include "core/intl.h"

@@ -2,6 +2,8 @@
 /**
  * @file core/intl.c
  * @brief Implementation: Internationalization
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "intl.h"
 

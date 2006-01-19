@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/message/mailbox_header.cpp
  * @brief Generic MIME message header
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "mailbox_header.h"
 

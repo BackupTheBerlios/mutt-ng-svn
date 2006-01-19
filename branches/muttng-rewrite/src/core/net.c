@@ -1,6 +1,8 @@
 /**
  * @file core/net.c
  * @brief Implementation: Network-related routines
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "core_features.h"
 

@@ -3,6 +3,8 @@
  * @file libmuttng/config/bool_option.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Bool option
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_CONFIG_BOOL_OPTION_H
 #define LIBMUTTNG_CONFIG_BOOL_OPTION_H

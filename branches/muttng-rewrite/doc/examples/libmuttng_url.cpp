@@ -3,6 +3,8 @@
  * @file examples/libmuttng_url.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Example: how to parsr a string into an URL
+ *
+ * This file is published as public domain.
  */
 #include <iostream>
 #include "core/buffer.h"

@@ -3,6 +3,8 @@
  * @file muttng/tools/sync_tool.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: muttng-sync(1)
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <unistd.h>
 

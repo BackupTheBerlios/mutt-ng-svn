@@ -3,6 +3,8 @@
  * @file libmuttng/libmuttng.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Library base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <iostream>
 

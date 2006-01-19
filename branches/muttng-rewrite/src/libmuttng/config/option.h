@@ -3,6 +3,8 @@
  * @file libmuttng/config/option.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Generic Config Option
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_CONFIG_OPTION_H
 #define LIBMUTTNG_CONFIG_OPTION_H

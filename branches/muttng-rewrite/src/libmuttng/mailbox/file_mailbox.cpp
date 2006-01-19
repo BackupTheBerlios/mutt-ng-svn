@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/file_mailbox.cpp
  * @brief Implementation: Single file Mailbox base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <stdlib.h>
 

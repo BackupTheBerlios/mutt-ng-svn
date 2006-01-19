@@ -3,6 +3,8 @@
  * @file core/test/io_tests.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: I/O unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef CORE_TEST_IO__H
 #define CORE_TEST_IO__H

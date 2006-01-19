@@ -3,6 +3,8 @@
  * @file core/test/hash_tests.cpp
  * @author Andreas Krennmair <ak@synflood.at>
  * @brief Implementation: hash_t unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <unit++/unit++.h>
 #include "hash_tests.h"

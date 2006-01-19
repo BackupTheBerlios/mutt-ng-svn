@@ -11,6 +11,8 @@
  * @author Esa Pulkkinen
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief (AUTO) Interface+Implementation: Signal handling
+ *
+ * This file is published as public domain.
  */
 #ifndef LIBMUTTNG_SIGNAL_H
 #define LIBMUTTNG_SIGNAL_H

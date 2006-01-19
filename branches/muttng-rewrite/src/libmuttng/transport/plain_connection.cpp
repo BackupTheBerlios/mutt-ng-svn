@@ -3,7 +3,8 @@
  * @file libmuttng/transport/plain_connection.cpp
  * @author Andreas Krennmair <ak@synflood.at>
  * @brief Implementation: plain TCP connection
- * @todo implementation is completely missing.
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "plain_connection.h"
 

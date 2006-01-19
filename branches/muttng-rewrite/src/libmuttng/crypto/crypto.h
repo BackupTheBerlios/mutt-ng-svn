@@ -7,6 +7,8 @@
  * @file libmuttng/crypto/crypto.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Message cryptography
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "libmuttng/libmuttng.h"
 

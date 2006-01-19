@@ -8,6 +8,8 @@
 /**
  * @file libmuttng/mailbox/mailbox.h
  * @brief Interface: Mailbox base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_MAILBOX_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_MAILBOX_H

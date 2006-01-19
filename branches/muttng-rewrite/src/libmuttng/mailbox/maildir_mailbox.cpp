@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/maildir_mailbox.cpp
  * @brief Implementation: Maildir Mailbox base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "maildir_mailbox.h"
 #include "libmuttng/config/config_manager.h"

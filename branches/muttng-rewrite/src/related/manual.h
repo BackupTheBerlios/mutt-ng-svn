@@ -121,28 +121,30 @@ $ svn checkout http://svn.berlios.de/svnroot/repos/mutt-ng/branches/muttng-rewri
     
     @subsection sect_introduction-copyright Copyright
     
+      Muttng is Copyright (C) 2005-06 Andreas Krennmair
+      <a href="mailto:ak@synflood.at">&lt;ak@synflood.at&gt;</a> and others.
+    
+
+    
       Mutt is Copyright (C) 1996-2000 Michael R. Elkins
       <a href="mailto:me@cs.hmc.edu">&lt;me@cs.hmc.edu&gt;</a> and others.
     
 
     
-      This program is free software; you can redistribute it and/or modify
-      it under the terms of the GNU General Public License as published by
-      the Free Software Foundation; either version 2 of the License, or
-      (at your option) any later version.
+      Muttng is published as source code with a license
+      depending on individual files. The licenses are: GNU General Public
+      License, GNU Lesser General Public License and "public domain" (i.e. no
+      specific licensing terms attached.)
     
 
     
-      This program is distributed in the hope that it will be useful,
-      but WITHOUT ANY WARRANTY; without even the implied warranty of
-      MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-      GNU General Public License for more details.
+      Copies of the GPL and LGPL can be found as files GPL and LGPL in the root
+      directory of the source.
     
 
     
-      You should have received a copy of the GNU General Public License
-      along with this program; if not, write to the Free Software
-      Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+      The header of each file contains its specific licensing terms; a complete list
+      can be found at the end of this document.
     
 
     
@@ -2780,6 +2782,17 @@ imaps://joe:secret@[fe80::1%25lo0]:4711/</pre>
 
     
     
+    
+    @section sect_licensing Licensing
+    <ol>
+    <li><b>GNU General Public License</b>:
+      <tt>src/libmuttng/test/conn_tests.cpp</tt><tt>src/libmuttng/test/header_tests.h</tt><tt>src/libmuttng/test/conn_tests.h</tt><tt>src/libmuttng/test/test.cpp</tt><tt>src/libmuttng/test/header_tests.cpp</tt><tt>src/libmuttng/test/url_tests.cpp</tt><tt>src/libmuttng/test/url_tests.h</tt><tt>src/libmuttng/test/lib_tests.h</tt><tt>src/libmuttng/test/rfc2047_tests.cpp</tt><tt>src/libmuttng/test/rfc2047_tests.h</tt><tt>src/libmuttng/test/lib_tests.cpp</tt><tt>src/libmuttng/crypto/crypto_gpgme.cpp</tt><tt>src/libmuttng/crypto/classic_smime.h</tt><tt>src/libmuttng/crypto/crypto.cpp</tt><tt>src/libmuttng/crypto/classic_crypto.cpp</tt><tt>src/libmuttng/crypto/crypto_gpgme.h</tt><tt>src/libmuttng/crypto/crypto.h</tt><tt>src/libmuttng/crypto/classic_crypto.h</tt><tt>src/libmuttng/crypto/classic_pgp.cpp</tt><tt>src/libmuttng/crypto/classic_smime.cpp</tt><tt>src/libmuttng/crypto/classic_pgp.h</tt><tt>src/libmuttng/cache/cache_qdbm.cpp</tt><tt>src/libmuttng/cache/cache.cpp</tt><tt>src/libmuttng/cache/cache.h</tt><tt>src/libmuttng/cache/cache_qdbm.h</tt><tt>src/libmuttng/message/message.cpp</tt><tt>src/libmuttng/message/body.h</tt><tt>src/libmuttng/message/header.cpp</tt><tt>src/libmuttng/message/message.h</tt><tt>src/libmuttng/message/body.cpp</tt><tt>src/libmuttng/message/header.h</tt><tt>src/libmuttng/message/simple_header.h</tt><tt>src/libmuttng/message/simple_header.cpp</tt><tt>src/libmuttng/message/mailbox_header.h</tt><tt>src/libmuttng/message/mailbox_header.cpp</tt><tt>src/libmuttng/message/subject_header.cpp</tt><tt>src/libmuttng/message/subject_header.h</tt><tt>src/libmuttng/mailbox/mmdf_mailbox.cpp</tt><tt>src/libmuttng/mailbox/dir_mailbox.h</tt><tt>src/libmuttng/mailbox/maildir_mailbox.h</tt><tt>src/libmuttng/mailbox/file_mailbox.h</tt><tt>src/libmuttng/mailbox/nntp_mailbox.h</tt><tt>src/libmuttng/mailbox/mailbox.h</tt><tt>src/libmuttng/mailbox/imap_mailbox.cpp</tt><tt>src/libmuttng/mailbox/pop3_mailbox.h</tt><tt>src/libmuttng/mailbox/mmdf_mailbox.h</tt><tt>src/libmuttng/mailbox/local_mailbox.cpp</tt><tt>src/libmuttng/mailbox/imap_mailbox.h</tt><tt>src/libmuttng/mailbox/remote_mailbox.cpp</tt><tt>src/libmuttng/mailbox/local_mailbox.h</tt><tt>src/libmuttng/mailbox/remote_mailbox.h</tt><tt>src/libmuttng/mailbox/mh_mailbox.cpp</tt><tt>src/libmuttng/mailbox/mbox_mailbox.cpp</tt><tt>src/libmuttng/mailbox/mh_mailbox.h</tt><tt>src/libmuttng/mailbox/mbox_mailbox.h</tt><tt>src/libmuttng/mailbox/dir_mailbox.cpp</tt><tt>src/libmuttng/mailbox/file_mailbox.cpp</tt><tt>src/libmuttng/mailbox/nntp_mailbox.cpp</tt><tt>src/libmuttng/mailbox/mailbox.cpp</tt><tt>src/libmuttng/mailbox/maildir_mailbox.cpp</tt><tt>src/libmuttng/mailbox/pop3_mailbox.cpp</tt><tt>src/libmuttng/transport/ssl_connection.cpp</tt><tt>src/libmuttng/transport/connection.cpp</tt><tt>src/libmuttng/transport/plain_connection.cpp</tt><tt>src/libmuttng/transport/tls_connection.cpp</tt><tt>src/libmuttng/transport/ssl_connection.h</tt><tt>src/libmuttng/transport/connection.h</tt><tt>src/libmuttng/transport/tls_connection.h</tt><tt>src/libmuttng/transport/plain_connection.h</tt><tt>src/libmuttng/util/url.cpp</tt><tt>src/libmuttng/util/rfc2047.cpp</tt><tt>src/libmuttng/util/url.h</tt><tt>src/libmuttng/util/rfc2047.h</tt><tt>src/libmuttng/libmuttng.cpp</tt><tt>src/libmuttng/debug.cpp</tt><tt>src/libmuttng/libmuttng.h</tt><tt>src/libmuttng/version.h</tt><tt>src/libmuttng/debug.h</tt><tt>src/libmuttng/config/option.h</tt><tt>src/libmuttng/config/int_option.h</tt><tt>src/libmuttng/config/int_option.cpp</tt><tt>src/libmuttng/config/config_manager.h</tt><tt>src/libmuttng/config/option.cpp</tt><tt>src/libmuttng/config/string_option.h</tt><tt>src/libmuttng/config/config_manager.cpp</tt><tt>src/libmuttng/config/string_option.cpp</tt><tt>src/libmuttng/config/rx_option.h</tt><tt>src/libmuttng/config/bool_option.h</tt><tt>src/libmuttng/config/bool_option.cpp</tt><tt>src/libmuttng/config/url_option.h</tt><tt>src/libmuttng/config/url_option.cpp</tt><tt>src/libmuttng/config/rx_option.cpp</tt><tt>src/libmuttng/config/quad_option.h</tt><tt>src/libmuttng/config/quad_option.cpp</tt><tt>src/libmuttng/config/sys_option.h</tt><tt>src/libmuttng/config/sys_option.cpp</tt><tt>src/libmuttng/config/syn_option.h</tt><tt>src/libmuttng/config/syn_option.cpp</tt><tt>src/core/exit.h</tt><tt>src/core/mem.c</tt><tt>src/core/mem.h</tt><tt>src/core/str.c</tt><tt>src/core/exit.c</tt><tt>src/core/version.h</tt><tt>src/core/intl.h</tt><tt>src/core/str.h</tt><tt>src/core/io.c</tt><tt>src/core/conv.h</tt><tt>src/core/io.h</tt><tt>src/core/conv.c</tt><tt>src/core/array.h</tt><tt>src/core/test/buffer_tests.h</tt><tt>src/core/test/test.cpp</tt><tt>src/core/test/buffer_tests.cpp</tt><tt>src/core/test/hash_tests.cpp</tt><tt>src/core/test/hash_tests.h</tt><tt>src/core/test/list_tests.cpp</tt><tt>src/core/test/conv_tests.h</tt><tt>src/core/test/list_tests.h</tt><tt>src/core/test/io_tests.h</tt><tt>src/core/test/io_tests.cpp</tt><tt>src/core/test/conv_tests.cpp</tt><tt>src/core/test/net_tests.cpp</tt><tt>src/core/test/net_tests.h</tt><tt>src/core/test/qp_tests.cpp</tt><tt>src/core/test/base64_tests.cpp</tt><tt>src/core/test/base64_tests.h</tt><tt>src/core/test/qp_tests.h</tt><tt>src/core/test/rx_tests.h</tt><tt>src/core/test/rx_tests.cpp</tt><tt>src/core/rx.h</tt><tt>src/core/core.h</tt><tt>src/core/command.c</tt><tt>src/core/sigs.h</tt><tt>src/core/core.c</tt><tt>src/core/sigs.c</tt><tt>src/core/command.h</tt><tt>src/core/net.c</tt><tt>src/core/net.h</tt><tt>src/core/buffer_token.h</tt><tt>src/core/intl.c</tt><tt>src/core/rx_posix.c</tt><tt>src/core/buffer_token.c</tt><tt>src/core/buffer_qp.c</tt><tt>src/core/buffer_qp.h</tt><tt>src/core/buffer_base64.c</tt><tt>src/core/buffer_base64.h</tt><tt>src/muttng/tools/muttng_tool.h</tt><tt>src/muttng/tools/sync_tool.h</tt><tt>src/muttng/tools/conf_tool.cpp</tt><tt>src/muttng/tools/conf_tool.h</tt><tt>src/muttng/tools/tool.h</tt><tt>src/muttng/tools/main.cpp</tt><tt>src/muttng/tools/mailx_tool.cpp</tt><tt>src/muttng/tools/sync_tool.cpp</tt><tt>src/muttng/tools/muttng_tool.cpp</tt><tt>src/muttng/tools/mailx_tool.h</tt><tt>src/muttng/tools/tool.cpp</tt><tt>src/muttng/tools/query_tool.h</tt><tt>src/muttng/tools/query_tool.cpp</tt><tt>src/muttng/event/event.h</tt><tt>src/muttng/config/config.h</tt><tt>src/muttng/config/global_variables.h</tt><tt>src/muttng/config/config.cpp</tt><tt>src/muttng/ui/ui_plain.cpp</tt><tt>src/muttng/ui/ui_curses.cpp</tt><tt>src/muttng/ui/ui_text.cpp</tt><tt>src/muttng/ui/ui.h</tt><tt>src/muttng/ui/ui_plain.h</tt><tt>src/muttng/ui/ui_curses.h</tt><tt>src/muttng/ui/ui_text.h</tt><tt>src/muttng/ui/ui.cpp</tt><tt>src/muttng/muttng.cpp</tt><tt>src/muttng/muttng.h</tt></li>
+    <li><b>GNU Lesser General Public License</b>:
+      <tt>src/libmuttng/util/hash.h</tt><tt>src/core/buffer.h</tt><tt>src/core/hash.h</tt><tt>src/core/hash.c</tt><tt>src/core/list.h</tt><tt>src/core/list.c</tt><tt>src/core/buffer_format.c</tt><tt>src/core/buffer_base.c</tt><tt>src/core/buffer_base.h</tt><tt>src/core/buffer_format.h</tt><tt>src/core/rx_pcre.c</tt></li>
+    <li><b>public domain</b>:
+      <tt>src/libmuttng/test/signal_tests.cpp</tt><tt>src/libmuttng/test/signal_tests.h</tt><tt>src/libmuttng/muttng_signal.h</tt><tt>src/libmuttng/signal.pl</tt><tt>doc/examples/core_hash.c</tt><tt>doc/examples/libmuttng_signal.cpp</tt><tt>doc/examples/libmuttng_mailbox_create.cpp</tt><tt>doc/examples/libmuttng_url.cpp</tt><tt>doc/examples/libmuttng_hash.cpp</tt><tt>doc/examples/core_buffer_format.c</tt><tt>doc/examples/core_buffer_format2.c</tt><tt>contrib/html_head_number.pl</tt><tt>contrib/licensing.pl</tt></li>
+    
+      </ol>
     
     @section sect_history Mutt-ng History
     <ul>

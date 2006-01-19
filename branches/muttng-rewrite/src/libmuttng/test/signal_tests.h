@@ -3,6 +3,8 @@
  * @file libmuttng/test/signal_tests.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Signal unit tests
+ *
+ * This file is published as public domain.
  */
 #ifndef LIBMUTTNG_TEST_SIGNAL_TESTS_H
 #define LIBMUTTNG_TEST_SIGNAL_TESTS_H

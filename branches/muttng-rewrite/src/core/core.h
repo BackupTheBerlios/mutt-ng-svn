@@ -1,6 +1,8 @@
 /**
  * @file core/core.h
  * @brief Interface: Misc library functions
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef CORE_CORE_H
 #define CORE_CORE_H

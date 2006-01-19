@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/cache/cache.h
  * @brief Interface: Cache base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_CACHE_CACHE_H
 #define LIBMUTTNG_CACHE_CACHE_H

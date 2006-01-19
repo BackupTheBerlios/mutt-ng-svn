@@ -6,6 +6,8 @@
 /**
  * @file core/intl.h
  * @brief Interface: Internationalization
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_CORE_INTL_H
 #define MUTTNG_CORE_INTL_H

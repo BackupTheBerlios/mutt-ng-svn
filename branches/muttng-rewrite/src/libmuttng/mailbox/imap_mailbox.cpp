@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/imap_mailbox.cpp
  * @brief Implementation: IMAP Mailbox
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <stdlib.h>
 #include "libmuttng/config/config_manager.h"

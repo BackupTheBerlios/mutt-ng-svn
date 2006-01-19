@@ -3,6 +3,8 @@
  * @file libmuttng/test/conn_tests.cpp
  * @author Andreas Krennmair
  * @brief Implementation: Connection unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <unit++/unit++.h>
 

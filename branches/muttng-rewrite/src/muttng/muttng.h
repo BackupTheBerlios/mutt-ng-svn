@@ -6,6 +6,8 @@
  * @file muttng/muttng.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Application base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_MUTTNG_H
 #define MUTTNG_MUTTNG_H

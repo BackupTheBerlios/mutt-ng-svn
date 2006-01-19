@@ -3,6 +3,8 @@
  * @file libmuttng/test/url_tests.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: URL unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_TEST_URL_TESTS_H
 #define LIBMUTTNG_TEST_URL_TESTS_H

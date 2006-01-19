@@ -3,6 +3,8 @@
  * @file libmuttng/debug.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Basic debug support
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_ABSTRACT_CLASS_H
 #define LIBMUTTNG_ABSTRACT_CLASS_H

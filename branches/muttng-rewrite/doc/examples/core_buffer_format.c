@@ -3,6 +3,8 @@
  * @file examples/core_buffer_format.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Example: Format buffer without s(n)printf
+ *
+ * This file is published as public domain.
  */
 
 /* for write(2) */

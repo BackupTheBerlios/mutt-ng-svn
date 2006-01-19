@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/mmdf_mailbox.h
  * @brief Interface: MMDF Mailbox class
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_MAILBOX_MMDF_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_MMDF_MAILBOX_H

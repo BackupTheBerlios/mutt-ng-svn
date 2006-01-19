@@ -3,6 +3,8 @@
  * @file examples/libmuttng_signal.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Example: How to use libmuttng's signals
+ *
+ * This file is published as public domain.
  */
 #include <iostream>
 #include "libmuttng/muttng_signal.h"

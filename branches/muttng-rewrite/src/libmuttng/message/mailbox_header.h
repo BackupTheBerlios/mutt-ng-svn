@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/message/mailbox_header.h
  * @brief Mailbox MIME message header
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_MESSAGE_MAILBOX_HEADER_H
 #define LIBMUTTNG_MESSAGE_MAILBOX_HEADER_H

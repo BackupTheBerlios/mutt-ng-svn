@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/mbox_mailbox.cpp
  * @brief Implementation: MBOX Mailbox class
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <stdlib.h>
 #include "libmuttng/config/config_manager.h"

@@ -4,6 +4,8 @@
  * @author Andreas Krennmair <ak@synflood.at>
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: buffer_t unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <unit++/unit++.h>
 #include <buffer.h>

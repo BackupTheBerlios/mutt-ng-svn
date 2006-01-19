@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/nntp_mailbox.h
  * @brief Interface: NNTP Mailbox
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_MAILBOX_NNTP_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_NNTP_MAILBOX_H

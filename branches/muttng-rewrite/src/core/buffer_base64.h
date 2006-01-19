@@ -2,6 +2,8 @@
 /**
  * @file core/buffer_base64.h
  * @brief Interface: Base64 conversions
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef CORE_BUFFER_BASE64_H
 #define CORE_BUFFER_BASE64_H

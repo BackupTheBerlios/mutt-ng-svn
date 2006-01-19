@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/imap_mailbox.h
  * @brief Interface: IMAP Mailbox
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_MAILBOX_IMAP_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_IMAP_MAILBOX_H

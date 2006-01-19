@@ -7,6 +7,8 @@
  * @file muttng/ui/ui_plain.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: CLI user interface
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_UI_PLAIN_H
 #define MUTTNG_UI_PLAIN_H

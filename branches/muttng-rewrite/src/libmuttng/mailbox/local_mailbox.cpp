@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/local_mailbox.cpp
  * @brief Implementation: Local Mailbox base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <stdlib.h>
 #include <stdio.h>

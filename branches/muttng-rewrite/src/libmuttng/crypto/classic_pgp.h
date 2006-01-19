@@ -3,6 +3,8 @@
  * @file libmuttng/crypto/classic_pgp.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Classic PGP for ClassicCrypto
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_CRYPTO_CLASSIC_PGP_H
 #define LIBMUTTNG_CRYPTO_CLASSIC_PGP_H

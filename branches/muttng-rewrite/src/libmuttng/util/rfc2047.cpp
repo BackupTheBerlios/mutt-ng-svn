@@ -3,6 +3,8 @@
  * @file libmuttng/util/rfc2047.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: RfC2047 encoding
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "libmuttng/util/rfc2047.h"
 #include "libmuttng/libmuttng.h"

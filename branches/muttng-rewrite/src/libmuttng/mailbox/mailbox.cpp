@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/mailbox.cpp
  * @brief Implementation: Mailbox bass class
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <stdlib.h>
 #include <iostream>

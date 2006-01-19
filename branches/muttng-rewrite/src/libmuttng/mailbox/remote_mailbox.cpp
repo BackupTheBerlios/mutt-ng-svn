@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/remote_mailbox.cpp
  * @brief Implementation: Remote Mailbox base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <stdlib.h>
 #include <iostream>

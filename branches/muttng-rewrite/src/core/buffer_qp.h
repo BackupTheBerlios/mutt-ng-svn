@@ -6,6 +6,8 @@
 /**
  * @file core/buffer_qp.h
  * @brief Inteface: Quoted-printable conversions
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef CORE_BUFFER_QP_H
 #define CORE_BUFFER_QP_H

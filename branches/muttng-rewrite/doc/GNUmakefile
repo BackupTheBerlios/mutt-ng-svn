@@ -17,8 +17,9 @@ all: prepare
 depend: doxygen
 
 prepare: common/manual-full.xml common/manual-user.xml
+	find ./../ \( -name '*.c' -or -name '*.h' -or -name '*.cpp' -or -name '*.cpp' -or -name '*.pl' \) | ./../contrib/licensing.pl > common/licensing.xml
 	@ for l in $(ALL_LANGUAGES) ; do \
-	  cp $^ tex/muttng.ist css/muttng.css manual_$$l/ ; \
+	  cp $^ tex/muttng.ist css/muttng.css common/licensing.xml manual_$$l/ ; \
 	  cp css/muttng.css homepage_$$l ; \
 	done
 

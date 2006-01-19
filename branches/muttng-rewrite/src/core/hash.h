@@ -3,6 +3,8 @@
  * @file core/hash.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Generic Hash Table
+ *
+ * This file is published under the GNU Lesser General Public License.
  */
 #ifndef MUTTNG_CORE_HASH_H
 #define MUTTNG_CORE_HASH_H

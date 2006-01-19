@@ -3,6 +3,8 @@
  * @file libmuttng/config/option.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Generic Config Option
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "option.h"
 #include "config_manager.h"

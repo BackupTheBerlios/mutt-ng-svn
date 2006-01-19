@@ -8,6 +8,8 @@
  * @file muttng/tools/conf_tool.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: muttng-conf(1)
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_CONF_TOOL_H
 #define MUTTNG_CONF_TOOL_H

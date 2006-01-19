@@ -3,6 +3,8 @@
  * @file muttng/tools/tool.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Common tool base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <iostream>
 

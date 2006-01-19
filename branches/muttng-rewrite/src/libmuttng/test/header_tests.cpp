@@ -3,6 +3,8 @@
  * @file libmuttng/test/header_tests.cpp
  * @author Andreas Krennmair <ak@synflood.at>
  * @brief Interface: Header unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "message/simple_header.h"
 #include "header_tests.h"

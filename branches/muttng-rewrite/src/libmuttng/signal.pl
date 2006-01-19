@@ -19,6 +19,8 @@ my $head =
 " * \@author Esa Pulkkinen\n" .
 " * \@author Rocco Rutte <pdmef\@cs.tu-berlin.de>\n" .
 " * \@brief (AUTO) Interface+Implementation: Signal handling\n" .
+" *\n" .
+" * This file is published as public domain.\n" .
 " */\n" .
 "#ifndef LIBMUTTNG_SIGNAL_H\n" .
 "#define LIBMUTTNG_SIGNAL_H\n\n";

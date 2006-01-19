@@ -3,6 +3,8 @@
  * @file muttng/ui/ui_text.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Text-based UI base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <iostream>
 

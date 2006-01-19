@@ -2,6 +2,8 @@
  * @file core/sigs.h
  * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
  * @brief Interface: Signal handling
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef CORE_SIGS_H
 #define CORE_SIGS_H

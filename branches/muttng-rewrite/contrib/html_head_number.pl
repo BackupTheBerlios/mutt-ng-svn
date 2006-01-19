@@ -17,6 +17,8 @@
 #
 # $Id$
 
+# This file is published as public domain.
+
 # if $trail==1 => the sequence in $tailseq is appended (e.g. a dot)
 my $trail = 1;
 my $trailseq = '.&nbsp;';

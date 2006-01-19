@@ -3,6 +3,8 @@
  * @author Copyright (C) 1996-2002 Michael R. Elkins <me@mutt.org>
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Configuration parser
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <errno.h>
 #include <cstdio>

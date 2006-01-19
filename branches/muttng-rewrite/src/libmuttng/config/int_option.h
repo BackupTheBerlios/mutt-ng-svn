@@ -3,6 +3,8 @@
  * @file libmuttng/config/int_option.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Integer option
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_CONFIG_INT_OPTION_H
 #define LIBMUTTNG_CONFIG_INT_OPTION_H

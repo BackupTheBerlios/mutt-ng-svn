@@ -8,7 +8,9 @@
  * of libowfat (see http://www.fefe.de/libowfat/).
  *
  * libowfat was written by Felix von Leitner <felix-libowfat@fefe.de> 
- * and is licensed under the GNU General Public License.
+ * which is licensed under the GNU General Public License.
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "buffer.h"
 

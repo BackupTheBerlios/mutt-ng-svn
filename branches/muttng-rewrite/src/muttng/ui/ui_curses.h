@@ -7,6 +7,8 @@
  * @file muttng/ui/ui_curses.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Curses-based UI
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_UI_CURSES_H
 #define MUTTNG_UI_CURSES_H

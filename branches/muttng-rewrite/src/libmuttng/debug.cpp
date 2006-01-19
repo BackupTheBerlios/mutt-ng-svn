@@ -3,6 +3,8 @@
  * @file libmuttng/debug.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Basic debug support
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <iostream>
 

@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/pop3_mailbox.h
  * @brief Interface: POP3 Mailbox
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_MAILBOX_POP3_MAILBOX_H
 #define LIBMUTTNG_MAILBOX_POP3_MAILBOX_H

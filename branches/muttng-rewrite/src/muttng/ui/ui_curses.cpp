@@ -3,6 +3,8 @@
  * @file muttng/ui/ui_curses.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Curses-based UI
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <iostream>
 

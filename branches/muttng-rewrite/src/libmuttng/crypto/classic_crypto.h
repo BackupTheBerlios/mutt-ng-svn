@@ -3,6 +3,8 @@
  * @file libmuttng/crypto/classic_crypto.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Classic module for Crypto
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_CRYPTO_CLASSIC_CRYPTO_H
 #define LIBMUTTNG_CRYPTO_CLASSIC_CRYPTO_H

@@ -3,6 +3,8 @@
  * @file muttng/tools/main.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Common wrapper for <code>main()</code>
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <stdlib.h>
 #include <string.h>

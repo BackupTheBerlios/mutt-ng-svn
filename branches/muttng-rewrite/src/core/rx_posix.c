@@ -2,6 +2,8 @@
 /**
  * @file core/rx_posic.c
  * @brief Implementation: POSIX regular expression support
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <string.h>
 

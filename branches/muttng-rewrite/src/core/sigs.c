@@ -2,6 +2,8 @@
  * @file core/sigs.c
  * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
  * @brief Implementation: Signal handling
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "core_features.h"
 

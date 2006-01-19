@@ -3,6 +3,8 @@
  * @file core/test/io_tests.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: I/O unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <iostream>
 

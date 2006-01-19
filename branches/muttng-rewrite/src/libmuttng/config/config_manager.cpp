@@ -3,6 +3,8 @@
  * @file libmuttng/config/config_manager.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Configuration Manager
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "config_manager.h"
 #include "core/str.h"

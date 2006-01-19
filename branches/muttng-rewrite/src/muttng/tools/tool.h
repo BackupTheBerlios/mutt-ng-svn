@@ -7,6 +7,8 @@
  * @file muttng/tools/tool.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Common tool base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_TOOL_H
 #define MUTTNG_TOOL_H

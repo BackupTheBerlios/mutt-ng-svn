@@ -3,6 +3,8 @@
  * @file core/test/rx_tests.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Regular expression unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef CORE_TEST_RX__H
 #define CORE_TEST_RX__H

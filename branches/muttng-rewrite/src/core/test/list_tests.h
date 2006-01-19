@@ -3,6 +3,8 @@
  * @file core/test/list_tests.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: list_t unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef CORE_TEST_LIST__H
 #define CORE_TEST_LIST__H

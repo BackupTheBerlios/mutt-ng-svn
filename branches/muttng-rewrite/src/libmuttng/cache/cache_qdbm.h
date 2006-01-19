@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/cache/cache_qdbm.h
  * @brief Interface: QDBM-based caching
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_CACHE_CACHE_QDBM_H
 #define LIBMUTTNG_CACHE_CACHE_QDBM_H

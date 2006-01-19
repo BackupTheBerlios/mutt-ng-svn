@@ -3,6 +3,8 @@
  * @file core/test/buffer_tests.h
  * @author Andreas Krennmair <ak@synflood.at>
  * @brief Interface: buffer_t unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef CORE_TEST_BUFFER__H
 #define CORE_TEST_BUFFER__H

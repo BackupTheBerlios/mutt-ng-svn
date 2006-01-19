@@ -3,6 +3,8 @@
  * @file core/test/list_tests.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: list_t unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <unit++/unit++.h>
 #include "list_tests.h"

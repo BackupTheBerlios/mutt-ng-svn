@@ -3,6 +3,8 @@
  * @file core/exit.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Fatal error handling
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <stdlib.h>
 #include <stdio.h>

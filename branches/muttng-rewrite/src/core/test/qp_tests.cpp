@@ -3,6 +3,8 @@
  * @file core/test/qp_tests.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: QP unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <iostream>
 

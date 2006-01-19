@@ -7,6 +7,8 @@
  * @file core/test/test.cpp
  * @author Andreas Krennmair <ak@synflood.at>
  * @brief Implementation: core/ unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <unit++/unit++.h>
 

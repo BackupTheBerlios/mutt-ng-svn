@@ -3,6 +3,8 @@
  * @file core/test/base64_tests.cpp
  * @author Andreas Krennmair <ak@synflood.at>
  * @brief Implementation: base64 unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "buffer.h"
 #include "base64_tests.h"

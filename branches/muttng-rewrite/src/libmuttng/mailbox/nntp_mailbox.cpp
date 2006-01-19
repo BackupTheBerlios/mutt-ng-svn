@@ -2,6 +2,8 @@
 /**
  * @file libmuttng/mailbox/nntp_mailbox.cpp
  * @brief Implementation: NNTP Mailbox
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <stdlib.h>
 #include <vector>

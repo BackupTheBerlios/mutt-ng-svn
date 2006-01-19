@@ -6,6 +6,8 @@
 /**
  * @file core/rx.h
  * @brief Interface: Regular expression support
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef CORE_RX_H
 #define CORE_RX_H

@@ -4,7 +4,8 @@
  * @author Andreas Krennmair <ak@synflood.at>
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: plain TCP connection
- * @todo implementation is completely missing.
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "libmuttng/libmuttng_features.h"
 

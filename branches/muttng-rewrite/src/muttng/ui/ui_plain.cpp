@@ -3,6 +3,8 @@
  * @file muttng/ui/ui_plain.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: CLI user interface
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <iostream>
 

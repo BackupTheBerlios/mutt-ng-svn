@@ -4,6 +4,8 @@
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @author Copyright (C) 2000 Thomas Roessler <roessler@does-not-exist.org>
  * @brief Implementation: URL handling
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <ctype.h>
 #include <cstring>

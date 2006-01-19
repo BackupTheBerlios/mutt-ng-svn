@@ -3,6 +3,8 @@
  * @file core/buffer_base.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: String buffer
+ *
+ * This file is published under the GNU Lesser General Public License.
  */
 #include <stdlib.h>
 #include <string.h>

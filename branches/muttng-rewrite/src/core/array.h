@@ -3,6 +3,8 @@
  * @file core/array.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Array handling
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_CORE_ARRAY_H
 #define MUTTNG_CORE_ARRAY_H

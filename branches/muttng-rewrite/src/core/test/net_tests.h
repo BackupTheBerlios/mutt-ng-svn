@@ -3,6 +3,8 @@
  * @file core/test/net_tests.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: IDNA unit tests
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef CORE_TEST_NET__H
 #define CORE_TEST_NET__H

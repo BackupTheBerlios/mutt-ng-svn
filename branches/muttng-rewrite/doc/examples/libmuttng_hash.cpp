@@ -3,6 +3,8 @@
  * @file examples/libmuttng_hash.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Example: Hash table
+ *
+ * This file is published as public domain.
  */
 #include <iostream>
 #include <vector>

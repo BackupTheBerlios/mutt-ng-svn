@@ -11,6 +11,8 @@
  * @file core/version.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Muttng core version
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_CORE_VERSION_H
 #define MUTTNG_CORE_VERSION_H

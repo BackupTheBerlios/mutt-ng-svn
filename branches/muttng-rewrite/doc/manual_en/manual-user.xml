@@ -24,6 +24,9 @@
     <xi:include href="devguide.xml"
       xmlns:xi="http://www.w3.org/2001/XInclude"/>
 
+    <xi:include href="licensing.xml"
+      xmlns:xi="http://www.w3.org/2001/XInclude"/>
+
     <xi:include href="history.xml"
       xmlns:xi="http://www.w3.org/2001/XInclude"/>
 

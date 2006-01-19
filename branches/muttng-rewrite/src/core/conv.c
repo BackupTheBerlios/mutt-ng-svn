@@ -3,6 +3,8 @@
  * @file core/conv.c
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Conversion routines
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "core_features.h"
 

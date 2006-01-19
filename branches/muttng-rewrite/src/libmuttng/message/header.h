@@ -4,6 +4,8 @@
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @author Andreas Krennmair <ak@synflood.at>
  * @brief MIME message header
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_MESSAGE_HEADER_H
 #define LIBMUTTNG_MESSAGE_HEADER_H

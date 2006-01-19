@@ -3,6 +3,8 @@
  * @file libmuttng/test/lib_tests.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Libmuttng base unit testing class
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_TEST_LIB_TESTS_H
 #define LIBMUTTNG_TEST_LIB_TESTS_H

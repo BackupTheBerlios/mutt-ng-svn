@@ -3,6 +3,8 @@
  * @file libmuttng/message/body.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief MIME message body part
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_MESSAGE_BODY_H
 #define LIBMUTTNG_MESSAGE_BODY_H

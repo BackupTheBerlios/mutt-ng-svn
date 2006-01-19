@@ -2,6 +2,8 @@
  * @file core/command.h
  * @author Copyright (C) 1996-2000 Michael R. Elkins <me@mutt.org>
  * @brief Interface: Commands
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef CORE_COMMAND_H
 #define CORE_COMMAND_H

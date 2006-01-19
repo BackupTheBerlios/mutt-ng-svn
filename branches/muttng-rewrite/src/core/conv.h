@@ -3,6 +3,8 @@
  * @file core/conv.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Conversion routines
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_CORE_CONV_H
 #define MUTTNG_CORE_CONV_H

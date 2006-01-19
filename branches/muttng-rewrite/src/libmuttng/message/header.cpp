@@ -3,6 +3,8 @@
  * @file libmuttng/message/header.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief MIME message header
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "header.h"
 #include <cstring>

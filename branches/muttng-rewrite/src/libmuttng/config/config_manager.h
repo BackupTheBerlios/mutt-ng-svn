@@ -7,6 +7,8 @@
  * @file libmuttng/config/config_manager.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Configuration Manager
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_CONFIG_CONFIG_MANAGER_H
 #define LIBMUTTNG_CONFIG_CONFIG_MANAGER_H

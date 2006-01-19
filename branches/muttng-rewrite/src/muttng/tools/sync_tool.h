@@ -9,6 +9,8 @@
  * @file muttng/tools/sync_tool.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: muttng-sync(1)
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_SYNC_TOOL_H
 #define MUTTNG_SYNC_TOOL_H

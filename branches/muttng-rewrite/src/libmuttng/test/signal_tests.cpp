@@ -3,6 +3,8 @@
  * @file libmuttng/test/signal_tests.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Signal unit tests
+ *
+ * This file is published as public domain.
  */
 #include <unit++/unit++.h>
 #include "signal_tests.h"

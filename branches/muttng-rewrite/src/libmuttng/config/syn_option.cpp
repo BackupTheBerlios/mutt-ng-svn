@@ -3,6 +3,8 @@
  * @file libmuttng/config/syn_option.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Synonym option
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "syn_option.h"
 #include "config_manager.h"

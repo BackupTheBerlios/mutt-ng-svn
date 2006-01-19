@@ -6,6 +6,8 @@
 /**
  * @file libmuttng/cache/cache.cpp
  * @brief Implementation: Cache base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #include "cache.h"
 

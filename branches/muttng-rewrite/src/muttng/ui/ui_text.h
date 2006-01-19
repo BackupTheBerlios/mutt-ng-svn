@@ -3,6 +3,8 @@
  * @file muttng/ui/ui_text.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Text-based UI base class
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_UI_TEXT_H
 #define MUTTNG_UI_TEXT_H

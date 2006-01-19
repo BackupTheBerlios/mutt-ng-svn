@@ -3,6 +3,8 @@
  * @file libmuttng/config/bool_option.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Implementation: Bool option
+ *
+ * This file is published under the GNU General Public License.
  */
 #include <cstring>
 #include <string.h>

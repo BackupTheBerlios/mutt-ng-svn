@@ -3,6 +3,8 @@
  * @file muttng/config/global_variables.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: UI internal configuration
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef MUTTNG_CONFIG_GLOBAL_VARIABLES_H
 #define MUTTNG_CONFIG_GLOBAL_VARIABLES_H

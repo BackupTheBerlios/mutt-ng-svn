@@ -3,6 +3,8 @@
  * @file examples/libmuttng_mailbox_create.cpp
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Example: how to create mailbox from URL
+ *
+ * This file is published as public domain.
  */
 #include <iostream>
 #include "core/buffer.h"

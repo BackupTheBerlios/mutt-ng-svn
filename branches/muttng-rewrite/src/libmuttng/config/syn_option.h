@@ -3,6 +3,8 @@
  * @file libmuttng/config/syn_option.h
  * @author Rocco Rutte <pdmef@cs.tu-berlin.de>
  * @brief Interface: Synonym option
+ *
+ * This file is published under the GNU General Public License.
  */
 #ifndef LIBMUTTNG_CONFIG_SYN_OPTION_H
 #define LIBMUTTNG_CONFIG_SYN_OPTION_H
