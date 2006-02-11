@@ -95,7 +95,7 @@ static int edit_one_message (CONTEXT * ctx, HEADER * cur)
    * remove it, the message will grow by one line each time the user edits
    * the message.
    */
-  if (sb.st_size != 0 && truncate (tmp, sb.st_size - 1) == -1) {
+  if (size != 0 && truncate (tmp, --size) == -1) {
     mutt_error (_("could not truncate temporary mail folder: %s"),
                 strerror (errno));
     goto bail;
