@@ -892,7 +892,7 @@ int mutt_lookup_mime_type (BODY * att, const char *path)
 
   szf = str_len (path);
 
-  for (count = 0; count < 3; count++) {
+  for (count = 0; count < 4; count++) {
     /*
      * can't use strtok() because we use it in an inner loop below, so use
      * a switch statement here instead.
@@ -906,6 +906,9 @@ int mutt_lookup_mime_type (BODY * att, const char *path)
       break;
     case 2:
       strfcpy (buf, PKGDATADIR "/mime.types", sizeof (buf));
+      break;
+    case 3:
+      strfcpy (buf, SYSCONFDIR "/mime.types", sizeof (buf));
       break;
     default:
       debug_print (1, ("Internal error, count = %d.\n", count));
