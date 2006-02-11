@@ -49,6 +49,8 @@
 #include <sys/types.h>
 #include <utime.h>
 
+#define SW              (option(OPTMBOXPANE)?SidebarWidth:0)
+
 BODY *mutt_new_body (void)
 {
   BODY *p = (BODY *) mem_calloc (1, sizeof (BODY));
@@ -1013,9 +1015,7 @@ void mutt_FormatString (char *dest,     /* output buffer */
         if (DrawFullLine || option (OPTSTATUSONTOP))
           count = (COLS < destlen ? COLS : destlen);
         else
-          count =
-            ((COLS - SidebarWidth) <
-             destlen ? (COLS - SidebarWidth) : destlen);
+          count = ((COLS - SW) < destlen ? (COLS - SW) : destlen);
         if (count > col) {
           count -= col;         /* how many columns left on this line */
           mutt_FormatString (buf, sizeof (buf), src, callback, data, flags);

@@ -31,7 +31,6 @@ static int CurBuffy = 0;
 static int known_lines = 0;
 static short initialized = 0;
 static short prev_show_value;
-static short saveSidebarWidth;
 
 /* computes first entry to be shown */
 void calc_boundaries (int menu)
@@ -44,11 +43,8 @@ void calc_boundaries (int menu)
     CurBuffy = 0;
   if (TopBuffy < 0 || TopBuffy >= Incoming->length)
     TopBuffy = 0;
-  /* correct known_lines if it has changed because of a window resize */
-  /*  if (known_lines != LINES)
-    known_lines = LINES; */
 
-  lines = LINES - 2 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
+  lines = LINES - 2 - (option (OPTSTATUSONTOP));
   known_lines = lines;
   if (option (OPTSIDEBARNEWMAILONLY)) {
     int i = CurBuffy;
@@ -295,22 +291,14 @@ int sidebar_draw (int menu)
   /* initialize first time */
   if (!initialized) {
     prev_show_value = option (OPTMBOXPANE);
-    saveSidebarWidth = SidebarWidth;
-    if (!option (OPTMBOXPANE)){
-      SidebarWidth = 0;
+    if (!option (OPTMBOXPANE))
       draw_devider = 1;
-    }
     initialized = 1;
   }
 
   /* save or restore the value SidebarWidth */
   if (prev_show_value != option (OPTMBOXPANE)) {
-    if (prev_show_value && !option (OPTMBOXPANE)) {
-      saveSidebarWidth = SidebarWidth;
-      SidebarWidth = 0;
-    }
-    else if (!prev_show_value && option (OPTMBOXPANE)) {
-      SidebarWidth = saveSidebarWidth;
+    if (!prev_show_value && option (OPTMBOXPANE)) {
       /* after toggle: force recounting of all mail */
       buffy_check (2);
     }

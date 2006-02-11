@@ -57,6 +57,7 @@
 #define IsSendAttach(x) (x && (x)->bdy && !(x)->fp)
 #define IsMsgAttach(x) (x && (x)->fp && (x)->bdy && (x)->bdy->hdr)
 #define IsHeader(x) (x && (x)->hdr && !(x)->bdy)
+#define SW              (option(OPTMBOXPANE)?SidebarWidth:0)
 
 static const char *Not_available_in_this_menu =
 N_("Not available in this menu.");
@@ -982,7 +983,7 @@ static int format_line (struct line_t **lineInfo, int n, unsigned char *buf,
 
   if (!(flags & (M_SHOWFLAT)))
     wrap_cols -= WrapMargin;
-  wrap_cols -= SidebarWidth;
+  wrap_cols -= SW;
 
   if (wrap_cols <= 0)
     wrap_cols = COLS;
@@ -1604,7 +1605,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
 
     if ((redraw & REDRAW_BODY) || topline != oldtopline) {
       do {
-        move (bodyoffset, SidebarWidth);
+        move (bodyoffset, SW);
         curline = oldtopline = topline;
         lines = 0;
         force_redraw = 0;
@@ -1617,7 +1618,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
                             &SearchRE) > 0)
             lines++;
           curline++;
-          move (lines + bodyoffset, SidebarWidth);
+          move (lines + bodyoffset, SW);
           redraw |= REDRAW_SIDEBAR;
         }
         last_offset = lineInfo[curline].offset;
@@ -1631,7 +1632,7 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
           addch ('~');
         addch ('\n');
         lines++;
-        move (lines + bodyoffset, SidebarWidth);
+        move (lines + bodyoffset, SW);
       }
       /* We are going to update the pager status bar, so it isn't
        * necessary to reset to normal color now. */
@@ -1660,10 +1661,10 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       }
       if (option(OPTSTATUSONTOP)) {
         move(0,0);
+      } else {
+        move(LINES-2,SW);
       }
-      /*move (indexoffset + (option (OPTSTATUSONTOP) ? 0 : (InHelp?(LINES-2):(indexlen - 1))),
-            option (OPTSTATUSONTOP) ? 0 : SidebarWidth);*/
-      mutt_paddstr (COLS - 10 - (option(OPTSTATUSONTOP)?0:SidebarWidth), IsHeader (extra)
+      mutt_paddstr (COLS - 10 - (option(OPTSTATUSONTOP)?0:SW), IsHeader (extra)
                     || IsMsgAttach (extra) ? buffer : banner);
 
       addstr (" -- (");
@@ -1686,10 +1687,10 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       /* print out the index status bar */
       menu_status_line (buffer, sizeof (buffer), index, NONULL (Status));
       move (indexoffset + (option (OPTSTATUSONTOP) ? 0 : (indexlen - 1)),
-            option (OPTSTATUSONTOP) ? 0 : SidebarWidth);
+            option (OPTSTATUSONTOP) ? 0 : SW);
       SETCOLOR (MT_COLOR_STATUS);
       BKGDSET (MT_COLOR_STATUS);
-      mutt_paddstr (COLS - (option (OPTSTATUSONTOP) ? 0 : SidebarWidth),
+      mutt_paddstr (COLS - (option (OPTSTATUSONTOP) ? 0 : SW),
                     buffer);
       SETCOLOR (MT_COLOR_NORMAL);
       BKGDSET (MT_COLOR_NORMAL);
