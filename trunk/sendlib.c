@@ -1499,7 +1499,7 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
     if (!option (OPTNEWSSEND))
 #endif
       if (EDIT_HEADER("To:"))
-        fputs ("To: \n", fp);
+        fputs ("To:\n", fp);
 
   if (env->cc) {
     fputs ("Cc: ", fp);
@@ -1510,7 +1510,7 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
     if (!option (OPTNEWSSEND))
 #endif
       if (EDIT_HEADER("Cc:"))
-        fputs ("Cc: \n", fp);
+        fputs ("Cc:\n", fp);
 
   if (env->bcc) {
     if (mode != 0 || option (OPTWRITEBCC)) {
@@ -1523,30 +1523,30 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
     if (!option (OPTNEWSSEND))
 #endif
       if (EDIT_HEADER("Bcc:"))
-        fputs ("Bcc: \n", fp);
+        fputs ("Bcc:\n", fp);
 
 #ifdef USE_NNTP
   if (env->newsgroups)
     fprintf (fp, "Newsgroups: %s\n", env->newsgroups);
   else if (mode == 1 && option (OPTNEWSSEND) && EDIT_HEADER("Newsgroups:"))
-    fputs ("Newsgroups: \n", fp);
+    fputs ("Newsgroups:\n", fp);
 
   if (env->followup_to)
     fprintf (fp, "Followup-To: %s\n", env->followup_to);
   else if (mode == 1 && option (OPTNEWSSEND) && EDIT_HEADER("Followup-To:"))
-    fputs ("Followup-To: \n", fp);
+    fputs ("Followup-To:\n", fp);
 
   if (env->x_comment_to)
     fprintf (fp, "X-Comment-To: %s\n", env->x_comment_to);
   else if (mode == 1 && option (OPTNEWSSEND) && option (OPTXCOMMENTTO) &&
            EDIT_HEADER("X-Comment-To:"))
-    fputs ("X-Comment-To: \n", fp);
+    fputs ("X-Comment-To:\n", fp);
 #endif
 
   if (env->subject)
     fprintf (fp, "Subject: %s\n", env->subject);
   else if (mode == 1 && EDIT_HEADER("Subject:"))
-    fputs ("Subject: \n", fp);
+    fputs ("Subject:\n", fp);
 
   /* save message id if the user has set it */
   if (env->message_id && !privacy)
@@ -1557,7 +1557,7 @@ int mutt_write_rfc822_header (FILE * fp, ENVELOPE * env, BODY * attach,
     mutt_write_address_list (env->reply_to, fp, 10, 0);
   }
   else if (mode > 0 && EDIT_HEADER("Reply-To:"))
-    fputs ("Reply-To: \n", fp);
+    fputs ("Reply-To:\n", fp);
 
   if (env->mail_followup_to)
 #ifdef USE_NNTP
