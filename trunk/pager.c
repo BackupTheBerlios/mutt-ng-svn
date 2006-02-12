@@ -833,6 +833,8 @@ static int grok_ansi (unsigned char *buf, int pos, ansi_attr * a)
       a->attr = ANSI_OFF;
       a->pair = -1;
     }
+    a->bg = -2;
+    a->fg = -2;
     while (pos < x) {
       if (buf[pos] == '1' && (pos + 1 == x || buf[pos + 1] == ';')) {
         a->attr |= ANSI_BOLD;
@@ -866,7 +868,8 @@ static int grok_ansi (unsigned char *buf, int pos, ansi_attr * a)
 #endif
         a->pair = -1;
         a->attr |= ANSI_COLOR;
-        a->fg = buf[pos + 1] - '0';
+        if (buf[pos + 1] != '9')
+          a->fg = buf[pos + 1] - '0';
         pos += 3;
       }
       else if (buf[pos] == '4' && isdigit (buf[pos + 1])) {
@@ -876,7 +879,8 @@ static int grok_ansi (unsigned char *buf, int pos, ansi_attr * a)
 #endif
         a->pair = -1;
         a->attr |= ANSI_COLOR;
-        a->bg = buf[pos + 1] - '0';
+        if (buf[pos + 1] != '9')
+          a->bg = buf[pos + 1] - '0';
         pos += 3;
       }
       else {
