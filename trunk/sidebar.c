@@ -44,7 +44,7 @@ void calc_boundaries (int menu)
   if (TopBuffy < 0 || TopBuffy >= Incoming->length)
     TopBuffy = 0;
 
-  lines = LINES - 2 - (option (OPTSTATUSONTOP));
+  lines = LINES - 2 - !option (OPTHELP);
   known_lines = lines;
   if (option (OPTSIDEBARNEWMAILONLY)) {
     int i = CurBuffy;
@@ -282,11 +282,19 @@ void sidebar_set_buffystats (CONTEXT* Context) {
  */
 int sidebar_draw (int menu)
 {
-
-  int lines = option (OPTHELP) ? 1 : 0, draw_devider = 1, i = 0;
+  int first_line = option (OPTSTATUSONTOP) ? 1 : option (OPTHELP) ? 1 : 0;
+  int last_line = LINES-1;
+  int draw_devider = 1, i = 0;
+  int line;
   BUFFY *tmp;
   short delim_len = str_len (SidebarDelim);
   char blank[SHORT_STRING];
+
+  if (option (OPTSTATUSONTOP)) {
+    last_line -= option (OPTHELP) ? 1 : 0;
+  } else {
+    last_line -= 1-(menu==MENU_PAGER);
+  }
 
   /* initialize first time */
   if (!initialized) {
@@ -319,10 +327,8 @@ int sidebar_draw (int menu)
   if (draw_devider == 1){
     /* draw the divider */
     SETCOLOR (MT_COLOR_SIDEBAR);
-    for (lines = 1;
-         lines < LINES - 1 - (menu != MENU_PAGER || option (OPTSTATUSONTOP));
-         lines++) {
-      move (lines, SidebarWidth - delim_len);
+    for (line = first_line; line < last_line; line++) {
+      move (line, SidebarWidth - delim_len);
       if (option (OPTASCIICHARS))
         addstr (NONULL (SidebarDelim));
       else if (!option (OPTASCIICHARS) && !str_cmp (SidebarDelim, "|"))
@@ -337,12 +343,11 @@ int sidebar_draw (int menu)
 
   if (list_empty(Incoming))
     return 0;
-  lines = option (OPTHELP) ? 1 : 0;     /* go back to the top */
+  line = first_line;
   calc_boundaries (menu);
 
   /* actually print items */
-  for (i = TopBuffy; i < Incoming->length && lines < LINES - 1 - 
-       (menu != MENU_PAGER || option (OPTSTATUSONTOP)); i++) {
+  for (i = TopBuffy; i < Incoming->length && line < last_line; i++) {
     tmp = (BUFFY*) Incoming->data[i];
 
     if (i == CurBuffy)
@@ -354,15 +359,15 @@ int sidebar_draw (int menu)
     else
       SETCOLOR (MT_COLOR_NORMAL);
 
-    move (lines, 0);
-    lines += make_sidebar_entry (tmp->path, i, SidebarWidth-delim_len);
+    move (line, 0);
+    line += make_sidebar_entry (tmp->path, i, SidebarWidth-delim_len);
   }
 
   /* fill with blanks to bottom */
   memset (&blank, ' ', sizeof (blank));
   SETCOLOR (MT_COLOR_NORMAL);
-  for (; lines < LINES - 1 - (menu != MENU_PAGER || option (OPTSTATUSONTOP)); lines++) {
-    move (lines, 0);
+  for (; line < last_line; line++) {
+    move (line, 0);
     addnstr (blank, SidebarWidth-delim_len);
   }
   return 0;
