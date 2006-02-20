@@ -35,7 +35,6 @@ static short prev_show_value;
 /* computes first entry to be shown */
 void calc_boundaries (int menu)
 {
-  int lines = 0;
 
   if (list_empty(Incoming))
     return;
@@ -44,8 +43,6 @@ void calc_boundaries (int menu)
   if (TopBuffy < 0 || TopBuffy >= Incoming->length)
     TopBuffy = 0;
 
-  lines = LINES - 2 - !option (OPTHELP);
-  known_lines = lines;
   if (option (OPTSIDEBARNEWMAILONLY)) {
     int i = CurBuffy;
     TopBuffy = CurBuffy - 1;
@@ -55,7 +52,7 @@ void calc_boundaries (int menu)
       i--;
     }
   } else
-    TopBuffy = CurBuffy - (CurBuffy % lines);
+    TopBuffy = CurBuffy - (CurBuffy % known_lines);
   if (TopBuffy < 0)
     TopBuffy = 0;
 }
@@ -296,6 +293,8 @@ int sidebar_draw (int menu)
     last_line -= 1-(menu==MENU_PAGER);
   }
 
+  known_lines=last_line-first_line;
+
   /* initialize first time */
   if (!initialized) {
     prev_show_value = option (OPTMBOXPANE);
@@ -303,6 +302,9 @@ int sidebar_draw (int menu)
       draw_devider = 1;
     initialized = 1;
   }
+
+  if (TopBuffy==0 || CurBuffy==0)
+    calc_boundaries(menu);
 
   /* save or restore the value SidebarWidth */
   if (prev_show_value != option (OPTMBOXPANE)) {
@@ -343,11 +345,9 @@ int sidebar_draw (int menu)
 
   if (list_empty(Incoming))
     return 0;
-  line = first_line;
-  calc_boundaries (menu);
 
   /* actually print items */
-  for (i = TopBuffy; i < Incoming->length && line < last_line; i++) {
+  for (i = TopBuffy, line=first_line; i < Incoming->length && line < last_line; i++) {
     tmp = (BUFFY*) Incoming->data[i];
 
     if (i == CurBuffy)
