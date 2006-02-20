@@ -133,9 +133,27 @@ static struct mapping_t ComposeNewsHelp[] = {
 
 static void snd_entry (char *b, size_t blen, MUTTMENU * menu, int num)
 {
+  int old1=DrawFullLine,old2=option(OPTSTATUSONTOP);
+
+  /*
+   * XXX
+   * mutt_FormatString is totally broken as it tries to determine
+   * the max. width of the output string itself which may fail
+   * (for example, for $status_on_top, many of the format strings
+   * are as wide as screen but $attach_format is not, etc.)
+   *
+   * When $status_on_top is unset, mutt_FormatString() will respect
+   * sidebar so unset it for compose menu entries by force... ;-(
+   */
+  DrawFullLine=0;
+  unset_option(OPTSTATUSONTOP);
+
   mutt_FormatString (b, blen, NONULL (AttachFormat), mutt_attach_fmt,
                      (unsigned long) (((ATTACHPTR **) menu->data)[num]),
                      M_FORMAT_STAT_FILE | M_FORMAT_ARROWCURSOR);
+
+  DrawFullLine=old1;
+  if (old2) set_option(OPTSTATUSONTOP);
 }
 
 
