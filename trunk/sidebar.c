@@ -33,9 +33,7 @@ static short initialized = 0;
 static short prev_show_value;
 
 /* computes first entry to be shown */
-void calc_boundaries (int menu)
-{
-
+static void calc_boundaries (void) {
   if (list_empty(Incoming))
     return;
   if (CurBuffy < 0 || CurBuffy >= Incoming->length)
@@ -255,8 +253,10 @@ const char* sidebar_get_current (void) {
 /* internally sets item to buf */
 void sidebar_set_current (const char* buf) {
   int i = buffy_lookup (buf);
-  if (i >= 0)
+  if (i >= 0) {
     CurBuffy = i;
+    calc_boundaries();
+  }
 }
 
 /* fix counters for a context
@@ -304,7 +304,7 @@ int sidebar_draw (int menu)
   }
 
   if (TopBuffy==0 || CurBuffy==0)
-    calc_boundaries(menu);
+    calc_boundaries();
 
   /* save or restore the value SidebarWidth */
   if (prev_show_value != option (OPTMBOXPANE)) {
@@ -460,6 +460,6 @@ void sidebar_scroll (int op, int menu) {
   default:
     return;
   }
-  calc_boundaries (menu);
+  calc_boundaries ();
   sidebar_draw (menu);
 }
