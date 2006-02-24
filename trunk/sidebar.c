@@ -49,7 +49,7 @@ static void calc_boundaries (void) {
         TopBuffy = i;
       i--;
     }
-  } else
+  } else if (known_lines>0)
     TopBuffy = CurBuffy - (CurBuffy % known_lines);
   if (TopBuffy < 0)
     TopBuffy = 0;
