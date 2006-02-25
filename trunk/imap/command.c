@@ -492,6 +492,9 @@ static void cmd_parse_fetch (IMAP_DATA * idata, char *s)
     for (cur = 0; cur < idata->ctx->msgcount; cur++) {
       h = idata->ctx->hdrs[cur];
 
+      if (!h)
+        break;
+
       if (h->active && h->index + 1 == msgno) {
         debug_print (2, ("Message UID %d updated\n", HEADER_DATA (h)->uid));
         break;
