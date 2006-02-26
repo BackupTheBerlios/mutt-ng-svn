@@ -583,7 +583,7 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
                          ComposeHelp);
 
   if (option (OPTMBOXPANE))
-    buffy_check (1);
+    buffy_check (0);
   while (loop) {
 #ifdef USE_NNTP
     unset_option (OPTNEWS);     /* for any case */
