@@ -36,6 +36,8 @@
 #include <sys/file.h>
 #include <fcntl.h>
 
+#define SW              (option(OPTMBOXPANE)?SidebarWidth:0)
+
 #ifdef MIXMASTER
 
 struct coord {
@@ -419,8 +421,9 @@ static const char *mix_entry_fmt (char *dest,
 static void mix_entry (char *b, size_t blen, MUTTMENU * menu, int num)
 {
   REMAILER **type2_list = (REMAILER **) menu->data;
+  int w=(COLS-SW)>blen?blen:(COLS-SW);
 
-  mutt_FormatString (b, blen, NONULL (MixEntryFormat), mix_entry_fmt,
+  mutt_FormatString (b, w, NONULL (MixEntryFormat), mix_entry_fmt,
                      (unsigned long) type2_list[num], M_FORMAT_ARROWCURSOR);
 }
 

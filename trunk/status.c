@@ -27,6 +27,8 @@
 #include <ctype.h>
 #include <unistd.h>
 
+#define SW              (option(OPTMBOXPANE)?SidebarWidth:0)
+
 static char *get_sort_str (char *buf, size_t buflen, int method)
 {
   snprintf (buf, buflen, "%s%s%s",
@@ -309,9 +311,11 @@ static const char *status_format_str (char *buf, size_t buflen, char op,
   return (src);
 }
 
-void menu_status_line (char *buf, size_t buflen, MUTTMENU * menu,
-                       const char *p)
-{
-  mutt_FormatString (buf, buflen, p, status_format_str, (unsigned long) menu,
-                     0);
+void menu_status_line (char* buf, size_t len, MUTTMENU* menu, const char* p) {
+  /*
+   * if we have enough space for buffer, format lines to $COLS-$SidebarWidth
+   * only to not wrap past end of screen
+   */
+  mutt_FormatString (buf, (COLS-SW)>len?len:(COLS-SW), p, status_format_str,
+                     (unsigned long) menu, 0);
 }

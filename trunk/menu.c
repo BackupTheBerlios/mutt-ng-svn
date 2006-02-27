@@ -173,8 +173,8 @@ void menu_redraw_full (MUTTMENU * menu)
 
   if (option (OPTHELP)) {
     SETCOLOR (MT_COLOR_STATUS);
-    move (option (OPTSTATUSONTOP) ? LINES - 2 : 0, 0);
-    mutt_paddstr (COLS, menu->help);
+    move (option (OPTSTATUSONTOP) ? LINES - 2 : 0, SW);
+    mutt_paddstr (COLS-SW, menu->help);
     SETCOLOR (MT_COLOR_NORMAL);
     menu->offset = 1;
     menu->pagelen = LINES - 3;
@@ -183,6 +183,8 @@ void menu_redraw_full (MUTTMENU * menu)
     menu->offset = option (OPTSTATUSONTOP) ? 1 : 0;
     menu->pagelen = LINES - 2;
   }
+
+  sidebar_draw_frames();
 
   mutt_show_error ();
 
@@ -195,10 +197,11 @@ void menu_redraw_status (MUTTMENU * menu)
 
   snprintf (buf, sizeof (buf), M_MODEFMT, menu->title);
   SETCOLOR (MT_COLOR_STATUS);
-  move (option (OPTSTATUSONTOP) ? 0 : LINES - 2, 0);
-  mutt_paddstr (COLS, buf);
+  move (option (OPTSTATUSONTOP) ? 0 : LINES - 2, SW);
+  mutt_paddstr (COLS-SW, buf);
   SETCOLOR (MT_COLOR_NORMAL);
   menu->redraw &= ~REDRAW_STATUS;
+  sidebar_draw_frames();
 }
 
 void menu_redraw_index (MUTTMENU * menu)
@@ -206,7 +209,6 @@ void menu_redraw_index (MUTTMENU * menu)
   char buf[STRING];
   int i;
 
-  sidebar_draw (1);
   for (i = menu->top; i < menu->top + menu->pagelen; i++) {
     if (i < menu->max) {
       menu_make_entry (buf, sizeof (buf), menu, i);
@@ -254,6 +256,9 @@ void menu_redraw_index (MUTTMENU * menu)
     else
       CLEARLINE_WIN (i - menu->top + menu->offset);
   }
+  sidebar_draw (1);
+/*  sidebar_draw_frames(); */
+
   menu->redraw = 0;
 }
 

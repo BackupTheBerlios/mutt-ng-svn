@@ -274,32 +274,67 @@ void sidebar_set_buffystats (CONTEXT* Context) {
   tmp->msg_flagged = Context->flagged;
 }
 
+void sidebar_draw_frames (void) {
+  size_t i,delim_len;
+
+  if (!option(OPTMBOXPANE) || SidebarWidth==0) 
+    return;
+
+  delim_len=str_len(NONULL(SidebarDelim));
+
+  /* draw vertical delimiter */
+  SETCOLOR (MT_COLOR_SIDEBAR);
+  for (i = 0; i < LINES-1; i++) {
+    move (i, SidebarWidth - delim_len);
+    if (option (OPTASCIICHARS))
+      addstr (NONULL (SidebarDelim));
+    else if (!option (OPTASCIICHARS) && !str_cmp (SidebarDelim, "|"))
+      addch (ACS_VLINE);
+    else if ((Charset_is_utf8) && !str_cmp (SidebarDelim, "|"))
+      addstr ("\342\224\202");
+    else
+      addstr (NONULL (SidebarDelim));
+  }
+
+  /* fill "gaps" at top+bottom */
+  SETCOLOR(MT_COLOR_STATUS);
+  for (i=0; i<SidebarWidth; i++) {
+    /*
+     * if we don't have $status_on_top and have $help, fill top
+     * gap with spaces to get bg color
+     */
+    if (option(OPTSTATUSONTOP) || option(OPTHELP)) {
+      move(0,i);
+      addch(' ');
+    }
+    /*
+      * if we don't have $status_on_top or we have $help, fill bottom
+      * gap with spaces to get bg color
+      */
+    if (!option(OPTSTATUSONTOP) || option(OPTHELP)) {
+      move(LINES-2,i);
+      addch(' ');
+    }
+  }
+  SETCOLOR (MT_COLOR_NORMAL);
+}
+
 /* actually draws something
  * FIXME this needs some clue when to do it
  */
-int sidebar_draw (int menu)
-{
-  int first_line = option (OPTSTATUSONTOP) ? 1 : option (OPTHELP) ? 1 : 0;
-  int last_line = LINES-1;
-  int draw_devider = 1, i = 0;
-  int line;
+int sidebar_draw (int menu) {
+  int first_line = option (OPTSTATUSONTOP) ? 1 : option (OPTHELP) ? 1 : 0,
+      last_line = LINES - 2 + (option (OPTSTATUSONTOP) && !option (OPTHELP) ? 1 : 0),
+      i = 0,line;
   BUFFY *tmp;
-  short delim_len = str_len (SidebarDelim);
+  size_t delim_len = str_len (SidebarDelim);
   char blank[SHORT_STRING];
-
-  if (option (OPTSTATUSONTOP)) {
-    last_line -= option (OPTHELP) ? 1 : 0;
-  } else {
-    last_line -= 1-(menu==MENU_PAGER);
-  }
 
   known_lines=last_line-first_line;
 
   /* initialize first time */
   if (!initialized) {
     prev_show_value = option (OPTMBOXPANE);
-    if (!option (OPTMBOXPANE))
-      draw_devider = 1;
     initialized = 1;
   }
 
@@ -325,23 +360,8 @@ int sidebar_draw (int menu)
 
   if (SidebarWidth == 0 || !option (OPTMBOXPANE))
     return 0;
-  /* draw devider only if necessary (if the sidebar becomes visible e.g.)*/
-  if (draw_devider == 1){
-    /* draw the divider */
-    SETCOLOR (MT_COLOR_SIDEBAR);
-    for (line = first_line; line < last_line; line++) {
-      move (line, SidebarWidth - delim_len);
-      if (option (OPTASCIICHARS))
-        addstr (NONULL (SidebarDelim));
-      else if (!option (OPTASCIICHARS) && !str_cmp (SidebarDelim, "|"))
-        addch (ACS_VLINE);
-      else if ((Charset_is_utf8) && !str_cmp (SidebarDelim, "|"))
-        addstr ("\342\224\202");
-      else
-        addstr (NONULL (SidebarDelim));
-    }
-  }
-  SETCOLOR (MT_COLOR_NORMAL);
+
+  sidebar_draw_frames();
 
   if (list_empty(Incoming))
     return 0;
@@ -363,9 +383,10 @@ int sidebar_draw (int menu)
     line += make_sidebar_entry (tmp->path, i, SidebarWidth-delim_len);
   }
 
+  SETCOLOR (MT_COLOR_NORMAL);
+
   /* fill with blanks to bottom */
   memset (&blank, ' ', sizeof (blank));
-  SETCOLOR (MT_COLOR_NORMAL);
   for (; line < last_line; line++) {
     move (line, 0);
     addnstr (blank, SidebarWidth-delim_len);

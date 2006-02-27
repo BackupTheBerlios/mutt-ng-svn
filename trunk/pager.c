@@ -1540,8 +1540,8 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
 
       if (option (OPTHELP)) {
         SETCOLOR (MT_COLOR_STATUS);
-        move (helpoffset, 0);
-        mutt_paddstr (COLS, helpstr);
+        move (helpoffset, SW);
+        mutt_paddstr (COLS-SW, helpstr);
         SETCOLOR (MT_COLOR_NORMAL);
       }
 
@@ -1663,13 +1663,9 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
         _mutt_make_string (buffer, l1 < l2 ? l1 : l2, NONULL (PagerFmt),
                            Context, extra->bdy->hdr, M_FORMAT_MAKEPRINT);
       }
-      if (option(OPTSTATUSONTOP)) {
-        move(0,0);
-      } else {
-        move(LINES-2,SW);
-      }
-      mutt_paddstr (COLS - 10 - (option(OPTSTATUSONTOP)?0:SW), IsHeader (extra)
-                    || IsMsgAttach (extra) ? buffer : banner);
+      move(statusoffset,SW);
+      mutt_paddstr (COLS - 10 - SW, IsHeader (extra) || 
+                    IsMsgAttach (extra) ? buffer : banner);
 
       addstr (" -- (");
       if (last_pos < sb.st_size - 1)
@@ -1690,12 +1686,10 @@ mutt_pager (const char *banner, const char *fname, int flags, pager_t * extra)
       sidebar_draw (MENU_PAGER);
       /* print out the index status bar */
       menu_status_line (buffer, sizeof (buffer), index, NONULL (Status));
-      move (indexoffset + (option (OPTSTATUSONTOP) ? 0 : (indexlen - 1)),
-            option (OPTSTATUSONTOP) ? 0 : SW);
+      move (indexoffset + (option (OPTSTATUSONTOP) ? 0 : (indexlen - 1)), SW);
       SETCOLOR (MT_COLOR_STATUS);
       BKGDSET (MT_COLOR_STATUS);
-      mutt_paddstr (COLS - (option (OPTSTATUSONTOP) ? 0 : SW),
-                    buffer);
+      mutt_paddstr (COLS-SW, buffer);
       SETCOLOR (MT_COLOR_NORMAL);
       BKGDSET (MT_COLOR_NORMAL);
     }

@@ -110,6 +110,7 @@ static const char *No_visible = N_("No visible messages.");
 #define CURHDR Context->hdrs[Context->v2r[menu->current]]
 #define OLDHDR Context->hdrs[Context->v2r[menu->oldcurrent]]
 #define UNREAD(h) mutt_thread_contains_unread (Context, h)
+#define SW              (option(OPTMBOXPANE)?SidebarWidth:0)
 
 extern const char *ReleaseDate;
 extern size_t UngetCount;
@@ -561,13 +562,13 @@ int mutt_index_menu (void)
       }
 
       if (menu->redraw & REDRAW_STATUS) {
-        DrawFullLine = 1;
         menu_status_line (buf, sizeof (buf), menu, NONULL (Status));
-        DrawFullLine = 0;
         CLEARLINE (option (OPTSTATUSONTOP) ? 0 : LINES - 2);
+        sidebar_draw_frames();
         SETCOLOR (MT_COLOR_STATUS);
         BKGDSET (MT_COLOR_STATUS);
-        mutt_paddstr (COLS, buf);
+        move(option (OPTSTATUSONTOP) ? 0 : LINES - 2,SW);
+        mutt_paddstr (COLS-SW, buf);
         SETCOLOR (MT_COLOR_NORMAL);
         BKGDSET (MT_COLOR_NORMAL);
         sidebar_set_buffystats (Context);

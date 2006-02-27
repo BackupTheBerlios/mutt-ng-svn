@@ -12,6 +12,7 @@
 #define _SIDEBAR_H
 
 int sidebar_draw (int);
+void sidebar_draw_frames (void);
 void sidebar_scroll (int, int);
 void sidebar_set_buffystats (CONTEXT *);
 const char* sidebar_get_current (void);

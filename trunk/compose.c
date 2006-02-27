@@ -131,32 +131,12 @@ static struct mapping_t ComposeNewsHelp[] = {
 };
 #endif
 
-static void snd_entry (char *b, size_t blen, MUTTMENU * menu, int num)
-{
-  int old1=DrawFullLine,old2=option(OPTSTATUSONTOP);
-
-  /*
-   * XXX
-   * mutt_FormatString is totally broken as it tries to determine
-   * the max. width of the output string itself which may fail
-   * (for example, for $status_on_top, many of the format strings
-   * are as wide as screen but $attach_format is not, etc.)
-   *
-   * When $status_on_top is unset, mutt_FormatString() will respect
-   * sidebar so unset it for compose menu entries by force... ;-(
-   */
-  DrawFullLine=0;
-  unset_option(OPTSTATUSONTOP);
-
-  mutt_FormatString (b, blen, NONULL (AttachFormat), mutt_attach_fmt,
+static void snd_entry (char *b, size_t blen, MUTTMENU * menu, int num) {
+  int w=(COLS-SW)>blen?blen:COLS-SW;
+  mutt_FormatString (b, w, NONULL (AttachFormat), mutt_attach_fmt,
                      (unsigned long) (((ATTACHPTR **) menu->data)[num]),
                      M_FORMAT_STAT_FILE | M_FORMAT_ARROWCURSOR);
-
-  DrawFullLine=old1;
-  if (old2) set_option(OPTSTATUSONTOP);
 }
-
-
 
 #include "mutt_crypt.h"
 
@@ -521,7 +501,8 @@ static const char *compose_format_str (char *buf, size_t buflen, char op,
 static void compose_status_line (char *buf, size_t buflen, MUTTMENU * menu,
                                  const char *p)
 {
-  mutt_FormatString (buf, buflen, p, compose_format_str,
+  int w=(COLS-SW)>buflen?buflen:(COLS-SW);
+  mutt_FormatString (buf, w, p, compose_format_str,
                      (unsigned long) menu, 0);
 }
 
@@ -1426,7 +1407,8 @@ int mutt_compose_menu (HEADER * msg,    /* structure for new message */
       compose_status_line (buf, sizeof (buf), menu, NONULL (ComposeFormat));
       CLEARLINE (option (OPTSTATUSONTOP) ? 0 : LINES - 2);
       SETCOLOR (MT_COLOR_STATUS);
-      printw ("%-*.*s", COLS, COLS, buf);
+      move (option (OPTSTATUSONTOP) ? 0 : LINES - 2, SW);
+      printw ("%-*.*s", COLS-SW, COLS-SW, buf);
       SETCOLOR (MT_COLOR_NORMAL);
       menu->redraw &= ~REDRAW_STATUS;
     }
