@@ -130,21 +130,21 @@ manual.tex stamp-doc-tex: manual.xml
 	touch stamp-doc-tex
 
 manual-ng.tex: manual.xml muttng-tex.xsl
-	xsltproc -o manual-ng.tex muttng-tex.xsl manual-pre.xml
+	xsltproc -o manual-ng.tex $(srcdir)/muttng-tex.xsl manual-pre.xml
 
 manual-ng.pdf: manual-ng.tex muttng.sty
-	pdflatex -file-line-error manual-ng.tex
-	pdflatex -file-line-error manual-ng.tex
+	(BD=`pwd`; cd $(srcdir); pdflatex -file-line-error -output-directory $$BD $(builddir)/manual-ng.tex)
+	(BD=`pwd`; cd $(srcdir); pdflatex -file-line-error -output-directory $$BD $(builddir)/manual-ng.tex)
 	touch manual-ng.idx
-	makeindex -s muttng.ist -o manual-ng.ind manual-ng.idx
-	pdflatex -file-line-error manual-ng.tex
+	makeindex -s $(srcdir)/muttng.ist -o manual-ng.ind manual-ng.idx
+	(BD=`pwd`; cd $(srcdir); pdflatex -file-line-error -output-directory $$BD $(builddir)/manual-ng.tex)
 
 manual-ng.ps: manual-ng.tex muttng.sty
-	latex -file-line-error manual-ng.tex
-	latex -file-line-error manual-ng.tex
+	(BD=`pwd`; cd $(srcdir); latex -file-line-error -output-directory $$BD $(builddir)/manual-ng.tex)
+	(BD=`pwd`; cd $(srcdir); latex -file-line-error -output-directory $$BD $(builddir)/manual-ng.tex)
 	touch manual-ng.idx
-	makeindex -s muttng.ist -o manual-ng.ind manual-ng.idx
-	latex -file-line-error manual-ng.tex
+	makeindex -s $(srcdir)/muttng.ist -o manual-ng.ind manual-ng.idx
+	(BD=`pwd`; cd $(srcdir); latex -file-line-error -output-directory $$BD $(builddir)/manual-ng.tex)
 	dvips -o manual-ng.ps manual-ng.dvi
 
 clean: 
@@ -210,5 +210,5 @@ manual.xml stamp-doc-xml: ../makedoc$(EXEEXT) $(top_srcdir)/init.h muttng-manual
 	( sed -e "s/@VERSION\@/`cat $(top_srcdir)/VERSION.in`-r`cat $(top_srcdir)/VERSION.svn`/" $(srcdir)/manual.xml.head ;\
 	  $(MAKEDOC_CPP) $(top_srcdir)/init.h | ../makedoc -s ) |      \
 		cat - $(srcdir)/manual.xml.tail > manual-pre.xml
-	-xsltproc --novalid --nonet muttng-manual.xsl manual-pre.xml > manual.xml
+	-xsltproc --novalid --nonet $(srcdir)/muttng-manual.xsl manual-pre.xml > manual.xml
 	touch stamp-doc-xml
