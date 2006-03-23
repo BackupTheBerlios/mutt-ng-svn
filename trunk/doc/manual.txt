@@ -9,7 +9,7 @@ Michael Elkins
 
    <mmee@@ccss..hhmmcc..eedduu>
 
-   version devel-r792
+   version devel-r790
 
    _A_b_s_t_r_a_c_t
 
@@ -7055,7 +7055,7 @@ Chapter 7. Reference
 
    Type: system property
 
-   Value: 792
+   Value: 790
 
    _T_h_i_s_ _i_s_ _a_ _r_e_a_d_-_o_n_l_y_ _s_y_s_t_e_m_ _p_r_o_p_e_r_t_y_ _a_n_d_ _s_p_e_c_i_f_i_e_s_ _m_u_t_t_n_g_'_s_ _s_u_b_v_e_r_s_i_o_n
    _r_e_v_i_s_i_o_n_ _s_t_r_i_n_g_.
