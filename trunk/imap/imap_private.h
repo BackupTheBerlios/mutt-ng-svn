@@ -88,6 +88,7 @@ enum {
   AUTH_ANON,                    /* AUTH=ANONYMOUS */
   STARTTLS,                     /* RFC 2595: STARTTLS */
   LOGINDISABLED,                /*           LOGINDISABLED */
+  SASL_IR,                      /* SASL initial response draft */
 
   CAPMAX
 };
