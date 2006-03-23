@@ -516,9 +516,11 @@ int imap_wait_keepalive (pid_t pid)
   int rc;
 
   short imap_passive = option (OPTIMAPPASSIVE);
+  int imap_askreconnect = quadoption (OPT_IMAPRECONNECT);
 
   set_option (OPTIMAPPASSIVE);
   set_option (OPTKEEPQUIET);
+  set_quadoption (OPT_IMAPRECONNECT, M_NO);
 
   sigprocmask (SIG_SETMASK, NULL, &oldmask);
 
@@ -547,6 +549,7 @@ int imap_wait_keepalive (pid_t pid)
   unset_option (OPTKEEPQUIET);
   if (!imap_passive)
     unset_option (OPTIMAPPASSIVE);
+  set_quadoption (OPT_IMAPRECONNECT, imap_askreconnect);
 
   return rc;
 }
