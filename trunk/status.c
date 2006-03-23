@@ -316,6 +316,8 @@ void menu_status_line (char* buf, size_t len, MUTTMENU* menu, const char* p) {
    * if we have enough space for buffer, format lines to $COLS-$SidebarWidth
    * only to not wrap past end of screen
    */
-  mutt_FormatString (buf, (COLS-SW)>len?len:(COLS-SW), p, status_format_str,
+  int width = COLS - SW;
+  mutt_FormatString (buf, (width >= len ? len : (width + 1)),
+                     p, status_format_str,
                      (unsigned long) menu, 0);
 }
