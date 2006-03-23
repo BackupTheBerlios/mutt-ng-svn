@@ -853,12 +853,8 @@ static int grok_ansi (unsigned char *buf, int pos, ansi_attr * a)
         pos += 2;
       }
       else if (buf[pos] == '0' && (pos + 1 == x || buf[pos + 1] == ';')) {
-#ifdef HAVE_COLOR
-        if (a->pair != -1)
-          mutt_free_color (a->fg, a->bg);
-#endif
-        a->attr = ANSI_OFF;
-        a->pair = -1;
+        a->bg = -2;
+        a->fg = -2;
         pos += 2;
       }
       else if (buf[pos] == '3' && isdigit (buf[pos + 1])) {
