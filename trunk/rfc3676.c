@@ -136,12 +136,14 @@ static void print_flowed_line (char *line, STATE * s, int ql) {
 int rfc3676_handler (BODY * a, STATE * s) {
   int bytes = a->length;
   char buf[LONG_STRING];
-  char *curline = str_dup ("");
+  char *curline = mem_malloc(1);
   char *t = NULL;
   unsigned int curline_len = 1,
                quotelevel = 0, newql = 0;
   int buf_off, buf_len;
   int delsp = 0, fixed = 0;
+
+  *curline='\0';
 
   /* respect DelSP of RfC3676 only with f=f parts */
   if ((t = (char*) mutt_get_parameter ("delsp", a->parameter))) {

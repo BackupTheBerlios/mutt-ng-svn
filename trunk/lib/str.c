@@ -21,7 +21,7 @@ char *str_dup (const char *s)
   char *p;
   size_t l;
 
-  if (!s) return 0;
+  if (!s || !*s) return NULL;
   l = str_len (s) + 1;
   p = (char *) mem_malloc (l);
   memcpy (p, s, l);
