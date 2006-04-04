@@ -78,7 +78,7 @@ HEADERS = \
   printf-parse.h wprintf-parse.h printf-parse.c \
   vasnprintf.h vasnwprintf.h vasnprintf.c \
   os2compat.h \
-  libgnuintl.h.in
+  libgnuintl.h
 SOURCES = \
   bindtextdom.c \
   dcgettext.c \
@@ -445,7 +445,7 @@ ID: $(HEADERS) $(SOURCES)
 
 mostlyclean:
 	rm -f *.a *.la *.o *.obj *.lo core core.*
-	rm -f libgnuintl.h libintl.h charset.alias ref-add.sed ref-del.sed
+	rm -f libintl.h charset.alias ref-add.sed ref-del.sed
 	rm -f -r .libs _libs
 
 clean: mostlyclean
