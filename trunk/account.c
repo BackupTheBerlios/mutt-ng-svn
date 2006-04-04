@@ -38,9 +38,9 @@ int mutt_account_match (const ACCOUNT * a1, const ACCOUNT * a2)
 
 #ifdef USE_IMAP
   if (a1->type == M_ACCT_TYPE_IMAP) {
-    if (ImapUser)
+    if (ImapUser && (ImapUser[0] != '\0'))
       user = ImapUser;
-    if (ImapLogin)
+    if (ImapLogin && (ImapLogin[0] != '\0'))
       login = ImapLogin;
   }
 #endif
@@ -146,7 +146,7 @@ int mutt_account_getuser (ACCOUNT * account)
   if (account->flags & M_ACCT_USER)
     return 0;
 #ifdef USE_IMAP
-  else if ((account->type == M_ACCT_TYPE_IMAP) && ImapUser)
+  else if ((account->type == M_ACCT_TYPE_IMAP) && ImapUser && (ImapUser[0] != '\0'))
     strfcpy (account->user, ImapUser, sizeof (account->user));
 #endif
 #ifdef USE_POP
@@ -179,7 +179,7 @@ int mutt_account_getlogin (ACCOUNT* account)
 #ifdef USE_IMAP
   else if (account->type == M_ACCT_TYPE_IMAP)
   {
-    if (ImapLogin) {
+    if (ImapLogin && (ImapLogin[0] != '\0')) {
       strfcpy (account->login, ImapLogin, sizeof (account->login));
       account->flags |= M_ACCT_LOGIN;
     }

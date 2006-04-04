@@ -40,7 +40,7 @@ imap_auth_res_t imap_auth_login (IMAP_DATA * idata, const char *method)
 
   mutt_message _("Logging in...");
 
-  imap_quote_string (q_user, sizeof (q_user), idata->conn->account.user);
+  imap_quote_string (q_user, sizeof (q_user), idata->conn->account.login);
   imap_quote_string (q_pass, sizeof (q_pass), idata->conn->account.pass);
 
 #ifdef DEBUG
