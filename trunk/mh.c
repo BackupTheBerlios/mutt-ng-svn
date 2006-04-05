@@ -703,7 +703,12 @@ static int maildir_parse_dir (CONTEXT * ctx, struct maildir ***last,
 
     debug_print (2, ("parsing %s\n", de->d_name));
     maildir_parse_entry (ctx, last, subdir, de->d_name, count, is_old,
-                         de->d_ino);
+#if HAVE_DIRENT_D_INO
+                         de->d_ino
+#else
+                         0
+#endif
+                        );
   }
 
   closedir (dirp);
