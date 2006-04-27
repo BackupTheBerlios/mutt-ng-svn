@@ -8001,7 +8001,7 @@ score !~* =42</muttng-doc:lstconf>
         sender, i.e. they allow for only one value which may not be what the
         user wants to send as the <literal>From:</literal> header. In this
         case, the variable
-        <muttng-doc:varref name="smtp-envelope"/> may be used
+        nvelope"/> may be used
         to set the envelope different from the <literal>From:</literal> header.
       </para>
       
@@ -10642,6 +10642,10 @@ mailto:joe@host?Attach=~/.gnupg/secring.gpg</screen>
             <row>
               <entry><literal>smtp_auth_password</literal></entry>
               <entry><muttng-doc:varref name="smtp-pass"/></entry>
+            </row>
+            <row>
+              <entry><literal>envelope_from_address</literal></entry>
+              <entry><muttng-doc:varref name="smtp-envelope"/></entry>
             </row>
             <row>
               <entry><literal>user_agent</literal></entry>
