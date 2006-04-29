@@ -8001,7 +8001,7 @@ score !~* =42</muttng-doc:lstconf>
         sender, i.e. they allow for only one value which may not be what the
         user wants to send as the <literal>From:</literal> header. In this
         case, the variable
-        nvelope"/> may be used
+        <muttng-doc:varref name="smtp-envelope"/> may be used
         to set the envelope different from the <literal>From:</literal> header.
       </para>
       
